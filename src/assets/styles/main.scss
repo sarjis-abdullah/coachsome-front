@@ -1,0 +1,234 @@
+@import "_variables";
+@import "_mixins";
+@import "_font";
+@import "_util";
+@import "_typography";
+
+.primary {
+  background: $primary;
+}
+
+.body-bg {
+  background: $body-bg;
+}
+
+
+.primary-light-1 {
+  color: $grey-200;
+  background: $primary-light-1;
+}
+
+.primary-light-1--text {
+  color: $primary-light-1;
+}
+
+.primary-light-2 {
+  color: $grey-200;
+  background: $primary-light-2;
+}
+
+.primary-light-2--text {
+  color: $primary-light-2;
+}
+
+.light {
+  color: $grey-500;
+  background: $grey-200;
+}
+
+.body-bg {
+  background: $grey-100 !important;
+}
+
+.line {
+  width: 100%;
+  background: #9faec2;
+  height: 1px;
+}
+
+.required {
+  font-family: $font-family;
+  font-size: 12px;
+  text-align: right;
+  color: #c7311d;
+}
+
+.page-title {
+  @include h2;
+}
+
+.section-title {
+  @include h3;
+  color: $primary-light-1;
+  text-transform: capitalize;
+}
+
+.section-description {
+  font-family: $font-family;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 19px;
+  color: #6f8098;
+}
+
+/* Logo */
+.logo {
+  position: relative;
+  padding-right: 20px;
+  height: 100%;
+  img {
+    padding-right: 20px;
+  }
+}
+.logo::before {
+  position: absolute;
+  top: -2px;
+  right: 10px;
+  content: "BETA";
+  color: #fff;
+  font-size: 9px;
+  line-height: 8px;
+  font-weight: 600;
+  padding: 3px 3px;
+  background-color: red !important;
+  border-radius: 10px;
+}
+
+/* Color */
+.disabled--text {
+  color: rgba(0, 0, 0, 0.26) !important;
+}
+/* Color */
+
+/* Button */
+.v-btn .v-btn__content {
+  font-family: $font-family;
+  font-style: normal;
+  font-weight: normal;
+}
+
+.btn {
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 6px;
+}
+
+.btn-sm {
+  height: 22px;
+  width: 70px;
+  font-family: $font-family;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 19px;
+}
+
+.btn-def {
+  height: 32px;
+  width: 100px;
+  font-family: $font-family;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 30px;
+}
+
+.btn-lg {
+  height: 42px;
+  width: 100px;
+  font-family: $font-family;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 40px;
+}
+
+.btn-xl {
+  height: 54px;
+  width: 100px;
+  font-family: $font-family;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 54px;
+}
+
+.btn-special {
+  font-family: $font-family;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  border: 1px solid #6eb5cb;
+  height: 42px;
+  vertical-align: middle;
+  width: 140px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $primary-light-2;
+
+  img {
+    width: 14px;
+    height: 22px;
+    height: 22px;
+    margin-right: 14px;
+  }
+}
+
+.btn-tag {
+  color: $grey-200;
+  background: $primary-light-2;
+  font-family: $font-family;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 19px;
+  border-radius: 20px;
+  width: 45px;
+  height: 21px;
+  text-align: center;
+}
+
+.btn-tag-icon {
+  color: $grey-200;
+  background: $primary-light-2;
+  font-family: $font-family;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  min-width: 108px;
+  width: 100%;
+  height: 22px;
+  text-align: center;
+
+  .btn-text {
+    flex-grow: 5;
+  }
+
+  img {
+    text-align: right;
+    flex-grow: 1;
+    height: 12px;
+  }
+}
+
+/* Button */
+
+/* Fonts */
+.toasted-container {
+  font-family: $font-family;
+}
+/* Fonts */
+
+/* Page */
+.page-container {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+/* Page */

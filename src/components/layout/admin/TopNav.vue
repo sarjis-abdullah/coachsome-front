@@ -1,0 +1,220 @@
+<template>
+  <v-app-bar
+    :clipped-left="$vuetify.breakpoint.lgAndUp"
+    app
+    color="primary"
+    dark
+    elevation="0"
+    dense
+  >
+    <!-- Logo -->
+    <router-link text to="/">
+      <img
+        class="d-none d-md-flex d-lg-flex"
+        :src="require('@/assets/images/logo.svg')"
+        alt="logo"
+      />
+      <img
+        class="d-sm-flex d-xs-flex d-md-none"
+        :src="require('@/assets/images/logo-icon-light.svg')"
+        alt="logo"
+      />
+    </router-link>
+
+    <!-- Search -->
+    <sport-search
+      class="d-sm-flex d-xs-flex d-md-none mx-5"
+      :style="{ maxWidth: '350px' }"
+    />
+    <v-spacer></v-spacer>
+
+    <!-- Main Menu -->
+    <v-btn
+      v-if="isSwitchedUser"
+      @click="revertUser"
+      outlined
+      color="blue"
+      light
+      small
+      >Switch to own user</v-btn
+    >
+    <div v-if="$vuetify.breakpoint.lgAndUp">
+      <v-btn
+        small
+        class="text-capitalize"
+        text
+        v-for="(item, i) in mainMenu.items"
+        :key="i"
+        :to="item.path"
+        >{{ item.text }}</v-btn
+      >
+    </div>
+
+    <!-- Avatar Menu -->
+    <avatar v-if="isLoggedIn" />
+  </v-app-bar>
+</template>
+
+<script>
+import { imageService } from "@/services";
+import { pathData } from "@/data";
+import { impersonateAdminApi, authApi } from "@/api";
+import Avatar from "@/components/artifact/global/Avatar";
+import SportSearch from "@/components/artifact/global/SportSearch";
+
+export default {
+  components: {
+    Avatar,
+    SportSearch
+  },
+  data() {
+    return {
+      mainMenu: {
+        items: {
+          dashboard: {
+            text: "Dashboard",
+            path: pathData.admin.dashboard,
+            icon: "mdi-view-list",
+            t_key: "dropdown_item_users"
+          },
+          pageBuilder: {
+            text: "CMS",
+            path: pathData.admin.pageBuilder,
+            icon: "mdi-view-list",
+            t_key: "dropdown_item_users"
+          },
+          orderList: {
+            text: "Order List",
+            path: pathData.admin.orderList,
+            icon: "mdi-view-list",
+            t_key: "dropdown_item_users"
+          },
+          translation: {
+            text: "Translation",
+            path: pathData.admin.translation,
+            icon: "mdi-view-list",
+            t_key: "dropdown_item_users"
+          },
+          users: {
+            text: "Users",
+            path: pathData.admin.userList,
+            icon: "mdi-view-list",
+            t_key: "dropdown_item_users"
+          },
+          // pendingCustomer: {
+          //   text: "Pending Customer",
+          //   path: pathData.admin.pendingCustomer,
+          //   icon: "mdi-view-list",
+          //   t_key: "dropdown_item_pending_customer"
+          // },
+          payoutRequest: {
+            text: "Payout Request",
+            path: pathData.admin.payoutRequest,
+            icon: "mdi-view-list",
+            t_key: "dropdown_item_pending_customer"
+          },
+          logs: {
+            text: "Logs",
+            path: pathData.admin.userLog,
+            icon: "mdi-view-list",
+            t_key: "dropdown_item_logs"
+          }
+        }
+      },
+      avatarMenu: {
+        sub: {
+          value: false
+        },
+        value: false,
+        items: {
+          language: {
+            text: "Change Language",
+            path: "#",
+            icon: "mdi-view-list",
+            t_key: "dropdown_item_change_language"
+          },
+          logout: {
+            text: "Log Out",
+            path: "#",
+            icon: "mdi-logout",
+            t_key: "dropdown_item_log_out"
+          }
+        }
+      },
+    };
+  },
+  methods: {
+    revertUser() {
+      impersonateAdminApi(this.$axios)
+        .revert()
+        .then(({ data }) => {
+          this.$auth.setUser(data.user);
+          this.$auth.setUserToken(data.accessToken);
+          if (this.$auth.hasRole(["coach"])) {
+            this.$router.push(this.localePath(pathData.coach.editProfile));
+          } else if (this.$auth.hasRole(["athlete"])) {
+            this.$router.push(this.localePath(pathData.athlete.editProfile));
+          } else {
+            this.$router.push(this.localePath(pathData.admin.dashboard));
+          }
+        })
+        .catch(() => {});
+    },
+    toggleDrawer(event) {
+      this.$root.$emit("toggle-drawer", event);
+    },
+    inviteFriend() {
+      this.dialog.inviteFriend = true;
+    },
+    changeLanguage(item) {
+      if (item.key == "lang_da") {
+        this.$i18n.locale = "da";
+        this.$store.dispatch("setLang", "da");
+        location.reload();
+      } else if (item.key == "lang_en") {
+        this.$i18n.locale = "en";
+        this.$store.dispatch("setLang", "en");
+        location.reload();
+      }
+    },
+    async logout() {
+      this.$nuxt.$loading.start();
+      await this.$auth.logout();
+      if (!this.$auth.loggedIn) {
+        this.$router.push(this.localePath(pathData.pages.login));
+      }
+      this.$nuxt.$loading.finish();
+    }
+  },
+  created() {
+  },
+  computed: {
+    isSwitchedUser() {
+      return this.$auth.user.is_switched;
+    },
+    avatarImage() {
+      return this.$auth.user.image
+        ? imageService.getImageByName(this.$auth.user.image)
+        : null;
+    },
+    initialImageContent() {
+      return (
+        this.$auth.user.first_name.substring(0, 1) +
+        this.$auth.user.last_name.substring(0, 1)
+      );
+    },
+    isLoggedIn() {
+      return this.$auth.loggedIn;
+    }
+  },
+  watch: {
+    "avatarMenu.value": function(val) {
+      if (val == false) {
+        this.avatarMenu.sub.value = false;
+      }
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped></style>

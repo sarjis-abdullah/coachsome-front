@@ -1,0 +1,940 @@
+<template>
+  <v-container>
+    <div class="booking-page">
+      <v-row justify="center">
+        <v-col cols="12" md="10">
+          <v-stepper v-model="step">
+            <v-stepper-header>
+              <v-stepper-step
+                :complete="step > 1"
+                step="1"
+                :editable="isFirstStepEditAble"
+              >
+                {{ $t("booking_step_order_details") }}
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="step > 2" step="2">
+                {{ $t("booking_step_confirm_and_pay") }}
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step step="3">
+                {{ $t("booking_step_waiting_for_coach") }}
+              </v-stepper-step>
+            </v-stepper-header>
+
+            <v-stepper-items>
+              <v-stepper-content step="1">
+                <v-card>
+                  <v-card-title>
+                    <v-spacer></v-spacer>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-row>
+                      <v-col cols="12" md="5">
+                        <div class="profile-card">
+                          <profile-simple-card
+                            v-bind="profileCard"
+                          ></profile-simple-card>
+                        </div>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        md="2"
+                        class="d-flex justify-center align-center"
+                      >
+                        <div class="line--vertical text-center"></div>
+                      </v-col>
+
+                      <v-col cols="12" md="5">
+                        <div class="person-number" v-if="isCampPackage">
+                          <div class="person-number__text">
+                            {{ $t("booking_group_package_person_text") }}
+                          </div>
+                          <div class="person-number__select">
+                            <v-select
+                              dense
+                              flat
+                              color="primary-light-1"
+                              outlined
+                              v-model="
+                                packageInfo.chargeBox.personNumbers.value
+                              "
+                              :items="packageInfo.chargeBox.personNumbers.items"
+                              solo
+                            ></v-select>
+                          </div>
+                        </div>
+                        <div
+                          class="charge-box"
+                          :style="{
+                            borderImage: `url(${require('@/assets/images/border-staircase.svg')}) 30 space`
+                          }"
+                        >
+                          <div class="charge-box__item">
+                            <div class="charge-box__item-left">
+                              {{ $t("charge_box_title") }}
+                            </div>
+                            <div class="charge-box__item-right">
+                              {{
+                                currencyService.toCurrency(
+                                  packageInfo.chargeBox.priceForPackage
+                                )
+                              }}
+                            </div>
+                          </div>
+                          <div class="charge-box__item">
+                            <div class="charge-box__item-left">
+                              {{ $t("booking_charge_box_service_fee_txt") }}
+                              <v-tooltip right max-width="250">
+                                <template v-slot:activator="{ on }">
+                                  <v-icon x-small color="#15577C" v-on="on"
+                                    >help_outline</v-icon
+                                  >
+                                </template>
+                                <span>{{
+                                  $t("booking_charge_box_service_fee_help")
+                                }}</span>
+                              </v-tooltip>
+                            </div>
+                            <div class="charge-box__item-right">
+                              {{
+                                currencyService.toCurrency(
+                                  packageInfo.chargeBox.serviceFee
+                                )
+                              }}
+                            </div>
+                          </div>
+                          <div class="charge-box__item" v-if="isCampPackage">
+                            <div class="charge-box__item-left">
+                              {{
+                                $t("booking_charge_box_total_per_person_txt")
+                              }}
+                            </div>
+                            <div class="charge-box__item-right">
+                              {{
+                                currencyService.toCurrency(
+                                  packageInfo.chargeBox.totalPerPerson
+                                )
+                              }}
+                            </div>
+                          </div>
+                          <div class="charge-box__item">
+                            <div class="charge-box__item-left stroke">
+                              {{ $t("booking_charge_box_total") }}
+                            </div>
+                            <div class="charge-box__item-right stroke">
+                              {{
+                                currencyService.toCurrency(
+                                  packageInfo.chargeBox.total
+                                )
+                              }}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="package-info">
+                          <package-simple-card
+                            v-bind="packageInfo"
+                          ></package-simple-card>
+                        </div>
+                        <div class="continue-btn mb-2">
+                          <v-btn
+                            color="#EDB041"
+                            @click.stop="continueBtnHandler"
+                            dark
+                            >{{ $t("booking_btn_label_continue") }}</v-btn
+                          >
+                        </div>
+                        <div class="help-text">
+                          {{ $t("booking_continue_help_txt_not_charged_yet") }}
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-stepper-content>
+
+              <!-- Step 2 -->
+              <v-stepper-content step="2">
+                <v-card>
+                  <v-card-title>
+                    <v-spacer></v-spacer>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-row>
+                      <v-col cols="12" md="5">
+                        <div class="profile-card">
+                          <profile-simple-card
+                            v-bind="profileCard"
+                          ></profile-simple-card>
+                        </div>
+                        <div class="message-box">
+                          <div class="message-box__title">
+                            {{ $t("booking_message_box_title") }}
+                            <span class="required">*</span>
+                          </div>
+                          <div class="message-box__field">
+                            <a-textarea
+                              ref="messageBoxTextArea"
+                              v-model="messageFromPackageBuyer"
+                              :placeholder="
+                                $t('booking_message_box_text_area_label')
+                              "
+                              :auto-size="{ minRows: 3, maxRows: 5 }"
+                            />
+                          </div>
+                        </div>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        md="2"
+                        class="d-flex justify-center align-center"
+                      >
+                        <div class="line--vertical text-center"></div>
+                      </v-col>
+                      <v-col cols="12" md="5">
+                        <div class="person-number" v-if="isCampPackage">
+                          <div class="person-number__text">
+                            {{ $t("booking_group_package_person_text") }}
+                          </div>
+                          <div class="person-number__select">
+                            <v-select
+                              dense
+                              flat
+                              color="primary-light-1"
+                              outlined
+                              v-model="
+                                packageInfo.chargeBox.personNumbers.value
+                              "
+                              :items="packageInfo.chargeBox.personNumbers.items"
+                              solo
+                            ></v-select>
+                          </div>
+                        </div>
+                        <div
+                          class="charge-box"
+                          :style="{
+                            borderImage: `url(${require('@/assets/images/border-staircase.svg')}) 30 space`
+                          }"
+                        >
+                          <div class="charge-box__item">
+                            <div class="charge-box__item-left">
+                              {{ $t("charge_box_title") }}
+                            </div>
+                            <div class="charge-box__item-right">
+                              {{
+                                currencyService.toCurrency(
+                                  packageInfo.chargeBox.priceForPackage
+                                )
+                              }}
+                            </div>
+                          </div>
+                          <div class="charge-box__item">
+                            <div class="charge-box__item-left">
+                              {{ $t("booking_charge_box_service_fee_txt") }}
+                              <v-tooltip right max-width="250">
+                                <template v-slot:activator="{ on }">
+                                  <v-icon x-small color="#15577C" v-on="on"
+                                    >help_outline</v-icon
+                                  >
+                                </template>
+                                <span>{{
+                                  $t("booking_charge_box_service_fee_help")
+                                }}</span>
+                              </v-tooltip>
+                            </div>
+                            <div class="charge-box__item-right">
+                              {{
+                                currencyService.toCurrency(
+                                  packageInfo.chargeBox.serviceFee
+                                )
+                              }}
+                            </div>
+                          </div>
+                          <div class="charge-box__item" v-if="isCampPackage">
+                            <div class="charge-box__item-left">
+                              {{
+                                $t("booking_charge_box_total_per_person_txt")
+                              }}
+                            </div>
+                            <div class="charge-box__item-right">
+                              {{
+                                currencyService.toCurrency(
+                                  packageInfo.chargeBox.totalPerPerson
+                                )
+                              }}
+                            </div>
+                          </div>
+                          <div class="charge-box__item">
+                            <div class="charge-box__item-left stroke">
+                              {{ $t("booking_charge_box_total") }}
+                            </div>
+                            <div class="charge-box__item-right stroke">
+                              {{
+                                currencyService.toCurrency(
+                                  packageInfo.chargeBox.total
+                                )
+                              }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="payment">
+                          <v-radio-group v-model="selectedPaymentMethod" column>
+                            <span
+                              v-for="(paymentMethod, i) in paymentMethods"
+                              :key="i"
+                            >
+                              <v-radio
+                                color="primary-light-1"
+                                :value="paymentMethod.value"
+                              >
+                                <template v-slot:label>
+                                  <img
+                                    :src="
+                                      require('@/assets/images/booking/' +
+                                        paymentMethod.logo)
+                                    "
+                                  />
+                                </template>
+                              </v-radio>
+                            </span>
+                          </v-radio-group>
+                        </div>
+                        <div class="mt-2 mb-2">
+                          <v-btn
+                            depressed
+                            :disabled="isDisabledRequestAndAuthorisePaymentBtn"
+                            color="#EDB041"
+                            class="white--text"
+                            :loading="loadingRequestBookingBtn"
+                            @click.stop="requestBookingButtonHandler"
+                            x-large
+                          >
+                            <span
+                              v-html="$t('booking_btn_label_request_booking')"
+                            ></span>
+                          </v-btn>
+                        </div>
+                        <div class="help-text" v-if="!isQuickBooking">
+                          {{ $t("booking_request_btn_help_text") }}
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-stepper-content>
+
+              <!-- Step 3 -->
+              <v-stepper-content step="3">
+                <v-card color="#ECF2F7">
+                  <v-card-text>
+                    <div class="message-container">
+                      <div class="quick-booking--dissable" v-if="true">
+                        <div class="quick-booking__message-box">
+                          <div class="message">
+                            <i18n
+                              path="booking_congrate_message_timer"
+                              tag="span"
+                            >
+                              <template v-slot:break>
+                                <span><br /></span>
+                              </template>
+                              <template v-slot:name>
+                                {{ profileCard.name }}
+                              </template>
+                            </i18n>
+                          </div>
+                        </div>
+                        <div class="quick-booking__timer">
+                          <div class="timer" ref="timerDisplay"></div>
+                        </div>
+                        <div class="quick-booking__chat-btn mt-10">
+                          <v-btn color="#EDB041" @click="chatNowBtnClickHandle"
+                            >{{ $t("booking_btn_label_chat_now") }}
+                            {{ profileCard.name }}</v-btn
+                          >
+                        </div>
+                      </div>
+                      <div class="quick-booking--enable" v-if="false">
+                        <div class="quick-booking__message-box">
+                          <div class="message">
+                            <i18n
+                              path="booking_congrate_message_no_timer"
+                              tag="span"
+                            >
+                              <template v-slot:break>
+                                <span><br /></span>
+                              </template>
+                            </i18n>
+                          </div>
+                        </div>
+                        <div class="quick-booking__chat-btn mt-10">
+                          <v-btn color="#EDB041" @click="chatNowBtnClickHandle"
+                            >{{ $t("booking_btn_label_chat_now") }}
+                            {{ profileCard.name }}</v-btn
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </v-stepper-content>
+            </v-stepper-items>
+          </v-stepper>
+        </v-col>
+      </v-row>
+    </div>
+  </v-container>
+</template>
+
+<script>
+import _ from "lodash";
+
+import ProfileSimpleCard from "@/components/card/ProfileSimpleCard";
+import PackageSimpleCard from "@/components/card/PackageSimpleCard";
+
+import { currencyService } from "@/services";
+import { constantData, endpointData, pathData } from "@/data";
+import { storageHelper, bookingHelper } from "@/helper";
+
+export default {
+  components: {
+    ProfileSimpleCard,
+    PackageSimpleCard
+  },
+  data() {
+    return {
+      currencyService,
+      loadingRequestBookingBtn: false,
+      selectedPaymentMethod: null,
+      paymentMethods: [
+        // {
+        //   id: 1,
+        //   name: "Mobile Pay",
+        //   value: "mobile_pay",
+        //   logo: "mobile-pay.svg",
+        // },
+        // {
+        //   id: 2,
+        //   name: "Apple Pay",
+        //   value: "apple_pay",
+        //   logo: "apple-pay.svg",
+        // },
+        // {
+        //   id: 3,
+        //   name: "Paypal",
+        //   value: "paypal",
+        //   logo: "paypal.svg",
+        // },
+        {
+          id: 4,
+          name: "VISA",
+          value: "visa",
+          logo: "visa-text.svg"
+        },
+        {
+          id: 5,
+          name: "Master Card",
+          value: "master_card",
+          logo: "visa-circle.svg"
+        }
+      ],
+      messageFromPackageBuyer: "",
+      currency: currencyService.selectedCurrency(),
+      step: 1,
+      profileCard: {
+        userId: null,
+        name: "",
+        image: "",
+        rating: 0,
+        rating_count: 0,
+        tags: [],
+        categories: [],
+        fb_link: "",
+        twitter_link: "",
+        instagram_link: ""
+      },
+      packageSetting: null,
+      packageInfo: {
+        packageId: null,
+        chargeBox: {
+          priceForPackage: 0,
+          salePrice: 0,
+          serviceFee: 0,
+          totalPerPerson: 0,
+          total: 0,
+          personNumbers: {
+            items: [],
+            value: 1
+          }
+        },
+        title: "",
+        description: "",
+        category: null
+      },
+      payment: {
+        gateway: "red"
+      }
+    };
+  },
+  computed: {
+    isFirstStepEditAble() {
+      return this.step == 2;
+    },
+    isSelectPaymentMethod() {
+      return this.selectedPaymentMethod ? true : false;
+    },
+    isDisabledRequestAndAuthorisePaymentBtn() {
+      if (
+        !this.selectedPaymentMethod ||
+        this.messageFromPackageBuyer.trim().length < 1
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    isQuickBooking: function() {
+      let isQuick = false;
+      if (this.packageSetting) {
+        isQuick = this.packageSetting.isQuickBooking;
+      }
+      return isQuick;
+    },
+    isCampPackage: function() {
+      let isCampPackage = false;
+      let category = this.packageInfo.category;
+      if (category && category.id == constantData.PACKAGE_CATEGORY_ID_CAMP) {
+        isCampPackage = true;
+      }
+      return isCampPackage;
+    }
+  },
+  watch: {
+    selectedPaymentMethod() {
+      this.$refs.messageBoxTextArea.focus();
+    },
+    step: function(val) {
+      if (val) {
+        let booking = storageHelper.get("booking");
+        if (booking) {
+          booking.step = val;
+          storageHelper.set("booking", booking);
+        }
+      }
+      if (val == 3) {
+        this.startTimer(60 * 7);
+      }
+    },
+    "packageInfo.chargeBox.personNumbers.value": {
+      handler(val) {
+        if (val) {
+          this.packageInfo.chargeBox.total =
+            this.packageInfo.chargeBox.totalPerPerson * val;
+        }
+      },
+      immediate: true,
+      deep: true
+    }
+  },
+  created() {},
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      console.log("Init");
+
+      let booking = {
+        id: null,
+        step: 1,
+        status: "Initial",
+        person: 1,
+        isNotified: false,
+        packageId: this.$route.params.packageId,
+        isRedirectToChat: false
+      };
+
+      // Store booking info || retrieve if exist
+      if (storageHelper.get("booking")) {
+        booking = storageHelper.get("booking");
+        storageHelper.set("booking", booking);
+        this.step = booking.step;
+        this.packageInfo.chargeBox.personNumbers.value = booking.value;
+      } else {
+        storageHelper.set("booking", booking);
+      }
+
+      // Notified if step at 3
+      if (!booking.isNotified && this.$route.query.payment_status == "paid") {
+        booking.isNotified = true;
+        storageHelper.set("booking", booking);
+        this.notify({ bookingId: booking.id });
+      }
+
+      // if status is paid && not redirect to chat
+      if (
+        this.$route.query.payment_status == "paid" &&
+        !booking.isRedirectToChat
+      ) {
+        this.step = 3;
+        booking.status = "Completed";
+        storageHelper.set("booking", booking);
+      }
+
+      if (
+        this.$route.query.payment_status == "paid" &&
+        booking.isRedirectToChat
+      ) {
+        this.$router.push(pathData.pages.marketplace);
+      }
+
+      // If payment is canceled
+      if (this.$route.query.payment_status == "cancel") {
+        bookingHelper.removeBookingInfoFromStorage();
+        this.$router.push(this.localePath(pathData.pages.marketplace));
+      }
+
+      const payload = {
+        packageId: this.$route.params.id
+      };
+
+      this.$axios
+        .post(endpointData.BOOKING_INITIATE, payload)
+        .then(response => {
+          let profileCardInfo = response.data.profileCard;
+          let packageInfo = response.data.packageInfo;
+          let chargeBox = response.data.chargeBox;
+          let packageSetting = response.data.packageSetting;
+
+          if (packageSetting) {
+            this.packageSetting = packageSetting;
+          }
+
+          if (profileCardInfo) {
+            this.profileCard.userId = profileCardInfo.userId;
+            this.profileCard.name = profileCardInfo.profileName;
+            this.profileCard.image = profileCardInfo.image;
+
+            this.profileCard.rating =
+              profileCardInfo.reviews.length > 0
+                ? profileCardInfo.reviews[0].rating
+                : 0;
+            this.profileCard.rating_count =
+              profileCardInfo.reviews.length > 0
+                ? profileCardInfo.reviews[0].ratingCount
+                : 0;
+            this.profileCard.tags = profileCardInfo.tags;
+            this.profileCard.categories = profileCardInfo.categories;
+          }
+
+          if (packageInfo) {
+            this.packageInfo.packageId = packageInfo.id;
+            this.packageInfo.title = packageInfo.details.title;
+            this.packageInfo.description = packageInfo.details.description;
+            this.packageInfo.category = packageInfo.category;
+            this.setCategoryId(packageInfo.category.id);
+          }
+
+          if (chargeBox) {
+            this.packageInfo.chargeBox.priceForPackage =
+              chargeBox.priceForPackage;
+            this.packageInfo.chargeBox.totalPerPerson =
+              chargeBox.totalPerPerson;
+            this.packageInfo.chargeBox.total = chargeBox.total;
+            this.packageInfo.chargeBox.salePrice = chargeBox.salePrice;
+            this.packageInfo.chargeBox.serviceFee = chargeBox.serviceFee;
+            this.packageInfo.chargeBox.personNumbers.items = _.range(
+              chargeBox.minPerson,
+              chargeBox.maxPerson + 1
+            );
+            this.packageInfo.chargeBox.personNumbers.value =
+              chargeBox.minPerson;
+            this.setPerson(chargeBox.minPerson);
+          }
+        })
+        .catch(() => {});
+    },
+    notify(payload) {
+      this.$axios.post(endpointData.BOOKING_NOTIFY, payload);
+    },
+    requestBookingButtonHandler() {
+      let payload = {
+        packageId: this.packageInfo.packageId,
+        serviceFee: this.packageInfo.chargeBox.serviceFee,
+        numberOfAttendees: this.packageInfo.chargeBox.personNumbers.value,
+        totalPerPerson: this.packageInfo.chargeBox.totalPerPerson,
+        totalAmount: this.packageInfo.chargeBox.total,
+        currency: this.currency.code,
+        message: this.messageFromPackageBuyer,
+        salePrice: this.packageInfo.chargeBox.salePrice,
+        paymentMethod: this.selectedPaymentMethod,
+        continueUrl: location.href + "?payment_status=paid",
+        cancelUrl: location.href + "?payment_status=cancel"
+      };
+      this.loadingRequestBookingBtn = true;
+      this.$axios
+        .post(endpointData.BOOKING_PAY_BY_QUICKPAY, payload)
+        .then(({ data }) => {
+          if (data.bookingId) {
+            let booking = storageHelper.get("booking");
+            booking.id = data.bookingId;
+            storageHelper.set("booking", booking);
+          }
+          if (data.link) {
+            window.location.assign(data.link);
+          }
+        })
+        .catch(error => {
+          this.$toast.error(error.response.data.message);
+        })
+        .finally(() => {
+          this.loadingRequestBookingBtn = false;
+        });
+    },
+    continueBtnHandler() {
+      if (!this.$auth.loggedIn) {
+        this.$router.push(this.localePath(pathData.pages.register));
+      } else {
+        this.step = 2;
+        this.setStepToStorage(this.step);
+      }
+    },
+    chatNowBtnClickHandle() {
+      let booking = storageHelper.get("booking");
+      if (booking) {
+        booking.isRedirectToChat = true;
+        storageHelper.set("booking", booking);
+      }
+      this.$router.push({
+        path: pathData.pages.chat,
+        query: { userId: this.profileCard.userId }
+      });
+    },
+    startTimer(duration) {
+      let display = this.$refs.timerDisplay;
+      var start = Date.now(),
+        diff,
+        minutes,
+        seconds;
+      function timer() {
+        // get the number of seconds that have elapsed since
+        // startTimer() was called
+        diff = duration - (((Date.now() - start) / 1000) | 0);
+
+        // does the same job as parseInt truncates the float
+        minutes = (diff / 60) | 0;
+        seconds = diff % 60 | 0;
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (diff <= 0) {
+          // add one second so that the count down starts at the full duration
+          // example 05:00 not 04:59
+          start = Date.now() + 1000;
+        }
+      }
+      // we don't want to wait a full second before the timer starts
+      timer();
+      setInterval(timer, 1000);
+    },
+
+    setStepToStorage(step) {
+      let booking = storageHelper.get("booking");
+      booking.step = step;
+      storageHelper.set("booking", booking);
+    },
+    setPerson(person) {
+      if (person) {
+        let booking = storageHelper.get("booking");
+        booking.person = person;
+        storageHelper.set("booking", booking);
+      }
+    },
+    setCategoryId(id) {
+      let booking = storageHelper.get("booking");
+      booking.categoryId = id;
+      storageHelper.set("booking", booking);
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.booking-page {
+  .message-container {
+    padding: 100px 50px;
+  }
+  .message {
+    font-family: $font-family;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 33px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #49556a;
+  }
+  .timer {
+    font-family: $font-family;
+    font-weight: bold;
+    font-size: 60px;
+    line-height: 33px;
+    text-align: center;
+    margin-top: 50px;
+    color: #49556a;
+  }
+  .continue-btn {
+    margin-top: 50px;
+  }
+  .help-text {
+    font-family: $font-family;
+    font-size: 12px;
+    line-height: 16px;
+    color: #6f8098;
+  }
+  .stroke {
+    font-weight: bold;
+  }
+  .package-info {
+    margin-top: 50px;
+  }
+  .profile-card {
+    margin-top: 20px;
+  }
+  .line--vertical {
+    border: 1px solid #15577c;
+    width: 1px;
+    height: 80%;
+  }
+
+  .charge-box {
+    padding: 20px 10px 35px 10px;
+    box-shadow: -1px 0px 0px 0px #6f8098, 1px 0px 0px 0px #6f8098;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    &__item {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0px;
+      &-left {
+        font-family: $font-family;
+        font-size: 14px;
+        line-height: 19px;
+        color: #000000;
+      }
+      &-right {
+        font-family: $font-family;
+        font-size: 14px;
+        line-height: 19px;
+        color: #000000;
+      }
+    }
+  }
+  .availability {
+    margin-top: 20px;
+    background: #fcfdfe;
+    border-radius: 20px;
+    box-shadow: 0px 4px 12px rgba(73, 85, 106, 0.15);
+    padding-top: 20px;
+    padding-bottom: 100px;
+
+    &__title {
+      font-family: $font-family;
+      font-size: 16px;
+      line-height: 22px;
+      text-align: center;
+      color: $primary-light-1;
+      border-radius: 20px;
+    }
+  }
+  .availability-timebox {
+    &__month {
+      margin: 20px 0;
+      font-family: $font-family;
+      font-size: 16px;
+      line-height: 22px;
+      text-align: center;
+      color: $primary-light-1;
+      border-radius: 20px;
+    }
+    &__days {
+      display: flex;
+    }
+  }
+  .day-box {
+    margin: 0 20px;
+    &__name {
+      font-family: $font-family;
+      font-size: 12px;
+      line-height: 16px;
+      text-align: center;
+      color: #6f8098;
+    }
+    &__date {
+      font-family: $font-family;
+      font-weight: 800;
+      font-size: 36px;
+      line-height: 49px;
+      text-align: center;
+      color: #49556a;
+    }
+  }
+  .timeslot-box {
+    margin-top: 15px;
+  }
+  .message-box {
+    margin-top: 40px;
+    border-radius: 10px 10px 0px 0px;
+    border-top: 5px solid $primary-light-1;
+    background: #ffffff;
+    box-shadow: 0px 10px 20px rgba(159, 174, 194, 0.15);
+    &__title {
+      font-family: $font-family;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 25px;
+      text-indent: 16px;
+      color: $primary-light-1;
+      padding: 10px 0;
+    }
+    &__field {
+      padding: 10px 15px 20px;
+    }
+  }
+  .person-number {
+    display: flex;
+    &__text {
+      font-family: $font-family;
+      font-weight: 600;
+      font-size: 18px;
+      line-height: 25px;
+      color: #000000;
+      width: 80%;
+    }
+    &__select {
+      width: 20%;
+    }
+  }
+  .quick-booking--enable {
+    .quick-booking__chat-btn {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .quick-booking--dissable {
+    .quick-booking__chat-btn {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
+</style>

@@ -1,0 +1,11 @@
+.text-ellipsis{
+  overflow: hidden;
+  white-space: nowrap;
+  width: 90%;
+  display: inline-block;
+  text-overflow: ellipsis;
+}
+
+.text-normal{
+  text-transform: none !important;
+}
