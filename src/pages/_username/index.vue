@@ -343,7 +343,13 @@ import DarkboxGallery from "@/components/darkbox/Gallery";
 export default {
   head() {
     return {
-      title: this.profileCard.name,
+      title: this.$i18n.t("profile_page_meta_title", {
+        firstname: this.userInfo.firstName,
+        lastname: this.userInfo.lastName,
+        sport: this.profileCard.categories.length && this.profileCard.categories
+          .map(item => this.$i18n.t(item.t_key).toLowerCase())[0]
+      }),
+      titleTemplate: "%s",
       meta: [
         {
           hid: "description",
@@ -432,7 +438,9 @@ export default {
     let userInfo = {
       id: null,
       email: null,
-      userName: null
+      userName: null,
+      firstName: "",
+      lastName: ""
     };
 
     let gallery = {
@@ -490,6 +498,8 @@ export default {
       userInfo.id = data.user_info.id;
       userInfo.email = data.user_info.email;
       userInfo.userName = data.user_info.userName;
+      userInfo.firstName = data.user_info.firstName;
+      userInfo.lastName = data.user_info.lastName;
     }
 
     // Services

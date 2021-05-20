@@ -29,6 +29,7 @@ export { default as adminUserApi } from "./admin/user";
 export { default as adminImpersonateApi } from "./admin/impersonate";
 export { default as adminTranslationApi } from "./admin/translation";
 export { default as adminUserLogApi } from "./admin/userLog";
+export { default as adminSeoTranslationApi } from "./admin/seoTranslation";
 
 // Coach
 export { default as coachBookingApi } from "./coach/booking";

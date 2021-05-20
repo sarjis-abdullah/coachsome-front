@@ -1,162 +1,83 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12" class="pb-0">
-        <div class="page-title">{{ $t("page_title_translation") }}</div>
-      </v-col>
-    </v-row>
+  <client-only>
+    <v-container>
+      <v-row>
+        <v-col cols="12" class="pb-0">
+          <div class="page-title">{{ $t("page_title_translation") }}</div>
+        </v-col>
+      </v-row>
 
-    <v-row>
-      <v-col cols="12">
-        <div class="line"></div>
-      </v-col>
-    </v-row>
-
-    <!-- Dialog -->
-    <v-dialog v-model="dialog" max-width="1000px">
-      <v-card>
-        <v-card-header color="white">
-          <v-card-title>
-            <span class="title">{{ formTitle }}</span>
-          </v-card-title>
-        </v-card-header>
-
-        <v-card-text>
-          <v-row>
-            <v-col cols="12">
-              <div v-if="serverErrors">
-                <div v-for="(value, key) in serverErrors" :key="key">
-                  <v-alert v-if="value.gl_key" :value="true" type="error">
-                    <span v-if="value.gl_key[0]"
-                      >The key has already been taken. please change the key
-                      name.</span
+      <v-row>
+        <v-col cols="12">
+          <div class="line"></div>
+        </v-col>
+      </v-row>
+     
+      <v-row>
+        <v-col>
+          <v-tabs v-model="tab" show-arrows>
+            <v-tabs-slider color="teal lighten-3"></v-tabs-slider>
+            <v-tab v-for="item in items" :key="item">
+              {{ item }}
+            </v-tab>
+          </v-tabs>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-tabs-items v-model="tab">
+            <v-tab-item v-for="item in items" :key="item">
+              <v-card v-if="item == 'Seo'">
+                <v-expansion-panels>
+                  <v-expansion-panel>
+                    <v-expansion-panel-header
+                      >Profile Page</v-expansion-panel-header
                     >
-                  </v-alert>
-                </div>
-              </div>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" md="4">
-              <h5 class="py-1">Page name</h5>
-              <v-text-field
-                v-model="editedItem.page_name"
-                label="Page name"
-                solo
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="4">
-              <h5 class="py-1">Group name</h5>
-              <v-text-field
-                v-model="editedItem.group"
-                label="Group name"
-                placeholder="Group name"
-                solo
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="4">
-              <h5 class="py-1">Key Name</h5>
-              <span v-if="this.editedIndex === -1">
-                <v-text-field
-                  v-model="editedItem.gl_key"
-                  label="Key Name"
-                  solo
-                  data-vv-name="Key"
-                  v-validate="'required'"
-                ></v-text-field>
-              </span>
-              <span v-else>
-                <v-text-field
-                  v-model="editedItem.gl_key"
-                  label="Key Name"
-                  solo
-                  disabled
-                  data-vv-name="Key"
-                  v-validate="'required'"
-                ></v-text-field>
-              </span>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" md="6">
-              <h5 class="py-1">English</h5>
-              <v-textarea
-                solo
-                v-model="editedItem.en_value"
-                name="input-7-4"
-                label="English"
-                data-vv-name="english"
-                v-validate="'required'"
-              ></v-textarea>
-            </v-col>
-            <v-col cols="12" md="6">
-              <h5 class="py-1">Danish</h5>
-              <v-textarea
-                solo
-                v-model="editedItem.dn_value"
-                name="input-7-4"
-                label="Danish"
-              ></v-textarea>
-            </v-col>
-            <v-col cols="12" md="6">
-              <h5 class="py-1">Swedish</h5>
-              <v-textarea
-                solo
-                v-model="editedItem.sv_value"
-                name="input-7-4"
-                label="Swedish"
-              ></v-textarea>
-            </v-col>
-          </v-row>
-        </v-card-text>
+                    <v-expansion-panel-content>
+                      <ProfileSeo />
+                      <v-card> </v-card>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                  <v-expansion-panel>
+                    <v-expansion-panel-header
+                      >Home Page</v-expansion-panel-header
+                    >
+                    <v-expansion-panel-content>
+                      <HomeSeo />
+                      <v-card> </v-card>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                  <v-expansion-panel>
+                    <v-expansion-panel-header
+                      >Marketplace Page</v-expansion-panel-header
+                    >
+                    <v-expansion-panel-content>
+                      <MarketplaceSeo />
+                      <v-card> </v-card>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                </v-expansion-panels>
+              </v-card>
+              <v-card v-if="item == 'General'">
+                <v-card-title>
+                  <v-text-field
+                    v-model="search"
+                    append-icon="search"
+                    label="Search"
+                    single-line
+                    solo
+                    hide-details
+                  ></v-text-field>
+                  <v-spacer></v-spacer>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <span v-if="this.editedIndex === -1">
-            <v-btn color="success" class="mr-3" @click="validateBeforeSubmit"
-              >Save</v-btn
-            >
-          </span>
-          <span v-else>
-            <v-btn color="success" class="mr-3" @click="validateBeforeUpdate"
-              >Update</v-btn
-            >
-          </span>
-          <v-btn color="blue darken-1" @click="close">Cancel</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <!-- Dialog -->
-
-    <v-row>
-      <v-col cols="12">
-        <v-row>
-          <v-col cols="12">
-            <v-row justify="center" align="center">
-              <v-col cols="12" md="4">
-                <v-text-field
-                  v-model="search"
-                  append-icon="search"
-                  label="Search"
-                  single-line
-                  solo
-                  hide-details
-                ></v-text-field>
-              </v-col>
-              <v-col class="text-right">
-                <v-btn
-                  @click="dialog = true"
-                  color="primary-light-1"
-                  depressed
-                  dark
-                  >{{ $t("btn_label_translation_add") }}</v-btn
-                >
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="12">
+                  <v-btn
+                    @click="dialog = true"
+                    color="primary-light-1"
+                    depressed
+                    dark
+                    >{{ $t("btn_label_translation_add") }}</v-btn
+                  >
+                </v-card-title>
                 <v-data-table
                   :headers="headers"
                   :items="langData"
@@ -190,20 +111,157 @@
                     <v-btn color="primary" @click="initialize">Reset</v-btn>
                   </template>
                 </v-data-table>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-  </v-container>
+              </v-card>
+            </v-tab-item>
+          </v-tabs-items>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col cols="12">
+          <v-row>
+            <v-col cols="12"> </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+
+      <!-- Dialog -->
+      <v-dialog v-model="dialog" max-width="1000px" scrollable>
+        <v-card>
+          <v-card-title>
+            <div class="title">{{ formTitle }}</div>
+            <v-spacer></v-spacer>
+            <v-btn icon color="primary-light-1" @click="close">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text>
+            <v-form ref="form" v-model="valid" lazy-validation>
+              <v-row>
+                <v-col cols="12" md="6">
+                  <div class="subtitle-2">Page name</div>
+                  <v-text-field
+                    v-model="editedItem.page_name"
+                    :rules="[v => !!v || 'Page name is required']"
+                    label="Page name"
+                    solo
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" md="6">
+                  <div class="subtitle-2">Group name</div>
+                  <v-text-field
+                    v-model="editedItem.group"
+                    :rules="[v => !!v || 'Group name is required']"
+                    label="Group name"
+                    placeholder="Group name"
+                    solo
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12">
+                  <div class="subtitle-2">Key Name</div>
+                  <span v-if="this.editedIndex === -1">
+                    <v-text-field
+                      v-model="editedItem.gl_key"
+                      label="Key Name"
+                      :rules="[v => !!v || 'Key name is required']"
+                      solo
+                    ></v-text-field>
+                  </span>
+                  <span v-else>
+                    <v-text-field
+                      v-model="editedItem.gl_key"
+                      label="Key Name"
+                      solo
+                      disabled
+                    ></v-text-field>
+                  </span>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" md="6">
+                  <div class="subtitle-2">English</div>
+                  <v-textarea
+                    solo
+                    v-model="editedItem.en_value"
+                    name="input-7-4"
+                    label="English"
+                  ></v-textarea>
+                </v-col>
+                <v-col cols="12" md="6">
+                  <div class="subtitle-2">Danish</div>
+                  <v-textarea
+                    solo
+                    v-model="editedItem.dn_value"
+                    name="input-7-4"
+                    label="Danish"
+                  ></v-textarea>
+                </v-col>
+                <v-col cols="12" md="6">
+                  <div class="subtitle-2">Swedish</div>
+                  <v-textarea
+                    solo
+                    v-model="editedItem.sv_value"
+                    name="input-7-4"
+                    label="Swedish"
+                  ></v-textarea>
+                </v-col>
+              </v-row>
+            </v-form>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <span v-if="this.editedIndex === -1">
+              <v-btn
+                :loading="isLoading"
+                dark
+                color="primary-light-1"
+                @click="handleSaveBtnClick"
+                >Save</v-btn
+              >
+            </span>
+            <span v-else>
+              <v-btn
+                :loading="isLoading"
+                dark
+                color="primary-light-1"
+                @click="handleUpdateBtnClick"
+                >Update</v-btn
+              >
+            </span>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- Dialog -->
+    </v-container>
+  </client-only>
 </template>
+
 <script>
+import ProfileSeo from "@/components/artifact/admin/translation/seo/ProfileSeo";
+import HomeSeo from "@/components/artifact/admin/translation/seo/HomeSeo";
+import MarketplaceSeo from "@/components/artifact/admin/translation/seo/MarketplaceSeo";
 import { adminTranslationApi } from "@/api";
 
 export default {
   layout: "admin",
+  head() {
+    return {
+      title: this.$auth.user.first_name + " " + this.$auth.user.last_name
+    };
+  },
+  components: {
+    ProfileSeo,
+    HomeSeo,
+    MarketplaceSeo
+  },
   data: () => ({
+    tributeValue: "",
+    valid: true,
+    tab: null,
+    items: ["General", "Seo"],
     dialog: false,
     search: "",
     headers: [
@@ -216,11 +274,6 @@ export default {
       { text: "Swedish", value: "sv_value", sortable: false },
       { text: "Actions", value: "actions", sortable: false }
     ],
-    rules: {
-      required: value => !!value || "Required.",
-      min: v => v.length >= 8 || "Min 8 characters",
-      emailMatch: () => "The email and password you entered don't match"
-    },
     isLoading: false,
     fullPage: true,
     serverErrors: [],
@@ -231,23 +284,22 @@ export default {
     },
     editedIndex: -1,
     editedItem: {
+      page_name: "",
       group: " ",
       gl_key: "",
       en_value: "",
       dn_value: "",
-      sv_value: "",
-      page_name: ""
+      sv_value: ""
     },
     defaultItem: {
+      page_name: "",
       group: "",
       gl_key: "",
       en_value: "",
       dn_value: "",
-      sv_value: "",
-      page_name: ""
+      sv_value: ""
     }
   }),
-  components: {},
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
@@ -267,34 +319,34 @@ export default {
 
   methods: {
     truncate(str, num) {
-      if (str.length > num) {
+      if (str && str.length > num) {
         return str.slice(0, num) + "...";
       } else {
         return str;
       }
     },
-    validateBeforeSubmit() {
-      this.$validator.validateAll().then(result => {
-        if (result) {
-          this.snackbar = true;
-          this.save();
-          this.$validator.reset();
-        }
-      });
+    validate() {
+      return this.$refs.form.validate();
     },
-    validateBeforeUpdate() {
-      this.save();
-      this.$validator.reset();
+    handleSaveBtnClick() {
+      if (this.validate()) {
+        this.save();
+      }
+    },
+    handleUpdateBtnClick() {
+      if (this.validate()) {
+        this.save();
+      }
     },
     initialize() {
       this.langData = [
         {
-          group: "button",
+          group: "",
+          page_name: "",
           gl_key: "",
           en_value: "",
           dn_value: "",
-          sv_value: "",
-          page_name: ""
+          sv_value: ""
         }
       ];
     },
@@ -307,55 +359,61 @@ export default {
         .catch(() => {});
     },
     storeTranslationData(items) {
+      this.isLoading = true;
       adminTranslationApi(this.$axios)
         .store({
-          gl_key: items.gl_key,
           status: 1,
+          page_name: items.page_name,
+          group: items.group,
+          gl_key: items.gl_key,
           en_value: items.en_value,
           dn_value: items.dn_value,
-          sv_value: items.sv_value,
-          page_name: items.page_name,
-          group: items.group
+          sv_value: items.sv_value
         })
         .then(data => {
           this.langData.push(data.data.data);
           this.serverErrors = [];
+          this.$toast.success("The item is created successfully.");
           this.close();
         })
         .catch(error => {
+          this.$toast.error(error.response.data.message);
+        })
+        .finally(() => {
           this.isLoading = false;
-          this.serverErrors = Object.values(error.response.data);
         });
     },
     updateTranslationData(items, editIndex) {
+      this.isLoading = true;
       adminTranslationApi(this.$axios)
         .update({
-          gl_key: items.gl_key,
           status: 1,
+          id: items.id,
+          page_name: items.page_name,
+          group: items.group,
+          gl_key: items.gl_key,
           en_value: items.en_value,
           dn_value: items.dn_value,
-          sv_value: items.sv_value,
-          page_name: items.page_name,
-          group: items.group
+          sv_value: items.sv_value
         })
         .then(data => {
           Object.assign(this.langData[editIndex], data.data.data);
+          this.$toast.success("The item is updated successfully.");
+          console.log(data);
           this.close();
         })
-        .catch(() => {});
+        .catch(error => {
+          this.$toast.error(error.response.data.message);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     editItem(item) {
       this.editedIndex = this.langData.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
-
-    deleteItem(item) {
-      const index = this.langData.indexOf(item);
-      confirm("Are you sure you want to delete this item?") &&
-        this.langData.splice(index, 1);
-    },
-
     close() {
       this.dialog = false;
       setTimeout(() => {

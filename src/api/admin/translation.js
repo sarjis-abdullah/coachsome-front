@@ -1,11 +1,11 @@
 export default axios => ({
   get: () => {
-    return axios.get("/translation");
+    return axios.get("/admin/translations");
   },
   store: payload => {
-    return axios.post("/translation", payload);
+    return axios.post("/admin/translations", payload);
   },
   update: payload => {
-    return axios.put("/translation" + payload);
+    return axios.put("/admin/translations", payload);
   }
 });

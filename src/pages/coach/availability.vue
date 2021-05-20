@@ -229,10 +229,11 @@
 import * as R from "ramda";
 import { coachAvailabilityApi } from "@/api";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
+
 export default {
   layout: "coach",
   components: {
-    ClientBackFooter
+    ClientBackFooter,
   },
   data() {
     return {

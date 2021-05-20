@@ -172,18 +172,24 @@
       </v-col>
       <v-col cols="12" md="8">
         <div class="d-flex flex-wrap">
-          <v-chip
-            v-for="lang in languagesSelected"
-            :key="lang.id"
-            class="mr-5 mt-5"
-            dark
-            small
-            close
-            close-icon="clear"
-            color="primary-light-2"
-            @click:close="removeLanguage(lang)"
-            >{{ $t(lang.t_key) }}</v-chip
-          >
+          <draggable class="d-flex flex-wrap" v-model="languagesSelected">
+            <v-chip
+              v-for="lang in languagesSelected"
+              :key="lang.id"
+              class="mr-5 mt-5"
+              dark
+              small
+              close
+              close-icon="clear"
+              color="primary-light-2"
+              @click:close="removeLanguage(lang)"
+            >
+              <v-icon left>
+                mdi-drag
+              </v-icon>
+              {{ $t(lang.t_key) }}</v-chip
+            >
+          </draggable>
           <div class="mt-5">
             <v-dialog v-model="dialog.language" scrollable max-width="600px">
               <template v-slot:activator="{ on }">
@@ -308,21 +314,27 @@
       </v-col>
       <v-col cols="12" md="8">
         <div class="d-flex flex-wrap">
-          <div
-            class="mr-5 mt-5"
-            v-for="category in categoriesSelected"
-            :key="category.id"
-          >
-            <v-chip
-              small
-              dark
-              close
-              close-icon="clear"
-              color="primary-light-2"
-              @click:close="removeCategory(category)"
-              >{{ $t(category.t_key) }}</v-chip
+          <draggable class="d-flex flex-wrap" v-model="categoriesSelected">
+            <div
+              class="mr-5 mt-5"
+              v-for="category in categoriesSelected"
+              :key="category.id"
             >
-          </div>
+              <v-chip
+                small
+                dark
+                close
+                close-icon="clear"
+                color="primary-light-2"
+                @click:close="removeCategory(category)"
+              >
+                <v-icon left>
+                  mdi-drag
+                </v-icon>
+                {{ $t(category.t_key) }}</v-chip
+              >
+            </div>
+          </draggable>
           <div class="mt-5">
             <v-dialog v-model="dialog.category" scrollable max-width="600px">
               <template v-slot:activator="{ on }">
@@ -406,8 +418,8 @@
           {{ $t("profile_sport_tag_description") }}
         </div>
       </v-col>
-      <v-col cols="12" md="8">
-        <div class="d-flex flex-wrap">
+      <v-col cols="12" md="8" class="d-flex flex-wrap">
+        <draggable class="d-flex flex-wrap" v-model="tagData.tagsSelected">
           <div
             v-for="(item, i) in tagData.tagsSelected"
             :key="i"
@@ -420,65 +432,69 @@
               close-icon="clear"
               color="primary-light-2"
               @click:close="removeTag(item)"
-              >{{ item }}</v-chip
+            >
+              <v-icon left>
+                mdi-drag
+              </v-icon>
+              {{ item }}</v-chip
             >
           </div>
-          <div class="mt-5">
-            <v-dialog v-model="dialog.tag" scrollable max-width="600px">
-              <template v-slot:activator="{ on }">
-                <v-btn color="primary" dark v-on="on" text small>
-                  {{ $t("profile_add_more_btn_label") }}
-                </v-btn>
-              </template>
-              <v-card>
-                <v-card-title>
-                  {{ $t("profile_modal_heading_select_tag") }}
-                  <v-spacer></v-spacer>
-                  <v-card-actions>
-                    <v-btn
-                      color="primary-light-1"
-                      text
-                      @click="dialog.tag = false"
-                      small
-                      >{{ $t("text_ok") }}</v-btn
+        </draggable>
+        <div class="mt-5">
+          <v-dialog v-model="dialog.tag" scrollable max-width="600px">
+            <template v-slot:activator="{ on }">
+              <v-btn color="primary" dark v-on="on" text small>
+                {{ $t("profile_add_more_btn_label") }}
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title>
+                {{ $t("profile_modal_heading_select_tag") }}
+                <v-spacer></v-spacer>
+                <v-card-actions>
+                  <v-btn
+                    color="primary-light-1"
+                    text
+                    @click="dialog.tag = false"
+                    small
+                    >{{ $t("text_ok") }}</v-btn
+                  >
+                </v-card-actions>
+              </v-card-title>
+              <v-card-text class="pt-5">
+                <v-row justify="center" align="center">
+                  <v-col cols="12">
+                    <v-combobox
+                      v-model="tagData.tagsSelected"
+                      :items="tagData.tags"
+                      clearable
+                      :label="$t('profile_modal_heading_select_tag')"
+                      multiple
+                      solo
+                      append-icon
                     >
-                  </v-card-actions>
-                </v-card-title>
-                <v-card-text class="pt-5">
-                  <v-row justify="center" align="center">
-                    <v-col cols="12">
-                      <v-combobox
-                        v-model="tagData.tagsSelected"
-                        :items="tagData.tags"
-                        clearable
-                        :label="$t('profile_modal_heading_select_tag')"
-                        multiple
-                        solo
-                        append-icon
+                      <template
+                        v-slot:selection="{ attrs, item, select, selected }"
                       >
-                        <template
-                          v-slot:selection="{ attrs, item, select, selected }"
+                        <v-chip
+                          v-bind="attrs"
+                          :input-value="selected"
+                          close
+                          @click="select"
+                          @click:close="removeTag(item)"
+                          label
+                          small
                         >
-                          <v-chip
-                            v-bind="attrs"
-                            :input-value="selected"
-                            close
-                            @click="select"
-                            @click:close="removeTag(item)"
-                            label
-                            small
-                          >
-                            <strong>{{ item }}</strong
-                            >&nbsp;
-                          </v-chip>
-                        </template>
-                      </v-combobox>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </v-dialog>
-          </div>
+                          <strong>{{ item }}</strong
+                          >&nbsp;
+                        </v-chip>
+                      </template>
+                    </v-combobox>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
         </div>
       </v-col>
     </v-row>
@@ -620,6 +636,7 @@ import { coachProfileApi } from "@/api";
 import { imageHelper, storageHelper } from "@/helper";
 
 import TiptopEditor from "@/components/editor/TiptopEditor";
+import draggable from "vuedraggable";
 
 import { statusCodeData } from "@/data";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
@@ -635,7 +652,8 @@ export default {
     ClientBackFooter,
     DrawerToggleBtn,
     EditImageDialog,
-    VuePhoneNumberInput
+    VuePhoneNumberInput,
+    draggable
   },
 
   data() {
