@@ -1,46 +1,80 @@
 <template>
-  <v-container>
-    <v-row justify="center">
-      <div v-if="showRegisterBtn">
-        Your account is not verified. Please
-        <v-btn small color="primary-light-1" :to="regBtnUrl" text
-          >register</v-btn
-        >again.
-      </div>
+  <v-container fill-height>
+    <v-row justify="center" align="center">
+      <v-col cols="12" md="6">
+        <v-alert v-if="isSuccess" text prominent type="success">
+          <v-row align="center" no-gutters>
+            <v-col class="grow">
+              {{ message }}
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-col class="shrink">
+              <v-btn
+                :to="localePath(pathData.login)"
+                color="primary-light-1"
+                outlined
+                >Login</v-btn
+              >
+            </v-col>
+          </v-row>
+        </v-alert>
+        <v-alert v-if="isError" text prominent type="error">
+          <v-row align="center" no-gutters>
+            <v-col class="grow">
+              {{ message }}
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-col class="shrink">
+              <v-btn
+                :to="localePath(pathData.register)"
+                color="primary-light-1"
+                outlined
+                >Register</v-btn
+              >
+            </v-col>
+          </v-row>
+        </v-alert>
+      </v-col>
     </v-row>
+    <DialogLoading :show="loading" />
   </v-container>
 </template>
 
 <script>
 import { pathData } from "@/data";
+import DialogLoading from "@/components/loading/DialogLoading";
 export default {
+  components: {
+    DialogLoading
+  },
   data() {
     return {
-      token: this.$route.query.token || "",
-      showRegisterBtn: false,
-      regBtnUrl: "",
-      isVerified: false
+      pathData,
+      loading: false,
+      message: "",
+      isSuccess: false,
+      isError: false,
+      token: this.$route.query.token || ""
     };
   },
   methods: {},
-  created() {
-    this.regBtnUrl = pathData.pages.register;
+  mounted() {
+    this.loading = true;
     this.$axios
       .put("/auth/emailVerification", {
         token: this.token
       })
-      .then(response => {
-        if (response.data.status == "success") {
-          this.$toast.success(
-            "Your account is verified successfully. You can login now."
-          );
-          this.$router.push(pathData.pages.login);
-        }
+      .then(() => {
+        this.isSuccess = true;
+        this.message =
+          "Your account is verified successfully. You can login now.";
       })
       .catch(error => {
-        this.showLoading = true;
-        this.showRegisterBtn = true;
-        this.$toast.error(error.response.data.message);
+        this.isError = true;
+        this.message = error.response.data.message;
+      })
+      .finally(() => {
+        this.loading = false;
       });
   }
 };

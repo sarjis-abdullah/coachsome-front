@@ -155,6 +155,7 @@
                           <v-col>
                             <v-btn
                               @click="register()"
+                              :loading="loading"
                               block
                               color="downy"
                               class="_util-text-transform-none"
@@ -201,7 +202,8 @@
   </div>
 </template>
 <script>
-import { pathData, endpointData } from "@/data";
+import { pathData } from "@/data";
+import { authApi } from "@/api";
 export default {
   layout: "auth",
   head() {
@@ -301,24 +303,18 @@ export default {
         password: this.form.password,
         user_type: this.form.user_type,
         agree_to_terms: this.form.agree_to_terms,
-        lang: localStorage.getItem("curr_lang")
+        lang: this.$i18n.locale
       };
 
       if (this.$refs.form.validate()) {
+        this.loading = true;
         try {
-          const { data } = this.$axios.post(
-            endpointData.AUTH_REGISTER,
-            payload
-          );
-          if (data.status == "success") {
-            this.$router.push(pathData.pages.afterRegister);
-          } else {
-            this.$toast.error(data.message);
-          }
+          await authApi(this.$axios).register(payload);
+          this.$router.push(pathData.pages.afterRegister);
         } catch (error) {
-          if (error.response.data.message) {
-            this.$toast.error(error.response.data.message);
-          }
+          this.$toast.error(error.response.data.message);
+        } finally{
+          this.loading = false;
         }
       }
     },

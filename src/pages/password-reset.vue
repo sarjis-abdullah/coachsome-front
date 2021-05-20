@@ -121,7 +121,6 @@ export default {
         authApi(this.$axios)
           .passwordReset(payload)
           .then(() => {
-            this.hideLoading();
             this.$toast.success("Successfully reset your password.");
             this.isPasswordReset = true;
           })
