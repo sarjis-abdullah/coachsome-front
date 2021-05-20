@@ -71,7 +71,7 @@
       </v-card>
     </v-form>
 
-    <v-form
+    <!-- <v-form
       ref="descriptionForm"
       v-model="descriptionForm.valid"
       lazy-validation
@@ -139,7 +139,7 @@
           </v-row>
         </v-card-text>
       </v-card>
-    </v-form>
+    </v-form> -->
   </div>
 </template>
 
