@@ -924,6 +924,8 @@ export default {
 
 <style lang="scss">
 .balance-earnings-page {
+  background: $body-bg;
+  height: 100%;
   .filter-content {
     font-family: $font-family;
     font-size: 14px;

@@ -340,11 +340,11 @@ import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import { reviewApi, baseReviewApi } from "@/api";
 
 export default {
-  layout:"coach",
+  layout: "coach",
   components: {
     VFacebookLogin,
     ReviewCard,
-    ClientBackFooter,
+    ClientBackFooter
   },
   data() {
     return {
@@ -355,18 +355,18 @@ export default {
         defaultElement: {
           email: "",
           emailRules: [
-            (v) => !!v || "E-mail is required",
-            (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-          ],
+            v => !!v || "E-mail is required",
+            v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+          ]
         },
         elements: [
           {
             email: "",
             emailRules: [
-              (v) => !!v || "E-mail is required",
-              (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-            ],
-          },
+              v => !!v || "E-mail is required",
+              v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+            ]
+          }
         ],
         totalCount: 0,
         overallStarRating: 0,
@@ -377,43 +377,46 @@ export default {
           fourStar: 0,
           threeStar: 0,
           twoStar: 0,
-          oneStar: 0,
-        },
+          oneStar: 0
+        }
       },
       isUpdateBtnloading: false,
       facebookLogin: { connected: false },
       rating: 0,
       fbSdkInstance: null,
-      reviewers: [],
+      reviewers: []
     };
   },
   created() {
     reviewApi(this.$axios)
       .getReviews()
-      .then((response) => {
+      .then(response => {
         this.reviewers = response.data.reviewers;
       })
-      .catch(() => {
-      });
+      .catch(() => {});
 
-    baseReviewApi(this.$axios).getBaseReview({}).then(({ data }) => {
-      this.baseReview.overallStarRating = data.overallRating;
-      this.baseReview.totalCount = data.reviewerCount;
-      this.baseReview.max = data.reviewerAnalysis.maxReviewer;
-      this.baseReview.slider.oneStar = data.reviewerAnalysis.reviewer.oneStar;
-      this.baseReview.slider.twoStar = data.reviewerAnalysis.reviewer.twoStar;
-      this.baseReview.slider.threeStar =
-        data.reviewerAnalysis.reviewer.threeStar;
-      this.baseReview.slider.fourStar = data.reviewerAnalysis.reviewer.fourStar;
-      this.baseReview.slider.fiveStar = data.reviewerAnalysis.reviewer.fiveStar;
-    });
+    baseReviewApi(this.$axios)
+      .getBaseReview({})
+      .then(({ data }) => {
+        this.baseReview.overallStarRating = data.overallRating;
+        this.baseReview.totalCount = data.reviewerCount;
+        this.baseReview.max = data.reviewerAnalysis.maxReviewer;
+        this.baseReview.slider.oneStar = data.reviewerAnalysis.reviewer.oneStar;
+        this.baseReview.slider.twoStar = data.reviewerAnalysis.reviewer.twoStar;
+        this.baseReview.slider.threeStar =
+          data.reviewerAnalysis.reviewer.threeStar;
+        this.baseReview.slider.fourStar =
+          data.reviewerAnalysis.reviewer.fourStar;
+        this.baseReview.slider.fiveStar =
+          data.reviewerAnalysis.reviewer.fiveStar;
+      });
   },
   methods: {
     makeRequest() {
       if (this.$refs.form.validate()) {
         this.baseReview.isRequestLoading = true;
         baseReviewApi(this.$axios)
-          .makeRequest(this.baseReview.elements.map((item) => item.email))
+          .makeRequest(this.baseReview.elements.map(item => item.email))
           .then(() => {
             this.$toast.success(
               this.$i18n.t(
@@ -445,7 +448,7 @@ export default {
       this.fbSdkInstance.FB.api(
         "/me",
         { fields: "accounts{access_token}" },
-        (meUriresponse) => {
+        meUriresponse => {
           let reviewUrl =
             "https://graph.facebook.com/" +
             meUriresponse.accounts.data[0].id +
@@ -459,83 +462,76 @@ export default {
 
           this.reviewers = [];
 
-          axios
-            .get(reviewOverAllRatting)
-            .then((reviewOverAllRattingResponse) => {
-              axios.get(reviewUrl).then((reviewsResponse) => {
-                console.log(reviewsResponse);
+          axios.get(reviewOverAllRatting).then(reviewOverAllRattingResponse => {
+            axios.get(reviewUrl).then(reviewsResponse => {
+              console.log(reviewsResponse);
 
-                let promises = [];
-                reviewsResponse.data.data.forEach((reviewsItem) => {
-                  let reviewerId = reviewsItem.reviewer
-                    ? reviewsItem.reviewer.id
-                    : "";
-                  let pictureUrl =
-                    "https://graph.facebook.com/v3.3/" +
-                    reviewerId +
-                    "/picture?redirect=false&access_token=" +
-                    meUriresponse.accounts.data[0].access_token;
+              let promises = [];
+              reviewsResponse.data.data.forEach(reviewsItem => {
+                let reviewerId = reviewsItem.reviewer
+                  ? reviewsItem.reviewer.id
+                  : "";
+                let pictureUrl =
+                  "https://graph.facebook.com/v3.3/" +
+                  reviewerId +
+                  "/picture?redirect=false&access_token=" +
+                  meUriresponse.accounts.data[0].access_token;
 
-                  promises.push(
-                    axios
-                      .get(pictureUrl)
-                      .then((pictureResponse) => {
-                        this.reviewers.push({
-                          title: reviewsItem.reviewer
-                            ? reviewsItem.reviewer.name
-                            : "",
-                          description: reviewsItem.review_text,
-                          rating:
-                            reviewsItem.recommendation_type == "positive"
-                              ? 5
-                              : 0,
-                          image: pictureResponse.data.data.url,
-                        });
-                      })
-                      .catch(() => {
-                        this.reviewers.push({
-                          title: reviewsItem.reviewer
-                            ? reviewsItem.reviewer.name
-                            : "",
-                          description: reviewsItem.review_text,
-                          rating:
-                            reviewsItem.recommendation_type == "positive"
-                              ? 5
-                              : 0,
-                          image: null,
-                        });
-                      })
-                  );
-
-                  Promise.all(promises)
-                    .then(() => {
-                      let payload = {
-                        provider: "facebook",
-                        access_token:
-                          meUriresponse.accounts.data[0].access_token,
-                        page_id: meUriresponse.accounts.data[0].id,
-                        overall_star_rating:
-                          reviewOverAllRattingResponse.data.overall_star_rating,
-                        rating_count:
-                          reviewOverAllRattingResponse.data.rating_count,
-                        reviewers: this.reviewers,
-                      };
-                      reviewApi(this.$axios)
-                        .storeReviews(payload)
-                        .then(() => {
-                          this.refreshPageProgress();
-                                            this.isUpdateBtnloading = false;
-                        })
-                        .catch(() => {});
+                promises.push(
+                  axios
+                    .get(pictureUrl)
+                    .then(pictureResponse => {
+                      this.reviewers.push({
+                        title: reviewsItem.reviewer
+                          ? reviewsItem.reviewer.name
+                          : "",
+                        description: reviewsItem.review_text,
+                        rating:
+                          reviewsItem.recommendation_type == "positive" ? 5 : 0,
+                        image: pictureResponse.data.data.url
+                      });
                     })
-                    .then(() => {
-                      if (!this.reviewers.length) {
-                        this.$toast.error("No review found");
-                      }
-                    });
-                });
+                    .catch(() => {
+                      this.reviewers.push({
+                        title: reviewsItem.reviewer
+                          ? reviewsItem.reviewer.name
+                          : "",
+                        description: reviewsItem.review_text,
+                        rating:
+                          reviewsItem.recommendation_type == "positive" ? 5 : 0,
+                        image: null
+                      });
+                    })
+                );
+
+                Promise.all(promises)
+                  .then(() => {
+                    let payload = {
+                      provider: "facebook",
+                      access_token: meUriresponse.accounts.data[0].access_token,
+                      page_id: meUriresponse.accounts.data[0].id,
+                      overall_star_rating:
+                        reviewOverAllRattingResponse.data.overall_star_rating,
+                      rating_count:
+                        reviewOverAllRattingResponse.data.rating_count,
+                      reviewers: this.reviewers
+                    };
+                    reviewApi(this.$axios)
+                      .storeReviews(payload)
+                      .then(() => {
+                        this.refreshPageProgress();
+                        this.isUpdateBtnloading = false;
+                      })
+                      .catch(() => {});
+                  })
+                  .then(() => {
+                    if (!this.reviewers.length) {
+                      this.$toast.error("No review found");
+                    }
+                  });
               });
             });
+          });
         }
       );
     },
@@ -561,13 +557,15 @@ export default {
         }
       };
       xhr.send();
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style lang="scss">
 .review-page {
+  background: $body-bg;
+  height: 100%;
   .request-card {
     .add-more-btn {
       font-family: $font-family;

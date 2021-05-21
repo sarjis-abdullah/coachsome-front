@@ -806,6 +806,8 @@ export default {
 
 <style lang="scss">
 .setting-page {
+  background: $body-bg;
+  height: 100%;
   .invoice-identity,
   .notification {
     .v-input .v-input__slot {

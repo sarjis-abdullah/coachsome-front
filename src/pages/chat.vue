@@ -1,166 +1,198 @@
 <template>
-  <v-container fluid fill-height class="pa-0">
-    <!-- Chat page -->
-    <v-row no-gutters>
-      <v-col cols="12">
-        <div class="chat-page">
-          <div class="chat-box">
-            <!-- Dialog -->
-            <v-dialog v-model="bookingDialog.value" max-width="400">
-              <RequestBox
-                v-bind="bookingDialog.requestBox.props"
-                @new-message="handleRequestBoxNewMessage"
-                @cancel="handleRequestBoxCancelBtn"
-              />
-            </v-dialog>
-            <v-dialog v-model="packageChoosingDialog.value" max-width="400">
-              <PackageChoosing
-                v-bind="{
-                  isOpen: packageChoosingDialog.value,
-                  ...packageChoosingDialog.props
-                }"
-                @cancel="handlePackageChoosingCancel"
-                @select-package="handleSelectPackage"
-              />
-            </v-dialog>
-            <!-- ./Dialog -->
+  <div class="chat-page">
+    <v-container fluid fill-height class="pa-0">
+      <!-- Chat page -->
+      <v-row no-gutters>
+        <v-col cols="12">
+          <div class="chat-page-wrapper">
+            <div class="chat-box">
+              <!-- Dialog -->
+              <v-dialog v-model="bookingDialog.value" max-width="400">
+                <RequestBox
+                  v-bind="bookingDialog.requestBox.props"
+                  @new-message="handleRequestBoxNewMessage"
+                  @cancel="handleRequestBoxCancelBtn"
+                />
+              </v-dialog>
+              <v-dialog v-model="packageChoosingDialog.value" max-width="400">
+                <PackageChoosing
+                  v-bind="{
+                    isOpen: packageChoosingDialog.value,
+                    ...packageChoosingDialog.props
+                  }"
+                  @cancel="handlePackageChoosingCancel"
+                  @select-package="handleSelectPackage"
+                />
+              </v-dialog>
+              <!-- ./Dialog -->
 
-            <v-row no-gutters>
-              <!-- LEFT SIDE -->
-              <v-col cols="12" md="4">
-                <div v-if="isShowingContactPanel" class="chat-box__left">
-                  <div
-                    class="chat-sidebar"
-                    :style="{
-                      height: 'calc(100vh - 10rem)',
-                      overflowY: 'scroll'
-                    }"
-                  >
-                    <v-row no-gutters justify="end">
-                      <v-col v-if="isShowingProfilePanel" cols="10">
-                        <div class="profile">
-                          <div class="profile__header d-flex align-center">
-                            <div>
-                              <v-avatar
-                                v-if="profileCard.avatarImage"
-                                size="48"
-                                class="my-0 py-0"
-                              >
-                                <v-img :src="profileCard.avatarImage"></v-img>
-                              </v-avatar>
-                              <v-avatar
-                                v-if="!profileCard.avatarImage"
-                                color="primary-light-1"
-                                size="48"
-                                class="my-0 py-0"
-                              >
-                                <span>{{ profileCard.avatarName }}</span>
-                              </v-avatar>
-                            </div>
-                            <div>
-                              <div class="profile-name ml-4">
-                                {{ profileCard.name }}
+              <v-row no-gutters>
+                <!-- LEFT SIDE -->
+                <v-col cols="12" md="4">
+                  <div v-if="isShowingContactPanel" class="chat-box__left">
+                    <div
+                      class="chat-sidebar"
+                      :style="{
+                        height: 'calc(100vh - 10rem)',
+                        overflowY: 'scroll'
+                      }"
+                    >
+                      <v-row no-gutters justify="end">
+                        <v-col v-if="isShowingProfilePanel" cols="10">
+                          <div class="profile">
+                            <div class="profile__header d-flex align-center">
+                              <div>
+                                <v-avatar
+                                  v-if="profileCard.avatarImage"
+                                  size="48"
+                                  class="my-0 py-0"
+                                >
+                                  <v-img :src="profileCard.avatarImage"></v-img>
+                                </v-avatar>
+                                <v-avatar
+                                  v-if="!profileCard.avatarImage"
+                                  color="primary-light-1"
+                                  size="48"
+                                  class="my-0 py-0"
+                                >
+                                  <span>{{ profileCard.avatarName }}</span>
+                                </v-avatar>
                               </div>
-                              <div
-                                class="profile-language ml-4"
-                                v-if="profileCard.languages.length > 0"
-                              >
-                                <span>
-                                  <v-icon color="primary-light-2"
-                                    >chat_bubble_outline</v-icon
+                              <div>
+                                <div class="profile-name ml-4">
+                                  {{ profileCard.name }}
+                                </div>
+                                <div
+                                  class="profile-language ml-4"
+                                  v-if="profileCard.languages.length > 0"
+                                >
+                                  <span>
+                                    <v-icon color="primary-light-2"
+                                      >chat_bubble_outline</v-icon
+                                    >
+                                  </span>
+                                  <span
+                                    v-for="(language,
+                                    i) in profileCard.languages"
+                                    :key="i"
                                   >
-                                </span>
+                                    {{ $t(language.t_key) }}
+                                    <span
+                                      v-if="
+                                        i != profileCard.languages.length - 1
+                                      "
+                                      >,</span
+                                    >
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="profile__body">
+                              <div
+                                class="profile-about-text mt-3"
+                                v-if="profileCard.aboutText"
+                              >
+                                <read-more
+                                  :more-str="$t('btn_label_view_more')"
+                                  :text="profileCard.aboutText"
+                                  link="#"
+                                  :less-str="$t('general_label_read_less')"
+                                  :max-chars="150"
+                                ></read-more>
+                              </div>
+                              <div class="profile-tags pt-3">
                                 <span
-                                  v-for="(language, i) in profileCard.languages"
+                                  v-for="(tag, i) in profileCard.tags"
                                   :key="i"
                                 >
-                                  {{ $t(language.t_key) }}
-                                  <span
-                                    v-if="i != profileCard.languages.length - 1"
-                                    >,</span
-                                  >
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="profile__body">
-                            <div
-                              class="profile-about-text mt-3"
-                              v-if="profileCard.aboutText"
-                            >
-                              <read-more
-                                :more-str="$t('btn_label_view_more')"
-                                :text="profileCard.aboutText"
-                                link="#"
-                                :less-str="$t('general_label_read_less')"
-                                :max-chars="150"
-                              ></read-more>
-                            </div>
-                            <div class="profile-tags pt-3">
-                              <span
-                                v-for="(tag, i) in profileCard.tags"
-                                :key="i"
-                              >
-                                <span v-if="i < 3">
-                                  <v-btn
-                                    x-small
-                                    color="#E1E8F1"
-                                    depressed
-                                    class="mr-2"
-                                  >
-                                    {{ tag.name }}
-                                  </v-btn>
-                                </span>
-                                <span v-if="i == 3">
-                                  + {{ profileCard.tags.length - 3 }}
-                                </span>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </v-col>
-                      <v-col cols="12" md="10">
-                        <div class="cantact">
-                          <v-card elevation="0" class="mt-10" color="#ECF2F7">
-                            <v-card-title>
-                              <div class="contact__title">
-                                {{ $t("chat_contact_box_title") }}
-                              </div>
-                            </v-card-title>
-                            <v-card-text>
-                              <v-text-field
-                                class="mx-3"
-                                flat
-                                :label="
-                                  $t('chat_contact_search_input_placeholder')
-                                "
-                                autocomplete="off"
-                                solo
-                                prepend-inner-icon="search"
-                                v-model="search"
-                                clearable
-                                @click="handleClearSearch"
-                              ></v-text-field>
-                              <v-list color="transparent">
-                                <v-list-item-group
-                                  v-model="activeChat"
-                                  active-class="border"
-                                  color="primary-light-1"
-                                >
-                                  <v-list-item
-                                    v-for="(item,
-                                    index) in filteredContactUsers"
-                                    :key="index"
-                                    :value="item.id"
-                                    @click.stop="
-                                      handleSelectedContactUser(item)
-                                    "
-                                  >
-                                    <v-list-item-avatar
-                                      color="grey lighten-1 white--text"
+                                  <span v-if="i < 3">
+                                    <v-btn
+                                      x-small
+                                      color="#E1E8F1"
+                                      depressed
+                                      class="mr-2"
                                     >
-                                      <span v-if="item.newMessageCount > 0">
-                                        <v-badge overlap bottom color="red">
+                                      {{ tag.name }}
+                                    </v-btn>
+                                  </span>
+                                  <span v-if="i == 3">
+                                    + {{ profileCard.tags.length - 3 }}
+                                  </span>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </v-col>
+                        <v-col cols="12" md="10">
+                          <div class="cantact">
+                            <v-card elevation="0" class="mt-10" color="#ECF2F7">
+                              <v-card-title>
+                                <div class="contact__title">
+                                  {{ $t("chat_contact_box_title") }}
+                                </div>
+                              </v-card-title>
+                              <v-card-text>
+                                <v-text-field
+                                  class="mx-3"
+                                  flat
+                                  :label="
+                                    $t('chat_contact_search_input_placeholder')
+                                  "
+                                  autocomplete="off"
+                                  solo
+                                  prepend-inner-icon="search"
+                                  v-model="search"
+                                  clearable
+                                  @click="handleClearSearch"
+                                ></v-text-field>
+                                <v-list color="transparent">
+                                  <v-list-item-group
+                                    v-model="activeChat"
+                                    active-class="border"
+                                    color="primary-light-1"
+                                  >
+                                    <v-list-item
+                                      v-for="(item,
+                                      index) in filteredContactUsers"
+                                      :key="index"
+                                      :value="item.id"
+                                      @click.stop="
+                                        handleSelectedContactUser(item)
+                                      "
+                                    >
+                                      <v-list-item-avatar
+                                        color="grey lighten-1 white--text"
+                                      >
+                                        <span v-if="item.newMessageCount > 0">
+                                          <v-badge overlap bottom color="red">
+                                            <v-avatar
+                                              v-if="item.avatarImage"
+                                              size="48"
+                                              class="my-0 py-0"
+                                            >
+                                              <v-img
+                                                class="elevation-6"
+                                                :src="item.avatarImage"
+                                              ></v-img>
+                                            </v-avatar>
+                                            <v-avatar
+                                              v-if="!item.avatarImage"
+                                              color="primary-light-1"
+                                              size="48"
+                                            >
+                                              <span>{{ item.avatarName }}</span>
+                                            </v-avatar>
+                                            <template
+                                              v-slot:badge
+                                              v-if="item.newMessageCount > 0"
+                                            >
+                                              <span>
+                                                {{ item.newMessageCount }}
+                                              </span>
+                                            </template>
+                                          </v-badge>
+                                        </span>
+                                        <span v-else>
                                           <v-avatar
                                             v-if="item.avatarImage"
                                             size="48"
@@ -178,135 +210,108 @@
                                           >
                                             <span>{{ item.avatarName }}</span>
                                           </v-avatar>
-                                          <template
-                                            v-slot:badge
-                                            v-if="item.newMessageCount > 0"
-                                          >
-                                            <span>
-                                              {{ item.newMessageCount }}
-                                            </span>
-                                          </template>
-                                        </v-badge>
-                                      </span>
-                                      <span v-else>
-                                        <v-avatar
-                                          v-if="item.avatarImage"
-                                          size="48"
-                                          class="my-0 py-0"
-                                        >
-                                          <v-img
-                                            class="elevation-6"
-                                            :src="item.avatarImage"
-                                          ></v-img>
-                                        </v-avatar>
-                                        <v-avatar
-                                          v-if="!item.avatarImage"
-                                          color="primary-light-1"
-                                          size="48"
-                                        >
-                                          <span>{{ item.avatarName }}</span>
-                                        </v-avatar>
-                                      </span>
-                                    </v-list-item-avatar>
-                                    <v-list-item-content>
-                                      <v-list-item-title>
-                                        <div class="connection">
-                                          <div class="connection__title">
-                                            {{ item.fullName }}
+                                        </span>
+                                      </v-list-item-avatar>
+                                      <v-list-item-content>
+                                        <v-list-item-title>
+                                          <div class="connection">
+                                            <div class="connection__title">
+                                              {{ item.fullName }}
+                                            </div>
+                                            <div class="connection__time"></div>
                                           </div>
-                                          <div class="connection__time"></div>
-                                        </div>
-                                      </v-list-item-title>
-                                      <v-list-item-subtitle>
-                                        <div class="connection-sub-title">
-                                          {{ item.title }}
-                                        </div>
-                                      </v-list-item-subtitle>
-                                    </v-list-item-content>
-                                  </v-list-item>
-                                </v-list-item-group>
-                              </v-list>
-                            </v-card-text>
-                          </v-card>
-                        </div>
-                      </v-col>
-                    </v-row>
+                                        </v-list-item-title>
+                                        <v-list-item-subtitle>
+                                          <div class="connection-sub-title">
+                                            {{ item.title }}
+                                          </div>
+                                        </v-list-item-subtitle>
+                                      </v-list-item-content>
+                                    </v-list-item>
+                                  </v-list-item-group>
+                                </v-list>
+                              </v-card-text>
+                            </v-card>
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </div>
                   </div>
-                </div>
-              </v-col>
-              <!-- ./LEFT SIDE -->
+                </v-col>
+                <!-- ./LEFT SIDE -->
 
-              <!-- RIGHT SIDE -->
-              <v-col cols="12" md="8">
-                <div class="chat-box__right pr-md-5">
-                  <div class="chat-body" v-if="selectedContactUser">
-                    <div class="chat-body__header">
-                      <v-toolbar
-                        v-if="!isShowingContactPanel"
-                        color="primary-light-2"
-                        elevation="0"
-                        dark
-                      >
-                        <v-toolbar-title>
-                          <v-btn icon @click="handleBackBtnClick">
-                            <v-icon>arrow_back</v-icon>
-                          </v-btn>
-                          {{ profileCard.name }}
-                        </v-toolbar-title>
-                      </v-toolbar>
-                    </div>
-                    <div class="chat-body__screen">
-                      <chat-screen> </chat-screen>
-                    </div>
-                    <div class="chat-body__status-bar">
-                      <span v-if="!hasNetwork">
-                        Offline now. You are able to send message as soon as you
-                        are back online.
-                      </span>
-                    </div>
-                    <div class="chat-body__actions">
-                      <v-textarea
-                        rows="1"
-                        row-height="15"
-                        auto-grow
-                        autocomplete="off"
-                        flat
-                        class="mx-3"
-                        v-model="messageForm.content"
-                        :label="$t('chat_chat_box_input_placeholder')"
-                        type="text"
-                        solo
-                        hide-details
-                        @keyup.enter="messageForm.content + '\n'"
-                      >
-                        <template v-slot:append>
-                          <!-- <v-btn icon>
+                <!-- RIGHT SIDE -->
+                <v-col cols="12" md="8">
+                  <div class="chat-box__right pr-md-5">
+                    <div class="chat-body" v-if="selectedContactUser">
+                      <div class="chat-body__header">
+                        <v-toolbar
+                          v-if="!isShowingContactPanel"
+                          color="primary-light-2"
+                          elevation="0"
+                          dark
+                        >
+                          <v-toolbar-title>
+                            <v-btn icon @click="handleBackBtnClick">
+                              <v-icon>arrow_back</v-icon>
+                            </v-btn>
+                            {{ profileCard.name }}
+                          </v-toolbar-title>
+                        </v-toolbar>
+                      </div>
+                      <div class="chat-body__screen">
+                        <chat-screen> </chat-screen>
+                      </div>
+                      <div class="chat-body__status-bar">
+                        <span v-if="!hasNetwork">
+                          Offline now. You are able to send message as soon as
+                          you are back online.
+                        </span>
+                      </div>
+                      <div class="chat-body__actions">
+                        <v-textarea
+                          rows="1"
+                          row-height="15"
+                          auto-grow
+                          autocomplete="off"
+                          flat
+                          class="mx-3"
+                          v-model="messageForm.content"
+                          :label="$t('chat_chat_box_input_placeholder')"
+                          type="text"
+                          solo
+                          hide-details
+                          @keyup.enter="messageForm.content + '\n'"
+                        >
+                          <template v-slot:append>
+                            <!-- <v-btn icon>
                         <v-icon>emoji_emotions</v-icon>
                           </v-btn>-->
-                          <v-btn icon @click.stop="handleCalenderClick">
-                            <v-icon>calendar_today</v-icon>
-                          </v-btn>
-                        </template>
-                      </v-textarea>
-                      <v-btn
-                        depressed
-                        dark
-                        color="primary-light-1"
-                        @click="handleMessageInput"
-                        >{{ $t("chat_btn_label_send") }}</v-btn
-                      >
+                            <v-btn icon @click.stop="handleCalenderClick">
+                              <v-icon>calendar_today</v-icon>
+                            </v-btn>
+                          </template>
+                        </v-textarea>
+                        <v-btn
+                          depressed
+                          dark
+                          color="primary-light-1"
+                          @click="handleMessageInput"
+                          >{{ $t("chat_btn_label_send") }}</v-btn
+                        >
+                      </div>
                     </div>
                   </div>
-                </div>
-              </v-col>
-            </v-row>
-            <!-- ./RIGHT SIDE -->
+                </v-col>
+              </v-row>
+              <!-- ./RIGHT SIDE -->
+            </div>
           </div>
-        </div>
-        <!-- ./chat-page -->
-      </v-col>
-    </v-row>
-  </v-container>
+          <!-- ./chat-page -->
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -470,11 +475,11 @@ export default {
   },
   mounted() {
     if (this.socket) {
-        this.socket.on("disconnect", () => console.log(`Disconnect`));
-        this.socket.on("connect", () => {
-          console.log(`Connected`);
-          this.$store.dispatch("socket/joinAuthUserToRoom");
-        });
+      this.socket.on("disconnect", () => console.log(`Disconnect`));
+      this.socket.on("connect", () => {
+        console.log(`Connected`);
+        this.$store.dispatch("socket/joinAuthUserToRoom");
+      });
     }
 
     // This is very sensitive.
@@ -626,6 +631,8 @@ export default {
 
 <style lang="scss">
 .chat-page {
+  background: $body-bg;
+  height: 100%;
   .v-avatar {
     justify-content: center;
   }

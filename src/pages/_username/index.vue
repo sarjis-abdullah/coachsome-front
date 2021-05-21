@@ -127,7 +127,7 @@
                       <v-row v-if="languageList">
                         <v-col cols="12">
                           <div class="d-flex">
-                            <v-icon small>far fa-comment</v-icon>
+                            <v-icon color="green" small>mdi-chat-outline</v-icon>
                             <span class="ml-5">
                               {{ languageList }}
                             </span>
@@ -147,13 +147,13 @@
                               small
                               v-if="verification.google"
                               color="green"
-                              >fa-check-circle</v-icon
+                              >mdi-check-circle-outlin</v-icon
                             >
                             <v-icon
                               small
                               v-if="!verification.google"
                               color="red"
-                              >fas fa-times</v-icon
+                              >mdi-cancel</v-icon
                             >
                             <span class="ml-5">{{
                               $t("profile_content_facts_google")
@@ -168,13 +168,13 @@
                               small
                               v-if="verification.facebook"
                               color="green"
-                              >fa-check-circle</v-icon
+                              >mdi-check-circle-outlin</v-icon
                             >
                             <v-icon
                               small
                               v-if="!verification.facebook"
                               color="red"
-                              >fas fa-times</v-icon
+                              >mdi-cancel</v-icon
                             >
                             <span class="ml-5">
                               {{ $t("profile_content_facts_fb_conn") }}
@@ -189,13 +189,13 @@
                               small
                               v-if="verification.gmail"
                               color="green"
-                              >fa-check-circle</v-icon
+                              >mdi-check-circle-outline</v-icon
                             >
                             <v-icon
                               small
                               v-if="!verification.gmail"
                               color="error"
-                              >fas fa-times</v-icon
+                              >mdi-cancel</v-icon
                             >
                             <span class="ml-5">
                               {{ $t("profile_content_email") }}
@@ -657,6 +657,7 @@ export default {
 
 <style lang="scss">
 .public-profile {
+  background: $body-bg;
   #map {
     z-index: 0;
   }

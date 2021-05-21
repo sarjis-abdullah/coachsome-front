@@ -289,5 +289,7 @@ export default {
 
 <style lang="scss" scoped>
 .coach-booking-page {
+  background: $body-bg;
+  height: 100%;
 }
 </style>

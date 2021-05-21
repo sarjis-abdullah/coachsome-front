@@ -15,7 +15,7 @@ export default {
     htmlAttrs: {
       lang: "en"
     },
-    
+
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -88,7 +88,7 @@ export default {
     { src: "~/plugins/tiptap-vuetify", mode: "client" },
     { src: "~/plugins/vue-js-toggle-button", mode: "client" },
     { src: "~/plugins/vue-image-upload-resize", mode: "client" },
-    { src: "~/plugins/vue-tribute.js", mode: "client"},
+    { src: "~/plugins/vue-tribute.js", mode: "client" },
     { src: "~/plugins/vuelidate" }
   ],
 
@@ -118,6 +118,7 @@ export default {
         locales: [
           {
             name: "English",
+            tKey: "lang_english",
             icon: "gb",
             countryCode: "GB",
             code: "en",
@@ -126,6 +127,7 @@ export default {
           },
           {
             name: "dansk",
+            tKey: "lang_danish",
             icon: "dk",
             countryCode: "DK",
             code: "da",
@@ -134,6 +136,7 @@ export default {
           },
           {
             name: "svenska",
+            tKey: "lang_swedish",
             icon: "se",
             countryCode: "SE",
             code: "sv",
@@ -211,6 +214,6 @@ export default {
 
   // Build Configuration
   build: {
-    transpile: ["vuetify/lib", "tiptap-vuetify",]
+    transpile: ["vuetify/lib", "tiptap-vuetify"]
   }
 };

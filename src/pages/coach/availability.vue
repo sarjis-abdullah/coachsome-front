@@ -1,228 +1,234 @@
 <template>
-  <v-container fluid class="page-container">
-    <v-row>
-      <v-col cols="12" class="pb-0">
-        <div class="page-title">{{ $t("avaiiability_page_title") }}</div>
-      </v-col>
-    </v-row>
+  <div class="coach-availability-page">
+    <v-container fluid class="page-container">
+      <v-row>
+        <v-col cols="12" class="pb-0">
+          <div class="page-title">{{ $t("avaiiability_page_title") }}</div>
+        </v-col>
+      </v-row>
 
-    <v-row>
-      <v-col cols="12">
-        <div class="line"></div>
-      </v-col>
-    </v-row>
+      <v-row>
+        <v-col cols="12">
+          <div class="line"></div>
+        </v-col>
+      </v-row>
 
-    <v-row>
-      <v-col cols="12" md="3">
-        <div class="section-title pb-2">{{ $t("text_times") }}</div>
-        <div class="section-description">
-          {{ $t("availability_section_desc") }}
-        </div>
-      </v-col>
-      <v-col cols="12" md="9">
-        <v-row v-for="(week, weekIndex) in defaultWeeks" :key="weekIndex">
-          <v-row>
-            <v-col
-              cols="12"
-              md="6"
-              v-for="(day, dayIndex) in week.days"
-              :key="dayIndex"
-            >
-              <div>{{ $t(day.t_key) }}</div>
-              <v-row>
-                <v-col
-                  cols="2"
-                  md="2"
-                  v-for="(time, timeIndex) in day.times"
-                  :key="timeIndex"
-                >
-                  <v-btn
-                    @click.stop="
-                      changeStatusForDefaultTime(
-                        !time.status,
-                        timeIndex,
-                        dayIndex,
-                        weekIndex
-                      )
-                    "
-                    x-small
-                    :color="time.status == 0 ? 'light' : 'orange lighten-4'"
-                    class="mr-2 mt-2"
-                    >{{ time.text }}</v-btn
-                  >
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col cols="12" md="6" class="ml-md-10 d-flex align-center">
-              <v-btn
-                dark
-                color="primary-light-1"
-                class="mr-3 mt-4"
-                hide-details
-                @click="saveDefaultAvailability"
-                >{{ $t("profile_save_btn") }}</v-btn
+      <v-row>
+        <v-col cols="12" md="3">
+          <div class="section-title pb-2">{{ $t("text_times") }}</div>
+          <div class="section-description">
+            {{ $t("availability_section_desc") }}
+          </div>
+        </v-col>
+        <v-col cols="12" md="9">
+          <v-row v-for="(week, weekIndex) in defaultWeeks" :key="weekIndex">
+            <v-row>
+              <v-col
+                cols="12"
+                md="6"
+                v-for="(day, dayIndex) in week.days"
+                :key="dayIndex"
               >
-              <v-switch
-                hide-details
-                v-model="week.is_fewer_time"
-                :label="
-                  week.is_fewer_time
-                    ? $t('input_label_all_time_slot')
-                    : $t('input_label_fewer_time_slot')
-                "
-                @change="fewerSlotForDefaultTime(weekIndex)"
-                color="primary-light-1"
-              />
-            </v-col>
-          </v-row>
-        </v-row>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col cols="12">
-        <div class="line my-5"></div>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col cols="12" md="3">
-        <div class="section-title pb-2">
-          {{ $t("availability_section_scheduled_time_title") }}
-        </div>
-        <div class="section-description">
-          {{ $t("availability_section_schedule_time_desc") }}
-        </div>
-      </v-col>
-      <v-col cols="12" md="9">
-        <v-expansion-panels v-model="weekPanel" multiple>
-          <v-expansion-panel
-            v-for="(week, weekIndex) in weeks"
-            :key="weekIndex"
-          >
-            <v-card flat tile>
-              <v-card-title
-                :style="{ backgroundColor: '#CAD5E1', paddingTop: 2 + 'px' }"
-              >
-                <span class="title-week">{{
-                  $t("text_week") + " " + week.week_no
-                }}</span>
-                <span class="font-weight-light">
-                  <v-btn
-                    color="primary-light-1"
-                    class="text-capitalize"
-                    @click="togglePanel(week, weekIndex)"
-                    text
-                    x-small
-                    >Edit</v-btn
-                  >
-                </span>
-              </v-card-title>
-              <v-card-text :style="{ backgroundColor: '#ECF2F7' }">
+                <div>{{ $t(day.t_key) }}</div>
                 <v-row>
-                  <v-col v-for="(day, dayIndex) in week.days" :key="dayIndex">
-                    <div>{{ $t(day.t_key) }}</div>
-                    <v-row
-                      v-for="(timeRange, timeRangeIndex) in day.time_ranges"
-                      :key="timeRangeIndex"
+                  <v-col
+                    cols="2"
+                    md="2"
+                    v-for="(time, timeIndex) in day.times"
+                    :key="timeIndex"
+                  >
+                    <v-btn
+                      @click.stop="
+                        changeStatusForDefaultTime(
+                          !time.status,
+                          timeIndex,
+                          dayIndex,
+                          weekIndex
+                        )
+                      "
+                      x-small
+                      :color="time.status == 0 ? 'light' : 'orange lighten-4'"
+                      class="mr-2 mt-2"
+                      >{{ time.text }}</v-btn
                     >
-                      <v-col>
-                        <v-chip
-                          @click:close="
-                            closed(
-                              timeRange,
-                              timeRangeIndex,
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col cols="12" md="6" class="ml-md-10 d-flex align-center">
+                <v-btn
+                  dark
+                  color="primary-light-1"
+                  class="mr-3 mt-4"
+                  hide-details
+                  @click="saveDefaultAvailability"
+                  >{{ $t("profile_save_btn") }}</v-btn
+                >
+                <v-switch
+                  hide-details
+                  v-model="week.is_fewer_time"
+                  :label="
+                    week.is_fewer_time
+                      ? $t('input_label_all_time_slot')
+                      : $t('input_label_fewer_time_slot')
+                  "
+                  @change="fewerSlotForDefaultTime(weekIndex)"
+                  color="primary-light-1"
+                />
+              </v-col>
+            </v-row>
+          </v-row>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col cols="12">
+          <div class="line my-5"></div>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col cols="12" md="3">
+          <div class="section-title pb-2">
+            {{ $t("availability_section_scheduled_time_title") }}
+          </div>
+          <div class="section-description">
+            {{ $t("availability_section_schedule_time_desc") }}
+          </div>
+        </v-col>
+        <v-col cols="12" md="9">
+          <v-expansion-panels v-model="weekPanel" multiple>
+            <v-expansion-panel
+              v-for="(week, weekIndex) in weeks"
+              :key="weekIndex"
+            >
+              <v-card flat tile>
+                <v-card-title
+                  :style="{ backgroundColor: '#CAD5E1', paddingTop: 2 + 'px' }"
+                >
+                  <span class="title-week">{{
+                    $t("text_week") + " " + week.week_no
+                  }}</span>
+                  <span class="font-weight-light">
+                    <v-btn
+                      color="primary-light-1"
+                      class="text-capitalize"
+                      @click="togglePanel(week, weekIndex)"
+                      text
+                      x-small
+                      >Edit</v-btn
+                    >
+                  </span>
+                </v-card-title>
+                <v-card-text :style="{ backgroundColor: '#ECF2F7' }">
+                  <v-row>
+                    <v-col v-for="(day, dayIndex) in week.days" :key="dayIndex">
+                      <div>{{ $t(day.t_key) }}</div>
+                      <v-row
+                        v-for="(timeRange, timeRangeIndex) in day.time_ranges"
+                        :key="timeRangeIndex"
+                      >
+                        <v-col>
+                          <v-chip
+                            @click:close="
+                              closed(
+                                timeRange,
+                                timeRangeIndex,
+                                dayIndex,
+                                weekIndex
+                              )
+                            "
+                            close
+                            color="rgba(73, 85, 106, 0.15)"
+                            label
+                            small
+                            >{{
+                              timeRange.start_time + " - " + timeRange.end_time
+                            }}</v-chip
+                          >
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+
+              <v-expansion-panel-content
+                :style="{ backgroundColor: '#E1E8F1' }"
+              >
+                <v-row>
+                  <v-col
+                    cols="12"
+                    md="6"
+                    v-for="(day, dayIndex) in week.days"
+                    :key="dayIndex"
+                  >
+                    <div>{{ $t(day.t_key) }}</div>
+                    <v-row>
+                      <v-col
+                        cols="4"
+                        md="2"
+                        v-for="(time, timeIndex) in day.times"
+                        :key="timeIndex"
+                      >
+                        <v-btn
+                          @click.stop="
+                            changeStatus(
+                              !time.status,
+                              timeIndex,
                               dayIndex,
                               weekIndex
                             )
                           "
-                          close
-                          color="rgba(73, 85, 106, 0.15)"
-                          label
-                          small
-                          >{{
-                            timeRange.start_time + " - " + timeRange.end_time
-                          }}</v-chip
+                          x-small
+                          :color="
+                            time.status == 0 ? 'light' : 'orange lighten-4'
+                          "
+                          class="mr-2 mt-2"
+                          >{{ time.text }}</v-btn
                         >
                       </v-col>
                     </v-row>
                   </v-col>
                 </v-row>
-              </v-card-text>
-            </v-card>
-
-            <v-expansion-panel-content :style="{ backgroundColor: '#E1E8F1' }">
-              <v-row>
-                <v-col
-                  cols="12"
-                  md="6"
-                  v-for="(day, dayIndex) in week.days"
-                  :key="dayIndex"
-                >
-                  <div>{{ $t(day.t_key) }}</div>
-                  <v-row>
-                    <v-col
-                      cols="4"
-                      md="2"
-                      v-for="(time, timeIndex) in day.times"
-                      :key="timeIndex"
+                <v-row>
+                  <v-col cols="12" md="2" class="ml-md-10">
+                    <v-btn
+                      dark
+                      color="primary-light-1"
+                      block
+                      class="mt-3"
+                      @click="updateAvailabilitytimes(weekIndex)"
+                      >{{ $t("profile_save_btn") }}</v-btn
                     >
-                      <v-btn
-                        @click.stop="
-                          changeStatus(
-                            !time.status,
-                            timeIndex,
-                            dayIndex,
-                            weekIndex
-                          )
-                        "
-                        x-small
-                        :color="time.status == 0 ? 'light' : 'orange lighten-4'"
-                        class="mr-2 mt-2"
-                        >{{ time.text }}</v-btn
-                      >
-                    </v-col>
-                  </v-row>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" md="2" class="ml-md-10">
-                  <v-btn
-                    dark
-                    color="primary-light-1"
-                    block
-                    class="mt-3"
-                    @click="updateAvailabilitytimes(weekIndex)"
-                    >{{ $t("profile_save_btn") }}</v-btn
-                  >
-                </v-col>
-                <v-col cols="12" md="3">
-                  <v-switch
-                    v-model="week.is_fewer_time"
-                    :label="
-                      week.is_fewer_time
-                        ? $t('input_label_all_time_slot')
-                        : $t('input_label_fewer_time_slot')
-                    "
-                    @change="fewerSlot(weekIndex)"
-                    color="primary-light-1"
-                  />
-                </v-col>
-              </v-row>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </v-col>
-    </v-row>
-    <v-row class="d-sm-flex d-xs-flex d-lg-none">
-      <v-col cols="12" class="mx-0 px-0">
-        <client-back-footer class="px-0 py-0" />
-      </v-col>
-    </v-row>
-  </v-container>
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-switch
+                      v-model="week.is_fewer_time"
+                      :label="
+                        week.is_fewer_time
+                          ? $t('input_label_all_time_slot')
+                          : $t('input_label_fewer_time_slot')
+                      "
+                      @change="fewerSlot(weekIndex)"
+                      color="primary-light-1"
+                    />
+                  </v-col>
+                </v-row>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-col>
+      </v-row>
+      <v-row class="d-sm-flex d-xs-flex d-lg-none">
+        <v-col cols="12" class="mx-0 px-0">
+          <client-back-footer class="px-0 py-0" />
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -233,7 +239,7 @@ import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 export default {
   layout: "coach",
   components: {
-    ClientBackFooter,
+    ClientBackFooter
   },
   data() {
     return {
@@ -754,11 +760,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.title-week {
-  font-family: $font-family;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  color: #f7fafc;
+.coach-availability-page {
+  background: $body-bg;
+  height: 100%;
+  .title-week {
+    font-family: $font-family;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    color: #f7fafc;
+  }
 }
 </style>

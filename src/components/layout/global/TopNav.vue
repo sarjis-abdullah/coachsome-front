@@ -85,7 +85,7 @@
                       </v-list-item-avatar>
                       <v-list-item-content>
                         <v-list-item-title>
-                          {{ locale.name }}
+                          {{ $t(locale.tKey) }}
                         </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
@@ -145,7 +145,6 @@
         </v-menu>
 
         <!-- Marketplace -->
-
         <v-btn
           small
           class="text-normal"
