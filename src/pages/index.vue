@@ -339,7 +339,6 @@
                   </div>
                 </v-col>
               </v-row>
-        
 
               <!-- Sport Swiper -->
               <!-- <client-only> -->
@@ -828,7 +827,7 @@ import { frontHomeApi } from "@/api";
 export default {
   layout: "home",
   components: {
-    SportSearch,
+    SportSearch
   },
   head() {
     return {
@@ -1207,6 +1206,7 @@ export default {
         font-family: $font-family;
         font-weight: 800;
         font-size: 24px;
+        word-wrap: normal;
         line-height: 33px;
         display: flex;
         align-items: center;

@@ -99,7 +99,12 @@
       </v-col>
 
       <!-- Field chooser -->
-      <v-col cols="12" md="1" class="text-right">
+      <v-col
+        cols="12"
+        md="1"
+        class="text-right"
+        v-if="$vuetify.breakpoint.mdAndUp"
+      >
         <v-row>
           <v-col>
             <v-menu bottom offset-y :close-on-content-click="false">
@@ -155,9 +160,9 @@
                       v-model="hourlyPriceFilter.range"
                       :max="priceSliderMax"
                       :min="priceSliderMin"
-                      @input="
+                      @end="
                         $emit(
-                          'update:priceSliderRange',
+                          'update:price-slider-range',
                           hourlyPriceFilter.range
                         )
                       "
@@ -196,6 +201,43 @@
         </v-row>
       </v-col>
     </v-row>
+
+    <!-- Field chooser -->
+    <v-row>
+      <v-col
+        cols="12"
+        md="1"
+        class="text-right"
+        v-if="$vuetify.breakpoint.smAndDown"
+      >
+        <v-row>
+          <v-col>
+            <v-menu bottom offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on }">
+                <v-btn color="white" v-on="on">
+                  <v-icon>filter_list</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item v-for="(item, i) in filter.item" :key="i">
+                  <v-list-item-action>
+                    <v-checkbox
+                      :disabled="item.isDisabled"
+                      v-model="item.isActive"
+                      color="primary-light-1"
+                      @click.stop="handleFieldChooserChange"
+                    ></v-checkbox>
+                  </v-list-item-action>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ $t(item.t_key) }}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -204,6 +246,7 @@ import GooglePlaceSearch from "@/components/geography/GooglePlaceSearch";
 
 export default {
   props: [
+    "mobile",
     "categories",
     "selectedCategories",
     "radiusSlider",
@@ -251,13 +294,6 @@ export default {
             text: "Hourly Price",
             t_key: "marketplace_filter_chooser_text_hourly_price",
             isActive: true,
-            isDisabled: false
-          },
-          date: {
-            id: 5,
-            text: "Date",
-            t_key: "marketplace_filter_chooser_text_hourly_date",
-            isActive: false,
             isDisabled: false
           },
           country: {
@@ -345,6 +381,9 @@ export default {
     }
   },
   methods: {
+    handlePriceChange() {
+      this.$emit("update:price-slider-range", this.hourlyPriceFilter.range);
+    },
     changeCategoryFilter() {
       this.categoryFilter.search = null;
     },

@@ -19,7 +19,10 @@
               <v-row>
                 <v-col class="px-10" cols="12" md="9">
                   <!-- Filter Box -->
-                  <div :class="{ 'filter-box': isFilterBoxFixed }">
+                  <div
+                    :class="{ 'filter-box': isFilterBoxFixed }"
+                    v-if="$vuetify.breakpoint.mdAndUp"
+                  >
                     <CoachFilter
                       :categories="categoryFilter.categories"
                       :selected-categories.sync="
@@ -28,15 +31,79 @@
                       :radius-slider.sync="radiusFilter.slider"
                       :radius-slider-min.sync="radiusFilter.min"
                       :radius-slider-max.sync="radiusFilter.max"
-                      :price-slider-range.sync="hourlyPriceFilter.range"
-                      :price-slider-min.sync="hourlyPriceFilter.min"
-                      :price-slider-max.sync="hourlyPriceFilter.max"
+                      :price-slider-range="hourlyPriceFilter.range"
+                      @update:price-slider-range="handleUpdatedPriceRange"
+                      :price-slider-min="hourlyPriceFilter.min"
+                      :price-slider-max="hourlyPriceFilter.max"
                       :currency-code="hourlyPriceFilter.currencyCode"
                       :countries="countryFilter.countryList"
                       :selected-country.sync="countryFilter.selectedCountryCode"
                       @update:location="handleGoogleLocation"
                     />
                   </div>
+
+                  <!-- Filter Dialog -->
+                  <v-dialog v-model="filterDialog">
+                    <v-card>
+                      <v-card-title class="title">
+                        {{ $t("marketplace_sm_body_filter_title_txt") }}
+                        <v-spacer></v-spacer>
+                        <v-menu bottom offset-y :close-on-content-click="false">
+                          <template v-slot:activator="{ on }">
+                            <v-btn icon v-on="on">
+                              <v-icon>filter_list</v-icon>
+                            </v-btn>
+                          </template>
+                          <v-list>
+                            <v-list-item
+                              v-for="(item, i) in filter.item"
+                              :key="i"
+                            >
+                              <v-list-item-action>
+                                <v-checkbox
+                                  :disabled="item.isDisabled"
+                                  v-model="item.isActive"
+                                  color="primary-light-1"
+                                  @click.native="reloadInfiniteLoader"
+                                ></v-checkbox>
+                              </v-list-item-action>
+                              <v-list-item-content>
+                                <v-list-item-title>{{
+                                  $t(item.t_key)
+                                }}</v-list-item-title>
+                              </v-list-item-content>
+                            </v-list-item>
+                          </v-list>
+                        </v-menu>
+                        <v-btn small icon @click="handleCloseFilterBtnClick">
+                          <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                      </v-card-title>
+                      <v-card-text>
+                        <CoachFilter
+                          mobile
+                          :categories="categoryFilter.categories"
+                          :selected-categories.sync="
+                            categoryFilter.selectedCategories
+                          "
+                          :radius-slider.sync="radiusFilter.slider"
+                          :radius-slider-min.sync="radiusFilter.min"
+                          :radius-slider-max.sync="radiusFilter.max"
+                          :price-slider-range="hourlyPriceFilter.range"
+                          @update:price-slider-range="handleUpdatedPriceRange"
+                          :price-slider-min="hourlyPriceFilter.min"
+                          :price-slider-max="hourlyPriceFilter.max"
+                          :currency-code="hourlyPriceFilter.currencyCode"
+                          :countries="countryFilter.countryList"
+                          :selected-country.sync="
+                            countryFilter.selectedCountryCode
+                          "
+                          @update:location="handleGoogleLocation"
+                        />
+                      </v-card-text>
+                      <v-divider></v-divider>
+                    </v-card>
+                  </v-dialog>
 
                   <!-- coach-list -->
                   <v-row>
@@ -344,6 +411,10 @@ export default {
     this.getInitialData();
   },
   methods: {
+    handleUpdatedPriceRange(val) {
+      this.hourlyPriceFilter.range = val;
+      this.reloadInfiniteLoader();
+    },
     setCurrenctCountry() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
