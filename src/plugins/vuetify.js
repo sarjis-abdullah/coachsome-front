@@ -2,6 +2,7 @@ import MyGoogleIcon from "@/components/icons/GoogleIcon.vue";
 import MyFacebookIcon from "@/components/icons/FacebookIcon.vue";
 
 export default {
+  defaultAssets: false,
   icons: {
     iconfont: "md",
     values: {
