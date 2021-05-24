@@ -1,6 +1,6 @@
 <template>
   <v-footer class="footer" color="primary" :fixed="fixed">
-    <v-card class="footer-card" flat>
+    <v-card class="footer-card" flat color="primary">
       <v-row>
         <v-col cols="12" md="5" class="pl-10">
           <v-row>
@@ -133,8 +133,8 @@
                 <div class="list__title text-uppercase">
                   {{ $t("footer_txt_contact_us") }}
                 </div>
-                <div class="list__item">Århusvej 201</div>
-                <div class="list__item">8464 Galten</div>
+                <div class="list__item">Ny Banegårdsgade 55, 4</div>
+                <div class="list__item">8000 Aarhus C</div>
                 <div class="list__item">Denmark</div>
                 <div class="list__item">
                   <a href="mailto:info@coachsome.com">info@coachsome.com</a>

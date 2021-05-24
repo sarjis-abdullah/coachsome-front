@@ -105,6 +105,12 @@ export default {
         optionsPath: "~/plugins/vuetify.js",
         treeShake: true
       }
+    ],
+    [
+      "@aceforth/nuxt-optimized-images",
+      {
+        optimizeImages: true
+      }
     ]
   ],
 

@@ -1,138 +1,116 @@
 <template>
   <div class="home-page">
+    <!-- hero -->
+    <div class="hero-section">
+      <div class="hero-section__bg">
+        <img
+          width="100%"
+          height="100%"
+          :src="require('@/assets/images/home/hero.jpg')"
+          alt=""
+        />
+        <!-- <v-img
+          width="100%"
+          height="100%"
+          :src="require('@/assets/images/home/hero.jpg')"
+          :lazy-src="require('@/assets/images/home/hero.jpg')"
+          class="grey lighten-2"
+        >
+          <template v-slot:placeholder>
+            <v-row class="fill-height ma-0" align="center" justify="center">
+              <v-progress-circular
+                indeterminate
+                color="grey lighten-5"
+              ></v-progress-circular>
+            </v-row>
+          </template>
+        </v-img> -->
+      </div>
+      <div class="hero-section__content">
+        <v-row justify="center" align="center">
+          <v-col cols="12" md="6">
+            <v-card color="transparent" elevation="0">
+              <v-card-text>
+                <div
+                  :class="[
+                    'big-title',
+                    {
+                      'big-title--sm': $vuetify.breakpoint.smAndDown,
+                      'big-title--md': $vuetify.breakpoint.mdAndUp
+                    }
+                  ]"
+                >
+                  {{ $t("front_sec_title_find_the_right_coach") }}
+                </div>
+              </v-card-text>
+            </v-card>
+            <SportSearch
+              :items="categoryList"
+              @on-item-select="goToMarketPlaceAndSearchByQueryParamCategoryName"
+            ></SportSearch>
+            <v-card color="transparent" elevation="0">
+              <v-card-text>
+                <div
+                  :class="[
+                    'category d-flex justify-center',
+                    {
+                      'category--md': $vuetify.breakpoint.mdAndUp,
+                      'category--sm': $vuetify.breakpoint.smAndDown
+                    }
+                  ]"
+                >
+                  <span class="category__title mr-2">{{
+                    $t("front_txt_poppular")
+                  }}</span>
+                  <span v-for="(item, i) in popularCategories" :key="i">
+                    <v-btn
+                      color="white"
+                      depressed
+                      rounded
+                      small
+                      class="text-capitalize category__item mr-2"
+                      @click.stop="goToMarketPlaceAndSearchByCategoryId(item)"
+                      >{{ $t(item.t_key) }}</v-btn
+                    >
+                  </span>
+                </div>
+              </v-card-text>
+            </v-card>
+            <div
+              :class="[
+                'coachsome-rating d-flex justify-center flex-wrap align-center',
+                {
+                  'coachsome-rating--md': $vuetify.breakpoint.mdAndUp,
+                  'coachsome-rating--sm': $vuetify.breakpoint.smAndDown
+                }
+              ]"
+            >
+              <v-rating
+                readonly
+                :value="overallRating"
+                background-color="rating"
+                color="rating"
+                medium
+                half-increments
+              ></v-rating>
+              <div class="coachsome-rating__text">
+                <v-btn
+                  text
+                  class="text-normal white--text"
+                  @click="handleReviewTextClick"
+                >
+                  {{ totalReviewerCount }}
+                  {{ $t("front_page_reviews_text") }}
+                </v-btn>
+              </div>
+            </div>
+          </v-col>
+        </v-row>
+      </div>
+    </div>
     <v-container fluid>
       <v-row>
         <v-col>
-          <!-- hero -->
-          <v-row
-            class="hero-section"
-            align="center"
-            :style="{
-              background:
-                'url(' + require('@/assets/images/home/hero.jpg') + ')',
-              backgroundSize: 'cover'
-            }"
-          >
-            <v-col cols="12">
-              <v-row justify="center">
-                <v-col cols="12" md="8">
-                  <div class="big-title">
-                    <div
-                      :class="[
-                        'big-title',
-                        {
-                          'big-title--sm': $vuetify.breakpoint.smAndDown,
-                          'big-title--md': $vuetify.breakpoint.mdAndUp
-                        }
-                      ]"
-                    >
-                      {{ $t("front_sec_title_find_the_right_coach") }}
-                    </div>
-                  </div>
-                </v-col>
-              </v-row>
-
-              <!-- Sport Search -->
-              <v-row justify="center">
-                <v-col cols="12" md="6" lg="4">
-                  <div class="sport-search">
-                    <SportSearch
-                      :items="categoryList"
-                      @on-item-select="
-                        goToMarketPlaceAndSearchByQueryParamCategoryName
-                      "
-                    ></SportSearch>
-                  </div>
-                </v-col>
-              </v-row>
-
-              <!-- Category -->
-              <v-row justify="center">
-                <v-col>
-                  <v-row justify="center" v-show="!popular.isLoading">
-                    <v-col cols="12" md="6">
-                      <div
-                        :class="[
-                          'category d-flex justify-center',
-                          {
-                            'category--md': $vuetify.breakpoint.mdAndUp,
-                            'category--sm': $vuetify.breakpoint.smAndDown
-                          }
-                        ]"
-                      >
-                        <span class="category__title mr-2">{{
-                          $t("front_txt_poppular")
-                        }}</span>
-                        <span v-for="(item, i) in popularCategories" :key="i">
-                          <v-btn
-                            color="white"
-                            depressed
-                            rounded
-                            small
-                            class="text-capitalize category__item mr-2"
-                            @click.stop="
-                              goToMarketPlaceAndSearchByCategoryId(item)
-                            "
-                            >{{ $t(item.t_key) }}</v-btn
-                          >
-                        </span>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row justify="center" v-show="popular.isLoading">
-                    <v-col cols="12" md="3">
-                      <v-skeleton-loader type="text@2"></v-skeleton-loader>
-                    </v-col>
-                  </v-row>
-                </v-col>
-              </v-row>
-
-              <!-- Rating -->
-              <v-row>
-                <v-col>
-                  <v-row justify="center" v-show="!companyRating.isLoading">
-                    <v-col cols="12" md="6">
-                      <div
-                        :class="[
-                          'coachsome-rating d-flex justify-center flex-wrap align-center',
-                          {
-                            'coachsome-rating--md': $vuetify.breakpoint.mdAndUp,
-                            'coachsome-rating--sm':
-                              $vuetify.breakpoint.smAndDown
-                          }
-                        ]"
-                      >
-                        <v-rating
-                          readonly
-                          :value="overallRating"
-                          background-color="rating"
-                          color="rating"
-                          medium
-                          half-increments
-                        ></v-rating>
-                        <div class="coachsome-rating__text">
-                          <v-btn
-                            text
-                            class="text-normal white--text"
-                            @click="handleReviewTextClick"
-                          >
-                            {{ totalReviewerCount }}
-                            {{ $t("front_page_reviews_text") }}
-                          </v-btn>
-                        </div>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row justify="center" v-show="companyRating.isLoading">
-                    <v-col cols="12" md="3">
-                      <v-skeleton-loader type="text@2"></v-skeleton-loader>
-                    </v-col>
-                  </v-row>
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
-
           <!-- Company Logos -->
           <client-only>
             <v-row>
@@ -1078,6 +1056,22 @@ export default {
 
   .hero-section {
     height: 100vh;
+    width: 100%;
+    position: relative;
+    &__bg {
+      height: 100vh;
+      width: 100%;
+      z-index: 0;
+      position: absolute;
+    }
+    &__content {
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      flex-direction: column;
+      height: 100vh;
+      width: 100%;
+    }
   }
 
   .sport-search {
@@ -1090,6 +1084,7 @@ export default {
     font-weight: 800;
     line-height: 127.1%;
     color: #ffffff;
+    z-index: 1;
     &--md {
       // margin-top: 150px;
       font-size: 48px;
