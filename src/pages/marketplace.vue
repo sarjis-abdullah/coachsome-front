@@ -20,557 +20,25 @@
                 <v-col class="px-10" cols="12" md="9">
                   <!-- Filter Box -->
                   <div :class="{ 'filter-box': isFilterBoxFixed }">
-                    <!-- Fields block is the duplicate code in future it should be optimized-->
-                    <!-- Field Block -->
-                    <div
-                      class="fields-block"
-                      v-if="$vuetify.breakpoint.mdAndUp"
-                    >
-                      <v-row>
-                        <v-col cols="12" md="11">
-                          <v-row>
-                            <!-- Category -->
-                            <v-col
-                              cols="12"
-                              md="4"
-                              style="padding-bottom: 0;"
-                              v-if="filter.item.category.isActive"
-                            >
-                              <v-autocomplete
-                                v-model="categoryFilter.selectedCategories"
-                                :items="categoryFilter.categories"
-                                @input="changeCategoryFilter"
-                                :menu-props="{ closeOnContentClick: true }"
-                                chips
-                                dense
-                                hide-details
-                                clearable
-                                color="white"
-                                item-text="name"
-                                item-value="id"
-                                :search-input.sync="categoryFilter.search"
-                                multiple
-                                solo
-                                :label="
-                                  $t(
-                                    'marketplace_category_filter_placeholder_text'
-                                  )
-                                "
-                                append-icon
-                                autocomplete="off"
-                              >
-                                <template v-slot:selection="data">
-                                  <v-chip
-                                    dark
-                                    small
-                                    color="primary-light-2"
-                                    v-bind="data.attrs"
-                                    :input-value="data.selected"
-                                    close
-                                    @click="data.select"
-                                    @click:close="remove(data.item)"
-                                    >{{ $t(data.item.t_key) }}</v-chip
-                                  >
-                                </template>
-                                <template v-slot:item="data">
-                                  <template>
-                                    <v-list-item-content>{{
-                                      $t(data.item.t_key)
-                                    }}</v-list-item-content>
-                                  </template>
-                                </template>
-                              </v-autocomplete>
-                            </v-col>
-
-                            <!-- Location -->
-                            <v-col
-                              cols="12"
-                              md="4"
-                              v-if="filter.item.location.isActive"
-                            >
-                              <GooglePlaceSearch
-                                height="39px"
-                                @location="handleGoogleLocation"
-                              />
-                            </v-col>
-
-                            <!-- Radius -->
-                            <v-col
-                              cols="12"
-                              md="4"
-                              v-if="filter.item.radius.isActive"
-                            >
-                              <v-select
-                                hide-details
-                                dense
-                                :label="radiusFilter.slider + ' km'"
-                                solo
-                              >
-                                <template v-slot:no-data>
-                                  <v-list-item>
-                                    <v-list-item-content>
-                                      <span class="title">Radius</span>
-                                    </v-list-item-content>
-                                  </v-list-item>
-                                  <v-list-item>
-                                    <v-list-item-content :style="{}">
-                                      <v-slider
-                                        color="primary-light-1"
-                                        @end="reloadInfiniteLoader"
-                                        v-model="radiusFilter.slider"
-                                        :min="radiusFilter.min"
-                                        :max="radiusFilter.max"
-                                        hide-details
-                                        class="align-center"
-                                      ></v-slider>
-                                      <span class="title font-weight-bold"
-                                        >{{ radiusFilter.slider }} km</span
-                                      >
-                                    </v-list-item-content>
-                                  </v-list-item>
-                                </template>
-                              </v-select>
-                            </v-col>
-                          </v-row>
-                        </v-col>
-
-                        <!-- Field chooser -->
-                        <v-col cols="12" md="1" class="text-right">
-                          <v-row>
-                            <v-col>
-                              <v-menu
-                                bottom
-                                offset-y
-                                :close-on-content-click="false"
-                              >
-                                <template v-slot:activator="{ on }">
-                                  <v-btn color="white" v-on="on">
-                                    <v-icon>filter_list</v-icon>
-                                  </v-btn>
-                                </template>
-                                <v-list>
-                                  <v-list-item
-                                    v-for="(item, i) in filter.item"
-                                    :key="i"
-                                  >
-                                    <v-list-item-action>
-                                      <v-checkbox
-                                        :disabled="item.isDisabled"
-                                        v-model="item.isActive"
-                                        color="primary-light-1"
-                                        @click.native="reloadInfiniteLoader"
-                                      ></v-checkbox>
-                                    </v-list-item-action>
-                                    <v-list-item-content>
-                                      <v-list-item-title>{{
-                                        $t(item.t_key)
-                                      }}</v-list-item-title>
-                                    </v-list-item-content>
-                                  </v-list-item>
-                                </v-list>
-                              </v-menu>
-                            </v-col>
-                          </v-row>
-                        </v-col>
-                      </v-row>
-
-                      <v-row>
-                        <v-col cols="12" md="11">
-                          <v-row>
-                            <!-- Hourly price -->
-                            <v-col
-                              cols="12"
-                              md="4"
-                              v-if="filter.item.hourlyPrice.isActive"
-                            >
-                              <v-select
-                                dense
-                                hide-details
-                                :label="
-                                  hourlyPriceFilter.range.join([
-                                    (separator = ' - ')
-                                  ])
-                                "
-                                solo
-                              >
-                                <template v-slot:no-data>
-                                  <v-list-item>
-                                    <v-list-item-content>
-                                      <span class="title">{{
-                                        $t(
-                                          "marketplace_hourly_rate_filter_title_text"
-                                        )
-                                      }}</span>
-                                    </v-list-item-content>
-                                  </v-list-item>
-                                  <v-list-item>
-                                    <v-list-item-content :style="{}">
-                                      <v-range-slider
-                                        color="primary-light-1"
-                                        v-model="hourlyPriceFilter.range"
-                                        :max="hourlyPriceFilter.max"
-                                        :min="hourlyPriceFilter.min"
-                                        hide-details
-                                        @end="reloadInfiniteLoader"
-                                        class="align-center"
-                                      ></v-range-slider>
-                                      <span class="title font-weight-bold"
-                                        >{{ hourlyPriceFilter.currencyCode }}
-                                        {{ hourlyPriceFilter.range[0] }} -
-                                        {{ hourlyPriceFilter.range[1] }}</span
-                                      >
-                                    </v-list-item-content>
-                                  </v-list-item>
-                                </template>
-                              </v-select>
-                            </v-col>
-
-                            <!-- Date -->
-                            <v-col
-                              cols="12"
-                              md="4"
-                              v-if="filter.item.date.isActive"
-                            >
-                              <v-menu
-                                v-model="dateFilter.menu"
-                                :close-on-content-click="false"
-                                :nudge-right="40"
-                                transition="scale-transition"
-                                offset-y
-                                min-width="290px"
-                              >
-                                <template v-slot:activator="{ on }">
-                                  <v-text-field
-                                    dense
-                                    v-model="formttedDate"
-                                    solo
-                                    label="Date"
-                                    readonly
-                                    v-on="on"
-                                  ></v-text-field>
-                                </template>
-                                <v-date-picker
-                                  :locale="currentLang"
-                                  v-model="dateFilter.date"
-                                  :first-day-of-week="1"
-                                  @input="dateFilter.menu = false"
-                                ></v-date-picker>
-                              </v-menu>
-                            </v-col>
-
-                            <!-- Country -->
-                            <v-col
-                              cols="12"
-                              md="4"
-                              v-if="filter.item.country.isActive"
-                            >
-                              <v-autocomplete
-                                autocomplete="off"
-                                v-model="countryFilter.selectedCountryCode"
-                                @change="handleCountryChange"
-                                :items="countryFilter.countryList"
-                                item-text="displayName"
-                                item-value="code"
-                                solo
-                                dense
-                                hide-no-data
-                                hide-details
-                                append-icon="expand_more"
-                                :label="$t('setting_input_hint_country')"
-                              ></v-autocomplete>
-                            </v-col>
-                          </v-row>
-                        </v-col>
-                      </v-row>
-                    </div>
-
-                    <!-- Filter Dialog -->
-                    <v-dialog v-model="filterDialog">
-                      <v-card>
-                        <v-card-title class="title">
-                          {{ $t("marketplace_sm_body_filter_title_txt") }}
-                          <v-spacer></v-spacer>
-                          <v-menu
-                            bottom
-                            offset-y
-                            :close-on-content-click="false"
-                          >
-                            <template v-slot:activator="{ on }">
-                              <v-btn icon v-on="on">
-                                <v-icon>filter_list</v-icon>
-                              </v-btn>
-                            </template>
-                            <v-list>
-                              <v-list-item
-                                v-for="(item, i) in filter.item"
-                                :key="i"
-                              >
-                                <v-list-item-action>
-                                  <v-checkbox
-                                    :disabled="item.isDisabled"
-                                    v-model="item.isActive"
-                                    color="primary-light-1"
-                                    @click.native="reloadInfiniteLoader"
-                                  ></v-checkbox>
-                                </v-list-item-action>
-                                <v-list-item-content>
-                                  <v-list-item-title>{{
-                                    $t(item.t_key)
-                                  }}</v-list-item-title>
-                                </v-list-item-content>
-                              </v-list-item>
-                            </v-list>
-                          </v-menu>
-                          <v-btn small icon @click="handleCloseFilterBtnClick">
-                            <v-icon>mdi-close</v-icon>
-                          </v-btn>
-                        </v-card-title>
-                        <v-card-text>
-                          <!-- Fields block is the duplicate code in future it should be optimized-->
-                          <!-- Field Block -->
-                          <div
-                            class="fields-block"
-                            v-if="$vuetify.breakpoint.smAndDown"
-                          >
-                            <v-row>
-                              <v-col cols="12" md="11">
-                                <v-row>
-                                  <!-- Category -->
-                                  <v-col
-                                    cols="12"
-                                    md="4"
-                                    style="padding-bottom: 0;"
-                                    v-if="filter.item.category.isActive"
-                                  >
-                                    <v-autocomplete
-                                      v-model="
-                                        categoryFilter.selectedCategories
-                                      "
-                                      :items="categoryFilter.categories"
-                                      @input="changeCategoryFilter"
-                                      :menu-props="{
-                                        closeOnContentClick: true
-                                      }"
-                                      chips
-                                      dense
-                                      hide-details
-                                      clearable
-                                      color="white"
-                                      item-text="name"
-                                      item-value="id"
-                                      :search-input.sync="categoryFilter.search"
-                                      multiple
-                                      solo
-                                      :label="
-                                        $t(
-                                          'marketplace_category_filter_placeholder_text'
-                                        )
-                                      "
-                                      append-icon
-                                      autocomplete="off"
-                                    >
-                                      <template v-slot:selection="data">
-                                        <v-chip
-                                          dark
-                                          small
-                                          color="primary-light-2"
-                                          v-bind="data.attrs"
-                                          :input-value="data.selected"
-                                          close
-                                          @click="data.select"
-                                          @click:close="remove(data.item)"
-                                          >{{ $t(data.item.t_key) }}</v-chip
-                                        >
-                                      </template>
-                                      <template v-slot:item="data">
-                                        <template>
-                                          <v-list-item-content>{{
-                                            $t(data.item.t_key)
-                                          }}</v-list-item-content>
-                                        </template>
-                                      </template>
-                                    </v-autocomplete>
-                                  </v-col>
-
-                                  <!-- Location -->
-                                  <v-col
-                                    cols="12"
-                                    md="4"
-                                    v-if="filter.item.location.isActive"
-                                  >
-                                    <GooglePlaceSearch
-                                      height="39px"
-                                      @location="handleGoogleLocation"
-                                    />
-                                  </v-col>
-
-                                  <!-- Radius -->
-                                  <v-col
-                                    cols="12"
-                                    md="4"
-                                    v-if="filter.item.radius.isActive"
-                                  >
-                                    <v-select
-                                      hide-details
-                                      dense
-                                      :label="radiusFilter.slider + ' km'"
-                                      solo
-                                    >
-                                      <template v-slot:no-data>
-                                        <v-list-item>
-                                          <v-list-item-content>
-                                            <span class="title">Radius</span>
-                                          </v-list-item-content>
-                                        </v-list-item>
-                                        <v-list-item>
-                                          <v-list-item-content :style="{}">
-                                            <v-slider
-                                              color="primary-light-1"
-                                              @end="reloadInfiniteLoader"
-                                              v-model="radiusFilter.slider"
-                                              :min="radiusFilter.min"
-                                              :max="radiusFilter.max"
-                                              hide-details
-                                              class="align-center"
-                                            ></v-slider>
-                                            <span class="title font-weight-bold"
-                                              >{{
-                                                radiusFilter.slider
-                                              }}
-                                              km</span
-                                            >
-                                          </v-list-item-content>
-                                        </v-list-item>
-                                      </template>
-                                    </v-select>
-                                  </v-col>
-                                </v-row>
-                              </v-col>
-                            </v-row>
-
-                            <v-row>
-                              <v-col cols="12" md="11">
-                                <v-row>
-                                  <!-- Hourly price -->
-                                  <v-col
-                                    cols="12"
-                                    md="4"
-                                    v-if="filter.item.hourlyPrice.isActive"
-                                  >
-                                    <v-select
-                                      dense
-                                      hide-details
-                                      :label="
-                                        hourlyPriceFilter.range.join([
-                                          (separator = ' - ')
-                                        ])
-                                      "
-                                      solo
-                                    >
-                                      <template v-slot:no-data>
-                                        <v-list-item>
-                                          <v-list-item-content>
-                                            <span class="title">{{
-                                              $t(
-                                                "marketplace_hourly_rate_filter_title_text"
-                                              )
-                                            }}</span>
-                                          </v-list-item-content>
-                                        </v-list-item>
-                                        <v-list-item>
-                                          <v-list-item-content :style="{}">
-                                            <v-range-slider
-                                              color="primary-light-1"
-                                              v-model="hourlyPriceFilter.range"
-                                              :max="hourlyPriceFilter.max"
-                                              :min="hourlyPriceFilter.min"
-                                              hide-details
-                                              @end="reloadInfiniteLoader"
-                                              class="align-center"
-                                            ></v-range-slider>
-                                            <span class="title font-weight-bold"
-                                              >{{
-                                                hourlyPriceFilter.currencyCode
-                                              }}
-                                              {{ hourlyPriceFilter.range[0] }} -
-                                              {{
-                                                hourlyPriceFilter.range[1]
-                                              }}</span
-                                            >
-                                          </v-list-item-content>
-                                        </v-list-item>
-                                      </template>
-                                    </v-select>
-                                  </v-col>
-
-                                  <!-- Date -->
-                                  <v-col
-                                    cols="12"
-                                    md="4"
-                                    v-if="filter.item.date.isActive"
-                                  >
-                                    <v-menu
-                                      v-model="dateFilter.menu"
-                                      :close-on-content-click="false"
-                                      :nudge-right="40"
-                                      transition="scale-transition"
-                                      offset-y
-                                      min-width="290px"
-                                    >
-                                      <template v-slot:activator="{ on }">
-                                        <v-text-field
-                                          dense
-                                          v-model="formttedDate"
-                                          solo
-                                          label="Date"
-                                          readonly
-                                          v-on="on"
-                                        ></v-text-field>
-                                      </template>
-                                      <v-date-picker
-                                        :locale="currentLang"
-                                        v-model="dateFilter.date"
-                                        :first-day-of-week="1"
-                                        @input="dateFilter.menu = false"
-                                      ></v-date-picker>
-                                    </v-menu>
-                                  </v-col>
-
-                                  <!-- Country -->
-                                  <v-col
-                                    cols="12"
-                                    md="4"
-                                    v-if="filter.item.country.isActive"
-                                  >
-                                    <v-autocomplete
-                                      autocomplete="off"
-                                      v-model="
-                                        countryFilter.selectedCountryCode
-                                      "
-                                      @change="handleCountryChange"
-                                      :items="countryFilter.countryList"
-                                      item-text="displayName"
-                                      item-value="code"
-                                      solo
-                                      dense
-                                      hide-no-data
-                                      hide-details
-                                      append-icon="expand_more"
-                                      :label="$t('setting_input_hint_country')"
-                                    ></v-autocomplete>
-                                  </v-col>
-                                </v-row>
-                              </v-col>
-                            </v-row>
-                          </div>
-                          <!-- Field Block -->
-                        </v-card-text>
-                        <v-divider></v-divider>
-                      </v-card>
-                    </v-dialog>
+                    <CoachFilter
+                      :categories="categoryFilter.categories"
+                      :selected-categories.sync="
+                        categoryFilter.selectedCategories
+                      "
+                      :radius-slider.sync="radiusFilter.slider"
+                      :radius-slider-min.sync="radiusFilter.min"
+                      :radius-slider-max.sync="radiusFilter.max"
+                      :price-slider-range.sync="hourlyPriceFilter.range"
+                      :price-slider-min.sync="hourlyPriceFilter.min"
+                      :price-slider-max.sync="hourlyPriceFilter.max"
+                      :currency-code="hourlyPriceFilter.currencyCode"
+                      :countries="countryFilter.countryList"
+                      :selected-country.sync="countryFilter.selectedCountryCode"
+                      @update:location="handleGoogleLocation"
+                    />
                   </div>
 
-                  <!-- Explore Card -->
+                  <!-- coach-list -->
                   <v-row>
                     <v-col
                       cols="12"
@@ -667,6 +135,7 @@ import { marketPlaceApi } from "@/api";
 import ExploreCard from "@/components/card/ExploreCard";
 import FrontFooter from "@/components/layout/global/FrontFooter";
 import GooglePlaceSearch from "@/components/geography/GooglePlaceSearch";
+import CoachFilter from "@/components/artifact/global/pages/marketplace/CoachFilter";
 
 export default {
   layout: "marketplace",
@@ -674,12 +143,13 @@ export default {
   components: {
     ExploreCard,
     FrontFooter,
-    GooglePlaceSearch
+    GooglePlaceSearch,
+    CoachFilter
   },
   head() {
     return {
-      title:this.$i18n.t("header_title_tag_front_marketplace"),
-      titleTemplate:"%s"
+      title: this.$i18n.t("header_title_tag_front_marketplace"),
+      titleTemplate: "%s"
     };
   },
   data() {
@@ -824,15 +294,7 @@ export default {
     isShowingFilterDialog: function(val) {
       this.filterDialog = val;
     },
-    "locationFilter.location": function(val) {
-      if (!val) {
-        this.removeMapCircle();
-        this.reloadInfiniteLoader();
-      }
-    },
-    "dateFilter.date": function() {
-      this.reloadInfiniteLoader();
-    },
+
     "$route.query.categoryId": {
       immediate: true,
       handler: function(val) {
@@ -852,6 +314,24 @@ export default {
           this.queryParams.categoryName = val;
         }
       }
+    },
+    "categoryFilter.selectedCategories": function() {
+      this.changeCategoryFilter();
+    },
+    "locationFilter.location": function(val) {
+      if (!val) {
+        this.removeMapCircle();
+        this.reloadInfiniteLoader();
+      }
+    },
+    "dateFilter.date": function() {
+      this.reloadInfiniteLoader();
+    },
+    "radiusFilter.slider": function() {
+      this.reloadInfiniteLoader();
+    },
+    "countryFilter.selectedCountryCode": function() {
+      this.reloadInfiniteLoader();
     }
   },
   mounted() {
@@ -878,6 +358,7 @@ export default {
                   if (item.types.includes("country")) {
                     if (item.short_name) {
                       this.countryFilter.selectedCountryCode = item.short_name;
+                      this.reloadInfiniteLoader();
                     }
                   }
                 });
