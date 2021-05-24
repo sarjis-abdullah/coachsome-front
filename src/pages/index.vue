@@ -27,85 +27,93 @@
         </v-img> -->
       </div>
       <div class="hero-section__content">
-        <v-row justify="center" align="center">
-          <v-col cols="12" md="6">
-            <v-card color="transparent" elevation="0">
-              <v-card-text>
-                <div
-                  :class="[
-                    'big-title',
-                    {
-                      'big-title--sm': $vuetify.breakpoint.smAndDown,
-                      'big-title--md': $vuetify.breakpoint.mdAndUp
-                    }
-                  ]"
-                >
-                  {{ $t("front_sec_title_find_the_right_coach") }}
+        <div>
+          <v-row justify="center">
+            <v-col cols="12" md="8">
+              <v-card color="transparent" elevation="0">
+                <v-card-text>
+                  <div
+                    :class="[
+                      'big-title',
+                      {
+                        'big-title--sm': $vuetify.breakpoint.smAndDown,
+                        'big-title--md': $vuetify.breakpoint.mdAndUp
+                      }
+                    ]"
+                  >
+                    {{ $t("front_sec_title_find_the_right_coach") }}
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row justify="center" align="center">
+            <v-col cols="12" md="6">
+              <SportSearch
+                :items="categoryList"
+                @on-item-select="
+                  goToMarketPlaceAndSearchByQueryParamCategoryName
+                "
+              ></SportSearch>
+              <v-card color="transparent" elevation="0">
+                <v-card-text>
+                  <div
+                    :class="[
+                      'category d-flex justify-center',
+                      {
+                        'category--md': $vuetify.breakpoint.mdAndUp,
+                        'category--sm': $vuetify.breakpoint.smAndDown
+                      }
+                    ]"
+                  >
+                    <span class="category__title mr-2">{{
+                      $t("front_txt_poppular")
+                    }}</span>
+                    <span v-for="(item, i) in popularCategories" :key="i">
+                      <v-btn
+                        color="white"
+                        depressed
+                        rounded
+                        small
+                        class="text-capitalize category__item mr-2"
+                        @click.stop="goToMarketPlaceAndSearchByCategoryId(item)"
+                        >{{ $t(item.t_key) }}</v-btn
+                      >
+                    </span>
+                  </div>
+                </v-card-text>
+              </v-card>
+              <div
+                :class="[
+                  'coachsome-rating d-flex justify-center flex-wrap align-center',
+                  {
+                    'coachsome-rating--md': $vuetify.breakpoint.mdAndUp,
+                    'coachsome-rating--sm': $vuetify.breakpoint.smAndDown
+                  }
+                ]"
+              >
+                <v-rating
+                  readonly
+                  :value="overallRating"
+                  background-color="rating"
+                  color="rating"
+                  medium
+                  half-increments
+                ></v-rating>
+                <div class="coachsome-rating__text">
+                  <v-btn
+                    text
+                    class="text-normal white--text"
+                    @click="handleReviewTextClick"
+                  >
+                    {{ totalReviewerCount }}
+                    {{ $t("front_page_reviews_text") }}
+                  </v-btn>
                 </div>
-              </v-card-text>
-            </v-card>
-            <SportSearch
-              :items="categoryList"
-              @on-item-select="goToMarketPlaceAndSearchByQueryParamCategoryName"
-            ></SportSearch>
-            <v-card color="transparent" elevation="0">
-              <v-card-text>
-                <div
-                  :class="[
-                    'category d-flex justify-center',
-                    {
-                      'category--md': $vuetify.breakpoint.mdAndUp,
-                      'category--sm': $vuetify.breakpoint.smAndDown
-                    }
-                  ]"
-                >
-                  <span class="category__title mr-2">{{
-                    $t("front_txt_poppular")
-                  }}</span>
-                  <span v-for="(item, i) in popularCategories" :key="i">
-                    <v-btn
-                      color="white"
-                      depressed
-                      rounded
-                      small
-                      class="text-capitalize category__item mr-2"
-                      @click.stop="goToMarketPlaceAndSearchByCategoryId(item)"
-                      >{{ $t(item.t_key) }}</v-btn
-                    >
-                  </span>
-                </div>
-              </v-card-text>
-            </v-card>
-            <div
-              :class="[
-                'coachsome-rating d-flex justify-center flex-wrap align-center',
-                {
-                  'coachsome-rating--md': $vuetify.breakpoint.mdAndUp,
-                  'coachsome-rating--sm': $vuetify.breakpoint.smAndDown
-                }
-              ]"
-            >
-              <v-rating
-                readonly
-                :value="overallRating"
-                background-color="rating"
-                color="rating"
-                medium
-                half-increments
-              ></v-rating>
-              <div class="coachsome-rating__text">
-                <v-btn
-                  text
-                  class="text-normal white--text"
-                  @click="handleReviewTextClick"
-                >
-                  {{ totalReviewerCount }}
-                  {{ $t("front_page_reviews_text") }}
-                </v-btn>
               </div>
-            </div>
-          </v-col>
-        </v-row>
+            </v-col>
+          </v-row>
+        </div>
       </div>
     </div>
     <v-container fluid>
@@ -809,7 +817,7 @@ export default {
   },
   head() {
     return {
-      title: "Find privat sportstræning online - Hurtigt og nemt",
+      title: this.$i18n.t('front_sec_title_find_the_right_coach'),
       titleTemplate: "Coachsome - %s"
     };
   },
@@ -1067,8 +1075,7 @@ export default {
     &__content {
       display: flex;
       justify-content: center;
-      align-content: center;
-      flex-direction: column;
+      align-items: center;
       height: 100vh;
       width: 100%;
     }
