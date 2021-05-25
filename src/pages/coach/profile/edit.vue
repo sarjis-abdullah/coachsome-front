@@ -577,12 +577,19 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12">
-                      <v-text-field
-                        solo
-                        :prefix="origin + '/'"
-                        placeholder="yourname"
-                        v-model="dialog.personalize.userName"
-                      ></v-text-field>
+                      <v-form
+                        ref="personalizeForm"
+                        v-model="personalizeForm.valid"
+                        lazy-validation
+                      >
+                        <v-text-field
+                          solo
+                          :prefix="origin + '/'"
+                          placeholder="yourname"
+                          :rules="personalizeForm.rules"
+                          v-model="dialog.personalize.userName"
+                        ></v-text-field>
+                      </v-form>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -729,6 +736,13 @@ export default {
         social_acc_fb_link: "",
         social_acc_twitter_link: "",
         social_acc_instagram_link: ""
+      },
+      personalizeForm: {
+        valid: true,
+        rules: [
+          v => !!v || "Url string is required",
+          v => /^[a-zA-Z0-9]+[a-zA-Z0-9.]*$/.test(v) || "String must be valid"
+        ]
       }
     };
   },
@@ -864,7 +878,10 @@ export default {
       console.log(coordinates, canvas);
     },
     updateUserName() {
-      if (this.dialog.personalize.userName) {
+      if (
+        this.dialog.personalize.userName &&
+        this.$refs.personalizeForm.validate()
+      ) {
         coachProfileApi(this.$axios)
           .updateUserName(this.dialog.personalize.userName)
           .then(response => {

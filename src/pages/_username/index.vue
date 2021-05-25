@@ -127,7 +127,9 @@
                       <v-row v-if="languageList">
                         <v-col cols="12">
                           <div class="d-flex">
-                            <v-icon color="green" small>mdi-chat-outline</v-icon>
+                            <v-icon color="green" small
+                              >mdi-chat-outline</v-icon
+                            >
                             <span class="ml-5">
                               {{ languageList }}
                             </span>
@@ -346,8 +348,11 @@ export default {
       title: this.$i18n.t("profile_page_meta_title", {
         firstname: this.userInfo.firstName,
         lastname: this.userInfo.lastName,
-        sport: this.profileCard.categories.length && this.profileCard.categories
-          .map(item => this.$i18n.t(item.t_key).toLowerCase())[0]
+        sport:
+          this.profileCard.categories.length &&
+          this.profileCard.categories.map(item =>
+            this.$i18n.t(item.t_key).toLowerCase()
+          )[0]
       }),
       titleTemplate: "%s",
       meta: [
@@ -418,154 +423,158 @@ export default {
       this.questionBox.question = "";
     }
   },
-  async asyncData({ $axios, params }) {
-    const { data } = await profileApi($axios).getProfileInformation(
-      params.username
-    );
+  async asyncData({ $axios, params, error }) {
+    try {
+      const { data } = await profileApi($axios).getProfileInformation(
+        params.username
+      );
 
-    let profileCard = {
-      name: "",
-      image: "",
-      rating: 0,
-      rating_count: 0,
-      tags: [],
-      categories: [],
-      fb_link: "",
-      twitter_link: "",
-      instagram_link: ""
-    };
+      let profileCard = {
+        name: "",
+        image: "",
+        rating: 0,
+        rating_count: 0,
+        tags: [],
+        categories: [],
+        fb_link: "",
+        twitter_link: "",
+        instagram_link: ""
+      };
 
-    let userInfo = {
-      id: null,
-      email: null,
-      userName: null,
-      firstName: "",
-      lastName: ""
-    };
+      let userInfo = {
+        id: null,
+        email: null,
+        userName: null,
+        firstName: "",
+        lastName: ""
+      };
 
-    let gallery = {
-      loadMoreBtnLoading: false,
-      loadingLimit: 8,
-      links: []
-    };
+      let gallery = {
+        loadMoreBtnLoading: false,
+        loadingLimit: 8,
+        links: []
+      };
 
-    let travelCard = {
-      map: null,
-      farAway: null,
-      isOfferOnlyOnline: true,
-      unit: "",
-      locationList: []
-    };
+      let travelCard = {
+        map: null,
+        farAway: null,
+        isOfferOnlyOnline: true,
+        unit: "",
+        locationList: []
+      };
 
-    let verification = {
-      google: false,
-      mobile: false,
-      facebook: false,
-      gmail: false
-    };
+      let verification = {
+        google: false,
+        mobile: false,
+        facebook: false,
+        gmail: false
+      };
 
-    let languages = [];
-    let reviewers = [];
-    let services = [];
-    let moreAbout = "";
+      let languages = [];
+      let reviewers = [];
+      let services = [];
+      let moreAbout = "";
 
-    // Profile Info
-    if (data.profile_info) {
-      profileCard.name = data.profile_info.profile_name;
-      profileCard.image =
-        data.profile_info.image || profileData.PROFILE_DEFAULT_IMAGE;
-      profileCard.landscapeImage =
-        data.profile_info.landscapeImage || profileData.PROFILE_DEFAULT_IMAGE;
-      profileCard.fb_link = data.profile_info.fb_link;
-      profileCard.twitter_link = data.profile_info.twitter_link;
-      profileCard.instagram_link = data.profile_info.instagram_link;
-      profileCard.tags = data.profile_info.tags;
-      profileCard.categories = data.profile_info.categories;
-      moreAbout = data.profile_info.more_about;
+      // Profile Info
+      if (data.profile_info) {
+        profileCard.name = data.profile_info.profile_name;
+        profileCard.image =
+          data.profile_info.image || profileData.PROFILE_DEFAULT_IMAGE;
+        profileCard.landscapeImage =
+          data.profile_info.landscapeImage || profileData.PROFILE_DEFAULT_IMAGE;
+        profileCard.fb_link = data.profile_info.fb_link;
+        profileCard.twitter_link = data.profile_info.twitter_link;
+        profileCard.instagram_link = data.profile_info.instagram_link;
+        profileCard.tags = data.profile_info.tags;
+        profileCard.categories = data.profile_info.categories;
+        moreAbout = data.profile_info.more_about;
+      }
+
+      if (data.profile_info.languages) {
+        languages = data.profile_info.languages;
+      }
+
+      // Reviews
+      if (data.rating_info) {
+        profileCard.rating = data.rating_info.rating;
+        profileCard.rating_count = data.rating_info.rating_count;
+        reviewers = data.rating_info.reviewers;
+      }
+
+      // User info
+      if (userInfo) {
+        userInfo.id = data.user_info.id;
+        userInfo.email = data.user_info.email;
+        userInfo.userName = data.user_info.userName;
+        userInfo.firstName = data.user_info.firstName;
+        userInfo.lastName = data.user_info.lastName;
+      }
+
+      // Services
+      if (data.packages) {
+        services = data.packages.map(item => {
+          return {
+            id: item.id,
+            title: item.details.title,
+            description: item.details.description,
+            session: item.details.session,
+            categoryId: item.category.id,
+            timePerSession: item.details.time_per_session,
+            category: item.category,
+            originalPrice: item.originalPrice,
+            salePrice: item.salePrice,
+            attendeesMin: item.details.attendees_min,
+            attendeesMax: item.details.attendees_max,
+            discount: item.details.discount
+          };
+        });
+      }
+
+      // Masonry links
+      if (data.links) {
+        gallery.links = data.links.map(item => {
+          if (item.type == "image") {
+            item.src = imageService.getImageByName(item.file_name);
+          } else {
+            item.src = item.url;
+          }
+          return item;
+        });
+      }
+
+      // Location
+      if (data.locations.length > 0) {
+        travelCard.locationList = data.locations;
+      }
+
+      // Travel distance
+      if (data.distance) {
+        travelCard.farAway = data.distance.far_away;
+        travelCard.isOfferOnlyOnline = data.distance.is_offer_only_online;
+        travelCard.unit = data.distance.unit;
+      }
+
+      // Travel distance
+      if (data.verification) {
+        verification.google = data.verification.google;
+        verification.facebook = data.verification.facebook;
+        verification.gmail = data.verification.gmail;
+      }
+
+      return {
+        profileCard,
+        languages,
+        moreAbout,
+        reviewers,
+        userInfo,
+        services,
+        gallery,
+        travelCard,
+        verification
+      };
+    } catch (res) {
+      error({ statusCode: 422, message: "Coach not found" });
     }
-
-    if (data.profile_info.languages) {
-      languages = data.profile_info.languages;
-    }
-
-    // Reviews
-    if (data.rating_info) {
-      profileCard.rating = data.rating_info.rating;
-      profileCard.rating_count = data.rating_info.rating_count;
-      reviewers = data.rating_info.reviewers;
-    }
-
-    // User info
-    if (userInfo) {
-      userInfo.id = data.user_info.id;
-      userInfo.email = data.user_info.email;
-      userInfo.userName = data.user_info.userName;
-      userInfo.firstName = data.user_info.firstName;
-      userInfo.lastName = data.user_info.lastName;
-    }
-
-    // Services
-    if (data.packages) {
-      services = data.packages.map(item => {
-        return {
-          id: item.id,
-          title: item.details.title,
-          description: item.details.description,
-          session: item.details.session,
-          categoryId: item.category.id,
-          timePerSession: item.details.time_per_session,
-          category: item.category,
-          originalPrice: item.originalPrice,
-          salePrice: item.salePrice,
-          attendeesMin: item.details.attendees_min,
-          attendeesMax: item.details.attendees_max,
-          discount: item.details.discount
-        };
-      });
-    }
-
-    // Masonry links
-    if (data.links) {
-      gallery.links = data.links.map(item => {
-        if (item.type == "image") {
-          item.src = imageService.getImageByName(item.file_name);
-        } else {
-          item.src = item.url;
-        }
-        return item;
-      });
-    }
-
-    // Location
-    if (data.locations.length > 0) {
-      travelCard.locationList = data.locations;
-    }
-
-    // Travel distance
-    if (data.distance) {
-      travelCard.farAway = data.distance.far_away;
-      travelCard.isOfferOnlyOnline = data.distance.is_offer_only_online;
-      travelCard.unit = data.distance.unit;
-    }
-
-    // Travel distance
-    if (data.verification) {
-      verification.google = data.verification.google;
-      verification.facebook = data.verification.facebook;
-      verification.gmail = data.verification.gmail;
-    }
-
-    return {
-      profileCard,
-      languages,
-      moreAbout,
-      reviewers,
-      userInfo,
-      services,
-      gallery,
-      travelCard,
-      verification
-    };
   },
   mounted() {
     this.initMap();

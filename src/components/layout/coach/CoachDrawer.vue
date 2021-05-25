@@ -423,9 +423,8 @@ export default {
       impersonateAdminApi(this.$axios)
         .revert()
         .then(({ data }) => {
-          this.$store.dispatch("logout");
-          this.$store.dispatch("login", data.accessToken);
-          this.$store.dispatch("setUser", data.user);
+          this.$auth.setUser(data.user);
+          this.$auth.setUserToken(data.accessToken);
           if (this.$auth.hasRole(["coach"])) {
             this.$router.push(this.localePath(pathData.coach.editProfile));
           } else if (this.$auth.hasRole(["athlete"])) {

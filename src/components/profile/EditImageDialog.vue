@@ -29,14 +29,14 @@
                   :stencil-props="{
                     handlers: {},
                     movable: false,
-                    scalable: false,
+                    scalable: false
                   }"
                   image-restriction="stencil"
                   :stencilSize="
                     ({ boundaries }) => {
                       return {
                         width: boundaries.width,
-                        height: boundaries.height,
+                        height: boundaries.height
                       };
                     }
                   "
@@ -109,7 +109,7 @@
                 backgroundClassname="backgroundCropClassCustom"
                 :stencil-props="{
                   minAspectRatio: 1 / 1,
-                  maxAspectRatio: 1 / 1,
+                  maxAspectRatio: 1 / 1
                 }"
                 ref="squareCropper"
               ></cropper>
@@ -129,7 +129,7 @@
                 backgroundClassname="backgroundCropClassCustom"
                 :stencil-props="{
                   minAspectRatio: 16 / 9,
-                  maxAspectRatio: 16 / 9,
+                  maxAspectRatio: 16 / 9
                 }"
                 ref="landscapeCropper"
               ></cropper>
@@ -149,7 +149,7 @@
                 backgroundClassname="backgroundCropClassCustom"
                 :stencil-props="{
                   minAspectRatio: 9 / 16,
-                  maxAspectRatio: 9 / 16,
+                  maxAspectRatio: 9 / 16
                 }"
                 ref="portraitCropper"
               ></cropper>
@@ -188,7 +188,7 @@ import { sharedProfileApi } from "@/api";
 export default {
   props: ["show", "isDeleted"],
   components: {
-    Cropper,
+    Cropper
   },
   data() {
     return {
@@ -200,18 +200,18 @@ export default {
       isLoadingSaveBtn: false,
       cropper: {
         original: {
-          cropData: null,
+          cropData: null
         },
         square: {
-          cropData: null,
+          cropData: null
         },
         landscape: {
-          cropData: null,
+          cropData: null
         },
         portrait: {
-          cropData: null,
-        },
-      },
+          cropData: null
+        }
+      }
     };
   },
   watch: {
@@ -230,7 +230,7 @@ export default {
       if (!val) {
         this.$emit("hide");
       }
-    },
+    }
   },
   computed: {
     isFileUploadBtnShowing() {
@@ -247,7 +247,7 @@ export default {
     },
     extension() {
       return this.file ? this.file.name.split(".").pop() : "";
-    },
+    }
   },
   methods: {
     async handleProfileImageDelete() {
@@ -264,13 +264,11 @@ export default {
     },
     async uploadImages(images) {
       try {
-        const { data } = await sharedProfileApi(this.$axios).uploadImages(images);
+        const { data } = await sharedProfileApi(this.$axios).uploadImages(
+          images
+        );
         if (data.image) {
-          if (data.image.square) {
-            this.$store.dispatch("updateUserImage", data.image.square);
-          } else {
-            this.$store.dispatch("updateUserImage", data.image.old);
-          }
+          this.$auth.fetchUser();
           this.$emit("uploaded");
           this.$toast.success("Successfully saved your profile image.");
         }
@@ -298,10 +296,10 @@ export default {
     },
     handleSaveBtnClick() {
       this.isLoadingSaveBtn = true;
-      let p1 = new Promise((resolve) => {
+      let p1 = new Promise(resolve => {
         const originalCropperResult = this.$refs.originalCropper.getResult();
         if (originalCropperResult.canvas) {
-          originalCropperResult.canvas.toBlob((blob) => {
+          originalCropperResult.canvas.toBlob(blob => {
             let reader = new FileReader();
             reader.readAsDataURL(blob);
             reader.onloadend = () => {
@@ -312,10 +310,10 @@ export default {
         }
       });
 
-      let p2 = new Promise((resolve) => {
+      let p2 = new Promise(resolve => {
         const squareCropperResult = this.$refs.squareCropper.getResult();
         if (squareCropperResult.canvas) {
-          squareCropperResult.canvas.toBlob((blob) => {
+          squareCropperResult.canvas.toBlob(blob => {
             let reader = new FileReader();
             reader.readAsDataURL(blob);
             reader.onloadend = () => {
@@ -325,10 +323,10 @@ export default {
           }, "image/png");
         }
       });
-      let p3 = new Promise((resolve) => {
+      let p3 = new Promise(resolve => {
         const landscapeCropperResult = this.$refs.landscapeCropper.getResult();
         if (landscapeCropperResult.canvas) {
-          landscapeCropperResult.canvas.toBlob((blob) => {
+          landscapeCropperResult.canvas.toBlob(blob => {
             let reader = new FileReader();
             reader.readAsDataURL(blob);
             reader.onloadend = () => {
@@ -338,10 +336,10 @@ export default {
           }, "image/png");
         }
       });
-      let p4 = new Promise((resolve) => {
+      let p4 = new Promise(resolve => {
         const portraitCropperResult = this.$refs.portraitCropper.getResult();
         if (portraitCropperResult.canvas) {
-          portraitCropperResult.canvas.toBlob((blob) => {
+          portraitCropperResult.canvas.toBlob(blob => {
             let reader = new FileReader();
             reader.readAsDataURL(blob);
             reader.onloadend = () => {
@@ -352,13 +350,13 @@ export default {
         }
       });
 
-      Promise.all([p1, p2, p3, p4]).then((values) => {
+      Promise.all([p1, p2, p3, p4]).then(values => {
         this.isLoadingSaveBtn = false;
         this.uploadImages({
           original: values[0],
           square: values[1],
           portrait: values[2],
-          landscape: values[3],
+          landscape: values[3]
         });
       });
     },
@@ -396,7 +394,7 @@ export default {
       this.dragging = false;
       if (typeof FileReader === "function") {
         const reader = new FileReader();
-        reader.onload = (event) => {
+        reader.onload = event => {
           this.imgSrc = event.target.result;
           this.$emit("image-selected");
         };
@@ -404,8 +402,8 @@ export default {
       } else {
         alert("Sorry, FileReader API not supported");
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
