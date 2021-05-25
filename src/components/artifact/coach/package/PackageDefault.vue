@@ -255,11 +255,9 @@ export default {
           price: this.form.price,
           isSpecialPrice: this.form.isSpecialPrice
         };
-        this.showLoading();
         coachPackageApi(this.$axios)
           .savePackage(paylod)
           .then(response => {
-            this.hideLoading();
             if (response.data.status == "success") {
               this.resetForm();
               this.$emit("package-created", response.data.package);
@@ -268,7 +266,6 @@ export default {
             }
           })
           .catch(() => {
-            this.hideLoading();
           });
       }
     },
