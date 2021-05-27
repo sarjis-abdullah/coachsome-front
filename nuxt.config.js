@@ -80,6 +80,7 @@ export default {
     { src: "~/plugins/vue-js-toggle-button", mode: "client" },
     { src: "~/plugins/vue-image-upload-resize", mode: "client" },
     { src: "~/plugins/vue-tribute.js", mode: "client" },
+    { src: "~/plugins/vue-image-upload-resize" , mode:"client"},
     { src: "~/plugins/vuelidate" }
   ],
 
