@@ -2,7 +2,6 @@ require("dotenv").config();
 
 export default {
   srcDir: "src/",
-  target: "static",
   loading: {
     color: "#6EB5CB",
     height: "4px"
@@ -97,12 +96,6 @@ export default {
         optionsPath: "~/plugins/vuetify.js",
         treeShake: true
       }
-    ],
-    [
-      "@aceforth/nuxt-optimized-images",
-      {
-        optimizeImages: true
-      }
     ]
   ],
 
@@ -112,13 +105,6 @@ export default {
       "nuxt-i18n",
       {
         seo: false,
-        baseUrl: process.env.CLIENT_BASE_URL,
-        vueI18n: {
-          fallbackLocale: "en",
-          messages: {
-            en: require("./src/app/locales/en.json")
-          }
-        },
         locales: [
           {
             name: "English",
