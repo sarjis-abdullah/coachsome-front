@@ -80,7 +80,7 @@ export default {
     { src: "~/plugins/vue-js-toggle-button", mode: "client" },
     { src: "~/plugins/vue-image-upload-resize", mode: "client" },
     { src: "~/plugins/vue-tribute.js", mode: "client" },
-    { src: "~/plugins/vue-image-upload-resize" , mode:"client"},
+    { src: "~/plugins/vue-image-upload-resize", mode: "client" },
     { src: "~/plugins/vuelidate" }
   ],
 
@@ -93,9 +93,18 @@ export default {
     [
       "@nuxtjs/vuetify",
       {
-        customVariables: ["~/assets/styles/main.scss"],
+        customVariables: ["~/assets/scss/main.scss"],
         optionsPath: "~/plugins/vuetify.js",
         treeShake: true
+      }
+    ],
+    [
+      "@nuxtjs/tailwindcss",
+      {
+        exposeConfig: true,
+        viewer: false,
+        cssPath: '~/assets/css/tailwind.css',
+        configPath: "~~/tailwind.config.js"
       }
     ]
   ],
