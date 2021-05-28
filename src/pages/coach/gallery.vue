@@ -20,13 +20,33 @@
             {{ $t("image_and_video_vidoe_desc") }}
           </div>
         </v-col>
-        <v-col cols="12" md="4">
-          <v-text-field v-model="url.video" solo></v-text-field>
-        </v-col>
-        <v-col cols="12" md="2" class="mt-2">
-          <v-btn block color="primary-light-1" dark @click="saveVideoUrl()">{{
-            $t("btn_label_add")
-          }}</v-btn>
+        <v-col cols="12" md="8">
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-form ref="videoForm" v-model="videoForm.valid" lazy-validation>
+                <v-text-field
+                  :rules="[
+                    v => !!v || 'Youtube or vimoe url is required',
+                    v =>
+                      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/.test(
+                        v
+                      ) ||
+                      /https:\/\/vimeo.com\/\d{8}(?=\b|\/)/.test(v) ||
+                      'Url is not valid'
+                  ]"
+                  v-model="url.video"
+                  :loading="videoForm.isLoading"
+                  dense
+                  solo
+                ></v-text-field>
+              </v-form>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-btn color="primary-light-1" dark @click="saveVideoUrl()">{{
+                $t("btn_label_add")
+              }}</v-btn>
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
 
@@ -37,86 +57,96 @@
             {{ $t("image_and_video_img_desc") }}
           </div>
         </v-col>
-        <v-col cols="12" md="4">
-          <!-- Image Upload Dialog -->
-          <v-dialog v-model="imageUpload.dialog" persistent max-width="600px">
-            <template v-slot:activator="{ on }">
-              <v-text-field v-model="url.image" v-on="on" solo></v-text-field>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="headline">Upload Image</span>
-              </v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" class="text-center">
-                      <client-only>
-                        <image-uploader
-                          :preview="true"
-                          :className="[
-                            'fileinput',
-                            { 'fileinput--loaded': imageUpload.hasImage }
-                          ]"
-                          capture="environment"
-                          :debug="1"
-                          doNotResize="gif"
-                          :autoRotate="true"
-                          outputFormat="verbose"
-                          @input="setImage"
-                        >
-                          <label for="fileInput" slot="upload-label">
-                            <figure>
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="32"
-                                height="32"
-                                viewBox="0 0 32 32"
-                              >
-                                <path
-                                  class="path1"
-                                  d="M9.5 19c0 3.59 2.91 6.5 6.5 6.5s6.5-2.91 6.5-6.5-2.91-6.5-6.5-6.5-6.5 2.91-6.5 6.5zM30 8h-7c-0.5-2-1-4-3-4h-8c-2 0-2.5 2-3 4h-7c-1.1 0-2 0.9-2 2v18c0 1.1 0.9 2 2 2h28c1.1 0 2-0.9 2-2v-18c0-1.1-0.9-2-2-2zM16 27.875c-4.902 0-8.875-3.973-8.875-8.875s3.973-8.875 8.875-8.875c4.902 0 8.875 3.973 8.875 8.875s-3.973 8.875-8.875 8.875zM30 14h-4v-2h4v2z"
-                                ></path>
-                              </svg>
-                            </figure>
-                            <span class="upload-caption">
-                              {{
-                                imageUpload.hasImage
-                                  ? "Replace"
-                                  : "Click to upload"
-                              }}
-                            </span>
-                          </label>
-                        </image-uploader>
-                      </client-only>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="imageUpload.dialog = false"
-                  >Close</v-btn
-                >
-                <v-btn
-                  color="blue darken-1"
-                  v-if="imageUpload.hasImage"
-                  text
-                  @click="uploadImage()"
-                  >Save</v-btn
-                >
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-          <!-- Image Upload Dialog -->
-        </v-col>
-        <v-col cols="12" md="2" class="mt-2">
-          <v-btn block color="primary-light-1" dark @click="saveImageUrl()">{{
-            $t("btn_label_add")
-          }}</v-btn>
+        <v-col cols="12" md="8">
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-text-field
+                readonly
+                @click="imageUpload.dialog = true"
+                solo
+                dense
+              ></v-text-field>
+              <!-- Image Upload Dialog -->
+              <v-dialog
+                v-model="imageUpload.dialog"
+                persistent
+                max-width="600px"
+                scrollable
+              >
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">Upload Image</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12" class="text-center">
+                          <client-only>
+                            <image-uploader
+                              :preview="true"
+                              :className="[
+                                'fileinput',
+                                { 'fileinput--loaded': imageUpload.hasImage }
+                              ]"
+                              capture="environment"
+                              :debug="1"
+                              doNotResize="gif"
+                              :autoRotate="true"
+                              outputFormat="verbose"
+                              @input="setImage"
+                            >
+                              <label for="fileInput" slot="upload-label">
+                                <figure>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="32"
+                                    height="32"
+                                    viewBox="0 0 32 32"
+                                  >
+                                    <path
+                                      class="path1"
+                                      d="M9.5 19c0 3.59 2.91 6.5 6.5 6.5s6.5-2.91 6.5-6.5-2.91-6.5-6.5-6.5-6.5 2.91-6.5 6.5zM30 8h-7c-0.5-2-1-4-3-4h-8c-2 0-2.5 2-3 4h-7c-1.1 0-2 0.9-2 2v18c0 1.1 0.9 2 2 2h28c1.1 0 2-0.9 2-2v-18c0-1.1-0.9-2-2-2zM16 27.875c-4.902 0-8.875-3.973-8.875-8.875s3.973-8.875 8.875-8.875c4.902 0 8.875 3.973 8.875 8.875s-3.973 8.875-8.875 8.875zM30 14h-4v-2h4v2z"
+                                    ></path>
+                                  </svg>
+                                </figure>
+                                <span class="upload-caption">
+                                  {{
+                                    imageUpload.hasImage
+                                      ? "Replace"
+                                      : "Click to upload"
+                                  }}
+                                </span>
+                              </label>
+                            </image-uploader>
+                          </client-only>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="red" text @click="imageUpload.dialog = false"
+                      >Close</v-btn
+                    >
+                    <v-btn
+                      color="primary-light-1"
+                      :loading="isLoading"
+                      v-if="imageUpload.hasImage"
+                      text
+                      @click="uploadImage()"
+                      >Save</v-btn
+                    >
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+              <!-- Image Upload Dialog -->
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-btn color="primary-light-1" dark>{{
+                $t("btn_label_add")
+              }}</v-btn>
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
 
@@ -168,7 +198,6 @@
 
 <script>
 import { coachAssetApi } from "@/api";
-import { imageService } from "@/services";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import DarkboxGallery from "@/components/darkbox/Gallery";
 
@@ -180,7 +209,12 @@ export default {
   },
   data() {
     return {
+      videoForm: {
+        valid: true,
+        isLoading: false
+      },
       loadMoreBtnLoading: false,
+      isLoading: false,
       loadingLimit: 8,
       imageUpload: {
         image: "",
@@ -224,65 +258,44 @@ export default {
       this.imageUpload.image = output;
     },
     uploadImage() {
-      // this.imageUpload.dialog = false
       let payload = {
-        url: this.url.image,
         type: "image",
         image: this.imageUpload.image.dataUrl
       };
-
+      this.isLoading = true;
       coachAssetApi(this.$axios)
         .saveImageUrl(payload)
-        .then(response => {
-          if (response.data.status == "success") {
-            this.$toast.success(response.data.message);
-            response.data.gallery.src = response.data.gallery.url;
-            this.imageUpload.uploadedImage = response.data.gallery;
-            this.url.image = imageService.getImageByName(
-              response.data.gallery.file_name
-            );
-            this.imageUpload.dialog = false;
-            this.setImageAndVideoProgress(response.data.progress);
-          }
+        .then(({ data }) => {
+          this.links.push(Object.assign(data.item, { src: data.item.url }));
+          this.$toast.success(data.message);
+          this.setImageAndVideoProgress(data.progress);
+          this.imageUpload.dialog = false;
         })
-        .catch(() => {});
-    },
-    saveImageUrl() {
-      if (this.validateImageUrl()) {
-        this.imageUpload.uploadedImage.src = this.url.image;
-        this.links.push(this.imageUpload.uploadedImage);
-        this.url.image = "";
-      }
-    },
-    validateImageUrl() {
-      let validate = true;
-      if (this.url.image.length == 0) {
-        this.$toast.error(
-          this.$i18n.t("image_and_video_validation_url_should_not_empty")
-        );
-        validate = false;
-      }
-      return validate;
+        .catch(() => {})
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     saveVideoUrl() {
-      if (this.validateVideoUrl()) {
+      if (this.$refs.videoForm.validate()) {
         let payload = {
           url: this.url.video,
           type: "video"
         };
-
+        this.videoForm.isLoading = true;
         coachAssetApi(this.$axios)
           .saveVideoUrl(payload)
-          .then(res => {
-            if (res.data.status == "success") {
-              this.$toast.success(res.data.message);
-              res.data.gallery.src = res.data.gallery.url;
-              this.links.push(res.data.gallery);
-              this.setImageAndVideoProgress(res.data.progress);
-              this.url.video = "";
-            }
+          .then(({ data }) => {
+            this.$toast.success(data.message);
+            this.links.push(Object.assign(data.item, { src: data.item.url }));
+            this.setImageAndVideoProgress(data.progress);
+            this.url.video = "";
+            this.$refs.videoForm.reset();
           })
-          .catch(() => {});
+          .catch(() => {})
+          .finally(() => {
+            this.videoForm.isLoading = false;
+          });
       }
     },
     validateVideoUrl() {
@@ -299,18 +312,14 @@ export default {
   created() {
     coachAssetApi(this.$axios)
       .gallery()
-      .then(response => {
-        response.data.forEach(item => {
-          if (item.type == "image") {
-            item.src = imageService.getImageByName(item.file_name);
-          } else if (item.type == "video") {
-            item.src = item.url;
-          } else {
-            item.src = "";
-          }
-          return item;
+      .then(({ data }) => {
+        this.links = data.items.map(item => {
+          return {
+            id: item.id,
+            type: item.type,
+            src: item.url
+          };
         });
-        this.links = response.data;
       })
       .catch(() => {});
   },

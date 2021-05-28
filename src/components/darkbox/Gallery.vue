@@ -32,7 +32,7 @@
 import overlay from "./Overlay";
 import itemMixin from "./mixins/item";
 export default {
-  name: "silentboxGallery",
+  name: "DarkboxGallery",
   mixins: [itemMixin],
   props: {
     lazyLoading: {
@@ -122,13 +122,13 @@ export default {
           };
         });
       }
-      return [
-        {
-          ...this.overlay.item,
-          ...this.image,
-          thumbnail: this.setThumbnail(this.image)
-        }
-      ];
+      // return [
+      //   {
+      //     ...this.overlay.item,
+      //     ...this.image,
+      //     thumbnail: this.setThumbnail(this.image)
+      //   }
+      // ];
     }
   },
   methods: {

@@ -532,14 +532,7 @@ export default {
 
       // Masonry links
       if (data.links) {
-        gallery.links = data.links.map(item => {
-          if (item.type == "image") {
-            item.src = imageService.getImageByName(item.file_name);
-          } else {
-            item.src = item.url;
-          }
-          return item;
-        });
+        gallery.links = data.links
       }
 
       // Location
