@@ -97,15 +97,6 @@ export default {
         optionsPath: "~/plugins/vuetify.js",
         treeShake: true
       }
-    ],
-    [
-      "@nuxtjs/tailwindcss",
-      {
-        exposeConfig: true,
-        viewer: false,
-        cssPath: '~/assets/css/tailwind.css',
-        configPath: "~~/tailwind.config.js"
-      }
     ]
   ],
 
