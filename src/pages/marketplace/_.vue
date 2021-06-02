@@ -361,7 +361,7 @@ export default {
       this.filterDialog = val;
     },
     "categoryFilter.selectedCategories": function() {
-      console.log("ategoryFilter.selectedCategories");
+      console.log("categoryFilter.selectedCategories");
       let categories = this.categoryFilter.categories
         .filter(item =>
           this.categoryFilter.selectedCategories.includes(item.id)
@@ -377,6 +377,7 @@ export default {
       } else {
         this.$router.push(this.localePath(pathData.pages.marketplace));
       }
+      this.reloadInfiniteLoader();
     },
     "locationFilter.location": function(val) {
       if (!val) {
@@ -395,7 +396,7 @@ export default {
     }
   },
   async fetch() {
-    console.log("fetch()")
+    console.log("fetch()");
     const { data } = await marketPlaceApi(
       this.$axios
     ).getMarketPlacePageInitialData();
