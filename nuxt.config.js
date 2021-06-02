@@ -22,7 +22,17 @@ export default {
     ],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
-      // Fonts
+      // Icon Fonts
+      {
+        rel: "stylesheet",
+        href:
+          "https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css"
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/icon?family=Material+Icons"
+      },
+      // Text Fonts
       {
         rel: "stylesheet",
         href:
@@ -56,11 +66,17 @@ export default {
     ]
   },
 
-  css: [
-    // Icons
-    "@mdi/font/css/materialdesignicons.min.css",
-    "material-design-icons-iconfont/dist/material-design-icons.css"
-  ],
+  css: [],
+
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push({
+        name: 'marketplace',
+        path: '/marketplace',
+        component: resolve(__dirname, 'src/pages/marketplace/_.vue')
+      })
+    }
+  },
 
   // Plugins to run before rendering page
   plugins: [
@@ -85,7 +101,7 @@ export default {
   ],
 
   // Auto import components
-  components: true,
+  // components: true,
 
   // Modules for dev and build
   buildModules: [
