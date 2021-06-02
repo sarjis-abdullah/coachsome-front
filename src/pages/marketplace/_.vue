@@ -395,6 +395,7 @@ export default {
     }
   },
   async fetch() {
+    console.log("fetch()")
     const { data } = await marketPlaceApi(
       this.$axios
     ).getMarketPlacePageInitialData();
