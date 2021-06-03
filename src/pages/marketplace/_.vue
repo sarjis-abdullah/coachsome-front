@@ -366,7 +366,16 @@ export default {
         .filter(item =>
           this.categoryFilter.selectedCategories.includes(item.id)
         )
-        .map(item => item.name.toLowerCase());
+        .map(item => {
+          if (item.name.split(" ").length) {
+            return item.name
+              .toLowerCase()
+              .split(" ")
+              .join("+");
+          } else {
+            return item.name.toLowerCase();
+          }
+        });
 
       if (categories.length) {
         this.$router.push(
@@ -435,7 +444,13 @@ export default {
       let categories = params[0].split("-");
       categories.forEach(outerItem => {
         this.categoryFilter.categories.forEach(innerItem => {
-          if (innerItem.name.toLowerCase() == outerItem.toLowerCase()) {
+          if (
+            innerItem.name.toLowerCase() ==
+            outerItem
+              .toLowerCase()
+              .split("+")
+              .join(" ")
+          ) {
             this.categoryFilter.selectedCategories.push(innerItem.id);
           }
         });
