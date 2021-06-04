@@ -21,7 +21,10 @@ export default {
     homeOld: "/front",
     howItWork: "/how-it-works",
     login: "/login",
-    marketplace: "/marketplace",
+    marketplace: {
+      name: "marketplace",
+      path: "/marketplace"
+    },
     price: "/price",
     passwordReset: "/password-reset",
     publicProfile: username => "/" + username,
@@ -29,7 +32,7 @@ export default {
     refundPolicy: "/refund-policy",
     register: "/register",
     redirect: "/redirect",
-    terms: "/terms-of-use",
+    terms: "/terms-of-use"
   },
   coach: {
     dashboard: "/coach/dashboard",

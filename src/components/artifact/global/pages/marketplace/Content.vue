@@ -1,5 +1,5 @@
 <template>
-  <div class="marketplace-page">
+  <div class="marketplace-content">
     <v-container
       class="pt-0  pb-0 body-bg"
       style="height: 96vh;"
@@ -196,7 +196,7 @@
 </template>
 
 <script>
-import { constantData, profileData } from "@/data";
+import { constantData, profileData, pathData } from "@/data";
 import { marketPlaceApi } from "@/api";
 
 import ExploreCard from "@/components/card/ExploreCard";
@@ -205,19 +205,11 @@ import GooglePlaceSearch from "@/components/geography/GooglePlaceSearch";
 import CoachFilter from "@/components/artifact/global/pages/marketplace/CoachFilter";
 
 export default {
-  layout: "marketplace",
-  title: "",
   components: {
     ExploreCard,
     FrontFooter,
     GooglePlaceSearch,
     CoachFilter
-  },
-  head() {
-    return {
-      title: this.$i18n.t("header_title_tag_front_marketplace"),
-      titleTemplate: "%s"
-    };
   },
   data() {
     return {
@@ -354,36 +346,41 @@ export default {
       return this.$route.query.categoryName;
     },
     currentLang() {
-      return this.$store.getters["locale/getCurrLang"];
+      return this.$i18n.locale;
     }
   },
   watch: {
     isShowingFilterDialog: function(val) {
       this.filterDialog = val;
     },
-
-    "$route.query.categoryId": {
-      immediate: true,
-      handler: function(val) {
-        if (typeof val == "string" && val.length > 0) {
-          let categoryIdArr = val.split(",");
-          let selectedCategories = categoryIdArr.map(item => {
-            return Number.parseInt(item);
-          });
-          this.categoryFilter.selectedCategories = selectedCategories;
-        }
-      }
-    },
-    "$route.query.categoryName": {
-      immediate: true,
-      handler: function(val) {
-        if (typeof val == "string") {
-          this.queryParams.categoryName = val;
-        }
-      }
-    },
     "categoryFilter.selectedCategories": function() {
-      this.changeCategoryFilter();
+      console.log("categoryFilter.selectedCategories");
+      let categories = this.categoryFilter.categories
+        .filter(item =>
+          this.categoryFilter.selectedCategories.includes(item.id)
+        )
+        .map(item => {
+          if (item.name.split(" ").length) {
+            return item.name
+              .toLowerCase()
+              .split(" ")
+              .join("+");
+          } else {
+            return item.name.toLowerCase();
+          }
+        });
+
+      if (categories.length) {
+        this.$router.push(
+          this.localePath({ name: pathData.pages.marketplace.name }) +
+            "/" +
+            categories.join("-")
+        );
+      } else {
+        this.$router.push(
+          this.localePath({ name: pathData.pages.marketplace.name })
+        );
+      }
     },
     "locationFilter.location": function(val) {
       if (!val) {
@@ -401,16 +398,77 @@ export default {
       this.reloadInfiniteLoader();
     }
   },
+  async fetch() {
+    console.log("fetch()", this.$route.params.pathMatch);
+    const { data } = await marketPlaceApi(
+      this.$axios
+    ).getMarketPlacePageInitialData();
+    this.hourlyPriceFilter.min = data.min;
+    this.hourlyPriceFilter.max = data.max;
+    this.hourlyPriceFilter.range[0] = data.minRange;
+    this.hourlyPriceFilter.range[1] = data.maxRange;
+    this.countryFilter.countryList = data.countries;
+    if (this.$auth.loggedIn) {
+      this.countryFilter.selectedCountryCode = data.countryCode;
+    }
+    if (data.categories) {
+      this.categoryFilter.categories = data.categories
+        .map(item => {
+          return {
+            id: item.id,
+            name: this.$i18n.t(item.t_key),
+            t_key: item.t_key,
+            priority: item.priority,
+            image: item.image,
+            isImageFullUrl: item.isImageFullUrl
+          };
+        })
+        .sort(function(a, b) {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
+    }
+    if (this.$route.params.pathMatch) {
+      let params = this.$route.params.pathMatch.split("/");
+      let categories = params[0].split("-");
+      categories.forEach(outerItem => {
+        this.categoryFilter.categories.forEach(innerItem => {
+          if (
+            innerItem.name.toLowerCase() ==
+            outerItem
+              .toLowerCase()
+              .split("+")
+              .join(" ")
+          ) {
+            this.categoryFilter.selectedCategories.push(innerItem.id);
+          }
+        });
+      });
+    }
+    this.reloadInfiniteLoader();
+  },
   mounted() {
     this.initMap();
     if (!this.$auth.loggedIn) {
       this.setCurrenctCountry();
     }
   },
-  created() {
-    this.getInitialData();
-  },
   methods: {
+    urlToArray(url) {
+      var request = {};
+      var pairs = url.substring(url.indexOf("?") + 1).split("&");
+      for (var i = 0; i < pairs.length; i++) {
+        if (!pairs[i]) continue;
+        var pair = pairs[i].split("=");
+        request[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+      }
+      return request;
+    },
     handleUpdatedPriceRange(val) {
       this.hourlyPriceFilter.range = val;
       this.reloadInfiniteLoader();
@@ -465,41 +523,6 @@ export default {
     handleCountryChange() {
       this.reloadInfiniteLoader();
     },
-    async getInitialData() {
-      const { data } = await marketPlaceApi(
-        this.$axios
-      ).getMarketPlacePageInitialData();
-      this.hourlyPriceFilter.min = data.min;
-      this.hourlyPriceFilter.max = data.max;
-      this.hourlyPriceFilter.range[0] = data.minRange;
-      this.hourlyPriceFilter.range[1] = data.maxRange;
-      this.countryFilter.countryList = data.countries;
-      if (this.$auth.loggedIn) {
-        this.countryFilter.selectedCountryCode = data.countryCode;
-      }
-      if (data.categories) {
-        this.categoryFilter.categories = data.categories
-          .map(item => {
-            return {
-              id: item.id,
-              name: this.$i18n.t(item.t_key),
-              t_key: item.t_key,
-              priority: item.priority,
-              image: item.image,
-              isImageFullUrl: item.isImageFullUrl
-            };
-          })
-          .sort(function(a, b) {
-            if (a.name < b.name) {
-              return -1;
-            }
-            if (a.name > b.name) {
-              return 1;
-            }
-            return 0;
-          });
-      }
-    },
     removeMapCircle() {
       if (this.mapCircle) {
         this.map.removeLayer(this.mapCircle);
@@ -522,7 +545,6 @@ export default {
       this.footer.value = true;
     },
     onScroll(e) {
-      console.log(e);
       if (e.target.scrollTop > 0) {
         this.footer.toggleButton = true;
       }
@@ -539,80 +561,80 @@ export default {
       }
     },
     infiniteHandler($state) {
-      this.queryParams.categoryId = this.categoryFilter.selectedCategories.join(
-        ","
-      );
-      this.queryParams.date = this.dateFilter.date;
-      this.queryParams.cityName = this.$route.query.cityName;
-      this.queryParams.originLat = this.locationFilter.lat;
-      this.queryParams.originLong = this.locationFilter.long;
-      this.queryParams.originLocation = this.locationFilter.location;
-      this.queryParams.distance = this.radiusFilter.slider;
-      this.queryParams.countryCode = this.countryFilter.selectedCountryCode;
-      this.queryParams.hourlyPriceMinRange = this.filter.item.hourlyPrice
-        .isActive
-        ? this.hourlyPriceFilter.range[0]
-        : null;
-      this.queryParams.hourlyPriceMaxRange = this.filter.item.hourlyPrice
-        .isActive
-        ? this.hourlyPriceFilter.range[1]
-        : null;
-      this.queryParams.page = this.page;
-      this.queryParams.categoryId = this.categoryFilter.selectedCategories.join(
-        ","
-      );
+      if (!this.$fetchState.pending) {
+        this.queryParams.categoryId = this.categoryFilter.selectedCategories.join(
+          ","
+        );
+        this.queryParams.date = this.dateFilter.date;
+        this.queryParams.cityName = this.$route.query.cityName;
+        this.queryParams.originLat = this.locationFilter.lat;
+        this.queryParams.originLong = this.locationFilter.long;
+        this.queryParams.originLocation = this.locationFilter.location;
+        this.queryParams.distance = this.radiusFilter.slider;
+        this.queryParams.countryCode = this.countryFilter.selectedCountryCode;
+        this.queryParams.hourlyPriceMinRange = this.filter.item.hourlyPrice
+          .isActive
+          ? this.hourlyPriceFilter.range[0]
+          : null;
+        this.queryParams.hourlyPriceMaxRange = this.filter.item.hourlyPrice
+          .isActive
+          ? this.hourlyPriceFilter.range[1]
+          : null;
+        this.queryParams.page = this.page;
+        this.queryParams.categoryId = this.categoryFilter.selectedCategories.join(
+          ","
+        );
 
-      this.$router.replace({ query: this.queryParams }).catch(() => {});
+        marketPlaceApi(this.$axios)
+          .getHourlyRatingUsers({ ...this.queryParams })
+          .then(({ data }) => {
+            if (data.searchedCountryName) {
+              this.searchedCountryName = data.searchedCountryName;
+            }
+            if (data.coachInCountries.length) {
+              this.coachInCountries = data.coachInCountries;
+            }
 
-      marketPlaceApi(this.$axios)
-        .getHourlyRatingUsers({ ...this.queryParams })
-        .then(({ data }) => {
-          if (data.searchedCountryName) {
-            this.searchedCountryName = data.searchedCountryName;
-          }
-          if (data.coachInCountries.length) {
-            this.coachInCountries = data.coachInCountries;
-          }
+            if (data.coaches.length) {
+              this.page += 1;
+              let coaches = data.coaches.map(item => {
+                let coachItem = {};
+                coachItem.name = item.name;
+                coachItem.image = item.image ? item.image : null;
+                coachItem.countReview = item.countReview;
+                coachItem.rating = item.rating;
+                coachItem.countReview = item.countReview;
+                coachItem.location =
+                  item.locations && item.locations.length > 0
+                    ? item.locations[0].zip + " " + item.locations[0].city
+                    : "";
+                coachItem.price = item.price;
+                coachItem.categories = item.categories;
+                coachItem.userName = item.userName;
+                return coachItem;
+              });
+              this.coaches.push(...coaches);
 
-          if (data.coaches.length) {
-            this.page += 1;
-            let coaches = data.coaches.map(item => {
-              let coachItem = {};
-              coachItem.name = item.name;
-              coachItem.image = item.image ? item.image : null;
-              coachItem.countReview = item.countReview;
-              coachItem.rating = item.rating;
-              coachItem.countReview = item.countReview;
-              coachItem.location =
-                item.locations && item.locations.length > 0
-                  ? item.locations[0].zip + " " + item.locations[0].city
-                  : "";
-              coachItem.price = item.price;
-              coachItem.categories = item.categories;
-              coachItem.userName = item.userName;
-              return coachItem;
-            });
-            this.coaches.push(...coaches);
+              let locations = data.coaches
+                .map(item => {
+                  if (item.locations.length > 0) {
+                    let locationItem = {};
+                    locationItem.address = item.locations[0].address;
+                    locationItem.lat = item.locations[0].lat;
+                    locationItem.long = item.locations[0].long;
+                    locationItem.userImage = item.locations[0].userImage;
+                    return locationItem;
+                  }
+                })
+                .filter(item => (item != null ? true : false));
 
-            let locations = data.coaches
-              .map(item => {
-                if (item.locations.length > 0) {
-                  let locationItem = {};
-                  locationItem.address = item.locations[0].address;
-                  locationItem.lat = item.locations[0].lat;
-                  locationItem.long = item.locations[0].long;
-                  locationItem.userImage = item.locations[0].userImage;
-                  return locationItem;
-                }
-              })
-              .filter(item => (item != null ? true : false));
-
-            this.addAllLocationMarker(locations);
-            $state.loaded();
-          } else {
-            $state.complete();
-          }
-        });
+              this.addAllLocationMarker(locations);
+              $state.loaded();
+            } else {
+              $state.complete();
+            }
+          });
+      }
     },
     removeParamThatHasNotAnyfilter() {
       if (this.queryParams.categoryName) {
@@ -693,7 +715,7 @@ export default {
 </script>
 
 <style lang="scss">
-.marketplace-page {
+.marketplace-content {
   .filter-box {
     position: fixed;
     z-index: 100;
@@ -702,60 +724,6 @@ export default {
     transition: all 3000ms ease;
   }
 
-  /* Dawa */
-  .autocomplete-container {
-    position: relative;
-    width: 100%;
-  }
-
-  .autocomplete-container input {
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .dawa-autocomplete-suggestions {
-    margin: 0.3em 0 0 0;
-    padding: 0;
-    text-align: left;
-    border-radius: 0.3125em;
-    background: #fcfcfc;
-    box-shadow: 0 0.0625em 0.15625em rgba(0, 0, 0, 0.15);
-    position: absolute;
-    left: 0;
-    right: 0;
-    z-index: 9999;
-    overflow-y: auto;
-    box-sizing: border-box;
-  }
-
-  .dawa-autocomplete-suggestions .dawa-autocomplete-suggestion {
-    margin: 0;
-    list-style: none;
-    cursor: pointer;
-    padding: 0.4em 0.6em;
-    color: #333;
-    border: 0.0625em solid #ddd;
-    border-bottom-width: 0;
-  }
-
-  .dawa-autocomplete-suggestions .dawa-autocomplete-suggestion:first-child {
-    border-top-left-radius: inherit;
-    border-top-right-radius: inherit;
-  }
-
-  .dawa-autocomplete-suggestions .dawa-autocomplete-suggestion:last-child {
-    border-bottom-left-radius: inherit;
-    border-bottom-right-radius: inherit;
-    border-bottom-width: 0.0625em;
-  }
-
-  .dawa-autocomplete-suggestions .dawa-autocomplete-suggestion.dawa-selected,
-  .dawa-autocomplete-suggestions .dawa-autocomplete-suggestion:hover {
-    background: #f0f0f0;
-  }
-  /* Dawa */
-
-  /* Map Styles */
   .map {
     position: fixed;
     right: 0;

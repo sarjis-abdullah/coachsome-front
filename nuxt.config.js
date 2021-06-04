@@ -70,11 +70,21 @@ export default {
 
   router: {
     extendRoutes(routes, resolve) {
-      routes.push({
-        name: 'marketplace',
-        path: '/marketplace',
-        component: resolve(__dirname, 'src/pages/marketplace/_.vue')
-      })
+      // routes.push({
+      //   name: encodeURIComponent("coaches"),
+      //   path: "/" + encodeURIComponent("coaches"),
+      //   component: resolve(__dirname, "src/pages/coaches/_.vue")
+      // });
+      // routes.push({
+      //   name: encodeURIComponent("trænere"),
+      //   path: "/" + encodeURIComponent("trænere"),
+      //   component: resolve(__dirname, "src/pages/coaches/_.vue")
+      // });
+      // routes.push({
+      //   name: encodeURIComponent("tränare"),
+      //   path: "/" + encodeURIComponent("tränare"),
+      //   component: resolve(__dirname, "src/pages/coaches/_.vue")
+      // });
     }
   },
 
@@ -122,16 +132,8 @@ export default {
       "nuxt-i18n",
       {
         seo: false,
+        strategy: "prefix",
         locales: [
-          {
-            name: "English",
-            tKey: "lang_english",
-            icon: "gb",
-            countryCode: "GB",
-            code: "en",
-            file: "en-UK.js",
-            iso: "en-UK"
-          },
           {
             name: "dansk",
             tKey: "lang_danish",
@@ -149,11 +151,33 @@ export default {
             code: "sv",
             file: "sv-SE.js",
             iso: "sv-SE"
+          },
+          {
+            name: "English",
+            tKey: "lang_english",
+            icon: "gb",
+            countryCode: "GB",
+            code: "en",
+            file: "en-UK.js",
+            iso: "en-UK"
           }
         ],
         lazy: true,
         langDir: "lang/",
-        defaultLocale: "en"
+        defaultLocale: "en",
+        parsePages: false,
+        pages: {
+          "marketplace/index": {
+            en: "/" + encodeURIComponent("coaches"),
+            da: "/" + encodeURIComponent("trænere"),
+            sv: "/" + encodeURIComponent("tränare")
+          },
+          "marketplace/_": {
+            en: "/" + encodeURIComponent("coaches") + "/*",
+            da: "/" + encodeURIComponent("trænere") + "/*",
+            sv: "/" + encodeURIComponent("tränare") + "/*"
+          }
+        }
       }
     ],
     [

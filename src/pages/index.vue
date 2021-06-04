@@ -1,6 +1,5 @@
 <template>
   <div class="home-page">
-  
     <v-container fluid class="px-0 pt-0">
       <v-row>
         <v-col>
@@ -1009,26 +1008,53 @@ export default {
       });
     },
     goToMarketPlaceAndSearchByCategoryId(category) {
-      this.$router.push({
-        path: this.localePath(pathData.pages.marketplace),
-        query: { categoryId: category.id.toString() }
-      });
+      if (category) {
+        let name = this.$i18n
+          .t(category.t_key)
+          .toLowerCase()
+          .split(" ")
+          .join("+");
+
+        this.$router.push(
+          this.localePath({ name: pathData.pages.marketplace.name }) +
+            "/" +
+            name
+        );
+      } else {
+        this.$router.push(
+          this.localePath({ name: pathData.pages.marketplace.name })
+        );
+      }
     },
     goToMarketPlaceAndSearchByQueryParamCategoryName(searchInputVal) {
-      this.$router.push({
-        path: this.localePath(pathData.pages.marketplace),
-        query: { categoryId: searchInputVal && searchInputVal.toString() }
-      });
+      let category = this.categoryList.find(item => item.id == searchInputVal);
+      if (category) {
+        let name = this.$i18n
+          .t(category.t_key)
+          .toLowerCase()
+          .split(" ")
+          .join("+");
+
+        this.$router.push(
+          this.localePath({ name: pathData.pages.marketplace.name }) +
+            "/" +
+            name
+        );
+      } else {
+        this.$router.push(
+          this.localePath({ name: pathData.pages.marketplace.name })
+        );
+      }
     },
     goToMarketPlace() {
-      this.$router.push(this.localePath(pathData.pages.marketplace));
+      this.$router.push(
+        this.localePath({ name: pathData.pages.marketplace.name })
+      );
     },
     goToRegister() {
       this.$router.push(this.localePath(pathData.pages.register));
     }
-  },
-  created() {},
-  watch: {}
+  }
 };
 </script>
 

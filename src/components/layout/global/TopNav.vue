@@ -149,8 +149,9 @@
           small
           class="text-normal"
           :color="colorOfTheTextBtn"
-          :to="localePath(navItems.marketplace.path)"
+          :to="localePath({ name: navItems.marketplace.name })"
           text
+          nuxt
           >{{ $t(navItems.marketplace.t_key) }}</v-btn
         >
 
@@ -317,7 +318,8 @@ export default {
           key: "marketplace",
           icon: "folder_open",
           t_key: "nav_item_marketplace",
-          path: pathData.pages.marketplace
+          path: pathData.pages.marketplace.path,
+          name: pathData.pages.marketplace.name
         },
         about: {
           key: "about",
@@ -401,7 +403,7 @@ export default {
       return this.$auth.loggedIn && this.$auth.hasRole("coach");
     },
     isAuthAthlete() {
-      return  this.$auth.loggedIn &&  this.$auth.hasRole("athlete");
+      return this.$auth.loggedIn && this.$auth.hasRole("athlete");
     },
     showSignUpBtn() {
       return !this.$auth.loggedIn;

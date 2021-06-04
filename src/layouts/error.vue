@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <div class="error-layout">
     <v-container>
       <v-card outlined>
         <v-row>
@@ -20,7 +20,14 @@
               </div>
             </div>
             <div class="d-flex justify-center mt-2">
-              <v-btn small class="text-normal text-decoration-underline" to="/" depressed plain color="#1867c0">
+              <v-btn
+                small
+                class="text-normal text-decoration-underline"
+                to="/"
+                depressed
+                plain
+                color="#1867c0"
+              >
                 Home
               </v-btn>
             </div>
@@ -28,7 +35,7 @@
         </v-row>
       </v-card>
     </v-container>
-  </v-app>
+  </div>
 </template>
 
 <script>
@@ -60,8 +67,10 @@ export default {
 };
 </script>
 
-<style scoped>
-h1 {
-  font-size: 20px;
+<style scoped lang="scss">
+.error-layout {
+  background: $body-bg;
+  width:100%;
+  height: 100vh;
 }
 </style>

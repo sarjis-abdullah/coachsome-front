@@ -335,7 +335,6 @@
 import ProfileCard from "@/components/card/ProfileCard";
 import ServiceCard from "@/components/card/ServiceCard";
 import ReviewCard from "@/components/card/ReviewCard";
-import { imageService } from "@/services";
 import BookingRequest from "@/components/artifact/global/BookingRequest";
 import { bookingHelper, storageHelper, seoHelper } from "@/helper";
 import { profileData, pathData } from "@/data";
@@ -532,7 +531,7 @@ export default {
 
       // Masonry links
       if (data.links) {
-        gallery.links = data.links
+        gallery.links = data.links;
       }
 
       // Location
