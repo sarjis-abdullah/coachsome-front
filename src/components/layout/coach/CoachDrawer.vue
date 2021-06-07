@@ -10,7 +10,7 @@
       <client-only>
         <v-list dark dense>
           <template v-for="(item, i) in drawerItems">
-            <v-list-item :key="i" :to="item.url" link>
+            <v-list-item :key="i" :to="localePath(item.url)" link>
               <v-list-item-content>
                 <v-list-item-title>
                   <v-row>

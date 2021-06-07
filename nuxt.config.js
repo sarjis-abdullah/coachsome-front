@@ -71,11 +71,6 @@ export default {
   router: {
     extendRoutes(routes, resolve) {
       // routes.push({
-      //   name: encodeURIComponent("coaches"),
-      //   path: "/" + encodeURIComponent("coaches"),
-      //   component: resolve(__dirname, "src/pages/coaches/_.vue")
-      // });
-      // routes.push({
       //   name: encodeURIComponent("trænere"),
       //   path: "/" + encodeURIComponent("trænere"),
       //   component: resolve(__dirname, "src/pages/coaches/_.vue")
@@ -167,9 +162,6 @@ export default {
         defaultLocale: "en",
         parsePages: false,
         pages: {
-          "_username/index":{
-            prefix: false
-          },
           "marketplace/index": {
             en: "/" + encodeURIComponent("coaches"),
             da: "/" + encodeURIComponent("trænere"),
