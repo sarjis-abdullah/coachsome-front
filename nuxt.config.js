@@ -167,6 +167,9 @@ export default {
         defaultLocale: "en",
         parsePages: false,
         pages: {
+          "_username/index":{
+            prefix: false
+          },
           "marketplace/index": {
             en: "/" + encodeURIComponent("coaches"),
             da: "/" + encodeURIComponent("trænere"),

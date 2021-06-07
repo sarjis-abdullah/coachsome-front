@@ -342,6 +342,7 @@ import { profileApi, messageApi } from "@/api";
 
 import DarkboxGallery from "@/components/darkbox/Gallery";
 export default {
+  nuxtI18n: false,
   head() {
     return {
       title: this.$i18n.t("profile_page_meta_title", {

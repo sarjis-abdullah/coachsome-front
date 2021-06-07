@@ -354,7 +354,6 @@ export default {
       this.filterDialog = val;
     },
     "categoryFilter.selectedCategories": function() {
-      console.log("categoryFilter.selectedCategories");
       let categories = this.categoryFilter.categories
         .filter(item =>
           this.categoryFilter.selectedCategories.includes(item.id)
@@ -399,7 +398,6 @@ export default {
     }
   },
   async fetch() {
-    console.log("fetch()", this.$route.params.pathMatch);
     const { data } = await marketPlaceApi(
       this.$axios
     ).getMarketPlacePageInitialData();
@@ -450,7 +448,7 @@ export default {
         });
       });
     }
-    this.reloadInfiniteLoader();
+    this.$fetchState.pending = false;
   },
   mounted() {
     this.initMap();
