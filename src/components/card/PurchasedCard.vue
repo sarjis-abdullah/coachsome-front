@@ -211,20 +211,22 @@ export default {
     goToChatPage() {
       if (this.isCoach) {
         if (this.isSold) {
-          this.$router.push({
-            path: pathData.pages.chat,
-            query: { userId: this.packageBuyerUserId }
-          });
+          this.$router.push(
+            this.localePath({
+              ...pathData.pages.chat,
+              params: { userId: this.packageBuyerUserId }
+            })
+          );
         } else {
           this.$router.push({
-            path: pathData.pages.chat,
-            query: { userId: this.packageOwnerUserId }
+            ...pathData.pages.chat,
+            params: { userId: this.packageOwnerUserId }
           });
         }
       } else {
         this.$router.push({
-          path: pathData.pages.chat,
-          query: { userId: this.packageOwnerUserId }
+          ...pathData.pages.chat,
+          params: { userId: this.packageOwnerUserId }
         });
       }
     }

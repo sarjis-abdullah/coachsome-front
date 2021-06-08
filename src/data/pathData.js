@@ -12,7 +12,10 @@ export default {
     baseReviews: "/reviews",
     baseReviewAction: username => "/" + username + "/review",
     baseReviewSuccess: "/reviews/success",
-    chat: "/chat",
+    chat: {
+      name:"chat",
+      path:"/chat"
+    },
     cookiePolicy: "/cookie-policy",
     emailVerification: "/email-verification",
     forgotPassword: "/password-forget",
