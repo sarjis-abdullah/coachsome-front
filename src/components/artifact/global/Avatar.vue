@@ -45,7 +45,7 @@
         <v-list-item
           color="primary"
           link
-          @click.stop="$router.push(items.coachSetting.path)"
+          @click.stop="$router.push(localePath(items.coachSetting.path))"
         >
           <v-list-item-content>
             <v-list-item-title>
