@@ -127,7 +127,7 @@ export default {
       "nuxt-i18n",
       {
         seo: false,
-        strategy: "prefix",
+        strategy: "prefix_and_default",
         locales: [
           {
             name: "dansk",

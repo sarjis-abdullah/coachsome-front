@@ -293,7 +293,7 @@ export default {
       this.tab.value = index;
     },
     existingAccHandler() {
-      this.$router.push(pathData.pages.login);
+      this.$router.push(this.localePath(pathData.pages.login));
     },
     async register() {
       let payload = {
@@ -335,6 +335,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .register-page {
+  background: $body-bg;
   height: 100%;
   .card-text {
     color: #fcfdfe;

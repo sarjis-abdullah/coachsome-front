@@ -10,7 +10,7 @@
       elevation="0"
     >
       <!-- Logo and Slogan-->
-      <v-toolbar-title class="ml-0 pl-4">
+      <v-toolbar-title class="ml-0">
         <div v-if="isLight" class="d-flex justify-center align-center">
           <NuxtLink :to="localePath('/')">
             <img :src="require('@/assets/images/logo-dark.svg')" alt="logo" />
@@ -38,7 +38,7 @@
       <!-- Search -->
       <slot name="sport-search">
         <div class="d-sm-flex d-xs-flex d-md-none mx-5">
-          <sport-search :style="{ maxWidth: '350px' }" />
+          <!-- <sport-search :style="{ maxWidth: '350px' }" /> -->
         </div>
       </slot>
 
@@ -380,7 +380,7 @@ export default {
       return this.$i18n.locales.find(i => i.code == this.$i18n.locale);
     },
     isMarketplacePage() {
-      return pathData.pages.marketplace == this.$router.currentRoute.path;
+      return this.localePath(pathData.pages.marketplace) == this.$router.currentRoute.path;
     },
     currencyBtnText() {
       const currency = currencyService.selectedCurrency();

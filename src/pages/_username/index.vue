@@ -606,7 +606,7 @@ export default {
     },
     contactBtnHandle() {
       if (!this.$auth.loggedIn) {
-        this.$router.push(pathData.pages.register);
+        this.$router.push(this.localePath(pathData.pages.register));
         let questionBox = {
           userId: this.userInfo.id,
           userName: this.userInfo.userName,
