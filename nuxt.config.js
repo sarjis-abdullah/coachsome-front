@@ -172,6 +172,11 @@ export default {
             da: "/" + encodeURIComponent("trænere") + "/*",
             sv: "/" + encodeURIComponent("tränare") + "/*"
           }
+        },
+        detectBrowserLanguage: {
+          useCookie: true,
+          cookieKey: "i18n_redirected",
+          onlyOnRoot: true // recommended
         }
       }
     ],
