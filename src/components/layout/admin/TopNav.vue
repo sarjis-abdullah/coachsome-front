@@ -45,7 +45,7 @@
         text
         v-for="(item, i) in mainMenu.items"
         :key="i"
-        :to="item.path"
+        :to="localePath(item.path)"
         >{{ item.text }}</v-btn
       >
     </div>
@@ -58,7 +58,7 @@
 <script>
 import { imageService } from "@/services";
 import { pathData } from "@/data";
-import { impersonateAdminApi, authApi } from "@/api";
+import { impersonateAdminApi } from "@/api";
 import Avatar from "@/components/artifact/global/Avatar";
 import SportSearch from "@/components/artifact/global/SportSearch";
 

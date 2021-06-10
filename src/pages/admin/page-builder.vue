@@ -22,7 +22,7 @@ export default {
       return (
         process.env.PAGE_BUILDER_URL +
         "/public?access_token=" +
-        this.$auth.token
+        this.$auth.strategy.token.get().split(" ")[1]
       );
     }
   },

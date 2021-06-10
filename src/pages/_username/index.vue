@@ -364,7 +364,7 @@ export default {
         ...seoHelper.createSocialMeta({
           title: this.profileCard.name,
           description: this.removeTags(this.moreAbout),
-          image: this.profileCard.landscapeImage
+          image: this.profileCard.metaImage
         })
       ],
       link: []
@@ -480,8 +480,8 @@ export default {
         profileCard.name = data.profile_info.profile_name;
         profileCard.image =
           data.profile_info.image || profileData.PROFILE_DEFAULT_IMAGE;
-        profileCard.landscapeImage =
-          data.profile_info.landscapeImage || profileData.PROFILE_DEFAULT_IMAGE;
+        profileCard.metaImage =
+          data.profile_info.metaImage || profileData.PROFILE_DEFAULT_IMAGE;
         profileCard.fb_link = data.profile_info.fb_link;
         profileCard.twitter_link = data.profile_info.twitter_link;
         profileCard.instagram_link = data.profile_info.instagram_link;

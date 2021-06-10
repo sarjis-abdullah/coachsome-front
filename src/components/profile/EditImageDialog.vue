@@ -355,8 +355,8 @@ export default {
         this.uploadImages({
           original: values[0],
           square: values[1],
-          portrait: values[2],
-          landscape: values[3]
+          landscape: values[2],
+          portrait: values[3],
         });
       });
     },
