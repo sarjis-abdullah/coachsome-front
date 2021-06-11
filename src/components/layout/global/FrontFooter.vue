@@ -10,51 +10,51 @@
                   {{ $t("footer_text_coachsome_aps") }}
                 </div>
                 <div class="list__item">
-                  <router-link :to="uri.price">
+                  <nuxt-link :to="localePath(uri.price)">
                     {{ $t("footer_url_label_pricing") }}
-                  </router-link>
+                  </nuxt-link>
                 </div>
                 <div class="list__item" v-show="false">
-                  <router-link to="/">Support</router-link>
+                  <nuxt-link to="/">Support</nuxt-link>
                 </div>
                 <div class="list__item">
-                  <router-link :to="uri.about">
+                  <nuxt-link :to="localePath(uri.about)">
                     {{ $t("global_url_about_us") }}
-                  </router-link>
+                  </nuxt-link>
                 </div>
                 <div class="list__item" v-show="false">
-                  <router-link to="/">Presses</router-link>
+                  <nuxt-link to="/">Presses</nuxt-link>
                 </div>
                 <div class="list__item" v-show="false">
-                  <router-link to="/">Job</router-link>
+                  <nuxt-link to="/">Job</nuxt-link>
                 </div>
                 <div class="list__item">
                   <div class="list__separator"></div>
                 </div>
                 <div class="list__item">
-                  <router-link :to="uri.terms">
+                  <nuxt-link :to="localePath(uri.terms)">
                     {{ $t("global_url_terms_of_use") }}
-                  </router-link>
+                  </nuxt-link>
                 </div>
                 <div class="list__item">
-                  <router-link :to="uri.policy">
+                  <nuxt-link :to="localePath(uri.policy)">
                     {{ $t("global_url_privacy_policy") }}
-                  </router-link>
+                  </nuxt-link>
                 </div>
                 <div class="list__item">
-                  <router-link :to="uri.cookiePolicy">
+                  <nuxt-link :to="localePath(uri.cookiePolicy)">
                     {{ $t("footer_url_link_cookie_policy") }}
-                  </router-link>
+                  </nuxt-link>
                 </div>
                 <div class="list__item">
-                  <router-link :to="uri.refundPolicy">
+                  <nuxt-link :to="localePath(uri.refundPolicy)">
                     {{ $t("footer_link_fefund_policy") }}
-                  </router-link>
+                  </nuxt-link>
                 </div>
                 <div class="list__item">
-                  <router-link :to="uri.faq">
+                  <nuxt-link :to="localePath(uri.faq)">
                     {{ $t("global_url_faq") }}
-                  </router-link>
+                  </nuxt-link>
                 </div>
               </div>
             </v-col>
@@ -62,16 +62,16 @@
               <div class="list">
                 <div class="list__title">Explore</div>
                 <div class="list__item" v-show="false">
-                  <router-link to="/">City</router-link>
+                  <nuxt-link to="/">City</nuxt-link>
                 </div>
                 <div class="list__item" v-show="false">
-                  <router-link to="/">Sport</router-link>
+                  <nuxt-link to="/">Sport</nuxt-link>
                 </div>
                 <div class="list__item" v-show="false">
                   <div class="list__separator"></div>
                 </div>
                 <div class="list__item">
-                  <router-link :to="uri.howItWorks">How it works</router-link>
+                  <nuxt-link :to="uri.howItWorks">How it works</nuxt-link>
                 </div>
               </div>
             </v-col>
@@ -81,10 +81,10 @@
                   {{ $t("footer_list_title_more_fun") }}
                 </div>
                 <!-- <div class="list__item">
-                  <router-link to="/">Invite friend</router-link>
+                  <nuxt-link to="/">Invite friend</nuxt-link>
                 </div>
                 <div class="list__item">
-                  <router-link to="/">News</router-link>
+                  <nuxt-link to="/">News</nuxt-link>
                 </div> -->
                 <div class="list__item">
                   <span style="cursor:pointer;" @click="handleBlogBtnClick">
@@ -98,31 +98,31 @@
         <v-col cols="12" md="2">
           <div class="payment-method d-flex justify-center mt-5">
             <div class="payment-method__item">
-              <router-link text to="#">
+              <nuxt-link text to="#">
                 <img
                   style="height: 35px;"
                   :src="require('@/assets/images/footer/mastercard.svg')"
                   alt="logo"
                 />
-              </router-link>
+              </nuxt-link>
             </div>
             <div class="payment-method__item ml-2">
-              <router-link text to="#">
+              <nuxt-link text to="#">
                 <img
                   style="height: 35px;"
                   :src="require('@/assets/images/footer/visa.svg')"
                   alt="logo"
                 />
-              </router-link>
+              </nuxt-link>
             </div>
             <div class="payment-method__item ml-2">
-              <router-link text to="#">
+              <nuxt-link text to="#">
                 <img
                   style="height: 35px;"
                   :src="require('@/assets/images/footer/mobilepay.svg')"
                   alt="logo"
                 />
-              </router-link>
+              </nuxt-link>
             </div>
           </div>
         </v-col>
