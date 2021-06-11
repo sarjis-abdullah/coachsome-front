@@ -559,7 +559,7 @@ export default {
       }
     },
     infiniteHandler($state) {
-      if (!this.$fetchState.pending) {
+      // if (!this.$fetchState.pending) {
         this.queryParams.categoryId = this.categoryFilter.selectedCategories.join(
           ","
         );
@@ -632,7 +632,7 @@ export default {
               $state.complete();
             }
           });
-      }
+      // }
     },
     removeParamThatHasNotAnyfilter() {
       if (this.queryParams.categoryName) {
