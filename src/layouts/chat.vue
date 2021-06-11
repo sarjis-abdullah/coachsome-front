@@ -20,9 +20,16 @@ export default {
     GlobalHeader
   },
   data() {
-    return {};
+    return {
+      socket: null
+    };
   },
-  mounted() {},
+  mounted() {
+    this.socket = this.$nuxtSocket({ name: "main" });
+    this.socket.on("new_message", data => {
+      console.log(data);
+    });
+  },
   methods: {}
 };
 </script>

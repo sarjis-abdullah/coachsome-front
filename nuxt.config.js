@@ -241,6 +241,19 @@ export default {
           "**/athlete/**"
         ]
       }
+    ],
+
+    // Socket
+    [
+      "nuxt-socket-io",
+      {
+        sockets: [
+          {
+            name: "main",
+            url: process.env.CHAT_SERVER_URL
+          }
+        ]
+      }
     ]
   ],
 

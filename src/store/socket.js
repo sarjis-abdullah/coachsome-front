@@ -1,7 +1,6 @@
-import io from "socket.io-client";
 
 export const state = () => ({
-  io: process.client ? io(process.env.CHAT_SERVER_URL) : null
+  io: null
 });
 
 export const getters = {

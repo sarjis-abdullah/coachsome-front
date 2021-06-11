@@ -1,3 +1,6 @@
+import { chatApi } from "@/api";
+import { imageService } from "@/services";
+
 export const state = () => ({
   messages: [],
   contacts: [],
@@ -48,10 +51,8 @@ export const mutations = {
   INCREMENT_CONTACT_USER_NEW_MESSAGE_COUNT(state, payload) {
     const { email } = payload;
     const contactUser = state.contacts.find(c => c.email == email);
-    if (contactUser.newMessageCount) {
+    if (contactUser && contactUser.newMessageCount) {
       contactUser.newMessageCount++;
-    } else {
-      contactUser.newMessageCount = 1;
     }
   },
   REFRESH_TOTAL_NEW_MESSAGE_COUNT(state) {
@@ -108,5 +109,42 @@ export const actions = {
   },
   setTotalNewMessageCount(context, totalNewMessageCount) {
     context.commit("SET_TOTAL_NEW_MESSAGE_COUNT", totalNewMessageCount);
+  },
+  async getMessageCount({ commit }) {
+    const { data } = await chatApi(this.$axios).getTotalNewMessageCount();
+    const { totalNewMessageCount } = data;
+    if (totalNewMessageCount) {
+      commit("SET_TOTAL_NEW_MESSAGE_COUNT", totalNewMessageCount);
+    }
+  },
+  async getContacts({ state, commit }) {
+    if (!state.contacts.length) {
+      const { data } = await chatApi(this.$axios).init();
+      let users = data.users;
+      if (users) {
+        let contactUsers = users.map(item => {
+          return {
+            id: item.id,
+            email: item.email,
+            firstName: item.firstName,
+            lastName: item.lastName,
+            fullName: item.fullName,
+            title: item.title,
+            avatarImage: item.avatarImage
+              ? imageService.getImageByName(item.avatarImage)
+              : null,
+            avatarName: item.avatarName,
+            languages: item.languages,
+            aboutText: item.aboutText,
+            categories: item.categories,
+            tags: item.tags,
+            newMessageCount: item.newMessageCount,
+            lastMessage: item.lastMessage,
+            lastMessageTime: item.lastMessageTime
+          };
+        });
+        commit("SET_CONTACTS", contactUsers);
+      }
+    }
   }
 };

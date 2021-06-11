@@ -160,57 +160,53 @@
                                         handleSelectedContactUser(item)
                                       "
                                     >
-                                      <v-list-item-avatar
-                                        color="grey lighten-1 white--text"
-                                      >
-                                        <span v-if="item.newMessageCount > 0">
-                                          <v-badge overlap bottom color="red">
+                                      <v-list-item-avatar>
+                                        <div v-if="item.newMessageCount > 0">
+                                          <v-badge
+                                            avatar
+                                            bordered
+                                            overlap
+                                            bottom
+                                            color="red"
+                                          >
                                             <v-avatar
-                                              v-if="item.avatarImage"
+                                              color="primary-light-1"
                                               size="48"
                                               class="my-0 py-0"
                                             >
-                                              <v-img
-                                                class="elevation-6"
-                                                :src="item.avatarImage"
-                                              ></v-img>
-                                            </v-avatar>
-                                            <v-avatar
-                                              v-if="!item.avatarImage"
-                                              color="primary-light-1"
-                                              size="48"
-                                            >
-                                              <span>{{ item.avatarName }}</span>
-                                            </v-avatar>
-                                            <template
-                                              v-slot:badge
-                                              v-if="item.newMessageCount > 0"
-                                            >
-                                              <span>
-                                                {{ item.newMessageCount }}
+                                              <span v-if="item.avatarImage">
+                                                <v-img
+                                                  :src="item.avatarImage"
+                                                ></v-img>
                                               </span>
+                                              <span v-else>
+                                                {{ item.avatarName }}
+                                              </span>
+                                            </v-avatar>
+
+                                            <template v-slot:badge>
+                                              <v-avatar badge>
+                                                {{ item.newMessageCount }}
+                                              </v-avatar>
                                             </template>
                                           </v-badge>
-                                        </span>
-                                        <span v-else>
+                                        </div>
+                                        <div v-else>
                                           <v-avatar
-                                            v-if="item.avatarImage"
+                                            color="primary-light-1"
                                             size="48"
                                             class="my-0 py-0"
                                           >
                                             <v-img
+                                              v-if="item.avatarImage"
                                               class="elevation-6"
                                               :src="item.avatarImage"
                                             ></v-img>
+                                            <span v-if="!item.avatarImage">{{
+                                              item.avatarName
+                                            }}</span>
                                           </v-avatar>
-                                          <v-avatar
-                                            v-if="!item.avatarImage"
-                                            color="primary-light-1"
-                                            size="48"
-                                          >
-                                            <span>{{ item.avatarName }}</span>
-                                          </v-avatar>
-                                        </span>
+                                        </div>
                                       </v-list-item-avatar>
                                       <v-list-item-content>
                                         <v-list-item-title>
@@ -331,6 +327,7 @@ export default {
     ChatScreen
   },
   data: () => ({
+    socket: null,
     bookingDialog: {
       value: false,
       requestBox: {
@@ -372,7 +369,6 @@ export default {
       content: "",
       created_at: new Date()
     },
-    socket: null,
     dayBox: []
   }),
   computed: {
@@ -460,7 +456,7 @@ export default {
                 };
                 this.pushMessage(messageItem);
                 this.socket.emit("new_message", {
-                  from: this.$store.getters.auth,
+                  from: this.$auth.user,
                   to: this.selectedContactUser,
                   message: messageItem
                 });
@@ -470,17 +466,23 @@ export default {
       }
     }
   },
-  created() {
-    this.init();
-  },
   mounted() {
-    if (this.socket) {
-      this.socket.on("disconnect", () => console.log(`Disconnect`));
-      this.socket.on("connect", () => {
-        console.log(`Connected`);
-        this.$store.dispatch("socket/joinAuthUserToRoom");
-      });
-    }
+    console.log("......mounted().....");
+    console.log("user", this.$auth.user.email);
+    this.socket = this.$nuxtSocket({ name: "main" });
+    this.socket.emit("room", { email: this.$auth.user.email });
+
+    this.socket.on("disconnect", () => {
+      console.log(`Disconnect`);
+    });
+
+    this.socket.on("connect", () => {
+      console.log(`Connected`);
+    });
+
+    this.socket.on("new_message", data => {
+      console.log(data);
+    });
 
     // This is very sensitive.
     // Since the date is not updated without refresh, we should manually refresh it
@@ -489,59 +491,55 @@ export default {
     setInterval(() => {
       this.duration.created_at = new Date().toISOString();
     }, 1000);
+
+    // Fetch contact users
+    chatApi(this.$axios)
+      .init()
+      .then(({ data }) => {
+        let users = data.users;
+        if (users) {
+          let contactUsers = users.map(item => {
+            return {
+              id: item.id,
+              email: item.email,
+              firstName: item.firstName,
+              lastName: item.lastName,
+              fullName: item.fullName,
+              title: item.title,
+              avatarImage: item.avatarImage
+                ? imageService.getImageByName(item.avatarImage)
+                : null,
+              avatarName: item.avatarName,
+              languages: item.languages,
+              aboutText: item.aboutText,
+              categories: item.categories,
+              tags: item.tags,
+              newMessageCount: item.newMessageCount,
+              lastMessage: item.lastMessage,
+              lastMessageTime: item.lastMessageTime
+            };
+          });
+
+          this.$store.dispatch("chat/setContacts", contactUsers);
+
+          // If it has any userId form the url
+          if (this.$route.query.userId) {
+            let user = this.contacts.find(
+              item => item.id == this.$route.query.userId
+            );
+            if (user) {
+              this.selectedContactUser = user;
+              this.$router.replace(pathData.pages.chat);
+            }
+          }
+        }
+      })
+      .catch(() => {});
   },
   beforeDestroy() {
     this.$store.dispatch("chat/destroySelectedContactUser");
   },
   methods: {
-    init() {
-      this.socket = this.$store.getters["socket/io"];
-      this.$store.dispatch("socket/joinAuthUserToRoom");
-
-      // Fetch contact users
-      chatApi(this.$axios)
-        .init()
-        .then(({ data }) => {
-          let users = data.users;
-          if (users) {
-            let contactUsers = users.map(item => {
-              return {
-                id: item.id,
-                email: item.email,
-                firstName: item.firstName,
-                lastName: item.lastName,
-                fullName: item.fullName,
-                title: item.title,
-                avatarImage: item.avatarImage
-                  ? imageService.getImageByName(item.avatarImage)
-                  : null,
-                avatarName: item.avatarName,
-                languages: item.languages,
-                aboutText: item.aboutText,
-                categories: item.categories,
-                tags: item.tags,
-                newMessageCount: item.newMessageCount,
-                lastMessage: item.lastMessage,
-                lastMessageTime: item.lastMessageTime
-              };
-            });
-
-            this.$store.dispatch("chat/setContacts", contactUsers);
-
-            // If it has any userId form the url
-            if (this.$route.query.userId) {
-              let user = this.contacts.find(
-                item => item.id == this.$route.query.userId
-              );
-              if (user) {
-                this.selectedContactUser = user;
-                this.$router.replace(pathData.pages.chat);
-              }
-            }
-          }
-        })
-        .catch(() => {});
-    },
     handleBackBtnClick() {
       this.selectedContactUser = null;
     },
@@ -557,13 +555,11 @@ export default {
     handleRequestBoxNewMessage(messageItem) {
       this.pushMessage(messageItem);
       this.bookingDialog.value = false;
-      if (process.client) {
-        this.socket.emit("new_message", {
-          from: this.$store.getters.auth,
-          to: this.selectedContactUser,
-          message: messageItem
-        });
-      }
+      this.socket.emit("new_message", {
+        from: this.$auth.user,
+        to: this.selectedContactUser,
+        message: messageItem
+      });
     },
     handleSelectPackage(item) {
       if (item) {
@@ -601,7 +597,7 @@ export default {
         this.pushMessage(newMessage);
 
         this.socket.emit("new_message", {
-          from: this.$store.getters.auth,
+          from: this.$auth.user,
           to: this.selectedContactUser,
           message: newMessage
         });
