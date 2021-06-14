@@ -160,7 +160,8 @@
                                         handleSelectedContactUser(item)
                                       "
                                     >
-                                      <v-list-item-avatar>
+                                      <!-- Avatar -->
+                                      <div class="py-2 pr-1">
                                         <div v-if="item.newMessageCount > 0">
                                           <v-badge
                                             avatar
@@ -183,7 +184,6 @@
                                                 {{ item.avatarName }}
                                               </span>
                                             </v-avatar>
-
                                             <template v-slot:badge>
                                               <v-avatar badge>
                                                 {{ item.newMessageCount }}
@@ -207,7 +207,8 @@
                                             }}</span>
                                           </v-avatar>
                                         </div>
-                                      </v-list-item-avatar>
+                                      </div>
+
                                       <v-list-item-content>
                                         <v-list-item-title>
                                           <div class="connection">

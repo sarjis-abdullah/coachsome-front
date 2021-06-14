@@ -51,7 +51,7 @@ export const mutations = {
   INCREMENT_CONTACT_USER_NEW_MESSAGE_COUNT(state, payload) {
     const { email } = payload;
     const contactUser = state.contacts.find(c => c.email == email);
-    if (contactUser && contactUser.newMessageCount) {
+    if (contactUser) {
       contactUser.newMessageCount++;
     }
   },
