@@ -102,7 +102,8 @@ export default {
     { src: "~/plugins/vue-image-upload-resize", mode: "client" },
     { src: "~/plugins/vue-tribute.js", mode: "client" },
     { src: "~/plugins/vue-image-upload-resize", mode: "client" },
-    { src: "~/plugins/vuelidate" }
+    { src: "~/plugins/vuelidate" },
+    { src: '~/plugins/socket.io.js', mode: 'client' },
   ],
 
   // Auto import components
@@ -176,7 +177,7 @@ export default {
         detectBrowserLanguage: {
           useCookie: false,
           cookieKey: "i18n_redirected",
-          onlyOnRoot: true // recommended
+          onlyOnRoot: true 
         }
       }
     ],
@@ -239,19 +240,6 @@ export default {
           "**/admin/**",
           "**/coach/**",
           "**/athlete/**"
-        ]
-      }
-    ],
-
-    // Socket
-    [
-      "nuxt-socket-io",
-      {
-        sockets: [
-          {
-            name: "main",
-            url: process.env.CHAT_SERVER_URL
-          }
         ]
       }
     ]

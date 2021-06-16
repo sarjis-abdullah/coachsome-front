@@ -456,7 +456,7 @@ export default {
                   content: item.content
                 };
                 this.pushMessage(messageItem);
-                this.socket.emit("new_message", {
+                this.$socket.client.emit("new_message", {
                   from: this.$auth.user,
                   to: this.selectedContactUser,
                   message: messageItem
@@ -468,21 +468,6 @@ export default {
     }
   },
   mounted() {
-    this.socket = this.$nuxtSocket({ name: "main" });
-    this.socket.emit("room", { email: this.$auth.user.email });
-
-    this.socket.on("disconnect", () => {
-      console.log(`Disconnect`);
-    });
-
-    this.socket.on("connect", () => {
-      console.log(`Connected`);
-    });
-
-    this.socket.on("new_message", data => {
-      console.log(data);
-    });
-
     // This is very sensitive.
     // Since the date is not updated without refresh, we should manually refresh it
     // Now this created_at is updated after 1 second
@@ -555,7 +540,7 @@ export default {
     handleRequestBoxNewMessage(messageItem) {
       this.pushMessage(messageItem);
       this.bookingDialog.value = false;
-      this.socket.emit("new_message", {
+      this.$socket.client.emit("new_message", {
         from: this.$auth.user,
         to: this.selectedContactUser,
         message: messageItem
@@ -596,7 +581,7 @@ export default {
         );
         this.pushMessage(newMessage);
 
-        this.socket.emit("new_message", {
+        this.$socket.client.emit("new_message", {
           from: this.$auth.user,
           to: this.selectedContactUser,
           message: newMessage
