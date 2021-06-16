@@ -34,6 +34,10 @@ export default {
         findCurrency = item;
       }
     });
+
+    if (!findCurrency) {
+      findCurrency = this.defaultCurrency();
+    }
     return findCurrency;
   },
   selectedCurrency() {
@@ -59,7 +63,7 @@ export default {
       getConfig = this.selectedCurrency();
     }
     if (getConfig) {
-      return currency(value, {
+      return currency(parseFloat(value), {
         symbol: getConfig.symbol,
         separator: getConfig.thousandsSeparator,
         decimal: getConfig.fractionSeparator

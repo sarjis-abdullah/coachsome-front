@@ -297,7 +297,7 @@
               </span>
             </div>
             <div class="booking-package__buyer-name mt-5">
-              {{ message.content.buyerName }}
+              {{ message.content.buyerName }} 
             </div>
             <div
               class="booking-package__buyer-text"
