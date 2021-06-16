@@ -624,6 +624,7 @@ export default {
     },
     handleBooking(service = null) {
       bookingHelper.removeBookingInfoFromStorage();
+      console.log(this.localePath(pathData.pages.bookingPackage(service.id)))
       this.$router.push(
         this.localePath(pathData.pages.bookingPackage(service.id))
       );

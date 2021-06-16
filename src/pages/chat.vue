@@ -468,8 +468,6 @@ export default {
     }
   },
   mounted() {
-    console.log("......mounted().....");
-    console.log("user", this.$auth.user.email);
     this.socket = this.$nuxtSocket({ name: "main" });
     this.socket.emit("room", { email: this.$auth.user.email });
 
@@ -524,13 +522,14 @@ export default {
           this.$store.dispatch("chat/setContacts", contactUsers);
 
           // If it has any userId form the url
+          console.log(this.$route.query.userId);
           if (this.$route.query.userId) {
             let user = this.contacts.find(
               item => item.id == this.$route.query.userId
             );
             if (user) {
               this.selectedContactUser = user;
-              this.$router.replace(pathData.pages.chat);
+              this.$router.replace(this.localePath(pathData.pages.chat));
             }
           }
         }

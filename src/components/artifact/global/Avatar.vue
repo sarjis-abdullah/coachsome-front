@@ -172,7 +172,7 @@
           :to="switchLocalePath(locale.code)"
         >
           <v-list-item :key="i" link>
-            <v-list-item-title>{{ locale.name }}</v-list-item-title>
+            <v-list-item-title>{{ $t(locale.tKey) }}</v-list-item-title>
           </v-list-item>
         </nuxt-link>
       </v-list-group>

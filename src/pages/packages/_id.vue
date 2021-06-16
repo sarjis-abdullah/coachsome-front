@@ -398,9 +398,9 @@ import ProfileSimpleCard from "@/components/card/ProfileSimpleCard";
 import PackageSimpleCard from "@/components/card/PackageSimpleCard";
 
 import { currencyService } from "@/services";
-import { constantData, endpointData, pathData } from "@/data";
+import { constantData, pathData } from "@/data";
 import { storageHelper, bookingHelper } from "@/helper";
-
+import { bookingApi, clientBookingApi } from "@/api";
 export default {
   components: {
     ProfileSimpleCard,
@@ -603,8 +603,8 @@ export default {
         packageId: this.$route.params.id
       };
 
-      this.$axios
-        .post(endpointData.BOOKING_INITIATE, payload)
+      clientBookingApi(this.$axios)
+        .initBooking(payload)
         .then(response => {
           let profileCardInfo = response.data.profileCard;
           let packageInfo = response.data.packageInfo;
@@ -660,7 +660,7 @@ export default {
         .catch(() => {});
     },
     notify(payload) {
-      this.$axios.post(endpointData.BOOKING_NOTIFY, payload);
+      bookingApi(this.$axios).notify(payload);
     },
     requestBookingButtonHandler() {
       let payload = {
@@ -677,8 +677,8 @@ export default {
         cancelUrl: location.href + "?payment_status=cancel"
       };
       this.loadingRequestBookingBtn = true;
-      this.$axios
-        .post(endpointData.BOOKING_PAY_BY_QUICKPAY, payload)
+      bookingApi(this.$axios)
+        .payByQuickpay(payload)
         .then(({ data }) => {
           if (data.bookingId) {
             let booking = storageHelper.get("booking");
@@ -710,10 +710,12 @@ export default {
         booking.isRedirectToChat = true;
         storageHelper.set("booking", booking);
       }
-      this.$router.push({
-        path: pathData.pages.chat,
-        query: { userId: this.profileCard.userId }
-      });
+      this.$router.push(
+        this.localePath({
+          ...pathData.pages.chat,
+          query: { userId: this.profileCard.userId }
+        })
+      );
     },
     startTimer(duration) {
       let display = this.$refs.timerDisplay;
