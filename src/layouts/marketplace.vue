@@ -7,7 +7,7 @@
     </TopNav>
     <v-main>
       <client-only>
-        <!-- <GlobalHeader /> -->
+        <GlobalHeader />
       </client-only>
       <nuxt />
     </v-main>
@@ -15,11 +15,11 @@
 </template>
 
 <script>
-// import GlobalHeader from "@/components/layout/global/GlobalHeader";
+import GlobalHeader from "@/components/layout/global/GlobalHeader";
 import TopNav from "@/components/layout/global/TopNav";
 export default {
   components: {
-    // GlobalHeader,
+    GlobalHeader,
     TopNav
   },
   data() {

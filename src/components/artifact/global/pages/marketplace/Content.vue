@@ -1,5 +1,5 @@
 <template>
-  <div class="marketplace-content">
+ <div class="marketplace-content">
     <v-container
       class="pt-0  pb-0 body-bg"
       style="height: 96vh;"
@@ -560,78 +560,78 @@ export default {
     },
     infiniteHandler($state) {
       // if (!this.$fetchState.pending) {
-        this.queryParams.categoryId = this.categoryFilter.selectedCategories.join(
-          ","
-        );
-        this.queryParams.date = this.dateFilter.date;
-        this.queryParams.cityName = this.$route.query.cityName;
-        this.queryParams.originLat = this.locationFilter.lat;
-        this.queryParams.originLong = this.locationFilter.long;
-        this.queryParams.originLocation = this.locationFilter.location;
-        this.queryParams.distance = this.radiusFilter.slider;
-        this.queryParams.countryCode = this.countryFilter.selectedCountryCode;
-        this.queryParams.hourlyPriceMinRange = this.filter.item.hourlyPrice
-          .isActive
-          ? this.hourlyPriceFilter.range[0]
-          : null;
-        this.queryParams.hourlyPriceMaxRange = this.filter.item.hourlyPrice
-          .isActive
-          ? this.hourlyPriceFilter.range[1]
-          : null;
-        this.queryParams.page = this.page;
-        this.queryParams.categoryId = this.categoryFilter.selectedCategories.join(
-          ","
-        );
+      this.queryParams.categoryId = this.categoryFilter.selectedCategories.join(
+        ","
+      );
+      this.queryParams.date = this.dateFilter.date;
+      this.queryParams.cityName = this.$route.query.cityName;
+      this.queryParams.originLat = this.locationFilter.lat;
+      this.queryParams.originLong = this.locationFilter.long;
+      this.queryParams.originLocation = this.locationFilter.location;
+      this.queryParams.distance = this.radiusFilter.slider;
+      this.queryParams.countryCode = this.countryFilter.selectedCountryCode;
+      this.queryParams.hourlyPriceMinRange = this.filter.item.hourlyPrice
+        .isActive
+        ? this.hourlyPriceFilter.range[0]
+        : null;
+      this.queryParams.hourlyPriceMaxRange = this.filter.item.hourlyPrice
+        .isActive
+        ? this.hourlyPriceFilter.range[1]
+        : null;
+      this.queryParams.page = this.page;
+      this.queryParams.categoryId = this.categoryFilter.selectedCategories.join(
+        ","
+      );
 
-        marketPlaceApi(this.$axios)
-          .getHourlyRatingUsers({ ...this.queryParams })
-          .then(({ data }) => {
-            if (data.searchedCountryName) {
-              this.searchedCountryName = data.searchedCountryName;
-            }
-            if (data.coachInCountries.length) {
-              this.coachInCountries = data.coachInCountries;
-            }
+      marketPlaceApi(this.$axios)
+        .getHourlyRatingUsers({ ...this.queryParams })
+        .then(({ data }) => {
+          if (data.searchedCountryName) {
+            this.searchedCountryName = data.searchedCountryName;
+          }
+          if (data.coachInCountries.length) {
+            this.coachInCountries = data.coachInCountries;
+          }
 
-            if (data.coaches.length) {
-              this.page += 1;
-              let coaches = data.coaches.map(item => {
-                let coachItem = {};
-                coachItem.name = item.name;
-                coachItem.image = item.image ? item.image : null;
-                coachItem.countReview = item.countReview;
-                coachItem.rating = item.rating;
-                coachItem.countReview = item.countReview;
-                coachItem.location =
-                  item.locations && item.locations.length > 0
-                    ? item.locations[0].zip + " " + item.locations[0].city
-                    : "";
-                coachItem.price = item.price;
-                coachItem.categories = item.categories;
-                coachItem.userName = item.userName;
-                return coachItem;
-              });
-              this.coaches.push(...coaches);
+          if (data.coaches.length) {
+            this.page += 1;
+            let coaches = data.coaches.map(item => {
+              let coachItem = {};
+              coachItem.name = item.name;
+              coachItem.image = item.image ? item.image : null;
+              coachItem.countReview = item.countReview;
+              coachItem.rating = item.rating;
+              coachItem.countReview = item.countReview;
+              coachItem.location =
+                item.locations && item.locations.length > 0
+                  ? item.locations[0].zip + " " + item.locations[0].city
+                  : "";
+              coachItem.price = item.price;
+              coachItem.categories = item.categories;
+              coachItem.userName = item.userName;
+              return coachItem;
+            });
+            this.coaches.push(...coaches);
 
-              let locations = data.coaches
-                .map(item => {
-                  if (item.locations.length > 0) {
-                    let locationItem = {};
-                    locationItem.address = item.locations[0].address;
-                    locationItem.lat = item.locations[0].lat;
-                    locationItem.long = item.locations[0].long;
-                    locationItem.userImage = item.locations[0].userImage;
-                    return locationItem;
-                  }
-                })
-                .filter(item => (item != null ? true : false));
+            let locations = data.coaches
+              .map(item => {
+                if (item.locations.length > 0) {
+                  let locationItem = {};
+                  locationItem.address = item.locations[0].address;
+                  locationItem.lat = item.locations[0].lat;
+                  locationItem.long = item.locations[0].long;
+                  locationItem.userImage = item.locations[0].userImage;
+                  return locationItem;
+                }
+              })
+              .filter(item => (item != null ? true : false));
 
-              this.addAllLocationMarker(locations);
-              $state.loaded();
-            } else {
-              $state.complete();
-            }
-          });
+            this.addAllLocationMarker(locations);
+            $state.loaded();
+          } else {
+            $state.complete();
+          }
+        });
       // }
     },
     removeParamThatHasNotAnyfilter() {
