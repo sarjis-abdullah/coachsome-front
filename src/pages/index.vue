@@ -1,108 +1,114 @@
 <template>
   <div class="home-page">
     <v-container fluid class="px-0 pt-0">
-    <!-- hero -->
-    <section class="hero-section">
-      <div class="hero-section__bg">
-        <v-img
-          min-width="100%"
-          height="100%"
-          :src="require('@/assets/images/home/hero.jpg')"
-          :lazy-src="require('@/assets/images/home/hero.jpg')"
-          class="grey lighten-2"
-        >
-        </v-img>
-      </div>
-      <div class="hero-section__content">
-        <div>
-          <v-row justify="center">
-            <v-col cols="12" md="8">
-              <v-card color="transparent" elevation="0">
-                <v-card-text>
-                  <div
-                    :class="[
-                      'big-title',
-                      {
-                        'big-title--sm': $vuetify.breakpoint.smAndDown,
-                        'big-title--md': $vuetify.breakpoint.mdAndUp
-                      }
-                    ]"
-                  >
-                    {{ $t("front_sec_title_find_the_right_coach") }}
-                  </div>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-          <v-row justify="center" align="center">
-            <v-col cols="11" md="6">
-              <SportSearch
-                :items="categoryList"
-                @on-item-select="
-                  goToMarketPlaceAndSearchByQueryParamCategoryName
-                "
-              ></SportSearch>
-              <v-card color="transparent" elevation="0">
-                <v-card-text>
-                  <div
-                    :class="[
-                      'category d-flex justify-center flex-wrap',
-                      {
-                        'category--md': $vuetify.breakpoint.mdAndUp,
-                        'category--sm': $vuetify.breakpoint.smAndDown
-                      }
-                    ]"
-                  >
-                    <span class="category__title mr-2">{{
-                      $t("front_txt_poppular")
-                    }}</span>
-                    <span v-for="(item, i) in popularCategories" :key="i">
-                      <v-btn
-                        color="white"
-                        depressed
-                        rounded
-                        small
-                        class="text-capitalize category__item mr-2"
-                        @click.stop="goToMarketPlaceAndSearchByCategoryId(item)"
-                        >{{ $t(item.t_key) }}</v-btn
-                      >
-                    </span>
-                  </div>
-                </v-card-text>
-              </v-card>
-              <div
-                :class="[
-                  'coachsome-rating d-flex justify-center flex-wrap align-center',
-                  {
-                    'coachsome-rating--md': $vuetify.breakpoint.mdAndUp,
-                    'coachsome-rating--sm': $vuetify.breakpoint.smAndDown
-                  }
-                ]"
-              >
-                <v-rating
-                  readonly
-                  :value="overallRating"
-                  background-color="rating"
-                  color="rating"
-                  medium
-                  half-increments
-                ></v-rating>
-                <div class="coachsome-rating__text">
-                  <v-btn
-                    text
-                    class="text-normal white--text"
-                    @click="handleReviewTextClick"
-                  >
-                    {{ totalReviewerCount }}
-                    {{ $t("front_page_reviews_text") }}
-                  </v-btn>
-                </div>
-              </div>
-            </v-col>
-          </v-row>
+      <!-- hero -->
+      <section class="hero-section">
+        <div class="hero-section__bg">
+          <v-img
+            min-width="100%"
+            height="100%"
+            :src="require('@/assets/images/home/hero.jpg')"
+            :lazy-src="require('@/assets/images/home/hero.jpg')"
+            class="grey lighten-2"
+          >
+          </v-img>
         </div>
-      </div>
-    </section>
+        <div class="hero-section__content">
+          <div>
+            <v-row justify="center" no-gutters>
+              <v-col cols="12" md="8">
+                <v-card color="transparent" elevation="0">
+                  <v-card-text>
+                    <div
+                      :class="[
+                        'big-title',
+                        {
+                          'big-title--sm': $vuetify.breakpoint.smAndDown,
+                          'big-title--md': $vuetify.breakpoint.mdAndUp
+                        }
+                      ]"
+                    >
+                      {{ $t("front_sec_title_find_the_right_coach") }}
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-row justify="center" align="center" no-gutters>
+              <v-col cols="11" md="6">
+                <SportSearch
+                  :items="categoryList"
+                  @on-item-select="
+                    goToMarketPlaceAndSearchByQueryParamCategoryName
+                  "
+                ></SportSearch>
+                <v-card color="transparent" elevation="0">
+                  <v-card-text>
+                    <div
+                      :class="[
+                        'category',
+                        {
+                          'category--md': $vuetify.breakpoint.mdAndUp,
+                          'category--sm': $vuetify.breakpoint.smAndDown
+                        }
+                      ]"
+                    >
+                      <div class="category__title mr-2">
+                        {{ $t("front_txt_poppular") }}
+                      </div>
+                      <div class="d-flex mt-md-0 mt-4">
+                        <div v-for="(item, i) in popularCategories" :key="i">
+                          <v-btn
+                            color="white"
+                            depressed
+                            rounded
+                            small
+                            class="text-capitalize category__item mr-2"
+                            @click.stop="
+                              goToMarketPlaceAndSearchByCategoryId(item)
+                            "
+                            >{{ $t(item.t_key) }}</v-btn
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </v-card-text>
+                </v-card>
+                <div
+                  :class="[
+                    'coachsome-rating d-flex justify-center flex-wrap align-center',
+                    {
+                      'coachsome-rating--md': $vuetify.breakpoint.mdAndUp,
+                      'coachsome-rating--sm': $vuetify.breakpoint.smAndDown
+                    }
+                  ]"
+                >
+                  <v-rating
+                    readonly
+                    :value="overallRating"
+                    background-color="rating"
+                    color="rating"
+                    medium
+                    half-increments
+                  ></v-rating>
+                  <div class="coachsome-rating__text">
+                    <v-btn
+                      text
+                      class="text-normal white--text"
+                      @click="handleReviewTextClick"
+                    >
+                      {{ totalReviewerCount }}
+                      {{ $t("front_page_reviews_text") }}
+                    </v-btn>
+                  </div>
+                </div>
+              </v-col>
+            </v-row>
+          </div>
+        </div>
+      </section>
+    </v-container>
+    <v-container fluid>
       <v-row>
         <v-col>
           <!-- Company Logos -->
@@ -1134,6 +1140,16 @@ export default {
       font-family: $font-family;
       font-size: 12px;
       color: #6f8098;
+    }
+    &--md {
+      display: flex;
+      justify-content: center;
+    }
+    &--sm {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
   }
 
