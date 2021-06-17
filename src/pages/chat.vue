@@ -456,7 +456,7 @@ export default {
                   content: item.content
                 };
                 this.pushMessage(messageItem);
-                this.$socket.client.emit("new_message", {
+                this.socket.emit("new_message", {
                   from: this.$auth.user,
                   to: this.selectedContactUser,
                   message: messageItem
@@ -468,6 +468,8 @@ export default {
     }
   },
   mounted() {
+    this.socket = this.$nuxtSocket({ name: "main" });
+
     // This is very sensitive.
     // Since the date is not updated without refresh, we should manually refresh it
     // Now this created_at is updated after 1 second
@@ -507,7 +509,6 @@ export default {
           this.$store.dispatch("chat/setContacts", contactUsers);
 
           // If it has any userId form the url
-          console.log(this.$route.query.userId);
           if (this.$route.query.userId) {
             let user = this.contacts.find(
               item => item.id == this.$route.query.userId
@@ -540,7 +541,7 @@ export default {
     handleRequestBoxNewMessage(messageItem) {
       this.pushMessage(messageItem);
       this.bookingDialog.value = false;
-      this.$socket.client.emit("new_message", {
+      this.socket.emit("new_message", {
         from: this.$auth.user,
         to: this.selectedContactUser,
         message: messageItem
@@ -581,7 +582,7 @@ export default {
         );
         this.pushMessage(newMessage);
 
-        this.$socket.client.emit("new_message", {
+        this.socket.emit("new_message", {
           from: this.$auth.user,
           to: this.selectedContactUser,
           message: newMessage

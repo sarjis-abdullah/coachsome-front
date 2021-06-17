@@ -68,21 +68,6 @@ export default {
 
   css: [],
 
-  router: {
-    extendRoutes(routes, resolve) {
-      // routes.push({
-      //   name: encodeURIComponent("trænere"),
-      //   path: "/" + encodeURIComponent("trænere"),
-      //   component: resolve(__dirname, "src/pages/coaches/_.vue")
-      // });
-      // routes.push({
-      //   name: encodeURIComponent("tränare"),
-      //   path: "/" + encodeURIComponent("tränare"),
-      //   component: resolve(__dirname, "src/pages/coaches/_.vue")
-      // });
-    }
-  },
-
   // Plugins to run before rendering page
   plugins: [
     { src: "~/plugins/axios", ssr: true },
@@ -103,7 +88,6 @@ export default {
     { src: "~/plugins/vue-tribute.js", mode: "client" },
     { src: "~/plugins/vue-image-upload-resize", mode: "client" },
     { src: "~/plugins/vuelidate" },
-    { src: '~/plugins/socket.io.js', mode: 'client' },
   ],
 
   // Auto import components
@@ -177,7 +161,7 @@ export default {
         detectBrowserLanguage: {
           useCookie: false,
           cookieKey: "i18n_redirected",
-          onlyOnRoot: true 
+          onlyOnRoot: true
         }
       }
     ],
@@ -240,6 +224,18 @@ export default {
           "**/admin/**",
           "**/coach/**",
           "**/athlete/**"
+        ]
+      }
+    ],
+    [
+      "nuxt-socket-io",
+      {
+        sockets: [
+          {
+            name: "main",
+            url: process.env.CHAT_SERVER_URL,
+            default: true
+          }
         ]
       }
     ]
