@@ -445,6 +445,8 @@ export default {
           }
         });
       });
+    } else {
+      this.reloadInfiniteLoader();
     }
     this.$fetchState.pending = false;
   },
