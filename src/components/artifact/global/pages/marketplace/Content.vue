@@ -445,9 +445,10 @@ export default {
           }
         });
       });
-    } else {
-      this.reloadInfiniteLoader();
     }
+    
+    this.reloadInfiniteLoader();
+
     this.$fetchState.pending = false;
   },
   mounted() {
