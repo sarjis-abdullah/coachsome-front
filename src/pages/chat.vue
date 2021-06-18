@@ -316,7 +316,7 @@ import RequestBox from "@/components/artifact/global/pages/chat/RequestBox";
 import PackageChoosing from "@/components/artifact/global/pages/chat/PackageChoosing";
 import ChatScreen from "@/components/artifact/global/pages/chat/ChatScreen";
 
-import { chatApi } from "@/api";
+import { contactApi, messageApi } from "@/api";
 import { imageService } from "@/services";
 import { pathData } from "@/data";
 
@@ -428,11 +428,9 @@ export default {
         this.profileCard.avatarName = this.selectedContactUser.avatarName;
         this.profileCard.languages = this.selectedContactUser.languages;
         this.profileCard.tags = this.selectedContactUser.tags;
-        let params = {
-          selectedUserId: this.selectedContactUser.id
-        };
-        chatApi(this.$axios)
-          .getMessage(params)
+
+        messageApi(this.$axios)
+          .get({ userId: this.selectedContactUser.id })
           .then(({ data }) => {
             // Old messages
             if (data.messages) {
@@ -478,9 +476,8 @@ export default {
       this.duration.created_at = new Date().toISOString();
     }, 1000);
 
-    // Fetch contact users
-    chatApi(this.$axios)
-      .init()
+    contactApi(this.$axios)
+      .get()
       .then(({ data }) => {
         let users = data.users;
         if (users) {
@@ -492,9 +489,7 @@ export default {
               lastName: item.lastName,
               fullName: item.fullName,
               title: item.title,
-              avatarImage: item.avatarImage
-                ? imageService.getImageByName(item.avatarImage)
-                : null,
+              avatarImage: item.avatarImage,
               avatarName: item.avatarName,
               languages: item.languages,
               aboutText: item.aboutText,
@@ -597,8 +592,8 @@ export default {
           receiverUserId
         };
 
-        chatApi(this.$axios)
-          .storeMessage(payload)
+        messageApi(this.$axios)
+          .store(payload)
           .then(() => {})
           .catch(() => {});
         this.messageForm.content = "";

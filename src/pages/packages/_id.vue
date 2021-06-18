@@ -353,7 +353,10 @@
                           <div class="timer" ref="timerDisplay"></div>
                         </div>
                         <div class="quick-booking__chat-btn mt-10">
-                          <v-btn color="#EDB041" @click="chatNowBtnClickHandle"
+                          <v-btn
+                            :loading="isChatBtnLoading"
+                            color="#EDB041"
+                            @click="chatNowBtnClickHandle"
                             >{{ $t("booking_btn_label_chat_now") }}
                             {{ profileCard.name }}</v-btn
                           >
@@ -373,7 +376,10 @@
                           </div>
                         </div>
                         <div class="quick-booking__chat-btn mt-10">
-                          <v-btn color="#EDB041" @click="chatNowBtnClickHandle"
+                          <v-btn
+                            :loading="isChatBtnLoading"
+                            color="#EDB041"
+                            @click="chatNowBtnClickHandle"
                             >{{ $t("booking_btn_label_chat_now") }}
                             {{ profileCard.name }}</v-btn
                           >
@@ -409,6 +415,7 @@ export default {
   data() {
     return {
       currencyService,
+      isChatBtnLoading: false,
       loadingRequestBookingBtn: false,
       selectedPaymentMethod: null,
       paymentMethods: [
@@ -603,6 +610,7 @@ export default {
         packageId: this.$route.params.id
       };
 
+      this.isChatBtnLoading = true;
       clientBookingApi(this.$axios)
         .initBooking(payload)
         .then(response => {
@@ -657,7 +665,10 @@ export default {
             this.setPerson(chargeBox.minPerson);
           }
         })
-        .catch(() => {});
+        .catch(() => {})
+        .finally(() => {
+          this.isChatBtnLoading = false;
+        });
     },
     notify(payload) {
       bookingApi(this.$axios).notify(payload);

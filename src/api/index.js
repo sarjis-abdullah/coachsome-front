@@ -9,6 +9,7 @@ export { default as bookingTimeApi } from "./bookingTime";
 export { default as chatApi } from "./chat";
 export { default as calenderApi } from "./calender";
 export { default as countryApi } from "./country";
+export { default as contactApi } from "./contact";
 export { default as frontHomeApi } from "./frontHome";
 export { default as languageApi } from "./language";
 export { default as marketPlaceApi } from "./marketPlace";

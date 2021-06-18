@@ -297,7 +297,7 @@
               </span>
             </div>
             <div class="booking-package__buyer-name mt-5">
-              {{ message.content.buyerName }} 
+              {{ message.content.buyerName }}
             </div>
             <div
               class="booking-package__buyer-text"
@@ -359,10 +359,12 @@
 import { bookingTimeApi, bookingApi } from "@/api";
 import { currencyService } from "@/services";
 import TextMessage from "./messages/TextMessage";
+
 export default {
   components: { TextMessage },
   data: () => ({
-    currencyService
+    currencyService,
+    socket: null
   }),
   computed: {
     messages() {
@@ -370,9 +372,6 @@ export default {
     },
     selectedContactUser() {
       return this.$store.getters["chat/selectedContactUser"];
-    },
-    socket() {
-      return this.$store.getters["socket/io"];
     },
     isCoach() {
       return this.hasRole(["coach"]);
@@ -390,13 +389,17 @@ export default {
     }
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.socket = this.$nuxtSocket({ name: "main" });
+  },
   methods: {
     hasRole(roles = []) {
       return this.$auth.hasRole(roles);
     },
     updateScroll() {
-      this.$refs.chatScreen.scrollTop = this.$refs.chatScreen.scrollHeight;
+      if (process.client) {
+        this.$refs.chatScreen.scrollTop = this.$refs.chatScreen.scrollHeight;
+      }
     },
     bookingTimeRequestDeclineBtnHandle(message) {
       let payload = {
@@ -408,7 +411,6 @@ export default {
       bookingTimeApi(this.$axios)
         .changeStatus(payload)
         .then(({ data }) => {
-
           if (data.toastMessage) {
             this.$toast.success(data.toastMessage);
           }
@@ -418,9 +420,9 @@ export default {
               type: data.newMessage.type,
               content: data.newMessage.content
             };
-            this.messages.push(messageItem);
+            this.$store.dispatch("chat/pushMessage", messageItem);
             this.socket.emit("new_message", {
-              from: this.$store.getters.auth,
+              from: this.$auth.user,
               to: this.selectedContactUser,
               message: messageItem
             });
@@ -455,9 +457,9 @@ export default {
               type: data.newMessage.type,
               content: data.newMessage.content
             };
-            this.messages.push(messageItem);
+            this.$store.dispatch("chat/pushMessage", messageItem);
             this.socket.emit("new_message", {
-              from: this.$store.getters.auth,
+              from: this.$auth.user,
               to: this.selectedContactUser,
               message: messageItem
             });
@@ -492,9 +494,9 @@ export default {
               type: data.newMessage.type,
               content: data.newMessage.content
             };
-            this.messages.push(messageItem);
+            this.$store.dispatch("chat/pushMessage", messageItem);
             this.socket.emit("new_message", {
-              from: this.$store.getters.auth,
+              from: this.$auth.user,
               to: this.selectedContactUser,
               message: messageItem
             });
@@ -531,9 +533,10 @@ export default {
               type: data.newMessage.type,
               content: data.newMessage.content
             };
-            this.messages.push(messageItem);
+            this.$store.dispatch("chat/pushMessage", messageItem);
+
             this.socket.emit("new_message", {
-              from: this.$store.getters.auth,
+              from: this.$auth.user,
               to: this.selectedContactUser,
               message: messageItem
             });
@@ -553,9 +556,9 @@ export default {
     },
     requestBoxNewMessageHandle(messageItem) {
       this.bookingDialog.value = false;
-      this.messages.push(messageItem);
+      this.$store.dispatch("chat/pushMessage", messageItem);
       this.socket.emit("new_message", {
-        from: this.$store.getters.auth,
+        from: this.$auth.user,
         to: this.selectedContactUser,
         message: messageItem
       });

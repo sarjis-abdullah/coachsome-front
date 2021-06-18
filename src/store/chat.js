@@ -1,5 +1,4 @@
-import { chatApi } from "@/api";
-import { imageService } from "@/services";
+import { messageApi, contactApi } from "@/api";
 
 export const state = () => ({
   messages: [],
@@ -111,40 +110,55 @@ export const actions = {
     context.commit("SET_TOTAL_NEW_MESSAGE_COUNT", totalNewMessageCount);
   },
   async getMessageCount({ commit }) {
-    const { data } = await chatApi(this.$axios).getTotalNewMessageCount();
+    const { data } = await messageApi(this.$axios).getNewCount();
     const { totalNewMessageCount } = data;
     if (totalNewMessageCount) {
       commit("SET_TOTAL_NEW_MESSAGE_COUNT", totalNewMessageCount);
     }
   },
-  async getContacts({ state, commit }) {
-    if (!state.contacts.length) {
-      const { data } = await chatApi(this.$axios).init();
-      let users = data.users;
-      if (users) {
-        let contactUsers = users.map(item => {
+  async getMessages({ state, commit }) {
+    if (state.selectedContactUser) {
+      const { data } = await messageApi(this.$axios).get({
+        userId: state.selectedContactUser.id
+      });
+      if (data.messages) {
+        let messages = data.messages.map(item => {
           return {
             id: item.id,
-            email: item.email,
-            firstName: item.firstName,
-            lastName: item.lastName,
-            fullName: item.fullName,
-            title: item.title,
-            avatarImage: item.avatarImage
-              ? imageService.getImageByName(item.avatarImage)
-              : null,
-            avatarName: item.avatarName,
-            languages: item.languages,
-            aboutText: item.aboutText,
-            categories: item.categories,
-            tags: item.tags,
-            newMessageCount: item.newMessageCount,
-            lastMessage: item.lastMessage,
-            lastMessageTime: item.lastMessageTime
+            type: item.type,
+            me: item.me,
+            content: item.content,
+            created_at: item.created_at
           };
         });
-        commit("SET_CONTACTS", contactUsers);
+        commit("SET_MESSAGES", messages);
       }
+    }
+  },
+  async getContacts({ commit }) {
+    const { data } = await contactApi(this.$axios).get();
+    let users = data.users;
+    if (users) {
+      let contactUsers = users.map(item => {
+        return {
+          id: item.id,
+          email: item.email,
+          firstName: item.firstName,
+          lastName: item.lastName,
+          fullName: item.fullName,
+          title: item.title,
+          avatarImage: item.avatarImage,
+          avatarName: item.avatarName,
+          languages: item.languages,
+          aboutText: item.aboutText,
+          categories: item.categories,
+          tags: item.tags,
+          newMessageCount: item.newMessageCount,
+          lastMessage: item.lastMessage,
+          lastMessageTime: item.lastMessageTime
+        };
+      });
+      commit("SET_CONTACTS", contactUsers);
     }
   }
 };

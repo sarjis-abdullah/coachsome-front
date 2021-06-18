@@ -591,11 +591,12 @@ export default {
     },
     questionSendBtnHandle() {
       let payload = {
-        userId: this.userInfo.id,
-        message: this.questionBox.question
+        receiverUserId: this.userInfo.id,
+        content: this.questionBox.question,
+        type: 'text'
       };
       messageApi(this.$axios)
-        .sendMessage(payload)
+        .store(payload)
         .then(() => {
           this.$toast.success("Your question is sent successfully.");
           this.questionBox.dialog = false;

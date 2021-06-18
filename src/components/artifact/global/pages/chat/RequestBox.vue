@@ -302,11 +302,13 @@ export default {
       this.requestBoxLocation.dialog = true;
     },
     handleStartTimeChange() {
-      let d = new Date();
-      d.setHours(this.selectedTimeRange.startTime);
-      d.setMinutes(0);
-      if (moment(d).format("HH:mm") > this.startTime.format("HH:mm")) {
-        this.startTime = this.preStartTime;
+      if(this.selectedTimeRange){
+        let d = new Date();
+        d.setHours(this.selectedTimeRange.startTime);
+        d.setMinutes(0);
+        if (moment(d).format("HH:mm") > this.startTime.format("HH:mm")) {
+          this.startTime = this.preStartTime;
+        }
       }
     },
     handleRequestBookingBtnClick() {

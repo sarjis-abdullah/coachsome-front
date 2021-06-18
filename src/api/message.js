@@ -1,5 +1,5 @@
 export default axios => ({
-  sendMessage: payload => {
-    return axios.post("messages/send", payload);
-  }
+  store: payload => axios.post("messages", payload),
+  get: params => axios.get("messages", { params }),
+  getNewCount: () => axios.get("messages/newCount")
 });
