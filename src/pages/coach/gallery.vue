@@ -31,7 +31,7 @@
                       /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/.test(
                         v
                       ) ||
-                      /https:\/\/vimeo.com\/\d{8}(?=\b|\/)/.test(v) ||
+                      /^(http\:\/\/|https\:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/.test(v) ||
                       'Url is not valid'
                   ]"
                   v-model="url.video"

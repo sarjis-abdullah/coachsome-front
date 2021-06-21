@@ -102,6 +102,14 @@ export const actions = {
       commit("SET_AVAILABILITY_PROGRESS", availability);
       commit("SET_REVIEW_PROGRESS", review);
     }
-    commit("UPDATE_USER_ACTIVE_STATUS", data.isActive, { root: true });
+
+    let user = Object.assign(
+      { ...this.$auth.user },
+      {
+        is_active: data.isActive
+      }
+    );
+
+    this.$auth.setUser(user);
   }
 };

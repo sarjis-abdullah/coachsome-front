@@ -144,7 +144,6 @@
             <v-col cols="12" md="8">
               <VuePhoneNumberInput
                 :default-country-code="profileData.mobile_code"
-                :only-countries="['DK', 'US']"
                 v-model="profileData.mobile_no"
                 @update="updateMobileInfo"
                 :translations="{
