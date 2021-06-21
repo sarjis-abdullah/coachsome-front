@@ -426,7 +426,7 @@ export default {
   async asyncData({ $axios, params, error }) {
     try {
       const { data } = await profileApi($axios).getProfileInformation(
-        params.username
+        encodeURIComponent(params.username)
       );
 
       let profileCard = {
@@ -593,7 +593,7 @@ export default {
       let payload = {
         receiverUserId: this.userInfo.id,
         content: this.questionBox.question,
-        type: 'text'
+        type: "text"
       };
       messageApi(this.$axios)
         .store(payload)
@@ -625,7 +625,7 @@ export default {
     },
     handleBooking(service = null) {
       bookingHelper.removeBookingInfoFromStorage();
-      console.log(this.localePath(pathData.pages.bookingPackage(service.id)))
+      console.log(this.localePath(pathData.pages.bookingPackage(service.id)));
       this.$router.push(
         this.localePath(pathData.pages.bookingPackage(service.id))
       );
