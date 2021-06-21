@@ -18,7 +18,9 @@
             <v-row justify="center" no-gutters>
               <v-col cols="12" md="8">
                 <v-card color="transparent" elevation="0">
-                  <v-card-text>
+                  <v-card-text
+                    class="d-flex flex-column justify-center align-center"
+                  >
                     <div
                       :class="[
                         'big-title',
@@ -29,6 +31,21 @@
                       ]"
                     >
                       {{ $t("front_sec_title_find_the_right_coach") }}
+                    </div>
+                    <div
+                      :class="[
+                        'big-subtitle',
+                        {
+                          'big-subtitle--sm': $vuetify.breakpoint.smAndDown,
+                          'big-subtitle--md': $vuetify.breakpoint.mdAndUp
+                        }
+                      ]"
+                    >
+                      {{
+                        $t(
+                          "home_txt_big_subtitle"
+                        )
+                      }}
                     </div>
                   </v-card-text>
                 </v-card>
@@ -1125,6 +1142,24 @@ export default {
     &--sm {
       // margin-top: 50px;
       font-size: 30px;
+    }
+  }
+  .big-subtitle {
+    font-family: $font-family;
+    text-align: center;
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 127.1%;
+    color: #ffffff;
+    margin-top: 20px;
+    z-index: 1;
+    &--md {
+      // margin-top: 150px;
+      // font-size: 30px;
+    }
+    &--sm {
+      // margin-top: 50px;
+      // font-size: 20px;
     }
   }
 
