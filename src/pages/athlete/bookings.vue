@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="athlete-bookings">
     <v-container>
       <v-row justify="center">
         <v-col cols="12" md="7">
@@ -170,56 +170,63 @@
             full-width
             color="primary-light-1"
           ></v-date-picker>
-          <v-card class="mx-auto" tile>
+          <v-card class="mx-auto" flat>
             <v-scroll-y-transition mode="out-in">
-              <v-list v-if="bookingTimes.length > 0">
-                <v-list-item v-for="(bookingTime, i) in bookingTimes" :key="i">
-                  <v-list-item-content>
-                    <v-row>
-                      <v-col cols="4" class="text-uppercase">
-                        <div>
-                          {{ bookingTime.date }}
-                        </div>
-                        <div>
-                          {{ bookingTime.time }}
-                        </div>
-                      </v-col>
-                      <v-col cols="4" class="text-center">
-                        <v-icon
-                          v-if="bookingTime.isCoachToCoach"
-                          color="primary-light-1"
-                          >star_border</v-icon
-                        >
-                        <v-btn
-                          v-if="bookingTime.status == 'Pending'"
-                          color="orange"
-                          dark
-                          x-small
-                          rounded
-                          depressed
-                        >
-                          {{ $t("btn_label_pending") }}
-                        </v-btn>
-                        <v-btn
-                          v-if="bookingTime.status == 'Accepted'"
-                          color="primary-light-2"
-                          dark
-                          x-small
-                          rounded
-                          depressed
-                        >
-                          {{ $t("btn_label_confirmed") }}
-                        </v-btn>
-                      </v-col>
-                      <v-col cols="4">
-                        <div class="location text-uppercase">
-                          {{ bookingTime.profileName }}
-                          <br />@{{ bookingTime.city + " " + bookingTime.zip }}
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </v-list-item-content>
-                </v-list-item>
+              <v-list v-if="bookingTimes.length > 0" elevation="0">
+                <template>
+                  <div v-for="(bookingTime, i) in bookingTimes" :key="i">
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-row>
+                          <v-col cols="4" class="text-uppercase">
+                            <div>
+                              {{ bookingTime.date }}
+                            </div>
+                            <div>
+                              {{ bookingTime.time }}
+                            </div>
+                          </v-col>
+                          <v-col cols="4" class="text-center">
+                            <v-icon
+                              v-if="bookingTime.isCoachToCoach"
+                              color="primary-light-1"
+                              >star_border</v-icon
+                            >
+                            <v-btn
+                              v-if="bookingTime.status == 'Pending'"
+                              color="orange"
+                              dark
+                              x-small
+                              rounded
+                              depressed
+                            >
+                              {{ $t("btn_label_pending") }}
+                            </v-btn>
+                            <v-btn
+                              v-if="bookingTime.status == 'Accepted'"
+                              color="primary-light-2"
+                              dark
+                              x-small
+                              rounded
+                              depressed
+                            >
+                              {{ $t("btn_label_confirmed") }}
+                            </v-btn>
+                          </v-col>
+                          <v-col cols="4">
+                            <div class="location text-uppercase">
+                              {{ bookingTime.profileName }}
+                              <br />@{{
+                                bookingTime.city + " " + bookingTime.zip
+                              }}
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider></v-divider>
+                  </div>
+                </template>
               </v-list>
             </v-scroll-y-transition>
           </v-card>
@@ -249,8 +256,7 @@ import { pathData } from "@/data";
 import {
   athleteBookingApi,
   athleteBookingTimeApi,
-  athleteSearchValueApi,
-  athleteExploreCoachApi
+  athleteSearchValueApi
 } from "@/api";
 
 export default {
@@ -321,12 +327,11 @@ export default {
           });
           this.fetchTimeSlots(this.date);
           this.fetchSearchValues();
-          this.fetchCoach();
         }
       })
       .catch(error => {
         if (error) {
-            this.$toast.error(error.response.data.message);
+          this.$toast.error(error.response.data.message);
         }
       });
   },
@@ -334,41 +339,20 @@ export default {
     goToMarketplace() {
       this.$router.push(this.localePath(pathData.pages.marketplace));
     },
-    fetchCoach() {
-      athleteExploreCoachApi(this.$axios)
-        .exploreCoach()
-        .then(({ data }) => {
-          let coaches = data.coaches.map(item => {
-            let coachItem = {};
-            coachItem.name = item.name;
-            coachItem.image = item.image ? item.image : null;
-            coachItem.countReview = item.countReview;
-            coachItem.rating = item.rating;
-            coachItem.location =
-              item.locations && item.locations.length > 0
-                ? item.locations[0].zip + " " + item.locations[0].city
-                : "";
-            coachItem.price = item.price;
-            coachItem.categories = item.categories;
-            coachItem.userName = item.userName;
-            return coachItem;
-          });
-          this.coaches.push(...coaches);
-        });
-    },
     fetchSearchValues() {
       let params = {
         type: "category"
       };
-      athleteSearchValueApi.getSearchValues(params).then(({ data }) => {
-        if (data.searchValues) {
-          this.searchValue.today = data.searchValues.today;
-          this.searchValue.tomorrow = data.searchValues.tomorrow;
-          this.searchValue.week = data.searchValues.week;
-          this.searchValue.later = data.searchValues.later;
-        }
-        console.log(data);
-      });
+      athleteSearchValueApi(this.$axios)
+        .getSearchValues(params)
+        .then(({ data }) => {
+          if (data.searchValues) {
+            this.searchValue.today = data.searchValues.today;
+            this.searchValue.tomorrow = data.searchValues.tomorrow;
+            this.searchValue.week = data.searchValues.week;
+            this.searchValue.later = data.searchValues.later;
+          }
+        });
     },
     fetchTimeSlots(date) {
       let params = {
@@ -454,24 +438,13 @@ export default {
             this.$toast.error(response.data.message);
           }
         });
-    },
-    sortActivePackges() {
-      let favouriteStack = [];
-      let generalStack = [];
-      this.purchasedPackages.forEach(item => {
-        let newItem = { ...item };
-        if (newItem.isFavourite == 1) {
-          favouriteStack.push(newItem);
-        } else {
-          generalStack.push(newItem);
-        }
-      });
-      this.purchasedPackages = [];
-      this.purchasedPackages.push(...favouriteStack);
-      this.purchasedPackages.push(...generalStack);
     }
   }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.athlete-bookings {
+  background: $body-bg;
+}
+</style>

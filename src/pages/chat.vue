@@ -152,9 +152,8 @@
                                     color="primary-light-1"
                                   >
                                     <v-list-item
-                                      v-for="(item,
-                                      index) in filteredContactUsers"
-                                      :key="index"
+                                      v-for="item in filteredContactUsers"
+                                      :key="item.id"
                                       :value="item.id"
                                       @click.stop="
                                         handleSelectedContactUser(item)
@@ -509,6 +508,7 @@ export default {
               item => item.id == this.$route.query.userId
             );
             if (user) {
+              this.activeChat = user.id
               this.selectedContactUser = user;
               this.$router.replace(this.localePath(pathData.pages.chat));
             }

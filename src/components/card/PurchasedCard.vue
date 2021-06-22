@@ -7,7 +7,7 @@
             <!-- First -->
             <div>
               <v-avatar v-if="profileImage" size="45">
-                <img :src="image" />
+                <img :src="profileImage" />
               </v-avatar>
               <v-avatar v-if="!profileImage" size="45" color="primary-light-1">
                 <span class="white--text">
@@ -31,17 +31,17 @@
               <v-tooltip right max-width="250">
                 <template v-slot:activator="{ on }">
                   <v-icon small color="primary-light-1" v-on="on"
-                    >help_outline</v-icon
+                    >mdi-help-circle-outline</v-icon
                   >
                 </template>
                 <span>{{ packageDescription }}</span>
               </v-tooltip>
-              <v-btn icon small class="ml-2" @click="goToChatPage">
-                <v-icon color="primary-light-1">far fa-comment</v-icon>
+              <v-btn icon class="ml-2" @click="goToChatPage">
+                <v-icon color="primary-light-1">mdi-comment-outline</v-icon>
               </v-btn>
               <v-btn icon color="white" @click.stop="isFavouriteBtnClickHandle">
-                <v-icon v-if="isFavouriteData">star</v-icon>
-                <v-icon v-if="!isFavouriteData">star_border</v-icon>
+                <v-icon v-if="isFavouriteData">mdi-star-outline</v-icon>
+                <v-icon v-if="!isFavouriteData">mdi-star</v-icon>
               </v-btn>
             </div>
           </v-col>
@@ -126,7 +126,6 @@
 </template>
 
 <script>
-import { imageService } from "@/services";
 import { pathData } from "@/data";
 
 export default {
@@ -152,13 +151,6 @@ export default {
     };
   },
   watch: {
-    profileImage: function(val) {
-      if (val) {
-        this.image = imageService.getImageByName(val);
-      } else {
-        this.image = imageService.getDefaultProfileImage();
-      }
-    },
     isFavourite: {
       handler: function(val) {
         this.isFavouriteData = val;
@@ -167,13 +159,6 @@ export default {
     }
   },
   computed: {
-    image: function() {
-      if (this.profileImage) {
-        return imageService.getImageByName(this.profileImage);
-      } else {
-        return imageService.getDefaultProfileImage();
-      }
-    },
     isHighlightedColor() {
       if (this.isCoach) {
         return this.isSold ? false : true;
@@ -209,25 +194,20 @@ export default {
       this.goToChatPage();
     },
     goToChatPage() {
-      if (this.isCoach) {
-        if (this.isSold) {
-          this.$router.push(
-            this.localePath({
-              ...pathData.pages.chat,
-              params: { userId: this.packageBuyerUserId }
-            })
-          );
-        } else {
-          this.$router.push({
+      if (this.isSold) {
+        this.$router.push(
+          this.localePath({
             ...pathData.pages.chat,
-            params: { userId: this.packageOwnerUserId }
-          });
-        }
+            query: { userId: this.packageBuyerUserId }
+          })
+        );
       } else {
-        this.$router.push({
-          ...pathData.pages.chat,
-          params: { userId: this.packageOwnerUserId }
-        });
+        this.$router.push(
+          this.localePath({
+            ...pathData.pages.chat,
+            query: { userId: this.packageOwnerUserId }
+          })
+        );
       }
     }
   }

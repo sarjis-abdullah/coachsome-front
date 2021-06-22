@@ -56,57 +56,65 @@
             v-model="date"
             full-width
             color="primary-light-1"
+            flat
           ></v-date-picker>
-          <v-card class="mx-auto" tile>
+          <v-card class="mx-auto" flat tile>
             <v-scroll-y-transition mode="out-in">
-              <v-list v-if="bookingTimes.length > 0">
-                <v-list-item v-for="(bookingTime, i) in bookingTimes" :key="i">
-                  <v-list-item-content>
-                    <v-row>
-                      <v-col cols="4" class="text-uppercase">
-                        <div>
-                          {{ bookingTime.date }}
-                        </div>
-                        <div>
-                          {{ bookingTime.time }}
-                        </div>
-                      </v-col>
-                      <v-col cols="4" class="text-center">
-                        <v-icon
-                          v-if="bookingTime.isCoachToCoach"
-                          color="primary-light-1"
-                          >star_border</v-icon
-                        >
-                        <v-btn
-                          v-if="bookingTime.status == 'Pending'"
-                          color="orange"
-                          dark
-                          x-small
-                          rounded
-                          depressed
-                        >
-                          {{ $t("btn_label_pending") }}
-                        </v-btn>
-                        <v-btn
-                          v-if="bookingTime.status == 'Accepted'"
-                          color="primary-light-2"
-                          dark
-                          x-small
-                          rounded
-                          depressed
-                        >
-                          {{ $t("btn_label_confirmed") }}
-                        </v-btn>
-                      </v-col>
-                      <v-col cols="4">
-                        <div class="location text-uppercase">
-                          {{ bookingTime.profileName }}
-                          <br />@{{ bookingTime.city + " " + bookingTime.zip }}
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </v-list-item-content>
-                </v-list-item>
+              <v-list v-if="bookingTimes.length > 0" elevation="0">
+                <template>
+                  <div v-for="(bookingTime, i) in bookingTimes" :key="i">
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-row>
+                          <v-col cols="4" class="text-uppercase">
+                            <div>
+                              {{ bookingTime.date }}
+                            </div>
+                            <div>
+                              {{ bookingTime.time }}
+                            </div>
+                          </v-col>
+                          <v-col cols="4" class="text-center">
+                            <v-icon
+                              v-if="bookingTime.isCoachToCoach"
+                              color="primary-light-1"
+                              >star_border</v-icon
+                            >
+                            <v-btn
+                              v-if="bookingTime.status == 'Pending'"
+                              color="orange"
+                              dark
+                              x-small
+                              rounded
+                              depressed
+                            >
+                              {{ $t("btn_label_pending") }}
+                            </v-btn>
+                            <v-btn
+                              v-if="bookingTime.status == 'Accepted'"
+                              color="primary-light-2"
+                              dark
+                              x-small
+                              rounded
+                              depressed
+                            >
+                              {{ $t("btn_label_confirmed") }}
+                            </v-btn>
+                          </v-col>
+                          <v-col cols="4">
+                            <div class="location text-uppercase">
+                              {{ bookingTime.profileName }}
+                              <br />@{{
+                                bookingTime.city + " " + bookingTime.zip
+                              }}
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider></v-divider>
+                  </div>
+                </template>
               </v-list>
             </v-scroll-y-transition>
           </v-card>
