@@ -158,7 +158,7 @@
           </v-col>
           <v-col cols="12" md="8">
             <v-row>
-              <v-col cols="10" md="4">
+              <v-col cols="12" md="4">
                 <v-text-field
                   solo
                   ref="priceTextField"
@@ -168,7 +168,7 @@
                   @input="$v.form.price.$touch()"
                 ></v-text-field>
               </v-col>
-              <v-col cols="2" md="4" class="mt-3">
+              <v-col cols="12" md="4" class="mt-3">
                 <span class="ml-2 primary-light-1--text">{{
                   $t("currency_denmark")
                 }}</span>
