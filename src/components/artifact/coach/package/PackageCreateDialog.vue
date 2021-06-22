@@ -11,7 +11,7 @@
       <v-card-text>
         <v-row class="pt-5" justify="center">
           <v-col cols="12" md="12">
-            <v-tabs>
+            <v-tabs show-arrows>
               <v-tabs-slider></v-tabs-slider>
               <v-tab v-for="i in tabs" :key="i" :href="`#tab-${i}`">{{
                 i == "default"

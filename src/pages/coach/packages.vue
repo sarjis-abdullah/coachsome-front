@@ -36,7 +36,7 @@
               <v-card-text class="pa-5">
                 <v-container>
                   <v-row>
-                    <v-col cols="7">
+                    <v-col cols="12" md="7">
                       <v-row>
                         <v-col cols="12" class="pb-0">
                           <div class="section-title pb-2">
@@ -50,7 +50,7 @@
                         </v-col>
                       </v-row>
                     </v-col>
-                    <v-col cols="3">
+                    <v-col cols="8" md="3">
                       <v-text-field
                         :error-messages="hourlyRateErrors"
                         required
@@ -59,7 +59,7 @@
                         @input="$v.hourlyRate.dialogInputVal.$touch()"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="2" class="mb-md-7 pt-7">
+                    <v-col cols="4" md="2" class="mb-md-7 pt-7">
                       <span class="primary-light-1--text">{{
                         currencyCode
                       }}</span>
@@ -156,42 +156,44 @@
             </v-col>
           </v-row>
           <v-row>
-            <draggable
-              @end="updateOrderList"
-              class="row"
-              v-model="packageList"
-              :sort="true"
-            >
-              <v-col
-                cols="12"
-                md="6"
-                v-for="item in packageList"
-                :key="item.id"
+            <v-col>
+              <draggable
+                @end="updateOrderList"
+                class="row"
+                v-model="packageList"
+                :sort="true"
               >
-                <package-card
-                  class="all-scroll"
-                  v-bind="item"
-                  @change-status="changeStatus(item, $event)"
-                  @edit="
-                    editDialog = true;
-                    editPackage(item);
-                  "
-                  @remove="removePackage(item)"
-                  :rate="hourlyRate.inputValue"
-                  :max-chars="descriptionMaxChar"
+                <v-col
+                  cols="12"
+                  md="6"
+                  v-for="item in packageList"
+                  :key="item.id"
                 >
-                  <template v-slot:original-price="{ price, discount }">
-                    <div v-if="discount && discount > 0">
-                      {{ currencyService.toCurrencyByBase(price) }}
-                    </div>
-                    <div else></div>
-                  </template>
-                  <template v-slot:sale-price="{ price }">
-                    <span>{{ currencyService.toCurrencyByBase(price) }}</span>
-                  </template>
-                </package-card>
-              </v-col>
-            </draggable>
+                  <package-card
+                    class="all-scroll"
+                    v-bind="item"
+                    @change-status="changeStatus(item, $event)"
+                    @edit="
+                      editDialog = true;
+                      editPackage(item);
+                    "
+                    @remove="removePackage(item)"
+                    :rate="hourlyRate.inputValue"
+                    :max-chars="descriptionMaxChar"
+                  >
+                    <template v-slot:original-price="{ price, discount }">
+                      <div v-if="discount && discount > 0">
+                        {{ currencyService.toCurrencyByBase(price) }}
+                      </div>
+                      <div else></div>
+                    </template>
+                    <template v-slot:sale-price="{ price }">
+                      <span>{{ currencyService.toCurrencyByBase(price) }}</span>
+                    </template>
+                  </package-card>
+                </v-col>
+              </draggable>
+            </v-col>
           </v-row>
         </v-col>
       </v-row>

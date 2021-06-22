@@ -41,11 +41,7 @@
                         }
                       ]"
                     >
-                      {{
-                        $t(
-                          "home_txt_big_subtitle"
-                        )
-                      }}
+                      {{ $t("home_txt_big_subtitle") }}
                     </div>
                   </v-card-text>
                 </v-card>
@@ -713,7 +709,11 @@
                         >{{ $t(item.t_key) }}</v-tab
                       >
                     </v-tabs>
-                    <v-tabs-items v-model="exploreCoach.tab" class="mt-12">
+                    <v-tabs-items
+                      v-model="exploreCoach.tab"
+                      class="mt-12"
+                      v-if="$vuetify.breakpoint.mdAndUp"
+                    >
                       <v-tab-item
                         v-for="item in exploreCoach.tabs"
                         :key="item.key"
@@ -752,6 +752,41 @@
                         </v-row>
                       </v-tab-item>
                     </v-tabs-items>
+
+                    <v-row
+                      class="mt-5"
+                      justify="center"
+                      v-if="$vuetify.breakpoint.smAndDown"
+                    >
+                      <v-col cols="10">
+                        <v-carousel hide-delimiters>
+                          <v-carousel-item
+                            v-for="(coach, coachIndex) in exploreCoach.coaches"
+                            :key="coachIndex"
+                          >
+                            <v-card
+                              elevation="0"
+                              :aspect-ratio="1"
+                              flat
+                              class="mx-auto clickable tab-card"
+                              @click="gotTo(coach.userName)"
+                            >
+                              <v-img :aspect-ratio="1" :src="coach.image" />
+                              <v-card-title>{{ coach.name }}</v-card-title>
+                              <v-card-subtitle>
+                                <div class="text-ellipsis">
+                                  {{
+                                    coach.sportCategories
+                                      .map(item => $t(item.t_key))
+                                      .join([(separator = ", ")])
+                                  }}
+                                </div>
+                              </v-card-subtitle>
+                            </v-card>
+                          </v-carousel-item>
+                        </v-carousel>
+                      </v-col>
+                    </v-row>
                   </v-col>
                   <v-col class="12">
                     <infinite-loading
