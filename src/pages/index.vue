@@ -759,32 +759,64 @@
                       v-if="$vuetify.breakpoint.smAndDown"
                     >
                       <v-col cols="10">
-                        <v-carousel hide-delimiters>
-                          <v-carousel-item
-                            v-for="(coach, coachIndex) in exploreCoach.coaches"
-                            :key="coachIndex"
+                        <div class="simple-swiper">
+                          <div class="simple-swiper-button-prev">
+                            <v-btn fab small>
+                              <v-icon>
+                                mdi-chevron-left
+                              </v-icon>
+                            </v-btn>
+                          </div>
+                          <swiper
+                            :options="{
+                              navigation: {
+                                nextEl: '.simple-swiper-button-next',
+                                prevEl: '.simple-swiper-button-prev'
+                              }
+                            }"
                           >
-                            <v-card
-                              elevation="0"
-                              :aspect-ratio="1"
-                              flat
-                              class="mx-auto clickable tab-card"
-                              @click="gotTo(coach.userName)"
+                            <swiper-slide
+                              v-for="(coach,
+                              coachIndex) in exploreCoach.coaches"
+                              :key="coachIndex"
                             >
-                              <v-img :aspect-ratio="1" :src="coach.image" />
-                              <v-card-title>{{ coach.name }}</v-card-title>
-                              <v-card-subtitle>
-                                <div class="text-ellipsis">
-                                  {{
-                                    coach.sportCategories
-                                      .map(item => $t(item.t_key))
-                                      .join([(separator = ", ")])
-                                  }}
-                                </div>
-                              </v-card-subtitle>
-                            </v-card>
-                          </v-carousel-item>
-                        </v-carousel>
+                              <v-card
+                                flat
+                                aspect-ratio="1"
+                                width="100%"
+                                class="mx-auto clickable"
+                                @click="gotTo(coach.userName)"
+                              >
+                                <v-img aspect-ratio="1" :src="coach.image" />
+                                <v-card-text>
+                                  <div style="height: 100px;">
+                                    <v-card-title>
+                                      <div class="text-elipsis">
+                                        {{ coach.name }}
+                                      </div>
+                                    </v-card-title>
+                                    <v-card-subtitle>
+                                      <div class="text-ellipsis">
+                                        {{
+                                          coach.sportCategories
+                                            .map(item => $t(item.t_key))
+                                            .join([(separator = ", ")])
+                                        }}
+                                      </div>
+                                    </v-card-subtitle>
+                                  </div>
+                                </v-card-text>
+                              </v-card>
+                            </swiper-slide>
+                          </swiper>
+                          <div class="simple-swiper-button-next">
+                            <v-btn fab small>
+                              <v-icon>
+                                mdi-chevron-right
+                              </v-icon>
+                            </v-btn>
+                          </div>
+                        </div>
                       </v-col>
                     </v-row>
                   </v-col>
@@ -792,7 +824,10 @@
                     <infinite-loading
                       :identifier="exploreCoach.filter.infiniteId"
                       @infinite="infiniteHandler"
-                    ></infinite-loading>
+                    >
+                      <div slot="no-more"></div>
+                      <div slot="no-results"></div>
+                    </infinite-loading>
                   </v-col>
                 </v-row>
               </v-col>
@@ -1116,6 +1151,31 @@ export default {
 
 <style lang="scss">
 .home-page {
+  .simple-swiper {
+    position: relative;
+    &-button-next {
+      right: -20px;
+      left: auto;
+      position: absolute;
+      top: 45%;
+      z-index: 10;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &-button-prev {
+      left: -20px;
+      right: auto;
+      position: absolute;
+      top: 45%;
+      z-index: 10;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
   .section-title {
     font-family: $font-family;
     font-weight: 800;
