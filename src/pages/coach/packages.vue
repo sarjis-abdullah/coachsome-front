@@ -33,56 +33,53 @@
               ></v-text-field>
             </template>
             <v-card>
+              <v-card-title>
+                <v-spacer></v-spacer>
+                <v-btn small icon depressed @click="hourlyRate.dialog = false">
+                  <v-icon small>mdi-close</v-icon>
+                </v-btn>
+              </v-card-title>
               <v-card-text class="pa-5">
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" md="7">
-                      <v-row>
-                        <v-col cols="12" class="pb-0">
-                          <div class="section-title pb-2">
-                            {{ $t("text_rate") }}
-                          </div>
-                        </v-col>
-                        <v-col cols="12" class="pt-0">
-                          <div class="section-description">
-                            {{ $t("package_dialog_hourly_rate_desc") }}
-                          </div>
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                    <v-col cols="8" md="3">
-                      <v-text-field
-                        :error-messages="hourlyRateErrors"
-                        required
-                        solo
-                        v-model="hourlyRate.dialogInputVal"
-                        @input="$v.hourlyRate.dialogInputVal.$touch()"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="4" md="2" class="mb-md-7 pt-7">
-                      <span class="primary-light-1--text">{{
-                        currencyCode
-                      }}</span>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-btn
-                        depressed
-                        color="primary-light-1"
-                        @click="saveHourlyRate()"
-                        >{{ $t("btn_label_save_and_continue") }}</v-btn
-                      >
-                      <v-btn
-                        depressed
-                        class="ml-2"
-                        color="error"
-                        @click="hourlyRate.dialog = false"
-                        >{{ $t("btn_label_cancel") }}</v-btn
-                      >
-                    </v-col>
-                  </v-row>
-                </v-container>
+                <v-row>
+                  <v-col cols="12" md="7">
+                    <v-row>
+                      <v-col cols="12" class="pb-0">
+                        <div class="section-title pb-2">
+                          {{ $t("text_rate") }}
+                        </div>
+                      </v-col>
+                      <v-col cols="12" class="pt-0">
+                        <div class="section-description">
+                          {{ $t("package_dialog_hourly_rate_desc") }}
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                  <v-col cols="8" md="3">
+                    <v-text-field
+                      :error-messages="hourlyRateErrors"
+                      required
+                      solo
+                      v-model="hourlyRate.dialogInputVal"
+                      @input="$v.hourlyRate.dialogInputVal.$touch()"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="4" md="2" class="mb-md-7 pt-7">
+                    <span class="primary-light-1--text">{{
+                      currencyCode
+                    }}</span>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
+                    <v-btn
+                      depressed
+                      color="primary-light-1"
+                      @click="saveHourlyRate()"
+                      >{{ $t("btn_label_save_and_continue") }}</v-btn
+                    >
+                  </v-col>
+                </v-row>
               </v-card-text>
             </v-card>
           </v-dialog>
