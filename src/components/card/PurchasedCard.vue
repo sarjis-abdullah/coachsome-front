@@ -34,7 +34,10 @@
                     >mdi-help-circle-outline</v-icon
                   >
                 </template>
-                <span>{{ packageDescription }}</span>
+                <div>
+                  <div>{{ packageDescription }}</div>
+                </div>
+                <v-divider></v-divider>
               </v-tooltip>
               <v-btn icon class="ml-2" @click="goToChatPage">
                 <v-icon color="primary-light-1">mdi-comment-outline</v-icon>
@@ -117,10 +120,70 @@
                 {{ $t("booking_purchased_cared_action_partial_text") }}
                 {{ totalSession }}
               </div>
+              <div>
+                <v-btn
+                  plain
+                  @click="show = !show"
+                  x-small
+                  color="primary-light-1"
+                  class="text-normal"
+                >
+                  {{ show ? "Hide" : "Details" }}
+                </v-btn>
+              </div>
             </div>
           </v-col>
         </v-row>
       </v-card-text>
+
+      <v-expand-transition>
+        <div v-show="show">
+          <v-divider></v-divider>
+          <v-card-text>
+            <div>
+              <div>
+                <strong>{{ "Booking ID" }}</strong>
+              </div>
+              <div>
+                {{ bookingId }}
+              </div>
+            </div>
+            <div v-if="orderKey">
+              <div>
+                <strong>{{ "Order Key" }}</strong>
+              </div>
+              <div>
+                {{ orderKey }}
+              </div>
+            </div>
+
+            <div>
+              <div>
+                <strong>{{ "Title" }}</strong>
+              </div>
+              <div>
+                {{ packageTitle }}
+              </div>
+            </div>
+            <div>
+              <div>
+                <strong>{{ "Description" }}</strong>
+              </div>
+              <div>
+                {{ packageDescription }}
+              </div>
+            </div>
+            <div v-if="readableDate">
+              <div>
+                <strong>{{ "Date" }}</strong>
+              </div>
+              <div>
+                {{ readableDate }}
+              </div>
+            </div>
+          </v-card-text>
+        </div>
+      </v-expand-transition>
     </v-card>
   </div>
 </template>
@@ -131,6 +194,7 @@ import { pathData } from "@/data";
 export default {
   props: [
     "bookingId",
+    "orderKey",
     "status",
     "packageTitle",
     "profileName",
@@ -143,11 +207,13 @@ export default {
     "packageDescription",
     "packageOwnerUserId",
     "packageBuyerUserId",
-    "isFavourite"
+    "isFavourite",
+    "readableDate"
   ],
   data() {
     return {
-      isFavouriteData: false
+      isFavouriteData: false,
+      show: false
     };
   },
   watch: {

@@ -322,7 +322,9 @@ export default {
               status: item.status,
               date: item.date,
               isSold: item.isSold,
-              isFavourite: item.isFavourite
+              isFavourite: item.isFavourite,
+              orderKey: item.orderKey,
+              readableDate: item.readableDate
             };
           });
           this.fetchTimeSlots(this.date);

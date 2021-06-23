@@ -87,7 +87,7 @@ export default {
     { src: "~/plugins/vue-image-upload-resize", mode: "client" },
     { src: "~/plugins/vue-tribute.js", mode: "client" },
     { src: "~/plugins/vue-image-upload-resize", mode: "client" },
-    { src: "~/plugins/vuelidate" },
+    { src: "~/plugins/vuelidate" }
   ],
 
   // Auto import components
@@ -106,7 +106,9 @@ export default {
     ]
   ],
 
-  // Modules
+  /**
+   * Modules
+   */
   modules: [
     [
       "nuxt-i18n",
@@ -206,27 +208,6 @@ export default {
         }
       }
     ],
-
-    // Sitemap Always end of the array
-    [
-      "@nuxtjs/sitemap",
-      {
-        hostname: process.env.CLIENT_BASE_URL,
-        exclude: [
-          "**/reviews/success",
-          "**/chat",
-          "**/email-verification",
-          "**/after-mail-confirmation",
-          "**/after-register",
-          "**/email-verificatio",
-          "**/password-forget",
-          "**/password-reset",
-          "**/admin/**",
-          "**/coach/**",
-          "**/athlete/**"
-        ]
-      }
-    ],
     [
       "nuxt-socket-io",
       {
@@ -236,6 +217,48 @@ export default {
             url: process.env.CHAT_SERVER_URL,
             default: true
           }
+        ]
+      }
+    ],
+
+    // Robots
+    [
+      "@nuxtjs/robots",
+      [
+        {
+          UserAgent: "*",
+          Disallow: "/admin"
+        },
+        {
+          UserAgent: "*",
+          Disallow: "/coach"
+        },
+        {
+          UserAgent: "*",
+          Disallow: "/athlete"
+        }
+      ]
+    ],
+
+    // Sitemap
+    // Always end of the array
+    [
+      "@nuxtjs/sitemap",
+      {
+        hostname: process.env.CLIENT_BASE_URL,
+        exclude: [
+          "**/reviews/success",
+          "**/chat",
+          "**/redirect",
+          "**/email-verification",
+          "**/after-mail-confirmation",
+          "**/after-register",
+          "**/email-verificatio",
+          "**/password-forget",
+          "**/password-reset",
+          "**/admin/**",
+          "**/coach/**",
+          "**/athlete/**"
         ]
       }
     ]
