@@ -1,6 +1,6 @@
 <template>
   <div class="explore-card">
-    <v-card elevation="1" aspect-ratio="1">
+    <v-card elevation="1" aspect-ratio="1" width="100%">
       <v-img
         clickable
         class="white--text align-end"
@@ -105,6 +105,7 @@ export default {
 
 <style lang="scss" scoped>
 .explore-card {
+  width: 100%;
   &__content {
     height: 90px;
   }

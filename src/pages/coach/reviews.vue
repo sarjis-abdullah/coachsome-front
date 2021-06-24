@@ -266,23 +266,25 @@
         <v-col cols="12" md="8">
           <v-row>
             <v-col cols="12" md="6">
-              <v-facebook-login
-                v-model="facebookLogin"
-                app-id="730811284065741"
-                version="v5.0"
-                @sdk-init="initFB"
-                @login="fbLogin"
-                :login-options="{ scope: 'manage_pages,pages_show_list' }"
-              >
-                <template #login>
-                  <span>{{ $t("button_label_fa_review") }}</span>
-                </template>
-                <template #logout>
-                  <span>
-                    {{ $t("coach_review_btn_label_sign_out") }}
-                  </span>
-                </template>
-              </v-facebook-login>
+              <client-only>
+                <v-facebook-login
+                  v-model="facebookLogin"
+                  app-id="730811284065741"
+                  version="v5.0"
+                  @sdk-init="initFB"
+                  @login="fbLogin"
+                  :login-options="{ scope: 'manage_pages,pages_show_list' }"
+                >
+                  <template #login>
+                    <span>{{ $t("button_label_fa_review") }}</span>
+                  </template>
+                  <template #logout>
+                    <span>
+                      {{ $t("coach_review_btn_label_sign_out") }}
+                    </span>
+                  </template>
+                </v-facebook-login>
+              </client-only>
             </v-col>
           </v-row>
           <v-row>

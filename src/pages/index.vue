@@ -719,7 +719,7 @@
                         :key="item.key"
                       >
                         <v-row
-                          class="explore-our-coach__tab"
+                          class="explore-our-coach__tab mb-5"
                           justify="center"
                           justify-md="start"
                         >
@@ -729,32 +729,14 @@
                             cols="8"
                             md="3"
                           >
-                            <v-card
-                              elevation="0"
-                              :aspect-ratio="1"
-                              flat
-                              class="mx-auto clickable tab-card"
-                              @click="gotTo(coach.userName)"
-                            >
-                              <v-img :aspect-ratio="1" :src="coach.image" />
-                              <v-card-title>{{ coach.name }}</v-card-title>
-                              <v-card-subtitle>
-                                <div class="text-ellipsis">
-                                  {{
-                                    coach.sportCategories
-                                      .map(item => $t(item.t_key))
-                                      .join([(separator = ", ")])
-                                  }}
-                                </div>
-                              </v-card-subtitle>
-                            </v-card>
+                            <explore-card v-bind="coach"></explore-card>
                           </v-col>
                         </v-row>
                       </v-tab-item>
                     </v-tabs-items>
 
                     <v-row
-                      class="mt-5"
+                      class="mt-5 mb-5"
                       justify="center"
                       v-if="$vuetify.breakpoint.smAndDown"
                     >
@@ -780,33 +762,7 @@
                               coachIndex) in exploreCoach.coaches"
                               :key="coachIndex"
                             >
-                              <v-card
-                                flat
-                                aspect-ratio="1"
-                                width="100%"
-                                class="mx-auto clickable"
-                                @click="gotTo(coach.userName)"
-                              >
-                                <v-img aspect-ratio="1" :src="coach.image" />
-                                <v-card-text>
-                                  <div style="height: 100px;">
-                                    <v-card-title>
-                                      <div class="text-elipsis">
-                                        {{ coach.name }}
-                                      </div>
-                                    </v-card-title>
-                                    <v-card-subtitle>
-                                      <div class="text-ellipsis">
-                                        {{
-                                          coach.sportCategories
-                                            .map(item => $t(item.t_key))
-                                            .join([(separator = ", ")])
-                                        }}
-                                      </div>
-                                    </v-card-subtitle>
-                                  </div>
-                                </v-card-text>
-                              </v-card>
+                              <explore-card v-bind="coach"></explore-card>
                             </swiper-slide>
                           </swiper>
                           <div class="simple-swiper-button-next">
@@ -819,15 +775,6 @@
                         </div>
                       </v-col>
                     </v-row>
-                  </v-col>
-                  <v-col class="12">
-                    <infinite-loading
-                      :identifier="exploreCoach.filter.infiniteId"
-                      @infinite="infiniteHandler"
-                    >
-                      <div slot="no-more"></div>
-                      <div slot="no-results"></div>
-                    </infinite-loading>
                   </v-col>
                 </v-row>
               </v-col>
@@ -887,12 +834,15 @@
 
 <script>
 import SportSearch from "@/components/artifact/global/pages/home/SportSearch";
-import { profileData, pathData } from "@/data";
-import { frontHomeApi } from "@/api";
+import { pathData } from "@/data";
+import { frontHomeApi, marketPlaceApi } from "@/api";
+import ExploreCard from "@/components/card/ExploreCard";
+
 export default {
   layout: "home",
   components: {
-    SportSearch
+    SportSearch,
+    ExploreCard
   },
   head() {
     return {
@@ -1045,37 +995,37 @@ export default {
       cities: data.cities
     };
   },
+  created() {
+    this.getCoach();
+  },
   methods: {
     handleReviewTextClick() {
       this.$router.push(this.localePath(pathData.pages.baseReviews));
     },
-    infiniteHandler($state) {
-      frontHomeApi(this.$axios)
-        .getInitialData({
+    getCoach() {
+      marketPlaceApi(this.$axios)
+        .get({
           type: this.exploreCoach.filter.type,
-          page: this.exploreCoach.filter.currentPage,
-          action: "filter"
+          perPage: 8,
+          countryCode: "DK"
         })
         .then(({ data }) => {
-          if (data.coaches.data.length > 0) {
-            if (this.exploreCoach.filter.currentPage == 1) {
-              this.exploreCoach.coaches = data.coaches.data.map(item => {
-                let coach = {};
-                coach.id = item.id;
-                coach.name = item.profile.profileName;
-                coach.image = item.profile.image
-                  ? item.profile.image
-                  : profileData.PROFILE_DEFAULT_IMAGE;
-                coach.sportCategories = item.sportCategories;
-                coach.userName = item.userName;
-                return coach;
-              });
-            }
-            this.exploreCoach.filter.currentPage += 1;
-            $state.loaded();
-          } else {
-            $state.complete();
-          }
+          this.exploreCoach.coaches = data.coaches.map(item => {
+            return {
+              name: item.name,
+              image: item.image ? item.image : null,
+              countReview: item.countReview,
+              rating: item.rating,
+              countReview: item.countReview,
+              location:
+                item.locations && item.locations.length > 0
+                  ? item.locations[0].zip + " " + item.locations[0].city
+                  : "",
+              price: item.price,
+              categories: item.categories,
+              userName: item.userName
+            };
+          });
         })
         .then(() => {});
     },
@@ -1087,9 +1037,7 @@ export default {
     },
     tabChanged(item) {
       this.exploreCoach.filter.type = item.key;
-      this.exploreCoach.coaches = [];
-      this.exploreCoach.filter.currentPage = 1;
-      this.exploreCoach.filter.infiniteId += 1;
+      this.getCoach();
     },
 
     goToMarketPlaceAndSearchByCityName(city) {
