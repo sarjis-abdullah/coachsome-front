@@ -1,12 +1,4 @@
 export default axios => ({
-  getBookingInformation: params => {
-    return axios.get("athlete/bookings", {
-      params: {
-        ...params
-      }
-    });
-  },
-  changeFavourite: payload => {
-    return axios.post("athlete/bookings/favourite", payload);
-  }
+  getBookingInformation: params => axios.get("athlete/bookings", { params }),
+  changeFavourite: payload => axios.post("athlete/bookings/favourite", payload)
 });

@@ -4,20 +4,20 @@
       <v-row justify="center">
         <v-col cols="12" md="8">
           <v-row align="center">
-            <v-col cols="12" md="8">
+            <v-col cols="12" md="9">
               <span class="section-title">
                 {{ $t("coach_booking_package_active_package_titile") }}
               </span>
             </v-col>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="3">
               <v-select
                 v-model="filterValue"
                 color="primary-light-1"
                 :items="filterItems"
+                item-value="id"
                 hide-details
                 dense
                 outlined
-                return-object
               >
                 <template v-slot:selection="{ item }">
                   {{ $t(item.t_key) }}
@@ -135,13 +135,7 @@ export default {
   },
   data() {
     return {
-      filterValue: {
-        id: 2,
-        title: "Active",
-        key: "active",
-        t_key: "coach_booking_filter_item_key_active",
-        icon: "mdi-square-outline"
-      },
+      filterValue: 2,
       filterItems: [
         {
           id: 1,
@@ -254,9 +248,12 @@ export default {
       this.activePackages.push(...generalStack);
     },
     infiniteHandler($state) {
+      const filterItem = this.filterItems.find(
+        item => item.id == this.filterValue
+      );
       let params = {
         page: this.page,
-        status: this.filterValue.key
+        status: filterItem.key
       };
       coachBookingApi(this.$axios)
         .getBookingInformation(params)

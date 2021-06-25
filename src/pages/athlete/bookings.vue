@@ -4,12 +4,38 @@
       <v-row justify="center">
         <v-col cols="12" md="7">
           <v-row>
-            <v-col cols="5" md="5">
+            <v-col cols="5" md="9">
               <div class="section-title">
                 {{
                   $t("athlete_booking_search_value_txt_purchased_package_title")
                 }}
               </div>
+            </v-col>
+            <v-col cols="12" md="3">
+              <v-select
+                v-model="filterValue"
+                color="primary-light-1"
+                :items="filterItems"
+                item-value="id"
+                append-icon="expand_more"
+                hide-details
+                outlined
+                dense
+                @change="getBooking"
+              >
+                <template v-slot:selection="{ item }">
+                  {{ $t(item.t_key) }}
+                </template>
+                <template v-slot:item="{ item, on, attrs }">
+                  <v-list-item v-bind="attrs" v-on="on" link>
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        {{ $t(item.t_key) }}
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </template>
+              </v-select>
             </v-col>
           </v-row>
 
@@ -267,6 +293,30 @@ export default {
   },
   data() {
     return {
+      filterValue: 1,
+      filterItems: [
+        {
+          id: 1,
+          title: "All",
+          key: "all",
+          t_key: "coach_booking_filter_item_key_all",
+          icon: "mdi-square-outline"
+        },
+        {
+          id: 2,
+          title: "Active",
+          key: "active",
+          t_key: "coach_booking_filter_item_key_active",
+          icon: "mdi-square-outline"
+        },
+        {
+          id: 3,
+          title: "Past",
+          key: "past",
+          t_key: "coach_booking_filter_item_key_past",
+          icon: "mdi-square-outline"
+        }
+      ],
       isHideShowMoreBtnLoading: false,
       showMoreLoading: false,
       showMoreBtn: false,
@@ -303,41 +353,45 @@ export default {
     }
   },
   created() {
-    athleteBookingApi(this.$axios)
-      .getBookingInformation()
-      .then(({ data }) => {
-        if (data.purchasedPackages) {
-          this.purchasedPackages = data.purchasedPackages.map(item => {
-            return {
-              bookingId: item.bookingId,
-              packageOwnerUserId: item.packageOwnerUserId,
-              packageBuyerUserId: item.packageBuyerUserId,
-              leftSession: item.leftSession,
-              packageTitle: item.packageTitle,
-              packageDescription: item.packageDescription,
-              profileAvatarName: item.profileAvatarName,
-              profileImage: item.profileImage,
-              profileName: item.profileName,
-              totalSession: item.totalSession,
-              status: item.status,
-              date: item.date,
-              isSold: item.isSold,
-              isFavourite: item.isFavourite,
-              orderKey: item.orderKey,
-              readableDate: item.readableDate
-            };
-          });
-          this.fetchTimeSlots(this.date);
-          this.fetchSearchValues();
-        }
-      })
-      .catch(error => {
-        if (error) {
-          this.$toast.error(error.response.data.message);
-        }
-      });
+    this.getBooking();
   },
   methods: {
+    getBooking() {
+      const filterItem = this.filterItems.find(item => item.id == this.filterValue);
+      athleteBookingApi(this.$axios)
+        .getBookingInformation({ status: filterItem.key })
+        .then(({ data }) => {
+          if (data.purchasedPackages) {
+            this.purchasedPackages = data.purchasedPackages.map(item => {
+              return {
+                bookingId: item.bookingId,
+                packageOwnerUserId: item.packageOwnerUserId,
+                packageBuyerUserId: item.packageBuyerUserId,
+                leftSession: item.leftSession,
+                packageTitle: item.packageTitle,
+                packageDescription: item.packageDescription,
+                profileAvatarName: item.profileAvatarName,
+                profileImage: item.profileImage,
+                profileName: item.profileName,
+                totalSession: item.totalSession,
+                status: item.status,
+                date: item.date,
+                isSold: item.isSold,
+                isFavourite: item.isFavourite,
+                orderKey: item.orderKey,
+                readableDate: item.readableDate
+              };
+            });
+            this.fetchTimeSlots(this.date);
+            this.fetchSearchValues();
+          }
+        })
+        .catch(error => {
+          if (error) {
+            this.$toast.error(error.response.data.message);
+          }
+        });
+    },
     goToMarketplace() {
       this.$router.push(this.localePath(pathData.pages.marketplace));
     },
