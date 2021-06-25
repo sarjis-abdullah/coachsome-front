@@ -67,7 +67,7 @@ export default {
         symbol: getConfig.symbol,
         separator: getConfig.thousandsSeparator,
         decimal: getConfig.fractionSeparator
-      }).format();
+      }).format().replace(/(\.|,)00$/g, '');
     } else {
       return value;
     }

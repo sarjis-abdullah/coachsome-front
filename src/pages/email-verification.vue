@@ -9,10 +9,7 @@
             </v-col>
             <v-spacer></v-spacer>
             <v-col class="shrink">
-              <v-btn
-                :to="localePath(pathData.login)"
-                color="primary-light-1"
-                outlined
+              <v-btn @click="handleLoginBtnClick()" color="primary-light-1" outlined
                 >Login</v-btn
               >
             </v-col>
@@ -26,7 +23,7 @@
             <v-spacer></v-spacer>
             <v-col class="shrink">
               <v-btn
-                :to="localePath(pathData.register)"
+                @click="handleRegisterBtnClick()"
                 color="primary-light-1"
                 outlined
                 >Register</v-btn
@@ -49,7 +46,6 @@ export default {
   },
   data() {
     return {
-      pathData,
       loading: false,
       message: "",
       isSuccess: false,
@@ -57,7 +53,14 @@ export default {
       token: this.$route.query.token || ""
     };
   },
-  methods: {},
+  methods: {
+    handleLoginBtnClick() {
+      this.$router.push(this.localePath(pathData.pages.login));
+    },
+    handleRegisterBtnClick() {
+      this.$router.push(this.localePath(pathData.pages.register));
+    },
+  },
   mounted() {
     this.loading = true;
     this.$axios
