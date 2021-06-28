@@ -87,36 +87,42 @@
                     </div>
                   </v-card-text>
                 </v-card>
-                <div
-                  :class="[
-                    'coachsome-rating d-flex justify-center flex-wrap align-center',
-                    {
-                      'coachsome-rating--md': $vuetify.breakpoint.mdAndUp,
-                      'coachsome-rating--sm': $vuetify.breakpoint.smAndDown
-                    }
-                  ]"
-                >
-                  <v-btn v-on:click="handleReviewTextClick" color="transparent" depressed>
-                    <v-rating
-                      readonly
-                      :value="overallRating"
-                      background-color="rating"
-                      color="rating"
-                      medium
-                      half-increments
-                    ></v-rating>
-                  </v-btn>
-                  <div class="coachsome-rating__text">
+                <client-only>
+                  <div
+                    :class="[
+                      'coachsome-rating d-flex justify-center flex-wrap align-center',
+                      {
+                        'coachsome-rating--md': $vuetify.breakpoint.mdAndUp,
+                        'coachsome-rating--sm': $vuetify.breakpoint.smAndDown
+                      }
+                    ]"
+                  >
                     <v-btn
-                      text
-                      class="text-normal white--text"
-                      @click="handleReviewTextClick"
+                      v-on:click="handleReviewTextClick"
+                      color="transparent"
+                      depressed
                     >
-                      {{ totalReviewerCount }}
-                      {{ $t("front_page_reviews_text") }}
+                      <v-rating
+                        readonly
+                        :value="overallRating"
+                        background-color="rating"
+                        color="rating"
+                        medium
+                        half-increments
+                      ></v-rating>
                     </v-btn>
+                    <div class="coachsome-rating__text">
+                      <v-btn
+                        text
+                        class="text-normal white--text"
+                        @click="handleReviewTextClick"
+                      >
+                        {{ totalReviewerCount }}
+                        {{ $t("front_page_reviews_text") }}
+                      </v-btn>
+                    </div>
                   </div>
-                </div>
+                </client-only>
               </v-col>
             </v-row>
           </div>
