@@ -123,6 +123,7 @@
                           :identifier="infiniteId"
                           @infinite="infiniteHandler"
                         >
+                          <div slot="no-more"></div>
                           <div slot="no-results">
                             {{ $t("marketplace_infiniity_loader_no_result") }}
                             <br />
@@ -446,7 +447,7 @@ export default {
         });
       });
     }
-    
+
     this.reloadInfiniteLoader();
 
     this.$fetchState.pending = false;

@@ -96,7 +96,7 @@
                     }
                   ]"
                 >
-                  <v-btn v-on:click="handleReviewTextClick" color="transparent">
+                  <v-btn v-on:click="handleReviewTextClick" color="transparent" depressed>
                     <v-rating
                       readonly
                       :value="overallRating"
