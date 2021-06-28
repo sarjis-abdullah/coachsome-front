@@ -76,13 +76,13 @@
               </v-btn>
             </v-col>
           </v-row>
-
+          <!-- 
           <v-row>
             <v-col>
               <div class="line"></div>
             </v-col>
-          </v-row>
-
+          </v-row> -->
+          <!-- 
           <v-row>
             <v-col cols="12">
               <div class="section-title">
@@ -187,7 +187,7 @@
                 </v-col>
               </v-row>
             </v-col>
-          </v-row>
+          </v-row> -->
         </v-col>
 
         <v-col cols="12" md="4">
@@ -357,7 +357,9 @@ export default {
   },
   methods: {
     getBooking() {
-      const filterItem = this.filterItems.find(item => item.id == this.filterValue);
+      const filterItem = this.filterItems.find(
+        item => item.id == this.filterValue
+      );
       athleteBookingApi(this.$axios)
         .getBookingInformation({ status: filterItem.key })
         .then(({ data }) => {

@@ -33,12 +33,12 @@
             </div>
           </div>
           <div class="mt-1">
-            <span class="explore-card__price">{{
-              currencyService.toCurrency(price)
-            }}</span>
-            <!-- <span class="explore-card__rate">{{
-            $t("marketplace_text_per_hour")
-          }}</span> -->
+            <span class="explore-card-price-prefix mr-3">
+              {{ $t("marketplace_explore_card_price_prefix_txt") }}
+            </span>
+            <span class="explore-card__price">
+              {{ currencyService.toCurrency(price) }}
+            </span>
           </div>
         </div>
       </v-card-text>
@@ -154,6 +154,13 @@ export default {
   &__category {
     color: $primary;
     @include h6;
+  }
+  &-price-prefix {
+    font-family: $font-family;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+    color: #9faec2;
   }
 }
 </style>

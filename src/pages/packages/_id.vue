@@ -783,6 +783,9 @@ export default {
 <style lang="scss" scoped>
 .booking-page {
   .message-container {
+    display: flex;
+    justify-content: center;
+    align-content: center;
     padding: 100px 50px;
   }
   .message {

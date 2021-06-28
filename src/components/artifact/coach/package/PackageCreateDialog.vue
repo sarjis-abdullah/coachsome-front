@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" persistent scrollable max-width="1000">
     <v-card class="package-create-dialog">
       <v-card-title class="grey lighten-2">
-        Create Package
+        {{ $t("package_dialog_title_create_package") }}
         <v-spacer></v-spacer>
         <v-btn icon @click="handleCloseBtnClick">
           <v-icon>mdi-close</v-icon>
@@ -44,13 +44,13 @@ import PackageCamp from "./PackageCamp";
 export default {
   components: {
     PackageDefault,
-    PackageCamp,
+    PackageCamp
   },
   props: ["value", "rate"],
   data: () => ({
     dialog: false,
     showTabs: false,
-    tabs: ["default", "camp"],
+    tabs: ["default", "camp"]
   }),
   watch: {
     value(val) {
@@ -60,17 +60,17 @@ export default {
       if (!val) {
         this.$emit("close");
       }
-    },
+    }
   },
   methods: {
     handlePackageCreate(newPackage) {
-      this.$emit("created", newPackage)
+      this.$emit("created", newPackage);
     },
     handleCloseBtnClick() {
       this.$emit("close");
     },
-    handleSaveBtnClick() {},
-  },
+    handleSaveBtnClick() {}
+  }
 };
 </script>
 

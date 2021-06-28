@@ -333,7 +333,7 @@ export default {
         .store(payload)
         .then(({ data }) => {
           if (data.t_key) {
-            this.$toast.success(data.t_key);
+            this.$toast.success(this.$i18n.t(data.t_key));
           } else {
             this.$toast.success(data.toastMessage);
           }
@@ -356,13 +356,11 @@ export default {
           userId: this.userId,
           session: this.packageSession
         };
-        this.showLoading();
         this.timeRanges = [];
         this.selectedTimeRange = null;
         calenderApi(this.$axios)
           .getTimeRange(params)
           .then(({ data }) => {
-            this.hideLoading();
             if (data.day.time_ranges) {
               this.timeRanges = [];
               data.day.time_ranges.forEach(item => {
@@ -376,7 +374,6 @@ export default {
             }
           })
           .catch(({ response }) => {
-            this.hideLoading();
             if (response.data.message) {
               this.$toast.error(response.data.message);
             }

@@ -96,14 +96,16 @@
                     }
                   ]"
                 >
-                  <v-rating
-                    readonly
-                    :value="overallRating"
-                    background-color="rating"
-                    color="rating"
-                    medium
-                    half-increments
-                  ></v-rating>
+                  <v-btn v-on:click="handleReviewTextClick" color="transparent">
+                    <v-rating
+                      readonly
+                      :value="overallRating"
+                      background-color="rating"
+                      color="rating"
+                      medium
+                      half-increments
+                    ></v-rating>
+                  </v-btn>
                   <div class="coachsome-rating__text">
                     <v-btn
                       text

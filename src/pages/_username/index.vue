@@ -31,12 +31,13 @@
                         </div>
                       </div>
                     </div>
-                    <v-list-item class="grow py-0">
-                      <v-list-item-content>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-row align="center">
+                      <v-col class="text-center text-md-left" col="12" md="6">
                         <div>{{ $t("text_got_a_question") }}</div>
-                      </v-list-item-content>
-                      <v-spacer></v-spacer>
-                      <v-list-item-action>
+                      </v-col>
+                      <v-col class="text-center text-md-right" cols="12" md="6">
                         <v-btn
                           class="blue-grey--text"
                           dark
@@ -47,9 +48,9 @@
                           >{{ $t("text_message") }}
                           {{ profileCard.name }}</v-btn
                         >
-                      </v-list-item-action>
-                    </v-list-item>
-                  </v-card-text>
+                      </v-col>
+                    </v-row>
+                  </v-card-actions>
                 </v-card>
               </div>
             </v-col>
