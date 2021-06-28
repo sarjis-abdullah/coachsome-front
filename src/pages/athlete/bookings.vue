@@ -503,6 +503,7 @@ export default {
 
 <style lang="scss" scoped>
 .athlete-bookings {
+  height: 100%;
   background: $body-bg;
 }
 </style>

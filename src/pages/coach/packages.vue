@@ -73,6 +73,7 @@
                 <v-row>
                   <v-col cols="12">
                     <v-btn
+                      dark
                       depressed
                       color="primary-light-1"
                       @click="saveHourlyRate()"
@@ -426,7 +427,7 @@ export default {
       this.editAblePackage = item;
     },
     removePackage(item) {
-      if (confirm(i18n.t("alert_confirm_short_text"))) {
+      if (confirm(this.$i18n.t("alert_confirm_short_text"))) {
         let payload = item;
         coachPackageApi(this.$axios)
           .removePackage(payload)

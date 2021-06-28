@@ -115,6 +115,9 @@ export default {
       {
         seo: false,
         strategy: "prefix_and_default",
+        vueI18n: {
+          fallbackLocale: "en"
+        },
         locales: [
           {
             name: "dansk",

@@ -19,7 +19,7 @@
 
     <v-list width="246px" dense>
       <!-- Coach Show Profile -->
-      <span v-if="isCoach">
+      <!-- <span v-if="isCoach">
         <v-list-item color="primary" link @click.stop="handleShowProfile">
           <v-list-item-content>
             <v-list-item-title>
@@ -27,10 +27,10 @@
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-      </span>
+      </span> -->
 
       <!-- Coach Edit Profile -->
-      <span v-if="isCoach">
+      <!-- <span v-if="isCoach">
         <v-list-item color="primary" link @click.stop="handleCoachEditProfile">
           <v-list-item-content>
             <v-list-item-title>
@@ -38,7 +38,7 @@
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-      </span>
+      </span> -->
 
       <!-- Coach Setting -->
       <span v-if="isLoggedIn && isCoach">

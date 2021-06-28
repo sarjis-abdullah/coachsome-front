@@ -1,5 +1,5 @@
 <template>
- <MarketplaceContent/>
+  <MarketplaceContent />
 </template>
 
 <script>
@@ -8,7 +8,7 @@ import MarketplaceContent from "@/components/artifact/global/pages/marketplace/C
 export default {
   layout: "marketplace",
   components: {
-   MarketplaceContent
+    MarketplaceContent
   },
   head() {
     return {
@@ -19,6 +19,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

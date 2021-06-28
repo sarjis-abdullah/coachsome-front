@@ -354,6 +354,7 @@
                         </div> -->
                         <div class="quick-booking__chat-btn mt-10">
                           <v-btn
+                            class="white--text"
                             :loading="isChatBtnLoading"
                             color="#EDB041"
                             @click="chatNowBtnClickHandle"

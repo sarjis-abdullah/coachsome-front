@@ -884,11 +884,11 @@ export default {
       exploreCoach: {
         tab: null,
         tabs: [
-          {
-            text: "All",
-            key: "all",
-            t_key: "txt_all"
-          },
+          // {
+          //   text: "All",
+          //   key: "all",
+          //   t_key: "txt_all"
+          // },
           {
             text: "Most Popular",
             key: "most_poppular",
@@ -1160,6 +1160,7 @@ export default {
     height: 100vh;
     width: 100%;
     position: relative;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     &__bg {
       height: 100vh;
       width: 100%;

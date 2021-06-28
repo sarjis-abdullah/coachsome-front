@@ -128,13 +128,22 @@
               </v-row>
             </v-col>
           </v-row>
+
+          <!-- Not a member yet -->
+          <v-row>
+            <v-col cols="12" class="text-center">
+              <div class="not-member" @click.stop="handleNotMemberBtnClick">
+                {{ $t("login_txt_not_member_yet") }}
+              </div>
+            </v-col>
+          </v-row>
         </v-card>
       </v-col>
       <v-col md="7" lg="8" sm="12" class="pa-0 ma-0">
-        <v-img
+        <img
+          style="object-fit:cover;height:100vh;width:100%;"
           class="d-none d-md-flex"
-          :src="require('@/assets/images/login-aside.jpg')"
-          height="100vh"
+          :src="require('@/assets/images/login/aside.jpg')"
         />
       </v-col>
     </v-row>
@@ -212,6 +221,9 @@ export default {
         }
       }
     },
+    handleNotMemberBtnClick() {
+      this.$router.push(this.localePath(pathData.pages.register));
+    },
     loginWithFacebook() {
       window.location.href =
         process.env.API_SERVER_URL + "/auth/login/facebook?user_type=coach";
@@ -228,6 +240,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 .login-page {
+  .not-member {
+    font-family: $font-family;
+    font-size: 14px;
+    line-height: 19px;
+    color: #f7fafc;
+    text-align: center;
+    text-decoration-line: underline;
+    cursor: pointer;
+  }
   .theme--light.v-application {
     background-color: transparent;
   }

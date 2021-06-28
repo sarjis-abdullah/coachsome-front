@@ -11,7 +11,7 @@
           <v-card
             elevation="0"
             color="transparent"
-            class="d-flex overflow-y-auto my-0"
+            class="d-flex overflow-y my-0"
             v-scroll.self="onScroll"
             :max-height="$vuetify.breakpoint.mdAndUp ? '91vh' : '90vh'"
           >
