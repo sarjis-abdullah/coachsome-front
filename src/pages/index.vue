@@ -1435,6 +1435,9 @@ export default {
     &__tab {
       background: #f7fafc;
     }
+    .v-window-item {
+      background: #f7fafc;
+    }
     .filter-title {
       font-family: $font-family;
       font-weight: 600;

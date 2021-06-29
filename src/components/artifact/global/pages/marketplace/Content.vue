@@ -1,29 +1,79 @@
 <template>
   <div class="marketplace-content">
     <v-container
-      class="pt-0  pb-0 body-bg"
+      class="py-0 body-bg"
       style="height: 96vh;"
       fluid
       @click.stop="clickedOnContainerSpace"
     >
       <v-row>
-        <v-col>
+        <v-col class="py-0" cols="12" md="9">
           <v-card
-            elevation="0"
+            class="overflow-y"
+            :height="$vuetify.breakpoint.mdAndUp ? '91vh' : '90vh'"
             color="transparent"
-            class="d-flex overflow-y my-0"
-            v-scroll.self="onScroll"
-            :max-height="$vuetify.breakpoint.mdAndUp ? '91vh' : '90vh'"
+            flat
           >
-            <v-card-text>
-              <v-row>
-                <v-col class="px-10" cols="12" md="9">
-                  <!-- Filter Box -->
-                  <div
-                    :class="{ 'filter-box': isFilterBoxFixed }"
-                    v-if="$vuetify.breakpoint.mdAndUp"
-                  >
+            <v-card-text class="px-0">
+              <!-- Filter Box -->
+              <div
+                :class="{ 'filter-box': isFilterBoxFixed }"
+                v-if="$vuetify.breakpoint.mdAndUp"
+              >
+                <CoachFilter
+                  :categories="categoryFilter.categories"
+                  :selected-categories.sync="categoryFilter.selectedCategories"
+                  :radius-slider.sync="radiusFilter.slider"
+                  :radius-slider-min.sync="radiusFilter.min"
+                  :radius-slider-max.sync="radiusFilter.max"
+                  :price-slider-range="hourlyPriceFilter.range"
+                  @update:price-slider-range="handleUpdatedPriceRange"
+                  :price-slider-min="hourlyPriceFilter.min"
+                  :price-slider-max="hourlyPriceFilter.max"
+                  :currency-code="hourlyPriceFilter.currencyCode"
+                  :countries="countryFilter.countryList"
+                  :selected-country.sync="countryFilter.selectedCountryCode"
+                  @update:location="handleGoogleLocation"
+                />
+              </div>
+
+              <!-- Filter Dialog -->
+              <v-dialog v-model="filterDialog">
+                <v-card>
+                  <v-card-title class="title">
+                    {{ $t("marketplace_sm_body_filter_title_txt") }}
+                    <v-spacer></v-spacer>
+                    <v-menu bottom offset-y :close-on-content-click="false">
+                      <template v-slot:activator="{ on }">
+                        <v-btn icon v-on="on">
+                          <v-icon>filter_list</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-list>
+                        <v-list-item v-for="(item, i) in filter.item" :key="i">
+                          <v-list-item-action>
+                            <v-checkbox
+                              :disabled="item.isDisabled"
+                              v-model="item.isActive"
+                              color="primary-light-1"
+                              @click.native="reloadInfiniteLoader"
+                            ></v-checkbox>
+                          </v-list-item-action>
+                          <v-list-item-content>
+                            <v-list-item-title>{{
+                              $t(item.t_key)
+                            }}</v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                    <v-btn small icon @click="handleCloseFilterBtnClick">
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                  </v-card-title>
+                  <v-card-text>
                     <CoachFilter
+                      mobile
                       :categories="categoryFilter.categories"
                       :selected-categories.sync="
                         categoryFilter.selectedCategories
@@ -40,144 +90,70 @@
                       :selected-country.sync="countryFilter.selectedCountryCode"
                       @update:location="handleGoogleLocation"
                     />
-                  </div>
+                  </v-card-text>
+                  <v-divider></v-divider>
+                </v-card>
+              </v-dialog>
 
-                  <!-- Filter Dialog -->
-                  <v-dialog v-model="filterDialog">
-                    <v-card>
-                      <v-card-title class="title">
-                        {{ $t("marketplace_sm_body_filter_title_txt") }}
-                        <v-spacer></v-spacer>
-                        <v-menu bottom offset-y :close-on-content-click="false">
-                          <template v-slot:activator="{ on }">
-                            <v-btn icon v-on="on">
-                              <v-icon>filter_list</v-icon>
-                            </v-btn>
-                          </template>
-                          <v-list>
-                            <v-list-item
-                              v-for="(item, i) in filter.item"
-                              :key="i"
-                            >
-                              <v-list-item-action>
-                                <v-checkbox
-                                  :disabled="item.isDisabled"
-                                  v-model="item.isActive"
-                                  color="primary-light-1"
-                                  @click.native="reloadInfiniteLoader"
-                                ></v-checkbox>
-                              </v-list-item-action>
-                              <v-list-item-content>
-                                <v-list-item-title>{{
-                                  $t(item.t_key)
-                                }}</v-list-item-title>
-                              </v-list-item-content>
-                            </v-list-item>
-                          </v-list>
-                        </v-menu>
-                        <v-btn small icon @click="handleCloseFilterBtnClick">
-                          <v-icon>mdi-close</v-icon>
-                        </v-btn>
-                      </v-card-title>
-                      <v-card-text>
-                        <CoachFilter
-                          mobile
-                          :categories="categoryFilter.categories"
-                          :selected-categories.sync="
-                            categoryFilter.selectedCategories
-                          "
-                          :radius-slider.sync="radiusFilter.slider"
-                          :radius-slider-min.sync="radiusFilter.min"
-                          :radius-slider-max.sync="radiusFilter.max"
-                          :price-slider-range="hourlyPriceFilter.range"
-                          @update:price-slider-range="handleUpdatedPriceRange"
-                          :price-slider-min="hourlyPriceFilter.min"
-                          :price-slider-max="hourlyPriceFilter.max"
-                          :currency-code="hourlyPriceFilter.currencyCode"
-                          :countries="countryFilter.countryList"
-                          :selected-country.sync="
-                            countryFilter.selectedCountryCode
-                          "
-                          @update:location="handleGoogleLocation"
-                        />
-                      </v-card-text>
-                      <v-divider></v-divider>
-                    </v-card>
-                  </v-dialog>
-
-                  <!-- coach-list -->
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      md="4"
-                      v-for="(item, i) in coaches"
-                      :key="i"
-                    >
-                      <explore-card v-bind="item"></explore-card>
-                    </v-col>
-                  </v-row>
-                  <v-row justify="center">
-                    <v-col cols="12" md="4" class="py-0 my-0">
-                      <client-only>
-                        <infinite-loading
-                          :identifier="infiniteId"
-                          @infinite="infiniteHandler"
-                        >
-                          <div slot="no-more"></div>
-                          <div slot="no-results">
-                            {{ $t("marketplace_infiniity_loader_no_result") }}
-                            <br />
-                            <i18n path="marketplace_search_did_not_give_result">
-                              <template v-slot:country>
-                                <span>{{ searchedCountryName }}</span>
-                              </template>
-                            </i18n>
-                            <br />
-                            <span
-                              v-for="(item, i) in coachInCountries"
-                              :key="i"
-                            >
-                              <v-btn
-                                text
-                                x-small
-                                @click.stop="handleFlagBtnClick(item)"
-                              >
-                                <country-flag
-                                  :country="item.cca2.toLowerCase()"
-                                  size="normal"
-                                />
-                              </v-btn>
-                            </span>
-                          </div>
-                        </infinite-loading>
-                      </client-only>
-                    </v-col>
-                  </v-row>
+              <!-- coach-list -->
+              <v-row class="card-container">
+                <v-col cols="12" md="4" v-for="(item, i) in coaches" :key="i">
+                  <explore-card v-bind="item"></explore-card>
                 </v-col>
-
-                <!-- Map -->
-                <v-col>
-                  <div
-                    id="map"
-                    class="map pt-0 pl-0 d-none d-md-flex"
-                    ref="mapRef"
-                  ></div>
+                <v-col cols="12">
+                  <client-only>
+                    <infinite-loading
+                      :identifier="infiniteId"
+                      @infinite="infiniteHandler"
+                    >
+                      <div slot="no-more"></div>
+                      <div slot="no-results">
+                        {{ $t("marketplace_infiniity_loader_no_result") }}
+                        <br />
+                        <i18n path="marketplace_search_did_not_give_result">
+                          <template v-slot:country>
+                            <span>{{ searchedCountryName }}</span>
+                          </template>
+                        </i18n>
+                        <br />
+                        <span v-for="(item, i) in coachInCountries" :key="i">
+                          <v-btn
+                            text
+                            x-small
+                            @click.stop="handleFlagBtnClick(item)"
+                          >
+                            <country-flag
+                              :country="item.cca2.toLowerCase()"
+                              size="normal"
+                            />
+                          </v-btn>
+                        </span>
+                      </div>
+                    </infinite-loading>
+                  </client-only>
                 </v-col>
               </v-row>
             </v-card-text>
           </v-card>
         </v-col>
+
+        <!-- Map -->
+        <v-col>
+          <div
+            id="map"
+            class="map pt-0 pl-0 d-none d-md-flex"
+            ref="mapRef"
+          ></div>
+        </v-col>
+        <!-- ./Map -->
       </v-row>
 
-      <client-only>
+      <!-- Footer -->
+      <client-only v-if="footer.toggleButton">
         <v-row>
           <v-col>
             <slide-x-left-transition>
-              <div
-                v-if="footer.toggleButton"
-                class="footer-btn-wrapper"
-                @click.stop="footerBtnClicked"
-              >
+              <div class="footer-btn-wrapper" @click.stop="footerBtnClicked">
                 <button class="footer-btn--menu">
                   <v-icon>menu</v-icon>
                 </button>
@@ -453,6 +429,8 @@ export default {
     this.$fetchState.pending = false;
   },
   mounted() {
+    window.addEventListener("scroll", this.onScroll);
+
     this.initMap();
     if (!this.$auth.loggedIn) {
       this.setCurrenctCountry();
@@ -545,18 +523,19 @@ export default {
       this.footer.value = true;
     },
     onScroll(e) {
-      if (e.target.scrollTop > 0) {
+      console.log(e);
+      if (window.scrollY > 0) {
         this.footer.toggleButton = true;
       }
-      if (e.target.scrollTop < 11) {
+      if (window.scrollY < 11) {
         this.footer.toggleButton = false;
       }
 
-      if (e.target.scrollTop > 200) {
+      if (window.scrollY > 200) {
         this.isFilterBoxFixed = true;
       }
 
-      if (e.target.scrollTop == 0) {
+      if (window.scrollY == 0) {
         this.isFilterBoxFixed = false;
       }
     },
@@ -716,6 +695,9 @@ export default {
 
 <style lang="scss">
 .marketplace-content {
+  .card-container {
+    background: $body-bg;
+  }
   .filter-box {
     position: fixed;
     z-index: 100;
