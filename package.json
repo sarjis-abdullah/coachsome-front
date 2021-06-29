@@ -24,7 +24,7 @@
     "mixpanel-browser": "^2.41.0",
     "moment": "^2.29.1",
     "nuxt": "^2.15.3",
-    "nuxt-i18n": "^6.24.0",
+    "nuxt-i18n": "^6.27.2",
     "nuxt-socket-io": "^1.1.18",
     "ramda": "^0.27.1",
     "sass": "1.32.*",
