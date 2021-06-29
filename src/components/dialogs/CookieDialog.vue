@@ -31,25 +31,31 @@
               {{ $t("header_cookie_description_does_not_work_without_cookie") }}
             </div>
           </div>
-          <div class="d-flex justify-space-between mt-10 ">
-            <v-btn
-              color="#C44130"
-              depressed
-              dark
-              large
-              @click="handleRejectAllBtnClick"
-            >
-              {{ $t("header_cookie_btn_label_reject_all") }}
-            </v-btn>
-            <v-btn
-              color="#6ECB72"
-              depressed
-              dark
-              large
-              @click="handleAcceptAllBtnClick"
-            >
-              {{ $t("header_cookie_btn_label_accept_all") }}
-            </v-btn>
+          <div class=" mt-10 ">
+            <v-row justify="center">
+              <v-col cols="12" md="6">
+                <v-btn
+                  color="#C44130"
+                  depressed
+                  dark
+                  block
+                  @click="handleRejectAllBtnClick"
+                >
+                  {{ $t("header_cookie_btn_label_reject_all") }}
+                </v-btn>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-btn
+                  color="#6ECB72"
+                  depressed
+                  dark
+                  block
+                  @click="handleAcceptAllBtnClick"
+                >
+                  {{ $t("header_cookie_btn_label_accept_all") }}
+                </v-btn>
+              </v-col>
+            </v-row>
           </div>
         </v-card-text>
       </v-card>
@@ -62,15 +68,15 @@ import { pathData } from "@/data";
 export default {
   props: {
     open: {
-      type: Boolean,
-    },
+      type: Boolean
+    }
   },
   data() {
     return {
       dialog: false,
       cookiePolicyPath: pathData.pages.cookiePolicy,
       privacyPolicyPath: pathData.pages.policy,
-      isReject: false,
+      isReject: false
     };
   },
   computed: {
@@ -79,15 +85,15 @@ export default {
     },
     isShowInitialDescription() {
       return !this.isReject;
-    },
+    }
   },
   watch: {
     open: {
       immediate: true,
       handler: function(val) {
         this.dialog = val;
-      },
-    },
+      }
+    }
   },
   methods: {
     handleRejectAllBtnClick() {
@@ -98,8 +104,8 @@ export default {
     handleAcceptAllBtnClick() {
       localStorage.setItem("cookie:accept", "true");
       this.dialog = false;
-    },
-  },
+    }
+  }
 };
 </script>
 

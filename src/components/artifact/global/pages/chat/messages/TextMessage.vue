@@ -27,8 +27,8 @@ export default {
   computed: {
     time() {
       return this.moment(this.message.created_at)
-        .lang(this.$i18n.locale)
-        .fromNow();
+        .locale(this.$i18n.locale)
+        .format("DD MMM h:mm");
     }
   },
   methods: {
