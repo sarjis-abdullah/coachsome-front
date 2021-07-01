@@ -28,7 +28,7 @@ export default {
     time() {
       return this.moment(this.message.created_at)
         .locale(this.$i18n.locale)
-        .format("DD MMM h:mm");
+        .format("DD MMM HH:mm");
     }
   },
   methods: {

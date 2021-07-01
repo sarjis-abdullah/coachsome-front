@@ -247,6 +247,7 @@ export default {
   mounted() {},
   methods: {
     handleGoogleLocation(item) {
+      console.log(item)
       this.isDisabled = false;
       let {
         zipCode,

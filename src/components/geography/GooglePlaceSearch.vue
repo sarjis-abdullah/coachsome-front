@@ -54,7 +54,7 @@ export default {
       let autocomplete = new this.google.maps.places.Autocomplete(
         this.$refs.search,
         {
-          fields: ["address_components", "geometry"]
+          fields: ["address_components", "geometry", "formatted_address"]
         }
       );
       autocomplete.addListener("place_changed", () => {
@@ -73,6 +73,7 @@ export default {
         this.location.address = place.formatted_address;
         this.location.lat = place.geometry.location.lat();
         this.location.long = place.geometry.location.lng();
+
         place.address_components.forEach(item => {
           // Zip Code finder
           if (item.types.includes("postal_code")) {
