@@ -87,42 +87,35 @@
                     </div>
                   </v-card-text>
                 </v-card>
-                <client-only>
-                  <div
-                    :class="[
-                      'coachsome-rating d-flex justify-center flex-wrap align-center',
-                      {
-                        'coachsome-rating--md': $vuetify.breakpoint.mdAndUp,
-                        'coachsome-rating--sm': $vuetify.breakpoint.smAndDown
-                      }
-                    ]"
-                  >
+                <div
+                  :class="[
+                    'coachsome-rating d-flex justify-center flex-wrap align-center',
+                    {
+                      'coachsome-rating--md': $vuetify.breakpoint.mdAndUp,
+                      'coachsome-rating--sm': $vuetify.breakpoint.smAndDown
+                    }
+                  ]"
+                >
+                  <v-rating
+                    v-on:click="handleReviewTextClick"
+                    readonly
+                    :value="overallRating"
+                    background-color="rating"
+                    color="rating"
+                    medium
+                    half-increments
+                  ></v-rating>
+                  <div class="coachsome-rating__text">
                     <v-btn
-                      v-on:click="handleReviewTextClick"
-                      color="transparent"
-                      depressed
+                      text
+                      class="text-normal white--text"
+                      @click="handleReviewTextClick"
                     >
-                      <v-rating
-                        readonly
-                        :value="overallRating"
-                        background-color="rating"
-                        color="rating"
-                        medium
-                        half-increments
-                      ></v-rating>
+                      {{ totalReviewerCount }}
+                      {{ $t("front_page_reviews_text") }}
                     </v-btn>
-                    <div class="coachsome-rating__text">
-                      <v-btn
-                        text
-                        class="text-normal white--text"
-                        @click="handleReviewTextClick"
-                      >
-                        {{ totalReviewerCount }}
-                        {{ $t("front_page_reviews_text") }}
-                      </v-btn>
-                    </div>
                   </div>
-                </client-only>
+                </div>
               </v-col>
             </v-row>
           </div>

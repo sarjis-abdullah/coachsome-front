@@ -300,8 +300,8 @@ export default {
             id: 6,
             text: "Country",
             t_key: "filter_item_text_country",
-            isActive: false,
-            isDisabled: false
+            isActive: true,
+            isDisabled: true
           }
         }
       },

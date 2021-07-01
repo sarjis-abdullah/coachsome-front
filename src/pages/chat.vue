@@ -316,7 +316,6 @@ import PackageChoosing from "@/components/artifact/global/pages/chat/PackageChoo
 import ChatScreen from "@/components/artifact/global/pages/chat/ChatScreen";
 
 import { contactApi, messageApi } from "@/api";
-import { imageService } from "@/services";
 import { pathData } from "@/data";
 
 export default {

@@ -43,30 +43,7 @@
                   <v-card-title class="title">
                     {{ $t("marketplace_sm_body_filter_title_txt") }}
                     <v-spacer></v-spacer>
-                    <v-menu bottom offset-y :close-on-content-click="false">
-                      <template v-slot:activator="{ on }">
-                        <v-btn icon v-on="on">
-                          <v-icon>filter_list</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-list>
-                        <v-list-item v-for="(item, i) in filter.item" :key="i">
-                          <v-list-item-action>
-                            <v-checkbox
-                              :disabled="item.isDisabled"
-                              v-model="item.isActive"
-                              color="primary-light-1"
-                              @click.native="reloadInfiniteLoader"
-                            ></v-checkbox>
-                          </v-list-item-action>
-                          <v-list-item-content>
-                            <v-list-item-title>{{
-                              $t(item.t_key)
-                            }}</v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
+                 
                     <v-btn small icon @click="handleCloseFilterBtnClick">
                       <v-icon>mdi-close</v-icon>
                     </v-btn>

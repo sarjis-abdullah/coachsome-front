@@ -33,11 +33,11 @@
                     </div>
                   </v-card-text>
                   <v-card-actions>
-                    <v-row align="center">
-                      <v-col class="text-center text-md-left" col="12" md="6">
+                    <div class="d-flex justify-space-between align-center flex-wrap" :style="{width:'100%'}">
+                      <div class="flex-grow-1 text-center text-lg-left">
                         <div>{{ $t("text_got_a_question") }}</div>
-                      </v-col>
-                      <v-col class="text-center text-md-right" cols="12" md="6">
+                      </div>
+                      <div class="flex-grow-1 text-center text-lg-right text-sm-center">
                         <v-btn
                           class="blue-grey--text"
                           dark
@@ -48,8 +48,8 @@
                           >{{ $t("text_message") }}
                           {{ profileCard.name }}</v-btn
                         >
-                      </v-col>
-                    </v-row>
+                      </div>
+                    </div>
                   </v-card-actions>
                 </v-card>
               </div>
@@ -594,7 +594,9 @@ export default {
       let payload = {
         receiverUserId: this.userInfo.id,
         content: this.questionBox.question,
-        type: "text"
+        type: "text",
+        created_at: new Date().toISOString()
+
       };
       messageApi(this.$axios)
         .store(payload)
