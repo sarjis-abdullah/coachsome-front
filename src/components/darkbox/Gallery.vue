@@ -6,7 +6,18 @@
       :key="index"
       class="silentbox-item"
     >
-      <div v-if="removeable" class="remove-btn" @click.stop="handleRemoveBtnClick(index)"></div>
+      <div
+        v-if="removeable"
+        class="remove-btn"
+        @click.stop="handleRemoveBtnClick(index)"
+      ></div>
+      <div class="play-btn" v-if="image.type == 'video'">
+        <img
+          style="width: 50px;height: 50px;"
+          :src="require('@/assets/images/public-profile/play-btn.svg')"
+          alt=""
+        />
+      </div>
       <img
         @click.prevent="openOverlay(image, index)"
         :loading="lazyLoading ? 'lazy' : 'eager'"
@@ -212,6 +223,11 @@ export default {
 
 .silentbox-item {
   position: relative;
+  .play-btn {
+    position: absolute;
+    top: 36%;
+    left: 40%;
+  }
   .remove-btn {
     &:before {
       transform: rotate(-45deg);
