@@ -43,7 +43,7 @@
                   <v-card-title class="title">
                     {{ $t("marketplace_sm_body_filter_title_txt") }}
                     <v-spacer></v-spacer>
-                 
+
                     <v-btn small icon @click="handleCloseFilterBtnClick">
                       <v-icon>mdi-close</v-icon>
                     </v-btn>
@@ -569,6 +569,7 @@ export default {
                 coachItem.userName = item.userName;
                 return coachItem;
               });
+
               this.coaches.push(...coaches);
 
               let locations = data.coaches
@@ -614,7 +615,7 @@ export default {
     addAllLocationMarker(locations) {
       if (process.client) {
         let coordinates = [];
-        this.removeAllMapMarker();
+        // this.removeAllMapMarker();
         locations.forEach(item => {
           let coordinate = [item.lat, item.long];
 
