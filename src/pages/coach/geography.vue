@@ -212,12 +212,12 @@ export default {
           text: this.$i18n.t("geography_table_header_text_address"),
           value: "address"
         },
-        { text: this.$i18n.t("geography_table_header_text_zip"), value: "zip" },
-        {
-          text: this.$i18n.t("geography_table_header_text_city"),
-          value: "city"
-        },
-        { text: this.$i18n.t("geography_table_col_country"), value: "cca2" },
+        // { text: this.$i18n.t("geography_table_header_text_zip"), value: "zip" },
+        // {
+        //   text: this.$i18n.t("geography_table_header_text_city"),
+        //   value: "city"
+        // },
+        // { text: this.$i18n.t("geography_table_col_country"), value: "cca2" },
         {
           text: this.$i18n.t("geography_table_header_text_actions"),
           value: "action",
