@@ -22,16 +22,18 @@ export default {
     ],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+
       // Icon Fonts
-      {
-        rel: "stylesheet",
-        href:
-          "https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css"
-      },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/icon?family=Material+Icons"
-      },
+      // {
+      //   rel: "stylesheet",
+      //   href:
+      //     "https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css"
+      // },
+      // {
+      //   rel: "stylesheet",
+      //   href: "https://fonts.googleapis.com/icon?family=Material+Icons"
+      // },
+
       // Text Fonts
       {
         rel: "stylesheet",
@@ -66,7 +68,10 @@ export default {
     ]
   },
 
-  css: [],
+  css: [
+    "@mdi/font/css/materialdesignicons.css",
+    "material-design-icons-iconfont/dist/material-design-icons.css"
+  ],
 
   // Plugins to run before rendering page
   plugins: [

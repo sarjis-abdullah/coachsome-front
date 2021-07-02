@@ -500,7 +500,6 @@ export default {
       this.footer.value = true;
     },
     onScroll(e) {
-      console.log(e);
       if (window.scrollY > 0) {
         this.footer.toggleButton = true;
       }
@@ -544,9 +543,13 @@ export default {
         marketPlaceApi(this.$axios)
           .get({ ...this.queryParams })
           .then(({ data }) => {
+            let locationList = [];
+            let coaches = [];
+
             if (data.searchedCountryName) {
               this.searchedCountryName = data.searchedCountryName;
             }
+
             if (data.coachInCountries.length) {
               this.coachInCountries = data.coachInCountries;
             }
@@ -554,38 +557,34 @@ export default {
             if (data.coaches.length) {
               this.page += 1;
               let coaches = data.coaches.map(item => {
-                let coachItem = {};
-                coachItem.name = item.name;
-                coachItem.image = item.image ? item.image : null;
-                coachItem.countReview = item.countReview;
-                coachItem.rating = item.rating;
-                coachItem.countReview = item.countReview;
-                coachItem.location =
-                  item.locations && item.locations.length > 0
-                    ? item.locations[0].zip + " " + item.locations[0].city
-                    : "";
-                coachItem.price = item.price;
-                coachItem.categories = item.categories;
-                coachItem.userName = item.userName;
-                return coachItem;
+                locationList.push(...item.locations);
+                return {
+                  name: item.name,
+                  image: item.image ? item.image : null,
+                  countReview: item.countReview,
+                  rating: item.rating,
+                  countReview: item.countReview,
+                  location:"",
+                  price: item.price,
+                  categories: item.categories,
+                  userName: item.userName
+                };
               });
 
               this.coaches.push(...coaches);
 
-              let locations = data.coaches
+              let locations = locationList
                 .map(item => {
-                  if (item.locations.length > 0) {
-                    let locationItem = {};
-                    locationItem.address = item.locations[0].address;
-                    locationItem.lat = item.locations[0].lat;
-                    locationItem.long = item.locations[0].long;
-                    locationItem.userImage = item.locations[0].userImage;
-                    return locationItem;
-                  }
+                  return {
+                    address: item.address,
+                    lat: item.lat,
+                    long: item.long,
+                    userImage: item.userImage
+                  };
                 })
                 .filter(item => (item != null ? true : false));
-
               this.addAllLocationMarker(locations);
+
               $state.loaded();
             } else {
               $state.complete();
