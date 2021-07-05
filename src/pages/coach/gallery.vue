@@ -297,10 +297,6 @@ export default {
         })
         .catch(() => {});
     },
-    // setImage: function(output) {
-    //   this.imageUpload.hasImage = true;
-    //   this.imageUpload.image = output;
-    // },
     uploadImage(croppedImage) {
       let payload = {
         type: "image",
