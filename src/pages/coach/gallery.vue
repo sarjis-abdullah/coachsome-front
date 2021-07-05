@@ -25,13 +25,16 @@
             <v-col cols="12" md="6">
               <v-form ref="videoForm" v-model="videoForm.valid" lazy-validation>
                 <v-text-field
+                  label="Enter a valid youtube or vimoe url"
                   :rules="[
                     v => !!v || 'Youtube or vimoe url is required',
                     v =>
                       /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/.test(
                         v
                       ) ||
-                      /^(http\:\/\/|https\:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/.test(v) ||
+                      /^(http\:\/\/|https\:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/.test(
+                        v
+                      ) ||
                       'Url is not valid'
                   ]"
                   v-model="url.video"
@@ -58,93 +61,74 @@
           </div>
         </v-col>
         <v-col cols="12" md="8">
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                readonly
-                @click="imageUpload.dialog = true"
-                solo
-                dense
-              ></v-text-field>
-              <!-- Image Upload Dialog -->
-              <v-dialog
-                v-model="imageUpload.dialog"
-                persistent
-                max-width="600px"
-                scrollable
+          <v-row justify="start" align="center">
+            <v-col cols="12" md="4">
+              <div
+                class="drop-zone"
+                @dragenter="dragging = true"
+                @dragleave="dragging = false"
               >
-                <v-card>
-                  <v-card-title>
-                    <span class="headline">Upload Image</span>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" class="text-center">
-                          <client-only>
-                            <image-uploader
-                              :preview="true"
-                              :className="[
-                                'fileinput',
-                                { 'fileinput--loaded': imageUpload.hasImage }
-                              ]"
-                              capture="environment"
-                              :debug="1"
-                              doNotResize="gif"
-                              :autoRotate="true"
-                              outputFormat="verbose"
-                              @input="setImage"
-                            >
-                              <label for="fileInput" slot="upload-label">
-                                <figure>
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                  >
-                                    <path
-                                      class="path1"
-                                      d="M9.5 19c0 3.59 2.91 6.5 6.5 6.5s6.5-2.91 6.5-6.5-2.91-6.5-6.5-6.5-6.5 2.91-6.5 6.5zM30 8h-7c-0.5-2-1-4-3-4h-8c-2 0-2.5 2-3 4h-7c-1.1 0-2 0.9-2 2v18c0 1.1 0.9 2 2 2h28c1.1 0 2-0.9 2-2v-18c0-1.1-0.9-2-2-2zM16 27.875c-4.902 0-8.875-3.973-8.875-8.875s3.973-8.875 8.875-8.875c4.902 0 8.875 3.973 8.875 8.875s-3.973 8.875-8.875 8.875zM30 14h-4v-2h4v2z"
-                                    ></path>
-                                  </svg>
-                                </figure>
-                                <span class="upload-caption">
-                                  {{
-                                    imageUpload.hasImage
-                                      ? "Replace"
-                                      : "Click to upload"
-                                  }}
-                                </span>
-                              </label>
-                            </image-uploader>
-                          </client-only>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="red" text @click="imageUpload.dialog = false"
-                      >Close</v-btn
-                    >
-                    <v-btn
-                      color="primary-light-1"
-                      :loading="isLoading"
-                      v-if="imageUpload.hasImage"
-                      text
-                      @click="uploadImage()"
-                      >Save</v-btn
-                    >
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-              <!-- Image Upload Dialog -->
+                <div class="drop-zone__info" @drag="showFileChooser">
+                  <div class="drop-zone__icon">
+                    <img
+                      :src="require('@/assets/images/gallery/upload.svg')"
+                      alt=""
+                    />
+                  </div>
+                  <div class="drop-zone__title mt-5">
+                    Drag a photo or click to
+                  </div>
+                  <div class="drop-zone__browse-btn">
+                    Browse
+                  </div>
+                  <div class="drop-zone__limit-info"></div>
+                </div>
+                <input
+                  ref="fileInput"
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  @change="setImage"
+                />
+              </div>
             </v-col>
-            <v-col cols="12" md="6">
-              <v-btn color="primary-light-1" dark>{{
-                $t("btn_label_add")
-              }}</v-btn>
+            <v-col cols="12" md="8" v-if="imgSrc">
+              <v-card outlined elevation="0" color="transparent">
+                <v-card-text>
+                  <cropper
+                    classname="cropper"
+                    :src="imgSrc"
+                    imageClassname="imageCropClassCustom"
+                    backgroundClassname="backgroundCropClassCustom"
+                    :stencil-props="{
+                      minAspectRatio: 1 / 1,
+                      maxAspectRatio: 1 / 1
+                    }"
+                    ref="imageCropper"
+                  ></cropper>
+                </v-card-text>
+                <v-card-actions class="justify-center">
+                  <v-btn
+                    @click="handleImageUploadBtnClick"
+                    class="text-normal"
+                    text
+                    depressed
+                    :loading="isLoading"
+                    color="primary-light-1"
+                    dark
+                    >{{ $t("Upload") }}</v-btn
+                  >
+                  <v-btn
+                    @click="handleCancelBtnClick"
+                    class="text-normal"
+                    text
+                    depressed
+                    color="red"
+                    dark
+                    >{{ $t("Cancel") }}</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
             </v-col>
           </v-row>
         </v-col>
@@ -200,15 +184,20 @@
 import { coachAssetApi } from "@/api";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import DarkboxGallery from "@/components/darkbox/Gallery";
-
+import { Cropper } from "vue-advanced-cropper";
+import "vue-advanced-cropper/dist/style.css";
 export default {
   layout: "coach",
   components: {
     ClientBackFooter,
-    DarkboxGallery
+    DarkboxGallery,
+    Cropper
   },
   data() {
     return {
+      file: "",
+      dragging: false,
+      imgSrc: null,
       videoForm: {
         valid: true,
         isLoading: false
@@ -230,6 +219,61 @@ export default {
     };
   },
   methods: {
+    handleCancelBtnClick() {
+      this.imgSrc = null;
+    },
+    handleImageUploadBtnClick() {
+      const imageCropperResult = this.$refs.imageCropper.getResult();
+      if (imageCropperResult.canvas) {
+        imageCropperResult.canvas.toBlob(blob => {
+          let reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = () => {
+            this.uploadImage(reader.result);
+          };
+        }, "image/png");
+      }
+    },
+    showFileChooser() {
+      this.$refs.fileInput.click();
+    },
+    setImage(e) {
+      let files = e.target.files || e.dataTransfer.files;
+      if (!files.length) {
+        this.dragging = false;
+        return;
+      }
+      const file = e.target.files[0];
+      if (file.type.indexOf("image/") === -1) {
+        alert("Please select an image file");
+        return;
+      }
+
+      if (file.size >= 10240000) {
+        alert("Please check file size no over 10 MB.");
+        this.dragging = false;
+        return;
+      }
+
+      if (!file.type.match("image/jpeg|image/jpg|image/png|image/gif")) {
+        alert("File type should be jpg, jpeg or png");
+        this.dragging = false;
+        return;
+      }
+
+      this.file = file;
+      this.dragging = false;
+      if (typeof FileReader === "function") {
+        const reader = new FileReader();
+        reader.onload = event => {
+          this.imgSrc = event.target.result;
+          this.$emit("image-selected");
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert("Sorry, FileReader API not supported");
+      }
+    },
     setImageAndVideoProgress(val) {
       this.$store.dispatch("pageProgress/setImageAndVideoProgress", val);
     },
@@ -253,14 +297,14 @@ export default {
         })
         .catch(() => {});
     },
-    setImage: function(output) {
-      this.imageUpload.hasImage = true;
-      this.imageUpload.image = output;
-    },
-    uploadImage() {
+    // setImage: function(output) {
+    //   this.imageUpload.hasImage = true;
+    //   this.imageUpload.image = output;
+    // },
+    uploadImage(croppedImage) {
       let payload = {
         type: "image",
-        image: this.imageUpload.image.dataUrl
+        image: croppedImage
       };
       this.isLoading = true;
       coachAssetApi(this.$axios)
@@ -269,7 +313,8 @@ export default {
           this.links.push(Object.assign(data.item, { src: data.item.url }));
           this.$toast.success(data.message);
           this.setImageAndVideoProgress(data.progress);
-          this.imageUpload.dialog = false;
+          this.imgSrc = null;
+          this.$refs.fileInput.value = null;
         })
         .catch(() => {})
         .finally(() => {
@@ -335,6 +380,52 @@ export default {
 .coach-gallery-page {
   background: $body-bg;
   height: 100%;
+
+  .drop-zone {
+    width: 100%;
+    height: 200px;
+    position: relative;
+    border: 2px dashed #eee;
+    &__info {
+      color: #a8a8a8;
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      transform: translate(0, -50%);
+      text-align: center;
+      .drop-zone__title {
+        color: #787878;
+      }
+      .drop-zone__limit-info {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+      }
+      .drop-zone__over {
+        background: #5c5c5c;
+        opacity: 0.8;
+      }
+      .drop-zone__browse-btn {
+        font-family: $font-family;
+        font-size: 14px;
+        line-height: 19px;
+        text-align: center;
+        color: $primary-light-1;
+      }
+    }
+    input {
+      position: absolute;
+      cursor: pointer;
+      top: 0px;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+    }
+  }
+
   .gallery-page {
     #fileInput {
       display: none;

@@ -147,10 +147,6 @@
                 :src="imgSrc"
                 imageClassname="imageCropClassCustom"
                 backgroundClassname="backgroundCropClassCustom"
-                :stencil-props="{
-                  minAspectRatio: 9 / 16,
-                  maxAspectRatio: 9 / 16
-                }"
                 ref="portraitCropper"
               ></cropper>
               <div
