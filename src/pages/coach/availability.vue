@@ -21,65 +21,74 @@
           </div>
         </v-col>
         <v-col cols="12" md="9">
-          <v-row v-for="(week, weekIndex) in defaultWeeks" :key="weekIndex">
-            <v-row>
-              <v-col
-                cols="12"
-                md="6"
-                v-for="(day, dayIndex) in week.days"
-                :key="dayIndex"
-              >
-                <div>{{ $t(day.t_key) }}</div>
-                <v-row>
-                  <v-col
-                    cols="2"
-                    md="2"
-                    v-for="(time, timeIndex) in day.times"
-                    :key="timeIndex"
-                  >
-                    <v-btn
-                      @click.stop="
-                        changeStatusForDefaultTime(
-                          !time.status,
-                          timeIndex,
-                          dayIndex,
-                          weekIndex
-                        )
-                      "
-                      x-small
-                      :color="time.status == 0 ? 'light' : 'orange lighten-4'"
-                      class="mr-2 mt-2"
-                      >{{ time.text }}</v-btn
-                    >
-                  </v-col>
-                </v-row>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="12" md="6" class="ml-md-10 d-flex align-center">
-                <v-btn
-                  dark
-                  color="primary-light-1"
-                  class="mr-3 mt-4"
-                  hide-details
-                  @click="saveDefaultAvailability"
-                  >{{ $t("profile_save_btn") }}</v-btn
+          <div id="selectable-area">
+            <v-row v-for="(week, weekIndex) in defaultWeeks" :key="weekIndex">
+              <v-row>
+                <v-col
+                  cols="12"
+                  md="6"
+                  v-for="(day, dayIndex) in week.days"
+                  :key="dayIndex"
                 >
-                <v-switch
-                  hide-details
-                  v-model="week.is_fewer_time"
-                  :label="
-                    week.is_fewer_time
-                      ? $t('input_label_all_time_slot')
-                      : $t('input_label_fewer_time_slot')
-                  "
-                  @change="fewerSlotForDefaultTime(weekIndex)"
-                  color="primary-light-1"
-                />
-              </v-col>
+                  <div>{{ $t(day.t_key) }}</div>
+                  <v-row>
+                    <v-col
+                      cols="2"
+                      md="2"
+                      v-for="(time, timeIndex) in day.times"
+                      :key="timeIndex"
+                    >
+                      <v-btn
+                        @click.stop="
+                          changeStatusForDefaultTime(
+                            !time.status,
+                            timeIndex,
+                            dayIndex,
+                            weekIndex
+                          )
+                        "
+                        x-small
+                        :color="time.status == 0 ? 'light' : 'orange lighten-4'"
+                        class="mr-2 mt-2"
+                      >
+                        {{ time.text }}
+                        <span
+                          class="selectable-item"
+                          :data-w="weekIndex"
+                          :data-d="dayIndex"
+                          :data-t="timeIndex"
+                        ></span>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col cols="12" md="6" class="ml-md-10 d-flex align-center">
+                  <v-btn
+                    dark
+                    color="primary-light-1"
+                    class="mr-3 mt-4"
+                    hide-details
+                    @click="saveDefaultAvailability"
+                    >{{ $t("profile_save_btn") }}</v-btn
+                  >
+                  <v-switch
+                    hide-details
+                    v-model="week.is_fewer_time"
+                    :label="
+                      week.is_fewer_time
+                        ? $t('input_label_all_time_slot')
+                        : $t('input_label_fewer_time_slot')
+                    "
+                    @change="fewerSlotForDefaultTime(weekIndex)"
+                    color="primary-light-1"
+                  />
+                </v-col>
+              </v-row>
             </v-row>
-          </v-row>
+          </div>
         </v-col>
       </v-row>
 
@@ -235,7 +244,7 @@
 import * as R from "ramda";
 import { coachAvailabilityApi } from "@/api";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
-
+import DragSelect from "dragselect";
 export default {
   layout: "coach",
   components: {
@@ -537,14 +546,31 @@ export default {
       ]
     };
   },
-  created() {
+  created() {},
+  mounted() {
     coachAvailabilityApi(this.$axios)
       .availabilityPageTrigger()
       .then(response => {
         this.defaultWeeks = response.data.default_weeks;
         this.filterableId = response.data.filterable_id_list;
         this.weeks = response.data.weeks;
-        console.log(response.data.default_weeks);
+        this.$nextTick(() => {
+          const ds = new DragSelect({
+            selectables: document.querySelectorAll(".selectable-item"),
+            area: document.getElementById("selectable-area")
+          });
+
+          ds.subscribe("callback", ({ items }) => {
+            if (items.length > 1) {
+              items.forEach(elm => {
+                let time = this.defaultWeeks[elm.getAttribute("data-w")].days[
+                  elm.getAttribute("data-d")
+                ].times[elm.getAttribute("data-t")];
+                time.status = 1;
+              });
+            }
+          });
+        });
       })
       .catch(error => {
         console.log(error);

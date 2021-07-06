@@ -81,7 +81,6 @@ export default {
     { src: "~/plugins/vue-infinite-loading", mode: "client" },
     { src: "~/plugins/vue-scroll", mode: "client" },
     { src: "~/plugins/vue2-transitions", mode: "client" },
-    { src: "~/plugins/vue-silentbox", mode: "client" },
     { src: "~/plugins/vue-read-more", mode: "client" },
     { src: "~/plugins/vue-easy-lightbox", mode: "client" },
     { src: "~/plugins/country-flag", mode: "client" },
@@ -89,12 +88,14 @@ export default {
     { src: "~/plugins/vue-phone-number-input", mode: "client" },
     { src: "~/plugins/tiptap-vuetify", mode: "client" },
     { src: "~/plugins/vue-js-toggle-button", mode: "client" },
-    { src: "~/plugins/vue-tribute.js", mode: "client" },
+    { src: "~/plugins/vue-tribute", mode: "client" },
     { src: "~/plugins/vuelidate" }
   ],
 
-  // Auto import components
-  // components: true,
+  /**
+   * Auto import components
+   */
+  components: false,
 
   // Modules for dev and build
   buildModules: [
@@ -180,13 +181,10 @@ export default {
       }
     ],
     [
-      "@nuxtjs/toast",
+      "vue-toastification/nuxt",
       {
-        position: "top-center",
-        iconPack: "material",
-        theme: "toasted-primary",
-        duration: 7000,
-        icon: "info_outline"
+        draggable: false,
+        position: "top-center"
       }
     ],
     [
