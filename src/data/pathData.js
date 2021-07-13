@@ -6,7 +6,7 @@ export default {
     booking: "/booking",
     bookingNew: "/booking/packages/:packageId",
     bookingPackage: id => "/packages/" + id,
-    blog: "/blogs",
+    blog: "/blog",
     blogCategory: "/blogs/categories/{id}",
     blogPost: "/posts/{title}",
     baseReviews: "/reviews",

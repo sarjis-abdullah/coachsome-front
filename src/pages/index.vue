@@ -209,6 +209,14 @@
                           <img src="@/assets/images/home/logos/text-mate.png" />
                         </div>
                       </swiper-slide>
+                      <swiper-slide class="d-flex justify-center">
+                        <div :style="{ marginTop: '30px' }">
+                          <img
+                            :style="{ width: '250px' }"
+                            src="@/assets/images/home/logos/innovationsfonden.png"
+                          />
+                        </div>
+                      </swiper-slide>
                       <div class="swiper-pagination" slot="pagination"></div>
                       <div
                         class="swiper-button-prev"

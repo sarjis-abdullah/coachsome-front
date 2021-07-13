@@ -130,6 +130,11 @@ export default {
     LineChart,
     DialogLoading
   },
+    head() {
+    return {
+      title: "Dashboard",   
+    };
+  },
   data() {
     return {
       currencyService,

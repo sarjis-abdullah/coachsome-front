@@ -19,5 +19,20 @@ export default axios => ({
         page_group_name: groupName
       }
     });
+  },
+  getBlogCategory: ({ locale }) => {
+    return axios.get(
+      `tikcms/category/translations/by/language/all/show?language=${locale}`
+    );
+  },
+  getBlogByCategory: ({ category }) => {
+    return axios.get(
+      `tikcms/blog/individual/category/published/show?blog_category=${category}`
+    );
+  },
+  getBlogPost: () => {
+    return axios.get(
+      `tikcms/blog/all/published/show`
+    );
   }
 });

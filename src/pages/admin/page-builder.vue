@@ -14,6 +14,11 @@ import { pageBuilderApi } from "@/api";
 
 export default {
   layout: "admin",
+    head() {
+    return {
+      title: "Cms"
+    };
+  },
   data() {
     return {};
   },
