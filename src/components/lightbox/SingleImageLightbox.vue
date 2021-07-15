@@ -170,6 +170,7 @@ export default {
       margin-top: -50px;
       margin-right: -5px;
       width: 44px;
+      background: transparent;
     }
   }
 }

@@ -8,7 +8,7 @@
         :src="profileImage"
         @click="gotTo(userName)"
       >
-        <v-card-title>
+        <v-card-title class="pl-2 pb-2 ">
           <v-btn
             v-if="badge.key == badgeData.TOP"
             class="white--text text-normal px-10"

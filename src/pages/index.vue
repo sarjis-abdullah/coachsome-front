@@ -1032,7 +1032,7 @@ export default {
                   : "",
               price: item.price,
               categories: item.categories,
-              badgeKey: item.badgeKey,
+              badge: item.badge,
               userName: item.userName
             };
           });
