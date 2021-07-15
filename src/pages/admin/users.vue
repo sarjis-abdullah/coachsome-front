@@ -233,6 +233,27 @@
                       </v-col>
                     </v-row>
 
+                    <!-- Coach badge -->
+                    <v-row>
+                      <v-col cols="12" md="6">
+                        <div class="section-title pb-2">Coach badge</div>
+                        <div class="section-description">
+                          Select the badge the coach should have. There are four
+                          levels total.
+                        </div>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <v-select
+                          solo
+                          v-model="userEdit.data.badgeId"
+                          :items="badges"
+                          item-text="name"
+                          item-value="id"
+                          label="Select badge"
+                        ></v-select>
+                      </v-col>
+                    </v-row>
+
                     <!-- User Status -->
                     <v-row>
                       <v-col cols="12" md="6">
@@ -285,13 +306,17 @@
 import { imageService } from "@/services";
 import { adminUserApi, adminImpersonateApi } from "@/api";
 import { pathData } from "@/data";
+import VuePhoneNumberInput from "vue-phone-number-input";
 
 export default {
   layout: "admin",
-  components: {},
+  components: {
+    VuePhoneNumberInput
+  },
   data() {
     return {
       search: "",
+      badges: [],
       activityStatusList: [],
       starStatusList: [],
       userEdit: {
@@ -314,7 +339,8 @@ export default {
           },
           starStatusId: null,
           activityStatusId: null,
-          reason: null
+          reason: null,
+          badgeId: null
         }
       },
       table: {
@@ -340,24 +366,31 @@ export default {
     };
   },
   created() {
-    adminUserApi(this.$axios)
-      .getUserList()
-      .then(({ data }) => {
-        if (data.activityStatusList) {
-          this.activityStatusList = data.activityStatusList;
-        }
-
-        if (data.starStatusList) {
-          this.starStatusList = data.starStatusList;
-        }
-
-        if (data.users) {
-          this.makeUserTableRow(data.users);
-        }
-      })
-      .catch(() => {});
+    this.getUser();
   },
   methods: {
+    getUser() {
+      adminUserApi(this.$axios)
+        .getUserList()
+        .then(({ data }) => {
+          if (data.activityStatusList) {
+            this.activityStatusList = data.activityStatusList;
+          }
+
+          if (data.badges) {
+            this.badges = data.badges;
+          }
+
+          if (data.starStatusList) {
+            this.starStatusList = data.starStatusList;
+          }
+
+          if (data.users) {
+            this.makeUserTableRow(data.users);
+          }
+        })
+        .catch(() => {});
+    },
     updateUser() {
       let payload = {};
       payload.id = this.userEdit.data.id;
@@ -369,6 +402,7 @@ export default {
       payload.activityStatusId = this.userEdit.data.activityStatusId;
       payload.activityStatusReason = this.userEdit.data.reason;
       payload.ranking = this.userEdit.data.ranking;
+      payload.badgeId = this.userEdit.data.badgeId;
       adminUserApi(this.$axios)
         .updateUser(payload)
         .then(({ data }) => {
@@ -401,6 +435,7 @@ export default {
             rowItem.type = data.user.type;
             rowItem.status = data.user.status;
             rowItem.ranking = data.user.ranking;
+            rowItem.badgeId = data.user.badgeId;
             rowItem.booking = data.user.booking;
             rowItem.decline = data.user.declined;
             rowItem.package = data.user.packageCount;
@@ -426,6 +461,7 @@ export default {
       this.userEdit.data.activityStatusId = "";
       this.userEdit.data.reason = "";
       this.userEdit.data.ranking = "";
+      this.userEdit.data.badgeId = null;
     },
     makeUserTableRow(users) {
       this.table.rows = [];
@@ -441,6 +477,7 @@ export default {
           type: item.type,
           status: item.status,
           ranking: item.ranking,
+          badgeId: item.badgeId,
           booking: item.booking,
           decline: item.declined,
           package: item.packageCount,
@@ -471,6 +508,7 @@ export default {
         this.userEdit.data.starStatusId = selectedRow.starStatusId;
         this.userEdit.data.reason = selectedRow.activityStatusReason;
         this.userEdit.data.ranking = selectedRow.ranking;
+        this.userEdit.data.badgeId = selectedRow.badgeId;
         this.userEdit.dialog = true;
       }
     },

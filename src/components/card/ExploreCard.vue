@@ -7,7 +7,42 @@
         aspect-ratio="1"
         :src="profileImage"
         @click="gotTo(userName)"
-      ></v-img>
+      >
+        <v-card-title>
+          <v-btn
+            v-if="badge.key == badgeData.TOP"
+            class="white--text text-normal px-10"
+            depressed
+            color="#EDB041"
+          >
+            {{ $t(badge.tKey) }}
+          </v-btn>
+          <v-btn
+            v-if="badge.key == badgeData.POPULAR"
+            class="white--text text-normal px-10"
+            depressed
+            color="#9FAEC2"
+          >
+            {{ $t(badge.tKey) }}
+          </v-btn>
+          <v-btn
+            v-if="badge.key == badgeData.TRENDING"
+            class="white--text text-normal px-10"
+            depressed
+            color="#D87D54"
+          >
+            {{ $t(badge.tKey) }}
+          </v-btn>
+          <v-btn
+            v-if="badge.key == badgeData.RISING"
+            class="white--text text-normal px-10"
+            depressed
+            color="#49556A"
+          >
+            {{ $t(badge.tKey) }}
+          </v-btn>
+        </v-card-title>
+      </v-img>
       <v-card-text>
         <div class="explore-card__content">
           <div class="d-flex flex-column">
@@ -47,7 +82,7 @@
 </template>
 
 <script>
-import { profileData, pathData } from "@/data";
+import { profileData, pathData, badgeData } from "@/data";
 import { currencyService } from "@/services";
 
 export default {
@@ -77,11 +112,15 @@ export default {
     },
     userName: {
       type: String
+    },
+    badge: {
+      type: Object
     }
   },
   data() {
     return {
-      currencyService
+      currencyService,
+      badgeData: { ...badgeData }
     };
   },
   methods: {

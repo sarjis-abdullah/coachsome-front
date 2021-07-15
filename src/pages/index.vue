@@ -210,9 +210,9 @@
                         </div>
                       </swiper-slide>
                       <swiper-slide class="d-flex justify-center">
-                        <div :style="{ marginTop: '30px' }">
+                        <div :style="{ marginTop: '35px' }">
                           <img
-                            :style="{ width: '250px' }"
+                            :style="{ maxWidth: '250px',paddingLeft:'40px',paddingRight:'40px' }"
                             src="@/assets/images/home/logos/innovationsfonden.png"
                           />
                         </div>
@@ -1032,6 +1032,7 @@ export default {
                   : "",
               price: item.price,
               categories: item.categories,
+              badgeKey: item.badgeKey,
               userName: item.userName
             };
           });

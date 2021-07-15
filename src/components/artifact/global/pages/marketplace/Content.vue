@@ -564,10 +564,11 @@ export default {
                   countReview: item.countReview,
                   rating: item.rating,
                   countReview: item.countReview,
-                  location:"",
+                  location: "",
                   price: item.price,
                   categories: item.categories,
-                  userName: item.userName
+                  userName: item.userName,
+                  badge: item.badge,
                 };
               });
 

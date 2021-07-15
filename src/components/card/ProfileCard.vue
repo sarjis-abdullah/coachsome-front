@@ -32,7 +32,7 @@
             </v-btn> -->
           </div>
           <div class="profile-card__avatar">
-            <single-image-lightbox :src="image" :title="name" />
+            <single-image-lightbox :src="image" :title="name" :badge-key="badgeKey"/>
           </div>
           <div class="profile-card__empty-place"></div>
         </div>
@@ -136,7 +136,8 @@ export default {
     categories: Array,
     fb_link: String,
     twitter_link: String,
-    instagram_link: String
+    instagram_link: String,
+    badgeKey: String
   },
   data() {
     return {

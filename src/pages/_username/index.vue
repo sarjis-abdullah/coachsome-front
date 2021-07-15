@@ -33,11 +33,16 @@
                     </div>
                   </v-card-text>
                   <v-card-actions>
-                    <div class="d-flex justify-space-between align-center flex-wrap" :style="{width:'100%'}">
+                    <div
+                      class="d-flex justify-space-between align-center flex-wrap"
+                      :style="{ width: '100%' }"
+                    >
                       <div class="flex-grow-1 text-center text-lg-left">
                         <div>{{ $t("text_got_a_question") }}</div>
                       </div>
-                      <div class="flex-grow-1 text-center text-lg-right text-sm-center">
+                      <div
+                        class="flex-grow-1 text-center text-lg-right text-sm-center"
+                      >
                         <v-btn
                           class="blue-grey--text"
                           dark
@@ -509,6 +514,7 @@ export default {
         userInfo.userName = data.user_info.userName;
         userInfo.firstName = data.user_info.firstName;
         userInfo.lastName = data.user_info.lastName;
+        profileCard.badgeKey = data.user_info.badgeKey;
       }
 
       // Services
@@ -596,7 +602,6 @@ export default {
         content: this.questionBox.question,
         type: "text",
         created_at: new Date().toISOString()
-
       };
       messageApi(this.$axios)
         .store(payload)
