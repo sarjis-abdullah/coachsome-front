@@ -43,7 +43,7 @@ import GooglePlaceSearch from "@/components/geography/GooglePlaceSearch";
 export default {
   props: ["locations"],
   components: {
-    GooglePlaceSearch,
+    GooglePlaceSearch
   },
   data: () => ({
     map: null,
@@ -53,18 +53,18 @@ export default {
     long: "",
     lat: "",
     googlePlaceSearch: {
-      value: "",
+      value: ""
     },
-    coordinates: [],
+    coordinates: []
   }),
   computed: {
     isEnableSubmitBtn() {
-      if (this.zip && this.city && this.address) {
+      if (this.city && this.address) {
         return true;
       } else {
         return false;
       }
-    },
+    }
   },
   mounted() {
     this.initMap();
@@ -87,7 +87,7 @@ export default {
         city: this.city,
         address: this.address,
         long: this.long,
-        lat: this.lat,
+        lat: this.lat
       };
       this.$emit("submit", location);
     },
@@ -99,17 +99,18 @@ export default {
         {}
       ).addTo(this.map);
 
-      this.locations.forEach((item) => {
+      this.locations.forEach(item => {
         let coordinate = [item.lat, item.long];
         this.coordinates.push(coordinate);
         window.L.marker(coordinate)
           .addTo(this.map)
           .bindPopup(item.address)
           .openPopup()
-          .on("click", (e) => {
+          .on("click", e => {
             let l = this.locations.find(
-              (item) => item.lat == e.latlng.lat && item.lang == e.latlng.lang
+              item => item.lat == e.latlng.lat && item.lang == e.latlng.lang
             );
+            console.log(l);
             if (l) {
               this.address = l.address;
               this.zip = l.zip;
@@ -125,8 +126,8 @@ export default {
         let bounds = new window.L.LatLngBounds([this.coordinates]);
         this.map.fitBounds(bounds);
       }, 3);
-    },
-  },
+    }
+  }
 };
 </script>
 
