@@ -71,7 +71,7 @@ export default {
       page: 1,
       totalReviewerCount: 0,
       overallRating: 0,
-      reviewers: [],
+      reviewers: []
     };
   },
   mounted() {
@@ -92,14 +92,16 @@ export default {
             $state.complete();
           }
         })
-        .catch(() => {})
-    },
-  },
+        .catch(() => {});
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .base-reviews {
+  background: $body-bg;
+  height: 100%;
   .top-title {
     font-family: Open Sans;
     font-style: normal;

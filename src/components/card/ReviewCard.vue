@@ -8,6 +8,19 @@
         <div href="#" class="card-review-title">
           <span>{{ title || $t("profile_card_title_default_txt") }}</span>
         </div>
+        <div v-if="reviewee" class="d-flex align-center">
+          <div class="ml-9 mr-5" :style="{ color: '#6F8098' }">Review</div>
+          <div>
+            <v-btn
+              class="text-normal"
+              color="primary-light-1"
+              text
+              @click="handleRevieweeBtnClick(reviewee.userName)"
+            >
+              {{ reviewee.profileName }}
+            </v-btn>
+          </div>
+        </div>
       </div>
       <div class="card-review__date">
         {{ date }}
@@ -41,7 +54,7 @@
 </template>
 
 <script>
-import { profileData } from "@/data";
+import { profileData, pathData } from "@/data";
 export default {
   components: {},
   props: {
@@ -58,6 +71,10 @@ export default {
     },
     date: {
       type: String
+    },
+    reviewee: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -70,6 +87,11 @@ export default {
     this.assignImage();
   },
   methods: {
+    handleRevieweeBtnClick(username) {
+      this.$router.push(
+        this.localePath(pathData.pages.publicProfile(username))
+      );
+    },
     assignImage() {
       this.avatarImage = profileData.PROFILE_DEFAULT_IMAGE;
       if (this.image) {

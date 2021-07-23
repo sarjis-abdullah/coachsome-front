@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-    <div class="review-action">
+  <div class="review-action">
+    <v-container>
       <v-snackbar v-model="snackbar.value" :multi-line="snackbar.multiLine">
         {{ snackbar.text }}
         <template v-slot:action="{ attrs }">
@@ -96,8 +96,8 @@
           </v-card>
         </v-col>
       </v-row>
-    </div>
-  </v-container>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -106,9 +106,9 @@ import { baseReviewApi } from "@/api";
 import { pathData } from "@/data";
 
 export default {
-  layout:"common",
+  layout: "common",
   components: {
-    NotFound,
+    NotFound
   },
   data() {
     return {
@@ -117,15 +117,15 @@ export default {
       snackbar: {
         multiLine: true,
         value: false,
-        text: `I'm a multi-line snackbar.`,
+        text: `I'm a multi-line snackbar.`
       },
       profile: {
         image: "",
         nameAvatar: "",
-        name: "",
+        name: ""
       },
       rating: 0,
-      reviewText: "",
+      reviewText: ""
     };
   },
   computed: {
@@ -134,12 +134,12 @@ export default {
     },
     isSubmitBtnDisabled() {
       return !this.reviewText || !this.rating;
-    },
+    }
   },
   created() {
     baseReviewApi(this.$axios)
       .getProfileInfo({
-        userName: this.$route.params.username,
+        userName: this.$route.params.username
       })
       .then(({ data }) => {
         this.isShowingNotFound = false;
@@ -168,12 +168,12 @@ export default {
           .store({
             userName: this.$route.params.username,
             rating: this.rating,
-            text: this.reviewText,
+            text: this.reviewText
           })
           .then(() => {
             this.$router.push({
               path: pathData.pages.baseReviewSuccess,
-              query: { userName: this.$route.params.username },
+              query: { userName: this.$route.params.username }
             });
           })
           .catch(({ response }) => {
@@ -183,13 +183,15 @@ export default {
             this.isLoading = false;
           });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style lang="scss">
 .review-action {
+  background: $body-bg;
+  height: 100%;
   .v-text-field .v-label {
     overflow: visible;
     text-overflow: auto;
