@@ -37,7 +37,7 @@
           <div class="profile-card__empty-place"></div>
         </div>
 
-        <div class="profile-card__middle">
+        <div class="profile-card__middle mt-5">
           <h4 class="profile-card__name">{{ name }}</h4>
           <div v-if="rating_count">
             <div class="profile-card__rating">
