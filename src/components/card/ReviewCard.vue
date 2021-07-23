@@ -9,7 +9,9 @@
           <span>{{ title || $t("profile_card_title_default_txt") }}</span>
         </div>
         <div v-if="reviewee" class="d-flex align-center">
-          <div class="ml-9 mr-5" :style="{ color: '#6F8098' }">Review</div>
+          <div class="ml-5 mr-3" :style="{ color: '#6F8098' }">
+            {{ $t("review_txt_review") }}
+          </div>
           <div>
             <v-btn
               class="text-normal"
@@ -88,8 +90,9 @@ export default {
   },
   methods: {
     handleRevieweeBtnClick(username) {
-      this.$router.push(
-        this.localePath(pathData.pages.publicProfile(username))
+      window.open(
+        this.localePath(pathData.pages.publicProfile(username)),
+        "_blank"
       );
     },
     assignImage() {
