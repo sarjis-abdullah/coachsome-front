@@ -2,19 +2,22 @@
   <div class="card-review">
     <div class="card-review__header">
       <div class="d-flex align-center">
-        <v-avatar class="mr-2">
-          <img alt="Avatar" :src="avatarImage" />
-        </v-avatar>
-        <div href="#" class="card-review-title">
-          <span>{{ title || $t("profile_card_title_default_txt") }}</span>
+        <div>
+          <v-avatar class="mr-2">
+            <img alt="Avatar" :src="avatarImage" />
+          </v-avatar>
         </div>
-        <div v-if="reviewee" class="d-flex align-center">
-          <div class="ml-5 mr-3" :style="{ color: '#6F8098' }">
+        <div class="d-md-flex">
+          <div class="card-review-title">
+            {{ title || $t("profile_card_title_default_txt") }}
+          </div>
+          <div class="px-md-5 px-0" v-if="reviewee" :style="{ color: '#6F8098' }">
             {{ $t("review_txt_review") }}
           </div>
-          <div>
+          <div v-if="reviewee">
             <v-btn
-              class="text-normal"
+              class="text-normal px-0"
+              height="auto"
               color="primary-light-1"
               text
               @click="handleRevieweeBtnClick(reviewee.userName)"
