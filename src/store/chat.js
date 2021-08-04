@@ -26,6 +26,9 @@ export const mutations = {
   SET_TOTAL_NEW_MESSAGE_COUNT(state, totalNewMessageCount) {
     state.totalNewMessageCount = totalNewMessageCount;
   },
+  INCREMENT_TOTAL_NEW_MESSAGE_COUNT(state) {
+    state.totalNewMessageCount += 1;
+  },
   PUSH_MESSAGE(state, message) {
     state.messages.push(message);
   },
@@ -48,19 +51,25 @@ export const mutations = {
     state.messages = [];
   },
   INCREMENT_CONTACT_USER_NEW_MESSAGE_COUNT(state, payload) {
-    const { email } = payload;
-    const contactUser = state.contacts.find(c => c.email == email);
-    if (contactUser) {
-      contactUser.newMessageCount++;
-    }
+    const { id } = payload;
+    state.contacts.forEach(item => {
+      if (item.id == id) {
+        item.newMessageCount += 1;
+      }
+    });
+    console.log("SenderId -> ", id);
+    console.log("SelectedId -> ", state.selectedContactUser.id);
+  },
+  REFRESH_CONTACT_USER_NEW_MESSAGE_COUNT(state, payload) {
+    const { id } = payload;
+    state.contacts.forEach(item => {
+      if (item.id == id) {
+        item.newMessageCount = 0;
+      }
+    });
   },
   REFRESH_TOTAL_NEW_MESSAGE_COUNT(state) {
     state.totalNewMessageCount = 0;
-    state.contacts.forEach(item => {
-      if (item.newMessageCount) {
-        state.totalNewMessageCount += item.newMessageCount;
-      }
-    });
   },
   RESET_CONTACT_USER_NEW_MESSAGE_COUNT(state, payload) {
     const { email } = payload;
@@ -95,9 +104,14 @@ export const actions = {
   destroyMessages(context) {
     context.commit("DESTROY_MESSAGES");
   },
+  incrementTotalNewMessageCount(context) {
+    context.commit("INCREMENT_TOTAL_NEW_MESSAGE_COUNT");
+  },
   incrementContactUserNewMessageCount(context, payload) {
     context.commit("INCREMENT_CONTACT_USER_NEW_MESSAGE_COUNT", payload);
-    context.commit("REFRESH_TOTAL_NEW_MESSAGE_COUNT");
+  },
+  refreshContactUserNewMessageCount(context, payload) {
+    context.commit("REFRESH_CONTACT_USER_NEW_MESSAGE_COUNT", payload);
   },
   resetContactUserNewMessageCount(context, payload) {
     context.commit("RESET_CONTACT_USER_NEW_MESSAGE_COUNT", payload);
@@ -135,11 +149,14 @@ export const actions = {
       }
     }
   },
-  async getContacts({ commit }) {
-    const { data } = await contactApi(this.$axios).get();
-    let users = data.users;
-    if (users) {
-      let contactUsers = users.map(item => {
+  async getContacts({ commit, state }) {
+    // Reset user reset the last message and message count information
+    const { data } = await contactApi(this.$axios).get({
+      resetUserId: state.selectedContactUser && state.selectedContactUser.id
+    });
+    commit(
+      "SET_CONTACTS",
+      data.users.map(item => {
         return {
           id: item.id,
           email: item.email,
@@ -157,8 +174,7 @@ export const actions = {
           lastMessage: item.lastMessage,
           lastMessageTime: item.lastMessageTime
         };
-      });
-      commit("SET_CONTACTS", contactUsers);
-    }
+      })
+    );
   }
 };

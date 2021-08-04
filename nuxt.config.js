@@ -89,6 +89,7 @@ export default {
     { src: "~/plugins/tiptap-vuetify", mode: "client" },
     { src: "~/plugins/vue-js-toggle-button", mode: "client" },
     { src: "~/plugins/vue-tribute", mode: "client" },
+    { src: "~/plugins/socket", mode: "client" },
     { src: "~/plugins/vuelidate" }
   ],
 
@@ -210,18 +211,6 @@ export default {
             }
           }
         }
-      }
-    ],
-    [
-      "nuxt-socket-io",
-      {
-        sockets: [
-          {
-            name: "main",
-            url: process.env.CHAT_SERVER_URL,
-            default: true
-          }
-        ]
       }
     ],
 

@@ -389,9 +389,7 @@ export default {
     }
   },
   created() {},
-  mounted() {
-    this.socket = this.$nuxtSocket({ name: "main" });
-  },
+  mounted() {},
   methods: {
     hasRole(roles = []) {
       return this.$auth.hasRole(roles);
@@ -400,6 +398,13 @@ export default {
       if (process.client) {
         this.$refs.chatScreen.scrollTop = this.$refs.chatScreen.scrollHeight;
       }
+    },
+    sendMessageToChatServer(payload) {
+      this.$socket.emit("private_message_send", {
+        senderUserId: payload.senderUserId,
+        receiverUserId: payload.receiverUserId,
+        message: payload.message
+      });
     },
     bookingTimeRequestDeclineBtnHandle(message) {
       let payload = {
@@ -421,9 +426,9 @@ export default {
               content: data.newMessage.content
             };
             this.$store.dispatch("chat/pushMessage", messageItem);
-            this.socket.emit("new_message", {
-              from: this.$auth.user,
-              to: this.selectedContactUser,
+            this.sendMessageToChatServer({
+              senderUserId: this.$auth.user.id,
+              receiverUserId: this.selectedContactUser.id,
               message: messageItem
             });
           }
@@ -458,9 +463,9 @@ export default {
               content: data.newMessage.content
             };
             this.$store.dispatch("chat/pushMessage", messageItem);
-            this.socket.emit("new_message", {
-              from: this.$auth.user,
-              to: this.selectedContactUser,
+            this.sendMessageToChatServer({
+              senderUserId: this.$auth.user.id,
+              receiverUserId: this.selectedContactUser.id,
               message: messageItem
             });
           }
@@ -495,9 +500,9 @@ export default {
               content: data.newMessage.content
             };
             this.$store.dispatch("chat/pushMessage", messageItem);
-            this.socket.emit("new_message", {
-              from: this.$auth.user,
-              to: this.selectedContactUser,
+            this.sendMessageToChatServer({
+              senderUserId: this.$auth.user.id,
+              receiverUserId: this.selectedContactUser.id,
               message: messageItem
             });
           }
@@ -535,9 +540,9 @@ export default {
             };
             this.$store.dispatch("chat/pushMessage", messageItem);
 
-            this.socket.emit("new_message", {
-              from: this.$auth.user,
-              to: this.selectedContactUser,
+            this.sendMessageToChatServer({
+              senderUserId: this.$auth.user.id,
+              receiverUserId: this.selectedContactUser.id,
               message: messageItem
             });
           }
@@ -557,9 +562,9 @@ export default {
     requestBoxNewMessageHandle(messageItem) {
       this.bookingDialog.value = false;
       this.$store.dispatch("chat/pushMessage", messageItem);
-      this.socket.emit("new_message", {
-        from: this.$auth.user,
-        to: this.selectedContactUser,
+      this.sendMessageToChatServer({
+        senderUserId: this.$auth.user.id,
+        receiverUserId: this.selectedContactUser.id,
         message: messageItem
       });
     },

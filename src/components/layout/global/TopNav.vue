@@ -161,7 +161,7 @@
           small
           :color="colorOfTheTextBtn"
           v-if="isLoggedIn"
-          :to="localePath(navItems.message.path)"
+          @click="handleMessageBtnClick"
           text
         >
           {{ $t(navItems.message.t_key) }}
@@ -380,7 +380,10 @@ export default {
       return this.$i18n.locales.find(i => i.code == this.$i18n.locale);
     },
     isMarketplacePage() {
-      return this.localePath(pathData.pages.marketplace) == this.$router.currentRoute.path;
+      return (
+        this.localePath(pathData.pages.marketplace) ==
+        this.$router.currentRoute.path
+      );
     },
     currencyBtnText() {
       const currency = currencyService.selectedCurrency();
@@ -424,6 +427,10 @@ export default {
   },
   created() {},
   methods: {
+    handleMessageBtnClick() {
+      this.$store.dispatch("chat/refreshTotalNewMessageCount");
+      this.$router.push(this.localePath(this.navItems.message.path));
+    },
     handleFilterBtnClick() {
       this.$store.dispatch("marketplace/showFilterDialog");
     },

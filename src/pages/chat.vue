@@ -320,6 +320,11 @@ import { pathData } from "@/data";
 
 export default {
   layout: "chat",
+  head() {
+    return {
+      title: "Chat"
+    };
+  },
   components: {
     RequestBox,
     PackageChoosing,
@@ -407,17 +412,16 @@ export default {
     "bookingDialog.value": function(val) {
       console.log(val);
     },
-    selectedContactUser() {
+    selectedContactUser(val, preVal) {
       if (this.selectedContactUser) {
-        this.doEmptyInMessageList();
+        this.$store.dispatch("chat/destroyMessages");
         this.$store.dispatch(
           "chat/setSelectedContactUser",
           this.selectedContactUser
         );
-        this.$store.dispatch("chat/resetContactUserNewMessageCount", {
-          ...this.selectedContactUser
+        this.$store.dispatch("chat/refreshContactUserNewMessageCount", {
+          id: this.selectedContactUser.id
         });
-
         this.packageChoosingDialog.props.userId = this.selectedContactUser.id;
         this.bookingDialog.requestBox.props.userId = this.selectedContactUser.id;
         this.profileCard.name = this.selectedContactUser.fullName;
@@ -452,9 +456,9 @@ export default {
                   content: item.content
                 };
                 this.pushMessage(messageItem);
-                this.socket.emit("new_message", {
-                  from: this.$auth.user,
-                  to: this.selectedContactUser,
+                this.sendMessageToChatServer({
+                  senderUserId: this.$auth.user.id,
+                  receiverUserId: this.selectedContactUser.id,
                   message: messageItem
                 });
               });
@@ -464,8 +468,6 @@ export default {
     }
   },
   mounted() {
-    this.socket = this.$nuxtSocket({ name: "main" });
-
     // This is very sensitive.
     // Since the date is not updated without refresh, we should manually refresh it
     // Now this created_at is updated after 1 second
@@ -507,7 +509,7 @@ export default {
               item => item.id == this.$route.query.userId
             );
             if (user) {
-              this.activeChat = user.id
+              this.activeChat = user.id;
               this.selectedContactUser = user;
               this.$router.replace(this.localePath(pathData.pages.chat));
             }
@@ -529,17 +531,21 @@ export default {
     pushMessage(message) {
       this.$store.dispatch("chat/pushMessage", message);
     },
-    doEmptyInMessageList() {
-      this.$store.dispatch("chat/destroyMessages");
-    },
-    handleRequestBoxNewMessage(messageItem) {
-      this.pushMessage(messageItem);
-      this.bookingDialog.value = false;
-      this.socket.emit("new_message", {
-        from: this.$auth.user,
-        to: this.selectedContactUser,
-        message: messageItem
+    sendMessageToChatServer(payload) {
+      this.$socket.emit("private_message_send", {
+        senderUserId: payload.senderUserId,
+        receiverUserId: payload.receiverUserId,
+        message: payload.message
       });
+    },
+    handleRequestBoxNewMessage(message) {
+      this.pushMessage(message);
+      this.sendMessageToChatServer({
+        senderUserId: this.$auth.user.id,
+        receiverUserId: this.selectedContactUser.id,
+        message: message
+      });
+      this.bookingDialog.value = false;
     },
     handleSelectPackage(item) {
       if (item) {
@@ -576,23 +582,19 @@ export default {
         );
         this.pushMessage(newMessage);
 
-        this.socket.emit("new_message", {
-          from: this.$auth.user,
-          to: this.selectedContactUser,
+        this.sendMessageToChatServer({
+          senderUserId: this.$auth.user.id,
+          receiverUserId: this.selectedContactUser.id,
           message: newMessage
         });
 
-        const receiverUserId = this.selectedContactUser
-          ? this.selectedContactUser.id
-          : null;
-
-        let payload = {
-          ...newMessage,
-          receiverUserId
-        };
-
         messageApi(this.$axios)
-          .store(payload)
+          .store({
+            ...newMessage,
+            receiverUserId: this.selectedContactUser
+              ? this.selectedContactUser.id
+              : null
+          })
           .then(() => {})
           .catch(() => {});
         this.messageForm.content = "";

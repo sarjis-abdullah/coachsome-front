@@ -1,9 +1,9 @@
 import axios from "axios";
 
 export default async () => {
-  const { data } = await axios.get(process.env.API_BASE_URL_LIVE + "/booting");
+  const { data } = await axios.get(process.env.API_BASE_URL + "/translations?locale=sv");
   return {
-    ...data.translation.sv
+    ...data.translations
   };
 };
 
