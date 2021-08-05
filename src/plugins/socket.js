@@ -3,7 +3,7 @@ import { pathData } from "@/data";
 
 export default ({ app }, inject) => {
   const socket = io(process.env.CHAT_SERVER_URL, {
-    transports: ["websocket", "polling"]
+    transports: ["polling"]
   });
   socket.on("connect", () => {
     if (app.$auth.loggedIn) {
