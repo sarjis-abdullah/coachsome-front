@@ -204,6 +204,7 @@ export default {
           });
 
           if (this.$auth.loggedIn) {
+            this.$socket.emit("connected", this.$auth.user.id);
             if (this.$auth.hasRole(["coach"])) {
               this.$router.push(this.localePath(pathData.coach.editProfile));
             } else if (this.$auth.hasRole(["athlete"])) {
