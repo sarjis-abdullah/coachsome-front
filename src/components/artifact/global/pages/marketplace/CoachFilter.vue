@@ -471,25 +471,25 @@ export default {
   /* Dawa */
 
   /* Map Styles */
-  .map {
-    position: fixed;
-    right: 0;
-    top: 0;
-    width: 25%;
-    height: 100vh;
-    z-index: 0;
-    margin-top: 48px;
-    /* Leaflet icon */
+  // .map {
+  //   position: fixed;
+  //   right: 0;
+  //   top: 0;
+  //   width: 25%;
+  //   height: 100vh;
+  //   z-index: 0;
+  //   margin-top: 48px;
+  //   /* Leaflet icon */
 
-    .leaflet-marker-icon {
-      background: white;
-      padding: 3px;
-      border: 1px solid $primary-light-1;
-      border-radius: 50%;
-      width: 25px !important;
-      height: 25px !important;
-    }
-  }
+  //   .leaflet-marker-icon {
+  //     background: white;
+  //     padding: 3px;
+  //     border: 1px solid $primary-light-1;
+  //     border-radius: 50%;
+  //     width: 25px !important;
+  //     height: 25px !important;
+  //   }
+  // }
   .footer-btn-wrapper {
     position: fixed;
     bottom: 20px;

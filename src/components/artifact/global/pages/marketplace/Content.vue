@@ -557,7 +557,10 @@ export default {
             if (data.coaches.length) {
               this.page += 1;
               let coaches = data.coaches.map(item => {
-                locationList.push(...item.locations);
+                item.locations.forEach(location => {
+                  location.coach = item;
+                  locationList.push(location);
+                });
                 return {
                   name: item.name,
                   image: item.image ? item.image : null,
@@ -568,7 +571,7 @@ export default {
                   price: item.price,
                   categories: item.categories,
                   userName: item.userName,
-                  badge: item.badge,
+                  badge: item.badge
                 };
               });
 
@@ -580,7 +583,8 @@ export default {
                     address: item.address,
                     lat: item.lat,
                     long: item.long,
-                    userImage: item.userImage
+                    userImage: item.userImage,
+                    coach: item.coach
                   };
                 })
                 .filter(item => (item != null ? true : false));
@@ -616,23 +620,46 @@ export default {
       if (process.client) {
         let coordinates = [];
         // this.removeAllMapMarker();
-        locations.forEach(item => {
+        locations.forEach((item, i) => {
           let coordinate = [item.lat, item.long];
 
           let image = item.userImage
             ? item.userImage
             : profileData.PROFILE_DEFAULT_IMAGE;
 
-          let profileImage = window.L.icon({
-            iconUrl: image,
-            iconSize: [20, 20],
-            popupAnchor: [0, -15]
-          });
-
           // create marker object, pass custom icon as option, pass content and options to popup, add to map
+          // let marker = window.L.marker(coordinate, {
+          //   icon: profileImage
+          // }).addTo(this.map);
           let marker = window.L.marker(coordinate, {
-            icon: profileImage
-          }).addTo(this.map);
+            icon: new window.L.DivIcon({
+              className: "dummy",
+              html: `
+              <div class="marker-point">
+                <img class="marker-point__image" src="${image}"/> 
+                <div class="${"marker-point__card marker-point__card--" +
+                  i}" style="display:none;">
+                  <div class="marker-point__card-body">
+                    <img class="marker-point__card-image" src="${image}"/> 
+                    <div class="marker-point__card-content">
+                      <div>${item.coach.name}</div>
+                      <a target="_blank" href="/${item.coach.userName}">View Profile</a>
+                    </div>
+                 </div>
+                </div>
+              </div>  
+              `
+            })
+          })
+            .addTo(this.map)
+            .on("click", function() {
+              var x = document.querySelector(".marker-point__card--" + i);
+              if (x.style.display === "none") {
+                x.style.display = "block";
+              } else {
+                x.style.display = "none";
+              }
+            });
 
           this.mapMarkers.push(marker);
           coordinates.push(coordinate);
@@ -694,13 +721,45 @@ export default {
     margin-top: 48px;
     /* Leaflet icon */
 
-    .leaflet-marker-icon {
-      background: white;
-      padding: 3px;
-      border: 1px solid $primary-light-1;
-      border-radius: 50%;
-      width: 25px !important;
-      height: 25px !important;
+    .marker-point {
+      position: relative;
+      .leaflet-div-icon {
+        all: initial;
+      }
+      &__image {
+        background: white;
+        padding: 3px;
+        border: 1px solid $primary-light-1;
+        border-radius: 50%;
+        width: 25px !important;
+        height: 25px !important;
+        z-index: 0;
+      }
+      &__card {
+        max-width: 100px;
+        position: absolute;
+        background: white;
+        z-index: 9000;
+        &-image {
+          width: 150px;
+          height: 150px;
+        }
+        &-content {
+          background: $primary-light-1;
+          width: 150px;
+          padding: 5px;
+          div {
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            font-family: $font-family;
+          }
+          a {
+            text-decoration: none;
+            color: $primary-light-2;
+          }
+        }
+      }
     }
   }
   .footer-btn-wrapper {
