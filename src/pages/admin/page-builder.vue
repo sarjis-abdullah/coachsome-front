@@ -14,7 +14,7 @@ import { pageBuilderApi } from "@/api";
 
 export default {
   layout: "admin",
-    head() {
+  head() {
     return {
       title: "Cms"
     };
@@ -26,7 +26,7 @@ export default {
     url() {
       return (
         process.env.PAGE_BUILDER_URL +
-        "/public?access_token=" +
+        "?access_token=" +
         this.$auth.strategy.token.get().split(" ")[1]
       );
     }

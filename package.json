@@ -18,6 +18,7 @@
     "bootstrap": "^4.6.0",
     "chart.js": "^2.9.4",
     "core-js": "^3.9.1",
+    "css-star-rating": "^1.2.4",
     "currency.js": "^2.0.3",
     "dawa-autocomplete2": "^1.0.2",
     "dragselect": "^2.1.1",

@@ -157,7 +157,9 @@ import ExploreCard from "@/components/card/ExploreCard";
 import FrontFooter from "@/components/layout/global/FrontFooter";
 import GooglePlaceSearch from "@/components/geography/GooglePlaceSearch";
 import CoachFilter from "@/components/artifact/global/pages/marketplace/CoachFilter";
+import { currencyService } from "@/services";
 
+import "css-star-rating/css/star-rating.css";
 export default {
   components: {
     ExploreCard,
@@ -276,7 +278,8 @@ export default {
       countryFilter: {
         selectedCountryCode: null,
         countryList: []
-      }
+      },
+      markerCardElements: []
     };
   },
   computed: {
@@ -637,23 +640,71 @@ export default {
               html: `
               <div class="marker-point">
                 <img class="marker-point__image" src="${image}"/> 
-                <div class="${"marker-point__card marker-point__card--" +
+                <div class="${"marker-point__card-wrapper marker-point__card--" +
                   i}" style="display:none;">
-                  <div class="marker-point__card-body">
-                    <img class="marker-point__card-image" src="${image}"/> 
-                    <div class="marker-point__card-content">
-                      <div>${item.coach.name}</div>
-                      <a target="_blank" href="/${item.coach.userName}">View Profile</a>
+                  <div class="marker-point__card">
+                    <div class="marker-point__card-body">
+                      <img class="marker-point__card-image" src="${image}"/> 
+                      <div class="marker-point__card-content">
+                        <div style="font-family: Open Sans;font-style: normal;font-weight: bold;font-size: 10px;line-height: 14px;color: #2C3749;">${
+                          item.coach.name
+                        }</div>
+                        <div class="d-flex align-center">
+                          <div class="rating star-icon value-${
+                            item.coach.rating
+                          } small color-ok" style="background: transparent !important;padding-left:0px;margin-left:0px;">
+                            <div class="star-container">
+                              <div class="star">
+                                  <i class="star-empty"></i>
+                                  <i class="star-half"></i>
+                                  <i class="star-filled"></i>
+                              </div>
+                              <div class="star">
+                                  <i class="star-empty"></i>
+                                  <i class="star-half"></i>
+                                  <i class="star-filled"></i>
+                              </div>
+                              <div class="star">
+                                  <i class="star-empty"></i>
+                                  <i class="star-half"></i>
+                                  <i class="star-filled"></i>
+                              </div>
+                              <div class="star">
+                                  <i class="star-empty"></i>
+                                  <i class="star-half"></i>
+                                  <i class="star-filled"></i>
+                              </div>
+                              <div class="star">
+                                  <i class="star-empty"></i>
+                                  <i class="star-half"></i>
+                                  <i class="star-filled"></i>
+                              </div>
+                            </div>
+                          </div>
+                          <div style="color:#9FAEC2;font-size: 10.2991px;font-family: Open Sans;font-style: normal;font-weight: normal;">(${
+                            item.coach.countReview
+                          })</div>
+                        </div>
+                        <div class="text-ellipsis" style="font-size: 10px;color: #2C3749;font-family: Open Sans;font-weight: normal;">${item
+                          .coach.categories &&
+                          item.coach.categories
+                            .map(item => this.$i18n.t(item.t_key))
+                            .join(", ")}</div>
+                        <div style="font-weight: bold;font-size: 12.3589px;color: #2C3749;font-family: Open Sans;">${currencyService.toCurrency(
+                          item.coach.price
+                        )}</div>
+                      </div>
                     </div>
-                 </div>
+                  </div>
                 </div>
               </div>  
               `
             })
           })
             .addTo(this.map)
-            .on("click", function() {
-              var x = document.querySelector(".marker-point__card--" + i);
+            .on("click", () => {
+              let x = document.querySelector(".marker-point__card--" + i);
+              this.markerCardElements.push(x);
               if (x.style.display === "none") {
                 x.style.display = "block";
               } else {
@@ -683,6 +734,12 @@ export default {
     initMap() {
       if (process.client) {
         this.map = window.L.map("map").locate({ setView: true, maxZoom: 6 });
+        this.map.on("click", () => {
+          this.markerCardElements.forEach(item => {
+            item.style.display = "none";
+          });
+          this.markerCardElements = [];
+        });
         window.L.tileLayer(
           "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
           {}
@@ -723,10 +780,11 @@ export default {
 
     .marker-point {
       position: relative;
+
       .leaflet-div-icon {
         all: initial;
       }
-      &__image {
+      .marker-point__image {
         background: white;
         padding: 3px;
         border: 1px solid $primary-light-1;
@@ -735,28 +793,51 @@ export default {
         height: 25px !important;
         z-index: 0;
       }
-      &__card {
-        max-width: 100px;
+
+      .marker-point__card-wrapper {
         position: absolute;
-        background: white;
-        z-index: 9000;
-        &-image {
-          width: 150px;
-          height: 150px;
-        }
-        &-content {
-          background: $primary-light-1;
-          width: 150px;
-          padding: 5px;
-          div {
-            color: white;
-            font-size: 1.2em;
-            font-weight: bold;
-            font-family: $font-family;
+        width: 280px;
+        top: -100px;
+        left: -100px;
+        .marker-point__card {
+          width: 100%;
+          background: #ffffff;
+          box-sizing: border-box;
+          border-radius: 8.23926px;
+          top: -100px;
+          z-index: 9000;
+          &:after {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            bottom: -10px;
+            right: 50%;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-top: 50px solid white;
           }
-          a {
-            text-decoration: none;
-            color: $primary-light-2;
+          .marker-point__card-body {
+            display: flex;
+            padding: 5px;
+
+            .marker-point__card-image {
+              width: 64px;
+              height: 77px;
+              border-radius: 6px;
+            }
+            .marker-point__card-content {
+              padding-left: 5px;
+              div {
+                font-size: 1.2em;
+                font-weight: bold;
+                font-family: $font-family;
+              }
+              a {
+                text-decoration: none;
+                color: $primary-light-2;
+              }
+            }
           }
         }
       }
