@@ -36,15 +36,9 @@
                     height="10"
                     indeterminate
                   ></v-progress-linear>
-                </template>
-                <v-img height="250" :src="post.featured_image"></v-img>
-                <v-card-title>
-                  {{ post.title }}
-                </v-card-title>
-
+                </template>       
                 <v-card-text>
-                  <div>
-                    {{ post.short_description }}
+                  <div v-html="post.published_content">
                   </div>
                 </v-card-text>
               </v-card>
