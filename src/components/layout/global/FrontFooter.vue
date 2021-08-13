@@ -252,8 +252,9 @@ export default {
   computed: {},
   methods: {
     handleBlogBtnClick() {
-      let win = window.open("https://blog.coachsome.com", "_blank");
-      win.focus();
+      // let win = window.open("https://blog.coachsome.com", "_blank");
+      // win.focus();
+      this.$router.push(this.localePath(this.uri.blog));
     }
   }
 };
