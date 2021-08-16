@@ -16,7 +16,7 @@
         <div>
           <v-card>
             <v-card-title>
-              <v-row>
+              <v-row align="center" justify="space-between">
                 <v-col cols="12" md="4">
                   <v-text-field
                     v-model="search"
@@ -26,6 +26,9 @@
                     solo
                     hide-details
                   ></v-text-field>
+                </v-col>
+                <v-col class="d-flex justify-end">
+                  <v-btn outlined depressed color="primary-light-1">Add</v-btn>
                 </v-col>
               </v-row>
             </v-card-title>

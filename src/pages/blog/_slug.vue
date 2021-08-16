@@ -36,9 +36,10 @@
                     height="10"
                     indeterminate
                   ></v-progress-linear>
-                </template>       
-                <v-card-text>
-                  <div v-html="post.published_content">
+                </template>
+                <v-card-text class="p-0">
+                  <div class="bootstrap-wrapper">
+                    <div v-html="post.published_content"></div>
                   </div>
                 </v-card-text>
               </v-card>
@@ -86,7 +87,7 @@ export default {
       categories,
       post,
       selectedCategory: null,
-      title:params.slug
+      title: params.slug
     };
   },
   methods: {
@@ -104,5 +105,8 @@ export default {
 .blog-page {
   height: 100%;
   background: $body-bg;
+  .bootstrap-wrapper::v-deep {
+    @import "~bootstrap/dist/css/bootstrap.min";
+  }
 }
 </style>
