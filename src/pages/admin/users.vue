@@ -28,7 +28,14 @@
                   ></v-text-field>
                 </v-col>
                 <v-col class="d-flex justify-end">
-                  <v-btn outlined depressed color="primary-light-1">Add</v-btn>
+                  <v-btn
+                    text
+                    color="primary-light-1"
+                    @click.stop="userCreate.dialog = true"
+                  >
+                    <v-icon>mdi-plus</v-icon>
+                    ADD
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-card-title>
@@ -298,6 +305,110 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
+
+            <!-- User Create Dialog -->
+            <template>
+              <v-row justify="center">
+                <v-dialog
+                  v-model="userCreate.dialog"
+                  persistent
+                  max-width="600px"
+                >
+                  <v-card>
+                    <v-card-title>
+                      <span class="text-h5">Create User</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-container>
+                        <v-form
+                          ref="form"
+                          v-model="userCreate.valid"
+                          lazy-validation
+                        >
+                          <v-row>
+                            <v-col cols="12" sm="6" md="6">
+                              <v-text-field
+                                label="First name*"
+                                v-model="userCreate.initialValue.firstName"
+                                :rules="[v => !!v || 'First name is required']"
+                                required
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="6">
+                              <v-text-field
+                                label="Last name*"
+                                v-model="userCreate.initialValue.lastName"
+                                :rules="[v => !!v || 'Last name is required']"
+                                persistent-hint
+                                required
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-text-field
+                                label="Email*"
+                                v-model="userCreate.initialValue.email"
+                                :rules="[
+                                  v => !!v || 'E-mail is required',
+                                  v =>
+                                    /.+@.+\..+/.test(v) ||
+                                    'E-mail must be valid'
+                                ]"
+                                required
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <v-select
+                                :items="roleList"
+                                v-model="userCreate.initialValue.role"
+                                item-text="displayName"
+                                item-value="id"
+                                :rules="[v => !!v || 'Role is required']"
+                                label="Role*"
+                                required
+                              ></v-select>
+                            </v-col>
+                            <v-col cols="12">
+                              <v-text-field
+                                v-model="userCreate.initialValue.password"
+                                label="Password*"
+                                :rules="[
+                                  v => !!v || 'Password is required',
+                                  v =>
+                                    /^(?=.*[A-Z]).*$/.test(v) ||
+                                    'At least one upper case letter',
+                                  v =>
+                                    (v && v.length >= 6) ||
+                                    'Min 6 character needed'
+                                ]"
+                                type="password"
+                                required
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-form>
+                      </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        color="primary-light-1"
+                        text
+                        @click="userCreate.dialog = false"
+                      >
+                        Close
+                      </v-btn>
+                      <v-btn
+                        color="primary-light-1"
+                        text
+                        @click="handleUserCreateSaveBtn"
+                      >
+                        Save
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-row>
+            </template>
           </v-card>
         </div>
       </v-col>
@@ -322,6 +433,18 @@ export default {
       badges: [],
       activityStatusList: [],
       starStatusList: [],
+      roleList: [],
+      userCreate: {
+        dialog: false,
+        valid: true,
+        initialValue: {
+          firstName: "",
+          lastName: "",
+          email: "",
+          role: null,
+          password: ""
+        }
+      },
       userEdit: {
         editedIndex: -1,
         dialog: false,
@@ -368,10 +491,40 @@ export default {
       }
     };
   },
+  watch: {
+    "userCreate.dialog": function() {
+      this.userCreate.initialValue.firstName = "";
+      this.userCreate.initialValue.lastName = "";
+      this.userCreate.initialValue.email = "";
+      this.userCreate.initialValue.role = null;
+      this.userCreate.initialValue.password = "";
+    }
+  },
   created() {
     this.getUser();
   },
   methods: {
+    handleUserCreateSaveBtn() {
+      if (this.$refs.form.validate()) {
+        adminUserApi(this.$axios)
+          .storeUser(this.userCreate.initialValue)
+          .then(({ data }) => {
+            if (data.user) {
+              let formattedRowList = this.formatUserRow([{ ...data.user }]);
+              this.table.rows.unshift(formattedRowList[0]);
+              this.$toast.success("The user is created successfully.");
+              this.userCreate.dialog = false;
+            }
+            console.log(data);
+          })
+          .catch(({ response }) => {
+            const { data } = response;
+            if (data.message) {
+              this.$toast.error(data.message);
+            }
+          });
+      }
+    },
     getUser() {
       adminUserApi(this.$axios)
         .getUserList()
@@ -390,6 +543,9 @@ export default {
 
           if (data.users) {
             this.makeUserTableRow(data.users);
+          }
+          if (data.roles) {
+            this.roleList = data.roles;
           }
         })
         .catch(() => {});
@@ -468,7 +624,10 @@ export default {
     },
     makeUserTableRow(users) {
       this.table.rows = [];
-      this.table.rows = users.map(item => {
+      this.table.rows = this.formatUserRow(users);
+    },
+    formatUserRow(users) {
+      return users.map(item => {
         return {
           id: item.id,
           image: item.image ? item.image : null,

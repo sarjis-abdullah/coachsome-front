@@ -1,8 +1,5 @@
 export default axios => ({
-  getUserList: () => {
-    return axios.get("admin/users");
-  },
-  updateUser: payload => {
-    return axios.put("admin/users/" + payload.id, payload);
-  }
+  getUserList: () => axios.get("admin/users"),
+  updateUser: payload => axios.put("admin/users/" + payload.id, payload),
+  storeUser: payload => axios.post("admin/users", payload)
 });
