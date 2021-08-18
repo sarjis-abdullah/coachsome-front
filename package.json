@@ -57,6 +57,7 @@
   "devDependencies": {
     "@mdi/font": "^5.9.55",
     "@nuxtjs/dotenv": "^1.4.1",
+    "@nuxtjs/google-analytics": "^2.4.0",
     "@nuxtjs/vuetify": "^1.12.1",
     "material-design-icons-iconfont": "^6.1.0"
   }

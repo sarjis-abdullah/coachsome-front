@@ -233,6 +233,14 @@ export default {
       ]
     ],
 
+    // Google Analytics
+    [
+      "@nuxtjs/google-analytics",
+      {
+        id: "UA-147188178-2"
+      }
+    ],
+
     // Sitemap
     // Always end of the array
     [
