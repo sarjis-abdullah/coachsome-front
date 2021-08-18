@@ -640,69 +640,76 @@ export default {
               html: `
               <div class="marker-point">
                 <img class="marker-point__image" src="${image}"/> 
-                <div class="${"marker-point__card-wrapper marker-point__card--" +
-                  i}" style="display:none;">
-                  <div class="marker-point__card">
-                    <div class="marker-point__card-body">
-                      <img class="marker-point__card-image" src="${image}"/> 
-                      <div class="marker-point__card-content">
-                        <div style="font-family: Open Sans;font-style: normal;font-weight: bold;font-size: 10px;line-height: 14px;color: #2C3749;">${
-                          item.coach.name
-                        }</div>
-                        <div class="d-flex align-center">
-                          <div class="rating star-icon value-${
-                            item.coach.rating
-                          } small color-ok" style="background: transparent !important;padding-left:0px;margin-left:0px;">
-                            <div class="star-container">
-                              <div class="star">
-                                  <i class="star-empty"></i>
-                                  <i class="star-half"></i>
-                                  <i class="star-filled"></i>
-                              </div>
-                              <div class="star">
-                                  <i class="star-empty"></i>
-                                  <i class="star-half"></i>
-                                  <i class="star-filled"></i>
-                              </div>
-                              <div class="star">
-                                  <i class="star-empty"></i>
-                                  <i class="star-half"></i>
-                                  <i class="star-filled"></i>
-                              </div>
-                              <div class="star">
-                                  <i class="star-empty"></i>
-                                  <i class="star-half"></i>
-                                  <i class="star-filled"></i>
-                              </div>
-                              <div class="star">
-                                  <i class="star-empty"></i>
-                                  <i class="star-half"></i>
-                                  <i class="star-filled"></i>
+                <a href="${item.coach.userName}" target="_blank">
+                  <div class="${"marker-point__card-wrapper marker-point__card--" +
+                    i}" style="display:none;">
+                    <div class="marker-point__card">
+                      <div class="marker-point__card-body">
+                        <img class="marker-point__card-image" src="${image}"/> 
+                        <div class="marker-point__card-content">
+                          <div style="font-family: Open Sans;font-style: normal;font-weight: bold;font-size: 10px;line-height: 14px;color: #2C3749;">${
+                            item.coach.name
+                          }</div>
+                          <div class="d-flex align-center">
+                            <div class="rating star-icon value-${
+                              item.coach.rating
+                                ? Math.trunc(item.coach.rating)
+                                : 0
+                            } small color-ok" style="background: transparent !important;padding-left:0px;margin-left:0px;">
+                              <div class="star-container">
+                                <div class="star">
+                                    <i class="star-empty"></i>
+                                    <i class="star-half"></i>
+                                    <i class="star-filled"></i>
+                                </div>
+                                <div class="star">
+                                    <i class="star-empty"></i>
+                                    <i class="star-half"></i>
+                                    <i class="star-filled"></i>
+                                </div>
+                                <div class="star">
+                                    <i class="star-empty"></i>
+                                    <i class="star-half"></i>
+                                    <i class="star-filled"></i>
+                                </div>
+                                <div class="star">
+                                    <i class="star-empty"></i>
+                                    <i class="star-half"></i>
+                                    <i class="star-filled"></i>
+                                </div>
+                                <div class="star">
+                                    <i class="star-empty"></i>
+                                    <i class="star-half"></i>
+                                    <i class="star-filled"></i>
+                                </div>
                               </div>
                             </div>
+                            <div style="color:#9FAEC2;font-size: 10.2991px;font-family: Open Sans;font-style: normal;font-weight: normal;">(${
+                              item.coach.countReview
+                            })</div>
                           </div>
-                          <div style="color:#9FAEC2;font-size: 10.2991px;font-family: Open Sans;font-style: normal;font-weight: normal;">(${
-                            item.coach.countReview
-                          })</div>
+                          <div class="text-ellipsis" style="font-size: 10px;color: #2C3749;font-family: Open Sans;font-weight: normal;">${item
+                            .coach.categories &&
+                            item.coach.categories
+                              .map(item => this.$i18n.t(item.t_key))
+                              .join(", ")}</div>
+                          <div style="font-weight: bold;font-size: 12.3589px;color: #2C3749;font-family: Open Sans;">${currencyService.toCurrency(
+                            item.coach.price
+                          )}</div>
                         </div>
-                        <div class="text-ellipsis" style="font-size: 10px;color: #2C3749;font-family: Open Sans;font-weight: normal;">${item
-                          .coach.categories &&
-                          item.coach.categories
-                            .map(item => this.$i18n.t(item.t_key))
-                            .join(", ")}</div>
-                        <div style="font-weight: bold;font-size: 12.3589px;color: #2C3749;font-family: Open Sans;">${currencyService.toCurrency(
-                          item.coach.price
-                        )}</div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </a>
               </div>  
               `
             })
           })
             .addTo(this.map)
             .on("click", () => {
+              this.markerCardElements.forEach(item => {
+                item.style.display = "none";
+              });
               let x = document.querySelector(".marker-point__card--" + i);
               this.markerCardElements.push(x);
               if (x.style.display === "none") {
