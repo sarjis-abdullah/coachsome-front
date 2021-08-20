@@ -119,7 +119,6 @@ export default {
 .place-search {
   .search-input {
     width: 100%;
-    line-height: 20px;
     padding: 12px 0 12px 10px;
     background: white;
     border-radius: 5px;

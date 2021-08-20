@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <TopNav color="primary">
+    <TopNav color="primary" :fixed="false">
       <template v-slot:sport-search>
         <span></span>
       </template>

@@ -472,14 +472,14 @@ export default {
       table: {
         headers: [
           {
-            text: "Id",
+            text: "id",
             align: "start",
             filterable: false,
             value: "id"
           },
-          { text: "Switch", value: "image" },
-          { text: "Name", value: "name" },
-          { text: "Type", value: "type" },
+          { text: "switch", value: "image" },
+          { text: "name", value: "name" },
+          { text: "type", value: "type" },
           { text: "Status", value: "status" },
           { text: "Ranking", value: "ranking" },
           { text: "Booking", value: "booking" },

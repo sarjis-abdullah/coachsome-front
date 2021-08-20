@@ -1,7 +1,8 @@
 <template>
   <div class="top-nav">
     <v-app-bar
-      app
+      :app="fixed"
+      :absolute="!fixed"
       dense
       :clipped-left="$vuetify.breakpoint.lgAndUp"
       :color="color"
@@ -283,6 +284,10 @@ import SportSearch from "@/components/artifact/global/SportSearch";
 
 export default {
   props: {
+    fixed: {
+      type: Boolean,
+      default: true
+    },
     theme: {
       type: String,
       default: "dark"
@@ -454,12 +459,12 @@ export default {
 
 <style lang="scss" scoped>
 .top-nav {
-  .slogan {
-    font-family: $font-family;
-    font-style: italic;
-    font-size: 14px;
-    line-height: 19px;
-    color: $primary-light-1;
-  }
+  // .slogan {
+  //   font-family: $font-family;
+  //   font-style: italic;
+  //   font-size: 14px;
+  //   line-height: 19px;
+  //   color: $primary-light-1;
+  // }
 }
 </style>

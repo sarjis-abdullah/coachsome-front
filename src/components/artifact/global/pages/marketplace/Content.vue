@@ -7,7 +7,7 @@
       @click.stop="clickedOnContainerSpace"
     >
       <v-row>
-        <v-col class="py-0" cols="12" md="9">
+        <v-col class="py-0 mt-12" cols="12" md="9">
           <v-card
             class="overflow-y"
             :height="$vuetify.breakpoint.mdAndUp ? '91vh' : '90vh'"
@@ -770,9 +770,12 @@ export default {
   .filter-box {
     position: fixed;
     z-index: 100;
-    width: 71%;
-    top: 50px;
-    transition: all 3000ms ease;
+    top: 0px;
+    left: 0px;
+    background: $primary;
+    transition: background-color 0.5s ease;
+
+    width: 100%;
   }
 
   .map {
