@@ -119,11 +119,16 @@ export default {
 .place-search {
   .search-input {
     width: 100%;
-    padding: 12px 0 12px 10px;
+    padding: 12px 15px 12px 15px;
     background: white;
-    border-radius: 5px;
+    border-radius: 4px;
     box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
       0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+    font-size: 16px;
+    letter-spacing: normal;
+    max-width: 100%;
+    text-align: left;
+
   }
   .search-input:focus {
     outline: none;
