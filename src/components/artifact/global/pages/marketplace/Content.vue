@@ -767,6 +767,7 @@ export default {
   .card-container {
     background: $body-bg;
   }
+  
   .filter-box {
     position: fixed;
     z-index: 100;
@@ -774,7 +775,6 @@ export default {
     left: 0px;
     background: $primary;
     transition: background-color 0.5s ease;
-
     width: 100%;
   }
 
