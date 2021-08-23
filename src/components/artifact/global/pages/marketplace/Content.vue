@@ -17,7 +17,7 @@
             <v-card-text class="px-0">
               <!-- Filter Box -->
               <div
-                :class="{ 'filter-box': isFilterBoxFixed }"
+                :class="{ 'fixed-box': isFilterBoxFixed }"
                 v-if="$vuetify.breakpoint.mdAndUp"
               >
                 <CoachFilter
@@ -872,7 +872,7 @@ export default {
     }
   }
 
-  .filter-box {
+  .fixed-box {
     position: fixed;
     z-index: 100;
     top: 0px;
