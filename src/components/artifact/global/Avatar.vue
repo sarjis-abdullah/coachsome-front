@@ -338,6 +338,12 @@ export default {
               t_key: "dropdown_item_translation"
             },
             {
+              name: "Order List",
+              path: pathData.admin.orderList,
+              icon: "mdi-view-list",
+              t_key: "dropdown_item_order_list"
+            },
+            {
               name: "Users",
               path: pathData.admin.userList,
               icon: "mdi-view-list",
