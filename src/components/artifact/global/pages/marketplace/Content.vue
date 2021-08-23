@@ -767,16 +767,6 @@ export default {
   .card-container {
     background: $body-bg;
   }
-  
-  .filter-box {
-    position: fixed;
-    z-index: 100;
-    top: 0px;
-    left: 0px;
-    background: $primary;
-    transition: background-color 0.5s ease;
-    width: 100%;
-  }
 
   .map {
     position: fixed;
@@ -880,6 +870,16 @@ export default {
       height: 16px;
       border-radius: 4px;
     }
+  }
+
+  .filter-box {
+    position: fixed;
+    z-index: 100;
+    top: 0px;
+    left: 0px;
+    background: $primary;
+    transition: background-color 0.5s ease;
+    width: 100%;
   }
 }
 </style>
