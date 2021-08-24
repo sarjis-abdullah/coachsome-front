@@ -103,6 +103,14 @@
               </template>
             </i18n>
           </div>
+          <!-- Tracking Pixel -->
+          <img
+            v-if="trackingPixel.status && i == messages.length - 1"
+            :src="
+              `https://makeinfluence.com/p?bid=7e4d005a-5ca9-11eb-8c81-02d6cc0d2b4c&value=${trackingPixel.salePrice}&uid=${trackingPixel.orderKey}`
+            "
+          />
+          <!-- Tracking Pixel -->
         </span>
 
         <!-- Package declined message  -->
@@ -364,6 +372,11 @@ export default {
   components: { TextMessage },
   data: () => ({
     currencyService,
+    trackingPixel: {
+      status: false,
+      salePrice: null,
+      orderKey: null
+    },
     socket: null
   }),
   computed: {
@@ -457,6 +470,12 @@ export default {
             this.$toast.success(data.toastMessage);
           }
 
+          if (data.trackingPixel && data.trackingPixel.status == true) {
+            this.trackingPixel.status = true;
+            this.trackingPixel.orderKey = data.trackingPixel.orderKey;
+            this.trackingPixel.salePrice = data.trackingPixel.salePrice;
+          }
+
           if (data.newMessage) {
             let messageItem = {
               type: data.newMessage.type,
@@ -520,6 +539,11 @@ export default {
         });
     },
     bookingPackageRequestAcceptBtnHandle(message) {
+      // Before accepting a package there sould have no renderring tracking pixel
+      this.trackingPixel.status = false;
+      this.trackingPixel.orderKey = "";
+      this.trackingPixel.salePrice = 0.0;
+
       let payload = {
         bookingId: message.content.bookingId,
         action: "accept"
@@ -531,6 +555,13 @@ export default {
             this.showMessage(data.successCode);
           } else {
             this.$toast.success(data.message);
+          }
+
+          // Tracking pixel render after package acceptance completed
+          if (data.trackingPixel && data.trackingPixel.status == true) {
+            this.trackingPixel.status = true;
+            this.trackingPixel.orderKey = data.trackingPixel.orderKey;
+            this.trackingPixel.salePrice = data.trackingPixel.salePrice;
           }
 
           if (data.newMessage) {
