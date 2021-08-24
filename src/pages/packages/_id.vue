@@ -332,6 +332,12 @@
               <v-stepper-content step="3">
                 <v-card color="#ECF2F7">
                   <v-card-text>
+                    <img
+                      v-if="$route.query.quick_booking"
+                      :src="
+                        `https://makeinfluence.com/p?bid=7e4d005a-5ca9-11eb-8c81-02d6cc0d2b4c&value=${$route.query.sale_price}&uid=${$route.query.order_key}`
+                      "
+                    />
                     <div class="message-container">
                       <div class="quick-booking--dissable" v-if="true">
                         <div class="quick-booking__message-box">
@@ -555,8 +561,6 @@ export default {
   },
   methods: {
     init() {
-      console.log("Init");
-
       let booking = {
         id: null,
         step: 1,
@@ -685,8 +689,7 @@ export default {
         message: this.messageFromPackageBuyer,
         salePrice: this.packageInfo.chargeBox.salePrice,
         paymentMethod: this.selectedPaymentMethod,
-        continueUrl: location.href + "?payment_status=paid",
-        cancelUrl: location.href + "?payment_status=cancel"
+        packageUrl: location.href
       };
       this.loadingRequestBookingBtn = true;
       bookingApi(this.$axios)
