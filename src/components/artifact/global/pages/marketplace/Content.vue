@@ -690,7 +690,7 @@ export default {
                           </div>
                           <div class="text-ellipsis" style="font-size: 10px;color: #2C3749;font-family: Open Sans;font-weight: normal;">${item
                             .coach.categories &&
-                            item.coach.categories
+                            item.coach.categories.slice(0,3)
                               .map(item => this.$i18n.t(item.t_key))
                               .join(", ")}</div>
                           <div style="font-weight: bold;font-size: 12.3589px;color: #2C3749;font-family: Open Sans;">${currencyService.toCurrency(
