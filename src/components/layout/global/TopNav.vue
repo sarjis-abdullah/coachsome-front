@@ -275,8 +275,7 @@
 
 <script>
 import { pathData } from "@/data";
-import { bookingHelper } from "@/helper";
-import { currencyService } from "@/services";
+import { currencyService,bookingService } from "@/services";
 import Avatar from "@/components/artifact/global/Avatar";
 import Burger from "@/components/artifact/global/Burger";
 import MessageBtn from "@/components/artifact/global/MessageBtn";
@@ -444,7 +443,7 @@ export default {
       location.reload();
     },
     athleteProfileHandle() {
-      bookingHelper.removeBookingInfoFromStorage();
+      bookingService.destroyBookingInfo();
       this.$router.push(this.localePath(this.navItems.athleteEditProfile.path));
     },
     toggleDrawer(event) {
