@@ -178,14 +178,13 @@
                             <span class="required">*</span>
                           </div>
                           <div class="message-box__field">
-                            <a-textarea
+                            <v-textarea
                               ref="messageBoxTextArea"
+                              solo
+                              :hint="$t('booking_message_box_text_area_label')"
                               v-model="messageFromPackageBuyer"
-                              :placeholder="
-                                $t('booking_message_box_text_area_label')
-                              "
-                              :auto-size="{ minRows: 3, maxRows: 5 }"
                             />
+                          
                           </div>
                         </div>
                       </v-col>
