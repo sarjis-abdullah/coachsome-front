@@ -633,7 +633,7 @@ export default {
       this.bookingRequest.coachInfo = this.profileCard;
     },
     handleBooking(service = null) {
-      // bookingService.destroyBookingInfo();
+      bookingService.destroyBookingInfo();
       this.$router.push(
         this.localePath(pathData.pages.bookingPackage(service.id))
       );
