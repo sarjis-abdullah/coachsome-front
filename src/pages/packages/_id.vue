@@ -414,7 +414,6 @@ import { currencyService, bookingService } from "@/services";
 import { constantData, pathData } from "@/data";
 import { storageHelper } from "@/helper";
 import { bookingApi, clientBookingApi } from "@/api";
-import loginVue from "../login.vue";
 export default {
   components: {
     ProfileSimpleCard,
@@ -575,17 +574,13 @@ export default {
         isRedirectToChat: false
       };
 
-      // Update Inital booking info
-      if (this.packageId) {
-        booking.packageId = this.packageId;
-        bookingService.setBookingInfo(booking);
-      }
-
       // if booking info exist
       if (bookingService.getBookingInfo()) {
         let booking = bookingService.getBookingInfo();
         this.step = booking.step;
         this.packageInfo.chargeBox.personNumbers.value = booking.value;
+        booking.packageId = this.packageId;
+        bookingService.setBookingInfo(booking);
       }
 
       // If there has no booking info
