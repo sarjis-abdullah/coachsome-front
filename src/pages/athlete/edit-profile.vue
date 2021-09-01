@@ -582,7 +582,6 @@
             </v-col>
           </v-row>
 
-
           <v-row>
             <v-col cols="12">
               <div class="line"></div>
@@ -621,6 +620,7 @@ import { profileApi } from "@/api";
 
 import { statusCodeData, pathData } from "@/data";
 import { storageHelper } from "@/helper";
+import { bookingService } from "@/services";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import EditImageDialog from "@/components/profile/EditImageDialog";
 import TiptopEditor from "@/components/editor/TiptopEditor";
@@ -734,10 +734,10 @@ export default {
     },
     init() {
       // Redirect booking page if booking not completed
-      let booking = storageHelper.get("booking");
+      let booking = bookingService.getBookingInfo();
       if (booking && booking.status != "Completed") {
         this.$router.push(
-          pathData.pages.bookingNew.replace(":packageId", booking.packageId)
+          this.localePath(pathData.pages.bookingPackage(booking.packageId))
         );
       }
 
