@@ -184,7 +184,6 @@
                               :hint="$t('booking_message_box_text_area_label')"
                               v-model="messageFromPackageBuyer"
                             />
-                          
                           </div>
                         </div>
                       </v-col>
@@ -563,34 +562,35 @@ export default {
   },
   methods: {
     init() {
-      let booking = {
+      let initialValue = {
         id: null, // booking id
         step: 1,
         status: "Initial",
         person: 1,
         isNotified: false,
-        packageId: null,
+        packageId: parseInt(this.packageId),
         isRedirectToChat: false
       };
 
+      // Get booking
+      let booking = bookingService.getBookingInfo();
+
+      // If there has no booking info
+      if (!booking) {
+        bookingService.setBookingInfo({ ...initialValue });
+        booking = bookingService.getBookingInfo();
+      }
+
       // if booking info exist
-      if (bookingService.getBookingInfo()) {
-        let booking = bookingService.getBookingInfo();
+      if (booking) {
         this.step = booking.step;
         this.packageInfo.chargeBox.personNumbers.value = booking.value;
         booking.packageId = this.packageId;
-        bookingService.setBookingInfo(booking);
-      }
-
-      // If there has no booking info
-      if (!bookingService.getBookingInfo()) {
-        bookingService.setBookingInfo(booking);
       }
 
       // Notified if step at 3
       if (!booking.isNotified && this.$route.query.payment_status == "paid") {
         booking.isNotified = true;
-        bookingService.setBookingInfo(booking);
         this.notify({ bookingId: booking.id });
       }
 
@@ -601,7 +601,6 @@ export default {
       ) {
         this.step = 3;
         booking.status = "Completed";
-        bookingService.setBookingInfo(booking);
       }
 
       if (
@@ -610,6 +609,9 @@ export default {
       ) {
         this.$router.push(pathData.pages.marketplace);
       }
+
+      // Set booking info after some change
+      bookingService.setBookingInfo(booking);
 
       // If payment is canceled
       if (this.$route.query.payment_status == "cancel") {
@@ -620,7 +622,7 @@ export default {
       this.isChatBtnLoading = true;
       clientBookingApi(this.$axios)
         .initBooking({
-          packageId: this.packageId
+          packageId: booking.packageId
         })
         .then(response => {
           let profileCardInfo = response.data.profileCard;
