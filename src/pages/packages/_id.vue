@@ -178,13 +178,11 @@
                             <span class="required">*</span>
                           </div>
                           <div class="message-box__field">
-                            <a-textarea
+                            <v-textarea
                               ref="messageBoxTextArea"
+                              solo
+                              :hint="$t('booking_message_box_text_area_label')"
                               v-model="messageFromPackageBuyer"
-                              :placeholder="
-                                $t('booking_message_box_text_area_label')
-                              "
-                              :auto-size="{ minRows: 3, maxRows: 5 }"
                             />
                           </div>
                         </div>
@@ -414,7 +412,6 @@ import { currencyService, bookingService } from "@/services";
 import { constantData, pathData } from "@/data";
 import { storageHelper } from "@/helper";
 import { bookingApi, clientBookingApi } from "@/api";
-import loginVue from "../login.vue";
 export default {
   components: {
     ProfileSimpleCard,
@@ -565,38 +562,35 @@ export default {
   },
   methods: {
     init() {
-      let booking = {
+      let initialValue = {
         id: null, // booking id
         step: 1,
         status: "Initial",
         person: 1,
         isNotified: false,
-        packageId: null,
+        packageId: parseInt(this.packageId),
         isRedirectToChat: false
       };
 
-      // Update Inital booking info
-      if (this.packageId) {
-        booking.packageId = this.packageId;
-        bookingService.setBookingInfo(booking);
+      // Get booking
+      let booking = bookingService.getBookingInfo();
+
+      // If there has no booking info
+      if (!booking) {
+        bookingService.setBookingInfo({ ...initialValue });
+        booking = bookingService.getBookingInfo();
       }
 
       // if booking info exist
-      if (bookingService.getBookingInfo()) {
-        let booking = bookingService.getBookingInfo();
+      if (booking) {
         this.step = booking.step;
         this.packageInfo.chargeBox.personNumbers.value = booking.value;
-      }
-
-      // If there has no booking info
-      if (!bookingService.getBookingInfo()) {
-        bookingService.setBookingInfo(booking);
+        booking.packageId = this.packageId;
       }
 
       // Notified if step at 3
       if (!booking.isNotified && this.$route.query.payment_status == "paid") {
         booking.isNotified = true;
-        bookingService.setBookingInfo(booking);
         this.notify({ bookingId: booking.id });
       }
 
@@ -607,7 +601,6 @@ export default {
       ) {
         this.step = 3;
         booking.status = "Completed";
-        bookingService.setBookingInfo(booking);
       }
 
       if (
@@ -616,6 +609,9 @@ export default {
       ) {
         this.$router.push(pathData.pages.marketplace);
       }
+
+      // Set booking info after some change
+      bookingService.setBookingInfo(booking);
 
       // If payment is canceled
       if (this.$route.query.payment_status == "cancel") {
@@ -626,7 +622,7 @@ export default {
       this.isChatBtnLoading = true;
       clientBookingApi(this.$axios)
         .initBooking({
-          packageId: this.packageId
+          packageId: booking.packageId
         })
         .then(response => {
           let profileCardInfo = response.data.profileCard;
