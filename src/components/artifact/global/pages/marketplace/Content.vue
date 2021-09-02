@@ -160,6 +160,8 @@ import CoachFilter from "@/components/artifact/global/pages/marketplace/CoachFil
 import { currencyService } from "@/services";
 
 import "css-star-rating/css/star-rating.css";
+import { v4 as uuidv4 } from "uuid";
+
 export default {
   components: {
     ExploreCard,
@@ -279,7 +281,8 @@ export default {
         selectedCountryCode: null,
         countryList: []
       },
-      markerCardElements: []
+      markerCardElements: [],
+      markerCardIndex: 1
     };
   },
   computed: {
@@ -623,7 +626,9 @@ export default {
       if (process.client) {
         let coordinates = [];
         // this.removeAllMapMarker();
-        locations.forEach((item, i) => {
+        locations.forEach(item => {
+          const markerCardIndex = uuidv4();
+
           let coordinate = [item.lat, item.long];
 
           let image = item.userImage
@@ -634,6 +639,7 @@ export default {
           // let marker = window.L.marker(coordinate, {
           //   icon: profileImage
           // }).addTo(this.map);
+
           let marker = window.L.marker(coordinate, {
             icon: new window.L.DivIcon({
               className: "dummy",
@@ -642,7 +648,7 @@ export default {
                 <img class="marker-point__image" src="${image}"/> 
                 <a href="${item.coach.userName}" target="_blank">
                   <div class="${"marker-point__card-wrapper marker-point__card--" +
-                    i}" style="display:none;">
+                    markerCardIndex}" style="display:none;">
                     <div class="marker-point__card">
                       <div class="marker-point__card-body">
                         <img class="marker-point__card-image" src="${image}"/> 
@@ -691,6 +697,7 @@ export default {
                           <div class="text-ellipsis" style="font-size: 10px;color: #2C3749;font-family: Open Sans;font-weight: normal;">${item
                             .coach.categories &&
                             item.coach.categories
+                              .slice(0, 3)
                               .map(item => this.$i18n.t(item.t_key))
                               .join(", ")}</div>
                           <div style="font-weight: bold;font-size: 12.3589px;color: #2C3749;font-family: Open Sans;">${currencyService.toCurrency(
@@ -710,7 +717,9 @@ export default {
               this.markerCardElements.forEach(item => {
                 item.style.display = "none";
               });
-              let x = document.querySelector(".marker-point__card--" + i);
+              let x = document.querySelector(
+                ".marker-point__card--" + markerCardIndex
+              );
               this.markerCardElements.push(x);
               if (x.style.display === "none") {
                 x.style.display = "block";
@@ -726,6 +735,7 @@ export default {
         this.map.fitBounds(bounds);
       }
     },
+
     removeAllMapMarker() {
       this.mapMarkers.forEach(item => {
         this.map.removeLayer(item);

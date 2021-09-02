@@ -178,13 +178,11 @@
                             <span class="required">*</span>
                           </div>
                           <div class="message-box__field">
-                            <a-textarea
+                            <v-textarea
                               ref="messageBoxTextArea"
+                              solo
+                              :hint="$t('booking_message_box_text_area_label')"
                               v-model="messageFromPackageBuyer"
-                              :placeholder="
-                                $t('booking_message_box_text_area_label')
-                              "
-                              :auto-size="{ minRows: 3, maxRows: 5 }"
                             />
                           </div>
                         </div>
@@ -410,9 +408,9 @@ import _ from "lodash";
 import ProfileSimpleCard from "@/components/card/ProfileSimpleCard";
 import PackageSimpleCard from "@/components/card/PackageSimpleCard";
 
-import { currencyService } from "@/services";
+import { currencyService, bookingService } from "@/services";
 import { constantData, pathData } from "@/data";
-import { storageHelper, bookingHelper } from "@/helper";
+import { storageHelper } from "@/helper";
 import { bookingApi, clientBookingApi } from "@/api";
 export default {
   components: {
@@ -555,36 +553,44 @@ export default {
       deep: true
     }
   },
+  async asyncData({ params }) {
+    return { packageId: params.id };
+  },
   created() {},
   mounted() {
     this.init();
   },
   methods: {
     init() {
-      let booking = {
-        id: null,
+      let initialValue = {
+        id: null, // booking id
         step: 1,
         status: "Initial",
         person: 1,
         isNotified: false,
-        packageId: this.$route.params.packageId,
+        packageId: parseInt(this.packageId),
         isRedirectToChat: false
       };
 
-      // Store booking info || retrieve if exist
-      if (storageHelper.get("booking")) {
-        booking = storageHelper.get("booking");
-        storageHelper.set("booking", booking);
+      // Get booking
+      let booking = bookingService.getBookingInfo();
+
+      // If there has no booking info
+      if (!booking) {
+        bookingService.setBookingInfo({ ...initialValue });
+        booking = bookingService.getBookingInfo();
+      }
+
+      // if booking info exist
+      if (booking) {
         this.step = booking.step;
         this.packageInfo.chargeBox.personNumbers.value = booking.value;
-      } else {
-        storageHelper.set("booking", booking);
+        booking.packageId = this.packageId;
       }
 
       // Notified if step at 3
       if (!booking.isNotified && this.$route.query.payment_status == "paid") {
         booking.isNotified = true;
-        storageHelper.set("booking", booking);
         this.notify({ bookingId: booking.id });
       }
 
@@ -595,7 +601,6 @@ export default {
       ) {
         this.step = 3;
         booking.status = "Completed";
-        storageHelper.set("booking", booking);
       }
 
       if (
@@ -605,19 +610,20 @@ export default {
         this.$router.push(pathData.pages.marketplace);
       }
 
+      // Set booking info after some change
+      bookingService.setBookingInfo(booking);
+
       // If payment is canceled
       if (this.$route.query.payment_status == "cancel") {
-        bookingHelper.removeBookingInfoFromStorage();
+        bookingService.destroyBookingInfo();
         this.$router.push(this.localePath(pathData.pages.marketplace));
       }
 
-      const payload = {
-        packageId: this.$route.params.id
-      };
-
       this.isChatBtnLoading = true;
       clientBookingApi(this.$axios)
-        .initBooking(payload)
+        .initBooking({
+          packageId: booking.packageId
+        })
         .then(response => {
           let profileCardInfo = response.data.profileCard;
           let packageInfo = response.data.packageInfo;
@@ -696,9 +702,9 @@ export default {
         .payByQuickpay(payload)
         .then(({ data }) => {
           if (data.bookingId) {
-            let booking = storageHelper.get("booking");
+            let booking = bookingService.getBookingInfo("booking");
             booking.id = data.bookingId;
-            storageHelper.set("booking", booking);
+            bookingService.setBookingInfo(booking);
           }
           if (data.link) {
             window.location.assign(data.link);
@@ -720,10 +726,10 @@ export default {
       }
     },
     chatNowBtnClickHandle() {
-      let booking = storageHelper.get("booking");
+      let booking = bookingService.getBookingInfo();
       if (booking) {
         booking.isRedirectToChat = true;
-        storageHelper.set("booking", booking);
+        bookingService.setBookingInfo(booking);
       }
       this.$router.push(
         this.localePath({
@@ -764,21 +770,21 @@ export default {
     // },
 
     setStepToStorage(step) {
-      let booking = storageHelper.get("booking");
+      let booking = bookingService.getBookingInfo();
       booking.step = step;
-      storageHelper.set("booking", booking);
+      bookingService.setBookingInfo(booking);
     },
     setPerson(person) {
       if (person) {
-        let booking = storageHelper.get("booking");
+        let booking = bookingService.getBookingInfo();
         booking.person = person;
-        storageHelper.set("booking", booking);
+        bookingService.setBookingInfo(booking);
       }
     },
     setCategoryId(id) {
-      let booking = storageHelper.get("booking");
+      let booking = bookingService.getBookingInfo();
       booking.categoryId = id;
-      storageHelper.set("booking", booking);
+      bookingService.setBookingInfo(booking);
     }
   }
 };

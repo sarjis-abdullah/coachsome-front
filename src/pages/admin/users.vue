@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row>
       <v-col cols="12" class="pb-0">
         <div class="page-title">User List</div>
@@ -479,6 +479,7 @@ export default {
           },
           { text: "switch", value: "image" },
           { text: "name", value: "name" },
+          { text: "Email", value: "email" },
           { text: "type", value: "type" },
           { text: "Status", value: "status" },
           { text: "Ranking", value: "ranking" },
