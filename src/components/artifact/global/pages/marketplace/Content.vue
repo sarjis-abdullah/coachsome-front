@@ -657,11 +657,11 @@ export default {
                             item.coach.name
                           }</div>
                           <div class="d-flex align-center">
-                            <div class="rating star-icon value-${
+                            <div class="rating small star-icon half color-ok value-${
                               item.coach.rating
-                                ? Math.trunc(item.coach.rating)
+                                ? item.coach.rating.toPrecision(2)
                                 : 0
-                            } small color-ok" style="background: transparent !important;padding-left:0px;margin-left:0px;">
+                            }" style="background: transparent !important;padding-left:0px;margin-left:0px;">
                               <div class="star-container">
                                 <div class="star">
                                     <i class="star-empty"></i>

@@ -65,6 +65,41 @@
               </template>
             </v-data-table>
 
+            <!-- Reason Dialog -->
+            <v-dialog v-model="userEdit.reasonDialog" max-width="290">
+              <v-card>
+                <v-card-title class="headline">Reason</v-card-title>
+
+                <v-card-text>
+                  <v-textarea
+                    solo
+                    counter="42"
+                    maxlength="42"
+                    v-model="userEdit.data.reason"
+                    label="Enter the reason"
+                  ></v-textarea>
+                </v-card-text>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+
+                  <v-btn
+                    color="primary-light-1"
+                    text
+                    @click="userEdit.reasonDialog = false"
+                    >Cancel</v-btn
+                  >
+
+                  <v-btn
+                    color="primary-light-1"
+                    text
+                    @click="userEdit.reasonDialog = false"
+                    >Ok</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+
             <!-- User Edit Dialog -->
             <v-dialog
               v-model="userEdit.dialog"
@@ -72,50 +107,20 @@
               max-width="70%"
               scrollable
             >
-              <!-- Reason Dialog -->
-              <v-dialog v-model="userEdit.reasonDialog" max-width="290">
-                <v-card>
-                  <v-card-title class="headline">Reason</v-card-title>
-
-                  <v-card-text>
-                    <v-textarea
-                      solo
-                      counter="42"
-                      maxlength="42"
-                      v-model="userEdit.data.reason"
-                      label="Enter the reason"
-                    ></v-textarea>
-                  </v-card-text>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-
-                    <v-btn
-                      color="primary-light-1"
-                      text
-                      @click="userEdit.reasonDialog = false"
-                      >Cancel</v-btn
-                    >
-
-                    <v-btn
-                      color="primary-light-1"
-                      text
-                      @click="userEdit.reasonDialog = false"
-                      >Ok</v-btn
-                    >
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
               <v-card>
+                <v-card-title>
+                  <span class="title black--text">User Profile</span>
+                  <span class="ml-5 primary-light-1--text">{{
+                    userEdit.data.name
+                  }}</span>
+                </v-card-title>
+                <v-divider></v-divider>
                 <v-card-text>
                   <v-container>
+                    <!-- General Group -->
                     <v-row>
                       <v-col cols="12">
-                        <span class="title black--text">User Profile</span>
-                        <span class="ml-5 primary-light-1--text">{{
-                          userEdit.data.name
-                        }}</span>
-                        <v-divider class></v-divider>
+                        <span class="subtitle-2">General</span>
                       </v-col>
                     </v-row>
                     <!-- Email -->
@@ -133,6 +138,26 @@
                           required
                           solo
                         ></v-text-field>
+                      </v-col>
+                    </v-row>
+
+                    <!-- Role -->
+                    <v-row>
+                      <v-col cols="12" md="6">
+                        <div class="section-title pb-2">Role</div>
+                        <div class="section-description">
+                          Role is the part of the system.
+                        </div>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <v-select
+                          solo
+                          v-model="userEdit.data.roleId"
+                          :items="roleList"
+                          item-text="name"
+                          item-value="id"
+                          label="Select badge"
+                        ></v-select>
                       </v-col>
                     </v-row>
 
@@ -166,10 +191,36 @@
                       </v-col>
                     </v-row>
 
+                    <!-- User Status -->
+                    <v-row>
+                      <v-col cols="12" md="6">
+                        <div class="section-title pb-2">USER STATUS</div>
+                        <div class="section-description">
+                          This status show a coachsome select status of a
+                          specific user in relation to the world
+                        </div>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <v-select
+                          @change="userEdit.reasonDialog = true"
+                          solo
+                          v-model="userEdit.data.activityStatusId"
+                          :items="activityStatusList"
+                          item-text="display_text"
+                          item-value="id"
+                          label="Select status"
+                        ></v-select>
+                        <div v-if="userEdit.data.reason">
+                          <div class="caption warning--text">Reason</div>
+                          <div>{{ userEdit.data.reason }}</div>
+                        </div>
+                      </v-col>
+                    </v-row>
+
+                    <!-- Ranking Group -->
                     <v-row>
                       <v-col cols="12">
-                        <span class="title black--text">Ranking</span>
-                        <v-divider class></v-divider>
+                        <span class="subtitle-2">Ranking</span>
                       </v-col>
                     </v-row>
                     <!-- Ranking -->
@@ -263,34 +314,9 @@
                         ></v-select>
                       </v-col>
                     </v-row>
-
-                    <!-- User Status -->
-                    <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">USER STATUS</div>
-                        <div class="section-description">
-                          This status show a coachsome select status of a
-                          specific user in relation to the world
-                        </div>
-                      </v-col>
-                      <v-col cols="12" md="6">
-                        <v-select
-                          @change="userEdit.reasonDialog = true"
-                          solo
-                          v-model="userEdit.data.activityStatusId"
-                          :items="activityStatusList"
-                          item-text="display_text"
-                          item-value="id"
-                          label="Select status"
-                        ></v-select>
-                        <div v-if="userEdit.data.reason">
-                          <div class="caption warning--text">Reason</div>
-                          <div>{{ userEdit.data.reason }}</div>
-                        </div>
-                      </v-col>
-                    </v-row>
                   </v-container>
                 </v-card-text>
+                <v-divider></v-divider>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn
@@ -466,7 +492,8 @@ export default {
           starStatusId: null,
           activityStatusId: null,
           reason: null,
-          badgeId: null
+          badgeId: null,
+          roleId: null
         }
       },
       table: {
@@ -563,6 +590,7 @@ export default {
       payload.activityStatusReason = this.userEdit.data.reason;
       payload.ranking = this.userEdit.data.ranking;
       payload.badgeId = this.userEdit.data.badgeId;
+      payload.roleId = this.userEdit.data.roleId;
       adminUserApi(this.$axios)
         .updateUser(payload)
         .then(({ data }) => {
@@ -582,27 +610,14 @@ export default {
           }
 
           if (data.user) {
-            const rowItem = this.table.rows.find(
+            const index = this.table.rows.findIndex(
               item => item.id == data.user.id
             );
-            rowItem.id = data.user.id;
-            rowItem.image = data.user.image;
-            rowItem.email = data.user.email;
-            rowItem.phoneCode = data.user.phoneCode;
-            rowItem.phoneNumber = data.user.phoneNumber;
-            rowItem.phoneText = data.user.phoneText;
-            rowItem.name = data.user.fullName;
-            rowItem.type = data.user.type;
-            rowItem.status = data.user.status;
-            rowItem.ranking = data.user.ranking;
-            rowItem.badgeId = data.user.badgeId;
-            rowItem.booking = data.user.booking;
-            rowItem.decline = data.user.declined;
-            rowItem.package = data.user.packageCount;
-            rowItem.media = data.user.mediaCount;
-            rowItem.activityStatusReason = data.user.activityStatusReason;
-            rowItem.activityStatusId = data.user.activityStatusId;
-            rowItem.starStatusId = data.user.starStatusId;
+            Object.assign(
+              this.table.rows[index],
+              this.formatUserItem(data.user)
+            );
+            console.log(this.table.rows[index]);
           }
         })
         .catch(({ response }) => {
@@ -622,6 +637,7 @@ export default {
       this.userEdit.data.reason = "";
       this.userEdit.data.ranking = "";
       this.userEdit.data.badgeId = null;
+      this.userEdit.data.roleId = null;
     },
     makeUserTableRow(users) {
       this.table.rows = [];
@@ -629,27 +645,31 @@ export default {
     },
     formatUserRow(users) {
       return users.map(item => {
-        return {
-          id: item.id,
-          image: item.image ? item.image : null,
-          email: item.email,
-          phoneCode: item.phoneCode,
-          phoneNumber: item.phoneNumber,
-          phoneText: item.phoneText,
-          name: item.fullName,
-          type: item.type,
-          status: item.status,
-          ranking: item.ranking,
-          badgeId: item.badgeId,
-          booking: item.booking,
-          decline: item.declined,
-          package: item.packageCount,
-          media: item.mediaCount,
-          activityStatusReason: item.activityStatusReason,
-          activityStatusId: item.activityStatusId,
-          starStatusId: item.starStatusId
-        };
+        return this.formatUserItem(item);
       });
+    },
+    formatUserItem(item) {
+      return {
+        id: item.id,
+        image: item.image ? item.image : null,
+        email: item.email,
+        phoneCode: item.phoneCode,
+        phoneNumber: item.phoneNumber,
+        phoneText: item.phoneText,
+        name: item.fullName,
+        type: item.type,
+        status: item.status,
+        ranking: item.ranking,
+        badgeId: item.badgeId,
+        roleId: item.roles.length ? item.roles[0].id : null,
+        booking: item.booking,
+        decline: item.declined,
+        package: item.packageCount,
+        media: item.mediaCount,
+        activityStatusReason: item.activityStatusReason,
+        activityStatusId: item.activityStatusId,
+        starStatusId: item.starStatusId
+      };
     },
     setUserEditDataMobileInfo(item) {
       if (item.countryCode) {
@@ -662,6 +682,7 @@ export default {
     setUserDataToEdit(selectedRow) {
       this.resetUserData();
       if (selectedRow) {
+        console.log(selectedRow);
         this.userEdit.data.id = selectedRow.id;
         this.userEdit.data.name = selectedRow.name;
         this.userEdit.data.email = selectedRow.email;
@@ -672,6 +693,7 @@ export default {
         this.userEdit.data.reason = selectedRow.activityStatusReason;
         this.userEdit.data.ranking = selectedRow.ranking;
         this.userEdit.data.badgeId = selectedRow.badgeId;
+        this.userEdit.data.roleId = selectedRow.roleId;
         this.userEdit.dialog = true;
       }
     },
