@@ -667,7 +667,8 @@ export default {
         message: this.messageFromPackageBuyer,
         salePrice: this.packageInfo.chargeBox.salePrice,
         paymentMethod: this.selectedPaymentMethod,
-        packageUrl: location.href
+        packageUrl: location.href,
+        promoCode: this.promoCode.value
       };
       this.loadingRequestBookingBtn = true;
       bookingApi(this.$axios)
