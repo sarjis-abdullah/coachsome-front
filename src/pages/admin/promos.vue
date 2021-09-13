@@ -230,6 +230,7 @@
 
 <script>
 import { adminPromoCodeApi } from "@/api";
+import { currencyService } from "@/services";
 
 export default {
   layout: "admin",
@@ -333,7 +334,12 @@ export default {
               id: item.id,
               name: item.name,
               code: item.code,
-              discount: item.discount,
+              discount: item.discount
+                ? currencyService.toCurrency(
+                    item.discount,
+                    currencyService.getByCode(item.currency)
+                  )
+                : null,
               currency: item.currency,
               duration: item.duration,
               used: item.totalUsed,
