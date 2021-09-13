@@ -208,7 +208,7 @@ export default {
           params: { username: this.userName }
         });
       } else {
-        this.$router.push(pathData.pages.marketplace);
+        this.$router.push(this.localePath(pathData.pages.marketplace));
       }
     },
     cancelBtnClickHandle() {
