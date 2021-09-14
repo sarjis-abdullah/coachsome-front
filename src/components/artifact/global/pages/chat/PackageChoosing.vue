@@ -203,10 +203,9 @@ export default {
     },
     anotherPakcageBtnHandle() {
       if (this.userName) {
-        this.$router.push({
-          name: "publicProfile",
-          params: { username: this.userName }
-        });
+        this.$router.push(
+          this.localePath(pathData.pages.publicProfile(this.userName))
+        );
       } else {
         this.$router.push(this.localePath(pathData.pages.marketplace));
       }
