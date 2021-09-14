@@ -634,9 +634,13 @@ export default {
     },
     handleBooking(service = null) {
       bookingService.destroyBookingInfo();
-      this.$router.push(
-        this.localePath(pathData.pages.bookingPackage(service.id))
-      );
+      if (!this.$auth.loggedIn) {
+        this.$router.push(this.localePath(pathData.pages.register));
+      } else {
+        this.$router.push(
+          this.localePath(pathData.pages.bookingPackage(service.id))
+        );
+      }
     },
     initMap() {
       if (this.travelCard.map != undefined) {

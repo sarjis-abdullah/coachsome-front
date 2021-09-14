@@ -204,6 +204,7 @@
                                 <v-btn
                                   color="primary-light-1"
                                   text
+                                  :loading="isLoading"
                                   @click="handleApplyBtnClick"
                                 >
                                   apply
@@ -362,6 +363,7 @@ export default {
       isChatBtnLoading: false,
       loadingRequestBookingBtn: false,
       selectedPaymentMethod: null,
+      isLoading: false,
       paymentMethods: [
         // {
         //   id: 1,
@@ -577,6 +579,7 @@ export default {
     fetchBookingInfo(payload) {
       const { packageId, promoCode, withPromoCode } = payload;
       this.isChatBtnLoading = true;
+      this.isLoading = true;
 
       bookingApi(this.$axios)
         .getBookingInfo({
@@ -651,6 +654,7 @@ export default {
         })
         .finally(() => {
           this.isChatBtnLoading = false;
+          this.isLoading = false;
         });
     },
     notify(payload) {
