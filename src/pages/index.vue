@@ -141,16 +141,16 @@
                         spaceBetween: 10,
                         direction: 'horizontal',
                         loop: true,
-
+                        speed: 2500,
+                        autoplay: {
+                          delay: 0,
+                          disableOnInteraction: false
+                        },
                         navigation: {
                           nextEl: '.swiper-button-next',
                           prevEl: '.swiper-button-prev'
                         },
 
-                        autoplay: {
-                          delay: 100000,
-                          disableOnInteraction: false
-                        },
                         breakpoints: {
                           1024: {
                             slidesPerView: 4,
@@ -158,27 +158,15 @@
                           },
                           768: {
                             slidesPerView: 3,
-                            spaceBetween: 30,
-                            autoplay: {
-                              delay: 3000
-                            }
+                            spaceBetween: 30
                           },
                           640: {
                             slidesPerView: 2,
-                            spaceBetween: 20,
-                            loop: true,
-                            autoplay: {
-                              delay: 3000,
-                              disableOnInteraction: false
-                            }
+                            spaceBetween: 20
                           },
                           320: {
                             slidesPerView: 1,
-                            spaceBetween: 10,
-                            loop: true,
-                            autoplay: {
-                              delay: 3000
-                            }
+                            spaceBetween: 10
                           }
                         }
                       }"
@@ -212,7 +200,11 @@
                       <swiper-slide class="d-flex justify-center">
                         <div :style="{ marginTop: '35px' }">
                           <img
-                            :style="{ maxWidth: '250px',paddingLeft:'40px',paddingRight:'40px' }"
+                            :style="{
+                              maxWidth: '250px',
+                              paddingLeft: '40px',
+                              paddingRight: '40px'
+                            }"
                             src="@/assets/images/home/logos/innovationsfonden.png"
                           />
                         </div>
