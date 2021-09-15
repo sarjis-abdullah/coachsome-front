@@ -1,6 +1,6 @@
 <template>
-  <v-container fluid class="px-10">
-    <v-row class="mt-5">
+  <v-container fluid>
+    <v-row>
       <v-col cols="12" class="pb-0 d-flex justify-space-between align-center">
         <div class="page-title">Promo Codes</div>
         <div>
