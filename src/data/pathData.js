@@ -66,12 +66,13 @@ export default {
     payoutRequest: "/admin/payout-request",
     orderList: "/admin/orders",
     pageBuilder: "/admin/page-builder",
-    grapesJs: "/admin/grapes-js"
+    grapesJs: "/admin/grapes-js",
+    promos:"/admin/promos"
   },
   athlete: {
     editProfile: "/athlete/edit-profile",
     login: "/athlete/login",
     register: "/athlete/register",
-    bookings: "/athlete/bookings"
+    bookings: "/athlete/bookings",
   }
 };
