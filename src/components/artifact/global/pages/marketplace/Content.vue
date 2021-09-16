@@ -659,7 +659,7 @@ export default {
                           <div class="d-flex align-center">
                             <div class="rating small star-icon half color-ok value-${
                               item.coach.rating
-                                ? item.coach.rating.toPrecision(2)
+                                ? Math.trunc(item.coach.rating)
                                 : 0
                             }" style="background: transparent !important;padding-left:0px;margin-left:0px;">
                               <div class="star-container">

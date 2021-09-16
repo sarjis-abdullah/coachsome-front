@@ -247,7 +247,7 @@ export default {
         id: null,
         name: "",
         code: "",
-        type: "",
+        type: 1,
         currency: null,
         symbol: null,
         discount: null,
@@ -393,7 +393,7 @@ export default {
       this.editMode = false;
       this.dialog = true;
       this.$nextTick(() => {
-        this.$refs.form.reset();
+        // this.$refs.form.reset();
       });
     },
     handleCreateBtnClick() {
