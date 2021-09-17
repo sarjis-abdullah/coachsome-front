@@ -42,6 +42,13 @@
                 }}
               </div>
             </template>
+            <template v-slot:item.used="{ item }">
+              <div>
+                <v-btn text @click="handleTotalUsedClick(item.code)">
+                  {{ item.used }}
+                </v-btn>
+              </div>
+            </template>
             <template v-slot:item.actions="{ item }">
               <v-icon small class="mr-2" @click="editItem(item)">
                 mdi-pencil
@@ -231,7 +238,7 @@
 <script>
 import { adminPromoCodeApi } from "@/api";
 import { currencyService } from "@/services";
-
+import { pathData } from "@/data";
 export default {
   layout: "admin",
   components: {},
@@ -247,7 +254,7 @@ export default {
         id: null,
         name: "",
         code: "",
-        type: "",
+        type: 1,
         currency: null,
         symbol: null,
         discount: null,
@@ -352,6 +359,12 @@ export default {
       });
   },
   methods: {
+    handleTotalUsedClick(code) {
+      window.open(
+        this.localePath(pathData.admin.trackingCodes(code)),
+        "_blank"
+      );
+    },
     handleUpdateBtnClick() {
       if (this.$refs.form.validate()) {
         this.isLoading = true;
@@ -393,7 +406,7 @@ export default {
       this.editMode = false;
       this.dialog = true;
       this.$nextTick(() => {
-        this.$refs.form.reset();
+        // this.$refs.form.reset();
       });
     },
     handleCreateBtnClick() {
