@@ -125,6 +125,7 @@
         <!-- ./Map -->
       </v-row>
 
+    
       <!-- Footer -->
       <client-only v-if="footer.toggleButton">
         <v-row>
