@@ -1,15 +1,15 @@
 <template>
   <div class="chat-new-page">
-    <v-container fluid class="pt-0">
+    <v-container fluid class="pa-0">
       <v-row no-gutters>
         <!-- left-sidebar -->
         <v-col cols="12" md="3">
           <div class="left-sidebar">
             <div class="left-sidebar__header">
-              <div class="page-title primary--text">Messages</div>
-              <div class="page-action">
-                <v-btn icon color="primary">
-                  <v-icon color="primary">
+              <div class="left-sidebar-title">Messages</div>
+              <div class="left-sidebar-action">
+                <v-btn icon color="primary-light-1">
+                  <v-icon color="primary-light-1">
                     mdi-plus-circle-outline
                   </v-icon>
                 </v-btn>
@@ -17,47 +17,75 @@
             </div>
             <div class="left-sidebar__body">
               <v-text-field
-                class="mt-5"
+                class="my-5 px-5"
                 rounded
                 dense
                 solo
+                hide-details
                 label="Search in chat history"
                 prepend-inner-icon="mdi-magnify"
               >
               </v-text-field>
               <v-select
+                class="px-5"
                 :value="0"
                 :items="['All Conversation', 'Unread']"
                 dense
                 solo
                 append-icon="expand_more"
               ></v-select>
-              <div class="caontact">
-                <div class="contact-item">
-                  <v-list color="transparent" nav>
-                    <template v-for="(item, index) in items">
-                      <v-list-item :key="index" link>
-                        <v-list-item-avatar>
-                          <v-img :src="item.avatar"></v-img>
+              <div class="contact">
+                <v-list color="transparent">
+                  <v-list-item-group
+                    v-model="activeChat"
+                    active-class="border"
+                    color="primary-light-1"
+                  >
+                    <template v-for="item in contacts">
+                      <v-list-item
+                        link
+                        :key="item.id"
+                        :value="item.id"
+                        @click.stop="handleSelectedContactUser(item)"
+                      >
+                        <v-list-item-avatar
+                          color="primary-light-1"
+                          class="d-flex justify-center"
+                        >
+                          <v-img
+                            v-if="item.avatarImage"
+                            :src="item.avatarImage"
+                          ></v-img>
+                          <div v-else v-html="item.avatarName">
+                            {{ item.avatarName }}
+                          </div>
                         </v-list-item-avatar>
 
                         <v-list-item-content>
                           <v-list-item-title
-                            v-html="item.title"
+                            v-html="item.fullName"
                           ></v-list-item-title>
-                          <v-list-item-subtitle
-                            v-html="item.subtitle"
-                          ></v-list-item-subtitle>
+                          <v-list-item-subtitle>
+                            <div v-if="item.lastMessage">
+                              <div
+                                v-if="
+                                  JSON.parse(item.lastMessage).type == 'text'
+                                "
+                              >
+                                {{ JSON.parse(item.lastMessage).text_content }}
+                              </div>
+                            </div>
+                          </v-list-item-subtitle>
                         </v-list-item-content>
                         <v-list-item-action>
                           <v-list-item-action-text>
-                            13.5.2021
+                            {{ item.lastMessageTime }}
                           </v-list-item-action-text>
                         </v-list-item-action>
                       </v-list-item>
                     </template>
-                  </v-list>
-                </div>
+                  </v-list-item-group>
+                </v-list>
               </div>
             </div>
           </div>
@@ -89,22 +117,78 @@
                 </div>
               </div>
               <div>
-                <v-btn outlined small rounded>
+                <v-btn
+                  outlined
+                  small
+                  rounded
+                  color="primary-light-1"
+                  class="text-normal"
+                >
                   Hide Actions
                 </v-btn>
               </div>
             </div>
-            <div class="content__body"></div>
+            <div class="content__body">
+              <div class="messages"></div>
+              <v-textarea
+                rounded
+                rows="1"
+                dense
+                color="primary-light-1"
+                auto-grow
+                autocomplete="off"
+                outlined
+                hide-details
+                label="Message"
+              >
+                <template v-slot:prepend>
+                  <div>
+                    <v-btn icon>
+                      <v-icon>
+                        mdi-attachment
+                      </v-icon>
+                    </v-btn>
+                  </div>
+                </template>
+                <template v-slot:append>
+                  <div>
+                    <v-btn icon>
+                      <v-icon>
+                        emoji_emotions
+                      </v-icon>
+                    </v-btn>
+                  </div>
+                </template>
+                <template v-slot:append-outer>
+                  <div>
+                    <v-btn icon>
+                      <v-icon>
+                        mdi-send
+                      </v-icon>
+                    </v-btn>
+                  </div>
+                </template>
+              </v-textarea>
+            </div>
           </div>
         </v-col>
 
         <!-- right-sidebar -->
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="3" class="pa-0 ma-0">
           <div class="right-sidebar">
             <div class="right-sidebar__header">
-              <div class="ml-5">Actions</div>
+              <div class="right-sidebar-title">Actions</div>
             </div>
-            <div class="right-sidebar__body"></div>
+            <div class="right-sidebar__body">
+              <div class="actions">
+                <div class="actions-item">
+                  <div class="actions-item__icon">
+                    <v-icon color="primary-light-1">mdi-calendar-plus</v-icon>
+                  </div>
+                  <div class="actions-item__title">Booking Request</div>
+                </div>
+              </div>
+            </div>
           </div>
         </v-col>
       </v-row>
@@ -439,10 +523,10 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .chat-new-page {
   background: #f7fafc;
-  height: 100%;
+  height: 94vh;
   .left-sidebar {
     &__header {
       border-bottom: 1px solid #e1e8f1;
@@ -450,12 +534,41 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      .left-sidebar-title {
+        margin-left: 10px;
+        font-family: $font-family;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 25px;
+        text-transform: capitalize;
+        color: $primary-light-1;
+      }
     }
     &__body {
-      padding: 8px;
-      border-right: 1px solid #e1e8f1;
-      height: 90vh;
-      overflow-y: hidden;
+      .contact {
+        height: 69.5vh;
+        overflow: auto;
+      }
+      /* width */
+      .contact::-webkit-scrollbar {
+        width: 5px;
+      }
+
+      /* Track */
+      .contact::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      /* Handle */
+      .contact::-webkit-scrollbar-thumb {
+        border-radius: 20px;
+        background: #888;
+      }
+
+      /* Handle on hover */
+      .contact::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
     }
   }
   .content {
@@ -465,15 +578,21 @@ export default {
       border-right: 1px solid #e1e8f1;
       border-bottom: 1px solid #e1e8f1;
       height: 83px;
-      height: 83px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding-right: 20px;
     }
     &__body {
+      min-height: 85.5vh;
+      padding-left: 10px;
+      padding-right: 10px;
       border-left: 1px solid #e1e8f1;
       border-right: 1px solid #e1e8f1;
+      .messages {
+        height: 75vh;
+        overflow: auto;
+      }
     }
   }
   .right-sidebar {
@@ -484,8 +603,39 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      .right-sidebar-title {
+        margin-left: 10px;
+        font-family: $font-family;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 25px;
+        text-transform: capitalize;
+        color: $primary-light-1;
+      }
     }
     &__body {
+      .actions {
+        &-item {
+          display: flex;
+          align-items: center;
+          padding-top: 20px;
+          padding-bottom: 20px;
+          border-bottom: 1px solid #e1e8f1;
+          padding-left: 10px;
+          &__title {
+            margin-left: 5px;
+            font-family: $font-family;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 124%;
+            color: $primary-light-1;
+          }
+        }
+        &-item:hover {
+          cursor: pointer;
+          background: #e1e8f1;
+        }
+      }
     }
   }
 }
