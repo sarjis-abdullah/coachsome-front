@@ -2,8 +2,53 @@
   <div class="chat-new-page">
     <v-container fluid class="pa-0">
       <v-row no-gutters>
+        <!-- Dialog -->
+        <v-dialog v-model="bookingDialog.value" max-width="400">
+          <RequestBox
+            v-bind="bookingDialog.requestBox.props"
+            @new-message="handleRequestBoxNewMessage"
+            @cancel="handleRequestBoxCancelBtn"
+          />
+        </v-dialog>
+        <v-dialog v-model="packageChoosingDialog.value" max-width="400">
+          <PackageChoosing
+            v-bind="{
+              isOpen: packageChoosingDialog.value,
+              ...packageChoosingDialog.props
+            }"
+            @cancel="handlePackageChoosingCancel"
+            @select-package="handleSelectPackage"
+          />
+        </v-dialog>
+        <v-dialog
+          v-model="actionDialog"
+          fullscreen
+          hide-overlay
+          transition="dialog-bottom-transition"
+          scrollable
+        >
+          <v-card>
+            <v-card-title>
+              <div class="subtitle-1">Actions</div>
+              <v-spacer></v-spacer>
+              <v-btn icon @click="actionDialog = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-card-title>
+            <v-card-text>
+              <v-list nav color="transparent" class="pa-0">
+                <v-list-item @click="handleCalenderClick" link class="pa-0">
+                  <v-icon color="primary-light-1">mdi-calendar-plus</v-icon>
+                  <div class="primary-light-1--text ml-5">Booking Request</div>
+                </v-list-item>
+              </v-list>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <!-- ./Dialog -->
+
         <!-- left-sidebar -->
-        <v-col cols="12" md="3">
+        <v-col cols="12" :md="leftSidebarMd" v-if="leftSidebarSection">
           <div class="left-sidebar">
             <div class="left-sidebar__header">
               <div class="left-sidebar-title">Messages</div>
@@ -17,7 +62,7 @@
             </div>
             <div class="left-sidebar__body">
               <v-text-field
-                class="my-5 px-5"
+                class="px-5 mt-5"
                 rounded
                 dense
                 solo
@@ -27,7 +72,7 @@
               >
               </v-text-field>
               <v-select
-                class="px-5"
+                class="px-5 mt-5"
                 :value="0"
                 :items="['All Conversation', 'Unread']"
                 dense
@@ -92,105 +137,143 @@
         </v-col>
 
         <!-- content -->
-        <v-col cols="12" md="6">
-          <div class="content">
-            <div class="content__header">
-              <div class="d-flex">
-                <v-badge
-                  bordered
-                  bottom
-                  color="green"
-                  dot
-                  class="ml-5"
-                  offset-x="10"
-                  offset-y="10"
-                >
-                  <v-avatar size="40">
-                    <v-img
-                      src="https://cdn.vuetifyjs.com/images/lists/2.jpg"
-                    ></v-img>
-                  </v-avatar>
-                </v-badge>
-                <div class="ml-3">
-                  <div>Kennth Dreyer</div>
-                  <div>Active</div>
+        <slide-x-left-transition>
+          <v-col cols="12" :md="contentMd" v-if="contentSection">
+            <div class="content">
+              <div class="content__header">
+                <div class="d-flex">
+                  <v-btn
+                    icon
+                    v-if="$vuetify.breakpoint.smAndDown"
+                    @click="handleBackBtnClick"
+                  >
+                    <v-icon>mdi-arrow-left</v-icon>
+                  </v-btn>
+                  <v-badge
+                    bordered
+                    bottom
+                    color="green"
+                    dot
+                    class="ml-5"
+                    offset-x="10"
+                    offset-y="10"
+                  >
+                    <v-avatar size="40">
+                      <v-img
+                        src="https://cdn.vuetifyjs.com/images/lists/2.jpg"
+                      ></v-img>
+                    </v-avatar>
+                  </v-badge>
+                  <div class="ml-3">
+                    <div>Kennth Dreyer</div>
+                    <div>Active</div>
+                  </div>
+                </div>
+                <div>
+                  <v-btn
+                    v-if="$vuetify.breakpoint.smAndDown"
+                    @click="handleMobileHideActionBtnClick"
+                    outlined
+                    small
+                    rounded
+                    color="primary-light-1"
+                    class="text-normal"
+                  >
+                    {{ actionDialog ? "Hide Actions" : "Show Actions" }}
+                  </v-btn>
+                  <v-btn
+                    v-if="!$vuetify.breakpoint.smAndDown"
+                    @click="handleDesktopHideActionBtnClick"
+                    outlined
+                    small
+                    rounded
+                    color="primary-light-1"
+                    class="text-normal"
+                  >
+                    {{ rightSidebar ? "Hide Actions" : "Show Actions" }}
+                  </v-btn>
                 </div>
               </div>
-              <div>
-                <v-btn
+              <div class="content__body">
+                <div class="message-list">
+                  <ChatScreen />
+                </div>
+                <v-textarea
+                  rows="1"
+                  row-height="15"
+                  auto-grow
+                  autocomplete="off"
                   outlined
-                  small
                   rounded
-                  color="primary-light-1"
-                  class="text-normal"
+                  class="mx-3"
+                  v-model="messageForm.content"
+                  :label="$t('chat_chat_box_input_placeholder')"
+                  type="text"
+                  hide-details
+                  @keyup.enter="messageForm.content + '\n'"
                 >
-                  Hide Actions
-                </v-btn>
+                  <template v-slot:prepend>
+                    <div>
+                      <v-btn icon>
+                        <v-icon>
+                          mdi-attachment
+                        </v-icon>
+                      </v-btn>
+                    </div>
+                  </template>
+                  <template v-slot:append>
+                    <div>
+                      <v-btn icon>
+                        <v-icon>
+                          emoji_emotions
+                        </v-icon>
+                      </v-btn>
+                    </div>
+                  </template>
+                  <template v-slot:append-outer>
+                    <div>
+                      <v-btn icon @click="handleMessageInput">
+                        <v-icon>
+                          mdi-send
+                        </v-icon>
+                      </v-btn>
+                    </div>
+                  </template>
+                </v-textarea>
               </div>
             </div>
-            <div class="content__body">
-              <div class="messages"></div>
-              <v-textarea
-                rounded
-                rows="1"
-                dense
-                color="primary-light-1"
-                auto-grow
-                autocomplete="off"
-                outlined
-                hide-details
-                label="Message"
-              >
-                <template v-slot:prepend>
-                  <div>
-                    <v-btn icon>
-                      <v-icon>
-                        mdi-attachment
-                      </v-icon>
-                    </v-btn>
-                  </div>
-                </template>
-                <template v-slot:append>
-                  <div>
-                    <v-btn icon>
-                      <v-icon>
-                        emoji_emotions
-                      </v-icon>
-                    </v-btn>
-                  </div>
-                </template>
-                <template v-slot:append-outer>
-                  <div>
-                    <v-btn icon>
-                      <v-icon>
-                        mdi-send
-                      </v-icon>
-                    </v-btn>
-                  </div>
-                </template>
-              </v-textarea>
-            </div>
-          </div>
-        </v-col>
+          </v-col>
+        </slide-x-left-transition>
 
         <!-- right-sidebar -->
-        <v-col cols="12" md="3" class="pa-0 ma-0">
-          <div class="right-sidebar">
-            <div class="right-sidebar__header">
-              <div class="right-sidebar-title">Actions</div>
-            </div>
-            <div class="right-sidebar__body">
-              <div class="actions">
-                <div class="actions-item">
-                  <div class="actions-item__icon">
-                    <v-icon color="primary-light-1">mdi-calendar-plus</v-icon>
-                  </div>
-                  <div class="actions-item__title">Booking Request</div>
-                </div>
+        <slide-x-left-transition>
+          <v-col
+            cols="12"
+            :md="rightSidebarMd"
+            class="pa-0 ma-0"
+            v-if="rightSidebar && $vuetify.breakpoint.mdAndUp"
+          >
+            <div class="right-sidebar">
+              <div class="right-sidebar__header">
+                <div class="right-sidebar-title">Actions</div>
+              </div>
+              <div class="right-sidebar__body">
+                <v-list nav color="transparent" class="pa-0">
+                  <v-list-item @click="handleCalenderClick" link class="pa-0">
+                    <div class="action-item">
+                      <div class="action-item__icon">
+                        <v-icon color="primary-light-1"
+                          >mdi-calendar-plus</v-icon
+                        >
+                      </div>
+                      <div class="action-item__title">Booking Request</div>
+                    </div>
+                  </v-list-item>
+                </v-list>
               </div>
             </div>
-          </div>
-        </v-col>
+          </v-col>
+        </slide-x-left-transition>
       </v-row>
     </v-container>
   </div>
@@ -217,37 +300,13 @@ export default {
     ChatScreen
   },
   data: () => ({
-    items: [
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-        title: "Kenneth Dreyer",
-        subtitle: `Super - I’ll see you there`
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-        title: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>',
-        subtitle: `<span class="text--primary">to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend.`
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-        title: "Oui oui",
-        subtitle:
-          '<span class="text--primary">Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?'
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-        title: "Birthday gift",
-        subtitle:
-          '<span class="text--primary">Trevor Hansen</span> &mdash; Have any ideas about what we should get Heidi for her birthday?'
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg",
-        title: "Recipe to try",
-        subtitle:
-          '<span class="text--primary">Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.'
-      }
-    ],
     socket: null,
+    // column
+    leftSidebarMd: 3,
+    contentMd: 6,
+    rightSidebarMd: 3,
+    rightSidebar: true,
+    actionDialog: false,
     bookingDialog: {
       value: false,
       requestBox: {
@@ -292,6 +351,27 @@ export default {
     dayBox: []
   }),
   computed: {
+    contentSection() {
+      let show = true;
+      if (!this.selectedContactUser && this.$vuetify.breakpoint.smAndDown) {
+        show = false;
+      }
+      return show;
+    },
+    leftSidebarSection() {
+      let show = true;
+      if (this.selectedContactUser && this.$vuetify.breakpoint.smAndDown) {
+        show = false;
+      }
+      return show;
+    },
+    rightSidebarSection() {
+      let show = true;
+      if (!this.$vuetify.breakpoint.mdAndUp) {
+        show = false;
+      }
+      return show;
+    },
     contacts() {
       return this.$store.getters["chat/contacts"];
     },
@@ -441,6 +521,20 @@ export default {
     handleBackBtnClick() {
       this.selectedContactUser = null;
     },
+    handleDesktopHideActionBtnClick() {
+      this.rightSidebar = !this.rightSidebar;
+      if (this.rightSidebar) {
+        this.contentMd = 6;
+      } else {
+        this.contentMd = 9;
+      }
+    },
+    handleMobileHideActionBtnClick() {
+      this.actionDialog = !this.actionDialog;
+    },
+    handleBackBtnClick() {
+      this.selectedContactUser = null;
+    },
     handleRequestBoxCancelBtn() {
       this.bookingDialog.value = false;
     },
@@ -523,10 +617,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .chat-new-page {
   background: #f7fafc;
-  height: 94vh;
   .left-sidebar {
     &__header {
       border-bottom: 1px solid #e1e8f1;
@@ -546,7 +639,7 @@ export default {
     }
     &__body {
       .contact {
-        height: 69.5vh;
+        height: calc(100vh - 19rem);
         overflow: auto;
       }
       /* width */
@@ -584,15 +677,8 @@ export default {
       padding-right: 20px;
     }
     &__body {
-      min-height: 85.5vh;
-      padding-left: 10px;
-      padding-right: 10px;
       border-left: 1px solid #e1e8f1;
       border-right: 1px solid #e1e8f1;
-      .messages {
-        height: 75vh;
-        overflow: auto;
-      }
     }
   }
   .right-sidebar {
@@ -614,26 +700,24 @@ export default {
       }
     }
     &__body {
-      .actions {
-        &-item {
-          display: flex;
-          align-items: center;
-          padding-top: 20px;
-          padding-bottom: 20px;
-          border-bottom: 1px solid #e1e8f1;
-          padding-left: 10px;
-          &__title {
-            margin-left: 5px;
-            font-family: $font-family;
-            font-weight: 600;
-            font-size: 14px;
-            line-height: 124%;
-            color: $primary-light-1;
-          }
+      .action-item {
+        display: flex;
+        align-items: center;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e1e8f1;
+        padding-left: 10px;
+        width: 100%;
+        &__icon {
+          margin-right: 5px;
         }
-        &-item:hover {
-          cursor: pointer;
-          background: #e1e8f1;
+        &__title {
+          margin-left: 5px;
+          font-family: $font-family;
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 124%;
+          color: $primary-light-1;
         }
       }
     }

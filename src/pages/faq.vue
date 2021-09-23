@@ -13,6 +13,7 @@
 <script>
 import { pageBuilderApi } from "@/api";
 
+
 export default {
   head() {
     return {

@@ -402,7 +402,8 @@ export default {
     }
   },
   created() {},
-  mounted() {},
+  mounted() {
+  },
   methods: {
     hasRole(roles = []) {
       return this.$auth.hasRole(roles);
@@ -635,10 +636,31 @@ export default {
 <style lang="scss" scoped>
 .chat-screen {
   background: #fcfdfe;
-  height: calc(100vh - 10.5rem);
+  height: calc(100vh - 12.5rem);
   overflow-y: auto;
   padding: 0 20px;
   width: 100%;
+  
+  /* width */
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background: #888;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 
   .quick-booking-tag {
     color: white;

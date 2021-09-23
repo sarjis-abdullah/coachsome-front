@@ -259,7 +259,7 @@ export default {
           }
         })
         .catch(({ response }) => {
-          response.data.message && this.$toast().error(response.data.message);
+          response.data.message && this.$toast.error(response.data.message);
         });
     }
   }
