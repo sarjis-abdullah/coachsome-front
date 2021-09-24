@@ -32,6 +32,11 @@
                   <div class="list__separator"></div>
                 </div>
                 <div class="list__item">
+                  <a target="_blank" href="https://coachsome.tawk.help">
+                    {{ $t("footer_url_support") }}
+                  </a>
+                </div>
+                <div class="list__item">
                   <nuxt-link :to="localePath(uri.terms)">
                     {{ $t("global_url_terms_of_use") }}
                   </nuxt-link>
