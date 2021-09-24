@@ -210,6 +210,7 @@
               <div class="content__body">
                 <div class="message-list">
                   <ChatScreen />
+
                 </div>
                 <v-textarea
                   rows="1"

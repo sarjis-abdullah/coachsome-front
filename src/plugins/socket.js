@@ -20,7 +20,7 @@ export default ({ app }, inject) => {
       socket.on("offline", userId => {
         app.store.dispatch("chat/setOnlineStatus", {
           userId: userId,
-          isOnline: true
+          isOnline: false
         });
         console.log(userId + " is offline");
       });

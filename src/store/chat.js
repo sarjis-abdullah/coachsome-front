@@ -25,12 +25,10 @@ export const getters = {
 export const mutations = {
   SET_ONLINE_STATUS(state, payload) {
     const { userId, isOnline } = payload;
-    state.contacts.forEach((item)=>{
-      if(item.userId == userId){
-        item.isOnline = isOnline;
-      }
-    })
-
+    const contact = state.contacts.find(item => item.id == userId);
+    if (contact) {
+      contact.isOnline = isOnline;
+    }
   },
   SET_TOTAL_NEW_MESSAGE_COUNT(state, totalNewMessageCount) {
     state.totalNewMessageCount = totalNewMessageCount;
@@ -92,8 +90,8 @@ export const mutations = {
 };
 
 export const actions = {
-  setOnlineStatus(context,payload){
-    context.commit('SET_ONLINE_STATUS',payload);
+  setOnlineStatus(context, payload) {
+    context.commit("SET_ONLINE_STATUS", payload);
   },
   pushMessage(context, message) {
     context.commit("PUSH_MESSAGE", message);
