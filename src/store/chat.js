@@ -23,6 +23,15 @@ export const getters = {
 };
 
 export const mutations = {
+  SET_ONLINE_STATUS(state, payload) {
+    const { userId, isOnline } = payload;
+    state.contacts.forEach((item)=>{
+      if(item.userId == userId){
+        item.isOnline = isOnline;
+      }
+    })
+
+  },
   SET_TOTAL_NEW_MESSAGE_COUNT(state, totalNewMessageCount) {
     state.totalNewMessageCount = totalNewMessageCount;
   },
@@ -83,6 +92,9 @@ export const mutations = {
 };
 
 export const actions = {
+  setOnlineStatus(context,payload){
+    context.commit('SET_ONLINE_STATUS',payload);
+  },
   pushMessage(context, message) {
     context.commit("PUSH_MESSAGE", message);
   },
@@ -172,7 +184,8 @@ export const actions = {
           tags: item.tags,
           newMessageCount: item.newMessageCount,
           lastMessage: item.lastMessage,
-          lastMessageTime: item.lastMessageTime
+          lastMessageTime: item.lastMessageTime,
+          isOnline: item.isOnline
         };
       })
     );

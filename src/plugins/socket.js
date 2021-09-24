@@ -10,10 +10,18 @@ export default ({ app }, inject) => {
       socket.emit("connected", app.$auth.user.id);
 
       socket.on("online", userId => {
+        app.store.dispatch("chat/setOnlineStatus", {
+          userId: userId,
+          isOnline: true
+        });
         console.log(userId + " is online");
       });
 
       socket.on("offline", userId => {
+        app.store.dispatch("chat/setOnlineStatus", {
+          userId: userId,
+          isOnline: true
+        });
         console.log(userId + " is offline");
       });
 
@@ -22,7 +30,7 @@ export default ({ app }, inject) => {
 
         await app.store.dispatch("chat/getContacts");
         await app.store.getters["chat/contacts"];
-        let selectedUser =  app.store.getters["chat/selectedContactUser"];
+        let selectedUser = app.store.getters["chat/selectedContactUser"];
 
         if (selectedUser && selectedUser.id == data.senderUserId) {
           app.store.dispatch("chat/pushMessage", data.message);
