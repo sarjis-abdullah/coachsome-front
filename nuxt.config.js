@@ -18,6 +18,7 @@ export default {
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "facebook-domain-verification", content: "7ilgh3d5ukfpfwwspw4chai9zokx7u" },
       { hid: "description", name: "description", content: "" }
     ],
     link: [
