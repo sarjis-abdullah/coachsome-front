@@ -75,9 +75,11 @@
                 @click="handleClearSearch"
               ></v-text-field>
               <v-select
+                v-model="selectedFilterItem"
                 class="px-5 mt-5"
-                :value="0"
-                :items="['All Conversation', 'Unread']"
+                :items="filters"
+                item-value="id"
+                item-text="label"
                 dense
                 solo
                 append-icon="expand_more"
@@ -210,7 +212,6 @@
               <div class="content__body">
                 <div class="message-list">
                   <ChatScreen />
-
                 </div>
                 <v-textarea
                   rows="1"
@@ -356,6 +357,24 @@ export default {
     duration: {
       created_at: ""
     },
+    selectedFilterItem: 1,
+    filters: [
+      {
+        id: 1,
+        key: "contact_filter_item_key_all_conversation",
+        label: "All Conversation"
+      },
+      {
+        id: 2,
+        key: "contact_filter_item_key_read",
+        label: "Read"
+      },
+      {
+        id: 3,
+        key: "contact_filter_item_key_unread",
+        label: "Unread"
+      }
+    ],
     messageForm: {
       me: true,
       type: "text",
@@ -397,15 +416,25 @@ export default {
       return this.$store.getters["chat/contacts"];
     },
     filteredContactUsers() {
-      if (!this.search) {
-        return this.contacts;
-      } else {
-        return this.contacts.filter(item => {
+      let items = this.contacts;
+
+      if (this.search) {
+        items = items.filter(item => {
           return item.fullName
             .toLowerCase()
             .includes(this.search.toLowerCase());
         });
       }
+
+      if (this.selectedFilterItem != 1) {
+        const filterValue = this.filters.find(
+          filter => filter.id == this.selectedFilterItem
+        );
+        items = items.filter(filterItem => {
+          return filterItem.status == filterValue.label;
+        });
+      }
+      return items;
     },
     hasNetwork() {
       return true;
@@ -515,7 +544,8 @@ export default {
               newMessageCount: item.newMessageCount,
               lastMessage: item.lastMessage,
               lastMessageTime: item.lastMessageTime,
-              isOnline: item.isOnline
+              isOnline: item.isOnline,
+              status: item.status
             };
           });
 
