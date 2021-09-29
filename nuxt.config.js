@@ -95,6 +95,7 @@ export default {
     { src: "~/plugins/vue-js-toggle-button", mode: "client" },
     { src: "~/plugins/vue-tribute", mode: "client" },
     { src: "~/plugins/socket", mode: "client" },
+    { src: "~/plugins/v-emoji-picker", mode: "client" },
     { src: "~/plugins/vuelidate" }
   ],
 

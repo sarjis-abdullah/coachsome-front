@@ -237,13 +237,23 @@
                     </div>
                   </template>
                   <template v-slot:append>
-                    <div>
-                      <v-btn icon>
-                        <v-icon>
-                          emoji_emotions
-                        </v-icon>
-                      </v-btn>
-                    </div>
+                    <v-menu
+                      v-model="emojiMenu"
+                      :close-on-content-click="false"
+                      :nudge-width="200"
+                      offset-x
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon v-bind="attrs" v-on="on">
+                          <v-icon>
+                            emoji_emotions
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <v-card>
+                        <VEmojiPicker @select="selectEmoji" />
+                      </v-card>
+                    </v-menu>
                   </template>
                   <template v-slot:append-outer>
                     <div>
@@ -315,6 +325,7 @@ export default {
     ChatScreen
   },
   data: () => ({
+    emojiMenu: false,
     socket: null,
     // column
     leftSidebarMd: 3,
@@ -570,6 +581,10 @@ export default {
     this.$store.dispatch("chat/destroySelectedContactUser");
   },
   methods: {
+    selectEmoji(emoji) {
+      this.messageForm.content+=emoji.data;
+      console.log(emoji);
+    },
     handleBackBtnClick() {
       this.selectedContactUser = null;
     },
