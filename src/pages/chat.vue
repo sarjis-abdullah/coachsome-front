@@ -20,31 +20,19 @@
             @select-package="handleSelectPackage"
           />
         </v-dialog>
-        <v-dialog
-          v-model="actionDialog"
-          fullscreen
-          hide-overlay
-          transition="dialog-bottom-transition"
-          scrollable
+        <a-drawer
+          title="Actions"
+          placement="bottom"
+          :visible="actionDialog"
+          @close="actionDialog = false"
         >
-          <v-card>
-            <v-card-title>
-              <div class="subtitle-1">Actions</div>
-              <v-spacer></v-spacer>
-              <v-btn icon @click="actionDialog = false">
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
-            </v-card-title>
-            <v-card-text>
-              <v-list nav color="transparent" class="pa-0">
-                <v-list-item @click="handleCalenderClick" link class="pa-0">
-                  <v-icon color="primary-light-1">mdi-calendar-plus</v-icon>
-                  <div class="primary-light-1--text ml-5">Booking Request</div>
-                </v-list-item>
-              </v-list>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
+          <v-list nav color="transparent" class="pa-0">
+            <v-list-item @click="handleCalenderClick" link class="pa-0">
+              <v-icon color="primary-light-1">mdi-calendar-plus</v-icon>
+              <div class="primary-light-1--text ml-5">Booking Request</div>
+            </v-list-item>
+          </v-list>
+        </a-drawer>
         <!-- ./Dialog -->
 
         <!-- left-sidebar -->
@@ -384,6 +372,11 @@ export default {
         id: 3,
         key: "contact_filter_item_key_unread",
         label: "Unread"
+      },
+      {
+        id: 4,
+        key: "contact_filter_item_key_archived",
+        label: "Archived"
       }
     ],
     messageForm: {
@@ -582,7 +575,7 @@ export default {
   },
   methods: {
     selectEmoji(emoji) {
-      this.messageForm.content+=emoji.data;
+      this.messageForm.content += emoji.data;
       console.log(emoji);
     },
     handleBackBtnClick() {
@@ -642,6 +635,7 @@ export default {
       this.packageChoosingDialog.value = false;
     },
     handleCalenderClick() {
+      this.actionDialog = false;
       this.packageChoosingDialog.value = true;
     },
     handleSelectedContactUser(user) {
