@@ -21,6 +21,7 @@
           />
         </v-dialog>
         <a-drawer
+          class="d-none d-sm-flex d-md-none"
           title="Actions"
           placement="bottom"
           :visible="actionDialog"
@@ -263,8 +264,7 @@
           <v-col
             cols="12"
             :md="rightSidebarMd"
-            class="pa-0 ma-0"
-            v-if="rightSidebar && $vuetify.breakpoint.mdAndUp"
+            class="pa-0 ma-0 d-none d-sm-none d-md-flex"
           >
             <div class="right-sidebar">
               <div class="right-sidebar__header">
@@ -410,11 +410,7 @@ export default {
       return show;
     },
     rightSidebarSection() {
-      let show = true;
-      if (!this.$vuetify.breakpoint.mdAndUp) {
-        show = false;
-      }
-      return show;
+      return this.rightSidebar && this.$vuetify.breakpoint.smAndDown;
     },
     contacts() {
       return this.$store.getters["chat/contacts"];
@@ -517,7 +513,7 @@ export default {
       }
     }
   },
-  mounted() {  
+  mounted() {
     // This is very sensitive.
     // Since the date is not updated without refresh, we should manually refresh it
     // Now this created_at is updated after 1 second
