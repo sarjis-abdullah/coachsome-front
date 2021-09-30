@@ -999,6 +999,8 @@ export default {
   created() {
     this.getCoach();
   },
+  mounted() {
+  },
   methods: {
     handleReviewTextClick() {
       this.$router.push(this.localePath(pathData.pages.baseReviews));

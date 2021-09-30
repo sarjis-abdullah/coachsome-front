@@ -517,7 +517,7 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted() {  
     // This is very sensitive.
     // Since the date is not updated without refresh, we should manually refresh it
     // Now this created_at is updated after 1 second
