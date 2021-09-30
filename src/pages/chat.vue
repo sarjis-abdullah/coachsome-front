@@ -30,7 +30,9 @@
           <v-list nav color="transparent" class="pa-0">
             <v-list-item @click="handleCalenderClick" link class="pa-0">
               <v-icon color="primary-light-1">mdi-calendar-plus</v-icon>
-              <div class="primary-light-1--text ml-5">Booking Request</div>
+              <div class="primary-light-1--text ml-5">
+                {{ $t("chat_title_booing_req") }}
+              </div>
             </v-list-item>
           </v-list>
         </a-drawer>
@@ -40,7 +42,9 @@
         <v-col cols="12" :md="leftSidebarMd" v-if="leftSidebarSection">
           <div class="left-sidebar">
             <div class="left-sidebar__header">
-              <div class="left-sidebar-title">Messages</div>
+              <div class="left-sidebar-title">
+                {{ $t("chat_page_title_message") }}
+              </div>
               <div class="left-sidebar-action">
                 <v-btn icon color="primary-light-1">
                   <v-icon color="primary-light-1">
@@ -53,12 +57,12 @@
               <v-text-field
                 class="ma-5"
                 rounded
-                :label="$t('chat_contact_search_input_placeholder')"
+                :label="$t('chat_field_label_txt_search')"
                 autocomplete="off"
                 solo
                 dense
                 hide-details
-                prepend-inner-icon="search"
+                :prepend-inner-icon="search"
                 v-model="search"
                 clearable
                 @click="handleClearSearch"
@@ -68,11 +72,22 @@
                 class="px-5 mt-5"
                 :items="filters"
                 item-value="id"
-                item-text="label"
+                item-text="key"
                 dense
                 solo
                 append-icon="expand_more"
-              ></v-select>
+              >
+                <template v-slot:selection="{ item }">
+                  <div>
+                    {{ $t(item.key) }}
+                  </div>
+                </template>
+                <template v-slot:item="{ item }">
+                  <div>
+                    {{ $t(item.key) }}
+                  </div>
+                </template>
+              </v-select>
               <div class="contact">
                 <v-list color="transparent">
                   <v-list-item-group
@@ -128,6 +143,19 @@
                     </template>
                   </v-list-item-group>
                 </v-list>
+                <div class="no-contact" v-if="!contacts.length">
+                  <img
+                    class="no-contact__icon"
+                    :src="require(`@/assets/images/icons/message-tick.svg`)"
+                    alt=""
+                  />
+                  <div class="no-contact__title">
+                    No new messages
+                  </div>
+                  <div class="no-contact__description">
+                    Start your first messages by getting your first customers
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -168,7 +196,11 @@
                       {{ selectedContactUser.fullName }}
                     </div>
                     <div>
-                      {{ selectedContactUser.isOnline ? "Active" : "Inactive" }}
+                      {{
+                        selectedContactUser.isOnline
+                          ? $t("chat_status_active_txt")
+                          : $t("chat_status_inactive_txt")
+                      }}
                     </div>
                   </div>
                 </div>
@@ -183,7 +215,11 @@
                     color="primary-light-1"
                     class="text-normal"
                   >
-                    {{ actionDialog ? "Hide Actions" : "Show Actions" }}
+                    {{
+                      actionDialog
+                        ? $t("chat_btn_label_hide_actions")
+                        : $t("chat_btn_label_show_actions")
+                    }}
                   </v-btn>
                   <v-btn
                     v-if="!$vuetify.breakpoint.smAndDown"
@@ -194,7 +230,11 @@
                     color="primary-light-1"
                     class="text-normal"
                   >
-                    {{ rightSidebar ? "Hide Actions" : "Show Actions" }}
+                    {{
+                      rightSidebar
+                        ? $t("chat_btn_label_hide_actions")
+                        : $t("chat_btn_label_show_actions")
+                    }}
                   </v-btn>
                 </div>
               </div>
@@ -264,11 +304,13 @@
           <v-col
             cols="12"
             :md="rightSidebarMd"
-            class="pa-0 ma-0 d-none d-sm-none d-md-flex"
+            class="pa-0 ma-0  d-none d-sm-none d-md-flex"
           >
             <div class="right-sidebar">
               <div class="right-sidebar__header">
-                <div class="right-sidebar-title">Actions</div>
+                <div class="right-sidebar-title">
+                  {{ $t("chat_title_txt_actions") }}
+                </div>
               </div>
               <div class="right-sidebar__body">
                 <v-list nav color="transparent" class="pa-0">
@@ -279,7 +321,9 @@
                           >mdi-calendar-plus</v-icon
                         >
                       </div>
-                      <div class="action-item__title">Booking Request</div>
+                      <div class="action-item__title">
+                        {{ $t("chat_title_booing_req") }}
+                      </div>
                     </div>
                   </v-list-item>
                 </v-list>
@@ -360,22 +404,22 @@ export default {
     filters: [
       {
         id: 1,
-        key: "contact_filter_item_key_all_conversation",
+        key: "chat_filter_item_all_conversation",
         label: "All Conversation"
       },
       {
         id: 2,
-        key: "contact_filter_item_key_read",
+        key: "chat_filter_item_all_read",
         label: "Read"
       },
       {
         id: 3,
-        key: "contact_filter_item_key_unread",
+        key: "chat_filter_item_all_unread",
         label: "Unread"
       },
       {
         id: 4,
-        key: "contact_filter_item_key_archived",
+        key: "chat_filter_item_all_archived",
         label: "Archived"
       }
     ],
@@ -719,6 +763,31 @@ export default {
       .contact::-webkit-scrollbar-thumb:hover {
         background: #555;
       }
+
+      .no-contact {
+        width: 100%;
+        text-align: center;
+        margin-top:5px;
+        &__title {
+          font-family: $font-family;
+          font-weight: bold;
+          font-size: 18px;
+          line-height: 25px;
+          text-align: center;
+          text-transform: capitalize;
+          color: $primary-light-1;
+          padding-top: 5px;
+          padding-bottom: 5px;
+        }
+        &__description {
+          font-family: $font-family;
+          font-size: 14px;
+          line-height: 19px;
+          text-align: center;
+          text-transform: capitalize;
+          color: $primary-light-1;
+        }
+      }
     }
   }
   .content {
@@ -739,9 +808,9 @@ export default {
     }
   }
   .right-sidebar {
+    width: 100%;
     &__header {
       border-bottom: 1px solid #e1e8f1;
-      height: 83px;
       height: 83px;
       display: flex;
       justify-content: space-between;
