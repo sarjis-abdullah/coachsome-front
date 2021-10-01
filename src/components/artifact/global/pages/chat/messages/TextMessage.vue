@@ -8,8 +8,10 @@
         }"
       >
         <span class="text-message-content">
-          <div style="white-space: pre-line" v-html="message.content">
-          </div>
+          <div
+            style="word-break: break-all;white-space: pre-wrap;"
+            v-html="message.content"
+          ></div>
           <div class="text-message-time" v-if="message.created_at">
             {{ time }}
           </div>

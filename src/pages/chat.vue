@@ -21,20 +21,29 @@
           />
         </v-dialog>
         <a-drawer
-          class="d-none d-sm-flex d-md-none"
+          class="d-none d-sm-flex d-md-none pa-0"
           title="Actions"
           placement="bottom"
           :visible="actionDialog"
           @close="actionDialog = false"
         >
-          <v-list nav color="transparent" class="pa-0">
-            <v-list-item @click="handleCalenderClick" link class="pa-0">
-              <v-icon color="primary-light-1">mdi-calendar-plus</v-icon>
-              <div class="primary-light-1--text ml-5">
-                {{ $t("chat_title_booing_req") }}
-              </div>
-            </v-list-item>
-          </v-list>
+          <div
+            :style="{
+              display: 'flex',
+              cursor: 'pointer',
+              alignItems: 'center'
+            }"
+            @click="handleCalenderClick"
+          >
+            <v-icon
+              color="primary-light-1"
+              :style="{ marginRight: '5px', padding: 0 }"
+              >mdi-calendar-plus</v-icon
+            >
+            <div class="action-item__title primary-light-1--text">
+              {{ $t("chat_title_booing_req") }}
+            </div>
+          </div>
         </a-drawer>
         <!-- ./Dialog -->
 
@@ -259,9 +268,10 @@
                   <template v-slot:prepend>
                     <div>
                       <v-btn icon small>
-                        <v-icon>
-                          mdi-attachment
-                        </v-icon>
+                        <img
+                          :src="require(`@/assets/images/icons/attachment.svg`)"
+                          alt="attachment-icon"
+                        />
                       </v-btn>
                     </div>
                   </template>
@@ -274,9 +284,10 @@
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn icon v-bind="attrs" v-on="on" small>
-                          <v-icon>
-                            emoji_emotions
-                          </v-icon>
+                          <img
+                            :src="require(`@/assets/images/icons/emoji.svg`)"
+                            alt="emoji-icon"
+                          />
                         </v-btn>
                       </template>
                       <v-card>
@@ -287,9 +298,10 @@
                   <template v-slot:append-outer>
                     <div>
                       <v-btn icon @click="handleMessageInput" small>
-                        <v-icon>
-                          mdi-send
-                        </v-icon>
+                        <img
+                          :src="require(`@/assets/images/icons/send.svg`)"
+                          alt="send-icon"
+                        />
                       </v-btn>
                     </div>
                   </template>
@@ -605,6 +617,14 @@ export default {
               this.selectedContactUser = user;
               this.$router.replace(this.localePath(pathData.pages.chat));
             }
+          } else {
+            if (this.contacts) {
+              let user = this.contacts[0];
+              if (user) {
+                this.activeChat = user.id;
+                this.selectedContactUser = user;
+              }
+            }
           }
         }
       })
@@ -724,6 +744,9 @@ export default {
   .v-select__selections {
     color: rgba(0, 0, 0, 0.6) !important;
   }
+  .ant-drawer-body {
+    padding: 0px !important;
+  }
   .left-sidebar {
     &__header {
       padding-left: 1.2em;
@@ -807,9 +830,10 @@ export default {
       padding-right: 20px;
     }
     &__body {
+      background: #fcfdfe;
       border-left: 1px solid #e1e8f1;
       border-right: 1px solid #e1e8f1;
-      padding-bottom:15px;
+      padding-bottom: 15px;
     }
   }
   .right-sidebar {
@@ -850,6 +874,9 @@ export default {
           line-height: 124%;
           color: $primary-light-1;
         }
+      }
+      .action-item::hover {
+        cursor: pointer;
       }
     }
   }
