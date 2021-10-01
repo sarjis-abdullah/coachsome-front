@@ -54,40 +54,40 @@
               </div>
             </div>
             <div class="left-sidebar__body">
-              <v-text-field
-                class="ma-5"
-                rounded
-                :label="$t('chat_field_label_txt_search')"
-                autocomplete="off"
-                solo
-                dense
-                hide-details
-                :prepend-inner-icon="search"
-                v-model="search"
-                clearable
-                @click="handleClearSearch"
-              ></v-text-field>
-              <v-select
-                v-model="selectedFilterItem"
-                class="px-5 mt-5"
-                :items="filters"
-                item-value="id"
-                item-text="key"
-                dense
-                solo
-                append-icon="expand_more"
-              >
-                <template v-slot:selection="{ item }">
-                  <div>
-                    {{ $t(item.key) }}
-                  </div>
-                </template>
-                <template v-slot:item="{ item }">
-                  <div>
-                    {{ $t(item.key) }}
-                  </div>
-                </template>
-              </v-select>
+              <div class="pl-4 pr-4 pt-5">
+                <v-text-field
+                  :label="$t('chat_field_label_txt_search')"
+                  autocomplete="off"
+                  solo
+                  dense
+                  hide-details
+                  :prepend-inner-icon="search"
+                  v-model="search"
+                  clearable
+                  @click="handleClearSearch"
+                ></v-text-field>
+                <v-select
+                  v-model="selectedFilterItem"
+                  class="mt-5"
+                  :items="filters"
+                  item-value="id"
+                  item-text="key"
+                  dense
+                  solo
+                  append-icon="expand_more"
+                >
+                  <template v-slot:selection="{ item }">
+                    <div>
+                      {{ $t(item.key) }}
+                    </div>
+                  </template>
+                  <template v-slot:item="{ item }">
+                    <div>
+                      {{ $t(item.key) }}
+                    </div>
+                  </template>
+                </v-select>
+              </div>
               <div class="contact">
                 <v-list color="transparent">
                   <v-list-item-group
@@ -243,8 +243,8 @@
                   <ChatScreen />
                 </div>
                 <v-textarea
+                  dense
                   rows="1"
-                  row-height="15"
                   auto-grow
                   autocomplete="off"
                   outlined
@@ -258,7 +258,7 @@
                 >
                   <template v-slot:prepend>
                     <div>
-                      <v-btn icon>
+                      <v-btn icon small>
                         <v-icon>
                           mdi-attachment
                         </v-icon>
@@ -273,7 +273,7 @@
                       offset-x
                     >
                       <template v-slot:activator="{ on, attrs }">
-                        <v-btn icon v-bind="attrs" v-on="on">
+                        <v-btn icon v-bind="attrs" v-on="on" small>
                           <v-icon>
                             emoji_emotions
                           </v-icon>
@@ -286,7 +286,7 @@
                   </template>
                   <template v-slot:append-outer>
                     <div>
-                      <v-btn icon @click="handleMessageInput">
+                      <v-btn icon @click="handleMessageInput" small>
                         <v-icon>
                           mdi-send
                         </v-icon>
@@ -721,15 +721,19 @@ export default {
 <style lang="scss">
 .chat-new-page {
   background: #f7fafc;
+  .v-select__selections {
+    color: rgba(0, 0, 0, 0.6) !important;
+  }
   .left-sidebar {
     &__header {
+      padding-left: 1.2em;
+      padding-right: 0.5em;
       border-bottom: 1px solid #e1e8f1;
       height: 83px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       .left-sidebar-title {
-        margin-left: 10px;
         font-family: $font-family;
         font-weight: bold;
         font-size: 18px;
@@ -767,7 +771,7 @@ export default {
       .no-contact {
         width: 100%;
         text-align: center;
-        margin-top:5px;
+        margin-top: 5px;
         &__title {
           font-family: $font-family;
           font-weight: bold;
@@ -805,6 +809,7 @@ export default {
     &__body {
       border-left: 1px solid #e1e8f1;
       border-right: 1px solid #e1e8f1;
+      padding-bottom:15px;
     }
   }
   .right-sidebar {
