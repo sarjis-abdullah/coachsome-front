@@ -175,77 +175,83 @@
           <v-col cols="12" :md="contentMd" v-if="contentSection">
             <div class="content">
               <div class="content__header">
-                <div class="d-flex" v-if="selectedContactUser">
-                  <v-btn
-                    icon
-                    v-if="$vuetify.breakpoint.smAndDown"
-                    @click="handleBackBtnClick"
-                  >
-                    <v-icon>mdi-arrow-left</v-icon>
-                  </v-btn>
-                  <v-badge
-                    bordered
-                    bottom
-                    :color="selectedContactUser.isOnline ? 'green' : 'grey'"
-                    dot
-                    class="ml-5"
-                    offset-x="10"
-                    offset-y="10"
-                  >
-                    <v-avatar size="40" color="primary-light-1">
-                      <v-img
-                        v-if="selectedContactUser.avatarImage"
-                        :src="selectedContactUser.avatarImage"
-                      ></v-img>
-                      <div v-else v-html="selectedContactUser.avatarName"></div>
-                    </v-avatar>
-                  </v-badge>
-                  <div class="ml-3">
-                    <div>
-                      {{ selectedContactUser.fullName }}
-                    </div>
-                    <div>
-                      {{
-                        selectedContactUser.isOnline
-                          ? $t("chat_status_active_txt")
-                          : $t("chat_status_inactive_txt")
-                      }}
-                    </div>
-                  </div>
-                </div>
-                <div v-else></div>
-                <div>
-                  <v-btn
-                    v-if="$vuetify.breakpoint.smAndDown"
-                    @click="handleMobileHideActionBtnClick"
-                    outlined
-                    small
-                    rounded
-                    color="primary-light-1"
-                    class="text-normal"
-                  >
-                    {{
-                      actionDialog
-                        ? $t("chat_btn_label_hide_actions")
-                        : $t("chat_btn_label_show_actions")
-                    }}
-                  </v-btn>
-                  <v-btn
-                    v-if="!$vuetify.breakpoint.smAndDown"
-                    @click="handleDesktopHideActionBtnClick"
-                    outlined
-                    small
-                    rounded
-                    color="primary-light-1"
-                    class="text-normal"
-                  >
-                    {{
-                      rightSidebar
-                        ? $t("chat_btn_label_hide_actions")
-                        : $t("chat_btn_label_show_actions")
-                    }}
-                  </v-btn>
-                </div>
+                <v-list two-line width="100%" color="transparent">
+                  <v-list-item v-if="selectedContactUser">
+                    <v-btn
+                      icon
+                      v-if="$vuetify.breakpoint.smAndDown"
+                      @click="handleBackBtnClick"
+                    >
+                      <v-icon small>mdi-arrow-left</v-icon>
+                    </v-btn>
+                    <v-badge
+                      bordered
+                      bottom
+                      :color="selectedContactUser.isOnline ? 'green' : 'grey'"
+                      dot
+                      offset-x="10"
+                      offset-y="10"
+                    >
+                      <v-avatar size="40" color="primary-light-1">
+                        <v-img
+                          v-if="selectedContactUser.avatarImage"
+                          :src="selectedContactUser.avatarImage"
+                        ></v-img>
+                        <div
+                          v-else
+                          v-html="selectedContactUser.avatarName"
+                        ></div>
+                      </v-avatar>
+                    </v-badge>
+                    <v-list-item-content class="pl-1">
+                      <v-list-item-title
+                        v-text="selectedContactUser.fullName"
+                      ></v-list-item-title>
+
+                      <v-list-item-subtitle>
+                        {{
+                          selectedContactUser.isOnline
+                            ? $t("chat_status_active_txt")
+                            : $t("chat_status_inactive_txt")
+                        }}
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <div>
+                        <v-btn
+                          v-if="$vuetify.breakpoint.smAndDown"
+                          @click="handleMobileHideActionBtnClick"
+                          outlined
+                          small
+                          rounded
+                          color="primary-light-1"
+                          class="text-normal"
+                        >
+                          {{
+                            actionDialog
+                              ? $t("chat_btn_label_hide_actions")
+                              : $t("chat_btn_label_show_actions")
+                          }}
+                        </v-btn>
+                        <v-btn
+                          v-if="!$vuetify.breakpoint.smAndDown"
+                          @click="handleDesktopHideActionBtnClick"
+                          outlined
+                          small
+                          rounded
+                          color="primary-light-1"
+                          class="text-normal"
+                        >
+                          {{
+                            rightSidebar
+                              ? $t("chat_btn_label_hide_actions")
+                              : $t("chat_btn_label_show_actions")
+                          }}
+                        </v-btn>
+                      </div>
+                    </v-list-item-action>
+                  </v-list-item>
+                </v-list>
               </div>
               <div class="content__body">
                 <div class="message-list">
@@ -256,7 +262,7 @@
                   rows="1"
                   auto-grow
                   autocomplete="off"
-                  outlined
+                  solo
                   rounded
                   class="mx-3"
                   v-model="messageForm.content"
@@ -276,6 +282,43 @@
                     </div>
                   </template>
                   <template v-slot:append>
+                    <v-menu
+                      v-model="settingsMenu"
+                      :close-on-content-click="false"
+                      :nudge-width="200"
+                      offset-x
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon v-bind="attrs" v-on="on" small>
+                          <img
+                            :src="require(`@/assets/images/icons/settings.svg`)"
+                            alt="emoji-icon"
+                          />
+                        </v-btn>
+                      </template>
+                      <v-card max-width="268">
+                        <v-card-text class="chat-settings">
+                          <div class="chat-settings__title">
+                            Pressing Enter Key will:
+                          </div>
+                          <v-radio-group v-model="pressingEnter">
+                            <v-radio
+                              label="Send message"
+                              value="send_message"
+                            ></v-radio>
+                            <v-radio
+                              label="Add a line break"
+                              value="line_break"
+                            ></v-radio>
+                          </v-radio-group>
+                          <v-divider></v-divider>
+                          <div class="chat-settings__description">
+                            It’s always possible to use “Shift+Enter or
+                            Ctrl+Enter to type in multi-line messages.
+                          </div>
+                        </v-card-text>
+                      </v-card>
+                    </v-menu>
                     <v-menu
                       v-model="emojiMenu"
                       :close-on-content-click="false"
@@ -316,6 +359,7 @@
           <v-col
             cols="12"
             :md="rightSidebarMd"
+            v-if="rightSidebar"
             class="pa-0 ma-0  d-none d-sm-none d-md-flex"
           >
             <div class="right-sidebar">
@@ -369,6 +413,8 @@ export default {
     ChatScreen
   },
   data: () => ({
+    pressingEnter: "send_message",
+    settingsMenu: false,
     emojiMenu: false,
     socket: null,
     // column
@@ -618,7 +664,7 @@ export default {
               this.$router.replace(this.localePath(pathData.pages.chat));
             }
           } else {
-            if (this.contacts) {
+            if (this.contacts && this.$vuetify.breakpoint.mdAndUp) {
               let user = this.contacts[0];
               if (user) {
                 this.activeChat = user.id;
@@ -738,21 +784,45 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" >
+$header-height: 50px;
 .chat-new-page {
   background: #f7fafc;
   .v-select__selections {
     color: rgba(0, 0, 0, 0.6) !important;
   }
+
   .ant-drawer-body {
     padding: 0px !important;
   }
+
+  .v-textarea .v-input__control{
+    border: 2px solid #15577C !important;
+  }
+
+  .chat-settings {
+    &__title {
+      font-family: $font-family;
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 16px;
+      color: #000000;
+    }
+    &__description {
+      font-family: $font-family;
+      font-weight: normal;
+      font-size: 8px;
+      line-height: 11px;
+      color: #000000;
+    }
+  }
+
   .left-sidebar {
     &__header {
       padding-left: 1.2em;
       padding-right: 0.5em;
       border-bottom: 1px solid #e1e8f1;
-      height: 83px;
+      height: $header-height;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -823,11 +893,10 @@ export default {
       border-left: 1px solid #e1e8f1;
       border-right: 1px solid #e1e8f1;
       border-bottom: 1px solid #e1e8f1;
-      height: 83px;
+      height: $header-height;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-right: 20px;
     }
     &__body {
       background: #fcfdfe;
@@ -840,7 +909,7 @@ export default {
     width: 100%;
     &__header {
       border-bottom: 1px solid #e1e8f1;
-      height: 83px;
+      height: $header-height;
       display: flex;
       justify-content: space-between;
       align-items: center;

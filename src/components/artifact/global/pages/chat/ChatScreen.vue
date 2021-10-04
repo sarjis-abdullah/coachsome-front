@@ -636,7 +636,7 @@ export default {
 <style lang="scss" scoped>
 .chat-screen {
   background: #fcfdfe;
-  height: calc(100vh - 11.8rem);
+  height: calc(100vh - 9.8rem);
   overflow-y: auto;
   padding: 0 20px;
   width: 100%;
