@@ -296,28 +296,7 @@
                           />
                         </v-btn>
                       </template>
-                      <v-card max-width="268">
-                        <v-card-text class="chat-settings">
-                          <div class="chat-settings__title">
-                            Pressing Enter Key will:
-                          </div>
-                          <v-radio-group v-model="pressingEnter">
-                            <v-radio
-                              label="Send message"
-                              value="send_message"
-                            ></v-radio>
-                            <v-radio
-                              label="Add a line break"
-                              value="line_break"
-                            ></v-radio>
-                          </v-radio-group>
-                          <v-divider></v-divider>
-                          <div class="chat-settings__description">
-                            It’s always possible to use “Shift+Enter or
-                            Ctrl+Enter to type in multi-line messages.
-                          </div>
-                        </v-card-text>
-                      </v-card>
+                      <ChatSetting />
                     </v-menu>
                     <v-menu
                       v-model="emojiMenu"
@@ -396,6 +375,7 @@
 import RequestBox from "@/components/artifact/global/pages/chat/RequestBox";
 import PackageChoosing from "@/components/artifact/global/pages/chat/PackageChoosing";
 import ChatScreen from "@/components/artifact/global/pages/chat/ChatScreen";
+import ChatSetting from "@/components/artifact/global/pages/chat/ChatSetting";
 
 import { contactApi, messageApi } from "@/api";
 import { pathData } from "@/data";
@@ -410,7 +390,8 @@ export default {
   components: {
     RequestBox,
     PackageChoosing,
-    ChatScreen
+    ChatScreen,
+    ChatSetting
   },
   data: () => ({
     pressingEnter: "send_message",
@@ -784,7 +765,7 @@ export default {
 };
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 $header-height: 50px;
 .chat-new-page {
   background: #f7fafc;
@@ -796,8 +777,8 @@ $header-height: 50px;
     padding: 0px !important;
   }
 
-  .v-textarea .v-input__control{
-    border: 2px solid #15577C !important;
+  .v-textarea .v-input__control {
+    border: 2px solid #15577c !important;
   }
 
   .chat-settings {
