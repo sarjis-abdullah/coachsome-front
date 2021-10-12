@@ -269,7 +269,7 @@
                   :label="$t('chat_chat_box_input_placeholder')"
                   type="text"
                   hide-details
-                  @keyup.enter="messageForm.content + '\n'"
+                  @keyup.enter="handleEnterPress"
                 >
                   <template v-slot:prepend>
                     <div>
@@ -296,7 +296,10 @@
                           />
                         </v-btn>
                       </template>
-                      <ChatSetting />
+                      <ChatSetting
+                        :enter-press="chatSetting.enterPress"
+                        @update="handleUpdatedChatSetting"
+                      />
                     </v-menu>
                     <v-menu
                       v-model="emojiMenu"
@@ -377,7 +380,7 @@ import PackageChoosing from "@/components/artifact/global/pages/chat/PackageChoo
 import ChatScreen from "@/components/artifact/global/pages/chat/ChatScreen";
 import ChatSetting from "@/components/artifact/global/pages/chat/ChatSetting";
 
-import { contactApi, messageApi } from "@/api";
+import { contactApi, messageApi, chatSettingApi } from "@/api";
 import { pathData } from "@/data";
 
 export default {
@@ -394,7 +397,9 @@ export default {
     ChatSetting
   },
   data: () => ({
-    pressingEnter: "send_message",
+    chatSetting: {
+      enterPress: "send_message"
+    },
     settingsMenu: false,
     emojiMenu: false,
     socket: null,
@@ -605,6 +610,15 @@ export default {
       this.duration.created_at = new Date().toISOString();
     }, 1000);
 
+    chatSettingApi(this.$axios)
+      .get()
+      .then(({ data }) => {
+        console.log(data.data);
+        if (data.data) {
+          this.chatSetting.enterPress = data.data.enterPress;
+        }
+      });
+
     contactApi(this.$axios)
       .get()
       .then(({ data }) => {
@@ -661,6 +675,17 @@ export default {
     this.$store.dispatch("chat/destroySelectedContactUser");
   },
   methods: {
+    handleUpdatedChatSetting(val) {
+      chatSettingApi(this.$axios)
+        .enterPress({ value: val })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.data) {
+            this.chatSetting.enterPress = data.data.enterPress;
+          }
+          this.$toast.success("Successfully updated");
+        });
+    },
     selectEmoji(emoji) {
       this.messageForm.content += emoji.data;
       console.log(emoji);
@@ -727,6 +752,13 @@ export default {
     },
     handleSelectedContactUser(user) {
       this.selectedContactUser = user;
+    },
+    handleEnterPress() {
+      if (this.chatSetting.enterPress == "line_break") {
+        this.messageForm.content + "\n";
+      } else {
+        this.handleMessageInput();
+      }
     },
     handleMessageInput() {
       if (!/^ *$/.test(this.messageForm.content) && this.hasNetwork) {

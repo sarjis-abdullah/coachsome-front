@@ -5,6 +5,7 @@ export { default as clientBookingApi } from "./client/booking";
 export { default as authApi } from "./auth";
 export { default as baseReviewApi } from "./baseReview";
 export { default as bookingApi } from "./booking";
+export { default as chatSettingApi } from "./chatSetting";
 export { default as bookingTimeApi } from "./bookingTime";
 export { default as chatApi } from "./chat";
 export { default as calenderApi } from "./calender";

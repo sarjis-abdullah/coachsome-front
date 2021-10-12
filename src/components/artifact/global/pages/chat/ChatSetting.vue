@@ -5,7 +5,7 @@
         <div class="chat-settings__title">
           Pressing Enter Key will:
         </div>
-        <v-radio-group v-model="pressingEnter">
+        <v-radio-group v-model="enterPressValue" @change="handleItemClick">
           <v-radio color="primary-light-1" value="send_message">
             <template v-slot:label>
               <div class="primary-light-1--text">
@@ -32,7 +32,27 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["enterPress"],
+  data() {
+    return {
+      enterPressValue: "send_message"
+    };
+  },
+  watch: {
+    enterPress: {
+      immediate: true,
+      handler: function(value) {
+        this.enterPressValue = value;
+      }
+    }
+  },
+  methods: {
+    handleItemClick() {
+      this.$emit("update", this.enterPressValue);
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -54,3 +74,4 @@ export default {};
   }
 }
 </style>
+#change
