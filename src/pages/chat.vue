@@ -259,7 +259,7 @@
                 </div>
                 <v-textarea
                   dense
-                  rows="1"
+                  :rows="1"
                   auto-grow
                   autocomplete="off"
                   solo
@@ -273,7 +273,7 @@
                 >
                   <template v-slot:prepend>
                     <div>
-                      <v-btn icon small>
+                      <v-btn icon>
                         <img
                           :src="require(`@/assets/images/icons/attachment.svg`)"
                           alt="attachment-icon"
@@ -283,16 +283,18 @@
                   </template>
                   <template v-slot:append>
                     <v-menu
+                      v-if="$vuetify.breakpoint.mdAndUp"
                       v-model="settingsMenu"
                       :close-on-content-click="false"
                       :nudge-width="200"
                       offset-x
                     >
                       <template v-slot:activator="{ on, attrs }">
-                        <v-btn icon v-bind="attrs" v-on="on" small>
+                        <v-btn icon v-bind="attrs" v-on="on" x-small class="mr-3">
                           <img
+                          class="mt-1"
                             :src="require(`@/assets/images/icons/settings.svg`)"
-                            alt="emoji-icon"
+                            alt="setting-icon"
                           />
                         </v-btn>
                       </template>
@@ -308,8 +310,9 @@
                       offset-x
                     >
                       <template v-slot:activator="{ on, attrs }">
-                        <v-btn icon v-bind="attrs" v-on="on" small>
+                        <v-btn icon v-bind="attrs" v-on="on" x-small>
                           <img
+                            class="mt-1"
                             :src="require(`@/assets/images/icons/emoji.svg`)"
                             alt="emoji-icon"
                           />
@@ -852,8 +855,6 @@ $header-height: 50px;
       .contact {
         overflow: auto;
         height: 100%;
-        height: -webkit-calc(100vh - 19rem);
-        height: -moz-calc(100vh - 19rem);
         height: calc(100vh - 19rem);
       }
       /* width */
