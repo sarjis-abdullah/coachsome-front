@@ -634,6 +634,7 @@ export default {
 
 <style lang="scss" scoped>
 .chat-screen {
+  height: 100%;
   background: #fcfdfe;
   height: -webkit-calc(100vh - 11.1em);
   height: -moz-calc(100vh - 11.1em);
