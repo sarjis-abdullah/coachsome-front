@@ -855,7 +855,7 @@ $header-height: 50px;
       .contact {
         overflow: auto;
         height: 100%;
-        height: calc(100vh - 19rem);
+        height: calc(100vh - 15rem);
       }
       /* width */
       .contact::-webkit-scrollbar {
