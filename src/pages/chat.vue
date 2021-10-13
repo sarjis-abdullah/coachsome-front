@@ -290,9 +290,15 @@
                       offset-x
                     >
                       <template v-slot:activator="{ on, attrs }">
-                        <v-btn icon v-bind="attrs" v-on="on" x-small class="mr-3">
+                        <v-btn
+                          icon
+                          v-bind="attrs"
+                          v-on="on"
+                          x-small
+                          class="mr-3"
+                        >
                           <img
-                          class="mt-1"
+                            class="mt-1"
                             :src="require(`@/assets/images/icons/settings.svg`)"
                             alt="setting-icon"
                           />
@@ -756,12 +762,17 @@ export default {
     handleSelectedContactUser(user) {
       this.selectedContactUser = user;
     },
-    handleEnterPress() {
+    handleEnterPress(e) {
       if (this.chatSetting.enterPress == "line_break") {
         this.messageForm.content + "\n";
       } else {
-        this.handleMessageInput();
+        if(!e.shiftKey){
+          this.handleMessageInput();
+        }
       }
+    },
+    handleShiftEnterPress() {
+      this.messageForm.content += "\n";
     },
     handleMessageInput() {
       if (!/^ *$/.test(this.messageForm.content) && this.hasNetwork) {
