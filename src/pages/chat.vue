@@ -66,13 +66,14 @@
               <div class="pl-4 pr-4 pt-5">
                 <v-text-field
                   :label="$t('chat_field_label_txt_search')"
-                  autocomplete="off"
                   solo
                   dense
                   hide-details
-                  :prepend-inner-icon="search"
+                  prepend-inner-icon="search"
                   v-model="search"
+                  :loading="loading"
                   clearable
+                  @input="handleSearch"
                   @click="handleClearSearch"
                 ></v-text-field>
                 <v-select
@@ -83,6 +84,7 @@
                   item-text="key"
                   dense
                   solo
+                  @change="handleFilterChange"
                   append-icon="expand_more"
                 >
                   <template v-slot:selection="{ item }">
@@ -105,7 +107,7 @@
                     color="primary-light-1"
                   >
                     <template
-                      v-for="item in filteredContactUsers"
+                      v-for="item in contacts"
                       @click.stop="handleSelectedContactUser(item)"
                     >
                       <v-list-item
@@ -218,6 +220,46 @@
                     </v-list-item-content>
                     <v-list-item-action>
                       <div>
+                        <v-menu offset-y min-width="200">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                              color="primary-light-1"
+                              icon
+                              v-bind="attrs"
+                              v-on="on"
+                            >
+                              <v-icon>mdi-dots-horizontal</v-icon>
+                            </v-btn>
+                          </template>
+                          <v-list dense>
+                            <v-list-item link @click="handleUnreadBtnClick">
+                              <v-list-item-avatar>
+                                <v-icon color="primary-light-1"
+                                  >mdi-check</v-icon
+                                >
+                              </v-list-item-avatar>
+
+                              <v-list-item-content>
+                                <v-list-item-title class="primary-light-1--text"
+                                  >Mark as unread</v-list-item-title
+                                >
+                              </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item link @click="handleArchiveBtnClick">
+                              <v-list-item-avatar>
+                                <v-icon color="primary-light-1"
+                                  >mdi-archive</v-icon
+                                >
+                              </v-list-item-avatar>
+
+                              <v-list-item-content>
+                                <v-list-item-title class="primary-light-1--text"
+                                  >Archive Chat</v-list-item-title
+                                >
+                              </v-list-item-content>
+                            </v-list-item>
+                          </v-list>
+                        </v-menu>
                         <v-btn
                           v-if="$vuetify.breakpoint.smAndDown"
                           @click="handleMobileHideActionBtnClick"
@@ -485,6 +527,9 @@ export default {
     dayBox: []
   }),
   computed: {
+    loading() {
+      return this.$store.getters["chat/loading"];
+    },
     isSelectedContactUserActive() {
       if (this.selectedContactUser) {
         return this.selectedContactUser.isOnline ? true : false;
@@ -619,41 +664,22 @@ export default {
       this.duration.created_at = new Date().toISOString();
     }, 1000);
 
+    // Fetch setting
     chatSettingApi(this.$axios)
       .get()
       .then(({ data }) => {
-        console.log(data.data);
         if (data.data) {
           this.chatSetting.enterPress = data.data.enterPress;
         }
       });
 
+    // Fetch contact list
     contactApi(this.$axios)
       .get()
       .then(({ data }) => {
         let users = data.users;
         if (users) {
-          let contactUsers = users.map(item => {
-            return {
-              id: item.id,
-              email: item.email,
-              firstName: item.firstName,
-              lastName: item.lastName,
-              fullName: item.fullName,
-              title: item.title,
-              avatarImage: item.avatarImage,
-              avatarName: item.avatarName,
-              languages: item.languages,
-              aboutText: item.aboutText,
-              categories: item.categories,
-              tags: item.tags,
-              newMessageCount: item.newMessageCount,
-              lastMessage: item.lastMessage,
-              lastMessageTime: item.lastMessageTime,
-              isOnline: item.isOnline,
-              status: item.status
-            };
-          });
+          let contactUsers = this.formatContactUser(users);
 
           this.$store.dispatch("chat/setContacts", contactUsers);
 
@@ -684,6 +710,62 @@ export default {
     this.$store.dispatch("chat/destroySelectedContactUser");
   },
   methods: {
+    async handleSearch() {
+      await this.$store.dispatch("chat/setSearch", this.search);
+      this.$store.dispatch("chat/getContacts");
+    },
+    async handleFilterChange(val) {
+      let selected = this.filters.find(item => item.id == val);
+      if (selected) {
+        await this.$store.dispatch("chat/setStatusFilter", selected.label);
+        this.$store.dispatch("chat/getContacts");
+      }
+    },
+    formatContactUser(users) {
+      return users.map(item => {
+        return {
+          id: item.id,
+          email: item.email,
+          firstName: item.firstName,
+          lastName: item.lastName,
+          fullName: item.fullName,
+          title: item.title,
+          avatarImage: item.avatarImage,
+          avatarName: item.avatarName,
+          languages: item.languages,
+          aboutText: item.aboutText,
+          categories: item.categories,
+          tags: item.tags,
+          newMessageCount: item.newMessageCount,
+          lastMessage: item.lastMessage,
+          lastMessageTime: item.lastMessageTime,
+          isOnline: item.isOnline,
+          status: item.status
+        };
+      });
+    },
+    handleArchiveBtnClick() {
+      if (this.selectedContactUser) {
+        contactApi(this.$axios)
+          .archive({ userId: this.selectedContactUser.id })
+          .then(() => {
+            this.$store.dispatch("chat/getContacts");
+            this.selectedContactUser = null;
+            this.$store.dispatch("chat/setMessages", []);
+          });
+      }
+    },
+    handleUnreadBtnClick() {
+      if (this.selectedContactUser) {
+        contactApi(this.$axios)
+          .unread({ userId: this.selectedContactUser.id })
+          .then(({ data }) => {
+            this.$store.dispatch("chat/getContacts");
+            this.selectedContactUser = null;
+            this.$store.dispatch("chat/setMessages", []);
+          });
+      }
+    },
     handleUpdatedChatSetting(val) {
       chatSettingApi(this.$axios)
         .enterPress({ value: val })
@@ -766,7 +848,7 @@ export default {
       if (this.chatSetting.enterPress == "line_break") {
         this.messageForm.content + "\n";
       } else {
-        if(!e.shiftKey){
+        if (!e.shiftKey) {
           this.handleMessageInput();
         }
       }

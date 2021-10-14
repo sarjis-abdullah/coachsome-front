@@ -4,10 +4,16 @@ export const state = () => ({
   messages: [],
   contacts: [],
   selectedContactUser: null,
-  totalNewMessageCount: 0
+  totalNewMessageCount: 0,
+  statusFilter: null,
+  search: "",
+  loading: false,
 });
 
 export const getters = {
+  loading(state) {
+    return state.loading;
+  },
   messages(state) {
     return state.messages;
   },
@@ -19,6 +25,9 @@ export const getters = {
   },
   totalNewMessageCount(state) {
     return state.totalNewMessageCount;
+  },
+  statusFilter(state) {
+    return state.statusFilter;
   }
 };
 
@@ -29,6 +38,15 @@ export const mutations = {
     if (contact) {
       contact.isOnline = isOnline;
     }
+  },
+  SET_STATUS_FILTER(state, payload) {
+    state.statusFilter = payload;
+  },
+  SET_LOADING(state, payload) {
+    state.loading = payload;
+  },
+  SET_SEARCH(state, payload) {
+    state.search = payload;
   },
   SET_TOTAL_NEW_MESSAGE_COUNT(state, totalNewMessageCount) {
     state.totalNewMessageCount = totalNewMessageCount;
@@ -90,6 +108,15 @@ export const mutations = {
 };
 
 export const actions = {
+  setSearch(context, payload) {
+    context.commit("SET_SEARCH", payload);
+  },
+  setSearch(context, payload) {
+    context.commit("SET_SEARCH", payload);
+  },
+  setStatusFilter(context, payload) {
+    context.commit("SET_STATUS_FILTER", payload);
+  },
   setOnlineStatus(context, payload) {
     context.commit("SET_ONLINE_STATUS", payload);
   },
@@ -161,31 +188,35 @@ export const actions = {
   },
   async getContacts({ commit, state }) {
     // Reset user reset the last message and message count information
+    commit("SET_LOADING", true);
     const { data } = await contactApi(this.$axios).get({
-      resetUserId: state.selectedContactUser && state.selectedContactUser.id
+      resetUserId: state.selectedContactUser && state.selectedContactUser.id,
+      "filter[status]": state.statusFilter,
+      "filter[search]": state.search
     });
-    commit(
-      "SET_CONTACTS",
-      data.users.map(item => {
-        return {
-          id: item.id,
-          email: item.email,
-          firstName: item.firstName,
-          lastName: item.lastName,
-          fullName: item.fullName,
-          title: item.title,
-          avatarImage: item.avatarImage,
-          avatarName: item.avatarName,
-          languages: item.languages,
-          aboutText: item.aboutText,
-          categories: item.categories,
-          tags: item.tags,
-          newMessageCount: item.newMessageCount,
-          lastMessage: item.lastMessage,
-          lastMessageTime: item.lastMessageTime,
-          isOnline: item.isOnline
-        };
-      })
-    );
+    commit("SET_LOADING", false);
+
+    let users = data.users.map(item => {
+      return {
+        id: item.id,
+        email: item.email,
+        firstName: item.firstName,
+        lastName: item.lastName,
+        fullName: item.fullName,
+        title: item.title,
+        avatarImage: item.avatarImage,
+        avatarName: item.avatarName,
+        languages: item.languages,
+        aboutText: item.aboutText,
+        categories: item.categories,
+        tags: item.tags,
+        newMessageCount: item.newMessageCount,
+        lastMessage: item.lastMessage,
+        lastMessageTime: item.lastMessageTime,
+        isOnline: item.isOnline,
+        status: item.status
+      };
+    });
+    commit("SET_CONTACTS", users);
   }
 };
