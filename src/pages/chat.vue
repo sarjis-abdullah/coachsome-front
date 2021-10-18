@@ -219,47 +219,70 @@
                       </v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
-                      <div>
-                        <v-menu offset-y min-width="200">
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                              color="primary-light-1"
-                              icon
-                              v-bind="attrs"
-                              v-on="on"
-                            >
-                              <v-icon>mdi-dots-horizontal</v-icon>
-                            </v-btn>
-                          </template>
-                          <v-list dense>
-                            <v-list-item link @click="handleUnreadBtnClick">
-                              <v-list-item-avatar>
-                                <v-icon color="primary-light-1"
-                                  >mdi-check</v-icon
-                                >
-                              </v-list-item-avatar>
+                      <div class="d-flex align-center">
+                        <div>
+                          <v-menu
+                            v-if="!isArchiveFilter"
+                            offset-y
+                            min-width="200"
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn
+                                color="primary-light-1"
+                                icon
+                                v-bind="attrs"
+                                v-on="on"
+                              >
+                                <v-icon>mdi-dots-horizontal</v-icon>
+                              </v-btn>
+                            </template>
+                            <v-list dense>
+                              <v-list-item link @click="handleUnreadBtnClick">
+                                <v-list-item-avatar>
+                                  <v-icon color="primary-light-1"
+                                    >mdi-check</v-icon
+                                  >
+                                </v-list-item-avatar>
 
-                              <v-list-item-content>
-                                <v-list-item-title class="primary-light-1--text"
-                                  >Mark as unread</v-list-item-title
-                                >
-                              </v-list-item-content>
-                            </v-list-item>
-                            <v-list-item link @click="handleArchiveBtnClick">
-                              <v-list-item-avatar>
-                                <v-icon color="primary-light-1"
-                                  >mdi-archive</v-icon
-                                >
-                              </v-list-item-avatar>
+                                <v-list-item-content>
+                                  <v-list-item-title
+                                    class="primary-light-1--text"
+                                    >Mark as unread</v-list-item-title
+                                  >
+                                </v-list-item-content>
+                              </v-list-item>
+                              <v-list-item link @click="handleArchiveBtnClick">
+                                <v-list-item-avatar>
+                                  <v-icon color="primary-light-1"
+                                    >mdi-archive</v-icon
+                                  >
+                                </v-list-item-avatar>
 
-                              <v-list-item-content>
-                                <v-list-item-title class="primary-light-1--text"
-                                  >Archive Chat</v-list-item-title
-                                >
-                              </v-list-item-content>
-                            </v-list-item>
-                          </v-list>
-                        </v-menu>
+                                <v-list-item-content>
+                                  <v-list-item-title
+                                    class="primary-light-1--text"
+                                    >Archive Chat</v-list-item-title
+                                  >
+                                </v-list-item-content>
+                              </v-list-item>
+                            </v-list>
+                          </v-menu>
+                          <v-tooltip v-else top>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn
+                                icon
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="handleUnarchiveBtnClick"
+                              >
+                                <v-icon color="primary-light-1" small>
+                                  mdi-archive
+                                </v-icon>
+                              </v-btn>
+                            </template>
+                            <span>Unarchive</span>
+                          </v-tooltip>
+                        </div>
                         <v-btn
                           v-if="$vuetify.breakpoint.smAndDown"
                           @click="handleMobileHideActionBtnClick"
@@ -527,6 +550,9 @@ export default {
     dayBox: []
   }),
   computed: {
+    isArchiveFilter() {
+      return this.selectedFilterItem == 4;
+    },
     loading() {
       return this.$store.getters["chat/loading"];
     },
@@ -710,6 +736,17 @@ export default {
     this.$store.dispatch("chat/destroySelectedContactUser");
   },
   methods: {
+    handleUnarchiveBtnClick() {
+      if (this.selectedContactUser) {
+        contactApi(this.$axios)
+          .unarchive({ userId: this.selectedContactUser.id })
+          .then(() => {
+            this.$store.dispatch("chat/getContacts");
+            this.selectedContactUser = null;
+            this.$store.dispatch("chat/setMessages", []);
+          });
+      }
+    },
     async handleSearch() {
       await this.$store.dispatch("chat/setSearch", this.search);
       this.$store.dispatch("chat/getContacts");
@@ -720,6 +757,7 @@ export default {
         await this.$store.dispatch("chat/setStatusFilter", selected.label);
         this.$store.dispatch("chat/getContacts");
       }
+      this.selectedContactUser = null;
     },
     formatContactUser(users) {
       return users.map(item => {
