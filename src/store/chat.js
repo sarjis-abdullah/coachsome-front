@@ -1,13 +1,14 @@
-import { messageApi, contactApi } from "@/api";
+import { messageApi, contactApi, endpoint } from "@/api";
+import { contactData } from "@/data";
 
 export const state = () => ({
   messages: [],
   contacts: [],
-  selectedContactUser: null,
+  selectedContact: null,
   totalNewMessageCount: 0,
   statusFilter: null,
   search: "",
-  loading: false,
+  loading: false
 });
 
 export const getters = {
@@ -20,8 +21,8 @@ export const getters = {
   contacts(state) {
     return state.contacts;
   },
-  selectedContactUser(state) {
-    return state.selectedContactUser;
+  selectedContact(state) {
+    return state.selectedContact;
   },
   totalNewMessageCount(state) {
     return state.totalNewMessageCount;
@@ -66,11 +67,11 @@ export const mutations = {
   SET_CONTACTS(state, contacts) {
     state.contacts = contacts;
   },
-  SET_SELECTED_CONTACT_USER(state, contact) {
-    state.selectedContactUser = contact;
+  SET_SELECTED_CONTACT(state, contact) {
+    state.selectedContact = contact;
   },
   DESTROY_SELECTED_CONTACT_USER(state) {
-    state.selectedContactUser = null;
+    state.selectedContact = null;
   },
   DESTROY_MESSAGES(state) {
     state.messages = [];
@@ -83,7 +84,7 @@ export const mutations = {
       }
     });
     console.log("SenderId -> ", id);
-    console.log("SelectedId -> ", state.selectedContactUser.id);
+    console.log("SelectedId -> ", state.selectedContact.id);
   },
   REFRESH_CONTACT_USER_NEW_MESSAGE_COUNT(state, payload) {
     const { id } = payload;
@@ -132,8 +133,8 @@ export const actions = {
   setContacts(context, contacts) {
     context.commit("SET_CONTACTS", contacts);
   },
-  setSelectedContactUser(context, contact) {
-    context.commit("SET_SELECTED_CONTACT_USER", contact);
+  setSelectedContact(context, contact) {
+    context.commit("SET_SELECTED_CONTACT", contact);
   },
   destroySelectedContactUser(context) {
     context.commit("DESTROY_SELECTED_CONTACT_USER");
@@ -167,56 +168,56 @@ export const actions = {
       commit("SET_TOTAL_NEW_MESSAGE_COUNT", totalNewMessageCount);
     }
   },
-  async getMessages({ state, commit }) {
-    if (state.selectedContactUser) {
-      const { data } = await messageApi(this.$axios).get({
-        userId: state.selectedContactUser.id
-      });
-      if (data.messages) {
-        let messages = data.messages.map(item => {
-          return {
-            id: item.id,
-            type: item.type,
-            me: item.me,
-            content: item.content,
-            created_at: item.created_at
-          };
-        });
-        commit("SET_MESSAGES", messages);
-      }
-    }
-  },
   async getContacts({ commit, state }) {
-    // Reset user reset the last message and message count information
     commit("SET_LOADING", true);
-    const { data } = await contactApi(this.$axios).get({
-      resetUserId: state.selectedContactUser && state.selectedContactUser.id,
-      "filter[status]": state.statusFilter,
-      "filter[search]": state.search
-    });
+    let params = {
+      selectedContactId: state.selectedContact && state.selectedContact.id,
+      statusFilter: state.statusFilter,
+      searchFilter: state.search
+    };
+    const { data } = await contactApi(this.$axios).get(params);
     commit("SET_LOADING", false);
 
-    let users = data.users.map(item => {
-      return {
+    let contacts = data.data.map(item => {
+      let contact = {
         id: item.id,
-        email: item.email,
-        firstName: item.firstName,
-        lastName: item.lastName,
-        fullName: item.fullName,
-        title: item.title,
-        avatarImage: item.avatarImage,
-        avatarName: item.avatarName,
-        languages: item.languages,
-        aboutText: item.aboutText,
-        categories: item.categories,
-        tags: item.tags,
-        newMessageCount: item.newMessageCount,
+        title: "",
+        avatarImage: null,
+        avatarName: "",
+        categoryId: item.categoryId,
+        groupId: null,
         lastMessage: item.lastMessage,
         lastMessageTime: item.lastMessageTime,
-        isOnline: item.isOnline,
-        status: item.status
+        newMessageCount: item.newMessageCount,
+        connectionUserId: item.connectionUserId,
+        isOnline: false
       };
+
+      // Private Contact
+      if (item.categoryId == contactData.CATEGORY_ID_PRIVATE) {
+        let user = item.users.length ? item.users[0] : null;
+        if (user) {
+          contact.title = item.contactName;
+          contact.avatarImage = user.profile.image;
+          contact.avatarName =
+            user.firstName.charAt(0).toUpperCase() +
+            user.lastName.charAt(0).toUpperCase();
+          contact.isOnline = user.isOnline;
+        }
+      }
+
+      // Group Contact
+      if (item.categoryId == contactData.CATEGORY_ID_GROUP) {
+        let group = item.group ? item.group : null;
+        if (group) {
+          contact.groupId = group.id;
+          contact.title = group.name;
+          contact.avatarImage = group.image;
+          contact.avatarName = group.name.charAt(0).toUpperCase();
+        }
+      }
+      return contact;
     });
-    commit("SET_CONTACTS", users);
+    commit("SET_CONTACTS", contacts);
   }
 };

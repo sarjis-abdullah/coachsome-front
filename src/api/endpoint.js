@@ -1,0 +1,34 @@
+/**
+ * Here we follow some pattern for naming key
+ * key = resource-name + method name
+ * Method name follow BREAD strategy
+ * B = Browse -> GET
+ * R = Read -> GET
+ * E = Edit -> PUT
+ * A = Append -> POST
+ * D = Delete -> DELETE
+ */
+
+export default {
+  // group message
+  GROUP_MESSAGES_GET: "/group-messages",
+  GROUP_MESSAGES_POST: "/group-messages",
+
+  // messages
+  MESSAGES_GET: "/messages",
+  MESSAGES_POST: "/messages",
+  MESSAGES_ID_GET: id => `/messages/${id}`,
+  MESSAGES_ID_EDIT: id => `/messages/${id}`,
+  MESSAGES_ID_DELETE: id => `/messages/${id}`,
+  MESSAGES_NEW_COUNT_GET: "/messages/newCount",
+
+  // chat setting
+  CHAT_SETTINGS_GET: "/chatSettings",
+  CHAT_SETTINGS_ENTER_PRESS_POST: "/chatSettings/enterPress",
+
+  // contacts
+  CONTACTS_GET: "/contacts",
+  CONTACTS_ARCHIVE_POST: "/contacts/archive",
+  CONTACTS_UNARCHIVE_POST: "/contacts/unarchive",
+  CONTACTS_UNREAD_POST: "/contacts/unread"
+};

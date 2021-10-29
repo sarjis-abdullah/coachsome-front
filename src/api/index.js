@@ -12,6 +12,7 @@ export { default as calenderApi } from "./calender";
 export { default as countryApi } from "./country";
 export { default as contactApi } from "./contact";
 export { default as frontHomeApi } from "./frontHome";
+export { default as groupApi } from "./group";
 export { default as languageApi } from "./language";
 export { default as marketPlaceApi } from "./marketPlace";
 export { default as messageApi } from "./message";
@@ -60,3 +61,7 @@ export { default as sharedProfileApi } from "./shared/profile";
 
 // TikCms
 export { default as pageBuilderApi } from "./tikCms/pageBuilder";
+
+// Endpoint
+// This is the future api path feature
+export { default as endpoint } from "./endpoint";

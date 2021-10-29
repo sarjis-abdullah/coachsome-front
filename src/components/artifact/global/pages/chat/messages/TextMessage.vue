@@ -12,7 +12,7 @@
             style="word-break: break-all;white-space: pre-wrap;"
             v-html="message.content"
           ></div>
-          <div class="text-message-time" v-if="message.created_at">
+          <div class="text-message-time" v-if="message.createdAt">
             {{ time }}
           </div>
         </span>
@@ -27,7 +27,7 @@ export default {
   props: ["message"],
   computed: {
     time() {
-      return this.moment(this.message.created_at)
+      return this.moment(this.message.createdAt)
         .locale(this.$i18n.locale)
         .format("DD MMM HH:mm");
     }

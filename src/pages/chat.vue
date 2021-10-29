@@ -20,6 +20,9 @@
             @select-package="handleSelectPackage"
           />
         </v-dialog>
+        <v-dialog v-model="createGroupDialog.value" max-width="600">
+          <CreateGroupForm @close="createGroupDialog.value = false" />
+        </v-dialog>
         <a-drawer
           class="d-none d-sm-flex d-md-none pa-0"
           title="Actions"
@@ -55,7 +58,11 @@
                 {{ $t("chat_page_title_message") }}
               </div>
               <div class="left-sidebar-action">
-                <v-btn icon color="primary-light-1">
+                <v-btn
+                  icon
+                  color="primary-light-1"
+                  @click="handleGroupBtnClick"
+                >
                   <v-icon color="primary-light-1">
                     mdi-plus-circle-outline
                   </v-icon>
@@ -100,73 +107,10 @@
                 </v-select>
               </div>
               <div class="contact">
-                <v-list color="transparent">
-                  <v-list-item-group
-                    v-model="activeChat"
-                    active-class="border"
-                    color="primary-light-1"
-                  >
-                    <template
-                      v-for="item in contacts"
-                      @click.stop="handleSelectedContactUser(item)"
-                    >
-                      <v-list-item
-                        link
-                        :key="item.id"
-                        :value="item.id"
-                        @click.stop="handleSelectedContactUser(item)"
-                      >
-                        <v-list-item-avatar
-                          color="primary-light-1"
-                          class="d-flex justify-center"
-                        >
-                          <v-img
-                            v-if="item.avatarImage"
-                            :src="item.avatarImage"
-                          ></v-img>
-                          <div v-else v-html="item.avatarName">
-                            {{ item.avatarName }}
-                          </div>
-                        </v-list-item-avatar>
-
-                        <v-list-item-content>
-                          <v-list-item-title
-                            v-html="item.fullName"
-                          ></v-list-item-title>
-                          <v-list-item-subtitle>
-                            <div v-if="item.lastMessage">
-                              <div
-                                v-if="
-                                  JSON.parse(item.lastMessage).type == 'text'
-                                "
-                              >
-                                {{ JSON.parse(item.lastMessage).text_content }}
-                              </div>
-                            </div>
-                          </v-list-item-subtitle>
-                        </v-list-item-content>
-                        <v-list-item-action>
-                          <v-list-item-action-text>
-                            {{ item.lastMessageTime }}
-                          </v-list-item-action-text>
-                        </v-list-item-action>
-                      </v-list-item>
-                    </template>
-                  </v-list-item-group>
-                </v-list>
-                <div class="no-contact" v-if="!contacts.length">
-                  <img
-                    class="no-contact__icon"
-                    :src="require(`@/assets/images/icons/message-tick.svg`)"
-                    alt=""
-                  />
-                  <div class="no-contact__title">
-                    No new messages
-                  </div>
-                  <div class="no-contact__description">
-                    Start your first messages by getting your first customers
-                  </div>
-                </div>
+                <ContactList
+                  :avatar-size="avatarSize"
+                  @selected="onHandleContactItemSeleted"
+                />
               </div>
             </div>
           </div>
@@ -178,111 +122,179 @@
             <div class="content">
               <div class="content__header">
                 <v-list two-line width="100%" color="transparent">
-                  <v-list-item v-if="selectedContactUser">
-                    <v-btn
-                      icon
-                      v-if="$vuetify.breakpoint.smAndDown"
-                      @click="handleBackBtnClick"
+                  <template v-if="selectedContact">
+                    <v-list-item
+                      v-if="
+                        selectedContact.categoryId ==
+                          contactData.CATEGORY_ID_PRIVATE
+                      "
                     >
-                      <v-icon small>mdi-arrow-left</v-icon>
-                    </v-btn>
-                    <v-badge
-                      bordered
-                      bottom
-                      :color="selectedContactUser.isOnline ? 'green' : 'grey'"
-                      dot
-                      offset-x="10"
-                      offset-y="10"
-                    >
-                      <v-avatar size="40" color="primary-light-1">
-                        <v-img
-                          v-if="selectedContactUser.avatarImage"
-                          :src="selectedContactUser.avatarImage"
-                        ></v-img>
-                        <div
-                          v-else
-                          v-html="selectedContactUser.avatarName"
-                        ></div>
-                      </v-avatar>
-                    </v-badge>
-                    <v-list-item-content class="pl-1">
-                      <v-list-item-title
-                        v-text="selectedContactUser.fullName"
-                      ></v-list-item-title>
+                      <v-btn
+                        icon
+                        v-if="$vuetify.breakpoint.smAndDown"
+                        @click="handleBackBtnClick"
+                      >
+                        <v-icon small>mdi-arrow-left</v-icon>
+                      </v-btn>
+                      <v-badge
+                        bordered
+                        bottom
+                        :color="selectedContact.isOnline ? 'green' : 'grey'"
+                        dot
+                        offset-x="10"
+                        offset-y="10"
+                      >
+                        <v-avatar :size="avatarSize" color="primary-light-1">
+                          <v-img
+                            v-if="selectedContact.avatarImage"
+                            :src="selectedContact.avatarImage"
+                          ></v-img>
+                          <div v-else v-html="selectedContact.avatarName"></div>
+                        </v-avatar>
+                      </v-badge>
+                      <v-list-item-content class="pl-1">
+                        <v-list-item-title
+                          v-text="selectedContact.title"
+                        ></v-list-item-title>
 
-                      <v-list-item-subtitle>
-                        {{
-                          selectedContactUser.isOnline
-                            ? $t("chat_status_active_txt")
-                            : $t("chat_status_inactive_txt")
-                        }}
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                    <v-list-item-action>
-                      <div class="d-flex align-center">
-                        <div>
-                          <v-menu
-                            v-if="!isArchiveFilter"
-                            offset-y
-                            min-width="200"
+                        <v-list-item-subtitle>
+                          {{
+                            selectedContact.isOnline
+                              ? $t("chat_status_active_txt")
+                              : $t("chat_status_inactive_txt")
+                          }}
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                      <v-list-item-action>
+                        <div class="d-flex align-center">
+                          <div>
+                            <v-menu
+                              v-if="!isArchiveFilter"
+                              offset-y
+                              min-width="200"
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                  color="primary-light-1"
+                                  icon
+                                  v-bind="attrs"
+                                  v-on="on"
+                                >
+                                  <v-icon>mdi-dots-horizontal</v-icon>
+                                </v-btn>
+                              </template>
+                              <v-list dense>
+                                <v-list-item link @click="handleUnreadBtnClick">
+                                  <v-list-item-avatar>
+                                    <v-icon color="primary-light-1"
+                                      >mdi-check</v-icon
+                                    >
+                                  </v-list-item-avatar>
+
+                                  <v-list-item-content>
+                                    <v-list-item-title
+                                      class="primary-light-1--text"
+                                      >Mark as unread</v-list-item-title
+                                    >
+                                  </v-list-item-content>
+                                </v-list-item>
+                                <v-list-item
+                                  link
+                                  @click="handleArchiveBtnClick"
+                                >
+                                  <v-list-item-avatar>
+                                    <v-icon color="primary-light-1"
+                                      >mdi-archive</v-icon
+                                    >
+                                  </v-list-item-avatar>
+
+                                  <v-list-item-content>
+                                    <v-list-item-title
+                                      class="primary-light-1--text"
+                                      >Archive Chat</v-list-item-title
+                                    >
+                                  </v-list-item-content>
+                                </v-list-item>
+                              </v-list>
+                            </v-menu>
+                            <v-tooltip v-else top>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                  icon
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  @click="handleUnarchiveBtnClick"
+                                >
+                                  <v-icon color="primary-light-1" small>
+                                    mdi-archive
+                                  </v-icon>
+                                </v-btn>
+                              </template>
+                              <span>Unarchive</span>
+                            </v-tooltip>
+                          </div>
+                          <v-btn
+                            v-if="$vuetify.breakpoint.smAndDown"
+                            @click="handleMobileHideActionBtnClick"
+                            outlined
+                            small
+                            rounded
+                            color="primary-light-1"
+                            class="text-normal"
                           >
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-btn
-                                color="primary-light-1"
-                                icon
-                                v-bind="attrs"
-                                v-on="on"
-                              >
-                                <v-icon>mdi-dots-horizontal</v-icon>
-                              </v-btn>
-                            </template>
-                            <v-list dense>
-                              <v-list-item link @click="handleUnreadBtnClick">
-                                <v-list-item-avatar>
-                                  <v-icon color="primary-light-1"
-                                    >mdi-check</v-icon
-                                  >
-                                </v-list-item-avatar>
-
-                                <v-list-item-content>
-                                  <v-list-item-title
-                                    class="primary-light-1--text"
-                                    >Mark as unread</v-list-item-title
-                                  >
-                                </v-list-item-content>
-                              </v-list-item>
-                              <v-list-item link @click="handleArchiveBtnClick">
-                                <v-list-item-avatar>
-                                  <v-icon color="primary-light-1"
-                                    >mdi-archive</v-icon
-                                  >
-                                </v-list-item-avatar>
-
-                                <v-list-item-content>
-                                  <v-list-item-title
-                                    class="primary-light-1--text"
-                                    >Archive Chat</v-list-item-title
-                                  >
-                                </v-list-item-content>
-                              </v-list-item>
-                            </v-list>
-                          </v-menu>
-                          <v-tooltip v-else top>
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-btn
-                                icon
-                                v-bind="attrs"
-                                v-on="on"
-                                @click="handleUnarchiveBtnClick"
-                              >
-                                <v-icon color="primary-light-1" small>
-                                  mdi-archive
-                                </v-icon>
-                              </v-btn>
-                            </template>
-                            <span>Unarchive</span>
-                          </v-tooltip>
+                            {{
+                              actionDialog
+                                ? $t("chat_btn_label_hide_actions")
+                                : $t("chat_btn_label_show_actions")
+                            }}
+                          </v-btn>
+                          <v-btn
+                            v-if="!$vuetify.breakpoint.smAndDown"
+                            @click="handleDesktopHideActionBtnClick"
+                            outlined
+                            small
+                            rounded
+                            color="primary-light-1"
+                            class="text-normal"
+                          >
+                            {{
+                              rightSidebar
+                                ? $t("chat_btn_label_hide_actions")
+                                : $t("chat_btn_label_show_actions")
+                            }}
+                          </v-btn>
                         </div>
+                      </v-list-item-action>
+                    </v-list-item>
+                    <v-list-item
+                      v-if="
+                        selectedContact.categoryId ==
+                          contactData.CATEGORY_ID_GROUP
+                      "
+                    >
+                      <v-btn
+                        icon
+                        v-if="$vuetify.breakpoint.smAndDown"
+                        @click="handleBackBtnClick"
+                      >
+                        <v-icon small>mdi-arrow-left</v-icon>
+                      </v-btn>
+                      <v-avatar :size="avatarSize" color="primary-light-1">
+                        <img
+                          :style="{ width: '20px' }"
+                          :src="
+                            selectedContact.avatarImage ||
+                              require(`@/assets/images/icons/group.svg`)
+                          "
+                        />
+                      </v-avatar>
+                      <v-list-item-content class="pl-1">
+                        <v-list-item-title
+                          v-text="selectedContact.title"
+                        ></v-list-item-title>
+                        <v-list-item-subtitle> </v-list-item-subtitle>
+                      </v-list-item-content>
+                      <v-list-item-action>
                         <v-btn
                           v-if="$vuetify.breakpoint.smAndDown"
                           @click="handleMobileHideActionBtnClick"
@@ -313,9 +325,9 @@
                               : $t("chat_btn_label_show_actions")
                           }}
                         </v-btn>
-                      </div>
-                    </v-list-item-action>
-                  </v-list-item>
+                      </v-list-item-action>
+                    </v-list-item>
+                  </template>
                 </v-list>
               </div>
               <div class="content__body">
@@ -453,9 +465,11 @@ import RequestBox from "@/components/artifact/global/pages/chat/RequestBox";
 import PackageChoosing from "@/components/artifact/global/pages/chat/PackageChoosing";
 import ChatScreen from "@/components/artifact/global/pages/chat/ChatScreen";
 import ChatSetting from "@/components/artifact/global/pages/chat/ChatSetting";
+import CreateGroupForm from "@/components/artifact/global/pages/chat/CreateGroupForm";
+import ContactList from "@/components/artifact/global/pages/chat/ContactList";
 
-import { contactApi, messageApi, chatSettingApi } from "@/api";
-import { pathData } from "@/data";
+import { endpoint } from "../api";
+import { pathData, contactData } from "@/data";
 
 export default {
   layout: "chat",
@@ -465,12 +479,16 @@ export default {
     };
   },
   components: {
+    CreateGroupForm,
     RequestBox,
     PackageChoosing,
     ChatScreen,
-    ChatSetting
+    ChatSetting,
+    ContactList
   },
   data: () => ({
+    contactData,
+    avatarSize: 40,
     chatSetting: {
       enterPress: "send_message"
     },
@@ -502,21 +520,14 @@ export default {
       },
       value: false
     },
-    search: "",
-    profileCard: {
-      name: "",
-      aboutText: "",
-      avatarImage: null,
-      avatarName: "",
-      languages: [],
-      tags: []
+    createGroupDialog: {
+      value: false
     },
-    selectedContactUser: null,
-    users: [],
-    activeChat: null,
+    search: "",
+    selectedContact: null,
     messages: [],
     duration: {
-      created_at: ""
+      createdAt: ""
     },
     selectedFilterItem: 1,
     filters: [
@@ -545,9 +556,8 @@ export default {
       me: true,
       type: "text",
       content: "",
-      created_at: new Date()
-    },
-    dayBox: []
+      createdAt: new Date()
+    }
   }),
   computed: {
     isArchiveFilter() {
@@ -557,22 +567,22 @@ export default {
       return this.$store.getters["chat/loading"];
     },
     isSelectedContactUserActive() {
-      if (this.selectedContactUser) {
-        return this.selectedContactUser.isOnline ? true : false;
+      if (this.selectedContact) {
+        return this.selectedContact.isOnline ? true : false;
       } else {
         return false;
       }
     },
     contentSection() {
       let show = true;
-      if (!this.selectedContactUser && this.$vuetify.breakpoint.smAndDown) {
+      if (!this.selectedContact && this.$vuetify.breakpoint.smAndDown) {
         show = false;
       }
       return show;
     },
     leftSidebarSection() {
       let show = true;
-      if (this.selectedContactUser && this.$vuetify.breakpoint.smAndDown) {
+      if (this.selectedContact && this.$vuetify.breakpoint.smAndDown) {
         show = false;
       }
       return show;
@@ -583,244 +593,203 @@ export default {
     contacts() {
       return this.$store.getters["chat/contacts"];
     },
-    filteredContactUsers() {
-      let items = this.contacts;
-
-      if (this.search) {
-        items = items.filter(item => {
-          return item.fullName
-            .toLowerCase()
-            .includes(this.search.toLowerCase());
-        });
-      }
-
-      if (this.selectedFilterItem != 1) {
-        const filterValue = this.filters.find(
-          filter => filter.id == this.selectedFilterItem
-        );
-        items = items.filter(filterItem => {
-          return filterItem.status == filterValue.label;
-        });
-      }
-      return items;
-    },
     hasNetwork() {
       return true;
-    },
-    isShowingContactPanel() {
-      if (this.$vuetify.breakpoint.smAndDown) {
-        return this.selectedContactUser == null;
-      } else {
-        return true;
-      }
-    },
-    isShowingProfilePanel() {
-      if (this.$vuetify.breakpoint.smAndDown) {
-        return false;
-      } else {
-        return this.selectedContactUser != null;
-      }
     }
   },
   watch: {
-    "bookingDialog.value": function(val) {
-      console.log(val);
-    },
-    selectedContactUser(val, preVal) {
-      if (this.selectedContactUser) {
+    selectedContact(contact) {
+      if (contact) {
         this.$store.dispatch("chat/destroyMessages");
-        this.$store.dispatch(
-          "chat/setSelectedContactUser",
-          this.selectedContactUser
-        );
-        this.$store.dispatch("chat/refreshContactUserNewMessageCount", {
-          id: this.selectedContactUser.id
-        });
-        this.packageChoosingDialog.props.userId = this.selectedContactUser.id;
-        this.bookingDialog.requestBox.props.userId = this.selectedContactUser.id;
-        this.profileCard.name = this.selectedContactUser.fullName;
-        this.profileCard.aboutText = this.selectedContactUser.aboutText;
-        this.profileCard.avatarImage = this.selectedContactUser.avatarImage;
-        this.profileCard.avatarName = this.selectedContactUser.avatarName;
-        this.profileCard.languages = this.selectedContactUser.languages;
-        this.profileCard.tags = this.selectedContactUser.tags;
+        this.$store.dispatch("chat/setSelectedContact", contact);
 
-        messageApi(this.$axios)
-          .get({ userId: this.selectedContactUser.id })
-          .then(({ data }) => {
-            // Old messages
-            if (data.messages) {
-              data.messages.forEach(item => {
+        // Fetch private message
+        if (contact.categoryId == contactData.CATEGORY_ID_PRIVATE) {
+          const params = { contactId: contact.id };
+          this.$axios
+            .get(endpoint.MESSAGES_GET, { params })
+            .then(({ data }) => {
+              // Old messages
+              if (data.messages) {
+                data.messages.forEach(item => {
+                  let newMessage = {
+                    id: item.id,
+                    type: item.type,
+                    me: item.me,
+                    content: item.content,
+                    createdAt: item.createdAt
+                  };
+                  this.pushMessage(newMessage);
+                });
+              }
+              // New messages
+              if (data.newMessages) {
+                data.newMessages.forEach(item => {
+                  let messageItem = {
+                    type: item.type,
+                    content: item.content
+                  };
+                  this.pushMessage(messageItem);
+                  this.sendPrivateMessageToChatServer({
+                    senderUserId: this.$auth.user.id,
+                    receiverUserId: contact.id,
+                    message: messageItem
+                  });
+                });
+              }
+            });
+        }
+
+        // Fetch group message
+        if (contact.categoryId == contactData.CATEGORY_ID_GROUP) {
+          const params = {
+            groupId: contact.groupId
+          };
+          this.$axios
+            .get(endpoint.GROUP_MESSAGES_GET, { params })
+            .then(({ data }) => {
+              data.data.forEach(item => {
                 let newMessage = {
                   id: item.id,
                   type: item.type,
                   me: item.me,
                   content: item.content,
-                  created_at: item.created_at
+                  createdAt: item.createdAt
                 };
                 this.pushMessage(newMessage);
               });
-            }
-
-            // New messages
-            if (data.newMessages) {
-              data.newMessages.forEach(item => {
-                let messageItem = {
-                  type: item.type,
-                  content: item.content
-                };
-                this.pushMessage(messageItem);
-                this.sendMessageToChatServer({
-                  senderUserId: this.$auth.user.id,
-                  receiverUserId: this.selectedContactUser.id,
-                  message: messageItem
-                });
-              });
-            }
-          });
+            });
+        }
       }
     }
   },
-  mounted() {
+  async mounted() {
     // This is very sensitive.
     // Since the date is not updated without refresh, we should manually refresh it
-    // Now this created_at is updated after 1 second
+    // Now this createdAt is updated after 1 second
     // ISO string is needed for standard time showing in different timezone
     setInterval(() => {
-      this.duration.created_at = new Date().toISOString();
+      this.duration.createdAt = new Date().toISOString();
     }, 1000);
 
     // Fetch setting
-    chatSettingApi(this.$axios)
-      .get()
-      .then(({ data }) => {
-        if (data.data) {
-          this.chatSetting.enterPress = data.data.enterPress;
+    this.$axios.get(endpoint.CHAT_SETTINGS_GET).then(({ data }) => {
+      if (data.data) {
+        this.chatSetting.enterPress = data.data.enterPress;
+      }
+    });
+
+    await this.$store.dispatch("chat/getContacts");
+
+    // Set contact
+    if (this.$route.query.userId) {
+      let contact = this.contacts.find(
+        item => item.connectionUserId == this.$route.query.userId
+      );
+      if (contact) {
+        this.selectedContact = contact;
+        this.$router.replace(this.localePath(pathData.pages.chat));
+      }
+    } else {
+      // If there has no selected contact
+      if (this.contacts && this.$vuetify.breakpoint.mdAndUp) {
+        let contact = this.contacts[0];
+        if (contact) {
+          this.selectedContact = contact;
         }
-      });
-
-    // Fetch contact list
-    contactApi(this.$axios)
-      .get()
-      .then(({ data }) => {
-        let users = data.users;
-        if (users) {
-          let contactUsers = this.formatContactUser(users);
-
-          this.$store.dispatch("chat/setContacts", contactUsers);
-
-          // If it has any userId form the url
-          if (this.$route.query.userId) {
-            let user = this.contacts.find(
-              item => item.id == this.$route.query.userId
-            );
-            if (user) {
-              this.activeChat = user.id;
-              this.selectedContactUser = user;
-              this.$router.replace(this.localePath(pathData.pages.chat));
-            }
-          } else {
-            if (this.contacts && this.$vuetify.breakpoint.mdAndUp) {
-              let user = this.contacts[0];
-              if (user) {
-                this.activeChat = user.id;
-                this.selectedContactUser = user;
-              }
-            }
-          }
-        }
-      })
-      .catch(() => {});
-  },
-  beforeDestroy() {
-    this.$store.dispatch("chat/destroySelectedContactUser");
+      }
+    }
   },
   methods: {
+    onHandleContactItemSeleted(item) {
+      this.selectedContact = item;
+    },
+    getSelectedContact() {
+      return this.$store.getters["chat/selectedContact"];
+    },
+    setSelectedContact(payload) {
+      this.$store.dispatch("chat/setSelectedContact", payload);
+    },
+    getContacts() {
+      return this.$store.dispatch("chat/getContacts");
+    },
+    setMessages(payload) {
+      this.$store.dispatch("chat/setMessages", payload);
+    },
+    pushMessage(message) {
+      this.$store.dispatch("chat/pushMessage", message);
+    },
+    handleGroupBtnClick() {
+      this.createGroupDialog.value = true;
+    },
     handleUnarchiveBtnClick() {
-      if (this.selectedContactUser) {
-        contactApi(this.$axios)
-          .unarchive({ userId: this.selectedContactUser.id })
+      if (this.selectedContact) {
+        this.$axios
+          .post(endpoint.CONTACTS_UNARCHIVE_POST, {
+            userId: this.selectedContact.id
+          })
           .then(() => {
+            this.selectedContact = null;
             this.$store.dispatch("chat/getContacts");
-            this.selectedContactUser = null;
             this.$store.dispatch("chat/setMessages", []);
           });
       }
     },
     async handleSearch() {
       await this.$store.dispatch("chat/setSearch", this.search);
-      this.$store.dispatch("chat/getContacts");
+      this.getContacts();
     },
     async handleFilterChange(val) {
       let selected = this.filters.find(item => item.id == val);
       if (selected) {
         await this.$store.dispatch("chat/setStatusFilter", selected.label);
-        this.$store.dispatch("chat/getContacts");
+        this.getContacts();
       }
-      this.selectedContactUser = null;
+      this.selectedContact = null;
     },
-    formatContactUser(users) {
-      return users.map(item => {
-        return {
-          id: item.id,
-          email: item.email,
-          firstName: item.firstName,
-          lastName: item.lastName,
-          fullName: item.fullName,
-          title: item.title,
-          avatarImage: item.avatarImage,
-          avatarName: item.avatarName,
-          languages: item.languages,
-          aboutText: item.aboutText,
-          categories: item.categories,
-          tags: item.tags,
-          newMessageCount: item.newMessageCount,
-          lastMessage: item.lastMessage,
-          lastMessageTime: item.lastMessageTime,
-          isOnline: item.isOnline,
-          status: item.status
-        };
-      });
-    },
-    handleArchiveBtnClick() {
-      if (this.selectedContactUser) {
-        contactApi(this.$axios)
-          .archive({ userId: this.selectedContactUser.id })
-          .then(() => {
-            this.$store.dispatch("chat/getContacts");
-            this.selectedContactUser = null;
-            this.$store.dispatch("chat/setMessages", []);
-          });
-      }
-    },
-    handleUnreadBtnClick() {
-      if (this.selectedContactUser) {
-        contactApi(this.$axios)
-          .unread({ userId: this.selectedContactUser.id })
-          .then(({ data }) => {
-            this.$store.dispatch("chat/getContacts");
-            this.selectedContactUser = null;
-            this.$store.dispatch("chat/setMessages", []);
-          });
-      }
-    },
-    handleUpdatedChatSetting(val) {
-      chatSettingApi(this.$axios)
-        .enterPress({ value: val })
-        .then(({ data }) => {
-          console.log(data);
-          if (data.data) {
-            this.chatSetting.enterPress = data.data.enterPress;
-          }
-          this.$toast.success("Successfully updated");
+    async handleArchiveBtnClick() {
+      let contact = this.selectedContact;
+      if (contact) {
+        await this.$axios.post(endpoint.CONTACTS_ARCHIVE_POST, {
+          contactId: contact.id
         });
+        this.getContacts();
+        this.selectedContact = null;
+        this.setMessages([]);
+      }
+    },
+    async handleUnreadBtnClick() {
+      let contact = this.selectedContact;
+      if (contact) {
+        await this.$axios.post(endpoint.CONTACTS_UNREAD_POST, {
+          contactId: contact.id
+        });
+        this.getContacts();
+        this.setMessages([]);
+      }
+    },
+    async handleUpdatedChatSetting(val) {
+      try {
+        const { data } = await this.$axios.post(
+          endpoint.CHAT_SETTINGS_ENTER_PRESS_POST,
+          {
+            value: val
+          }
+        );
+
+        if (data.data) {
+          this.chatSetting.enterPress = data.data.enterPress;
+        }
+        this.$toast.success("Successfully updated");
+      } catch (error) {
+        console.error(error);
+      }
     },
     selectEmoji(emoji) {
       this.messageForm.content += emoji.data;
-      console.log(emoji);
     },
     handleBackBtnClick() {
-      this.selectedContactUser = null;
+      this.selectedContact = null;
     },
     handleDesktopHideActionBtnClick() {
       this.rightSidebar = !this.rightSidebar;
@@ -834,34 +803,45 @@ export default {
       this.actionDialog = !this.actionDialog;
     },
     handleBackBtnClick() {
-      this.selectedContactUser = null;
+      this.selectedContact = null;
     },
     handleRequestBoxCancelBtn() {
       this.bookingDialog.value = false;
     },
-    pushMessage(message) {
-      this.$store.dispatch("chat/pushMessage", message);
-    },
-    sendMessageToChatServer(payload) {
+
+    sendPrivateMessageToChatServer(payload) {
       this.$socket.emit("private_message_send", {
         senderUserId: payload.senderUserId,
         receiverUserId: payload.receiverUserId,
         message: payload.message
       });
     },
-    handleRequestBoxNewMessage(message) {
-      this.pushMessage(message);
-      this.sendMessageToChatServer({
-        senderUserId: this.$auth.user.id,
-        receiverUserId: this.selectedContactUser.id,
-        message: message
+    sendGroupMessageToChatServer(payload) {
+      this.$socket.emit("group_message_send", {
+        senderUserId: payload.senderUserId,
+        groupId: payload.groupId,
+        message: payload.message
       });
-      this.bookingDialog.value = false;
+    },
+    handleRequestBoxNewMessage(message) {
+      let contact = this.selectedContact;
+      if (contact) {
+        this.pushMessage(message);
+        this.sendPrivateMessageToChatServer({
+          senderUserId: this.$auth.user.id,
+          receiverUserId: contact.connectionUserId,
+          message: message
+        });
+        this.bookingDialog.value = false;
+      }
     },
     handleSelectPackage(item) {
       if (item) {
+        let contact = this.selectedContact;
         this.packageChoosingDialog.value = false;
-        this.bookingDialog.requestBox.props.userId = this.selectedContactUser.id;
+        this.bookingDialog.requestBox.props.userId = contact
+          ? contact.connectionUserId
+          : null;
         this.bookingDialog.requestBox.props.bookingId = item.bookingId;
         this.bookingDialog.requestBox.props.packageSession = item.session;
         this.bookingDialog.requestBox.props.isSold = item.isSold;
@@ -879,9 +859,6 @@ export default {
       this.actionDialog = false;
       this.packageChoosingDialog.value = true;
     },
-    handleSelectedContactUser(user) {
-      this.selectedContactUser = user;
-    },
     handleEnterPress(e) {
       if (this.chatSetting.enterPress == "line_break") {
         this.messageForm.content + "\n";
@@ -895,7 +872,11 @@ export default {
       this.messageForm.content += "\n";
     },
     handleMessageInput() {
-      if (!/^ *$/.test(this.messageForm.content) && this.hasNetwork) {
+      if (
+        this.selectedContact &&
+        !/^ *$/.test(this.messageForm.content) &&
+        this.hasNetwork
+      ) {
         // Modify the content
         this.messageForm.content = this.messageForm.content.trim();
 
@@ -906,22 +887,46 @@ export default {
         );
         this.pushMessage(newMessage);
 
-        this.sendMessageToChatServer({
-          senderUserId: this.$auth.user.id,
-          receiverUserId: this.selectedContactUser.id,
-          message: newMessage
-        });
+        if (
+          this.selectedContact.categoryId == contactData.CATEGORY_ID_PRIVATE
+        ) {
+          this.sendPrivateMessageToChatServer({
+            senderUserId: this.$auth.user.id,
+            receiverUserId: this.selectedContact.connectionUserId,
+            message: newMessage
+          });
 
-        messageApi(this.$axios)
-          .store({
-            ...newMessage,
-            receiverUserId: this.selectedContactUser
-              ? this.selectedContactUser.id
-              : null
-          })
-          .then(() => {})
-          .catch(() => {});
-        this.messageForm.content = "";
+          this.$axios
+            .post(endpoint.MESSAGES_POST, {
+              ...newMessage,
+              receiverUserId: this.selectedContact.connectionUserId
+            })
+            .then(() => {})
+            .catch(() => {});
+          this.messageForm.content = "";
+        } else {
+          console.log(this.selectedContact.groupId);
+          const payload = {
+            type: "text",
+            content: this.messageForm.content,
+            groupId: this.selectedContact.groupId
+          };
+          this.sendGroupMessageToChatServer({
+            senderUserId: this.$auth.user.id,
+            groupId: this.selectedContact.groupId,
+            message: newMessage
+          });
+          this.$axios
+            .post(endpoint.GROUP_MESSAGES_POST, payload)
+            .then(({ data }) => {
+              console.log(data.data);
+            })
+            .catch(err => {
+              if (err.response.data.error) {
+                this.$toast.error(err.response.data.error.message);
+              }
+            });
+        }
       }
     },
     handleClearSearch() {
@@ -932,7 +937,7 @@ export default {
 </script>
 
 <style lang="scss">
-$header-height: 50px;
+$header-height: 60px;
 .chat-new-page {
   background: #f7fafc;
   .v-select__selections {
@@ -986,7 +991,7 @@ $header-height: 50px;
       .contact {
         overflow: auto;
         height: 100%;
-        height: calc(100vh - 15rem);
+        height: calc(100vh - 16rem);
       }
       /* width */
       .contact::-webkit-scrollbar {

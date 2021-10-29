@@ -6,3 +6,4 @@ export { default as profileData } from "./profileData";
 export { default as statusCodeData } from "./statusCodeData";
 export { default as roleData } from "./roleData";
 export { default as badgeData } from "./badgeData";
+export { default as contactData } from "./contactData";

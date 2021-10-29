@@ -42,6 +42,10 @@ export default ({ app }, inject) => {
           app.store.dispatch("chat/incrementTotalNewMessageCount");
         }
       });
+
+      socket.on("group_message_receive", async data => {
+        console.log(data);
+      });
     }
   });
   inject("socket", socket);
