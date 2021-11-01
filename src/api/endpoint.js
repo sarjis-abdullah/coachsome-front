@@ -30,5 +30,11 @@ export default {
   CONTACTS_GET: "/contacts",
   CONTACTS_ARCHIVE_POST: "/contacts/archive",
   CONTACTS_UNARCHIVE_POST: "/contacts/unarchive",
-  CONTACTS_UNREAD_POST: "/contacts/unread"
+  CONTACTS_UNREAD_POST: "/contacts/unread",
+  CONTACTS_PRIVATE_USERS_GET: "/contacts/private-users",
+
+  // group
+  GROUPS_POST: "/groups",
+  GROUP_INVITATIONS_POST: "/group-invitations",
+  GROUP_INVITATIONS_VERIFY_POST: "/group-invitations/verify"
 };

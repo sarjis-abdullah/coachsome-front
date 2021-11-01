@@ -1,7 +1,7 @@
 <template>
   <div class="group-invitations-verify">
-    <div class="d-flex flex-column justify-center align-center">
-      <div>
+    <div v-if="!hasError">
+      <div class="d-flex flex-column justify-center align-center">
         <v-progress-circular
           :size="30"
           color="primary-light-2"
@@ -12,23 +12,47 @@
         Verifying ....
       </div>
     </div>
+    <div v-else>
+      <v-btn color="primary-light-1" outlined :to="localePath('/')">
+        Go Home
+      </v-btn>
+    </div>
   </div>
 </template>
 
 <script>
 import { pathData } from "@/data";
+import { endpoint } from "../../api";
 
 export default {
+  data() {
+    return {
+      hasError: false,
+    };
+  },
   mounted() {
     if (this.$route.query.token) {
-        console.log(this.$route.query.token)
-    } else {
-      this.$router.push(
-        this.localePath({
-          ...pathData.pages.chat,
-          query: { groupId: 1 }
+      this.$axios
+        .post(endpoint.GROUP_INVITATIONS_VERIFY_POST, {
+          token: this.$route.query.token
         })
-      );
+        .then(({ data }) => {
+          if (data.data.groupId) {
+            this.$router.push(
+              this.localePath({
+                ...pathData.pages.chat,
+                query: { groupId: data.data.groupId }
+              })
+            );
+          }
+        })
+        .catch(({ response }) => {
+          this.hasError = true
+          if (response.data.error) {
+            this.$toast.error(response.data.error.message);
+          }
+        })
+       
     }
   },
   methods: {}

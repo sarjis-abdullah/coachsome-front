@@ -1,9 +1,9 @@
 <template>
-  <div class="create-group-form">
+  <div class="invite-group-form">
     <v-card color="body-bg">
       <v-card-title class="py-2">
         <div class="create-group-form__title">
-          Create a New Group
+          Group invitations
         </div>
         <v-spacer></v-spacer>
         <v-btn icon>
@@ -15,40 +15,17 @@
       <v-card-text class="pa-5">
         <v-form ref="form" v-model="valid" lazy-validation>
           <div class="field__label">
-            Group Name
-          </div>
-          <v-text-field
-            v-model="form.name"
-            :rules="[v => !!v || 'Name is required']"
-            label="What do you want to call this group?"
-            dense
-            solo
-          ></v-text-field>
-
-          <div class="field__label">
-            Description
-          </div>
-          <v-text-field
-            v-model="form.description"
-            :rules="[v => !!v || 'Description is required']"
-            label="What is the purpose of this group?"
-            dense
-            solo
-          ></v-text-field>
-
-          <div class="field__label">
             Add People
           </div>
-          <v-combobox
+          <v-autocomplete
             :rules="[v => !!v || 'At least one email is required']"
             v-model="form.emails"
-            :search-input.sync="search"
             :items="items"
             label="Add users by name or email address"
             multiple
+            :search-input.sync="search"
             solo
             dense
-            @keyup.enter="search = ''"
             no-filter
             chips
           >
@@ -67,26 +44,14 @@
                 {{ data.item }}
               </v-chip>
             </template>
-          </v-combobox>
-
-          <div class="field__label">
-            Message
-          </div>
-          <v-textarea
-            :rules="[v => !!v || 'Text seome message']"
-            v-model="form.message"
-            solo
-            name="input-7-1"
-            label="Type your message..."
-          ></v-textarea>
-
+          </v-autocomplete>
           <v-btn
             dark
             color="primary-light-1"
             class="mr-4"
             @click="handleCreateBtnClick"
           >
-            Create
+            Invite
           </v-btn>
         </v-form>
       </v-card-text>
@@ -98,64 +63,40 @@
 import { endpoint } from "../../../../../api";
 
 export default {
-  props: ["open"],
   data() {
     return {
       valid: true,
+      search: "",
       items: [],
       form: {
-        name: "",
-        description: "",
-        emails: null,
-        message: ""
-      },
-      search: ""
+        emails: null
+      }
     };
   },
   watch: {
-    open(val) {
-      this.items = [];
-      this.form.name = "";
-      this.form.description = "";
-      this.form.emails = "";
-      this.form.message = "";
-      this.$refs.form.resetValidation();
-    },
     search(val) {
-      const params = {
-        search: val
-      };
-      this.$axios
-        .get(endpoint.CONTACTS_PRIVATE_USERS_GET, { params })
-        .then(({ data }) => {
-          console.log(data.data);
-          if (data.data) {
-            this.items = data.data.map(item => item.email);
-          }
-        });
+        console.log(val)
     }
   },
   methods: {
     handleCreateBtnClick() {
-      if (this.$refs.form.validate()) {
-        this.$axios
-          .post(endpoint.GROUPS_POST, this.form)
-          .then(({ data }) => {
-            console.log(data);
-          })
-          .catch(err => {
-            if (err.response.data.error) {
-              this.$toast.error(err.response.data.error.message);
-            }
-          });
-      }
+      this.$axios
+        .post(endpoint.GROUP_INVITATIONS_POST, this.form)
+        .then(({ data }) => {
+          this.$toast.success("Invitaion is completed successfully");
+        })
+        .catch(err => {
+          if (err.response.data.error) {
+            this.$toast.error(err.response.data.error.message);
+          }
+        });
     }
   }
 };
 </script>
 
 <style lang="scss">
-.create-group-form {
+.invite-group-form {
   background: $body-bg;
   .v-card .v-card__title {
     border-bottom: 1px solid $primary-light-1;

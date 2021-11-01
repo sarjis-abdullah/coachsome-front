@@ -21,7 +21,10 @@
           />
         </v-dialog>
         <v-dialog v-model="createGroupDialog.value" max-width="600">
-          <CreateGroupForm @close="createGroupDialog.value = false" />
+          <CreateGroupForm
+            :open="createGroupDialog.value"
+            @close="createGroupDialog.value = false"
+          />
         </v-dialog>
         <a-drawer
           class="d-none d-sm-flex d-md-none pa-0"
