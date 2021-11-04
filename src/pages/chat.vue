@@ -302,7 +302,9 @@
                         <v-list-item-title
                           v-text="selectedContact.title"
                         ></v-list-item-title>
-                        <v-list-item-subtitle> </v-list-item-subtitle>
+                        <v-list-item-subtitle> 
+                          {{ selectedContact.description}}
+                        </v-list-item-subtitle>
                       </v-list-item-content>
                       <v-list-item-action>
                         <div class="d-flex justify-center align-center">

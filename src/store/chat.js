@@ -212,6 +212,7 @@ export const actions = {
         if (group) {
           contact.groupId = group.id;
           contact.title = group.name;
+          contact.description = group.description;
           contact.avatarImage = group.image;
           contact.avatarName = group.name.charAt(0).toUpperCase();
         }
