@@ -105,12 +105,15 @@ export const mutations = {
     } else {
       contactUser.newMessageCount = 0;
     }
+  },
+  UPDATE_SELECTED_CONTACT(state, payload) {
+    state.selectedContact = { ...state.selectedContact, ...payload };
   }
 };
 
 export const actions = {
-  setSearch(context, payload) {
-    context.commit("SET_SEARCH", payload);
+  updateSelectedContact(context, payload) {
+    context.commit("UPDATE_SELECTED_CONTACT", payload);
   },
   setSearch(context, payload) {
     context.commit("SET_SEARCH", payload);

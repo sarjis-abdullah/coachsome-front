@@ -34,6 +34,52 @@
             @close="inviteGroupDialog.value = false"
           />
         </v-dialog>
+        <v-dialog v-model="groupImageEditDialog.value" max-width="400">
+          <v-card>
+            <v-card-title>
+              <div>
+                Edit Image
+              </div>
+              <v-spacer></v-spacer>
+              <div>
+                <v-btn icon @click="groupImageEditDialog.value = false">
+                  <v-icon>
+                    mdi-close
+                  </v-icon>
+                </v-btn>
+              </div>
+            </v-card-title>
+            <v-card-text>
+              <cropper
+                classname="cropper"
+                :src="groupEditImgCropper"
+                imageClassname="imageCropClassCustom"
+                backgroundClassname="backgroundCropClassCustom"
+                :maxWidth="250"
+                :maxHeight="250"
+                :stencil-props="{
+                  minAspectRatio: 1 / 1,
+                  maxAspectRatio: 1 / 1
+                }"
+                ref="squareCropper"
+              ></cropper>
+              <v-file-input
+                full-width
+                v-model="groupEditImgSrc"
+                :rules="[
+                  value =>
+                    !value ||
+                    value.size < 2000000 ||
+                    'Avatar size should be less than 2 MB!'
+                ]"
+                accept="image/png, image/jpeg, image/bmp"
+                placeholder="Pick an avatar"
+                prepend-icon="mdi-camera"
+              ></v-file-input>
+              <v-btn dark depressed block color="primary-light-1">Save</v-btn>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
         <a-drawer
           class="d-none d-sm-flex d-md-none pa-0"
           title="Actions"
@@ -289,21 +335,97 @@
                       >
                         <v-icon small>mdi-arrow-left</v-icon>
                       </v-btn>
-                      <v-avatar :size="avatarSize" color="primary-light-1">
-                        <img
-                          :style="{ width: '20px' }"
-                          :src="
-                            selectedContact.avatarImage ||
-                              require(`@/assets/images/icons/group.svg`)
-                          "
-                        />
-                      </v-avatar>
+                      <div class="group-avatar">
+                        <v-avatar
+                          class="group-avatar__avatar"
+                          :size="avatarSize"
+                          color="primary-light-1"
+                        >
+                          <img
+                            :style="{ width: '20px' }"
+                            :src="
+                              selectedContact.avatarImage ||
+                                require(`@/assets/images/icons/group.svg`)
+                            "
+                          />
+                        </v-avatar>
+                        <v-btn
+                          x-small
+                          icon
+                          class="group-avatar__btn"
+                          @click="handleGroupImageEditBtn"
+                        >
+                          <v-icon color="black"
+                            >mdi-camera-enhance-outline</v-icon
+                          >
+                        </v-btn>
+                      </div>
                       <v-list-item-content class="pl-1">
                         <v-list-item-title
                           v-text="selectedContact.title"
                         ></v-list-item-title>
-                        <v-list-item-subtitle> 
-                          {{ selectedContact.description}}
+                        <v-list-item-subtitle>
+                          <div class="d-flex align-center">
+                            <div>
+                              {{ selectedContact.description }}
+                            </div>
+                            <div>
+                              <v-menu
+                                v-model="topicEditMenu"
+                                :close-on-content-click="false"
+                                :nudge-width="200"
+                                offset-x
+                              >
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    small
+                                    color="primary-light-1"
+                                    icon
+                                  >
+                                    <v-icon>
+                                      mdi-pencil-outline
+                                    </v-icon>
+                                  </v-btn>
+                                </template>
+                                <v-card>
+                                  <v-list>
+                                    <v-list-item>
+                                      <v-text-field
+                                        v-model="topicEditValue"
+                                        :close-on-click="false"
+                                        outlined
+                                        hide-details
+                                        :loading="topicEditLoading"
+                                        dense
+                                        label="Enter topics"
+                                      ></v-text-field>
+                                    </v-list-item>
+                                    <v-list-item>
+                                      <v-spacer></v-spacer>
+                                      <v-btn
+                                        color="primary-light-1"
+                                        x-small
+                                        text
+                                        @click="topicEditMenu = false"
+                                      >
+                                        Cancel
+                                      </v-btn>
+                                      <v-btn
+                                        x-small
+                                        color="primary-light-1"
+                                        text
+                                        @click="handleTopicSaveBtnClick"
+                                      >
+                                        Save
+                                      </v-btn>
+                                    </v-list-item>
+                                  </v-list>
+                                </v-card>
+                              </v-menu>
+                            </div>
+                          </div>
                         </v-list-item-subtitle>
                       </v-list-item-content>
                       <v-list-item-action>
@@ -517,7 +639,8 @@ import ChatSetting from "@/components/artifact/global/pages/chat/ChatSetting";
 import CreateGroupForm from "@/components/artifact/global/pages/chat/CreateGroupForm";
 import InviteGroupForm from "@/components/artifact/global/pages/chat/InviteGroupForm";
 import ContactList from "@/components/artifact/global/pages/chat/ContactList";
-
+import { Cropper } from "vue-advanced-cropper";
+import "vue-advanced-cropper/dist/style.css";
 import { endpoint } from "../api";
 import { pathData, contactData } from "@/data";
 import { messageData } from "@/data";
@@ -530,6 +653,7 @@ export default {
     };
   },
   components: {
+    Cropper,
     CreateGroupForm,
     InviteGroupForm,
     RequestBox,
@@ -541,6 +665,9 @@ export default {
   data: () => ({
     messageData,
     contactData,
+    topicEditMenu: false,
+    topicEditValue: "",
+    topicEditLoading: false,
     avatarSize: 40,
     chatSetting: {
       enterPress: "send_message"
@@ -579,6 +706,11 @@ export default {
     inviteGroupDialog: {
       value: false
     },
+    groupImageEditDialog: {
+      value: false
+    },
+    groupEditImgSrc: null,
+    groupEditImgCropper: "",
     search: "",
     selectedContact: null,
     messages: [],
@@ -654,6 +786,20 @@ export default {
     }
   },
   watch: {
+    groupEditImgSrc(val) {
+      if (val) {
+        const reader = new FileReader();
+        reader.onload = event => {
+          this.groupEditImgCropper = event.target.result;
+          this.$emit("image-selected");
+        };
+        reader.readAsDataURL(val);
+        console.log(val);
+      } else {
+        this.groupEditImgCropper = "";
+      }
+    },
+
     selectedContact(contact) {
       if (contact) {
         this.$store.dispatch("chat/destroyMessages");
@@ -699,6 +845,7 @@ export default {
 
         // Fetch group message
         if (contact.categoryId == contactData.CATEGORY_ID_GROUP) {
+          this.topicEditValue = contact.description;
           const params = {
             groupId: contact.groupId
           };
@@ -760,6 +907,33 @@ export default {
     }
   },
   methods: {
+    handleGroupImageEditBtn() {
+      this.groupImageEditDialog.value = true;
+    },
+    async handleTopicSaveBtnClick() {
+      const { groupId } = this.selectedContact;
+
+      try {
+        this.topicEditLoading = true;
+        const { data } = await this.$axios.put(
+          endpoint.GROUP_ID_CHANGE_TOPIC_PUT(groupId),
+          {
+            topic: this.topicEditValue
+          }
+        );
+        await this.$store.dispatch("chat/getContacts");
+        let contact = this.contacts.find(item => item.groupId == groupId);
+        this.selectedContact = contact;
+        this.$toast.success("Successfully updated");
+        this.topicEditLoading = false;
+        this.topicEditMenu = false;
+      } catch (error) {
+        if (error.response.data.error) {
+          this.$toast.error(error.response.data.error.message);
+        }
+        this.topicEditLoading = false;
+      }
+    },
     async handleCreatedGroup() {
       this.createGroupDialog.value = false;
       await this.$store.dispatch("chat/getContacts");
@@ -1025,6 +1199,18 @@ $header-height: 60px;
 
   .v-textarea .v-input__control {
     border: 2px solid #15577c !important;
+  }
+
+  .group-avatar {
+    position: relative;
+    &__btn {
+      left: 10px;
+      bottom: -6px;
+      position: absolute;
+    }
+    &__avatar {
+      position: relative;
+    }
   }
 
   .chat-settings {

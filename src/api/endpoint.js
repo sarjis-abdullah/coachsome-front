@@ -38,5 +38,6 @@ export default {
   GROUP_INVITATIONS_POST: "/group-invitations",
   GROUP_INVITATIONS_VERIFY_POST: "/group-invitations/verify",
   GROUP_INVITATIONS_PRIVATE_USERS_GET: "/group-invitations/private-users",
-  GROUP_INVITATIONS_GROUP_ID_POST: id=> `/group-invitations/groups/${id}`
+  GROUP_INVITATIONS_GROUP_ID_POST: id => `/group-invitations/groups/${id}`,
+  GROUP_ID_CHANGE_TOPIC_PUT: id => `groups/${id}/change-topic`
 };
