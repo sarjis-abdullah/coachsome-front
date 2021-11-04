@@ -22,8 +22,16 @@
         </v-dialog>
         <v-dialog v-model="createGroupDialog.value" max-width="600">
           <CreateGroupForm
+            @created="handleCreatedGroup"
             :open="createGroupDialog.value"
             @close="createGroupDialog.value = false"
+          />
+        </v-dialog>
+        <v-dialog v-model="inviteGroupDialog.value" max-width="600">
+          <InviteGroupForm
+            @invited="inviteGroupDialog.value = false"
+            :open="inviteGroupDialog.value"
+            @close="inviteGroupDialog.value = false"
           />
         </v-dialog>
         <a-drawer
@@ -81,7 +89,6 @@
                   hide-details
                   prepend-inner-icon="search"
                   v-model="search"
-                  :loading="loading"
                   clearable
                   @input="handleSearch"
                   @click="handleClearSearch"
@@ -298,36 +305,73 @@
                         <v-list-item-subtitle> </v-list-item-subtitle>
                       </v-list-item-content>
                       <v-list-item-action>
-                        <v-btn
-                          v-if="$vuetify.breakpoint.smAndDown"
-                          @click="handleMobileHideActionBtnClick"
-                          outlined
-                          small
-                          rounded
-                          color="primary-light-1"
-                          class="text-normal"
-                        >
-                          {{
-                            actionDialog
-                              ? $t("chat_btn_label_hide_actions")
-                              : $t("chat_btn_label_show_actions")
-                          }}
-                        </v-btn>
-                        <v-btn
-                          v-if="!$vuetify.breakpoint.smAndDown"
-                          @click="handleDesktopHideActionBtnClick"
-                          outlined
-                          small
-                          rounded
-                          color="primary-light-1"
-                          class="text-normal"
-                        >
-                          {{
-                            rightSidebar
-                              ? $t("chat_btn_label_hide_actions")
-                              : $t("chat_btn_label_show_actions")
-                          }}
-                        </v-btn>
+                        <div class="d-flex justify-center align-center">
+                          <v-menu
+                            v-if="!isArchiveFilter"
+                            offset-y
+                            min-width="200"
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn
+                                color="primary-light-1"
+                                icon
+                                v-bind="attrs"
+                                v-on="on"
+                              >
+                                <v-icon>mdi-dots-horizontal</v-icon>
+                              </v-btn>
+                            </template>
+                            <v-list dense>
+                              <v-list-item
+                                link
+                                @click="inviteGroupDialog.value = true"
+                              >
+                                <v-list-item-avatar>
+                                  <v-icon color="primary-light-1"
+                                    >mdi-account-plus</v-icon
+                                  >
+                                </v-list-item-avatar>
+
+                                <v-list-item-content>
+                                  <v-list-item-title
+                                    class="primary-light-1--text"
+                                    >Add People</v-list-item-title
+                                  >
+                                </v-list-item-content>
+                              </v-list-item>
+                            </v-list>
+                          </v-menu>
+                          <v-btn
+                            v-if="$vuetify.breakpoint.smAndDown"
+                            @click="handleMobileHideActionBtnClick"
+                            outlined
+                            small
+                            rounded
+                            color="primary-light-1"
+                            class="text-normal"
+                          >
+                            {{
+                              actionDialog
+                                ? $t("chat_btn_label_hide_actions")
+                                : $t("chat_btn_label_show_actions")
+                            }}
+                          </v-btn>
+                          <v-btn
+                            v-if="!$vuetify.breakpoint.smAndDown"
+                            @click="handleDesktopHideActionBtnClick"
+                            outlined
+                            small
+                            rounded
+                            color="primary-light-1"
+                            class="text-normal"
+                          >
+                            {{
+                              rightSidebar
+                                ? $t("chat_btn_label_hide_actions")
+                                : $t("chat_btn_label_show_actions")
+                            }}
+                          </v-btn>
+                        </div>
                       </v-list-item-action>
                     </v-list-item>
                   </template>
@@ -469,10 +513,12 @@ import PackageChoosing from "@/components/artifact/global/pages/chat/PackageChoo
 import ChatScreen from "@/components/artifact/global/pages/chat/ChatScreen";
 import ChatSetting from "@/components/artifact/global/pages/chat/ChatSetting";
 import CreateGroupForm from "@/components/artifact/global/pages/chat/CreateGroupForm";
+import InviteGroupForm from "@/components/artifact/global/pages/chat/InviteGroupForm";
 import ContactList from "@/components/artifact/global/pages/chat/ContactList";
 
 import { endpoint } from "../api";
 import { pathData, contactData } from "@/data";
+import { messageData } from "@/data";
 
 export default {
   layout: "chat",
@@ -483,6 +529,7 @@ export default {
   },
   components: {
     CreateGroupForm,
+    InviteGroupForm,
     RequestBox,
     PackageChoosing,
     ChatScreen,
@@ -490,6 +537,7 @@ export default {
     ContactList
   },
   data: () => ({
+    messageData,
     contactData,
     avatarSize: 40,
     chatSetting: {
@@ -524,6 +572,9 @@ export default {
       value: false
     },
     createGroupDialog: {
+      value: false
+    },
+    inviteGroupDialog: {
       value: false
     },
     search: "",
@@ -620,7 +671,8 @@ export default {
                     type: item.type,
                     me: item.me,
                     content: item.content,
-                    createdAt: item.createdAt
+                    createdAt: item.createdAt,
+                    scope: item.scope
                   };
                   this.pushMessage(newMessage);
                 });
@@ -657,7 +709,9 @@ export default {
                   type: item.type,
                   me: item.me,
                   content: item.content,
-                  createdAt: item.createdAt
+                  createdAt: item.createdAt,
+                  scope: item.scope,
+                  senderUser: item.senderUser
                 };
                 this.pushMessage(newMessage);
               });
@@ -704,6 +758,14 @@ export default {
     }
   },
   methods: {
+    async handleCreatedGroup() {
+      this.createGroupDialog.value = false;
+      await this.$store.dispatch("chat/getContacts");
+      let contact = this.contacts[0];
+      if (contact) {
+        this.selectedContact = contact;
+      }
+    },
     onHandleContactItemSeleted(item) {
       this.selectedContact = item;
     },
@@ -729,7 +791,7 @@ export default {
       if (this.selectedContact) {
         this.$axios
           .post(endpoint.CONTACTS_UNARCHIVE_POST, {
-            userId: this.selectedContact.id
+            contactId: this.selectedContact.id
           })
           .then(() => {
             this.selectedContact = null;
@@ -814,6 +876,7 @@ export default {
 
     sendPrivateMessageToChatServer(payload) {
       this.$socket.emit("private_message_send", {
+        scope: messageData.SCOPE_PRIVATE,
         senderUserId: payload.senderUserId,
         receiverUserId: payload.receiverUserId,
         message: payload.message
@@ -821,9 +884,10 @@ export default {
     },
     sendGroupMessageToChatServer(payload) {
       this.$socket.emit("group_message_send", {
-        senderUserId: payload.senderUserId,
-        groupId: payload.groupId,
-        message: payload.message
+        ...payload.message,
+        scope: messageData.SCOPE_GROUP,
+        senderUser: payload.senderUser,
+        groupId: payload.groupId
       });
     },
     handleRequestBoxNewMessage(message) {
@@ -888,12 +952,11 @@ export default {
           { ...this.messageForm },
           { ...this.duration }
         );
-        this.pushMessage(newMessage);
 
         if (
           this.selectedContact.categoryId == contactData.CATEGORY_ID_PRIVATE
         ) {
-          this.sendPrivateMessageToChatServer({
+          newMessage.scope = this.sendPrivateMessageToChatServer({
             senderUserId: this.$auth.user.id,
             receiverUserId: this.selectedContact.connectionUserId,
             message: newMessage
@@ -906,16 +969,20 @@ export default {
             })
             .then(() => {})
             .catch(() => {});
-          this.messageForm.content = "";
         } else {
-          console.log(this.selectedContact.groupId);
           const payload = {
             type: "text",
             content: this.messageForm.content,
             groupId: this.selectedContact.groupId
           };
           this.sendGroupMessageToChatServer({
-            senderUserId: this.$auth.user.id,
+            senderUser: {
+              id: this.$auth.user.id,
+              firstName: this.$auth.user.last_name,
+              lastName: this.$auth.user.first_name,
+              email: this.$auth.user.email,
+              image: this.$auth.user.image
+            },
             groupId: this.selectedContact.groupId,
             message: newMessage
           });
@@ -930,6 +997,9 @@ export default {
               }
             });
         }
+
+        this.pushMessage(newMessage);
+        this.messageForm.content = "";
       }
     },
     handleClearSearch() {

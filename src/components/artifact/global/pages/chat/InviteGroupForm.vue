@@ -17,7 +17,7 @@
           <div class="field__label">
             Add People
           </div>
-          <v-autocomplete
+          <v-combobox
             :rules="[v => !!v || 'At least one email is required']"
             v-model="form.emails"
             :items="items"
@@ -44,12 +44,13 @@
                 {{ data.item }}
               </v-chip>
             </template>
-          </v-autocomplete>
+          </v-combobox>
           <v-btn
             dark
+            :loading="loading"
             color="primary-light-1"
             class="mr-4"
-            @click="handleCreateBtnClick"
+            @click="handleInviteBtnClick"
           >
             Invite
           </v-btn>
@@ -63,33 +64,63 @@
 import { endpoint } from "../../../../../api";
 
 export default {
+  props: ["open"],
   data() {
     return {
       valid: true,
       search: "",
       items: [],
+      loading: false,
       form: {
         emails: null
       }
     };
   },
   watch: {
+    open(val) {
+      this.items = [];
+      this.form.emails = "";
+      this.$refs.form.resetValidation();
+    },
     search(val) {
-        console.log(val)
+      const selectedContact = this.$store.getters["chat/selectedContact"];
+      if (selectedContact) {
+        const params = {
+          search: val,
+          groupId: selectedContact.groupId
+        };
+        this.$axios
+          .get(endpoint.GROUP_INVITATIONS_PRIVATE_USERS_GET, { params })
+          .then(({ data }) => {
+            console.log(data.data);
+            if (data.data) {
+              this.items = data.data.map(item => item.email);
+            }
+          });
+      }
     }
   },
   methods: {
-    handleCreateBtnClick() {
-      this.$axios
-        .post(endpoint.GROUP_INVITATIONS_POST, this.form)
-        .then(({ data }) => {
-          this.$toast.success("Invitaion is completed successfully");
-        })
-        .catch(err => {
-          if (err.response.data.error) {
-            this.$toast.error(err.response.data.error.message);
-          }
-        });
+    handleInviteBtnClick() {
+      const selectedContact = this.$store.getters["chat/selectedContact"];
+      if (this.$refs.form.validate() && selectedContact) {
+        const { groupId } = selectedContact;
+        this.loading = true;
+        this.$axios
+          .post(endpoint.GROUP_INVITATIONS_GROUP_ID_POST(groupId), this.form)
+          .then(({ data }) => {
+            this.$toast.success("Successfully invited");
+            this.$emit("invited");
+          })
+          .catch(err => {
+            if (err.response.data.error) {
+              this.$toast.error(err.response.data.error.message);
+            }
+          })
+          .finally(() => {
+            this.loading = false;
+          });
+      }
     }
   }
 };

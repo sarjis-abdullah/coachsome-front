@@ -383,8 +383,8 @@ export default {
     messages() {
       return this.$store.getters["chat/messages"];
     },
-    selectedContactUser() {
-      return this.$store.getters["chat/selectedContactUser"];
+    selectedContact() {
+      return this.$store.getters["chat/selectedContact"];
     },
     isCoach() {
       return this.hasRole(["coach"]);
@@ -421,7 +421,7 @@ export default {
     },
     bookingTimeRequestDeclineBtnHandle(message) {
       let payload = {
-        userId: this.selectedContactUser.id,
+        userId: this.selectedContact.connectionUserId,
         messageId: message.id,
         bookingTimeId: message.content.bookingTimeId,
         action: "decline"
@@ -441,7 +441,7 @@ export default {
             this.$store.dispatch("chat/pushMessage", messageItem);
             this.sendMessageToChatServer({
               senderUserId: this.$auth.user.id,
-              receiverUserId: this.selectedContactUser.id,
+              receiverUserId: this.selectedContact.connectionUserId,
               message: messageItem
             });
           }
@@ -458,7 +458,7 @@ export default {
     },
     bookingTimeRequestAcceptBtnHandle(message) {
       let payload = {
-        userId: this.selectedContactUser.id,
+        userId: this.selectedContact.connectionUserId,
         messageId: message.id,
         bookingTimeId: message.content.bookingTimeId,
         action: "accept"
@@ -484,7 +484,7 @@ export default {
             this.$store.dispatch("chat/pushMessage", messageItem);
             this.sendMessageToChatServer({
               senderUserId: this.$auth.user.id,
-              receiverUserId: this.selectedContactUser.id,
+              receiverUserId: this.selectedContact.connectionUserId,
               message: messageItem
             });
           }
@@ -521,7 +521,7 @@ export default {
             this.$store.dispatch("chat/pushMessage", messageItem);
             this.sendMessageToChatServer({
               senderUserId: this.$auth.user.id,
-              receiverUserId: this.selectedContactUser.id,
+              receiverUserId: this.selectedContact.connectionUserId,
               message: messageItem
             });
           }
@@ -573,7 +573,7 @@ export default {
 
             this.sendMessageToChatServer({
               senderUserId: this.$auth.user.id,
-              receiverUserId: this.selectedContactUser.id,
+              receiverUserId: this.selectedContact.connectionUserId,
               message: messageItem
             });
           }
@@ -595,7 +595,7 @@ export default {
       this.$store.dispatch("chat/pushMessage", messageItem);
       this.sendMessageToChatServer({
         senderUserId: this.$auth.user.id,
-        receiverUserId: this.selectedContactUser.id,
+        receiverUserId: this.selectedContact.connectionUserId,
         message: messageItem
       });
     },

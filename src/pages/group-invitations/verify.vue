@@ -28,6 +28,7 @@ export default {
   data() {
     return {
       hasError: false,
+      verified: false
     };
   },
   mounted() {

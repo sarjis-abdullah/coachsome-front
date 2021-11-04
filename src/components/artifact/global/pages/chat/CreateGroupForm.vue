@@ -81,6 +81,7 @@
           ></v-textarea>
 
           <v-btn
+            :loading="loading"
             dark
             color="primary-light-1"
             class="mr-4"
@@ -103,6 +104,7 @@ export default {
     return {
       valid: true,
       items: [],
+      loading: false,
       form: {
         name: "",
         description: "",
@@ -138,15 +140,20 @@ export default {
   methods: {
     handleCreateBtnClick() {
       if (this.$refs.form.validate()) {
+        this.loading = true;
         this.$axios
           .post(endpoint.GROUPS_POST, this.form)
           .then(({ data }) => {
-            console.log(data);
+            this.$toast.success("Successfully created");
+            this.$emit("created");
           })
           .catch(err => {
             if (err.response.data.error) {
               this.$toast.error(err.response.data.error.message);
             }
+          })
+          .finally(() => {
+            this.loading = false;
           });
       }
     }

@@ -4,6 +4,7 @@
       <v-list-item-group
         active-class="border"
         color="primary-light-1"
+        v-model="active"
       >
         <template
           v-for="item in contacts"
@@ -27,7 +28,7 @@
                 {{ item.avatarName }}
               </div>
             </v-list-item-avatar>
- 
+
             <v-list-item-content>
               <v-list-item-title v-html="item.title"></v-list-item-title>
               <v-list-item-subtitle>
@@ -98,18 +99,26 @@
 </template>
 
 <script>
-import { pathData, contactData } from "@/data";
+import { contactData } from "@/data";
 
 export default {
   props: ["avatarSize"],
   data() {
     return {
-      contactData
+      contactData,
+      active: null
     };
   },
   computed: {
     contacts() {
       return this.$store.getters["chat/contacts"];
+    }
+  },
+  watch: {
+    "$store.state.chat.selectedContact": function(val) {
+      if (val) {
+        this.active = val.id;
+      }
     }
   },
   methods: {

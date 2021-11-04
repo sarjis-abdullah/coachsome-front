@@ -214,53 +214,57 @@ export default {
       this.$emit("cancel");
     },
     fetchPackageInformation() {
-      bookingApi(this.$axios)
-        .getPurchasedPackage({
-          selectedUserId: this.userId,
-          status: "Completed"
-        })
-        .then(({ data }) => {
-          if (data.soldPackages) {
-            this.soldPackageList = data.soldPackages.map(item => {
-              return {
-                packageOwnerUserId: item.packageOwnerUserId,
-                packageBuyerUserId: item.packageBuyerUserId,
-                bookingId: item.bookingId,
-                orderId: item.orderId,
-                packageTitle: item.packageInfo.details.title,
-                session: item.packageInfo.details.time_per_session,
-                isSold: item.isSold,
-                info: item.info,
-                totalSession: item.totalSession,
-                remainingSession: item.remainingSession
-              };
-            });
-          }
+      const selectedContact = this.$store.getters['chat/selectedContact']
+      if(selectedContact){
+        bookingApi(this.$axios)
+          .getPurchasedPackage({
+            selectedUserId: selectedContact.connectionUserId,
+            status: "Completed"
+          })
+          .then(({ data }) => {
+            if (data.soldPackages) {
+              this.soldPackageList = data.soldPackages.map(item => {
+                return {
+                  packageOwnerUserId: item.packageOwnerUserId,
+                  packageBuyerUserId: item.packageBuyerUserId,
+                  bookingId: item.bookingId,
+                  orderId: item.orderId,
+                  packageTitle: item.packageInfo.details.title,
+                  session: item.packageInfo.details.time_per_session,
+                  isSold: item.isSold,
+                  info: item.info,
+                  totalSession: item.totalSession,
+                  remainingSession: item.remainingSession
+                };
+              });
+            }
+  
+            if (data.purchasedPackages) {
+              this.purchasedPackageList = data.purchasedPackages.map(item => {
+                return {
+                  packageOwnerUserId: item.packageOwnerUserId,
+                  packageBuyerUserId: item.packageBuyerUserId,
+                  bookingId: item.bookingId,
+                  orderId: item.orderId,
+                  packageTitle: item.packageInfo.details.title,
+                  session: item.packageInfo.details.time_per_session,
+                  isSold: item.isSold,
+                  info: item.info,
+                  totalSession: item.totalSession,
+                  remainingSession: item.remainingSession
+                };
+              });
+            }
+  
+            if (data.userName) {
+              this.userName = data.userName;
+            }
+          })
+          .catch(({ response }) => {
+            response.data.message && this.$toast.error(response.data.message);
+          });
 
-          if (data.purchasedPackages) {
-            this.purchasedPackageList = data.purchasedPackages.map(item => {
-              return {
-                packageOwnerUserId: item.packageOwnerUserId,
-                packageBuyerUserId: item.packageBuyerUserId,
-                bookingId: item.bookingId,
-                orderId: item.orderId,
-                packageTitle: item.packageInfo.details.title,
-                session: item.packageInfo.details.time_per_session,
-                isSold: item.isSold,
-                info: item.info,
-                totalSession: item.totalSession,
-                remainingSession: item.remainingSession
-              };
-            });
-          }
-
-          if (data.userName) {
-            this.userName = data.userName;
-          }
-        })
-        .catch(({ response }) => {
-          response.data.message && this.$toast.error(response.data.message);
-        });
+      }
     }
   }
 };

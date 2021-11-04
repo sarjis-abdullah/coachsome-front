@@ -9,9 +9,18 @@
       >
         <span class="text-message-content">
           <div
+            class="text-message-title"
+            v-if="message.scope == messageData.SCOPE_GROUP"
+          >
+            <div v-if="message.senderUser.id != $auth.user.id">
+              {{ message.senderUser.firstName }}
+            </div>
+          </div>
+          <div
             style="word-break: break-all;white-space: pre-wrap;"
             v-html="message.content"
           ></div>
+
           <div class="text-message-time" v-if="message.createdAt">
             {{ time }}
           </div>
@@ -23,8 +32,14 @@
 
 <script>
 import moment from "moment";
+import { messageData } from "@/data";
 export default {
   props: ["message"],
+  data() {
+    return {
+      messageData
+    };
+  },
   computed: {
     time() {
       return this.moment(this.message.createdAt)
@@ -73,6 +88,13 @@ export default {
     color: #999;
     width: 100%;
     font-size: 0.7em;
+  }
+  .text-message-title {
+    margin-top: 5px;
+    color: #999;
+    width: 100%;
+    font-size: 0.7em;
+    font-weight:bold;
   }
 }
 </style>
