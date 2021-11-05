@@ -214,6 +214,7 @@ export const actions = {
         let group = item.group ? item.group : null;
         if (group) {
           contact.groupId = group.id;
+          contact.isAdmin = group.isAdmin;
           contact.title = group.name;
           contact.description = group.description;
           contact.avatarImage = group.image;

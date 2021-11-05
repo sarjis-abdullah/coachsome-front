@@ -57,11 +57,11 @@
               :size="avatarSize"
               class="d-flex justify-center"
             >
+              <v-img v-if="item.avatarImage" :src="item.avatarImage"></v-img>
               <img
+                v-else
                 :style="{ width: '20px' }"
-                :src="
-                  item.avatarImage || require(`@/assets/images/icons/group.svg`)
-                "
+                :src="require(`@/assets/images/icons/group.svg`)"
               />
             </v-list-item-avatar>
 

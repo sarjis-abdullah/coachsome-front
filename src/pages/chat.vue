@@ -57,11 +57,7 @@
                 backgroundClassname="backgroundCropClassCustom"
                 :maxWidth="250"
                 :maxHeight="250"
-                :stencil-props="{
-                  minAspectRatio: 1 / 1,
-                  maxAspectRatio: 1 / 1
-                }"
-                ref="squareCropper"
+                ref="groupCropper"
               ></cropper>
               <v-file-input
                 full-width
@@ -76,7 +72,15 @@
                 placeholder="Pick an avatar"
                 prepend-icon="mdi-camera"
               ></v-file-input>
-              <v-btn dark depressed block color="primary-light-1">Save</v-btn>
+              <v-btn
+                dark
+                depressed
+                block
+                :loading="groupEditImgLoading"
+                color="primary-light-1"
+                @click="handleGroupImageSaveBtnClick"
+                >Save</v-btn
+              >
             </v-card-text>
           </v-card>
         </v-dialog>
@@ -341,15 +345,18 @@
                           :size="avatarSize"
                           color="primary-light-1"
                         >
+                          <v-img
+                            v-if="selectedContact.avatarImage"
+                            :src="selectedContact.avatarImage"
+                          ></v-img>
                           <img
+                            v-else
                             :style="{ width: '20px' }"
-                            :src="
-                              selectedContact.avatarImage ||
-                                require(`@/assets/images/icons/group.svg`)
-                            "
+                            :src="require(`@/assets/images/icons/group.svg`)"
                           />
                         </v-avatar>
                         <v-btn
+                          v-if="selectedContact.isAdmin"
                           x-small
                           icon
                           class="group-avatar__btn"
@@ -371,6 +378,7 @@
                             </div>
                             <div>
                               <v-menu
+                                v-if="selectedContact.isAdmin"
                                 v-model="topicEditMenu"
                                 :close-on-content-click="false"
                                 :nudge-width="200"
@@ -711,6 +719,7 @@ export default {
     },
     groupEditImgSrc: null,
     groupEditImgCropper: "",
+    groupEditImgLoading: false,
     search: "",
     selectedContact: null,
     messages: [],
@@ -907,6 +916,41 @@ export default {
     }
   },
   methods: {
+    async handleGroupImageSaveBtnClick() {
+      const groupCropperResult = this.$refs.groupCropper.getResult();
+      if (groupCropperResult.canvas) {
+        groupCropperResult.canvas.toBlob(blob => {
+          let reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = async () => {
+            const { groupId } = this.selectedContact;
+
+            try {
+              this.groupEditImgLoading = true;
+              const { data } = await this.$axios.post(
+                endpoint.GROUPS_ID_SAVE_IMAGE_POST(groupId),
+                {
+                  content: reader.result
+                }
+              );
+              await this.$store.dispatch("chat/getContacts");
+              let contact = this.contacts.find(item => item.groupId == groupId);
+              this.selectedContact = contact;
+              this.$toast.success("Successfully saved");
+              this.groupEditImgSrc = null;
+              this.groupEditImgCropper = "";
+              this.groupImageEditDialog.value = false;
+            } catch (error) {
+              if (error.response.data.error) {
+                this.$toast.error(error.response.data.error.message);
+              }
+            } finally {
+              this.groupEditImgLoading = false;
+            }
+          };
+        }, "image/png");
+      }
+    },
     handleGroupImageEditBtn() {
       this.groupImageEditDialog.value = true;
     },
@@ -916,7 +960,7 @@ export default {
       try {
         this.topicEditLoading = true;
         const { data } = await this.$axios.put(
-          endpoint.GROUP_ID_CHANGE_TOPIC_PUT(groupId),
+          endpoint.GROUPS_ID_CHANGE_TOPIC_PUT(groupId),
           {
             topic: this.topicEditValue
           }
