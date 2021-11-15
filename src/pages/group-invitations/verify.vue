@@ -23,6 +23,7 @@
 <script>
 import { pathData } from "@/data";
 import { endpoint } from "../../api";
+import { redirectPathService } from "@/services";
 
 export default {
   data() {
@@ -32,28 +33,33 @@ export default {
     };
   },
   mounted() {
-    if (this.$route.query.token) {
-      this.$axios
-        .post(endpoint.GROUP_INVITATIONS_VERIFY_POST, {
-          token: this.$route.query.token
-        })
-        .then(({ data }) => {
-          if (data.data.groupId) {
-            this.$router.push(
-              this.localePath({
-                ...pathData.pages.chat,
-                query: { groupId: data.data.groupId }
-              })
-            );
-          }
-        })
-        .catch(({ response }) => {
-          this.hasError = true
-          if (response.data.error) {
-            this.$toast.error(response.data.error.message);
-          }
-        })
-       
+    redirectPathService.destroy();
+    if (!this.$auth.user) {
+      redirectPathService.set(location.pathname + location.search);
+      this.$router.push(this.localePath(pathData.pages.login))
+    } else {
+      if (this.$route.query.token) {
+        this.$axios
+          .post(endpoint.GROUP_INVITATIONS_VERIFY_POST, {
+            token: this.$route.query.token
+          })
+          .then(({ data }) => {
+            if (data.data.groupId) {
+              this.$router.push(
+                this.localePath({
+                  ...pathData.pages.chat,
+                  query: { groupId: data.data.groupId }
+                })
+              );
+            }
+          })
+          .catch(({ response }) => {
+            this.hasError = true;
+            if (response.data.error) {
+              this.$toast.error(response.data.error.message);
+            }
+          });
+      }
     }
   },
   methods: {}
