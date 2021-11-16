@@ -1187,13 +1187,19 @@ export default {
               ...newMessage,
               receiverUserId: this.selectedContact.connectionUserId
             })
-            .then(() => {})
+            .then(() => {
+              let contact = this.contacts[0];
+              if (contact.id != this.selectedContact.id) {
+                this.$store.dispatch("chat/getContacts");
+              }
+            })
             .catch(() => {});
         } else {
           const payload = {
             type: "text",
             content: this.messageForm.content,
-            groupId: this.selectedContact.groupId
+            groupId: this.selectedContact.groupId,
+            ...this.duration
           };
           this.sendGroupMessageToChatServer({
             senderUser: {
@@ -1204,12 +1210,16 @@ export default {
               image: this.$auth.user.image
             },
             groupId: this.selectedContact.groupId,
-            message: newMessage
+            message: newMessage,
+            ...this.duration
           });
           this.$axios
             .post(endpoint.GROUP_MESSAGES_POST, payload)
             .then(({ data }) => {
-              console.log(data.data);
+              let contact = this.contacts[0];
+              if (contact.id != this.selectedContact.id) {
+                this.$store.dispatch("chat/getContacts");
+              }
             })
             .catch(err => {
               if (err.response.data.error) {

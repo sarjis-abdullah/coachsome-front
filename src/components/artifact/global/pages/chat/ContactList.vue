@@ -39,7 +39,13 @@
             </v-list-item-content>
             <v-list-item-action>
               <v-list-item-action-text>
-                {{ item.lastMessageTime }}
+                {{
+                  item.lastMessageTime
+                    ? moment(item.lastMessageTime)
+                        .locale($i18n.locale)
+                        .format("DD MMM HH:mm")
+                    : ""
+                }}
               </v-list-item-action-text>
             </v-list-item-action>
           </v-list-item>
@@ -75,7 +81,13 @@
             </v-list-item-content>
             <v-list-item-action>
               <v-list-item-action-text>
-                {{ item.lastMessageTime }}
+                {{
+                  item.lastMessageTime
+                    ? moment(item.lastMessageTime)
+                        .locale($i18n.locale)
+                        .format("DD MMM HH:mm")
+                    : ""
+                }}
               </v-list-item-action-text>
             </v-list-item-action>
           </v-list-item>
@@ -100,11 +112,13 @@
 
 <script>
 import { contactData } from "@/data";
+import moment from "moment";
 
 export default {
   props: ["avatarSize"],
   data() {
     return {
+      moment,
       contactData,
       active: null
     };

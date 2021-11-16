@@ -3,7 +3,7 @@
     <v-card color="body-bg">
       <v-card-title class="py-2">
         <div class="create-group-form__title">
-          Create a New Group
+          {{ $t("chat_create_group_title") }}
         </div>
         <v-spacer></v-spacer>
         <v-btn icon>
@@ -15,36 +15,36 @@
       <v-card-text class="pa-5">
         <v-form ref="form" v-model="valid" lazy-validation>
           <div class="field__label">
-            Group Name
+            {{ $t("chat_create_group_label_group_name") }}
           </div>
           <v-text-field
             v-model="form.name"
             :rules="[v => !!v || 'Name is required']"
-            label="What do you want to call this group?"
+            :label="$t('chat_create_group_name_placeholder')"
             dense
             solo
           ></v-text-field>
 
           <div class="field__label">
-            Description
+            {{ $t("chat_create_group_label_descritpion") }}
           </div>
           <v-text-field
             v-model="form.description"
             :rules="[v => !!v || 'Description is required']"
-            label="What is the purpose of this group?"
+            :label="$t('chat_create_group_description_placeholder')"
             dense
             solo
           ></v-text-field>
 
           <div class="field__label">
-            Add People
+            {{ $t("chat_create_group_label_add_people") }}
           </div>
           <v-combobox
             :rules="[v => !!v || 'At least one email is required']"
             v-model="form.emails"
             :search-input.sync="search"
             :items="items"
-            label="Add users by name or email address"
+            :label="$t('chat_create_group_emails_placeholder')"
             multiple
             solo
             dense
@@ -70,14 +70,14 @@
           </v-combobox>
 
           <div class="field__label">
-            Message
+            {{ $t("chat_create_group_label_message") }}
           </div>
           <v-textarea
             :rules="[v => !!v || 'Text seome message']"
             v-model="form.message"
             solo
             name="input-7-1"
-            label="Type your message..."
+            :label="$t('chat_create_group_message_placeholder')"
           ></v-textarea>
 
           <v-btn
@@ -87,7 +87,7 @@
             class="mr-4"
             @click="handleCreateBtnClick"
           >
-            Create
+            {{ $t("chat_create_group_label_create") }}
           </v-btn>
         </v-form>
       </v-card-text>
