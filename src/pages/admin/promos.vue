@@ -462,7 +462,7 @@ export default {
               this.promoCodes.splice(index, 1);
             }
             this.dialog = false;
-            this.$toast.error("Successfully deleted");
+            this.$toast.success("Successfully deleted");
           })
           .catch(({ response }) => {
             if (response.data.message) {

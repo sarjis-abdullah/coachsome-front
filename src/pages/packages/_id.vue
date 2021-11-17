@@ -518,7 +518,7 @@ export default {
     // if booking info exist
     if (booking) {
       this.step = booking.step;
-      this.packageInfo.chargeBox.personNumbers.value = booking.value;
+      this.packageInfo.chargeBox.personNumbers.value = booking.person;
       booking.packageId = this.packageId;
     }
 

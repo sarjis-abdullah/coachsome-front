@@ -1,310 +1,639 @@
 <template>
-  <div class="chat-page">
-    <v-container fluid fill-height class="pa-0">
-      <!-- Chat page -->
+  <div class="chat-new-page">
+    <v-container fluid class="pa-0">
       <v-row no-gutters>
-        <v-col cols="12">
-          <div class="chat-page-wrapper">
-            <div class="chat-box">
-              <!-- Dialog -->
-              <v-dialog v-model="bookingDialog.value" max-width="400">
-                <RequestBox
-                  v-bind="bookingDialog.requestBox.props"
-                  @new-message="handleRequestBoxNewMessage"
-                  @cancel="handleRequestBoxCancelBtn"
-                />
-              </v-dialog>
-              <v-dialog v-model="packageChoosingDialog.value" max-width="400">
-                <PackageChoosing
-                  v-bind="{
-                    isOpen: packageChoosingDialog.value,
-                    ...packageChoosingDialog.props
-                  }"
-                  @cancel="handlePackageChoosingCancel"
-                  @select-package="handleSelectPackage"
-                />
-              </v-dialog>
-              <!-- ./Dialog -->
-
-              <v-row no-gutters>
-                <!-- LEFT SIDE -->
-                <v-col cols="12" md="4">
-                  <div v-if="isShowingContactPanel" class="chat-box__left">
-                    <div
-                      class="chat-sidebar"
-                      :style="{
-                        height: 'calc(100vh - 10rem)',
-                        overflowY: 'scroll'
-                      }"
-                    >
-                      <v-row no-gutters justify="end">
-                        <v-col v-if="isShowingProfilePanel" cols="10">
-                          <div class="profile">
-                            <div class="profile__header d-flex align-center">
-                              <div>
-                                <v-avatar
-                                  v-if="profileCard.avatarImage"
-                                  size="48"
-                                  class="my-0 py-0"
-                                >
-                                  <v-img :src="profileCard.avatarImage"></v-img>
-                                </v-avatar>
-                                <v-avatar
-                                  v-if="!profileCard.avatarImage"
-                                  color="primary-light-1"
-                                  size="48"
-                                  class="my-0 py-0"
-                                >
-                                  <span>{{ profileCard.avatarName }}</span>
-                                </v-avatar>
-                              </div>
-                              <div>
-                                <div class="profile-name ml-4">
-                                  {{ profileCard.name }}
-                                </div>
-                                <div
-                                  class="profile-language ml-4"
-                                  v-if="profileCard.languages.length > 0"
-                                >
-                                  <span>
-                                    <v-icon color="primary-light-2"
-                                      >chat_bubble_outline</v-icon
-                                    >
-                                  </span>
-                                  <span
-                                    v-for="(language,
-                                    i) in profileCard.languages"
-                                    :key="i"
-                                  >
-                                    {{ $t(language.t_key) }}
-                                    <span
-                                      v-if="
-                                        i != profileCard.languages.length - 1
-                                      "
-                                      >,</span
-                                    >
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="profile__body">
-                              <div
-                                class="profile-about-text mt-3"
-                                v-if="profileCard.aboutText"
-                              >
-                                <read-more
-                                  :more-str="$t('btn_label_view_more')"
-                                  :text="profileCard.aboutText"
-                                  link="#"
-                                  :less-str="$t('general_label_read_less')"
-                                  :max-chars="150"
-                                ></read-more>
-                              </div>
-                              <div class="profile-tags pt-3">
-                                <span
-                                  v-for="(tag, i) in profileCard.tags"
-                                  :key="i"
-                                >
-                                  <span v-if="i < 3">
-                                    <v-btn
-                                      x-small
-                                      color="#E1E8F1"
-                                      depressed
-                                      class="mr-2"
-                                    >
-                                      {{ tag.name }}
-                                    </v-btn>
-                                  </span>
-                                  <span v-if="i == 3">
-                                    + {{ profileCard.tags.length - 3 }}
-                                  </span>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </v-col>
-                        <v-col cols="12" md="10">
-                          <div class="cantact">
-                            <v-card elevation="0" class="mt-10" color="#ECF2F7">
-                              <v-card-title>
-                                <div class="contact__title">
-                                  {{ $t("chat_contact_box_title") }}
-                                </div>
-                              </v-card-title>
-                              <v-card-text>
-                                <v-text-field
-                                  class="mx-3"
-                                  flat
-                                  :label="
-                                    $t('chat_contact_search_input_placeholder')
-                                  "
-                                  autocomplete="off"
-                                  solo
-                                  prepend-inner-icon="search"
-                                  v-model="search"
-                                  clearable
-                                  @click="handleClearSearch"
-                                ></v-text-field>
-                                <v-list color="transparent">
-                                  <v-list-item-group
-                                    v-model="activeChat"
-                                    active-class="border"
-                                    color="primary-light-1"
-                                  >
-                                    <v-list-item
-                                      v-for="item in filteredContactUsers"
-                                      :key="item.id"
-                                      :value="item.id"
-                                      @click.stop="
-                                        handleSelectedContactUser(item)
-                                      "
-                                    >
-                                      <!-- Avatar -->
-                                      <div class="py-2 pr-1">
-                                        <div v-if="item.newMessageCount > 0">
-                                          <v-badge
-                                            avatar
-                                            bordered
-                                            overlap
-                                            bottom
-                                            color="red"
-                                          >
-                                            <v-avatar
-                                              color="primary-light-1"
-                                              size="48"
-                                              class="my-0 py-0"
-                                            >
-                                              <span v-if="item.avatarImage">
-                                                <v-img
-                                                  :src="item.avatarImage"
-                                                ></v-img>
-                                              </span>
-                                              <span v-else>
-                                                {{ item.avatarName }}
-                                              </span>
-                                            </v-avatar>
-                                            <template v-slot:badge>
-                                              <v-avatar badge>
-                                                {{ item.newMessageCount }}
-                                              </v-avatar>
-                                            </template>
-                                          </v-badge>
-                                        </div>
-                                        <div v-else>
-                                          <v-avatar
-                                            color="primary-light-1"
-                                            size="48"
-                                            class="my-0 py-0"
-                                          >
-                                            <v-img
-                                              v-if="item.avatarImage"
-                                              class="elevation-6"
-                                              :src="item.avatarImage"
-                                            ></v-img>
-                                            <span v-if="!item.avatarImage">{{
-                                              item.avatarName
-                                            }}</span>
-                                          </v-avatar>
-                                        </div>
-                                      </div>
-
-                                      <v-list-item-content>
-                                        <v-list-item-title>
-                                          <div class="connection">
-                                            <div class="connection__title">
-                                              {{ item.fullName }}
-                                            </div>
-                                            <div class="connection__time"></div>
-                                          </div>
-                                        </v-list-item-title>
-                                        <v-list-item-subtitle>
-                                          <div class="connection-sub-title">
-                                            {{ item.title }}
-                                          </div>
-                                        </v-list-item-subtitle>
-                                      </v-list-item-content>
-                                    </v-list-item>
-                                  </v-list-item-group>
-                                </v-list>
-                              </v-card-text>
-                            </v-card>
-                          </div>
-                        </v-col>
-                      </v-row>
-                    </div>
-                  </div>
-                </v-col>
-                <!-- ./LEFT SIDE -->
-
-                <!-- RIGHT SIDE -->
-                <v-col cols="12" md="8">
-                  <div class="chat-box__right pr-md-5">
-                    <div class="chat-body" v-if="selectedContactUser">
-                      <div class="chat-body__header">
-                        <v-toolbar
-                          v-if="!isShowingContactPanel"
-                          color="primary-light-2"
-                          elevation="0"
-                          dark
-                        >
-                          <v-toolbar-title>
-                            <v-btn icon @click="handleBackBtnClick">
-                              <v-icon>arrow_back</v-icon>
-                            </v-btn>
-                            {{ profileCard.name }}
-                          </v-toolbar-title>
-                        </v-toolbar>
-                      </div>
-                      <div class="chat-body__screen">
-                        <chat-screen> </chat-screen>
-                      </div>
-                      <div class="chat-body__status-bar">
-                        <span v-if="!hasNetwork">
-                          Offline now. You are able to send message as soon as
-                          you are back online.
-                        </span>
-                      </div>
-                      <div class="chat-body__actions">
-                        <v-textarea
-                          rows="1"
-                          row-height="15"
-                          auto-grow
-                          autocomplete="off"
-                          flat
-                          class="mx-3"
-                          v-model="messageForm.content"
-                          :label="$t('chat_chat_box_input_placeholder')"
-                          type="text"
-                          solo
-                          hide-details
-                          @keyup.enter="messageForm.content + '\n'"
-                        >
-                          <template v-slot:append>
-                            <!-- <v-btn icon>
-                        <v-icon>emoji_emotions</v-icon>
-                          </v-btn>-->
-                            <v-btn icon @click.stop="handleCalenderClick">
-                              <v-icon>calendar_today</v-icon>
-                            </v-btn>
-                          </template>
-                        </v-textarea>
-                        <v-btn
-                          depressed
-                          dark
-                          color="primary-light-1"
-                          @click="handleMessageInput"
-                          >{{ $t("chat_btn_label_send") }}</v-btn
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </v-col>
-              </v-row>
-              <!-- ./RIGHT SIDE -->
+        <!-- Dialog -->
+        <v-dialog v-model="bookingDialog.value" max-width="400">
+          <RequestBox
+            v-bind="bookingDialog.requestBox.props"
+            @new-message="handleRequestBoxNewMessage"
+            @cancel="handleRequestBoxCancelBtn"
+          />
+        </v-dialog>
+        <v-dialog v-model="packageChoosingDialog.value" max-width="400">
+          <PackageChoosing
+            v-bind="{
+              isOpen: packageChoosingDialog.value,
+              ...packageChoosingDialog.props
+            }"
+            @cancel="handlePackageChoosingCancel"
+            @select-package="handleSelectPackage"
+          />
+        </v-dialog>
+        <v-dialog v-model="createGroupDialog.value" max-width="600">
+          <CreateGroupForm
+            @created="handleCreatedGroup"
+            :open="createGroupDialog.value"
+            @close="createGroupDialog.value = false"
+          />
+        </v-dialog>
+        <v-dialog v-model="inviteGroupDialog.value" max-width="600">
+          <InviteGroupForm
+            @invited="inviteGroupDialog.value = false"
+            :open="inviteGroupDialog.value"
+            @close="inviteGroupDialog.value = false"
+          />
+        </v-dialog>
+        <v-dialog v-model="groupImageEditDialog.value" max-width="400">
+          <v-card>
+            <v-card-title>
+              <div>
+                Edit Image
+              </div>
+              <v-spacer></v-spacer>
+              <div>
+                <v-btn icon @click="groupImageEditDialog.value = false">
+                  <v-icon>
+                    mdi-close
+                  </v-icon>
+                </v-btn>
+              </div>
+            </v-card-title>
+            <v-card-text>
+              <cropper
+                classname="cropper"
+                :src="groupEditImgCropper"
+                imageClassname="imageCropClassCustom"
+                backgroundClassname="backgroundCropClassCustom"
+                :maxWidth="250"
+                :maxHeight="250"
+                ref="groupCropper"
+              ></cropper>
+              <v-file-input
+                full-width
+                v-model="groupEditImgSrc"
+                :rules="[
+                  value =>
+                    !value ||
+                    value.size < 2000000 ||
+                    'Avatar size should be less than 2 MB!'
+                ]"
+                accept="image/png, image/jpeg, image/bmp"
+                placeholder="Pick an avatar"
+                prepend-icon="mdi-camera"
+              ></v-file-input>
+              <v-btn
+                dark
+                depressed
+                block
+                :loading="groupEditImgLoading"
+                color="primary-light-1"
+                @click="handleGroupImageSaveBtnClick"
+                >Save</v-btn
+              >
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <a-drawer
+          class="d-none d-sm-flex d-md-none pa-0"
+          title="Actions"
+          placement="bottom"
+          :visible="actionDialog"
+          @close="actionDialog = false"
+        >
+          <div
+            :style="{
+              display: 'flex',
+              cursor: 'pointer',
+              alignItems: 'center'
+            }"
+            @click="handleCalenderClick"
+          >
+            <v-icon
+              color="primary-light-1"
+              :style="{ marginRight: '5px', padding: 0 }"
+              >mdi-calendar-plus</v-icon
+            >
+            <div class="action-item__title primary-light-1--text">
+              {{ $t("chat_title_booing_req") }}
             </div>
           </div>
-          <!-- ./chat-page -->
+        </a-drawer>
+        <!-- ./Dialog -->
+
+        <!-- left-sidebar -->
+        <v-col cols="12" :md="leftSidebarMd" v-if="leftSidebarSection">
+          <div class="left-sidebar">
+            <div class="left-sidebar__header">
+              <div class="left-sidebar-title">
+                {{ $t("chat_page_title_message") }}
+              </div>
+              <div class="left-sidebar-action">
+                <v-btn
+                  icon
+                  color="primary-light-1"
+                  @click="handleGroupBtnClick"
+                >
+                  <v-icon color="primary-light-1">
+                    mdi-plus-circle-outline
+                  </v-icon>
+                </v-btn>
+              </div>
+            </div>
+            <div class="left-sidebar__body">
+              <div class="pl-4 pr-4 pt-5">
+                <v-text-field
+                  :label="$t('chat_field_label_txt_search')"
+                  solo
+                  dense
+                  hide-details
+                  prepend-inner-icon="search"
+                  v-model="search"
+                  clearable
+                  @input="handleSearch"
+                  @click="handleClearSearch"
+                ></v-text-field>
+                <v-select
+                  v-model="selectedFilterItem"
+                  class="mt-5"
+                  :items="filters"
+                  item-value="id"
+                  item-text="key"
+                  dense
+                  solo
+                  @change="handleFilterChange"
+                  append-icon="expand_more"
+                >
+                  <template v-slot:selection="{ item }">
+                    <div>
+                      {{ $t(item.key) }}
+                    </div>
+                  </template>
+                  <template v-slot:item="{ item }">
+                    <div>
+                      {{ $t(item.key) }}
+                    </div>
+                  </template>
+                </v-select>
+              </div>
+              <div class="contact">
+                <ContactList
+                  :avatar-size="avatarSize"
+                  @selected="onHandleContactItemSeleted"
+                />
+              </div>
+            </div>
+          </div>
         </v-col>
+
+        <!-- content -->
+        <slide-x-left-transition>
+          <v-col cols="12" :md="contentMd" v-if="contentSection">
+            <div class="content">
+              <div class="content__header">
+                <v-list two-line width="100%" color="transparent">
+                  <template v-if="selectedContact">
+                    <v-list-item
+                      v-if="
+                        selectedContact.categoryId ==
+                          contactData.CATEGORY_ID_PRIVATE
+                      "
+                    >
+                      <v-btn
+                        icon
+                        v-if="$vuetify.breakpoint.smAndDown"
+                        @click="handleBackBtnClick"
+                      >
+                        <v-icon small>mdi-arrow-left</v-icon>
+                      </v-btn>
+                      <v-badge
+                        bordered
+                        bottom
+                        :color="selectedContact.isOnline ? 'green' : 'grey'"
+                        dot
+                        offset-x="10"
+                        offset-y="10"
+                      >
+                        <v-avatar :size="avatarSize" color="primary-light-1">
+                          <v-img
+                            v-if="selectedContact.avatarImage"
+                            :src="selectedContact.avatarImage"
+                          ></v-img>
+                          <div v-else v-html="selectedContact.avatarName"></div>
+                        </v-avatar>
+                      </v-badge>
+                      <v-list-item-content class="pl-1">
+                        <v-list-item-title
+                          v-text="selectedContact.title"
+                        ></v-list-item-title>
+
+                        <v-list-item-subtitle>
+                          {{
+                            selectedContact.isOnline
+                              ? $t("chat_status_active_txt")
+                              : $t("chat_status_inactive_txt")
+                          }}
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                      <v-list-item-action>
+                        <div class="d-flex align-center">
+                          <div>
+                            <v-menu
+                              v-if="!isArchiveFilter"
+                              offset-y
+                              min-width="200"
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                  color="primary-light-1"
+                                  icon
+                                  v-bind="attrs"
+                                  v-on="on"
+                                >
+                                  <v-icon>mdi-dots-horizontal</v-icon>
+                                </v-btn>
+                              </template>
+                              <v-list dense>
+                                <v-list-item link @click="handleUnreadBtnClick">
+                                  <v-list-item-avatar>
+                                    <v-icon color="primary-light-1"
+                                      >mdi-check</v-icon
+                                    >
+                                  </v-list-item-avatar>
+
+                                  <v-list-item-content>
+                                    <v-list-item-title
+                                      class="primary-light-1--text"
+                                      >Mark as unread</v-list-item-title
+                                    >
+                                  </v-list-item-content>
+                                </v-list-item>
+                                <v-list-item
+                                  link
+                                  @click="handleArchiveBtnClick"
+                                >
+                                  <v-list-item-avatar>
+                                    <v-icon color="primary-light-1"
+                                      >mdi-archive</v-icon
+                                    >
+                                  </v-list-item-avatar>
+
+                                  <v-list-item-content>
+                                    <v-list-item-title
+                                      class="primary-light-1--text"
+                                      >Archive Chat</v-list-item-title
+                                    >
+                                  </v-list-item-content>
+                                </v-list-item>
+                              </v-list>
+                            </v-menu>
+                            <v-tooltip v-else top>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                  icon
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  @click="handleUnarchiveBtnClick"
+                                >
+                                  <v-icon color="primary-light-1" small>
+                                    mdi-archive
+                                  </v-icon>
+                                </v-btn>
+                              </template>
+                              <span>Unarchive</span>
+                            </v-tooltip>
+                          </div>
+                          <v-btn
+                            v-if="$vuetify.breakpoint.smAndDown"
+                            @click="handleMobileHideActionBtnClick"
+                            outlined
+                            small
+                            rounded
+                            color="primary-light-1"
+                            class="text-normal"
+                          >
+                            {{
+                              actionDialog
+                                ? $t("chat_btn_label_hide_actions")
+                                : $t("chat_btn_label_show_actions")
+                            }}
+                          </v-btn>
+                          <v-btn
+                            v-if="!$vuetify.breakpoint.smAndDown"
+                            @click="handleDesktopHideActionBtnClick"
+                            outlined
+                            small
+                            rounded
+                            color="primary-light-1"
+                            class="text-normal"
+                          >
+                            {{
+                              rightSidebar
+                                ? $t("chat_btn_label_hide_actions")
+                                : $t("chat_btn_label_show_actions")
+                            }}
+                          </v-btn>
+                        </div>
+                      </v-list-item-action>
+                    </v-list-item>
+                    <v-list-item
+                      v-if="
+                        selectedContact.categoryId ==
+                          contactData.CATEGORY_ID_GROUP
+                      "
+                    >
+                      <v-btn
+                        icon
+                        v-if="$vuetify.breakpoint.smAndDown"
+                        @click="handleBackBtnClick"
+                      >
+                        <v-icon small>mdi-arrow-left</v-icon>
+                      </v-btn>
+                      <div class="group-avatar">
+                        <v-avatar
+                          class="group-avatar__avatar"
+                          :size="avatarSize"
+                          color="primary-light-1"
+                        >
+                          <v-img
+                            v-if="selectedContact.avatarImage"
+                            :src="selectedContact.avatarImage"
+                          ></v-img>
+                          <img
+                            v-else
+                            :style="{ width: '20px' }"
+                            :src="require(`@/assets/images/icons/group.svg`)"
+                          />
+                        </v-avatar>
+                        <v-btn
+                          v-if="selectedContact.isAdmin"
+                          x-small
+                          icon
+                          class="group-avatar__btn"
+                          @click="handleGroupImageEditBtn"
+                        >
+                          <v-icon color="black"
+                            >mdi-camera-enhance-outline</v-icon
+                          >
+                        </v-btn>
+                      </div>
+                      <v-list-item-content class="pl-1">
+                        <v-list-item-title
+                          v-text="selectedContact.title"
+                        ></v-list-item-title>
+                        <v-list-item-subtitle>
+                          <div class="d-flex align-center">
+                            <div>
+                              {{ selectedContact.description }}
+                            </div>
+                            <div>
+                              <v-menu
+                                v-if="selectedContact.isAdmin"
+                                v-model="topicEditMenu"
+                                :close-on-content-click="false"
+                                :nudge-width="200"
+                                offset-x
+                              >
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    small
+                                    color="primary-light-1"
+                                    icon
+                                  >
+                                    <v-icon>
+                                      mdi-pencil-outline
+                                    </v-icon>
+                                  </v-btn>
+                                </template>
+                                <v-card>
+                                  <v-list>
+                                    <v-list-item>
+                                      <v-text-field
+                                        v-model="topicEditValue"
+                                        :close-on-click="false"
+                                        outlined
+                                        hide-details
+                                        :loading="topicEditLoading"
+                                        dense
+                                        label="Enter topics"
+                                      ></v-text-field>
+                                    </v-list-item>
+                                    <v-list-item>
+                                      <v-spacer></v-spacer>
+                                      <v-btn
+                                        color="primary-light-1"
+                                        x-small
+                                        text
+                                        @click="topicEditMenu = false"
+                                      >
+                                        Cancel
+                                      </v-btn>
+                                      <v-btn
+                                        x-small
+                                        color="primary-light-1"
+                                        text
+                                        @click="handleTopicSaveBtnClick"
+                                      >
+                                        Save
+                                      </v-btn>
+                                    </v-list-item>
+                                  </v-list>
+                                </v-card>
+                              </v-menu>
+                            </div>
+                          </div>
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                      <v-list-item-action>
+                        <div class="d-flex justify-center align-center">
+                          <v-menu
+                            v-if="!isArchiveFilter"
+                            offset-y
+                            min-width="200"
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn
+                                color="primary-light-1"
+                                icon
+                                v-bind="attrs"
+                                v-on="on"
+                              >
+                                <v-icon>mdi-dots-horizontal</v-icon>
+                              </v-btn>
+                            </template>
+                            <v-list dense>
+                              <v-list-item
+                                link
+                                @click="inviteGroupDialog.value = true"
+                              >
+                                <v-list-item-avatar>
+                                  <v-icon color="primary-light-1"
+                                    >mdi-account-plus</v-icon
+                                  >
+                                </v-list-item-avatar>
+
+                                <v-list-item-content>
+                                  <v-list-item-title
+                                    class="primary-light-1--text"
+                                    >Add People</v-list-item-title
+                                  >
+                                </v-list-item-content>
+                              </v-list-item>
+                            </v-list>
+                          </v-menu>
+                          <v-btn
+                            v-if="$vuetify.breakpoint.smAndDown"
+                            @click="handleMobileHideActionBtnClick"
+                            outlined
+                            small
+                            rounded
+                            color="primary-light-1"
+                            class="text-normal"
+                          >
+                            {{
+                              actionDialog
+                                ? $t("chat_btn_label_hide_actions")
+                                : $t("chat_btn_label_show_actions")
+                            }}
+                          </v-btn>
+                          <v-btn
+                            v-if="!$vuetify.breakpoint.smAndDown"
+                            @click="handleDesktopHideActionBtnClick"
+                            outlined
+                            small
+                            rounded
+                            color="primary-light-1"
+                            class="text-normal"
+                          >
+                            {{
+                              rightSidebar
+                                ? $t("chat_btn_label_hide_actions")
+                                : $t("chat_btn_label_show_actions")
+                            }}
+                          </v-btn>
+                        </div>
+                      </v-list-item-action>
+                    </v-list-item>
+                  </template>
+                </v-list>
+              </div>
+              <div class="content__body">
+                <div class="message-list">
+                  <ChatScreen />
+                </div>
+                <v-textarea
+                  dense
+                  :rows="1"
+                  auto-grow
+                  autocomplete="off"
+                  solo
+                  rounded
+                  class="mx-3"
+                  v-model="messageForm.content"
+                  :label="$t('chat_chat_box_input_placeholder')"
+                  type="text"
+                  hide-details
+                  @keyup.enter="handleEnterPress"
+                >
+                  <template v-slot:prepend>
+                    <div>
+                      <v-btn icon>
+                        <img
+                          :src="require(`@/assets/images/icons/attachment.svg`)"
+                          alt="attachment-icon"
+                        />
+                      </v-btn>
+                    </div>
+                  </template>
+                  <template v-slot:append>
+                    <v-menu
+                      v-if="$vuetify.breakpoint.mdAndUp"
+                      v-model="settingsMenu"
+                      :close-on-content-click="false"
+                      :nudge-width="200"
+                      offset-x
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          icon
+                          v-bind="attrs"
+                          v-on="on"
+                          x-small
+                          class="mr-3"
+                        >
+                          <img
+                            class="mt-1"
+                            :src="require(`@/assets/images/icons/settings.svg`)"
+                            alt="setting-icon"
+                          />
+                        </v-btn>
+                      </template>
+                      <ChatSetting
+                        :enter-press="chatSetting.enterPress"
+                        @update="handleUpdatedChatSetting"
+                      />
+                    </v-menu>
+                    <v-menu
+                      v-model="emojiMenu"
+                      :close-on-content-click="false"
+                      :nudge-width="200"
+                      offset-x
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon v-bind="attrs" v-on="on" x-small>
+                          <img
+                            class="mt-1"
+                            :src="require(`@/assets/images/icons/emoji.svg`)"
+                            alt="emoji-icon"
+                          />
+                        </v-btn>
+                      </template>
+                      <v-card>
+                        <VEmojiPicker @select="selectEmoji" />
+                      </v-card>
+                    </v-menu>
+                  </template>
+                  <template v-slot:append-outer>
+                    <div>
+                      <v-btn icon @click="handleMessageInput" small>
+                        <img
+                          :src="require(`@/assets/images/icons/send.svg`)"
+                          alt="send-icon"
+                        />
+                      </v-btn>
+                    </div>
+                  </template>
+                </v-textarea>
+              </div>
+            </div>
+          </v-col>
+        </slide-x-left-transition>
+
+        <!-- right-sidebar -->
+        <slide-x-left-transition>
+          <v-col
+            cols="12"
+            :md="rightSidebarMd"
+            v-if="rightSidebar"
+            class="pa-0 ma-0  d-none d-sm-none d-md-flex"
+          >
+            <div class="right-sidebar">
+              <div class="right-sidebar__header">
+                <div class="right-sidebar-title">
+                  {{ $t("chat_title_txt_actions") }}
+                </div>
+              </div>
+              <div class="right-sidebar__body">
+                <v-list nav color="transparent" class="pa-0">
+                  <v-list-item @click="handleCalenderClick" link class="pa-0">
+                    <div class="action-item">
+                      <div class="action-item__icon">
+                        <v-icon color="primary-light-1"
+                          >mdi-calendar-plus</v-icon
+                        >
+                      </div>
+                      <div class="action-item__title">
+                        {{ $t("chat_title_booing_req") }}
+                      </div>
+                    </div>
+                  </v-list-item>
+                </v-list>
+              </div>
+            </div>
+          </v-col>
+        </slide-x-left-transition>
       </v-row>
     </v-container>
   </div>
@@ -314,9 +643,15 @@
 import RequestBox from "@/components/artifact/global/pages/chat/RequestBox";
 import PackageChoosing from "@/components/artifact/global/pages/chat/PackageChoosing";
 import ChatScreen from "@/components/artifact/global/pages/chat/ChatScreen";
-
-import { contactApi, messageApi } from "@/api";
-import { pathData } from "@/data";
+import ChatSetting from "@/components/artifact/global/pages/chat/ChatSetting";
+import CreateGroupForm from "@/components/artifact/global/pages/chat/CreateGroupForm";
+import InviteGroupForm from "@/components/artifact/global/pages/chat/InviteGroupForm";
+import ContactList from "@/components/artifact/global/pages/chat/ContactList";
+import { Cropper } from "vue-advanced-cropper";
+import "vue-advanced-cropper/dist/style.css";
+import { endpoint } from "../api";
+import { pathData, contactData } from "@/data";
+import { messageData } from "@/data";
 
 export default {
   layout: "chat",
@@ -326,12 +661,34 @@ export default {
     };
   },
   components: {
+    Cropper,
+    CreateGroupForm,
+    InviteGroupForm,
     RequestBox,
     PackageChoosing,
-    ChatScreen
+    ChatScreen,
+    ChatSetting,
+    ContactList
   },
   data: () => ({
+    messageData,
+    contactData,
+    topicEditMenu: false,
+    topicEditValue: "",
+    topicEditLoading: false,
+    avatarSize: 40,
+    chatSetting: {
+      enterPress: "send_message"
+    },
+    settingsMenu: false,
+    emojiMenu: false,
     socket: null,
+    // column
+    leftSidebarMd: 3,
+    contentMd: 6,
+    rightSidebarMd: 3,
+    rightSidebar: true,
+    actionDialog: false,
     bookingDialog: {
       value: false,
       requestBox: {
@@ -351,206 +708,427 @@ export default {
       },
       value: false
     },
-    search: "",
-    profileCard: {
-      name: "",
-      aboutText: "",
-      avatarImage: null,
-      avatarName: "",
-      languages: [],
-      tags: []
+    createGroupDialog: {
+      value: false
     },
-    selectedContactUser: null,
-    users: [],
-    activeChat: null,
+    inviteGroupDialog: {
+      value: false
+    },
+    groupImageEditDialog: {
+      value: false
+    },
+    groupEditImgSrc: null,
+    groupEditImgCropper: "",
+    groupEditImgLoading: false,
+    search: "",
+    selectedContact: null,
     messages: [],
     duration: {
-      created_at: ""
+      createdAt: ""
     },
+    selectedFilterItem: 1,
+    filters: [
+      {
+        id: 1,
+        key: "chat_filter_item_all_conversation",
+        label: "All Conversation"
+      },
+      {
+        id: 2,
+        key: "chat_filter_item_all_read",
+        label: "Read"
+      },
+      {
+        id: 3,
+        key: "chat_filter_item_all_unread",
+        label: "Unread"
+      },
+      {
+        id: 4,
+        key: "chat_filter_item_all_archived",
+        label: "Archived"
+      }
+    ],
     messageForm: {
       me: true,
       type: "text",
       content: "",
-      created_at: new Date()
-    },
-    dayBox: []
+      createdAt: new Date()
+    }
   }),
   computed: {
+    isArchiveFilter() {
+      return this.selectedFilterItem == 4;
+    },
+    loading() {
+      return this.$store.getters["chat/loading"];
+    },
+    isSelectedContactUserActive() {
+      if (this.selectedContact) {
+        return this.selectedContact.isOnline ? true : false;
+      } else {
+        return false;
+      }
+    },
+    contentSection() {
+      let show = true;
+      if (!this.selectedContact && this.$vuetify.breakpoint.smAndDown) {
+        show = false;
+      }
+      return show;
+    },
+    leftSidebarSection() {
+      let show = true;
+      if (this.selectedContact && this.$vuetify.breakpoint.smAndDown) {
+        show = false;
+      }
+      return show;
+    },
+    rightSidebarSection() {
+      return this.rightSidebar && this.$vuetify.breakpoint.smAndDown;
+    },
     contacts() {
       return this.$store.getters["chat/contacts"];
     },
-    filteredContactUsers() {
-      if (!this.search) {
-        return this.contacts;
-      } else {
-        return this.contacts.filter(item => {
-          return item.fullName
-            .toLowerCase()
-            .includes(this.search.toLowerCase());
-        });
-      }
-    },
     hasNetwork() {
       return true;
-    },
-    isShowingContactPanel() {
-      if (this.$vuetify.breakpoint.smAndDown) {
-        return this.selectedContactUser == null;
-      } else {
-        return true;
-      }
-    },
-    isShowingProfilePanel() {
-      if (this.$vuetify.breakpoint.smAndDown) {
-        return false;
-      } else {
-        return this.selectedContactUser != null;
-      }
     }
   },
   watch: {
-    "bookingDialog.value": function(val) {
-      console.log(val);
+    groupEditImgSrc(val) {
+      if (val) {
+        const reader = new FileReader();
+        reader.onload = event => {
+          this.groupEditImgCropper = event.target.result;
+          this.$emit("image-selected");
+        };
+        reader.readAsDataURL(val);
+        console.log(val);
+      } else {
+        this.groupEditImgCropper = "";
+      }
     },
-    selectedContactUser(val, preVal) {
-      if (this.selectedContactUser) {
-        this.$store.dispatch("chat/destroyMessages");
-        this.$store.dispatch(
-          "chat/setSelectedContactUser",
-          this.selectedContactUser
-        );
-        this.$store.dispatch("chat/refreshContactUserNewMessageCount", {
-          id: this.selectedContactUser.id
-        });
-        this.packageChoosingDialog.props.userId = this.selectedContactUser.id;
-        this.bookingDialog.requestBox.props.userId = this.selectedContactUser.id;
-        this.profileCard.name = this.selectedContactUser.fullName;
-        this.profileCard.aboutText = this.selectedContactUser.aboutText;
-        this.profileCard.avatarImage = this.selectedContactUser.avatarImage;
-        this.profileCard.avatarName = this.selectedContactUser.avatarName;
-        this.profileCard.languages = this.selectedContactUser.languages;
-        this.profileCard.tags = this.selectedContactUser.tags;
 
-        messageApi(this.$axios)
-          .get({ userId: this.selectedContactUser.id })
-          .then(({ data }) => {
-            // Old messages
-            if (data.messages) {
-              data.messages.forEach(item => {
+    selectedContact(contact) {
+      if (contact) {
+        this.$store.dispatch("chat/destroyMessages");
+        this.$store.dispatch("chat/setSelectedContact", contact);
+
+        // Fetch private message
+        if (contact.categoryId == contactData.CATEGORY_ID_PRIVATE) {
+          const params = { contactId: contact.id };
+          this.$axios
+            .get(endpoint.MESSAGES_GET, { params })
+            .then(({ data }) => {
+              // Old messages
+              if (data.messages) {
+                data.messages.forEach(item => {
+                  let newMessage = {
+                    id: item.id,
+                    type: item.type,
+                    me: item.me,
+                    content: item.content,
+                    createdAt: item.createdAt,
+                    scope: item.scope
+                  };
+                  this.pushMessage(newMessage);
+                });
+              }
+              // New messages
+              if (data.newMessages) {
+                data.newMessages.forEach(item => {
+                  let messageItem = {
+                    type: item.type,
+                    content: item.content
+                  };
+                  this.pushMessage(messageItem);
+                  this.sendPrivateMessageToChatServer({
+                    senderUserId: this.$auth.user.id,
+                    receiverUserId: contact.id,
+                    message: messageItem
+                  });
+                });
+              }
+            });
+        }
+
+        // Fetch group message
+        if (contact.categoryId == contactData.CATEGORY_ID_GROUP) {
+          this.topicEditValue = contact.description;
+          const params = {
+            groupId: contact.groupId
+          };
+          this.$axios
+            .get(endpoint.GROUP_MESSAGES_GET, { params })
+            .then(({ data }) => {
+              data.data.forEach(item => {
                 let newMessage = {
                   id: item.id,
                   type: item.type,
                   me: item.me,
                   content: item.content,
-                  created_at: item.created_at
+                  createdAt: item.createdAt,
+                  scope: item.scope,
+                  senderUser: item.senderUser
                 };
                 this.pushMessage(newMessage);
               });
-            }
-
-            // New messages
-            if (data.newMessages) {
-              data.newMessages.forEach(item => {
-                let messageItem = {
-                  type: item.type,
-                  content: item.content
-                };
-                this.pushMessage(messageItem);
-                this.sendMessageToChatServer({
-                  senderUserId: this.$auth.user.id,
-                  receiverUserId: this.selectedContactUser.id,
-                  message: messageItem
-                });
-              });
-            }
-          });
+            });
+        }
       }
     }
   },
-  mounted() {
+  async mounted() {
     // This is very sensitive.
     // Since the date is not updated without refresh, we should manually refresh it
-    // Now this created_at is updated after 1 second
+    // Now this createdAt is updated after 1 second
     // ISO string is needed for standard time showing in different timezone
     setInterval(() => {
-      this.duration.created_at = new Date().toISOString();
+      this.duration.createdAt = new Date().toISOString();
     }, 1000);
 
-    contactApi(this.$axios)
-      .get()
-      .then(({ data }) => {
-        let users = data.users;
-        if (users) {
-          let contactUsers = users.map(item => {
-            return {
-              id: item.id,
-              email: item.email,
-              firstName: item.firstName,
-              lastName: item.lastName,
-              fullName: item.fullName,
-              title: item.title,
-              avatarImage: item.avatarImage,
-              avatarName: item.avatarName,
-              languages: item.languages,
-              aboutText: item.aboutText,
-              categories: item.categories,
-              tags: item.tags,
-              newMessageCount: item.newMessageCount,
-              lastMessage: item.lastMessage,
-              lastMessageTime: item.lastMessageTime
-            };
-          });
+    // Fetch setting
+    this.$axios.get(endpoint.CHAT_SETTINGS_GET).then(({ data }) => {
+      if (data.data) {
+        this.chatSetting.enterPress = data.data.enterPress;
+      }
+    });
 
-          this.$store.dispatch("chat/setContacts", contactUsers);
+    await this.$store.dispatch("chat/getContacts");
 
-          // If it has any userId form the url
-          if (this.$route.query.userId) {
-            let user = this.contacts.find(
-              item => item.id == this.$route.query.userId
-            );
-            if (user) {
-              this.activeChat = user.id;
-              this.selectedContactUser = user;
-              this.$router.replace(this.localePath(pathData.pages.chat));
-            }
-          }
+    // Set contact
+    if (this.$route.query.userId) {
+      let contact = this.contacts.find(
+        item => item.connectionUserId == this.$route.query.userId
+      );
+      if (contact) {
+        this.selectedContact = contact;
+        this.$router.replace(this.localePath(pathData.pages.chat));
+      }
+    } else {
+      // If there has no selected contact
+      if (this.contacts && this.$vuetify.breakpoint.mdAndUp) {
+        let contact = this.contacts[0];
+        if (contact) {
+          this.selectedContact = contact;
         }
-      })
-      .catch(() => {});
-  },
-  beforeDestroy() {
-    this.$store.dispatch("chat/destroySelectedContactUser");
+      }
+    }
   },
   methods: {
-    handleBackBtnClick() {
-      this.selectedContactUser = null;
+    async handleGroupImageSaveBtnClick() {
+      const groupCropperResult = this.$refs.groupCropper.getResult();
+      if (groupCropperResult.canvas) {
+        groupCropperResult.canvas.toBlob(blob => {
+          let reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = async () => {
+            const { groupId } = this.selectedContact;
+
+            try {
+              this.groupEditImgLoading = true;
+              const { data } = await this.$axios.post(
+                endpoint.GROUPS_ID_SAVE_IMAGE_POST(groupId),
+                {
+                  content: reader.result
+                }
+              );
+              await this.$store.dispatch("chat/getContacts");
+              let contact = this.contacts.find(item => item.groupId == groupId);
+              this.selectedContact = contact;
+              this.$toast.success("Successfully saved");
+              this.groupEditImgSrc = null;
+              this.groupEditImgCropper = "";
+              this.groupImageEditDialog.value = false;
+            } catch (error) {
+              if (error.response.data.error) {
+                this.$toast.error(error.response.data.error.message);
+              }
+            } finally {
+              this.groupEditImgLoading = false;
+            }
+          };
+        }, "image/png");
+      }
     },
-    handleRequestBoxCancelBtn() {
-      this.bookingDialog.value = false;
+    handleGroupImageEditBtn() {
+      this.groupImageEditDialog.value = true;
+    },
+    async handleTopicSaveBtnClick() {
+      const { groupId } = this.selectedContact;
+
+      try {
+        this.topicEditLoading = true;
+        const { data } = await this.$axios.put(
+          endpoint.GROUPS_ID_CHANGE_TOPIC_PUT(groupId),
+          {
+            topic: this.topicEditValue
+          }
+        );
+        await this.$store.dispatch("chat/getContacts");
+        let contact = this.contacts.find(item => item.groupId == groupId);
+        this.selectedContact = contact;
+        this.$toast.success("Successfully updated");
+        this.topicEditLoading = false;
+        this.topicEditMenu = false;
+      } catch (error) {
+        if (error.response.data.error) {
+          this.$toast.error(error.response.data.error.message);
+        }
+        this.topicEditLoading = false;
+      }
+    },
+    async handleCreatedGroup() {
+      this.createGroupDialog.value = false;
+      await this.$store.dispatch("chat/getContacts");
+      let contact = this.contacts[0];
+      if (contact) {
+        this.selectedContact = contact;
+      }
+    },
+    onHandleContactItemSeleted(item) {
+      this.selectedContact = item;
+    },
+    getSelectedContact() {
+      return this.$store.getters["chat/selectedContact"];
+    },
+    setSelectedContact(payload) {
+      this.$store.dispatch("chat/setSelectedContact", payload);
+    },
+    getContacts() {
+      return this.$store.dispatch("chat/getContacts");
+    },
+    setMessages(payload) {
+      this.$store.dispatch("chat/setMessages", payload);
     },
     pushMessage(message) {
       this.$store.dispatch("chat/pushMessage", message);
     },
-    sendMessageToChatServer(payload) {
+    handleGroupBtnClick() {
+      this.createGroupDialog.value = true;
+    },
+    handleUnarchiveBtnClick() {
+      if (this.selectedContact) {
+        this.$axios
+          .post(endpoint.CONTACTS_UNARCHIVE_POST, {
+            contactId: this.selectedContact.id
+          })
+          .then(() => {
+            this.selectedContact = null;
+            this.$store.dispatch("chat/getContacts");
+            this.$store.dispatch("chat/setMessages", []);
+          });
+      }
+    },
+    async handleSearch() {
+      await this.$store.dispatch("chat/setSearch", this.search);
+      this.getContacts();
+    },
+    async handleFilterChange(val) {
+      let selected = this.filters.find(item => item.id == val);
+      if (selected) {
+        await this.$store.dispatch("chat/setStatusFilter", selected.label);
+        this.getContacts();
+      }
+      this.selectedContact = null;
+    },
+    async handleArchiveBtnClick() {
+      let contact = this.selectedContact;
+      if (contact) {
+        await this.$axios.post(endpoint.CONTACTS_ARCHIVE_POST, {
+          contactId: contact.id
+        });
+        this.getContacts();
+        this.selectedContact = null;
+        this.setMessages([]);
+      }
+    },
+    async handleUnreadBtnClick() {
+      let contact = this.selectedContact;
+      if (contact) {
+        await this.$axios.post(endpoint.CONTACTS_UNREAD_POST, {
+          contactId: contact.id
+        });
+        this.getContacts();
+        this.setMessages([]);
+      }
+    },
+    async handleUpdatedChatSetting(val) {
+      try {
+        const { data } = await this.$axios.post(
+          endpoint.CHAT_SETTINGS_ENTER_PRESS_POST,
+          {
+            value: val
+          }
+        );
+
+        if (data.data) {
+          this.chatSetting.enterPress = data.data.enterPress;
+        }
+        this.$toast.success("Successfully updated");
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    selectEmoji(emoji) {
+      this.messageForm.content += emoji.data;
+    },
+    handleBackBtnClick() {
+      this.selectedContact = null;
+    },
+    handleDesktopHideActionBtnClick() {
+      this.rightSidebar = !this.rightSidebar;
+      if (this.rightSidebar) {
+        this.contentMd = 6;
+      } else {
+        this.contentMd = 9;
+      }
+    },
+    handleMobileHideActionBtnClick() {
+      this.actionDialog = !this.actionDialog;
+    },
+    handleBackBtnClick() {
+      this.selectedContact = null;
+    },
+    handleRequestBoxCancelBtn() {
+      this.bookingDialog.value = false;
+    },
+
+    sendPrivateMessageToChatServer(payload) {
       this.$socket.emit("private_message_send", {
+        scope: messageData.SCOPE_PRIVATE,
         senderUserId: payload.senderUserId,
         receiverUserId: payload.receiverUserId,
         message: payload.message
       });
     },
-    handleRequestBoxNewMessage(message) {
-      this.pushMessage(message);
-      this.sendMessageToChatServer({
-        senderUserId: this.$auth.user.id,
-        receiverUserId: this.selectedContactUser.id,
-        message: message
+    sendGroupMessageToChatServer(payload) {
+      this.$socket.emit("group_message_send", {
+        ...payload.message,
+        scope: messageData.SCOPE_GROUP,
+        senderUser: payload.senderUser,
+        groupId: payload.groupId
       });
-      this.bookingDialog.value = false;
+    },
+    handleRequestBoxNewMessage(message) {
+      let contact = this.selectedContact;
+      if (contact) {
+        this.pushMessage(message);
+        this.sendPrivateMessageToChatServer({
+          senderUserId: this.$auth.user.id,
+          receiverUserId: contact.connectionUserId,
+          message: message
+        });
+        this.bookingDialog.value = false;
+      }
     },
     handleSelectPackage(item) {
       if (item) {
+        let contact = this.selectedContact;
         this.packageChoosingDialog.value = false;
-        this.bookingDialog.requestBox.props.userId = this.selectedContactUser.id;
+        this.bookingDialog.requestBox.props.userId = contact
+          ? contact.connectionUserId
+          : null;
         this.bookingDialog.requestBox.props.bookingId = item.bookingId;
         this.bookingDialog.requestBox.props.packageSession = item.session;
         this.bookingDialog.requestBox.props.isSold = item.isSold;
@@ -565,13 +1143,27 @@ export default {
       this.packageChoosingDialog.value = false;
     },
     handleCalenderClick() {
+      this.actionDialog = false;
       this.packageChoosingDialog.value = true;
     },
-    handleSelectedContactUser(user) {
-      this.selectedContactUser = user;
+    handleEnterPress(e) {
+      if (this.chatSetting.enterPress == "line_break") {
+        this.messageForm.content + "\n";
+      } else {
+        if (!e.shiftKey) {
+          this.handleMessageInput();
+        }
+      }
+    },
+    handleShiftEnterPress() {
+      this.messageForm.content += "\n";
     },
     handleMessageInput() {
-      if (!/^ *$/.test(this.messageForm.content) && this.hasNetwork) {
+      if (
+        this.selectedContact &&
+        !/^ *$/.test(this.messageForm.content) &&
+        this.hasNetwork
+      ) {
         // Modify the content
         this.messageForm.content = this.messageForm.content.trim();
 
@@ -580,23 +1172,63 @@ export default {
           { ...this.messageForm },
           { ...this.duration }
         );
+
+        if (
+          this.selectedContact.categoryId == contactData.CATEGORY_ID_PRIVATE
+        ) {
+          newMessage.scope = this.sendPrivateMessageToChatServer({
+            senderUserId: this.$auth.user.id,
+            receiverUserId: this.selectedContact.connectionUserId,
+            message: newMessage
+          });
+
+          this.$axios
+            .post(endpoint.MESSAGES_POST, {
+              ...newMessage,
+              receiverUserId: this.selectedContact.connectionUserId
+            })
+            .then(() => {
+              let contact = this.contacts[0];
+              if (contact.id != this.selectedContact.id) {
+                this.$store.dispatch("chat/getContacts");
+              }
+            })
+            .catch(() => {});
+        } else {
+          const payload = {
+            type: "text",
+            content: this.messageForm.content,
+            groupId: this.selectedContact.groupId,
+            ...this.duration
+          };
+          this.sendGroupMessageToChatServer({
+            senderUser: {
+              id: this.$auth.user.id,
+              firstName: this.$auth.user.last_name,
+              lastName: this.$auth.user.first_name,
+              email: this.$auth.user.email,
+              image: this.$auth.user.image
+            },
+            groupId: this.selectedContact.groupId,
+            message: newMessage,
+            ...this.duration
+          });
+          this.$axios
+            .post(endpoint.GROUP_MESSAGES_POST, payload)
+            .then(({ data }) => {
+              let contact = this.contacts[0];
+              if (contact.id != this.selectedContact.id) {
+                this.$store.dispatch("chat/getContacts");
+              }
+            })
+            .catch(err => {
+              if (err.response.data.error) {
+                this.$toast.error(err.response.data.error.message);
+              }
+            });
+        }
+
         this.pushMessage(newMessage);
-
-        this.sendMessageToChatServer({
-          senderUserId: this.$auth.user.id,
-          receiverUserId: this.selectedContactUser.id,
-          message: newMessage
-        });
-
-        messageApi(this.$axios)
-          .store({
-            ...newMessage,
-            receiverUserId: this.selectedContactUser
-              ? this.selectedContactUser.id
-              : null
-          })
-          .then(() => {})
-          .catch(() => {});
         this.messageForm.content = "";
       }
     },
@@ -608,122 +1240,180 @@ export default {
 </script>
 
 <style lang="scss">
-.chat-page {
-  background: $body-bg;
-  height: 100%;
-  .v-avatar {
-    justify-content: center;
+$header-height: 60px;
+.chat-new-page {
+  background: #f7fafc;
+  .v-select__selections {
+    color: rgba(0, 0, 0, 0.6) !important;
   }
-  $text-field-rounded-border-radius: 10px;
-  .chat-box {
-    &__left {
+
+  .ant-drawer-body {
+    padding: 0px !important;
+  }
+
+  .v-textarea .v-input__control {
+    border: 2px solid #15577c !important;
+  }
+
+  .group-avatar {
+    position: relative;
+    &__btn {
+      left: 10px;
+      bottom: -6px;
+      position: absolute;
+    }
+    &__avatar {
+      position: relative;
+    }
+  }
+
+  .chat-settings {
+    &__title {
+      font-family: $font-family;
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 16px;
+      color: #000000;
+    }
+    &__description {
+      font-family: $font-family;
+      font-weight: normal;
+      font-size: 8px;
+      line-height: 11px;
+      color: #000000;
+    }
+  }
+
+  .left-sidebar {
+    &__header {
+      padding-left: 1.2em;
+      padding-right: 0.5em;
+      border-bottom: 1px solid #e1e8f1;
+      height: $header-height;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .left-sidebar-title {
+        font-family: $font-family;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 25px;
+        text-transform: capitalize;
+        color: $primary-light-1;
+      }
+    }
+    &__body {
+      .contact {
+        overflow: auto;
+        height: 100%;
+        height: calc(100vh - 16rem);
+      }
       /* width */
-      .chat-sidebar::-webkit-scrollbar {
+      .contact::-webkit-scrollbar {
         width: 5px;
       }
 
       /* Track */
-      .chat-sidebar::-webkit-scrollbar-track {
+      .contact::-webkit-scrollbar-track {
         background: #f1f1f1;
       }
 
       /* Handle */
-      .chat-sidebar::-webkit-scrollbar-thumb {
+      .contact::-webkit-scrollbar-thumb {
         border-radius: 20px;
         background: #888;
       }
 
       /* Handle on hover */
-      .chat-sidebar::-webkit-scrollbar-thumb:hover {
+      .contact::-webkit-scrollbar-thumb:hover {
         background: #555;
       }
 
-      .profile {
-        padding-top: 28px;
-        padding-left: 28px;
-        padding-bottom: 28px;
-        background: #fcfdfe;
-        background: #fcfdfe;
-        box-shadow: 0px 4px 12px rgba(73, 85, 106, 0.15);
-        border-radius: 20px 0px 0px 20px;
-        &__header {
-          .profile-name {
-            font-family: $font-family;
-            font-size: 18px;
-            line-height: 25px;
-            text-transform: uppercase;
-            color: #15577c;
-          }
-          .profile-language {
-            font-family: $font-family;
-            font-size: 14px;
-            line-height: 19px;
-            color: #000000;
-          }
-        }
-        &__body {
-          .profile-about-text {
-            font-family: $font-family;
-            font-size: 14px;
-            line-height: 19px;
-            color: #1a202d;
-          }
-        }
-      }
-      .contact {
+      .no-contact {
+        width: 100%;
+        text-align: center;
+        margin-top: 5px;
         &__title {
           font-family: $font-family;
+          font-weight: bold;
           font-size: 18px;
           line-height: 25px;
-          text-transform: uppercase;
-          color: #15577c;
-        }
-      }
-      .connection {
-        display: flex;
-        justify-content: space-between;
-        &__title {
-          font-family: $font-family;
-          font-size: 16px;
-          line-height: 22px;
           text-align: center;
-          color: #2c3749;
+          text-transform: capitalize;
+          color: $primary-light-1;
+          padding-top: 5px;
+          padding-bottom: 5px;
         }
-        &__time {
+        &__description {
           font-family: $font-family;
-          font-size: 11px;
-          line-height: 15px;
-          text-transform: uppercase;
-          color: #6f8098;
+          font-size: 14px;
+          line-height: 19px;
+          text-align: center;
+          text-transform: capitalize;
+          color: $primary-light-1;
         }
-      }
-      .connection-sub-title {
-        font-family: $font-family;
-        font-size: 14px;
-        line-height: 124%;
-        color: #49556a;
       }
     }
-
-    &__right {
-      height: 100%;
-      .chat-body {
+  }
+  .content {
+    height: 100%;
+    &__header {
+      border-left: 1px solid #e1e8f1;
+      border-right: 1px solid #e1e8f1;
+      border-bottom: 1px solid #e1e8f1;
+      height: $header-height;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    &__body {
+      background: #fcfdfe;
+      border-left: 1px solid #e1e8f1;
+      border-right: 1px solid #e1e8f1;
+      padding-bottom: 15px;
+    }
+  }
+  .right-sidebar {
+    width: 100%;
+    &__header {
+      border-bottom: 1px solid #e1e8f1;
+      height: $header-height;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .right-sidebar-title {
+        margin-left: 10px;
+        font-family: $font-family;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 25px;
+        text-transform: capitalize;
+        color: $primary-light-1;
+      }
+    }
+    &__body {
+      .action-item {
+        display: flex;
+        align-items: center;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e1e8f1;
+        padding-left: 10px;
         width: 100%;
-        &__status-bar {
+        &__icon {
+          margin-right: 5px;
+        }
+        &__title {
+          margin-left: 5px;
           font-family: $font-family;
-          display: flex;
-          justify-content: center;
-          background: orange;
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 124%;
+          color: $primary-light-1;
         }
-        &__actions {
-          display: flex;
-          box-sizing: border-box;
-          align-items: center;
-          background: #ecf2f7;
-          border-radius: 20px;
-          box-shadow: 0px 2px 2px rgba(73, 85, 106, 0.15);
-          padding: 10px 10px;
-        }
+      }
+      .action-item::hover {
+        cursor: pointer;
       }
     }
   }

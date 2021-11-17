@@ -383,8 +383,8 @@ export default {
     messages() {
       return this.$store.getters["chat/messages"];
     },
-    selectedContactUser() {
-      return this.$store.getters["chat/selectedContactUser"];
+    selectedContact() {
+      return this.$store.getters["chat/selectedContact"];
     },
     isCoach() {
       return this.hasRole(["coach"]);
@@ -421,7 +421,7 @@ export default {
     },
     bookingTimeRequestDeclineBtnHandle(message) {
       let payload = {
-        userId: this.selectedContactUser.id,
+        userId: this.selectedContact.connectionUserId,
         messageId: message.id,
         bookingTimeId: message.content.bookingTimeId,
         action: "decline"
@@ -441,7 +441,7 @@ export default {
             this.$store.dispatch("chat/pushMessage", messageItem);
             this.sendMessageToChatServer({
               senderUserId: this.$auth.user.id,
-              receiverUserId: this.selectedContactUser.id,
+              receiverUserId: this.selectedContact.connectionUserId,
               message: messageItem
             });
           }
@@ -458,7 +458,7 @@ export default {
     },
     bookingTimeRequestAcceptBtnHandle(message) {
       let payload = {
-        userId: this.selectedContactUser.id,
+        userId: this.selectedContact.connectionUserId,
         messageId: message.id,
         bookingTimeId: message.content.bookingTimeId,
         action: "accept"
@@ -484,7 +484,7 @@ export default {
             this.$store.dispatch("chat/pushMessage", messageItem);
             this.sendMessageToChatServer({
               senderUserId: this.$auth.user.id,
-              receiverUserId: this.selectedContactUser.id,
+              receiverUserId: this.selectedContact.connectionUserId,
               message: messageItem
             });
           }
@@ -521,7 +521,7 @@ export default {
             this.$store.dispatch("chat/pushMessage", messageItem);
             this.sendMessageToChatServer({
               senderUserId: this.$auth.user.id,
-              receiverUserId: this.selectedContactUser.id,
+              receiverUserId: this.selectedContact.connectionUserId,
               message: messageItem
             });
           }
@@ -573,7 +573,7 @@ export default {
 
             this.sendMessageToChatServer({
               senderUserId: this.$auth.user.id,
-              receiverUserId: this.selectedContactUser.id,
+              receiverUserId: this.selectedContact.connectionUserId,
               message: messageItem
             });
           }
@@ -595,7 +595,7 @@ export default {
       this.$store.dispatch("chat/pushMessage", messageItem);
       this.sendMessageToChatServer({
         senderUserId: this.$auth.user.id,
-        receiverUserId: this.selectedContactUser.id,
+        receiverUserId: this.selectedContact.connectionUserId,
         message: messageItem
       });
     },
@@ -635,10 +635,31 @@ export default {
 <style lang="scss" scoped>
 .chat-screen {
   background: #fcfdfe;
-  height: calc(100vh - 10.5rem);
+  height: calc(100vh - 10.8rem);
   overflow-y: auto;
   padding: 0 20px;
   width: 100%;
+
+  /* width */
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background: #888;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 
   .quick-booking-tag {
     color: white;
