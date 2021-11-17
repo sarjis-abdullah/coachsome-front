@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 export default {
+  telemetry: false,
   srcDir: "src/",
   loading: {
     color: "#6EB5CB",
@@ -18,6 +19,10 @@ export default {
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        name: "facebook-domain-verification",
+        content: "7ilgh3d5ukfpfwwspw4chai9zokx7u"
+      },
       { hid: "description", name: "description", content: "" }
     ],
     link: [
@@ -64,6 +69,10 @@ export default {
       {
         src: `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAP_API_KEY}&libraries=places`,
         body: true
+      },
+      {
+        src: `/tawk.js`,
+        body: true
       }
     ]
   },
@@ -90,6 +99,7 @@ export default {
     { src: "~/plugins/vue-js-toggle-button", mode: "client" },
     { src: "~/plugins/vue-tribute", mode: "client" },
     { src: "~/plugins/socket", mode: "client" },
+    { src: "~/plugins/v-emoji-picker", mode: "client" },
     { src: "~/plugins/vuelidate" }
   ],
 

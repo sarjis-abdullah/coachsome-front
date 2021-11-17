@@ -4,7 +4,7 @@ export default {
     afterConfirmationMailClicked: "/after-mail-confirmation",
     about: "/about",
     booking: "/booking",
-    bookingNew: "/booking/packages/:packageId",
+    bookingNew: "/packages/:packageId",
     bookingPackage: id => "/packages/" + id,
     blog: "/blog",
     blogCategory: "/blogs/categories/{id}",
@@ -13,8 +13,8 @@ export default {
     baseReviewAction: username => "/" + username + "/review",
     baseReviewSuccess: "/reviews/success",
     chat: {
-      name:"chat",
-      path:"/chat"
+      name: "chat",
+      path: "/chat"
     },
     cookiePolicy: "/cookie-policy",
     emailVerification: "/email-verification",
@@ -66,7 +66,9 @@ export default {
     payoutRequest: "/admin/payout-request",
     orderList: "/admin/orders",
     pageBuilder: "/admin/page-builder",
-    grapesJs: "/admin/grapes-js"
+    grapesJs: "/admin/grapes-js",
+    promos: "/admin/promos",
+    trackingCodes: code => `/admin/tracking-codes/${code}`
   },
   athlete: {
     editProfile: "/athlete/edit-profile",

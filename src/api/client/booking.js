@@ -1,5 +1,3 @@
 export default axios => ({
-  initBooking: payload => {
-    return axios.post("bookings", payload);
-  }
+  initBooking: params => axios.get("bookings", { params })
 });

@@ -101,12 +101,12 @@ export default {
             icon: "mdi-view-list",
             t_key: "dropdown_item_users"
           },
-          // pendingCustomer: {
-          //   text: "Pending Customer",
-          //   path: pathData.admin.pendingCustomer,
-          //   icon: "mdi-view-list",
-          //   t_key: "dropdown_item_pending_customer"
-          // },
+          promos: {
+            text: "Promo Codes",
+            path: pathData.admin.promos,
+            icon: "mdi-view-list",
+            t_key: "dropdown_item_promos"
+          },
           payoutRequest: {
             text: "Payout Request",
             path: pathData.admin.payoutRequest,

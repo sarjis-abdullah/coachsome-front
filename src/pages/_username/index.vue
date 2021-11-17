@@ -342,9 +342,10 @@ import ProfileCard from "@/components/card/ProfileCard";
 import ServiceCard from "@/components/card/ServiceCard";
 import ReviewCard from "@/components/card/ReviewCard";
 import BookingRequest from "@/components/artifact/global/BookingRequest";
-import { bookingHelper, storageHelper, seoHelper } from "@/helper";
+import { storageHelper, seoHelper } from "@/helper";
 import { profileData, pathData } from "@/data";
 import { profileApi, messageApi } from "@/api";
+import { bookingService } from "@/services";
 
 import DarkboxGallery from "@/components/darkbox/Gallery";
 export default {
@@ -632,11 +633,14 @@ export default {
       this.bookingRequest.coachInfo = this.profileCard;
     },
     handleBooking(service = null) {
-      bookingHelper.removeBookingInfoFromStorage();
-      console.log(this.localePath(pathData.pages.bookingPackage(service.id)));
-      this.$router.push(
-        this.localePath(pathData.pages.bookingPackage(service.id))
-      );
+      bookingService.destroyBookingInfo();
+      if (!this.$auth.loggedIn) {
+        this.$router.push(this.localePath(pathData.pages.register));
+      } else {
+        this.$router.push(
+          this.localePath(pathData.pages.bookingPackage(service.id))
+        );
+      }
     },
     initMap() {
       if (this.travelCard.map != undefined) {

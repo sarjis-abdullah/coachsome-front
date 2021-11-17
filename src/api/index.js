@@ -5,12 +5,14 @@ export { default as clientBookingApi } from "./client/booking";
 export { default as authApi } from "./auth";
 export { default as baseReviewApi } from "./baseReview";
 export { default as bookingApi } from "./booking";
+export { default as chatSettingApi } from "./chatSetting";
 export { default as bookingTimeApi } from "./bookingTime";
 export { default as chatApi } from "./chat";
 export { default as calenderApi } from "./calender";
 export { default as countryApi } from "./country";
 export { default as contactApi } from "./contact";
 export { default as frontHomeApi } from "./frontHome";
+export { default as groupApi } from "./group";
 export { default as languageApi } from "./language";
 export { default as marketPlaceApi } from "./marketPlace";
 export { default as messageApi } from "./message";
@@ -31,6 +33,7 @@ export { default as adminImpersonateApi } from "./admin/impersonate";
 export { default as adminTranslationApi } from "./admin/translation";
 export { default as adminUserLogApi } from "./admin/userLog";
 export { default as adminSeoTranslationApi } from "./admin/seoTranslation";
+export { default as adminPromoCodeApi } from "./admin/promoCode";
 
 // Coach
 export { default as coachBookingApi } from "./coach/booking";
@@ -58,3 +61,7 @@ export { default as sharedProfileApi } from "./shared/profile";
 
 // TikCms
 export { default as pageBuilderApi } from "./tikCms/pageBuilder";
+
+// Endpoint
+// This is the future api path feature
+export { default as endpoint } from "./endpoint";

@@ -1,32 +1,28 @@
 <template>
-  <v-container>
-    <div class="booking-page">
+  <div class="front-booking-page">
+    <v-container>
       <v-row justify="center">
         <v-col cols="12" md="10">
           <v-stepper v-model="step">
             <v-stepper-header>
               <v-stepper-step
                 :complete="step > 1"
-                step="1"
+                :step="1"
                 :editable="isFirstStepEditAble"
               >
                 {{ $t("booking_step_order_details") }}
               </v-stepper-step>
-
               <v-divider></v-divider>
-
               <v-stepper-step :complete="step > 2" step="2">
                 {{ $t("booking_step_confirm_and_pay") }}
               </v-stepper-step>
-
               <v-divider></v-divider>
-
               <v-stepper-step step="3">
                 {{ $t("booking_step_waiting_for_coach") }}
               </v-stepper-step>
             </v-stepper-header>
-
             <v-stepper-items>
+              <!-- Step One -->
               <v-stepper-content step="1">
                 <v-card>
                   <v-card-title>
@@ -48,7 +44,6 @@
                       >
                         <div class="line--vertical text-center"></div>
                       </v-col>
-
                       <v-col cols="12" md="5">
                         <div class="person-number" v-if="isCampPackage">
                           <div class="person-number__text">
@@ -68,74 +63,11 @@
                             ></v-select>
                           </div>
                         </div>
-                        <div
-                          class="charge-box"
-                          :style="{
-                            borderImage: `url(${require('@/assets/images/border-staircase.svg')}) 30 space`
-                          }"
-                        >
-                          <div class="charge-box__item">
-                            <div class="charge-box__item-left">
-                              {{ $t("charge_box_title") }}
-                            </div>
-                            <div class="charge-box__item-right">
-                              {{
-                                currencyService.toCurrency(
-                                  packageInfo.chargeBox.priceForPackage
-                                )
-                              }}
-                            </div>
-                          </div>
-                          <div class="charge-box__item">
-                            <div class="charge-box__item-left">
-                              {{ $t("booking_charge_box_service_fee_txt") }}
-                              <v-tooltip right max-width="250">
-                                <template v-slot:activator="{ on }">
-                                  <v-icon x-small color="#15577C" v-on="on"
-                                    >help_outline</v-icon
-                                  >
-                                </template>
-                                <span>{{
-                                  $t("booking_charge_box_service_fee_help")
-                                }}</span>
-                              </v-tooltip>
-                            </div>
-                            <div class="charge-box__item-right">
-                              {{
-                                currencyService.toCurrency(
-                                  packageInfo.chargeBox.serviceFee
-                                )
-                              }}
-                            </div>
-                          </div>
-                          <div class="charge-box__item" v-if="isCampPackage">
-                            <div class="charge-box__item-left">
-                              {{
-                                $t("booking_charge_box_total_per_person_txt")
-                              }}
-                            </div>
-                            <div class="charge-box__item-right">
-                              {{
-                                currencyService.toCurrency(
-                                  packageInfo.chargeBox.totalPerPerson
-                                )
-                              }}
-                            </div>
-                          </div>
-                          <div class="charge-box__item">
-                            <div class="charge-box__item-left stroke">
-                              {{ $t("booking_charge_box_total") }}
-                            </div>
-                            <div class="charge-box__item-right stroke">
-                              {{
-                                currencyService.toCurrency(
-                                  packageInfo.chargeBox.total
-                                )
-                              }}
-                            </div>
-                          </div>
-                        </div>
-
+                        <charge-box
+                          :charge-info="packageInfo.chargeBox"
+                          :camp-package="isCampPackage"
+                          :promo-code="promoCode"
+                        />
                         <div class="package-info">
                           <package-simple-card
                             v-bind="packageInfo"
@@ -157,8 +89,9 @@
                   </v-card-text>
                 </v-card>
               </v-stepper-content>
+              <!-- ./Step One -->
 
-              <!-- Step 2 -->
+              <!-- Step Two -->
               <v-stepper-content step="2">
                 <v-card>
                   <v-card-title>
@@ -178,13 +111,12 @@
                             <span class="required">*</span>
                           </div>
                           <div class="message-box__field">
-                            <a-textarea
+                            <v-textarea
                               ref="messageBoxTextArea"
+                              outlined
+                              flat
+                              :hint="$t('booking_message_box_text_area_label')"
                               v-model="messageFromPackageBuyer"
-                              :placeholder="
-                                $t('booking_message_box_text_area_label')
-                              "
-                              :auto-size="{ minRows: 3, maxRows: 5 }"
                             />
                           </div>
                         </div>
@@ -215,72 +147,71 @@
                             ></v-select>
                           </div>
                         </div>
-                        <div
-                          class="charge-box"
-                          :style="{
-                            borderImage: `url(${require('@/assets/images/border-staircase.svg')}) 30 space`
-                          }"
-                        >
-                          <div class="charge-box__item">
-                            <div class="charge-box__item-left">
-                              {{ $t("charge_box_title") }}
-                            </div>
-                            <div class="charge-box__item-right">
-                              {{
-                                currencyService.toCurrency(
-                                  packageInfo.chargeBox.priceForPackage
-                                )
-                              }}
-                            </div>
-                          </div>
-                          <div class="charge-box__item">
-                            <div class="charge-box__item-left">
-                              {{ $t("booking_charge_box_service_fee_txt") }}
-                              <v-tooltip right max-width="250">
-                                <template v-slot:activator="{ on }">
-                                  <v-icon x-small color="#15577C" v-on="on"
-                                    >help_outline</v-icon
-                                  >
-                                </template>
-                                <span>{{
-                                  $t("booking_charge_box_service_fee_help")
-                                }}</span>
-                              </v-tooltip>
-                            </div>
-                            <div class="charge-box__item-right">
-                              {{
-                                currencyService.toCurrency(
-                                  packageInfo.chargeBox.serviceFee
-                                )
-                              }}
-                            </div>
-                          </div>
-                          <div class="charge-box__item" v-if="isCampPackage">
-                            <div class="charge-box__item-left">
-                              {{
-                                $t("booking_charge_box_total_per_person_txt")
-                              }}
-                            </div>
-                            <div class="charge-box__item-right">
-                              {{
-                                currencyService.toCurrency(
-                                  packageInfo.chargeBox.totalPerPerson
-                                )
-                              }}
-                            </div>
-                          </div>
-                          <div class="charge-box__item">
-                            <div class="charge-box__item-left stroke">
-                              {{ $t("booking_charge_box_total") }}
-                            </div>
-                            <div class="charge-box__item-right stroke">
-                              {{
-                                currencyService.toCurrency(
-                                  packageInfo.chargeBox.total
-                                )
-                              }}
-                            </div>
-                          </div>
+                        <charge-box
+                          :charge-info="packageInfo.chargeBox"
+                          :camp-package="isCampPackage"
+                          :promo-code="promoCode"
+                        />
+                        <div class="promo-code">
+                          <v-text-field
+                            v-model="promoCode.value"
+                            outlined
+                            dense
+                            readonly
+                            @click="promoCode.dialog = true"
+                            elevation="0"
+                            hide-details
+                            class="mt-5"
+                            placeholder="Enter promo code or gift certificate code here"
+                          >
+                            <template v-slot:append>
+                              <div>
+                                <v-icon v-if="promoCode.valid" color="green">
+                                  mdi-check
+                                </v-icon>
+                              </div>
+                            </template>
+                          </v-text-field>
+                          <v-dialog v-model="promoCode.dialog" max-width="290">
+                            <v-card>
+                              <v-card-title>
+                                Promo Code
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                  icon
+                                  x-small
+                                  @click="promoCode.dialog = false"
+                                >
+                                  <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                              </v-card-title>
+                              <v-card-text>
+                                <v-text-field
+                                  v-model="promoCode.dialogValue"
+                                  label="Enter promo code"
+                                ></v-text-field>
+                              </v-card-text>
+                              <v-card-actions>
+                                <v-spacer></v-spacer>
+
+                                <v-btn
+                                  color="error"
+                                  text
+                                  @click="handleRemoveBtnClick"
+                                >
+                                  remove
+                                </v-btn>
+                                <v-btn
+                                  color="primary-light-1"
+                                  text
+                                  :loading="isLoading"
+                                  @click="handleApplyBtnClick"
+                                >
+                                  apply
+                                </v-btn>
+                              </v-card-actions>
+                            </v-card>
+                          </v-dialog>
                         </div>
                         <div class="payment">
                           <v-radio-group v-model="selectedPaymentMethod" column>
@@ -327,8 +258,9 @@
                   </v-card-text>
                 </v-card>
               </v-stepper-content>
+              <!-- ./Step Two -->
 
-              <!-- Step 3 -->
+              <!-- Step Three -->
               <v-stepper-content step="3">
                 <v-card color="#ECF2F7">
                   <v-card-text>
@@ -355,9 +287,6 @@
                             </i18n>
                           </div>
                         </div>
-                        <!-- <div class="quick-booking__timer">
-                          <div class="timer" ref="timerDisplay"></div>
-                        </div> -->
                         <div class="quick-booking__chat-btn mt-10">
                           <v-btn
                             class="white--text"
@@ -396,12 +325,13 @@
                   </v-card-text>
                 </v-card>
               </v-stepper-content>
+              <!-- ./ Step Three -->
             </v-stepper-items>
           </v-stepper>
         </v-col>
       </v-row>
-    </div>
-  </v-container>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -409,22 +339,31 @@ import _ from "lodash";
 
 import ProfileSimpleCard from "@/components/card/ProfileSimpleCard";
 import PackageSimpleCard from "@/components/card/PackageSimpleCard";
-
-import { currencyService } from "@/services";
+import ChargeBox from "@/components/artifact/global/pages/booking/ChargeBox";
+import { currencyService, bookingService } from "@/services";
 import { constantData, pathData } from "@/data";
-import { storageHelper, bookingHelper } from "@/helper";
-import { bookingApi, clientBookingApi } from "@/api";
+import { storageHelper } from "@/helper";
+import { bookingApi } from "@/api";
 export default {
   components: {
     ProfileSimpleCard,
-    PackageSimpleCard
+    PackageSimpleCard,
+    ChargeBox
   },
   data() {
     return {
+      promoCode: {
+        valid: false,
+        value: "",
+        amount: 0.0,
+        dialog: false,
+        dialogValue: ""
+      },
       currencyService,
       isChatBtnLoading: false,
       loadingRequestBookingBtn: false,
       selectedPaymentMethod: null,
+      isLoading: false,
       paymentMethods: [
         // {
         //   id: 1,
@@ -540,9 +479,6 @@ export default {
           storageHelper.set("booking", booking);
         }
       }
-      // if (val == 3) {
-      //   this.startTimer(60 * 7);
-      // }
     },
     "packageInfo.chargeBox.personNumbers.value": {
       handler(val) {
@@ -555,74 +491,107 @@ export default {
       deep: true
     }
   },
+  async asyncData({ params }) {
+    return { packageId: params.id };
+  },
   created() {},
   mounted() {
-    this.init();
+    let initialValue = {
+      id: null, // booking id
+      step: 1,
+      status: "Initial",
+      person: 1,
+      isNotified: false,
+      packageId: parseInt(this.packageId),
+      isRedirectToChat: false
+    };
+
+    // Get booking
+    let booking = bookingService.getBookingInfo();
+
+    // If there has no booking info
+    if (!booking) {
+      bookingService.setBookingInfo({ ...initialValue });
+      booking = bookingService.getBookingInfo();
+    }
+
+    // if booking info exist
+    if (booking) {
+      this.step = booking.step;
+      this.packageInfo.chargeBox.personNumbers.value = booking.person;
+      booking.packageId = this.packageId;
+    }
+
+    // Notified if step at 3
+    if (!booking.isNotified && this.$route.query.payment_status == "paid") {
+      booking.isNotified = true;
+      this.notify({ bookingId: booking.id });
+    }
+
+    // if status is paid && not redirect to chat
+    if (
+      this.$route.query.payment_status == "paid" &&
+      !booking.isRedirectToChat
+    ) {
+      this.step = 3;
+      booking.status = "Completed";
+    }
+
+    if (
+      this.$route.query.payment_status == "paid" &&
+      booking.isRedirectToChat
+    ) {
+      this.$router.push(pathData.pages.marketplace);
+    }
+
+    // Set booking info after some change
+    bookingService.setBookingInfo(booking);
+
+    // If payment is canceled
+    if (this.$route.query.payment_status == "cancel") {
+      bookingService.destroyBookingInfo();
+      this.$router.push(this.localePath(pathData.pages.marketplace));
+    }
+
+    this.fetchBookingInfo({
+      packageId: booking.packageId,
+      promoCode: null,
+      withPromoCode: false
+    });
   },
   methods: {
-    init() {
-      let booking = {
-        id: null,
-        step: 1,
-        status: "Initial",
-        person: 1,
-        isNotified: false,
-        packageId: this.$route.params.packageId,
-        isRedirectToChat: false
-      };
-
-      // Store booking info || retrieve if exist
-      if (storageHelper.get("booking")) {
-        booking = storageHelper.get("booking");
-        storageHelper.set("booking", booking);
-        this.step = booking.step;
-        this.packageInfo.chargeBox.personNumbers.value = booking.value;
-      } else {
-        storageHelper.set("booking", booking);
-      }
-
-      // Notified if step at 3
-      if (!booking.isNotified && this.$route.query.payment_status == "paid") {
-        booking.isNotified = true;
-        storageHelper.set("booking", booking);
-        this.notify({ bookingId: booking.id });
-      }
-
-      // if status is paid && not redirect to chat
-      if (
-        this.$route.query.payment_status == "paid" &&
-        !booking.isRedirectToChat
-      ) {
-        this.step = 3;
-        booking.status = "Completed";
-        storageHelper.set("booking", booking);
-      }
-
-      if (
-        this.$route.query.payment_status == "paid" &&
-        booking.isRedirectToChat
-      ) {
-        this.$router.push(pathData.pages.marketplace);
-      }
-
-      // If payment is canceled
-      if (this.$route.query.payment_status == "cancel") {
-        bookingHelper.removeBookingInfoFromStorage();
-        this.$router.push(this.localePath(pathData.pages.marketplace));
-      }
-
-      const payload = {
-        packageId: this.$route.params.id
-      };
-
+    handleRemoveBtnClick() {
+      this.fetchBookingInfo({
+        packageId: this.packageId,
+        promoCode: null,
+        withPromoCode: false
+      });
+      this.promoCode.dialogValue = "";
+      this.promoCode.dialog = false;
+    },
+    handleApplyBtnClick() {
+      this.fetchBookingInfo({
+        packageId: this.packageId,
+        promoCode: this.promoCode.dialogValue,
+        withPromoCode: true
+      });
+    },
+    fetchBookingInfo(payload) {
+      const { packageId, promoCode, withPromoCode } = payload;
       this.isChatBtnLoading = true;
-      clientBookingApi(this.$axios)
-        .initBooking(payload)
+      this.isLoading = true;
+
+      bookingApi(this.$axios)
+        .getBookingInfo({
+          packageId,
+          promoCode
+        })
         .then(response => {
           let profileCardInfo = response.data.profileCard;
           let packageInfo = response.data.packageInfo;
           let chargeBox = response.data.chargeBox;
           let packageSetting = response.data.packageSetting;
+          let promoCode = response.data.promoCode;
 
           if (packageSetting) {
             this.packageSetting = packageSetting;
@@ -669,10 +638,23 @@ export default {
               chargeBox.minPerson;
             this.setPerson(chargeBox.minPerson);
           }
+
+          if (promoCode) {
+            this.promoCode.valid = promoCode.valid;
+            this.promoCode.value = promoCode.value;
+            this.promoCode.amount = promoCode.amount;
+            if (withPromoCode) {
+              if (!promoCode.valid) {
+                this.$toast.error(promoCode.message);
+              } else {
+                this.promoCode.dialog = false;
+              }
+            }
+          }
         })
-        .catch(() => {})
         .finally(() => {
           this.isChatBtnLoading = false;
+          this.isLoading = false;
         });
     },
     notify(payload) {
@@ -689,16 +671,17 @@ export default {
         message: this.messageFromPackageBuyer,
         salePrice: this.packageInfo.chargeBox.salePrice,
         paymentMethod: this.selectedPaymentMethod,
-        packageUrl: location.href
+        packageUrl: location.href,
+        promoCode: this.promoCode.value
       };
       this.loadingRequestBookingBtn = true;
       bookingApi(this.$axios)
         .payByQuickpay(payload)
         .then(({ data }) => {
           if (data.bookingId) {
-            let booking = storageHelper.get("booking");
+            let booking = bookingService.getBookingInfo("booking");
             booking.id = data.bookingId;
-            storageHelper.set("booking", booking);
+            bookingService.setBookingInfo(booking);
           }
           if (data.link) {
             window.location.assign(data.link);
@@ -720,10 +703,10 @@ export default {
       }
     },
     chatNowBtnClickHandle() {
-      let booking = storageHelper.get("booking");
+      let booking = bookingService.getBookingInfo();
       if (booking) {
         booking.isRedirectToChat = true;
-        storageHelper.set("booking", booking);
+        bookingService.setBookingInfo(booking);
       }
       this.$router.push(
         this.localePath({
@@ -732,66 +715,45 @@ export default {
         })
       );
     },
-    // startTimer(duration) {
-    //   let display = this.$refs.timerDisplay;
-    //   var start = Date.now(),
-    //     diff,
-    //     minutes,
-    //     seconds;
-    //   function timer() {
-    //     // get the number of seconds that have elapsed since
-    //     // startTimer() was called
-    //     diff = duration - (((Date.now() - start) / 1000) | 0);
-
-    //     // does the same job as parseInt truncates the float
-    //     minutes = (diff / 60) | 0;
-    //     seconds = diff % 60 | 0;
-
-    //     minutes = minutes < 10 ? "0" + minutes : minutes;
-    //     seconds = seconds < 10 ? "0" + seconds : seconds;
-
-    //     display.textContent = minutes + ":" + seconds;
-
-    //     if (diff <= 0) {
-    //       // add one second so that the count down starts at the full duration
-    //       // example 05:00 not 04:59
-    //       start = Date.now() + 1000;
-    //     }
-    //   }
-    //   // we don't want to wait a full second before the timer starts
-    //   timer();
-    //   setInterval(timer, 1000);
-    // },
-
     setStepToStorage(step) {
-      let booking = storageHelper.get("booking");
+      let booking = bookingService.getBookingInfo();
       booking.step = step;
-      storageHelper.set("booking", booking);
+      bookingService.setBookingInfo(booking);
     },
     setPerson(person) {
       if (person) {
-        let booking = storageHelper.get("booking");
+        let booking = bookingService.getBookingInfo();
         booking.person = person;
-        storageHelper.set("booking", booking);
+        bookingService.setBookingInfo(booking);
       }
     },
     setCategoryId(id) {
-      let booking = storageHelper.get("booking");
+      let booking = bookingService.getBookingInfo();
       booking.categoryId = id;
-      storageHelper.set("booking", booking);
+      bookingService.setBookingInfo(booking);
     }
   }
 };
 </script>
 
-<style lang="scss" scoped>
-.booking-page {
+<style lang="scss">
+.front-booking-page {
+  background: $body-bg;
+  height: 100%;
+  .promo-code {
+    .v-text-field--outlined.v-input--dense input::placeholder {
+      font-size: 12px;
+      color: #6f8098;
+    }
+  }
+
   .message-container {
     display: flex;
     justify-content: center;
     align-content: center;
     padding: 100px 50px;
   }
+
   .message {
     font-family: $font-family;
     font-weight: bold;
@@ -811,53 +773,35 @@ export default {
     margin-top: 50px;
     color: #49556a;
   }
+
   .continue-btn {
     margin-top: 50px;
   }
+
   .help-text {
     font-family: $font-family;
     font-size: 12px;
     line-height: 16px;
     color: #6f8098;
   }
+
   .stroke {
     font-weight: bold;
   }
   .package-info {
     margin-top: 50px;
   }
+
   .profile-card {
     margin-top: 20px;
   }
+
   .line--vertical {
     border: 1px solid #15577c;
     width: 1px;
     height: 80%;
   }
 
-  .charge-box {
-    padding: 20px 10px 35px 10px;
-    box-shadow: -1px 0px 0px 0px #6f8098, 1px 0px 0px 0px #6f8098;
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
-    &__item {
-      display: flex;
-      justify-content: space-between;
-      padding: 5px 0px;
-      &-left {
-        font-family: $font-family;
-        font-size: 14px;
-        line-height: 19px;
-        color: #000000;
-      }
-      &-right {
-        font-family: $font-family;
-        font-size: 14px;
-        line-height: 19px;
-        color: #000000;
-      }
-    }
-  }
   .availability {
     margin-top: 20px;
     background: #fcfdfe;

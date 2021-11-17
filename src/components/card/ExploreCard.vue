@@ -1,12 +1,16 @@
 <template>
   <div class="explore-card">
-    <v-card elevation="1" aspect-ratio="1" width="100%">
+    <v-card
+      @click="gotTo(userName)"
+      elevation="1"
+      aspect-ratio="1"
+      width="100%"
+    >
       <v-img
         clickable
         class="white--text align-end"
         aspect-ratio="1"
         :src="profileImage"
-        @click="gotTo(userName)"
       >
         <v-card-title class="pl-2 pb-2 ">
           <v-btn
