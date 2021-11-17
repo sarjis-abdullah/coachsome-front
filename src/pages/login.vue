@@ -151,6 +151,7 @@
 </template>
 <script>
 import { pathData } from "@/data";
+import { redirectPathService } from "@/services";
 
 export default {
   layout: "auth",
@@ -205,12 +206,20 @@ export default {
 
           if (this.$auth.loggedIn) {
             this.$socket.emit("connected", this.$auth.user.id);
-            if (this.$auth.hasRole(["coach"])) {
-              this.$router.push(this.localePath(pathData.coach.editProfile));
-            } else if (this.$auth.hasRole(["athlete"])) {
-              this.$router.push(this.localePath(pathData.athlete.editProfile));
+
+            // if there has any redirect path
+            if (redirectPathService.has()) {
+              this.$router.push(this.localePath(redirectPathService.get()));
             } else {
-              this.$router.push(this.localePath(pathData.admin.dashboard));
+              if (this.$auth.hasRole(["coach"])) {
+                this.$router.push(this.localePath(pathData.coach.editProfile));
+              } else if (this.$auth.hasRole(["athlete"])) {
+                this.$router.push(
+                  this.localePath(pathData.athlete.editProfile)
+                );
+              } else {
+                this.$router.push(this.localePath(pathData.admin.dashboard));
+              }
             }
           }
         } catch (error) {

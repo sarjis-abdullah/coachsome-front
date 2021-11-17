@@ -1,3 +1,2 @@
-## [dev,test,prod]
-
-- npm i --save swiper@5.x vue-awesome-swiper
+## feature/chat-improvements [dev,test]
+- npm i 

@@ -22,7 +22,21 @@ export default {
   data() {
     return {};
   },
-  mounted() {},
+  mounted() {
+    // Tawk Api exist in static directory
+    // Only chat page do not effect
+    Tawk_API.onLoad = function() {
+      Tawk_API.hideWidget();
+    };
+    if (Tawk_API.hideWidget) {
+      Tawk_API.hideWidget();
+    }
+  },
+  destroyed() {
+    if (Tawk_API.hideWidget) {
+      Tawk_API.showWidget();
+    }
+  },
   methods: {}
 };
 </script>
