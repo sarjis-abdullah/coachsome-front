@@ -53,7 +53,7 @@
                     color="primary-light-1"
                     text
                     x-small
-                    @click="handleReadMoreClick(item.title)"
+                    @click="handleReadMoreClick(item.slug_url)"
                   >
                     Read more
                   </v-btn>
@@ -92,6 +92,7 @@ export default {
     let categories = [];
     let blogPostList = [];
 
+    console.log(categoryRes.data)
     if (categoryRes.data.data.categories) {
       categories = categoryRes.data.data.categories;
       if (categories) {
