@@ -177,6 +177,34 @@
         </nuxt-link>
       </v-list-group>
 
+      <!-- Currency -->
+      <v-list-group v-model="currencyGroup" link>
+        <template v-slot:activator>
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ $t(items.changeCurrency.t_key) }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </template>
+        <template v-for="(item, i) in items.changeCurrency.currencies">
+          <v-list-item
+            :key="i"
+            :value="item.code"
+            @click="handleCurrencyChnage(item)"
+          >
+            <v-list-item-avatar size="20" tile>
+              <span>
+                {{ item.symbol }}
+              </span>
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title v-text="item.code"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+      </v-list-group>
+
       <!-- Admin -->
       <span v-if="isAdmin">
         <v-list-group v-model="adminGroup" link>
@@ -229,6 +257,7 @@ export default {
       menu: false,
       languageGroup: false,
       currencyGroup: false,
+      selectedCurrencyCode: currencyService.currentCurrencyCode(),
       adminGroup: false,
       friendInvitationInfo: [
         { email: "", name: "" },
@@ -453,6 +482,10 @@ export default {
   },
   created() {},
   methods: {
+    handleCurrencyChnage(item) {
+      currencyService.setCurrencyCode(item.code);
+      location.reload();
+    },
     profileUrl() {
       return window.location.origin + "/" + this.$auth.user.user_name;
     },
