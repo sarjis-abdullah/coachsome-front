@@ -180,7 +180,10 @@
         <slide-x-left-transition>
           <v-col cols="12" :md="contentMd" v-if="contentSection">
             <div class="content">
-              <div class="content__header">
+              <div
+                class="content__header"
+                :class="{ 'fixed-top': $vuetify.breakpoint.smAndDown }"
+              >
                 <v-list two-line width="100%" color="transparent">
                   <template v-if="selectedContact">
                     <v-list-item
@@ -513,89 +516,95 @@
                 <div class="message-list">
                   <ChatScreen />
                 </div>
-                <v-textarea
-                  dense
-                  :rows="1"
-                  auto-grow
-                  autocomplete="off"
-                  solo
-                  rounded
-                  class="mx-3"
-                  v-model="messageForm.content"
-                  :label="$t('chat_chat_box_input_placeholder')"
-                  type="text"
-                  hide-details
-                  @keyup.enter="handleEnterPress"
-                >
-                  <template v-slot:prepend>
-                    <div>
-                      <v-btn icon>
-                        <img
-                          :src="require(`@/assets/images/icons/attachment.svg`)"
-                          alt="attachment-icon"
-                        />
-                      </v-btn>
-                    </div>
-                  </template>
-                  <template v-slot:append>
-                    <v-menu
-                      v-if="$vuetify.breakpoint.mdAndUp"
-                      v-model="settingsMenu"
-                      :close-on-content-click="false"
-                      :nudge-width="200"
-                      offset-x
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          icon
-                          v-bind="attrs"
-                          v-on="on"
-                          x-small
-                          class="mr-3"
-                        >
+                <div :class="{ 'fixed-bottom': $vuetify.breakpoint.smAndDown }">
+                  <v-textarea
+                    dense
+                    :rows="1"
+                    auto-grow
+                    autocomplete="off"
+                    solo
+                    rounded
+                    class="mx-3"
+                    v-model="messageForm.content"
+                    :label="$t('chat_chat_box_input_placeholder')"
+                    type="text"
+                    hide-details
+                    @keyup.enter="handleEnterPress"
+                  >
+                    <template v-slot:prepend>
+                      <div>
+                        <v-btn icon>
                           <img
-                            class="mt-1"
-                            :src="require(`@/assets/images/icons/settings.svg`)"
-                            alt="setting-icon"
+                            :src="
+                              require(`@/assets/images/icons/attachment.svg`)
+                            "
+                            alt="attachment-icon"
                           />
                         </v-btn>
-                      </template>
-                      <ChatSetting
-                        :enter-press="chatSetting.enterPress"
-                        @update="handleUpdatedChatSetting"
-                      />
-                    </v-menu>
-                    <v-menu
-                      v-model="emojiMenu"
-                      :close-on-content-click="false"
-                      :nudge-width="200"
-                      offset-x
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn icon v-bind="attrs" v-on="on" x-small>
+                      </div>
+                    </template>
+                    <template v-slot:append>
+                      <v-menu
+                        v-if="$vuetify.breakpoint.mdAndUp"
+                        v-model="settingsMenu"
+                        :close-on-content-click="false"
+                        :nudge-width="200"
+                        offset-x
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            icon
+                            v-bind="attrs"
+                            v-on="on"
+                            x-small
+                            class="mr-3"
+                          >
+                            <img
+                              class="mt-1"
+                              :src="
+                                require(`@/assets/images/icons/settings.svg`)
+                              "
+                              alt="setting-icon"
+                            />
+                          </v-btn>
+                        </template>
+                        <ChatSetting
+                          :enter-press="chatSetting.enterPress"
+                          @update="handleUpdatedChatSetting"
+                        />
+                      </v-menu>
+                      <v-menu
+                        v-model="emojiMenu"
+                        :close-on-content-click="false"
+                        :nudge-width="200"
+                        offset-x
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn icon v-bind="attrs" v-on="on" x-small>
+                            <img
+                              class="mt-1"
+                              :src="require(`@/assets/images/icons/emoji.svg`)"
+                              alt="emoji-icon"
+                            />
+                          </v-btn>
+                        </template>
+                        <v-card>
+                          <VEmojiPicker @select="selectEmoji" />
+                        </v-card>
+                      </v-menu>
+                    </template>
+                    <template v-slot:append-outer>
+                      <div>
+                        <v-btn icon @click="handleMessageInput" small>
                           <img
-                            class="mt-1"
-                            :src="require(`@/assets/images/icons/emoji.svg`)"
-                            alt="emoji-icon"
+                            :src="require(`@/assets/images/icons/send.svg`)"
+                            alt="send-icon"
                           />
                         </v-btn>
-                      </template>
-                      <v-card>
-                        <VEmojiPicker @select="selectEmoji" />
-                      </v-card>
-                    </v-menu>
-                  </template>
-                  <template v-slot:append-outer>
-                    <div>
-                      <v-btn icon @click="handleMessageInput" small>
-                        <img
-                          :src="require(`@/assets/images/icons/send.svg`)"
-                          alt="send-icon"
-                        />
-                      </v-btn>
-                    </div>
-                  </template>
-                </v-textarea>
+                      </div>
+                    </template>
+                  </v-textarea>
+                </div>
               </div>
             </div>
           </v-col>
@@ -1242,6 +1251,20 @@ export default {
 <style lang="scss">
 $header-height: 60px;
 .chat-new-page {
+  .fixed-bottom {
+    position: fixed;
+    bottom: 0;
+    -webkit-backface-visibility: hidden;
+    width: 100%;
+  }
+  .fixed-top {
+    position: fixed;
+    z-index: 100;
+    background: #f7fafc;
+    top: 45px;
+    -webkit-backface-visibility: hidden;
+    width: 100%;
+  }
   background: #f7fafc;
   .v-select__selections {
     color: rgba(0, 0, 0, 0.6) !important;
