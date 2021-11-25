@@ -49,12 +49,7 @@
             </v-row>
             <v-row justify="center" align="center" no-gutters>
               <v-col cols="11" md="6">
-                <SportSearch
-                  :items="categoryList"
-                  @on-item-select="
-                    goToMarketPlaceAndSearchByQueryParamCategoryName
-                  "
-                ></SportSearch>
+                <SportSearch />
                 <v-card color="transparent" elevation="0">
                   <v-card-text>
                     <div

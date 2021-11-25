@@ -5,7 +5,7 @@
     @input="goToMarketPlaceAndSearchByQueryParam"
     v-model="selectedCategory"
     :loading="loading"
-    :items="categoryItems"
+    :items="items"
     :search-input.sync="search"
     item-text="name"
     item-value="id"
@@ -32,32 +32,35 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { endpoint } from "../../../api";
 export default {
   data() {
     return {
+      items: [],
       search: null,
       selectedCategory: null,
-      loading: false,
+      loading: false
     };
   },
-  computed: {
-    ...mapGetters({
-      categoryItems: "sports/all"
-    })
-  },
+  computed: {},
   watch: {
-    "search": function() {
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 500);
+    search: function() {
+      this.searchByKey();
     }
   },
-  created() {
-    this.loadAll();
-  },
+  created() {},
   methods: {
-    ...mapActions("sports", ["loadAll"]),
+    searchByKey() {
+      this.loading = true;
+      this.$axios
+        .get(endpoint.MARKETPLACE_SEARCHES)
+        .then(data => {
+          this.items = data.sportCategories;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
     removeSelectedValue() {
       this.selectedCategory = null;
     },
