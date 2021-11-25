@@ -41,4 +41,7 @@ export default {
   GROUP_INVITATIONS_GROUP_ID_POST: id => `/group-invitations/groups/${id}`,
   GROUPS_ID_CHANGE_TOPIC_PUT: id => `/groups/${id}/change-topic`,
   GROUPS_ID_SAVE_IMAGE_POST: id => `/groups/${id}/save-image`,
+
+  // marketplaces
+  MARKETPLACE_SEARCHES: "/marketplace-searches"
 };

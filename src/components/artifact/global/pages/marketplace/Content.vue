@@ -529,6 +529,7 @@ export default {
         );
         this.queryParams.date = this.dateFilter.date;
         this.queryParams.cityName = this.$route.query.cityName;
+        this.queryParams.tagName = this.$route.query.tagName;
         this.queryParams.originLat = this.locationFilter.lat;
         this.queryParams.originLong = this.locationFilter.long;
         this.queryParams.originLocation = this.locationFilter.location;
@@ -610,6 +611,9 @@ export default {
       }
       if (this.queryParams.cityName) {
         this.$route.query.cityName = "";
+      }
+      if(this.queryParams.tagName){
+        this.queryParams.tagName = "";
       }
     },
     changeCategoryFilter() {
