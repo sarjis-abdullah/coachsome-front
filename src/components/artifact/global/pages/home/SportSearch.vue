@@ -66,7 +66,7 @@ import { pathData } from "@/data";
 
 const group = {
   SPORT: "Sport",
-  TAG: "TAG",
+  TAG: "Tag",
   CITY: "City",
   NAME: "Name"
 };
@@ -129,6 +129,12 @@ export default {
           this.loading = false;
         });
     }
+  },
+  mounted() {
+    group.SPORT = this.$i18n.t('home_search_group_item_sport');
+    group.TAG = this.$i18n.t('home_search_group_item_tag');
+    group.CITY = this.$i18n.t('home_search_group_item_city');
+    group.NAME = this.$i18n.t('home_search_group_item_name');
   },
   methods: {
     handleSelect(item) {
