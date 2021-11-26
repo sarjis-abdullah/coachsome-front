@@ -345,9 +345,13 @@
                             </v-col>
                           </v-row>
                           <v-row>
-                              <v-col>
-                                  <v-btn color="primary-light-1" class="px-12 white--text">Save Changes</v-btn>
-                              </v-col>
+                            <v-col>
+                              <v-btn
+                                color="primary-light-1"
+                                class="px-12 white--text"
+                                >Save Changes</v-btn
+                              >
+                            </v-col>
                           </v-row>
                         </v-col>
                       </v-row>
@@ -357,7 +361,82 @@
                 <v-tab-item>
                   <v-card flat class="body-bg">
                     <v-card-text>
-                      Security
+                      <div class="security-title">
+                        Verify your email and phone number
+                      </div>
+                      <v-row class="mt-5">
+                        <v-col cols="4" class="d-flex align-center">
+                          <v-icon>mdi-email-outline</v-icon>
+                          <div class="security-subtitle">
+                            Email
+                          </div>
+                        </v-col>
+                        <v-col cols="8">
+                          <v-btn depressed>
+                            Verify
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                      <v-row class="mt-5">
+                        <v-col cols="4" class="d-flex align-center">
+                          <v-icon>mdi-phone</v-icon>
+                          <div class="security-subtitle">
+                            Phone number
+                          </div>
+                        </v-col>
+                        <v-col cols="8">
+                          <v-btn depressed color="success">
+                            Verified
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col>
+                          <div class="line"></div>
+                        </v-col>
+                      </v-row>
+                      <div class="security-title mt-5">
+                        Link your social accounts
+                      </div>
+                      <v-row class="mt-5">
+                        <v-col cols="4" class="d-flex align-center">
+                          <v-icon color="#4267B2">mdi-facebook</v-icon>
+                          <div class="security-subtitle">
+                            Facebook
+                          </div>
+                        </v-col>
+                        <v-col cols="8">
+                          <v-btn depressed>
+                            Connect
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                      <v-row class="mt-5">
+                        <v-col cols="4" class="d-flex align-center">
+                          <v-icon color="#EB4335">mdi-google</v-icon>
+                          <div class="security-subtitle">
+                            Google
+                          </div>
+                        </v-col>
+                        <v-col cols="8">
+                          <v-btn depressed color="success">
+                            Connected
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                            <v-row class="mt-5">
+                        <v-col cols="4" class="d-flex align-center">
+                          <v-icon color="#47ACDF">mdi-twitter</v-icon>
+                          <div class="security-subtitle">
+                            Twitter
+                          </div>
+                        </v-col>
+                        <v-col cols="8">
+                          <v-btn depressed color="success">
+                            Connected
+                          </v-btn>
+                        </v-col>
+                      </v-row>
                     </v-card-text>
                   </v-card>
                 </v-tab-item>
@@ -371,13 +450,9 @@
 </template>
 
 <script>
-import { coachSettingApi, coachTimezoneApi } from "@/api";
-import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 export default {
   layout: "athlete",
-  components: {
-    ClientBackFooter
-  },
+  components: {},
   data() {
     return {
       tab: null,
@@ -386,33 +461,13 @@ export default {
         email: "",
         password: ""
       },
-      defaultSelected: { id: 1, code: 88 },
-      items: [
-        { id: 1, code: "Denmark" },
-        { id: 2, code: "Australia" }
-      ],
       form: {
         isValidPasswordForm: true,
-        contactInformation: {
-          firstName: "",
-          lastName: "",
-          address: "",
-          zipCode: "",
-          city: "",
-          lat: "",
-          long: "",
-          country: "",
-          timezone: ""
-        },
         email: "",
         password: {
           oldPassword: "",
           newPassword: ""
-        },
-        timeZone: "",
-        countryList: [],
-        notifications: [],
-        activeNotifications: []
+        }
       },
       rule: {
         oldPassword: [],
@@ -420,14 +475,8 @@ export default {
       }
     };
   },
-  watch: {
-    "form.contactInformation.country": function() {}
-  },
-  computed: {
-    isTheCountryCodeDk() {
-      return this.form.contactInformation.country == "DK";
-    }
-  },
+  watch: {},
+  computed: {},
   created() {
     this.rule = {
       oldPassword: [v => !!v || this.$i18n.t("valid_pass_required")],
@@ -442,155 +491,10 @@ export default {
   },
   mounted() {},
   methods: {
-    handleCountryChange() {
-      this.form.contactInformation.long = "";
-      this.form.contactInformation.lat = "";
-      this.form.contactInformation.zipCode = "";
-      this.form.contactInformation.city = "";
-      this.form.contactInformation.address = "";
-      this.fetchTimeZone(this.form.contactInformation.country);
-    },
-    async handleSaveBtnClick() {
-      try {
-        let payload = {
-          firstName: this.form.contactInformation.firstName,
-          lastName: this.form.contactInformation.lastName,
-          cca2: this.form.contactInformation.country,
-          zipCode: this.form.contactInformation.zipCode,
-          lat: this.form.contactInformation.lat,
-          long: this.form.contactInformation.long,
-          city: this.form.contactInformation.city,
-          address: this.form.contactInformation.address,
-          timezone: this.form.contactInformation.timezone,
-          notificatonCategories: this.form.activeNotifications.map(
-            item => item.id
-          )
-        };
-        let { data } = await coachSettingApi(this.$axios).updateSetting(
-          payload
-        );
-        console.log(data);
-        if (data.message) {
-          this.$toast.success(data.message);
-        }
-      } catch (error) {
-        let { data } = error.response;
-        if (data.message) {
-          this.$toast.error(data.message);
-        }
-      }
-    },
-    async handlePasswordChangeBtn() {
-      if (this.$refs.passwordForm.validate()) {
-        try {
-          let payload = {
-            oldPassword: this.form.password.oldPassword,
-            newPassword: this.form.password.newPassword
-          };
-          let { data } = await coachSettingApi(this.$axios).changePassword(
-            payload
-          );
-          if (data.message) {
-            this.$toast.success(data.message);
-          }
-          this.resetPasswordForm();
-        } catch (error) {
-          this.resetPasswordForm();
-          let { data } = error.response;
-          if (data.message) {
-            this.$toast.error(data.message);
-          }
-        }
-      }
-    },
-    resetPasswordForm() {
-      this.$refs.passwordForm.reset();
-    },
-    emailResetCancelHandle() {
-      this.emailReset.dialog = false;
-    },
-    async emailResetSaveHandle() {
-      try {
-        let payload = {
-          email: this.emailReset.email,
-          password: this.emailReset.password
-        };
-        let { data } = await coachSettingApi(this.$axios).changeEmail(payload);
-        if (data.message) {
-          this.$toast.success(data.message);
-        }
-        console.log(data);
-      } catch (error) {
-        let { data } = error.response;
-        if (data.message) {
-          this.$toast.error(data.message);
-        }
-      }
-
-      this.emailReset.dialog = true;
-    },
     emailClickHandler() {
       this.emailReset.email = "";
       this.emailReset.password = "";
       this.emailReset.dialog = true;
-    },
-    async fetchTimeZone(val) {
-      let params = {
-        cca2: val
-      };
-
-      let { data } = await coachTimezoneApi(this.$axios).getTimezone(params);
-
-      if (data.timezone) {
-        this.form.contactInformation.timezone = data.timezone;
-      }
-    },
-    async fetchSettings() {
-      let { data } = await coachSettingApi(this.$axios).get();
-
-      if (data.notificationCategoryList.length) {
-        data.notificationCategoryList.forEach(item => {
-          this.form.notifications.push(item);
-        });
-      }
-
-      if (data.countryList) {
-        data.countryList.forEach(item => {
-          this.form.countryList.push(item);
-        });
-      }
-
-      if (data.userSetting) {
-        this.form.contactInformation.firstName = data.userSetting.firstName;
-        this.form.contactInformation.lastName = data.userSetting.lastName;
-        this.form.contactInformation.country = data.userSetting.country;
-        this.form.contactInformation.address = data.userSetting.address;
-        this.form.contactInformation.zipCode = data.userSetting.zipCode;
-        this.form.contactInformation.city = data.userSetting.city;
-        this.form.contactInformation.timezone = data.userSetting.timezone;
-        this.form.activeNotifications =
-          data.userSetting.activeNotificationCategories;
-        this.form.email = data.userSetting.email;
-      }
-
-      console.log(data);
-    },
-    changeNotification(notification) {
-      let hasNotificaion = false;
-      this.form.activeNotifications.forEach(item => {
-        if (item.id == notification.id) {
-          hasNotificaion = true;
-        }
-      });
-      if (hasNotificaion) {
-        let index = this.form.activeNotifications.findIndex(
-          item => item.id == notification.id
-        );
-        console.log(index);
-        this.form.activeNotifications.splice(index, 1);
-      } else {
-        this.form.activeNotifications.push(notification);
-      }
     }
   }
 };
@@ -600,64 +504,23 @@ export default {
 .setting-page--athlete {
   background: $body-bg;
   height: 100%;
-  .invoice-identity,
-  .notification {
-    .v-input .v-input__slot {
-      box-shadow: none;
-      margin-bottom: 0px !important;
-      .v-label {
-        color: #49556a !important;
-      }
-    }
+
+  .security-title {
+    font-family: $font-family;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 20px;
+    color: #6e7491;
   }
 
-  .square {
-    width: 20px;
-    height: 20px;
-    border: 20px solid $primary-light-1;
-    background: #15577c;
-  }
-
-  .dawa-autocomplete-suggestions {
-    margin: 0.3em 0 0 0;
-    padding: 0;
-    text-align: left;
-    border-radius: 0.3125em;
-    background: #fcfcfc;
-    box-shadow: 0 0.0625em 0.15625em rgba(0, 0, 0, 0.15);
-    position: absolute;
-    left: 0;
-    right: 0;
-    z-index: 9999;
-    overflow-y: auto;
-    box-sizing: border-box;
-  }
-
-  .dawa-autocomplete-suggestions .dawa-autocomplete-suggestion {
-    margin: 0;
-    list-style: none;
-    cursor: pointer;
-    padding: 0.4em 0.6em;
-    color: #333;
-    border: 0.0625em solid #ddd;
-    border-bottom-width: 0;
-  }
-  value
-    .dawa-autocomplete-suggestions
-    .dawa-autocomplete-suggestion:first-child {
-    border-top-left-radius: inherit;
-    border-top-right-radius: inherit;
-  }
-
-  .dawa-autocomplete-suggestions .dawa-autocomplete-suggestion:last-child {
-    border-bottom-left-radius: inherit;
-    border-bottom-right-radius: inherit;
-    border-bottom-width: 0.0625em;
-  }
-
-  .dawa-autocomplete-suggestions .dawa-autocomplete-suggestion.dawa-selected,
-  .dawa-autocomplete-suggestions .dawa-autocomplete-suggestion:hover {
-    background: #f0f0f0;
+  .security-subtitle {
+    margin-left: 20px;
+    font-family: $font-family;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 25px;
+    text-transform: capitalize;
+    color: #7c8db0;
   }
 }
 </style>
