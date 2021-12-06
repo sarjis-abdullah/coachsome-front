@@ -8,3 +8,4 @@ export { default as roleData } from "./roleData";
 export { default as badgeData } from "./badgeData";
 export { default as contactData } from "./contactData";
 export { default as messageData } from "./messageData";
+export { default as settingValueData } from "./settingValueData";

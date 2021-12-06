@@ -1,0 +1,245 @@
+<template>
+  <div class="gift-page">
+    <div>
+      <img
+        class="gift-hero-image"
+        :src="require(`@/assets/images/gift/hero.png`)"
+        alt="hero image"
+      />
+      <div class="d-flex justify-center">
+        <div class="certificate">
+          <div class="certificate__title">
+            GIFT CERTIFICATE
+          </div>
+          <div class="certificate__description">
+            Suprise someone this holiday with a personal gift through a personal
+            trainer that will help them get to the next level
+          </div>
+        </div>
+      </div>
+    </div>
+    <v-container class="mt-15 mb-15">
+      <v-row justify="center">
+        <v-col cols="12" md="10" class="text-center">
+          <div class="gift-card-title">
+            Select the amount on the gift certificate
+          </div>
+        </v-col>
+        <v-col cols="12" md="10">
+          <v-item-group
+            v-model="selectedAmount"
+            @change="handleGiftAmmountSelect"
+          >
+            <v-container>
+              <v-row>
+                <v-col
+                  v-for="(amountItem, i) in amountItems"
+                  :key="i"
+                  cols="12"
+                  md="4"
+                >
+                  <v-item v-slot="{ active, toggle }">
+                    <v-card
+                      rounded="lg"
+                      :class="['gift-card', { 'gift-card--border': !active }]"
+                      :color="active ? 'primary-light-2' : ''"
+                      height="200"
+                      @click="toggle"
+                    >
+                      <div class="gift-card__check" v-if="active">
+                        <v-icon color="white">mdi-check-circle-outline</v-icon>
+                      </div>
+                      <div
+                        :class="[
+                          'gift-card__body',
+                          { 'primary--text': !active }
+                        ]"
+                      >
+                        {{ amountItem.value + " " + amountItem.currency }}
+                      </div>
+                    </v-card>
+                  </v-item>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-item-group>
+        </v-col>
+      </v-row>
+
+      <v-row justify="center">
+        <v-col cols="12" class="text-center">
+          <div class="or-text">
+            or
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row justify="center">
+        <v-col cols="12" md="4" class="text-center">
+          <v-text-field
+            v-model="customAmmount"
+            class="text-field--gift-card"
+            solo
+            type="number"
+            label="Enter amount"
+            hide-details
+            flat
+            @click="handleInputClick"
+          >
+            <template v-slot:append>
+              <div>
+                {{ ammountCurrency }}
+              </div>
+            </template>
+          </v-text-field>
+        </v-col>
+      </v-row>
+
+      <v-row justify="center">
+        <v-col cols="12" class="text-center">
+          <v-btn
+            class="px-15"
+            x-large
+            color="#EDB041"
+            @click="handleBuyNowBtnClick"
+          >
+            BUY NOW
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
+</template>
+
+<script>
+import { pathData } from "@/data";
+
+export default {
+  data() {
+    return {
+      selectedAmount: null,
+      customAmmount: null,
+      ammountCurrency: "DKK",
+      amountItems: [
+        {
+          id: 1,
+          value: 100,
+          currency: "DKK"
+        },
+        {
+          id: 2,
+          value: 500,
+          currency: "DKK"
+        },
+        {
+          id: 3,
+          value: 1000,
+          currency: "DKK"
+        }
+      ]
+    };
+  },
+  methods: {
+    handleGiftAmmountSelect() {
+      this.customAmmount = null;
+    },
+    handleInputClick() {
+      this.selectedAmount = null;
+    },
+    handleBuyNowBtnClick() {
+      if (this.selectedAmount != null) {
+        const { value } = this.amountItems[this.selectedAmount];
+        this.$router.push(
+          this.localePath(pathData.pages.giftCheckout + "?amount=" + value + "&currency="+ this.ammountCurrency)
+        );
+        console.log("selectedAmount")
+      }
+      if (this.customAmmount) {
+        this.$router.push(
+          this.localePath(
+            pathData.pages.giftCheckout + "?amount=" + this.customAmmount + "&currency="+ this.ammountCurrency
+          )
+        );
+      }
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.gift-page {
+  background: $body-bg;
+  height: 100%;
+  .certificate {
+    background: #f7fafc;
+    opacity: 0.95;
+    max-width: 70%;
+    margin-top: -150px;
+    padding: 100px 80px;
+    box-shadow: 0px 10px 20px rgba(159, 174, 194, 0.15);
+    border-radius: 24px;
+    &__title {
+      font-family: $font-family;
+      font-weight: bold;
+      font-size: 48px;
+      line-height: 65px;
+      text-align: center;
+      color: $primary-light-1;
+    }
+    &__description {
+      font-family: $font-family;
+      font-weight: bold;
+      font-size: 25px;
+      line-height: 34px;
+      text-align: center;
+      color: $primary-light-2;
+    }
+  }
+  .gift-hero-image {
+    width: 100%;
+  }
+  .or-text {
+    font-family: $font-family;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 33px;
+    color: #6f8098;
+  }
+  .text-field--gift-card {
+    border: 5px solid #cad5e1;
+    box-sizing: border-box;
+    border-radius: 12px;
+  }
+  .gift-card-title {
+    font-family: $font-family;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 33px;
+    color: #000000;
+  }
+  .gift-card {
+    position: relative;
+    width: 100%;
+    &--border {
+      border: 5px solid #cad5e1;
+    }
+    &__check {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+    }
+    &__body {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      font-family: $font-family;
+      font-weight: bold;
+      font-size: 24px;
+      line-height: 33px;
+      color: #f7fafc;
+    }
+  }
+}
+</style>

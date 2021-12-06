@@ -45,6 +45,11 @@ export default {
         href:
           "https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap"
       },
+      {
+        rel: "stylesheet",
+        href:
+          "https://fonts.googleapis.com/css2?family=Pacifico:wght@400&display=swap"
+      },
 
       // Leaflet
       {
@@ -100,7 +105,8 @@ export default {
     { src: "~/plugins/vue-tribute", mode: "client" },
     { src: "~/plugins/socket", mode: "client" },
     { src: "~/plugins/v-emoji-picker", mode: "client" },
-    { src: "~/plugins/vuelidate" }
+    { src: "~/plugins/vuelidate" },
+    { src: '~/plugins/vue-html2pdf', mode: 'client' }
   ],
 
   /**
