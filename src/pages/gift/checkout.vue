@@ -284,6 +284,7 @@
 <script>
 import { currencyService } from "@/services";
 import DownloadableCard from "@/components/artifact/global/pages/gift/checkout/DownloadableCard";
+import { endpoint } from "../../api";
 
 export default {
   components: { DownloadableCard },
@@ -362,8 +363,23 @@ export default {
     handleContinueBtnClick() {
       this.seletedStep = 2;
     },
-    handleConfirmAndPayBtnClick() {
-      console.log("step 2");
+    async handleConfirmAndPayBtnClick() {
+      try {
+        const payload = {
+          currency: this.currency,
+          totalAmount: this.totalAmount,
+          paymentMethod: this.selectedPaymentMethod
+        };
+        const { data } = await this.$axios.post(
+          endpoint.GIFT_CARDS_PAY_POST,
+          payload
+        );
+        if (data.data.link) {
+          window.location.assign(data.data.link);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
     nextStep(n) {
       if (n === this.steps) {

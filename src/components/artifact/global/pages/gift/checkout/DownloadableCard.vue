@@ -187,11 +187,17 @@ export default {
       background: $primary-light-1;
       &__title {
         width: 100%;
+        padding: 20px;
         text-align: center;
+        img{
+           height: 26px;
+        }
       }
       &__description {
         font-family: $font-family;
         font-weight: bold;
+        padding-top: 12px;
+        padding-bottom: 20px;
         font-size: 48px;
         line-height: 65px;
         text-align: center;
