@@ -10,7 +10,6 @@
                   :key="n.value"
                   :complete="seletedStep > n.value"
                   :step="n.value"
-                  editable
                 >
                   {{ n.name }}
                 </v-stepper-step>
@@ -103,7 +102,11 @@
                             or
                           </div>
                           <div>
-                            <v-btn color="primary-light-1" text>
+                            <v-btn
+                              color="primary-light-1"
+                              text
+                              @click="handleChangeAmountBtnClick"
+                            >
                               CHANGE AMOUNT
                             </v-btn>
                           </div>
@@ -147,6 +150,7 @@
                           </div>
                           <div class="card__body">
                             <v-textarea
+                              v-model="message"
                               ref="messageBoxTextArea"
                               outlined
                               flat
@@ -243,6 +247,7 @@
                   </div>
                   <div class="gift-confirmation__middle">
                     <v-btn
+                      :loading="isDownloading"
                       @click="printDownload"
                       color="#EDB041"
                       x-large
@@ -282,9 +287,10 @@
 </template>
 
 <script>
-import { currencyService } from "@/services";
+import { currencyService, giftService } from "@/services";
 import DownloadableCard from "@/components/artifact/global/pages/gift/checkout/DownloadableCard";
 import { endpoint } from "../../api";
+import { pathData } from "@/data";
 
 export default {
   components: { DownloadableCard },
@@ -295,6 +301,8 @@ export default {
       totalAmount: 0,
       currency: "",
       seletedStep: 1,
+      isDownloading: false,
+      message: "",
       steps: [
         {
           name: "Order details",
@@ -350,32 +358,87 @@ export default {
 
   watch: {},
   mounted() {
-    const { amount, currency } = this.$route.query;
+    const { amount, currency, status } = this.$route.query;
     this.selectedAmount = amount;
     this.totalAmount = amount;
     this.currency = currency;
+
+    let gift = giftService.getGift();
+    if (!gift) {
+      gift = {
+        step: 1
+      };
+      giftService.setGift(gift);
+    }
+    gift = giftService.getGift();
+    this.seletedStep = gift.step;
+    if (status == "success") {
+      this.seletedStep = 3;
+      gift = {
+        step: 3
+      };
+      giftService.setGift(gift);
+    }
   },
 
   methods: {
-    printDownload() {
-      this.$refs.DownloadComp.generatePdf();
+    handleChangeAmountBtnClick() {
+      this.$router.push(this.localePath(pathData.pages.gift));
+    },
+    async printDownload() {
+      // this.$refs.DownloadComp.generatePdf();
+      const { id } = this.$route.query;
+      this.isDownloading = true;
+      try {
+        const response = await this.$axios.get(
+          endpoint.GIFT_CARDS_ID_DOWNLOAD_GET(id),
+          {
+            responseType: "blob"
+          }
+        );
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "gift-card.pdf");
+        document.body.appendChild(link);
+        link.click();
+      } catch (error) {
+        if (errro.response.data.error) {
+          this.$toast.error(errro.response.data.error.message);
+        }
+      } finally {
+        this.isDownloading = false;
+      }
     },
     handleContinueBtnClick() {
       this.seletedStep = 2;
+      let gift = giftService.getGift();
+      if (gift) {
+        gift = {
+          step: 2
+        };
+        giftService.setGift(gift);
+      }
     },
     async handleConfirmAndPayBtnClick() {
       try {
         const payload = {
+          message: this.message,
           currency: this.currency,
           totalAmount: this.totalAmount,
           paymentMethod: this.selectedPaymentMethod
         };
-        const { data } = await this.$axios.post(
-          endpoint.GIFT_CARDS_PAY_POST,
-          payload
-        );
-        if (data.data.link) {
-          window.location.assign(data.data.link);
+        if (this.selectedPaymentMethod) {
+          const { data } = await this.$axios.post(
+            endpoint.GIFT_CARDS_PAY_POST,
+            payload
+          );
+          if (data.data.link) {
+            window.location.assign(data.data.link);
+          }
+        } else {
+          this.$toast.error("Select a payment method");
         }
       } catch (error) {
         console.log(error);

@@ -96,6 +96,11 @@
                     {{ $t("footer_link_fefund_blog") }}
                   </span>
                 </div>
+                <div class="list__item">
+                  <span style="cursor:pointer;" @click="handleGiftBtnClick">
+                    {{ $t("Gift") }}
+                  </span>
+                </div>
               </div>
             </v-col>
           </v-row>
@@ -249,13 +254,17 @@ export default {
         terms: pathData.pages.terms,
         faq: pathData.pages.faq,
         refundPolicy: pathData.pages.refundPolicy,
-        blog: pathData.pages.blog
+        blog: pathData.pages.blog,
+        gift: pathData.pages.gift
       },
       currentYear: new Date().getFullYear()
     };
   },
   computed: {},
   methods: {
+    handleGiftBtnClick() {
+      this.$router.push(this.localePath(this.uri.gift));
+    },
     handleBlogBtnClick() {
       // let win = window.open("https://blog.coachsome.com", "_blank");
       // win.focus();

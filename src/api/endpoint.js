@@ -59,5 +59,5 @@ export default {
 
   // gift-cards
   GIFT_CARDS_PAY_POST: "/gift-cards/pay",
-
+  GIFT_CARDS_ID_DOWNLOAD_GET: id => `/gift-cards/${id}/download`
 };

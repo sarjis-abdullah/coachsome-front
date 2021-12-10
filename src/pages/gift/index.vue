@@ -113,6 +113,7 @@
 
 <script>
 import { pathData } from "@/data";
+import { giftService } from "@/services";
 
 export default {
   data() {
@@ -139,6 +140,9 @@ export default {
       ]
     };
   },
+  mounted() {
+    giftService.destroyGift();
+  },
   methods: {
     handleGiftAmmountSelect() {
       this.customAmmount = null;
@@ -150,14 +154,24 @@ export default {
       if (this.selectedAmount != null) {
         const { value } = this.amountItems[this.selectedAmount];
         this.$router.push(
-          this.localePath(pathData.pages.giftCheckout + "?amount=" + value + "&currency="+ this.ammountCurrency)
+          this.localePath(
+            pathData.pages.giftCheckout +
+              "?amount=" +
+              value +
+              "&currency=" +
+              this.ammountCurrency
+          )
         );
-        console.log("selectedAmount")
+        console.log("selectedAmount");
       }
       if (this.customAmmount) {
         this.$router.push(
           this.localePath(
-            pathData.pages.giftCheckout + "?amount=" + this.customAmmount + "&currency="+ this.ammountCurrency
+            pathData.pages.giftCheckout +
+              "?amount=" +
+              this.customAmmount +
+              "&currency=" +
+              this.ammountCurrency
           )
         );
       }
