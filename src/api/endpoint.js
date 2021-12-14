@@ -2,11 +2,11 @@
  * Here we follow some pattern for naming key
  * key = resource-name + method name
  * Method name follow BREAD strategy
- * B = Browse -> GET
- * R = Read -> GET
- * E = Edit -> PUT
- * A = Append -> POST
- * D = Delete -> DELETE
+ * Browse -> GET
+ * Read -> GET
+ * Edit -> PUT
+ * Append -> POST
+ * Delete -> DELETE
  */
 
 export default {
@@ -43,5 +43,21 @@ export default {
   GROUPS_ID_SAVE_IMAGE_POST: id => `/groups/${id}/save-image`,
 
   // marketplaces
-  MARKETPLACE_SEARCHES: "/marketplace-searches"
+  MARKETPLACE_SEARCHES: "/marketplace-searches",
+
+  // athlete
+  ATHLETE_SETTINGS_RESET_EMAIL_PUT: "/athlete/settings/reset-email",
+  ATHLETE_SETTINGS_RESET_PASSWORD_PUT: "/athlete/settings/reset-password",
+  ATHLETE_SETTINGS_GET: "/athlete/settings",
+  ATHLETE_SETTINGS_PUT: id => `/athlete/settings/${id}`,
+
+  // accounts
+  ACCOUNTS_DELETE: "/accounts/delete",
+
+  // securities
+  SECURITIES_GET: "/securities",
+
+  // gift-cards
+  GIFT_CARDS_PAY_POST: "/gift-cards/pay",
+  GIFT_CARDS_ID_DOWNLOAD_GET: id => `/gift-cards/${id}/download`
 };
