@@ -32,7 +32,7 @@
                     <v-row>
                       <v-col cols="12" md="5">
                         <div class="order-details-title mt-5 mb-5">
-                          Selected Gift Card Amount
+                          {{ $t("checkout_selected_amount") }}
                         </div>
                         <v-card
                           rounded="lg"
@@ -64,7 +64,7 @@
                         >
                           <div class="charge-box__item">
                             <div class="charge-box__item-left">
-                              {{ $t("Gift Card Amount") }}
+                              {{ $t("charge_box_gift_card_amount") }}
                             </div>
                             <div class="charge-box__item-right">
                               {{
@@ -95,11 +95,12 @@
                             class="px-10 white--text text-normal rounded-lg"
                             color="#EDB041"
                             @click="handleContinueBtnClick"
-                            >Continue</v-btn
                           >
+                            {{ $t("checkout_label_continue") }}
+                          </v-btn>
 
                           <div class="or-text mx-5">
-                            or
+                            {{ $t("checkout_text_or") }}
                           </div>
                           <div>
                             <v-btn
@@ -107,12 +108,12 @@
                               text
                               @click="handleChangeAmountBtnClick"
                             >
-                              CHANGE AMOUNT
+                              {{ $t("checkout_label_change_amount") }}
                             </v-btn>
                           </div>
                         </div>
                         <div class="helper-text">
-                          You will not be charged yet
+                          {{ $t("checkout_helper_text_not_charged_yet") }}
                         </div>
                       </v-col>
                     </v-row>
@@ -145,7 +146,7 @@
                         <div class="card mt-10">
                           <div class="card__header">
                             <div class="card__title">
-                              Personal message for the recipent
+                              {{ $t("checkout_personal_message_title") }}
                             </div>
                           </div>
                           <div class="card__body">
@@ -155,9 +156,7 @@
                               outlined
                               flat
                               :hint="
-                                $t(
-                                  'Write a personal message to the person that will get the gift certificate and maybe a suggestion to a coach that they might choose.'
-                                )
+                                $t('checkout_personal_message_descritpiotn')
                               "
                             />
                           </div>
@@ -179,7 +178,7 @@
                         >
                           <div class="charge-box__item">
                             <div class="charge-box__item-left">
-                              {{ "Amount on the certificate" }}
+                              {{ "checkout_title_amount_of_the_certificate" }}
                             </div>
                             <div class="charge-box__item-right">
                               {{
@@ -230,8 +229,9 @@
                           @click="handleConfirmAndPayBtnClick"
                           class="px-10 white--text text-normal"
                           color="primary-light-1"
-                          >Confirm & Pay</v-btn
                         >
+                          {{ $t("checkout_label_confirm_and_pay") }}
+                        </v-btn>
                       </v-col>
                     </v-row>
                   </v-card-text>
@@ -253,28 +253,11 @@
                       x-large
                       class="text-normal white--text font-weight-bold"
                     >
-                      Download Gift Card
+                      {{ $t("checkout_label_download_gift_card") }}
                     </v-btn>
-                    <VueHtml2pdf
-                      filename="gift-card"
-                      :manual-pagination="true"
-                      :enable-download="true"
-                      ref="DownloadComp"
-                    >
-                      <section slot="pdf-content">
-                        <DownloadableCard
-                          code="fd2f1s2f1sd21fs1fs"
-                          value="1000"
-                          currency="DKK"
-                          first-name="Hafijur"
-                          last-name="Rahaman"
-                        />
-                      </section>
-                    </VueHtml2pdf>
                   </div>
                   <div class="gift-confirmation__bottom">
-                    The Gift Card have also been mailed to you attached to your
-                    receipt.
+                    {{ $t("checkout_helper_text_mailed_attach") }}
                   </div>
                 </div>
               </v-stepper-content>
@@ -288,12 +271,11 @@
 
 <script>
 import { currencyService, giftService } from "@/services";
-import DownloadableCard from "@/components/artifact/global/pages/gift/checkout/DownloadableCard";
 import { endpoint } from "../../api";
 import { pathData } from "@/data";
 
 export default {
-  components: { DownloadableCard },
+  components: {},
   data() {
     return {
       currencyService,

@@ -9,11 +9,10 @@
       <div class="d-flex justify-center">
         <div class="certificate">
           <div class="certificate__title">
-            GIFT CERTIFICATE
+            {{ $t("gift_title_gift_certificate") }}
           </div>
           <div class="certificate__description">
-            Suprise someone this holiday with a personal gift through a personal
-            trainer that will help them get to the next level
+            {{ $t("gift_description_top") }}
           </div>
         </div>
       </div>
@@ -22,7 +21,7 @@
       <v-row justify="center">
         <v-col cols="12" md="10" class="text-center">
           <div class="gift-card-title">
-            Select the amount on the gift certificate
+            {{ $t("gift_amount_title") }}
           </div>
         </v-col>
         <v-col cols="12" md="10">
@@ -103,7 +102,7 @@
             color="#EDB041"
             @click="handleBuyNowBtnClick"
           >
-            BUY NOW
+            {{ $t("gift_label_buy_now") }}
           </v-btn>
         </v-col>
       </v-row>

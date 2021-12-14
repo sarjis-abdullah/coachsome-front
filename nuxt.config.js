@@ -106,7 +106,6 @@ export default {
     { src: "~/plugins/socket", mode: "client" },
     { src: "~/plugins/v-emoji-picker", mode: "client" },
     { src: "~/plugins/vuelidate" },
-    { src: '~/plugins/vue-html2pdf', mode: 'client' }
   ],
 
   /**
