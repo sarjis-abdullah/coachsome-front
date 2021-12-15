@@ -475,10 +475,18 @@
                           </div>
                         </v-col>
                         <v-col cols="8">
-                          <v-btn color="success" depressed v-if="security.isEmailVerified">
+                          <v-btn
+                            color="success"
+                            depressed
+                            v-if="security.isEmailVerified"
+                          >
                             Verified
                           </v-btn>
-                           <v-btn depressed v-if="!security.isEmailVerified">
+                          <v-btn
+                            depressed
+                            v-if="!security.isEmailVerified"
+                            @click="handleEmailVerifyBtnClick"
+                          >
                             Verify
                           </v-btn>
                         </v-col>
@@ -491,7 +499,12 @@
                           </div>
                         </v-col>
                         <v-col cols="8">
-                          <v-btn depressed color="success" disabled>
+                          <v-btn
+                            depressed
+                            color="success"
+                            disabled
+                            @click="handlePhoneVerifyBtnClick"
+                          >
                             Verify
                           </v-btn>
                         </v-col>
@@ -512,7 +525,10 @@
                           </div>
                         </v-col>
                         <v-col cols="8">
-                          <v-btn depressed>
+                          <v-btn
+                            depressed
+                            @click="handleFacebookVerifyBtnClick"
+                          >
                             Connect
                           </v-btn>
                         </v-col>
@@ -525,7 +541,11 @@
                           </div>
                         </v-col>
                         <v-col cols="8">
-                          <v-btn depressed color="success">
+                          <v-btn
+                            depressed
+                            color="success"
+                            @click="handleGoogleVerifyBtnClick"
+                          >
                             Connected
                           </v-btn>
                         </v-col>
@@ -538,7 +558,11 @@
                           </div>
                         </v-col>
                         <v-col cols="8">
-                          <v-btn depressed color="success">
+                          <v-btn
+                            depressed
+                            color="success"
+                            @click="handleTwitterVerifyBtnClick"
+                          >
                             Connected
                           </v-btn>
                         </v-col>
@@ -624,9 +648,63 @@ export default {
     this.securityDetails();
   },
   methods: {
+    async handleEmailVerifyBtnClick() {
+      try {
+        const { data } = await this.$axios.post(
+          endpoint.VERIFICATIONS_EMAIL_VERIFY_POST
+        );
+        console.log(data);
+      } catch (error) {
+        this.$toast.error(error.response.data.error.message);
+      }
+    },
+    async handlePhoneVerifyBtnClick() {
+      try {
+        const { data } = await this.$axios.post(
+          endpoint.VERIFICATIONS_EMAIL_VERIFY_POST
+        );
+        console.log(data);
+      } catch (error) {
+        this.$toast.error(error.response.data.error.message);
+      }
+    },
+    async handleFacebookVerifyBtnClick() {
+      try {
+        const { data } = await this.$axios.post(
+          endpoint.VERIFICATIONS_FACEBOOK_VERIFY_POST
+        );
+        console.log(data);
+      } catch (error) {
+        this.$toast.error(error.response.data.error.message);
+      }
+    },
+    async handleGoogleVerifyBtnClick() {
+      try {
+        const { data } = await this.$axios.post(
+          endpoint.VERIFICATIONS_GOOGLE_VERIFY_POST
+        );
+        console.log(data);
+      } catch (error) {
+        this.$toast.error(error.response.data.error.message);
+      }
+    },
+    async handleTwitterVerifyBtnClick() {
+      try {
+        const { data } = await this.$axios.post(
+          endpoint.VERIFICATIONS_TWITTER_VERIFY_POST
+        );
+        console.log(data);
+      } catch (error) {
+        this.$toast.error(error.response.data.error.message);
+      }
+    },
     async securityDetails() {
       try {
         const { data } = await this.$axios.get(endpoint.SECURITIES_GET);
+        if(data.data) {
+          this.security.isEmailVerified = data.data.emailVerifiedAt
+        }
+        console.log(data)
       } catch (error) {
         if (error.response.data.error) {
           this.$toast.error(error.response.data.error.message);
