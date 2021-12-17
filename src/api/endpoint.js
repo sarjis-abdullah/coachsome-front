@@ -54,6 +54,12 @@ export default {
   // accounts
   ACCOUNTS_DELETE: "/accounts/delete",
 
+  // verifications
+  VERIFICATIONS_EMAIL_VERIFY_POST: "/verifications/email-verify",
+  VERIFICATIONS_FACEBOOK_VERIFY_POST: "/verifications/facebook-verify",
+  VERIFICATIONS_GOOGLE_VERIFY_POST: "/verifications/google-verify",
+  VERIFICATIONS_TWITTER_VERIFY_POST: "/verifications/twitter-verify",
+
   // securities
   SECURITIES_GET: "/securities",
 

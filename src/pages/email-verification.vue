@@ -8,11 +8,6 @@
               {{ message }}
             </v-col>
             <v-spacer></v-spacer>
-            <v-col class="shrink">
-              <v-btn @click="handleLoginBtnClick()" color="primary-light-1" outlined
-                >Login</v-btn
-              >
-            </v-col>
           </v-row>
         </v-alert>
         <v-alert v-if="isError" text prominent type="error">
@@ -21,14 +16,6 @@
               {{ message }}
             </v-col>
             <v-spacer></v-spacer>
-            <v-col class="shrink">
-              <v-btn
-                @click="handleRegisterBtnClick()"
-                color="primary-light-1"
-                outlined
-                >Register</v-btn
-              >
-            </v-col>
           </v-row>
         </v-alert>
       </v-col>
@@ -59,7 +46,7 @@ export default {
     },
     handleRegisterBtnClick() {
       this.$router.push(this.localePath(pathData.pages.register));
-    },
+    }
   },
   mounted() {
     this.loading = true;
@@ -69,8 +56,7 @@ export default {
       })
       .then(() => {
         this.isSuccess = true;
-        this.message =
-          "Your account is verified successfully. You can login now.";
+        this.message = "Successfully verified";
       })
       .catch(error => {
         this.isError = true;
