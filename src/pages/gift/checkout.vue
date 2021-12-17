@@ -178,7 +178,7 @@
                         >
                           <div class="charge-box__item">
                             <div class="charge-box__item-left">
-                              {{ "checkout_title_amount_of_the_certificate" }}
+                              {{ $t("checkout_title_amount_of_the_certificate") }}
                             </div>
                             <div class="charge-box__item-right">
                               {{
