@@ -49,12 +49,7 @@
             </v-row>
             <v-row justify="center" align="center" no-gutters>
               <v-col cols="11" md="6">
-                <SportSearch
-                  :items="categoryList"
-                  @on-item-select="
-                    goToMarketPlaceAndSearchByQueryParamCategoryName
-                  "
-                ></SportSearch>
+                <SportSearch />
                 <v-card color="transparent" elevation="0">
                   <v-card-text>
                     <div
@@ -529,8 +524,8 @@
           </v-row>
 
           <!-- become a coach -->
-          <v-row class="become-a-coach">
-            <v-col cols="12" md="6" class="">
+          <v-row class="become-a-coach pb-10">
+            <v-col class="pl-10" cols="12" md="6" align-self="center">
               <v-row>
                 <v-col>
                   <div class="become-a-coach__title">
@@ -633,33 +628,13 @@
               cols="12"
               md="6"
               class="px-0 py-0 my-0 d-none d-md-flex d-lg-flex"
-              align-self="end"
+              align-self="center"
             >
               <div class="become-coach-img">
-                <div class="become-coach-img__content">
-                  <img
-                    style="width: 100%;"
-                    src="@/assets/images/home/become-coach-img.png"
-                  />
-                </div>
-                <div class="become-coach-img__overlay">
-                  <div class="overlay">
-                    <div class="overlay__text">
-                      {{ $t("front_overlay_text_we_cover_all_sports") }}
-                    </div>
-                    <img
-                      style="width: 90%;"
-                      class="overlay__img"
-                      src="@/assets/images/home/become-coach-overlay.png"
-                    />
-                  </div>
-                </div>
-                <div class="become-coach-img__bg">
-                  <img
-                    style="width: 90%;"
-                    src="@/assets/images/home/become-coach-bg.png"
-                  />
-                </div>
+                <img
+                  style="width: 100%; height: 400px"
+                  src="@/assets/images/home/become-coach-img.svg"
+                />
               </div>
             </v-col>
           </v-row>
@@ -999,8 +974,7 @@ export default {
   created() {
     this.getCoach();
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     handleReviewTextClick() {
       this.$router.push(this.localePath(pathData.pages.baseReviews));

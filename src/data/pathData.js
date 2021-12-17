@@ -20,6 +20,8 @@ export default {
     emailVerification: "/email-verification",
     forgotPassword: "/password-forget",
     faq: "/faq",
+    gift: "/gift",
+    giftCheckout: "/gift/checkout",
     home: "/",
     homeOld: "/front",
     howItWork: "/how-it-works",

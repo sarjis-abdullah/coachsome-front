@@ -4,25 +4,24 @@
       'sport-search',
       {
         'sport-search--sm': $vuetify.breakpoint.smAndDown,
-        'sport-search--md': $vuetify.breakpoint.mdAndUp,
-      },
+        'sport-search--md': $vuetify.breakpoint.mdAndUp
+      }
     ]"
   >
     <v-autocomplete
       v-model="selectedValue"
       class="sport-search__input"
       ref="searchField"
-      @keyup.enter="handleEnterKeyBtnClick()"
-      @input="changeItem"
       :search-input.sync="search"
+      @keyup.enter="handleSelect"
+      @input="handleSelect"
       hide-no-data
       color="white"
-      :items="values"
-      item-text="name"
-      item-value="id"
+      :items="items"
+      :filter="item => item"
       block
       solo
-      :loading="isLoading"
+      :loading="loading"
       flat
       height="58px"
       hide-details
@@ -33,12 +32,18 @@
       <template v-slot:prepend-inner>
         <v-icon class="sport-search__icon">search</v-icon>
       </template>
+      <template v-slot:selection="{ item }">
+        <div>
+          {{ item.title }}
+        </div>
+      </template>
       <template v-slot:item="{ item }">
         <v-list-item-content>
           <v-list-item-title>
-            {{ $t(item.t_key) }}
+            {{ $t(item.title) }}
+            <small class="grey--text">( {{ item.group }} )</small>
           </v-list-item-title>
-          <v-list-item-subtitle></v-list-item-subtitle>
+          <v-list-item-subtitle> </v-list-item-subtitle>
         </v-list-item-content>
       </template>
     </v-autocomplete>
@@ -56,40 +61,127 @@
 </template>
 
 <script>
+import { endpoint } from "../../../../../api";
+import { pathData } from "@/data";
+
+const group = {
+  SPORT: "Sport",
+  TAG: "Tag",
+  CITY: "City",
+  NAME: "Name"
+};
+
 export default {
-  props: {
-    items: {
-      type: Array,
-    },
-  },
   data() {
     return {
-      isLoading: false,
+      loading: false,
       selectedValue: null,
-      values: [],
-      search: null,
+      items: [],
+      search: null
     };
   },
   watch: {
-    search() {
-      this.isLoading = true;
-      setTimeout(() => {
-        this.values = this.items;
-        this.isLoading = false;
-      }, 2000);
-    },
+    search(val) {
+      this.loading = true;
+      const params = {
+        key: val
+      };
+      this.$axios
+        .get(endpoint.MARKETPLACE_SEARCHES, { params })
+        .then(({ data }) => {
+          this.items = [];
+          if (data.categories.length) {
+            this.items.push({ header: group.SPORT });
+            data.categories.forEach(item => {
+              item.group = group.SPORT;
+              item.title = item.name;
+              this.items.push(item);
+            });
+          }
+          if (data.tags.length) {
+            this.items.push({ header: group.TAG });
+            data.tags.forEach(item => {
+              item.group = group.TAG;
+              item.title = item.name;
+              this.items.push(item);
+            });
+          }
+
+          if (data.locations.length) {
+            this.items.push({ header: group.CITY });
+            data.locations.forEach(item => {
+              item.group = group.CITY;
+              item.title = item.city;
+              this.items.push(item);
+            });
+          }
+
+          if (data.users.length) {
+            this.items.push({ header: group.NAME });
+            data.users.forEach(item => {
+              item.group = group.NAME;
+              item.title = item.profileName;
+              this.items.push(item);
+            });
+          }
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    }
+  },
+  mounted() {
+    group.SPORT = this.$i18n.t('home_search_group_item_sport');
+    group.TAG = this.$i18n.t('home_search_group_item_tag');
+    group.CITY = this.$i18n.t('home_search_group_item_city');
+    group.NAME = this.$i18n.t('home_search_group_item_name');
   },
   methods: {
-    changeItem() {
-      this.$emit("on-item-select", this.selectedValue);
+    handleSelect(item) {
+      this.navigate(item);
     },
-    handleEnterKeyBtnClick() {
-      this.$emit("on-item-select", this.selectedValue);
-    },
+
     handleBtnClick() {
-      this.$emit("on-item-select", this.selectedValue);
+      console.log("handleBtnClick");
     },
-  },
+    navigate(item) {
+      if (item) {
+        if (item.group == group.NAME) {
+          this.$router.push(
+            this.localePath(pathData.pages.publicProfile(item.userName))
+          );
+        }
+
+        if (item.group == group.SPORT) {
+          let name = item.title
+            .toLowerCase()
+            .split(" ")
+            .join("+");
+
+          this.$router.push(
+            this.localePath({ name: pathData.pages.marketplace.name }) +
+              "/" +
+              name
+          );
+        }
+        if (item.group == group.TAG) {
+          this.$router.push(
+            this.localePath({ name: pathData.pages.marketplace.name }) +
+              "?tagName=" +
+              item.title
+          );
+        }
+
+        if (item.group == group.CITY) {
+          this.$router.push(
+            this.localePath({ name: pathData.pages.marketplace.name }) +
+              "?cityName=" +
+              item.title
+          );
+        }
+      }
+    }
+  }
 };
 </script>
 

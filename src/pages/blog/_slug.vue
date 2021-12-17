@@ -79,10 +79,8 @@ export default {
 
     const blogRes = await pageBuilderApi($axios).getBlogPost();
     if (blogRes.data.blog) {
-      post = blogRes.data.blog.find(item => item.title == params.slug);
+      post = blogRes.data.blog.find(item => item.slug_url == params.slug);
     }
-    console.log(params, blogRes.data);
-
     return {
       categories,
       post,
