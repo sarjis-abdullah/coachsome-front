@@ -133,14 +133,18 @@
                         <div class="card">
                           <div class="card__header">
                             <div class="card__title">
-                              Recipent name
+                            {{ $t("recipent_title") }}
                             </div>
                           </div>
                           <div class="card__body">
-                            Please enter the name of the person that will
-                            recieve the gift certificate. This will be added to
-                            the PDF file you’ll recieve with the gift
-                            certificate that you can send to the receiver.
+                            <v-text-field
+                              v-model="recipentName"
+                              dense
+                              outlined
+                              flat
+                              :hint="$t('recipent_description')"
+                            >
+                            </v-text-field>
                           </div>
                         </div>
                         <div class="card mt-10">
@@ -178,7 +182,9 @@
                         >
                           <div class="charge-box__item">
                             <div class="charge-box__item-left">
-                              {{ $t("checkout_title_amount_of_the_certificate") }}
+                              {{
+                                $t("checkout_title_amount_of_the_certificate")
+                              }}
                             </div>
                             <div class="charge-box__item-right">
                               {{
@@ -284,6 +290,7 @@ export default {
       currency: "",
       seletedStep: 1,
       isDownloading: false,
+      recipentName:"",
       message: "",
       steps: [
         {
@@ -409,7 +416,8 @@ export default {
           message: this.message,
           currency: this.currency,
           totalAmount: this.totalAmount,
-          paymentMethod: this.selectedPaymentMethod
+          paymentMethod: this.selectedPaymentMethod,
+          recipentName: this.recipentName
         };
         if (this.selectedPaymentMethod) {
           const { data } = await this.$axios.post(
