@@ -7,7 +7,12 @@
         alt="hero image"
       />
       <div class="d-flex justify-center">
-        <div class="certificate">
+        <div
+          :class="[
+            'certificate',
+            { 'certificate--mdAndUp': $vuetify.breakpoint.mdAndUp,'certificate--smAndDown': $vuetify.breakpoint.smAndDown }
+          ]"
+        >
           <div class="certificate__title">
             {{ $t("gift_title_gift_certificate") }}
           </div>
@@ -186,9 +191,14 @@ export default {
   .certificate {
     background: #f7fafc;
     opacity: 0.95;
-    max-width: 70%;
     margin-top: -150px;
-    padding: 100px 80px;
+    &--mdAndUp {
+      padding: 100px 80px;
+      max-width: 70%;
+    }
+    &--smAndDown {
+      padding:5px;
+    }
     box-shadow: 0px 10px 20px rgba(159, 174, 194, 0.15);
     border-radius: 24px;
     &__title {
