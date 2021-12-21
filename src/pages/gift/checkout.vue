@@ -51,7 +51,10 @@
                         class="d-flex justify-center align-center"
                       >
                         <div
-                          class="line--vertical text-center"
+                          :class="[
+                            'line--vertical text-center',
+                            { 'd-none': $vuetify.breakpoint.smAndDown }
+                          ]"
                           style="min-height: 500px;"
                         ></div>
                       </v-col>
@@ -133,7 +136,7 @@
                         <div class="card">
                           <div class="card__header">
                             <div class="card__title">
-                            {{ $t("recipent_title") }}
+                              {{ $t("recipent_title") }}
                             </div>
                           </div>
                           <div class="card__body">
@@ -169,7 +172,7 @@
                       <v-col
                         cols="12"
                         md="2"
-                        class="d-flex justify-center align-center"
+                        class="d-flex justify-center align-center d-sm-none d-md-flex"
                       >
                         <div class="line--vertical text-center"></div>
                       </v-col>
@@ -290,7 +293,7 @@ export default {
       currency: "",
       seletedStep: 1,
       isDownloading: false,
-      recipentName:"",
+      recipentName: "",
       message: "",
       steps: [
         {
