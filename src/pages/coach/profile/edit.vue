@@ -769,10 +769,12 @@ export default {
   },
   created() {
     this.langCode = this.$i18n.locale;
-    this.init();
     this.fetchLanguage();
     this.fetchSportCategory();
     this.refreshPageProgress();
+  },
+  mounted() {
+    this.init();
   },
   methods: {
     moment,

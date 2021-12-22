@@ -157,6 +157,17 @@
         </v-list-item>
       </span>
 
+      <!-- Payments -->
+      <span v-if="hasRole(['coach', 'athlete'])">
+        <v-list-item color="primary" link @click.stop="handlePayments">
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ $t(items.payments.t_key) }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </span>
+
       <!-- Langugae -->
       <v-list-group v-model="languageGroup" link>
         <template v-slot:activator>
@@ -301,6 +312,13 @@ export default {
           key: "payout_information",
           icon: "mdi-menu-down",
           t_key: "nav_item_payout_information"
+        },
+        payments: {
+          name: "Payments",
+          path: pathData.pages.payments,
+          key: "payments",
+          icon: "mdi-menu-down",
+          t_key: "nav_item_payments"
         },
         // verification: {
         //   name: "Verifications",
@@ -525,6 +543,9 @@ export default {
     },
     handleChatPage() {
       this.$router.push(this.localePath(this.items.message.path));
+    },
+    handlePayments() {
+      this.$router.push(this.localePath(this.items.payments.path));
     },
     async handleLogout() {
       this.$nuxt.$loading.start();

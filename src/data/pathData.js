@@ -31,6 +31,7 @@ export default {
       path: "/marketplace"
     },
     price: "/price",
+    payments: "/payments",
     passwordReset: "/password-reset",
     publicProfile: username => "/" + username,
     policy: "/privacy-policy",
