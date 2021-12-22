@@ -14,7 +14,7 @@
 import GlobalHeader from "@/components/layout/global/GlobalHeader";
 import TopNav from "@/components/layout/global/TopNav";
 export default {
-  middleware: ["authenticated"],
+  middleware: ["auth"],
   components: {
     TopNav,
     GlobalHeader
