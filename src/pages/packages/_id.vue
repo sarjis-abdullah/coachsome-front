@@ -172,6 +172,54 @@
                               </div>
                             </template>
                           </v-text-field>
+
+                          <!-- Gift Card -->
+                          <div
+                            v-if="giftCard.balance"
+                            class="balance-btn"
+                            @click="giftCard.dialog = true"
+                          >
+                            You have credits on your balance? Use your Coachsome
+                            Balance
+                          </div>
+                          <v-dialog v-model="giftCard.dialog" max-width="500">
+                            <v-card>
+                              <v-card-title>
+                                <v-spacer></v-spacer>
+                                <v-btn icon @click="giftCard.dialog = false">
+                                  <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                              </v-card-title>
+                              <v-card-text
+                                class="d-flex flex-column justify-center pb-10 pt-10"
+                              >
+                                <div
+                                  class="gift-card-balance-title text-center primary-light-1--text"
+                                  style="font-weight: bold;font-size: 25px;"
+                                >
+                                  Coachsome Balance
+                                </div>
+                                <div
+                                  class="text-center mb-5 mt-5"
+                                  style="font-weight: bold;font-size: 36px;line-height: 49px;text-align: center;color: #1A202D;"
+                                >
+                                  {{
+                                    currencyService.toCurrency(giftCard.balance)
+                                  }}
+                                </div>
+                                <v-btn
+                                  depressed
+                                  color="primary-light-1"
+                                  class="px-10 white--text text-normal"
+                                >
+                                  Use Balance
+                                </v-btn>
+                              </v-card-text>
+                              <v-card-actions> </v-card-actions>
+                            </v-card>
+                          </v-dialog>
+                          <!-- Gift Card -->
+
                           <v-dialog v-model="promoCode.dialog" max-width="290">
                             <v-card>
                               <v-card-title>
@@ -352,6 +400,7 @@ export default {
   },
   data() {
     return {
+      currencyService,
       promoCode: {
         valid: false,
         value: "",
@@ -359,7 +408,10 @@ export default {
         dialog: false,
         dialogValue: ""
       },
-      currencyService,
+      giftCard: {
+        balance: 0.0,
+        dialog: false
+      },
       isChatBtnLoading: false,
       loadingRequestBookingBtn: false,
       selectedPaymentMethod: null,
@@ -593,6 +645,10 @@ export default {
           let packageSetting = response.data.packageSetting;
           let promoCode = response.data.promoCode;
 
+          if (response.data.giftCardBalance) {
+            this.giftCard.balance = response.data.giftCardBalance;
+          }
+
           if (packageSetting) {
             this.packageSetting = packageSetting;
           }
@@ -740,6 +796,15 @@ export default {
 .front-booking-page {
   background: $body-bg;
   height: 100%;
+  .balance-btn {
+    font-family: $font-family;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    text-decoration-line: underline;
+    color: #000000;
+    cursor: pointer;
+  }
   .promo-code {
     .v-text-field--outlined.v-input--dense input::placeholder {
       font-size: 12px;
