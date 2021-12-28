@@ -211,9 +211,17 @@
                                   depressed
                                   color="primary-light-1"
                                   class="px-10 white--text text-normal"
+                                  @click="handleGiftCardUseBtnClick"
                                 >
                                   Use Balance
                                 </v-btn>
+                                <v-btn
+                                  block
+                                  class="mt-5 text-normal"
+                                  color="warning"
+                                  @click="handleGiftCardCancleBtnClick"
+                                  >Cancel</v-btn
+                                >
                               </v-card-text>
                               <v-card-actions> </v-card-actions>
                             </v-card>
@@ -261,7 +269,7 @@
                             </v-card>
                           </v-dialog>
                         </div>
-                        <div class="payment">
+                        <div class="payment" v-if="!isTotalAmountZero">
                           <v-radio-group v-model="selectedPaymentMethod" column>
                             <span
                               v-for="(paymentMethod, i) in paymentMethods"
@@ -410,6 +418,7 @@ export default {
       },
       giftCard: {
         balance: 0.0,
+        enabled: false,
         dialog: false
       },
       isChatBtnLoading: false,
@@ -494,14 +503,20 @@ export default {
       return this.selectedPaymentMethod ? true : false;
     },
     isDisabledRequestAndAuthorisePaymentBtn() {
+      let flag = true;
       if (
-        !this.selectedPaymentMethod ||
-        this.messageFromPackageBuyer.trim().length < 1
+        this.selectedPaymentMethod &&
+        this.messageFromPackageBuyer.trim().length > 0
       ) {
-        return true;
+        flag = false;
+      } else if (this.packageInfo.chargeBox.total < 1 &&  this.messageFromPackageBuyer.trim().length > 0) {
+        flag = false;
       } else {
-        return false;
       }
+      return flag;
+    },
+    isTotalAmountZero() {
+      return this.packageInfo.chargeBox.total < 1;
     },
     isQuickBooking: function() {
       let isQuick = false;
@@ -621,6 +636,21 @@ export default {
       this.promoCode.dialogValue = "";
       this.promoCode.dialog = false;
     },
+    handleGiftCardUseBtnClick() {
+      this.giftCard.enabled = true;
+      this.fetchBookingInfo({
+        packageId: this.packageId,
+        promoCode: this.promoCode.dialogValue,
+        useGiftCard: true
+      });
+    },
+    handleGiftCardCancleBtnClick() {
+      this.giftCard.enabled = true;
+      this.fetchBookingInfo({
+        packageId: this.packageId,
+        promoCode: this.promoCode.dialogValue
+      });
+    },
     handleApplyBtnClick() {
       this.fetchBookingInfo({
         packageId: this.packageId,
@@ -629,14 +659,15 @@ export default {
       });
     },
     fetchBookingInfo(payload) {
-      const { packageId, promoCode, withPromoCode } = payload;
+      const { packageId, promoCode, withPromoCode, useGiftCard } = payload;
       this.isChatBtnLoading = true;
       this.isLoading = true;
 
       bookingApi(this.$axios)
         .getBookingInfo({
           packageId,
-          promoCode
+          promoCode,
+          useGiftCard
         })
         .then(response => {
           let profileCardInfo = response.data.profileCard;
@@ -683,6 +714,8 @@ export default {
               chargeBox.priceForPackage;
             this.packageInfo.chargeBox.totalPerPerson =
               chargeBox.totalPerPerson;
+            this.packageInfo.chargeBox.giftPayableAmount =
+              chargeBox.giftPayableAmount;
             this.packageInfo.chargeBox.total = chargeBox.total;
             this.packageInfo.chargeBox.salePrice = chargeBox.salePrice;
             this.packageInfo.chargeBox.serviceFee = chargeBox.serviceFee;
@@ -711,6 +744,7 @@ export default {
         .finally(() => {
           this.isChatBtnLoading = false;
           this.isLoading = false;
+          this.giftCard.dialog = false;
         });
     },
     notify(payload) {
@@ -728,7 +762,8 @@ export default {
         salePrice: this.packageInfo.chargeBox.salePrice,
         paymentMethod: this.selectedPaymentMethod,
         packageUrl: location.href,
-        promoCode: this.promoCode.value
+        promoCode: this.promoCode.value,
+        useGiftCard: this.giftCard.enabled
       };
       this.loadingRequestBookingBtn = true;
       bookingApi(this.$axios)
@@ -741,6 +776,8 @@ export default {
           }
           if (data.link) {
             window.location.assign(data.link);
+          } else {
+            this.step = 3;
           }
         })
         .catch(error => {
