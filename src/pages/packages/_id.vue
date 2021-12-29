@@ -172,6 +172,62 @@
                               </div>
                             </template>
                           </v-text-field>
+
+                          <!-- Gift Card -->
+                          <div
+                            v-if="giftCard.balance"
+                            class="balance-btn"
+                            @click="giftCard.dialog = true"
+                          >
+                            You have credits on your balance? Use your Coachsome
+                            Balance
+                          </div>
+                          <v-dialog v-model="giftCard.dialog" max-width="500">
+                            <v-card>
+                              <v-card-title>
+                                <v-spacer></v-spacer>
+                                <v-btn icon @click="giftCard.dialog = false">
+                                  <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                              </v-card-title>
+                              <v-card-text
+                                class="d-flex flex-column justify-center pb-10 pt-10"
+                              >
+                                <div
+                                  class="gift-card-balance-title text-center primary-light-1--text"
+                                  style="font-weight: bold;font-size: 25px;"
+                                >
+                                  Coachsome Balance
+                                </div>
+                                <div
+                                  class="text-center mb-5 mt-5"
+                                  style="font-weight: bold;font-size: 36px;line-height: 49px;text-align: center;color: #1A202D;"
+                                >
+                                  {{
+                                    currencyService.toCurrency(giftCard.balance)
+                                  }}
+                                </div>
+                                <v-btn
+                                  depressed
+                                  color="primary-light-1"
+                                  class="px-10 white--text text-normal"
+                                  @click="handleGiftCardUseBtnClick"
+                                >
+                                  Use Balance
+                                </v-btn>
+                                <v-btn
+                                  block
+                                  class="mt-5 text-normal"
+                                  color="warning"
+                                  @click="handleGiftCardCancleBtnClick"
+                                  >Cancel</v-btn
+                                >
+                              </v-card-text>
+                              <v-card-actions> </v-card-actions>
+                            </v-card>
+                          </v-dialog>
+                          <!-- Gift Card -->
+
                           <v-dialog v-model="promoCode.dialog" max-width="290">
                             <v-card>
                               <v-card-title>
@@ -213,7 +269,7 @@
                             </v-card>
                           </v-dialog>
                         </div>
-                        <div class="payment">
+                        <div class="payment" v-if="!isTotalAmountZero">
                           <v-radio-group v-model="selectedPaymentMethod" column>
                             <span
                               v-for="(paymentMethod, i) in paymentMethods"
@@ -352,6 +408,7 @@ export default {
   },
   data() {
     return {
+      currencyService,
       promoCode: {
         valid: false,
         value: "",
@@ -359,7 +416,11 @@ export default {
         dialog: false,
         dialogValue: ""
       },
-      currencyService,
+      giftCard: {
+        balance: 0.0,
+        enabled: false,
+        dialog: false
+      },
       isChatBtnLoading: false,
       loadingRequestBookingBtn: false,
       selectedPaymentMethod: null,
@@ -442,14 +503,23 @@ export default {
       return this.selectedPaymentMethod ? true : false;
     },
     isDisabledRequestAndAuthorisePaymentBtn() {
+      let flag = true;
       if (
-        !this.selectedPaymentMethod ||
-        this.messageFromPackageBuyer.trim().length < 1
+        this.selectedPaymentMethod &&
+        this.messageFromPackageBuyer.trim().length > 0
       ) {
-        return true;
+        flag = false;
+      } else if (
+        this.packageInfo.chargeBox.total < 1 &&
+        this.messageFromPackageBuyer.trim().length > 0
+      ) {
+        flag = false;
       } else {
-        return false;
       }
+      return flag;
+    },
+    isTotalAmountZero() {
+      return this.packageInfo.chargeBox.total < 1;
     },
     isQuickBooking: function() {
       let isQuick = false;
@@ -569,6 +639,21 @@ export default {
       this.promoCode.dialogValue = "";
       this.promoCode.dialog = false;
     },
+    handleGiftCardUseBtnClick() {
+      this.giftCard.enabled = true;
+      this.fetchBookingInfo({
+        packageId: this.packageId,
+        promoCode: this.promoCode.dialogValue,
+        useGiftCard: true
+      });
+    },
+    handleGiftCardCancleBtnClick() {
+      this.giftCard.enabled = true;
+      this.fetchBookingInfo({
+        packageId: this.packageId,
+        promoCode: this.promoCode.dialogValue
+      });
+    },
     handleApplyBtnClick() {
       this.fetchBookingInfo({
         packageId: this.packageId,
@@ -577,14 +662,15 @@ export default {
       });
     },
     fetchBookingInfo(payload) {
-      const { packageId, promoCode, withPromoCode } = payload;
+      const { packageId, promoCode, withPromoCode, useGiftCard } = payload;
       this.isChatBtnLoading = true;
       this.isLoading = true;
 
       bookingApi(this.$axios)
         .getBookingInfo({
           packageId,
-          promoCode
+          promoCode,
+          useGiftCard
         })
         .then(response => {
           let profileCardInfo = response.data.profileCard;
@@ -592,6 +678,10 @@ export default {
           let chargeBox = response.data.chargeBox;
           let packageSetting = response.data.packageSetting;
           let promoCode = response.data.promoCode;
+
+          if (response.data.giftCardBalance) {
+            this.giftCard.balance = response.data.giftCardBalance;
+          }
 
           if (packageSetting) {
             this.packageSetting = packageSetting;
@@ -627,6 +717,8 @@ export default {
               chargeBox.priceForPackage;
             this.packageInfo.chargeBox.totalPerPerson =
               chargeBox.totalPerPerson;
+            this.packageInfo.chargeBox.giftPayableAmount =
+              chargeBox.giftPayableAmount;
             this.packageInfo.chargeBox.total = chargeBox.total;
             this.packageInfo.chargeBox.salePrice = chargeBox.salePrice;
             this.packageInfo.chargeBox.serviceFee = chargeBox.serviceFee;
@@ -655,6 +747,7 @@ export default {
         .finally(() => {
           this.isChatBtnLoading = false;
           this.isLoading = false;
+          this.giftCard.dialog = false;
         });
     },
     notify(payload) {
@@ -672,7 +765,8 @@ export default {
         salePrice: this.packageInfo.chargeBox.salePrice,
         paymentMethod: this.selectedPaymentMethod,
         packageUrl: location.href,
-        promoCode: this.promoCode.value
+        promoCode: this.promoCode.value,
+        useGiftCard: this.giftCard.enabled
       };
       this.loadingRequestBookingBtn = true;
       bookingApi(this.$axios)
@@ -685,6 +779,8 @@ export default {
           }
           if (data.link) {
             window.location.assign(data.link);
+          } else {
+            this.step = 3;
           }
         })
         .catch(error => {
@@ -740,6 +836,15 @@ export default {
 .front-booking-page {
   background: $body-bg;
   height: 100%;
+  .balance-btn {
+    font-family: $font-family;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    text-decoration-line: underline;
+    color: #000000;
+    cursor: pointer;
+  }
   .promo-code {
     .v-text-field--outlined.v-input--dense input::placeholder {
       font-size: 12px;
