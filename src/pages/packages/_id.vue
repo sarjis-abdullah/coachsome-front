@@ -509,7 +509,10 @@ export default {
         this.messageFromPackageBuyer.trim().length > 0
       ) {
         flag = false;
-      } else if (this.packageInfo.chargeBox.total < 1 &&  this.messageFromPackageBuyer.trim().length > 0) {
+      } else if (
+        this.packageInfo.chargeBox.total < 1 &&
+        this.messageFromPackageBuyer.trim().length > 0
+      ) {
         flag = false;
       } else {
       }
