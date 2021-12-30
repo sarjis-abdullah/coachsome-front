@@ -10,7 +10,10 @@
         <div
           :class="[
             'certificate',
-            { 'certificate--mdAndUp': $vuetify.breakpoint.mdAndUp,'certificate--smAndDown': $vuetify.breakpoint.smAndDown }
+            {
+              'certificate--mdAndUp': $vuetify.breakpoint.mdAndUp,
+              'certificate--smAndDown': $vuetify.breakpoint.smAndDown
+            }
           ]"
         >
           <div class="certificate__title">
@@ -59,7 +62,7 @@
                           { 'primary--text': !active }
                         ]"
                       >
-                        {{ amountItem.value + " " + amountItem.currency }}
+                        {{ currencyService.toCurrency(amountItem.value) }}
                       </div>
                     </v-card>
                   </v-item>
@@ -118,13 +121,15 @@
 <script>
 import { pathData } from "@/data";
 import { giftService } from "@/services";
+import { currencyService } from "@/services";
 
 export default {
   data() {
     return {
+      currencyService,
       selectedAmount: null,
       customAmmount: null,
-      ammountCurrency: "DKK",
+      ammountCurrency: "",
       amountItems: [
         {
           id: 1,
@@ -145,6 +150,7 @@ export default {
     };
   },
   mounted() {
+    this.ammountCurrency = this.currencyService.currentCurrencyCode()
     giftService.destroyGift();
   },
   methods: {
@@ -197,7 +203,7 @@ export default {
       max-width: 70%;
     }
     &--smAndDown {
-      padding:5px;
+      padding: 5px;
     }
     box-shadow: 0px 10px 20px rgba(159, 174, 194, 0.15);
     border-radius: 24px;

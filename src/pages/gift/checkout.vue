@@ -71,7 +71,7 @@
                             </div>
                             <div class="charge-box__item-right">
                               {{
-                                currencyService.toCurrencyByBase(selectedAmount)
+                                currencyService.toCurrency(selectedAmount)
                               }}
                             </div>
                           </div>
@@ -86,7 +86,7 @@
                             </div>
                             <div class="charge-box__item-right stroke">
                               {{
-                                currencyService.toCurrencyByBase(totalAmount)
+                                currencyService.toCurrency(totalAmount)
                               }}
                             </div>
                           </div>
@@ -191,7 +191,7 @@
                             </div>
                             <div class="charge-box__item-right">
                               {{
-                                currencyService.toCurrencyByBase(selectedAmount)
+                                currencyService.toCurrency(selectedAmount)
                               }}
                             </div>
                           </div>
@@ -206,7 +206,7 @@
                             </div>
                             <div class="charge-box__item-right stroke">
                               {{
-                                currencyService.toCurrencyByBase(totalAmount)
+                                currencyService.toCurrency(totalAmount)
                               }}
                             </div>
                           </div>
@@ -434,7 +434,7 @@ export default {
           this.$toast.error("Select a payment method");
         }
       } catch (error) {
-        console.log(error);
+        this.$toast.error(error.response.data.error.message);
       }
     },
     nextStep(n) {
