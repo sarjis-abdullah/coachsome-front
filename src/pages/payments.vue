@@ -35,6 +35,7 @@
             class="text-normal"
             x-large
             color="primary-light-1"
+            :loading="loading"
             depressed
             @click="dialog = true"
           >

@@ -204,7 +204,7 @@
                                   style="font-weight: bold;font-size: 36px;line-height: 49px;text-align: center;color: #1A202D;"
                                 >
                                   {{
-                                    currencyService.toCurrency(giftCard.balance)
+                                    currencyService.toCurrencyByBase(giftCard.balance)
                                   }}
                                 </div>
                                 <v-btn
@@ -648,7 +648,7 @@ export default {
       });
     },
     handleGiftCardCancleBtnClick() {
-      this.giftCard.enabled = true;
+      this.giftCard.enabled = false;
       this.fetchBookingInfo({
         packageId: this.packageId,
         promoCode: this.promoCode.dialogValue

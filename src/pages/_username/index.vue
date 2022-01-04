@@ -62,6 +62,16 @@
           </v-row>
 
           <!-- Service -->
+          <v-row>
+            <v-col cols="12" md="6" v-for="item in 4" :key="item">
+              <v-skeleton-loader
+                v-if="isServiceLoading"
+                v-bind="attrs"
+                type="article, actions"
+              ></v-skeleton-loader>
+            </v-col>
+          </v-row>
+          
           <v-row v-if="services.length > 0">
             <v-col cols="12">
               <div class="section-title">
@@ -398,7 +408,20 @@ export default {
         coachInfo: null,
         service: null
       },
-      descriptionMaxChar: 0
+      descriptionMaxChar: 0,
+      profileCard: {
+        name: "",
+        image: "",
+        rating: 0,
+        rating_count: 0,
+        tags: [],
+        categories: [],
+        fb_link: "",
+        twitter_link: "",
+        instagram_link: ""
+      },
+      isServiceLoading: true,
+      services: []
     };
   },
   computed: {
@@ -479,7 +502,6 @@ export default {
 
       let languages = [];
       let reviewers = [];
-      let services = [];
       let moreAbout = "";
 
       // Profile Info
@@ -518,26 +540,6 @@ export default {
         profileCard.badgeKey = data.user_info.badgeKey;
       }
 
-      // Services
-      if (data.packages) {
-        services = data.packages.map(item => {
-          return {
-            id: item.id,
-            title: item.details.title,
-            description: item.details.description,
-            session: item.details.session,
-            categoryId: item.category.id,
-            timePerSession: item.details.time_per_session,
-            category: item.category,
-            originalPrice: item.originalPrice,
-            salePrice: item.salePrice,
-            attendeesMin: item.details.attendees_min,
-            attendeesMax: item.details.attendees_max,
-            discount: item.details.discount
-          };
-        });
-      }
-
       // Masonry links
       if (data.links) {
         gallery.links = data.links;
@@ -568,7 +570,6 @@ export default {
         moreAbout,
         reviewers,
         userInfo,
-        services,
         gallery,
         travelCard,
         verification
@@ -579,8 +580,39 @@ export default {
   },
   mounted() {
     this.initMap();
+    this.getData();
   },
   methods: {
+    async getData() {
+      try {
+        const { data } = await profileApi(this.$axios).getProfileInformation(
+          encodeURIComponent(this.$route.params.username)
+        );
+        // Services
+        if (data.packages) {
+          this.services = data.packages.map(item => {
+            return {
+              id: item.id,
+              title: item.details.title,
+              description: item.details.description,
+              session: item.details.session,
+              categoryId: item.category.id,
+              timePerSession: item.details.time_per_session,
+              category: item.category,
+              originalPrice: item.originalPrice,
+              salePrice: item.salePrice,
+              attendeesMin: item.details.attendees_min,
+              attendeesMax: item.details.attendees_max,
+              discount: item.details.discount
+            };
+          });
+        }
+      } catch (res) {
+        error({ statusCode: 422, message: "Coach not found" });
+      } finally {
+        this.isServiceLoading = false;
+      }
+    },
     removeTags(str) {
       if (str === null || str === "") return false;
       else str = str.toString();
