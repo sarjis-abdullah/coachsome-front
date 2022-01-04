@@ -25,6 +25,12 @@ export default {
       },
       { hid: "description", name: "description", content: "" }
     ],
+    noscript: [
+      {
+        innerHTML:
+          '<img height="1" width="1" style="display:none"src="https://www.facebook.com/tr?id=387225812473389&ev=PageView&noscript=1"/>'
+      }
+    ],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
 
@@ -105,7 +111,7 @@ export default {
     { src: "~/plugins/vue-tribute", mode: "client" },
     { src: "~/plugins/socket", mode: "client" },
     { src: "~/plugins/v-emoji-picker", mode: "client" },
-    { src: "~/plugins/vuelidate" },
+    { src: "~/plugins/vuelidate" }
   ],
 
   /**
@@ -255,6 +261,15 @@ export default {
         id: "UA-147188178-2"
       }
     ],
+
+    // Facebook pixel
+    ['nuxt-facebook-pixel-module', {
+      /* module options */
+      track: 'PageView',
+      pixelId: '387225812473389',
+      autoPageView: true,
+      disabled: false
+    }],
 
     // Sitemap
     // Always end of the array

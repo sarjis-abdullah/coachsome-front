@@ -25,6 +25,7 @@
     "mixpanel-browser": "^2.41.0",
     "moment": "^2.29.1",
     "nuxt": "^2.15.3",
+    "nuxt-facebook-pixel-module": "^1.5.0",
     "nuxt-i18n": "^6.27.2",
     "ramda": "^0.27.1",
     "sass": "1.32.*",

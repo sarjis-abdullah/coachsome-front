@@ -29,7 +29,7 @@
             {{ $t("payments_text_curr_credit_balance") }}
           </div>
           <div class="balance mt-2 mb-3">
-            {{ currencyService.toCurrency(balance) }}
+            {{ currencyService.toCurrencyByBase(balance) }}
           </div>
           <v-btn
             class="text-normal"
