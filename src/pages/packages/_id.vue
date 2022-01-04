@@ -179,8 +179,7 @@
                             class="balance-btn"
                             @click="giftCard.dialog = true"
                           >
-                            You have credits on your balance? Use your Coachsome
-                            Balance
+                           {{ $t("package_booking_gift_card_use_balance_txt") }}
                           </div>
                           <v-dialog v-model="giftCard.dialog" max-width="500">
                             <v-card>
@@ -197,7 +196,7 @@
                                   class="gift-card-balance-title text-center primary-light-1--text"
                                   style="font-weight: bold;font-size: 25px;"
                                 >
-                                  Coachsome Balance
+                                   {{ $t("package_booking_gift_card_title_balance") }}
                                 </div>
                                 <div
                                   class="text-center mb-5 mt-5"
@@ -213,14 +212,16 @@
                                   class="px-10 white--text text-normal"
                                   @click="handleGiftCardUseBtnClick"
                                 >
-                                  Use Balance
+                                  {{ $t("package_booking_gift_card_btn_label_use_balance") }}
                                 </v-btn>
                                 <v-btn
                                   block
                                   class="mt-5 text-normal"
                                   color="warning"
                                   @click="handleGiftCardCancleBtnClick"
-                                  >Cancel</v-btn
+                                  >
+                                  {{ $t('package_booking_gift_card_btn_label_cancel') }}
+                                  </v-btn
                                 >
                               </v-card-text>
                               <v-card-actions> </v-card-actions>
@@ -231,7 +232,7 @@
                           <v-dialog v-model="promoCode.dialog" max-width="290">
                             <v-card>
                               <v-card-title>
-                                Promo Code
+                                {{ $t("package_booking_promo_code_title") }}
                                 <v-spacer></v-spacer>
                                 <v-btn
                                   icon
@@ -244,7 +245,7 @@
                               <v-card-text>
                                 <v-text-field
                                   v-model="promoCode.dialogValue"
-                                  label="Enter promo code"
+                                  :label="$t('package_booking_placeholder_enter_promo_code')"
                                 ></v-text-field>
                               </v-card-text>
                               <v-card-actions>
@@ -255,7 +256,7 @@
                                   text
                                   @click="handleRemoveBtnClick"
                                 >
-                                  remove
+                                  {{ $t("pakcage_booking_promo_code_label_btn_remove") }}
                                 </v-btn>
                                 <v-btn
                                   color="primary-light-1"
@@ -263,7 +264,7 @@
                                   :loading="isLoading"
                                   @click="handleApplyBtnClick"
                                 >
-                                  apply
+                                  {{ $t("package_booking_promo_code_btn_label_apply") }}
                                 </v-btn>
                               </v-card-actions>
                             </v-card>
