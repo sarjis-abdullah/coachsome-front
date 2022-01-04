@@ -76,7 +76,7 @@
       <v-row justify="center">
         <v-col cols="12" class="text-center">
           <div class="or-text">
-            or
+            {{ $t("gift_text_or") }}
           </div>
         </v-col>
       </v-row>
@@ -88,7 +88,7 @@
             class="text-field--gift-card"
             solo
             type="number"
-            label="Enter amount"
+            :label="$t('gift_placeholder_enter_amount')"
             hide-details
             flat
             @click="handleInputClick"

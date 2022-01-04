@@ -3,12 +3,12 @@
     <v-container>
       <v-row justify="center">
         <v-col cols="12" md="10">
-          <v-stepper v-model="seletedStep" elevation="0" flat>
+          <v-stepper v-model="step" elevation="0" flat>
             <v-stepper-header>
-              <template v-for="n in steps">
+              <!-- <template v-for="n in steps">
                 <v-stepper-step
                   :key="n.value"
-                  :complete="seletedStep > n.value"
+                  :complete="step > n.value"
                   :step="n.value"
                 >
                   {{ n.name }}
@@ -18,7 +18,22 @@
                   v-if="n.value !== steps.length"
                   :key="'divider' + n.value"
                 ></v-divider>
-              </template>
+              </template> -->
+              <v-stepper-step
+                :complete="step > 1"
+                :step="1"
+                :editable="isFirstStepEditAble"
+              >
+                {{ $t("gift_checkout_first_step") }}
+              </v-stepper-step>
+              <v-divider></v-divider>
+              <v-stepper-step :complete="step > 2" step="2">
+                {{ $t("gift_checkout_second_step") }}
+              </v-stepper-step>
+              <v-divider></v-divider>
+              <v-stepper-step step="3">
+                {{ $t("gift_checkout_third_step") }}
+              </v-stepper-step>
             </v-stepper-header>
 
             <v-stepper-items>
@@ -243,7 +258,7 @@
               <v-stepper-content :step="3">
                 <div class="gift-confirmation">
                   <div class="gift-confirmation__top">
-                    <i18n path="gift_order_step_three_description" >
+                    <i18n path="gift_order_step_three_description">
                       <template #name>
                         <span>{{ recipentName }}</span>
                       </template>
@@ -286,7 +301,7 @@ export default {
       selectedAmount: 0,
       totalAmount: 0,
       currency: "",
-      seletedStep: 1,
+      step: 1,
       isDownloading: false,
       recipentName: "",
       message: "",
@@ -344,6 +359,11 @@ export default {
   },
 
   watch: {},
+  computed: {
+    isFirstStepEditAble() {
+      return this.step == 2;
+    }
+  },
   mounted() {
     const { amount, currency, status } = this.$route.query;
     this.selectedAmount = amount;
@@ -358,9 +378,9 @@ export default {
       giftService.setGift(gift);
     }
     gift = giftService.getGift();
-    this.seletedStep = gift.step;
+    this.step = gift.step;
     if (status == "success") {
-      this.seletedStep = 3;
+      this.step = 3;
       gift = {
         step: 3
       };
@@ -411,7 +431,7 @@ export default {
       }
     },
     handleContinueBtnClick() {
-      this.seletedStep = 2;
+      this.step = 2;
       let gift = giftService.getGift();
       if (gift) {
         gift = {
@@ -446,9 +466,9 @@ export default {
     },
     nextStep(n) {
       if (n === this.steps) {
-        this.seletedStep = 1;
+        this.step = 1;
       } else {
-        this.seletedStep = n + 1;
+        this.step = n + 1;
       }
     }
   }

@@ -12,10 +12,10 @@
 
       <v-card-text>
         <div class="redeem-title">
-          Redeem gift card
+          {{ $t('payment_redeem_title') }}
         </div>
         <div class="field-label mt-10 mb-2">
-          Gift Card Code
+          {{ $t("payment_redeem_code_title") }}
         </div>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
@@ -35,10 +35,10 @@
           depressed
           class="text-normal ml-2"
         >
-          RedeemI accept
+          {{ $t("payment_redeem_btn_label_redeem_accept") }}
         </v-btn>
         <v-btn text class="text-normal" @click="$emit('close')">
-          Cancel
+           {{ $t("payment_redeem_btn_label_cancel") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -54,10 +54,15 @@ export default {
       valid: true,
       loading: false,
       code: "",
-      rules: [v => !!v || "Code is required"]
+      rules: []
     };
   },
   watch: {},
+  mounted() {
+    this.rules= [
+      v => !!v || this.$i18n.t("payment_redeem_validation_code_is_required")
+    ]
+  },
   methods: {
     handleAcceptBtnClick() {
       if (this.$refs.form.validate()) {
