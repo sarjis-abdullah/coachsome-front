@@ -70,9 +70,7 @@
                               {{ $t("charge_box_gift_card_amount") }}
                             </div>
                             <div class="charge-box__item-right">
-                              {{
-                                currencyService.toCurrency(selectedAmount)
-                              }}
+                              {{ currencyService.toCurrency(selectedAmount) }}
                             </div>
                           </div>
                           <div class="charge-box__item">
@@ -85,9 +83,7 @@
                               {{ $t("booking_charge_box_total") }}
                             </div>
                             <div class="charge-box__item-right stroke">
-                              {{
-                                currencyService.toCurrency(totalAmount)
-                              }}
+                              {{ currencyService.toCurrency(totalAmount) }}
                             </div>
                           </div>
                         </div>
@@ -190,9 +186,7 @@
                               }}
                             </div>
                             <div class="charge-box__item-right">
-                              {{
-                                currencyService.toCurrency(selectedAmount)
-                              }}
+                              {{ currencyService.toCurrency(selectedAmount) }}
                             </div>
                           </div>
                           <div class="charge-box__item">
@@ -205,9 +199,7 @@
                               {{ $t("booking_charge_box_total") }}
                             </div>
                             <div class="charge-box__item-right stroke">
-                              {{
-                                currencyService.toCurrency(totalAmount)
-                              }}
+                              {{ currencyService.toCurrency(totalAmount) }}
                             </div>
                           </div>
                         </div>
@@ -251,8 +243,11 @@
               <v-stepper-content :step="3">
                 <div class="gift-confirmation">
                   <div class="gift-confirmation__top">
-                    Congratulations you have purchased a Gift Card for
-                    :GiftCardReceiverFullName
+                    <i18n path="gift_order_step_three_description" >
+                      <template #name>
+                        <span>{{ recipentName }}</span>
+                      </template>
+                    </i18n>
                   </div>
                   <div class="gift-confirmation__middle">
                     <v-btn
@@ -370,10 +365,22 @@ export default {
         step: 3
       };
       giftService.setGift(gift);
+      this.getGiftOrderInfo();
     }
   },
 
   methods: {
+    async getGiftOrderInfo() {
+      try {
+        const { id } = this.$route.query;
+        const { data } = await this.$axios.get(
+          endpoint.GIFT_CARDS_ORDERS_ID(id)
+        );
+        this.recipentName = data.data.recipentName;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     handleChangeAmountBtnClick() {
       this.$router.push(this.localePath(pathData.pages.gift));
     },
