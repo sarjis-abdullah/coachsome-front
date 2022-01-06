@@ -101,10 +101,10 @@
         alt=""
       />
       <div class="no-contact__title">
-        No new messages
+        {{ $t("chat_contact_list_no_contact_title") }}
       </div>
       <div class="no-contact__description">
-        Start your first messages by getting your first customers
+        {{ $t("chat_contact_list_no_contact_desc") }}
       </div>
     </div>
   </div>
