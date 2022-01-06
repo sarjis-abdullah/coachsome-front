@@ -40,7 +40,7 @@
       <template v-slot:item="{ item }">
         <v-list-item-content>
           <v-list-item-title>
-            {{ $t(item.title) }}
+            {{ $t(item.title.replace(/./, c => c.toUpperCase())) }}
             <small class="grey--text">( {{ item.group }} )</small>
           </v-list-item-title>
           <v-list-item-subtitle> </v-list-item-subtitle>
@@ -131,10 +131,10 @@ export default {
     }
   },
   mounted() {
-    group.SPORT = this.$i18n.t('home_search_group_item_sport');
-    group.TAG = this.$i18n.t('home_search_group_item_tag');
-    group.CITY = this.$i18n.t('home_search_group_item_city');
-    group.NAME = this.$i18n.t('home_search_group_item_name');
+    group.SPORT = this.$i18n.t("home_search_group_item_sport");
+    group.TAG = this.$i18n.t("home_search_group_item_tag");
+    group.CITY = this.$i18n.t("home_search_group_item_city");
+    group.NAME = this.$i18n.t("home_search_group_item_name");
   },
   methods: {
     handleSelect(item) {

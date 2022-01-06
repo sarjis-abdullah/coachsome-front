@@ -723,9 +723,9 @@ export default {
     }
   },
   created() {
-    this.init();
-  },
+    },
   mounted() {
+    this.init();
     this.origin = window.location.origin;
   },
   methods: {

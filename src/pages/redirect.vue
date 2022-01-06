@@ -11,21 +11,30 @@ export default {
     loading: true
   }),
   mounted() {
-    if (this.$route.query.access_token) {
-      this.$auth.setUserToken(this.$route.query.access_token);
-      userApi(this.$axios)
-        .authUserInformation()
-        .then(({ data }) => {
-          this.$auth.setUser(data.user);
-          if (this.$auth.hasRole(["coach"])) {
-            this.$router.push(this.localePath(pathData.coach.editProfile));
-          } else if (this.$auth.hasRole(["athlete"])) {
-            this.$router.push(this.localePath(pathData.athlete.editProfile));
-          } else {
-            this.$router.push(this.localePath(pathData.admin.dashboard));
-          }
-        })
-        .catch(() => {});
+    // Request from params indicate the request comes from
+    // may be it is login page or setting page of athlete or coach
+    if (
+      this.$route.query.request_from == "athlete_settings" ||
+      this.$route.query.request_from == "coach_settings"
+    ) {
+      window.close();
+    } else {
+      if (this.$route.query.access_token) {
+        this.$auth.setUserToken(this.$route.query.access_token);
+        userApi(this.$axios)
+          .authUserInformation()
+          .then(({ data }) => {
+            this.$auth.setUser(data.user);
+            if (this.$auth.hasRole(["coach"])) {
+              this.$router.push(this.localePath(pathData.coach.editProfile));
+            } else if (this.$auth.hasRole(["athlete"])) {
+              this.$router.push(this.localePath(pathData.athlete.editProfile));
+            } else {
+              this.$router.push(this.localePath(pathData.admin.dashboard));
+            }
+          })
+          .catch(() => {});
+      }
     }
   }
 };
