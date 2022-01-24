@@ -3,12 +3,12 @@
     <v-container>
       <v-row justify="center">
         <v-col cols="12" md="10">
-          <v-stepper v-model="seletedStep" elevation="0" flat>
+          <v-stepper v-model="step" elevation="0" flat>
             <v-stepper-header>
-              <template v-for="n in steps">
+              <!-- <template v-for="n in steps">
                 <v-stepper-step
                   :key="n.value"
-                  :complete="seletedStep > n.value"
+                  :complete="step > n.value"
                   :step="n.value"
                 >
                   {{ n.name }}
@@ -18,7 +18,22 @@
                   v-if="n.value !== steps.length"
                   :key="'divider' + n.value"
                 ></v-divider>
-              </template>
+              </template> -->
+              <v-stepper-step
+                :complete="step > 1"
+                :step="1"
+                :editable="isFirstStepEditAble"
+              >
+                {{ $t("gift_checkout_first_step") }}
+              </v-stepper-step>
+              <v-divider></v-divider>
+              <v-stepper-step :complete="step > 2" step="2">
+                {{ $t("gift_checkout_second_step") }}
+              </v-stepper-step>
+              <v-divider></v-divider>
+              <v-stepper-step step="3">
+                {{ $t("gift_checkout_third_step") }}
+              </v-stepper-step>
             </v-stepper-header>
 
             <v-stepper-items>
@@ -51,7 +66,10 @@
                         class="d-flex justify-center align-center"
                       >
                         <div
-                          class="line--vertical text-center"
+                          :class="[
+                            'line--vertical text-center',
+                            { 'd-none': $vuetify.breakpoint.smAndDown }
+                          ]"
                           style="min-height: 500px;"
                         ></div>
                       </v-col>
@@ -67,9 +85,7 @@
                               {{ $t("charge_box_gift_card_amount") }}
                             </div>
                             <div class="charge-box__item-right">
-                              {{
-                                currencyService.toCurrencyByBase(selectedAmount)
-                              }}
+                              {{ currencyService.toCurrency(selectedAmount) }}
                             </div>
                           </div>
                           <div class="charge-box__item">
@@ -82,9 +98,7 @@
                               {{ $t("booking_charge_box_total") }}
                             </div>
                             <div class="charge-box__item-right stroke">
-                              {{
-                                currencyService.toCurrencyByBase(totalAmount)
-                              }}
+                              {{ currencyService.toCurrency(totalAmount) }}
                             </div>
                           </div>
                         </div>
@@ -133,14 +147,18 @@
                         <div class="card">
                           <div class="card__header">
                             <div class="card__title">
-                              Recipent name
+                              {{ $t("recipent_title") }}
                             </div>
                           </div>
                           <div class="card__body">
-                            Please enter the name of the person that will
-                            recieve the gift certificate. This will be added to
-                            the PDF file you’ll recieve with the gift
-                            certificate that you can send to the receiver.
+                            <v-text-field
+                              v-model="recipentName"
+                              dense
+                              outlined
+                              flat
+                              :hint="$t('recipent_description')"
+                            >
+                            </v-text-field>
                           </div>
                         </div>
                         <div class="card mt-10">
@@ -165,7 +183,7 @@
                       <v-col
                         cols="12"
                         md="2"
-                        class="d-flex justify-center align-center"
+                        class="d-flex justify-center align-center d-sm-none d-md-flex"
                       >
                         <div class="line--vertical text-center"></div>
                       </v-col>
@@ -178,12 +196,12 @@
                         >
                           <div class="charge-box__item">
                             <div class="charge-box__item-left">
-                              {{ $t("checkout_title_amount_of_the_certificate") }}
+                              {{
+                                $t("checkout_title_amount_of_the_certificate")
+                              }}
                             </div>
                             <div class="charge-box__item-right">
-                              {{
-                                currencyService.toCurrencyByBase(selectedAmount)
-                              }}
+                              {{ currencyService.toCurrency(selectedAmount) }}
                             </div>
                           </div>
                           <div class="charge-box__item">
@@ -196,9 +214,7 @@
                               {{ $t("booking_charge_box_total") }}
                             </div>
                             <div class="charge-box__item-right stroke">
-                              {{
-                                currencyService.toCurrencyByBase(totalAmount)
-                              }}
+                              {{ currencyService.toCurrency(totalAmount) }}
                             </div>
                           </div>
                         </div>
@@ -242,8 +258,11 @@
               <v-stepper-content :step="3">
                 <div class="gift-confirmation">
                   <div class="gift-confirmation__top">
-                    Congratulations you have purchased a Gift Card for
-                    :GiftCardReceiverFullName
+                    <i18n path="gift_order_step_three_description">
+                      <template #name>
+                        <span>{{ recipentName }}</span>
+                      </template>
+                    </i18n>
                   </div>
                   <div class="gift-confirmation__middle">
                     <v-btn
@@ -282,8 +301,9 @@ export default {
       selectedAmount: 0,
       totalAmount: 0,
       currency: "",
-      seletedStep: 1,
+      step: 1,
       isDownloading: false,
+      recipentName: "",
       message: "",
       steps: [
         {
@@ -339,6 +359,11 @@ export default {
   },
 
   watch: {},
+  computed: {
+    isFirstStepEditAble() {
+      return this.step == 2;
+    }
+  },
   mounted() {
     const { amount, currency, status } = this.$route.query;
     this.selectedAmount = amount;
@@ -353,17 +378,29 @@ export default {
       giftService.setGift(gift);
     }
     gift = giftService.getGift();
-    this.seletedStep = gift.step;
+    this.step = gift.step;
     if (status == "success") {
-      this.seletedStep = 3;
+      this.step = 3;
       gift = {
         step: 3
       };
       giftService.setGift(gift);
+      this.getGiftOrderInfo();
     }
   },
 
   methods: {
+    async getGiftOrderInfo() {
+      try {
+        const { id } = this.$route.query;
+        const { data } = await this.$axios.get(
+          endpoint.GIFT_CARDS_ORDERS_ID(id)
+        );
+        this.recipentName = data.data.recipentName;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     handleChangeAmountBtnClick() {
       this.$router.push(this.localePath(pathData.pages.gift));
     },
@@ -394,7 +431,7 @@ export default {
       }
     },
     handleContinueBtnClick() {
-      this.seletedStep = 2;
+      this.step = 2;
       let gift = giftService.getGift();
       if (gift) {
         gift = {
@@ -409,7 +446,8 @@ export default {
           message: this.message,
           currency: this.currency,
           totalAmount: this.totalAmount,
-          paymentMethod: this.selectedPaymentMethod
+          paymentMethod: this.selectedPaymentMethod,
+          recipentName: this.recipentName
         };
         if (this.selectedPaymentMethod) {
           const { data } = await this.$axios.post(
@@ -423,14 +461,14 @@ export default {
           this.$toast.error("Select a payment method");
         }
       } catch (error) {
-        console.log(error);
+        this.$toast.error(error.response.data.error.message);
       }
     },
     nextStep(n) {
       if (n === this.steps) {
-        this.seletedStep = 1;
+        this.step = 1;
       } else {
-        this.seletedStep = n + 1;
+        this.step = n + 1;
       }
     }
   }

@@ -35,6 +35,7 @@
         {{ currencyService.toCurrency(chargeInfo.totalPerPerson) }}
       </div>
     </div>
+
     <div class="charge-box__item promo" v-if="promoCode.valid">
       <div class="charge-box__item-left">
         <div class="promo-code">
@@ -45,6 +46,18 @@
         - {{ currencyService.toCurrency(promoCode.amount) }}
       </div>
     </div>
+
+    <!-- Gift Card -->
+    <div class="charge-box__item gift-card-item pl-1 py-1"  v-if="chargeInfo.giftPayableAmount">
+      <div class="charge-box__item-left white--text stroke">
+        {{ $t("Gift balance") }}
+      </div>
+      <div class="charge-box__item-right stroke white--text pr-1">
+        - {{ currencyService.toCurrency(chargeInfo.giftPayableAmount) }}
+      </div>
+    </div>
+
+    <!-- Total -->
     <div class="charge-box__item">
       <div class="charge-box__item-left stroke">
         {{ $t("booking_charge_box_total") }}
@@ -79,6 +92,9 @@ export default {
   box-shadow: -1px 0px 0px 0px #6f8098, 1px 0px 0px 0px #6f8098;
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
+  .gift-card-item{
+    background: #FAA0A0;
+  }
   &__item {
     display: flex;
     justify-content: space-between;
@@ -108,7 +124,7 @@ export default {
     font-weight: bold;
   }
 
-  .promo{
+  .promo {
     background: $body-bg;
     padding: 3px;
   }

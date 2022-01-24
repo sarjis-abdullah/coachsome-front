@@ -9,4 +9,5 @@ All notable changes to this project will be documented in this file.
 ### CMD
 
 - npm i --save vue-html2pdf
+- npm install --save nuxt-facebook-pixel-module
 
