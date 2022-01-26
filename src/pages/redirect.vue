@@ -14,6 +14,7 @@ export default {
     // Request from params indicate the request comes from
     // may be it is login page or setting page of athlete or coach
     if (this.$route.query.request_from == "settings_page") {
+      window.opener.postMessage({}, process.env.CLIENT_BASE_URL);
       window.close();
     } else {
       if (this.$route.query.access_token) {
