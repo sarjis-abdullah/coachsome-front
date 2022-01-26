@@ -13,7 +13,7 @@ export default {
   mounted() {
     // Request from params indicate the request comes from
     // may be it is login page or setting page of athlete or coach
-    if (this.$route.query.request_from == "settings_page") {
+    if (this.$route.query.action == "security_identify") {
       window.opener.postMessage({}, process.env.CLIENT_BASE_URL);
       window.close();
     } else {
