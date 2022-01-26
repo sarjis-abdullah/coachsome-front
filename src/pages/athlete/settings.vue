@@ -527,9 +527,13 @@
                         <v-col cols="8">
                           <v-btn
                             depressed
+                            v-if="!security.isConnectedFacebook"
                             @click="handleFacebookVerifyBtnClick"
                           >
                             Connect
+                          </v-btn>
+                          <v-btn v-else depressed color="success">
+                            Connected
                           </v-btn>
                         </v-col>
                       </v-row>
@@ -543,9 +547,12 @@
                         <v-col cols="8">
                           <v-btn
                             depressed
-                            color="success"
+                            v-if="!security.isConnectedGoogle"
                             @click="handleGoogleVerifyBtnClick"
                           >
+                            Connect
+                          </v-btn>
+                          <v-btn v-else depressed color="success">
                             Connected
                           </v-btn>
                         </v-col>
@@ -560,8 +567,15 @@
                         <v-col cols="8">
                           <v-btn
                             depressed
-                            color="success"
+                            v-if="!security.isConnectedTwitter"
                             @click="handleTwitterVerifyBtnClick"
+                          >
+                            Connect
+                          </v-btn>
+                          <v-btn
+                            v-else
+                            depressed
+                            color="success"
                           >
                             Connected
                           </v-btn>
