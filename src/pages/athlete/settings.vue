@@ -588,7 +588,7 @@ export default {
   data() {
     return {
       settingValueData,
-      requestFrom: "" + this.requestFrom,
+      requestFrom: "settings_page",
       tab: null,
       security: {
         isEmailVerified: null,
