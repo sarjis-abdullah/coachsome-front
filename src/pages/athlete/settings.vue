@@ -572,11 +572,7 @@
                           >
                             Connect
                           </v-btn>
-                          <v-btn
-                            v-else
-                            depressed
-                            color="success"
-                          >
+                          <v-btn v-else depressed color="success">
                             Connected
                           </v-btn>
                         </v-col>
@@ -602,7 +598,7 @@ export default {
   data() {
     return {
       settingValueData,
-      requestFrom: "settings_page",
+      action: "security_identify",
       tab: null,
       security: {
         isEmailVerified: null,
@@ -731,19 +727,19 @@ export default {
       const newWindow = this.openWindow("", "message");
       newWindow.location.href =
         process.env.API_SERVER_URL +
-        "/auth/login/facebook?user_type=" +
-        roleData.ATHLETE +
-        "&request_from=" +
-        this.requestFrom;
+        "/auth/login/facebook?user_id=" +
+        this.$auth.user.id +
+        "&action=" +
+        this.action;
     },
     async handleGoogleVerifyBtnClick() {
       const newWindow = this.openWindow("", "message");
       newWindow.location.href =
         process.env.API_SERVER_URL +
-        "/auth/login/google?user_type=" +
-        roleData.ATHLETE +
-        "&request_from=" +
-        this.requestFrom;
+        "/auth/login/google?user_id=" +
+        this.$auth.user.id +
+        "&action=" +
+        this.action;
     },
     async handleTwitterVerifyBtnClick() {
       try {
