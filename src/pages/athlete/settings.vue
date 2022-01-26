@@ -588,6 +588,7 @@ export default {
   data() {
     return {
       settingValueData,
+      requestFrom: "" + this.requestFrom,
       tab: null,
       security: {
         isEmailVerified: null,
@@ -644,10 +645,14 @@ export default {
     };
   },
   mounted() {
+    window.addEventListener("message", this.onMessage, false);
     this.getAthleteSetting();
     this.securityDetails();
   },
   methods: {
+    onMessage(e) {
+      this.securityDetails();
+    },
     openWindow(url, title, options = {}) {
       if (typeof url === "object") {
         options = url;
@@ -704,20 +709,18 @@ export default {
         const { data } = await this.$axios.post(
           endpoint.VERIFICATIONS_EMAIL_VERIFY_POST
         );
-        console.log(data);
       } catch (error) {
         this.$toast.error(error.response.data.error.message);
       }
     },
     async handleFacebookVerifyBtnClick() {
-      try {
-        const { data } = await this.$axios.post(
-          endpoint.VERIFICATIONS_FACEBOOK_VERIFY_POST
-        );
-        console.log(data);
-      } catch (error) {
-        this.$toast.error(error.response.data.error.message);
-      }
+      const newWindow = this.openWindow("", "message");
+      newWindow.location.href =
+        process.env.API_SERVER_URL +
+        "/auth/login/facebook?user_type=" +
+        roleData.ATHLETE +
+        "&request_from=" +
+        this.requestFrom;
     },
     async handleGoogleVerifyBtnClick() {
       const newWindow = this.openWindow("", "message");
@@ -725,7 +728,8 @@ export default {
         process.env.API_SERVER_URL +
         "/auth/login/google?user_type=" +
         roleData.ATHLETE +
-        "&request_from=athlete_settings";
+        "&request_from=" +
+        this.requestFrom;
     },
     async handleTwitterVerifyBtnClick() {
       try {
@@ -742,8 +746,11 @@ export default {
         const { data } = await this.$axios.get(endpoint.SECURITIES_GET);
         if (data.data) {
           this.security.isEmailVerified = data.data.emailVerifiedAt;
+          this.security.isPhoneNumberVerified = data.data.phoneNumberVerifiedAt;
+          this.security.isConnectedFacebook = data.data.facebookConnectedAt;
+          this.security.isConnectedGoogle = data.data.googleConnectedAt;
+          this.security.isConnectedTwitter = data.data.twitterConnectedAt;
         }
-        console.log(data);
       } catch (error) {
         if (error.response.data.error) {
           this.$toast.error(error.response.data.error.message);
