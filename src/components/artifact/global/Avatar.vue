@@ -248,6 +248,20 @@
         </v-list-item-content>
       </v-list-item>
 
+      <!-- Athlete settings -->
+      <v-list-item
+        v-if="isAthlete"
+        color="primary"
+        link
+        @click.stop="$router.push(localePath(items.athleteSettings.path))"
+      >
+        <v-list-item-content>
+          <v-list-item-title>{{
+            $t(items.athleteSettings.t_key)
+          }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
       <!-- Logout -->
       <v-list-item color="primary" link @click.stop="handleLogout">
         <v-list-item-content>
@@ -444,6 +458,13 @@ export default {
           key: "athleteBooking",
           icon: "folder_open",
           t_key: "app_bar_dashboard_booking"
+        },
+        athleteSettings: {
+          name: "Athlete Booking",
+          path: pathData.athlete.settings,
+          key: "athleteBooking",
+          icon: "folder_open",
+          t_key: "app_bar_setings"
         }
       }
     };
