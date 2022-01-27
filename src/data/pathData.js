@@ -77,6 +77,7 @@ export default {
     editProfile: "/athlete/edit-profile",
     login: "/athlete/login",
     register: "/athlete/register",
-    bookings: "/athlete/bookings"
+    bookings: "/athlete/bookings",
+    settings: "/athlete/settings"
   }
 };
