@@ -249,18 +249,20 @@
       </v-list-item>
 
       <!-- Athlete settings -->
-      <v-list-item
-        v-if="isAthlete"
-        color="primary"
-        link
-        @click.stop="$router.push(localePath(items.athleteSettings.path))"
-      >
-        <v-list-item-content>
-          <v-list-item-title>{{
-            $t(items.athleteSettings.t_key)
-          }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+      <div v-if="false">
+        <v-list-item
+          v-if="isAthlete"
+          color="primary"
+          link
+          @click.stop="$router.push(localePath(items.athleteSettings.path))"
+        >
+          <v-list-item-content>
+            <v-list-item-title>{{
+              $t(items.athleteSettings.t_key)
+            }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </div>
 
       <!-- Logout -->
       <v-list-item color="primary" link @click.stop="handleLogout">
