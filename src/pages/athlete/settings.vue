@@ -76,7 +76,11 @@
                                       dense
                                       hide-details
                                       solo
-                                      :label="$t('athlete_settings_placeholder_enter_email')"
+                                      :label="
+                                        $t(
+                                          'athlete_settings_placeholder_enter_email'
+                                        )
+                                      "
                                     ></v-text-field>
                                   </v-col>
                                 </v-row>
@@ -88,7 +92,11 @@
                                       dense
                                       solo
                                       type="password"
-                                      :label="$t('athlete_settings_placeholder_enter_pass')"
+                                      :label="
+                                        $t(
+                                          'athlete_settings_placeholder_enter_pass'
+                                        )
+                                      "
                                     ></v-text-field>
                                   </v-col>
                                 </v-row>
@@ -281,6 +289,7 @@
                               {{ $t("athlete_settings_column_email_txt") }}
                             </v-col>
                             <v-col
+                              v-if="false"
                               class="primary-light-1--text font-weight-bold text-center"
                             >
                               {{ $t("athlete_settings_column_sms_txt") }}
@@ -288,180 +297,121 @@
                           </v-row>
 
                           <!-- Inbox Message -->
-                          <v-radio-group
-                            v-model="notificationType.inboxMessage"
-                          >
-                            <v-row justify="center" align="center">
-                              <v-col class="primary-light-1--text">
-                                {{ $t("athlete_settings_item_inbox_message") }}
-                              </v-col>
-                              <v-col class="d-flex align-center justify-center">
-                                <v-radio
-                                  :value="settingValueData.ID_EMAIL"
-                                  class="ma-0"
-                                  color="primary-light-1"
-                                  hide-details
-                                ></v-radio>
-                              </v-col>
-                              <v-col class="d-flex align-center justify-center">
-                                <v-radio
-                                  disabled
-                                  :value="settingValueData.ID_SMS"
-                                  class="ma-0"
-                                  color="primary-light-1"
-                                  hide-details
-                                ></v-radio>
-                              </v-col>
-                            </v-row>
-                          </v-radio-group>
+                          <v-row justify="center" align="center">
+                            <v-col class="primary-light-1--text">
+                              {{ $t("athlete_settings_item_inbox_message") }}
+                            </v-col>
+                            <v-col class="d-flex align-center justify-center">
+                              <v-checkbox
+                                v-model="notificationType.inboxMessage"
+                                value="email"
+                                class="ma-0"
+                                color="primary-light-1"
+                                hide-details
+                              ></v-checkbox>
+                            </v-col>
+                          </v-row>
 
                           <!-- Order message -->
-                          <v-radio-group
-                            v-model="notificationType.orderMessage"
-                          >
-                            <v-row justify="center" align="center">
-                              <v-col class="primary-light-1--text">
-                                {{ $t("athlete_settings_item_order_message") }}
-                              </v-col>
-                              <v-col class="d-flex align-center justify-center">
-                                <v-radio
-                                  :value="settingValueData.ID_EMAIL"
-                                  class="ma-0"
-                                  color="primary-light-1"
-                                  hide-details
-                                ></v-radio>
-                              </v-col>
-                              <v-col class="d-flex align-center justify-center">
-                                <v-radio
-                                  disabled
-                                  :value="settingValueData.ID_SMS"
-                                  class="ma-0"
-                                  color="primary-light-1"
-                                  hide-details
-                                ></v-radio>
-                              </v-col>
-                            </v-row>
-                          </v-radio-group>
+                          <v-row justify="center" align="center">
+                            <v-col class="primary-light-1--text">
+                              {{ $t("athlete_settings_item_order_message") }}
+                            </v-col>
+                            <v-col class="d-flex align-center justify-center">
+                              <v-checkbox
+                                v-model="notificationType.orderMessage"
+                                value="email"
+                                class="ma-0"
+                                color="primary-light-1"
+                                hide-details
+                              ></v-checkbox>
+                            </v-col>
+                          </v-row>
 
                           <!-- Order updates -->
-                          <v-radio-group v-model="notificationType.orderUpdate">
-                            <v-row justify="center" align="center">
-                              <v-col class="primary-light-1--text">
-                                {{ $t("athlete_settings_item_order_updates") }}
-                              </v-col>
-                              <v-col class="d-flex align-center justify-center">
-                                <v-radio
-                                  :value="settingValueData.ID_EMAIL"
-                                  class="ma-0"
-                                  color="primary-light-1"
-                                  hide-details
-                                ></v-radio>
-                              </v-col>
-                              <v-col class="d-flex align-center justify-center">
-                                <v-radio
-                                  disabled
-                                  :value="settingValueData.ID_SMS"
-                                  class="ma-0"
-                                  color="primary-light-1"
-                                  hide-details
-                                ></v-radio>
-                              </v-col>
-                            </v-row>
-                          </v-radio-group>
+                          <v-row justify="center" align="center">
+                            <v-col class="primary-light-1--text">
+                              {{ $t("athlete_settings_item_order_updates") }}
+                            </v-col>
+                            <v-col class="d-flex align-center justify-center">
+                              <v-checkbox
+                                v-model="notificationType.orderUpdate"
+                                value="email"
+                                class="ma-0"
+                                color="primary-light-1"
+                                hide-details
+                              ></v-checkbox>
+                            </v-col>
+                          </v-row>
 
                           <!-- Booking request -->
-                          <v-radio-group
-                            v-model="notificationType.bookingRequest"
-                          >
-                            <v-row justify="center" align="center">
-                              <v-col class="primary-light-1--text">
-                                {{ $t("athlete_settings_item_booking_req") }}
-                              </v-col>
-                              <v-col class="d-flex align-center justify-center">
-                                <v-radio
-                                  :value="settingValueData.ID_EMAIL"
-                                  class="ma-0"
-                                  color="primary-light-1"
-                                  hide-details
-                                ></v-radio>
-                              </v-col>
-                              <v-col class="d-flex align-center justify-center">
-                                <v-radio
-                                  disabled
-                                  :value="settingValueData.ID_SMS"
-                                  class="ma-0"
-                                  color="primary-light-1"
-                                  hide-details
-                                ></v-radio>
-                              </v-col>
-                            </v-row>
-                          </v-radio-group>
+                          <v-row justify="center" align="center">
+                            <v-col class="primary-light-1--text">
+                              {{ $t("athlete_settings_item_booking_req") }}
+                            </v-col>
+                            <v-col class="d-flex align-center justify-center">
+                              <v-checkbox
+                                v-model="notificationType.bookingRequest"
+                                value="email"
+                                class="ma-0"
+                                color="primary-light-1"
+                                hide-details
+                              ></v-checkbox>
+                            </v-col>
+                          </v-row>
 
                           <!-- Booking chnages -->
-                          <v-radio-group
-                            v-model="notificationType.bookingChange"
-                          >
-                            <v-row justify="center" align="center">
-                              <v-col class="primary-light-1--text">
-                                {{ $t("athlete_settings_item_booking_change") }}
-                              </v-col>
-                              <v-col class="d-flex align-center justify-center">
-                                <v-radio
-                                  :value="settingValueData.ID_EMAIL"
-                                  class="ma-0"
-                                  color="primary-light-1"
-                                  hide-details
-                                ></v-radio>
-                              </v-col>
-                              <v-col class="d-flex align-center justify-center">
-                                <v-radio
-                                  disabled
-                                  :value="settingValueData.ID_SMS"
-                                  class="ma-0"
-                                  color="primary-light-1"
-                                  hide-details
-                                ></v-radio>
-                              </v-col>
-                            </v-row>
-                          </v-radio-group>
+                          <v-row justify="center" align="center">
+                            <v-col class="primary-light-1--text">
+                              {{ $t("athlete_settings_item_booking_change") }}
+                            </v-col>
+                            <v-col class="d-flex align-center justify-center">
+                              <v-checkbox
+                                v-model="notificationType.bookingChange"
+                                value="email"
+                                class="ma-0"
+                                color="primary-light-1"
+                                hide-details
+                              ></v-checkbox>
+                            </v-col>
+                          </v-row>
 
                           <!-- My account -->
-                          <v-radio-group v-model="notificationType.account">
-                            <v-row justify="center" align="center">
-                              <v-col class="primary-light-1--text">
-                                {{ $t("athlete_settings_item_my_acc") }}
-                              </v-col>
-                              <v-col class="d-flex align-center justify-center">
-                                <v-radio
-                                  :value="settingValueData.ID_EMAIL"
-                                  class="ma-0"
-                                  color="primary-light-1"
-                                  hide-details
-                                ></v-radio>
-                              </v-col>
-                              <v-col class="d-flex align-center justify-center">
-                              </v-col>
-                            </v-row>
-                          </v-radio-group>
+                          <v-row justify="center" align="center">
+                            <v-col class="primary-light-1--text">
+                              {{ $t("athlete_settings_item_my_acc") }}
+                            </v-col>
+                            <v-col class="d-flex align-center justify-center">
+                              <v-checkbox
+                                v-model="notificationType.account"
+                                value="email"
+                                class="ma-0"
+                                color="primary-light-1"
+                                hide-details
+                              ></v-checkbox>
+                            </v-col>
+                            <v-col
+                              class="d-flex align-center justify-center"
+                              v-if="false"
+                            >
+                            </v-col>
+                          </v-row>
 
                           <!-- Marketting -->
-                          <v-radio-group v-model="notificationType.marketting">
-                            <v-row justify="center" align="center">
-                              <v-col class="primary-light-1--text">
-                                {{ $t("athlete_settings_item_marketting") }}
-                              </v-col>
-                              <v-col class="d-flex align-center justify-center">
-                                <v-radio
-                                  :value="settingValueData.ID_EMAIL"
-                                  class="ma-0"
-                                  color="primary-light-1"
-                                  hide-details
-                                ></v-radio>
-                              </v-col>
-                              <v-col class="d-flex align-center justify-center">
-                              </v-col>
-                            </v-row>
-                          </v-radio-group>
+                          <v-row justify="center" align="center">
+                            <v-col class="primary-light-1--text">
+                              {{ $t("athlete_settings_item_marketting") }}
+                            </v-col>
+                            <v-col class="d-flex align-center justify-center">
+                              <v-checkbox
+                                v-model="notificationType.marketting"
+                                value="email"
+                                class="ma-0"
+                                color="primary-light-1"
+                                hide-details
+                              ></v-checkbox>
+                            </v-col>
+                          </v-row>
 
                           <v-row>
                             <v-col>
@@ -673,13 +623,18 @@ export default {
     };
   },
   mounted() {
-    window.addEventListener("message", this.onMessage, false);
+    window.addEventListener("message", this.onMessage);
     this.getAthleteSetting();
     this.securityDetails();
   },
   methods: {
+    beforeDestroy() {
+      window.removeEventListener("message", this.onMessage);
+    },
     onMessage(e) {
-      this.securityDetails();
+      if (e.data.status == "success") {
+        this.securityDetails();
+      }
     },
     openWindow(url, title, options = {}) {
       if (typeof url === "object") {
@@ -787,8 +742,83 @@ export default {
     },
     async handleNotificationSaveBtnClick() {
       try {
-        const { data } = await this.$axios.put(
-          endpoint.ATHLETE_SETTINGS_PUT(this.notificationType.id)
+        const payload = {
+          inboxMessage: null,
+          orderMessage: null,
+          orderUpdate: null,
+          bookingRequest: null,
+          bookingChange: null,
+          account: null,
+          marketting: null
+        };
+
+        if (this.notificationType.inboxMessage) {
+          if (
+            this.notificationType.inboxMessage == settingValueData.KEY_EMAIL
+          ) {
+            payload.inboxMessage = settingValueData.ID_EMAIL;
+          } else {
+            payload.inboxMessage = settingValueData.ID_SMS;
+          }
+        }
+
+        if (this.notificationType.orderMessage) {
+          if (
+            this.notificationType.orderMessage == settingValueData.KEY_EMAIL
+          ) {
+            payload.orderMessage = settingValueData.ID_EMAIL;
+          } else {
+            payload.orderMessage = settingValueData.ID_SMS;
+          }
+        }
+
+        if (this.notificationType.orderUpdate) {
+          if (this.notificationType.orderUpdate == settingValueData.KEY_EMAIL) {
+            payload.orderUpdate = settingValueData.ID_EMAIL;
+          } else {
+            payload.orderUpdate = settingValueData.ID_SMS;
+          }
+        }
+
+        if (this.notificationType.bookingRequest) {
+          if (
+            this.notificationType.bookingRequest == settingValueData.KEY_EMAIL
+          ) {
+            payload.bookingRequest = settingValueData.ID_EMAIL;
+          } else {
+            payload.bookingRequest = settingValueData.ID_SMS;
+          }
+        }
+
+        if (this.notificationType.bookingChange) {
+          if (
+            this.notificationType.bookingChange == settingValueData.KEY_EMAIL
+          ) {
+            payload.bookingChange = settingValueData.ID_EMAIL;
+          } else {
+            payload.bookingChange = settingValueData.ID_SMS;
+          }
+        }
+
+        if (this.notificationType.account) {
+          if (this.notificationType.account == settingValueData.KEY_EMAIL) {
+            payload.account = settingValueData.ID_EMAIL;
+          } else {
+            payload.account = settingValueData.ID_SMS;
+          }
+        }
+
+        if (this.notificationType.marketting) {
+          if (this.notificationType.marketting == settingValueData.KEY_EMAIL) {
+            payload.marketting = settingValueData.ID_EMAIL;
+          } else {
+            payload.marketting = settingValueData.ID_SMS;
+          }
+        }
+        
+        await this.$axios.put(
+          endpoint.ATHLETE_SETTINGS_PUT(this.notificationType.id),
+          { ...payload }
         );
         this.$toast.success("successfully updated");
       } catch (error) {
@@ -801,16 +831,64 @@ export default {
       try {
         const { data } = await this.$axios.get(endpoint.ATHLETE_SETTINGS_GET);
         if (data.data) {
+          console.log("Vaue = " + data.data.orderUpdate);
           this.notificationType.id = data.data.id;
-          this.notificationType.inboxMessage = data.data.inboxMessage;
-          this.notificationType.orderMessage = data.data.orderMessage;
-          this.notificationType.orderUpdate = data.data.orderUpdate;
-          this.notificationType.bookingRequest = data.data.bookingRequest;
-          this.notificationType.bookingChange = data.data.bookingChange;
-          this.notificationType.account = data.data.account;
-          this.notificationType.marketting = data.data.marketting;
+          if (data.data.inboxMessage) {
+            if (data.data.inboxMessage == settingValueData.ID_EMAIL) {
+              this.notificationType.inboxMessage = settingValueData.KEY_EMAIL;
+            } else {
+              this.notificationType.inboxMessage = settingValueData.KEY_SMS;
+            }
+          }
+
+          if (data.data.orderMessage) {
+            if (data.data.orderMessage == settingValueData.ID_EMAIL) {
+              this.notificationType.orderMessage = settingValueData.KEY_EMAIL;
+            } else {
+              this.notificationType.orderMessage = settingValueData.KEY_SMS;
+            }
+          }
+
+          if (data.data.orderUpdate) {
+            if (data.data.orderUpdate == settingValueData.ID_EMAIL) {
+              this.notificationType.orderUpdate = settingValueData.KEY_EMAIL;
+            } else {
+              this.notificationType.orderUpdate = settingValueData.KEY_SMS;
+            }
+          }
+
+          if (data.data.bookingRequest) {
+            if (data.data.bookingRequest == settingValueData.ID_EMAIL) {
+              this.notificationType.bookingRequest = settingValueData.KEY_EMAIL;
+            } else {
+              this.notificationType.bookingRequest = settingValueData.KEY_SMS;
+            }
+          }
+
+          if (data.data.bookingChange) {
+            if (data.data.bookingChange == settingValueData.ID_EMAIL) {
+              this.notificationType.bookingChange = settingValueData.KEY_EMAIL;
+            } else {
+              this.notificationType.bookingChange = settingValueData.KEY_SMS;
+            }
+          }
+
+          if (data.data.account) {
+            if (data.data.account == settingValueData.ID_EMAIL) {
+              this.notificationType.account = settingValueData.KEY_EMAIL;
+            } else {
+              this.notificationType.account = settingValueData.KEY_SMS;
+            }
+          }
+
+          if (data.data.marketting) {
+            if (data.data.marketting == settingValueData.ID_EMAIL) {
+              this.notificationType.marketting = settingValueData.KEY_EMAIL;
+            } else {
+              this.notificationType.marketting = settingValueData.KEY_SMS;
+            }
+          }
         }
-        console.log(data);
       } catch (err) {
         this.$toast.error(err.response.data.error.message);
       }
