@@ -625,8 +625,8 @@ export default {
   },
   mounted() {
     window.addEventListener("message", this.onMessage);
-    this.getAthleteSetting();
     this.securityDetails();
+    this.getAthleteSetting();
   },
   methods: {
     beforeDestroy() {
