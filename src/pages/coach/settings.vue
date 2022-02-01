@@ -466,6 +466,7 @@ export default {
   data() {
     return {
       tab: null,
+      action: "security_identify",
       emailReset: {
         dialog: false,
         email: "",
