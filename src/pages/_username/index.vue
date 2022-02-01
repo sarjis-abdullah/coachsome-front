@@ -71,7 +71,7 @@
               ></v-skeleton-loader>
             </v-col>
           </v-row>
-          
+
           <v-row v-if="services.length > 0">
             <v-col cols="12">
               <div class="section-title">
@@ -639,7 +639,9 @@ export default {
       messageApi(this.$axios)
         .store(payload)
         .then(() => {
-          this.$toast.success("Your question is sent successfully.");
+          this.$toast.success(
+            this.$i18n.t("pulbic_profile_msg_sucessfully_sent")
+          );
           this.questionBox.dialog = false;
         })
         .catch(({ response }) => {
