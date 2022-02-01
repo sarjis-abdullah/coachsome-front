@@ -605,7 +605,8 @@ export default {
       rule: {
         oldPassword: [],
         newPassword: []
-      }
+      },
+      isSocialLogin: false,
     };
   },
   watch: {},
@@ -815,7 +816,7 @@ export default {
             payload.marketting = settingValueData.ID_SMS;
           }
         }
-        
+
         await this.$axios.put(
           endpoint.ATHLETE_SETTINGS_PUT(this.notificationType.id),
           { ...payload }
@@ -831,7 +832,8 @@ export default {
       try {
         const { data } = await this.$axios.get(endpoint.ATHLETE_SETTINGS_GET);
         if (data.data) {
-          console.log("Vaue = " + data.data.orderUpdate);
+          this.form.email = data.email;
+          this.isSocialLogin = data.isSocialLogin;
           this.notificationType.id = data.data.id;
           if (data.data.inboxMessage) {
             if (data.data.inboxMessage == settingValueData.ID_EMAIL) {
@@ -895,7 +897,7 @@ export default {
     },
     async handleDeleteAccount() {
       try {
-        this.$axios.delete(
+        await this.$axios.delete(
           endpoint.ACCOUNTS_DELETE + "?password=" + this.deleteAccount.password
         );
         await this.$auth.logout();
@@ -905,7 +907,13 @@ export default {
       }
     },
     handleDeleteAccountBtnClick() {
-      this.deleteAccount.dialog = true;
+      if(this.$auth.user.is_social_account){
+        if(confirm("Are You sure? Your account will be deleted permanantly.")){
+          this.handleDeleteAccount();
+        }
+      } else {
+        this.deleteAccount.dialog = true;
+      }
     },
     emailResetCancelHandle() {
       this.emailReset.dialog = false;
