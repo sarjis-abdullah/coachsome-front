@@ -1,5 +1,7 @@
 <template>
- <MarketplaceContent/>
+  <div class="marketplace-page">
+    <MarketplaceContent />
+  </div>
 </template>
 
 <script>
@@ -19,6 +21,9 @@ export default {
 };
 </script>
 
-<style lang="scss">
 
+<style lang="scss" scoped>
+.marketplace-page {
+  background: $body-bg;
+}
 </style>
