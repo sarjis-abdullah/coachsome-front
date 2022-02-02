@@ -634,7 +634,7 @@ export default {
         receiverUserId: this.userInfo.id,
         content: this.questionBox.question,
         type: "text",
-        created_at: new Date().toISOString()
+        createdAt: new Date().toISOString()
       };
       messageApi(this.$axios)
         .store(payload)
