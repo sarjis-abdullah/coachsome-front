@@ -14,6 +14,11 @@
                     {{ $t("footer_url_label_pricing") }}
                   </nuxt-link>
                 </div>
+                 <div class="list__item">
+                  <nuxt-link :to="localePath(uri.advisoryBoard)">
+                    {{ $t("footer_url_label_advisory_board") }}
+                  </nuxt-link>
+                </div>
                 <div class="list__item" v-show="false">
                   <nuxt-link to="/">Support</nuxt-link>
                 </div>
@@ -244,6 +249,7 @@ export default {
         show: true
       },
       uri: {
+        advisoryBoard: pathData.pages.advisoryBoard,
         price: pathData.pages.price,
         howItWorks: pathData.pages.howItWork,
         about: pathData.pages.about,

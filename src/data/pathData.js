@@ -4,6 +4,7 @@ export default {
     afterConfirmationMailClicked: "/after-mail-confirmation",
     about: "/about",
     booking: "/booking",
+    advisoryBoard: "/advisory-board",
     bookingNew: "/packages/:packageId",
     bookingPackage: id => "/packages/" + id,
     blog: "/blog",
