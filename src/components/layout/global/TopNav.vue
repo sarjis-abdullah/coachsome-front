@@ -275,7 +275,7 @@
 
 <script>
 import { pathData } from "@/data";
-import { currencyService,bookingService } from "@/services";
+import { currencyService, bookingService } from "@/services";
 import Avatar from "@/components/artifact/global/Avatar";
 import Burger from "@/components/artifact/global/Burger";
 import MessageBtn from "@/components/artifact/global/MessageBtn";
@@ -384,10 +384,18 @@ export default {
       return this.$i18n.locales.find(i => i.code == this.$i18n.locale);
     },
     isMarketplacePage() {
-      return (
-        this.localePath(pathData.pages.marketplace) ==
-        this.$router.currentRoute.path
-      );
+      let path = this.$router.currentRoute.path;
+      let pathArr = path.split("/");
+      if (pathArr.length == 2) {
+        return (
+          this.localePath(pathData.pages.marketplace) ==
+          this.$router.currentRoute.path
+        );
+      } else {
+        pathArr.splice(pathArr.length - 1, 1);
+        let result = pathArr.join("/");
+        return this.localePath(pathData.pages.marketplace) == result;
+      }
     },
     currencyBtnText() {
       const currency = currencyService.selectedCurrency();

@@ -16,7 +16,7 @@ import { pageBuilderApi } from "@/api";
 export default {
   head() {
     return {
-      title: this.$i18n.t("header_title_tag_front_policy"),
+      title: this.$i18n.t("header_title_tag_advisory_board"),
       titleTemplate: "%s"
     };
   },
@@ -24,28 +24,31 @@ export default {
     content: ""
   }),
   async asyncData({ app, $axios }) {
-  
-    const { data } = await pageBuilderApi($axios).getPageByGroupName("PrivacyPolicy");
-
     let content = "";
-    if (data.data) {
-      if (data.data.pages.length) {
+    try {
+      const { data } = await pageBuilderApi($axios).getPageByGroupName(
+        "AdvisoryBoard"
+      );
+
+      if (data.data) {
+        if (data.data.pages.length) {
+          data.data.pages.forEach(item => {
+            if (item.locale == app.i18n.locale) {
+              content = item.content;
+            }
+          });
+        }
+      }
+
+      // Fallback
+      if (!content) {
         data.data.pages.forEach(item => {
-          if (item.locale == app.i18n.locale) {
+          if (app.i18n.locale == item.locale) {
             content = item.content;
           }
         });
       }
-    }
-
-    // Fallback
-    if (!content) {
-      data.data.pages.forEach(item => {
-        if (app.i18n.locale == item.locale) {
-          content = item.content;
-        }
-      });
-    }
+    } catch (error) {}
 
     return {
       content
