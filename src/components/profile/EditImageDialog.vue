@@ -270,6 +270,8 @@ export default {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        this.isLoadingSaveBtn = false;
       }
     },
     async getImages(images) {
@@ -291,68 +293,71 @@ export default {
       this.handleProfileImageDelete();
     },
     handleSaveBtnClick() {
-      this.isLoadingSaveBtn = true;
-      let p1 = new Promise(resolve => {
-        const originalCropperResult = this.$refs.originalCropper.getResult();
-        if (originalCropperResult.canvas) {
-          originalCropperResult.canvas.toBlob(blob => {
-            let reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => {
-              this.cropper.original.cropper = reader.result;
-              resolve(reader.result);
-            };
-          }, "image/png");
-        }
-      });
+      try {
+        this.isLoadingSaveBtn = true;
+        let p1 = new Promise(resolve => {
+          const originalCropperResult = this.$refs.originalCropper.getResult();
+          if (originalCropperResult.canvas) {
+            originalCropperResult.canvas.toBlob(blob => {
+              let reader = new FileReader();
+              reader.readAsDataURL(blob);
+              reader.onloadend = () => {
+                this.cropper.original.cropper = reader.result;
+                resolve(reader.result);
+              };
+            }, "image/png");
+          }
+        });
 
-      let p2 = new Promise(resolve => {
-        const squareCropperResult = this.$refs.squareCropper.getResult();
-        if (squareCropperResult.canvas) {
-          squareCropperResult.canvas.toBlob(blob => {
-            let reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => {
-              this.cropper.square.cropper = reader.result;
-              resolve(reader.result);
-            };
-          }, "image/png");
-        }
-      });
-      let p3 = new Promise(resolve => {
-        const landscapeCropperResult = this.$refs.landscapeCropper.getResult();
-        if (landscapeCropperResult.canvas) {
-          landscapeCropperResult.canvas.toBlob(blob => {
-            let reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => {
-              this.cropper.landscape.cropper = reader.result;
-              resolve(reader.result);
-            };
-          }, "image/png");
-        }
-      });
-      let p4 = new Promise(resolve => {
-        const portraitCropperResult = this.$refs.portraitCropper.getResult();
-        if (portraitCropperResult.canvas) {
-          portraitCropperResult.canvas.toBlob(blob => {
-            let reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => {
-              this.cropper.portrait.cropper = reader.result;
-              resolve(reader.result);
-            };
-          }, "image/png");
-        }
-      });
-
+        let p2 = new Promise(resolve => {
+          const squareCropperResult = this.$refs.squareCropper.getResult();
+          if (squareCropperResult.canvas) {
+            squareCropperResult.canvas.toBlob(blob => {
+              let reader = new FileReader();
+              reader.readAsDataURL(blob);
+              reader.onloadend = () => {
+                this.cropper.square.cropper = reader.result;
+                resolve(reader.result);
+              };
+            }, "image/png");
+          }
+        });
+        let p3 = new Promise(resolve => {
+          const landscapeCropperResult = this.$refs.landscapeCropper.getResult();
+          if (landscapeCropperResult.canvas) {
+            landscapeCropperResult.canvas.toBlob(blob => {
+              let reader = new FileReader();
+              reader.readAsDataURL(blob);
+              reader.onloadend = () => {
+                this.cropper.landscape.cropper = reader.result;
+                resolve(reader.result);
+              };
+            }, "image/png");
+          }
+        });
+        let p4 = new Promise(resolve => {
+          const portraitCropperResult = this.$refs.portraitCropper.getResult();
+          if (portraitCropperResult.canvas) {
+            portraitCropperResult.canvas.toBlob(blob => {
+              let reader = new FileReader();
+              reader.readAsDataURL(blob);
+              reader.onloadend = () => {
+                this.cropper.portrait.cropper = reader.result;
+                resolve(reader.result);
+              };
+            }, "image/png");
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      
       Promise.all([p1, p2, p3, p4]).then(values => {
-        this.isLoadingSaveBtn = false;
         this.uploadImages({
           original: values[0],
           square: values[1],
           landscape: values[2],
-          portrait: values[3],
+          portrait: values[3]
         });
       });
     },
