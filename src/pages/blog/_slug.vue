@@ -1,35 +1,11 @@
 <template>
   <div class="blog-page">
-    <v-container>
-      <v-row>
-        <v-col cols="12" md="3">
-          <v-list elevation="1">
-            <v-list-item-group
-              v-model="selectedCategory"
-              color="primary-light-1"
-            >
-              <v-subheader>Category</v-subheader>
-              <div
-                v-for="(category, i) in categories"
-                :key="i"
-                @click="handleCategoryClick(category.translation)"
-              >
-                <v-list-item link>
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      {{ category.translation }}
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-divider></v-divider>
-              </div>
-            </v-list-item-group>
-          </v-list>
-        </v-col>
+    <v-container class="py-10">
+      <v-row justify="center">
         <v-col cols="12" md="9">
           <v-row>
             <v-col cols="12" md="12">
-              <v-card>
+              <v-card class="post">
                 <template slot="progress">
                   <v-progress-linear
                     color="deep-purple"
@@ -37,11 +13,24 @@
                     indeterminate
                   ></v-progress-linear>
                 </template>
-                <v-card-text class="p-0">
+                <v-img :src="post.featured_image" height="538"></v-img>
+                <div class="px-5 pt-10 pb-10">
+                  <div class="post__title">
+                    {{ post.title }}
+                  </div>
+                  <div class="post__subtitle pt-5">
+                    {{ moment(post.created_at).format("MMM Do YY") }}
+                  </div>
+                  <div class="post__subsubtitle pt-5">
+                    Written by {{ post.authorName }}
+                  </div>
+                </div>
+                <v-divider></v-divider>
+                <div class="pa-5">
                   <div class="bootstrap-wrapper">
                     <div v-html="post.published_content"></div>
                   </div>
-                </v-card-text>
+                </div>
               </v-card>
             </v-col>
           </v-row>
@@ -53,7 +42,7 @@
 
 <script>
 import { pageBuilderApi } from "@/api";
-
+import moment from "moment";
 export default {
   head() {
     return {
@@ -72,14 +61,15 @@ export default {
     let categories = [];
     let post = {};
 
-    const categoryRes = await pageBuilderApi($axios).getBlogCategory({
-      locale: app.i18n.locale
-    });
-    categories = categoryRes.data.data.categories;
-
     const blogRes = await pageBuilderApi($axios).getBlogPost();
     if (blogRes.data.blog) {
       post = blogRes.data.blog.find(item => item.slug_url == params.slug);
+    }
+    if (post) {
+      const userResponse = await $axios.get(`/users/${post.author}`);
+      if (userResponse.data.data) {
+        post.authorName = userResponse.data.data.fullName;
+      }
     }
     return {
       categories,
@@ -89,12 +79,7 @@ export default {
     };
   },
   methods: {
-    data() {
-      return {};
-    },
-    handleCategoryClick(category) {
-      this.$router.push(this.localePath(`/blog?category=${category}`));
-    }
+    moment
   }
 };
 </script>
@@ -103,6 +88,32 @@ export default {
 .blog-page {
   height: 100%;
   background: $body-bg;
+  .post {
+    &__title {
+      font-family: $font-family;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 56.9141px;
+      line-height: 78px;
+      color: #2d3748;
+    }
+    &__subtitle {
+      font-family: $font-family;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 22.7656px;
+      line-height: 31px;
+      color: #718096;
+    }
+    &__subsubtitle {
+      font-family: $font-family;
+      font-weight: bold;
+      font-size: 22.7656px;
+      line-height: 31px;
+      color: #2d3748;
+    }
+  }
+
   .bootstrap-wrapper::v-deep {
     @import "~bootstrap/dist/css/bootstrap.min";
   }
