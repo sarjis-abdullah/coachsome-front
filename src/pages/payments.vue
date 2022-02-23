@@ -31,63 +31,27 @@
         <v-col cols="12" md="6">
           <div v-if="loaderInitial">
             <v-skeleton-loader
-              v-bind="attrs"
               type=" list-item-three-line, card-heading"
             ></v-skeleton-loader>
           </div>
           <div v-else>
-            <v-card
-              class="payment-card rounded-lg"
-              max-width="300"
-              color="#FCFDFE"
-              elevation="3"
-              v-if="paymentCard"
-              flat
-            >
-              <v-card-title>
-                <img
-                  v-if="paymentCard.brand == 'mastercard'"
-                  :src="require(`@/assets/images/booking/mastercard.svg`)"
-                  height="50px"
-                  width="50px"
-                />
-                <img
-                  v-if="paymentCard.brand == 'visa'"
-                  :src="require(`@/assets/images/booking/visa-text.svg`)"
-                  height="50px"
-                  width="50px"
-                />
-                <v-spacer></v-spacer>
-                <v-btn
-                  :loading="loadingPaymentCardRemove"
-                  text
-                  color="#C7311D"
-                  class="px-0 py-0"
-                  height="0"
-                  small
-                  @click="handleRemoveBtnClick"
-                >
-                  Remove card
-                </v-btn>
-              </v-card-title>
-
-              <v-card-text class="text-h5 font-weight-bold"> </v-card-text>
-
-              <v-card-actions>
+            <payment-card v-if="paymentCard" :payment-card="paymentCard">
+              <template v-slot:top-right>
                 <div>
-                  <div class="payment-card__holder">
-                    {{ paymentCard.name }}
-                  </div>
-                  <div class="payment-card__code">
-                    **** **** **** {{ paymentCard.last4 }}
-                  </div>
+                  <v-btn
+                    :loading="loadingPaymentCardRemove"
+                    text
+                    color="#C7311D"
+                    class="px-0 py-0"
+                    height="0"
+                    small
+                    @click="handleRemoveBtnClick"
+                  >
+                    Remove card
+                  </v-btn>
                 </div>
-                <v-spacer></v-spacer>
-                <div class="payment-card__year">
-                  {{ paymentCard.expYear }}
-                </div>
-              </v-card-actions>
-            </v-card>
+              </template>
+            </payment-card>
             <div v-else>
               <v-alert
                 icon="mdi-shield-lock-outline"
@@ -100,6 +64,7 @@
             </div>
 
             <v-btn
+              v-if="!paymentCard"
               class="text-normal mt-5"
               x-large
               color="primary-light-1"
@@ -158,10 +123,12 @@ import Reedem from "@/components/artifact/global/pages/payments/Reedem.vue";
 import { currencyService } from "@/services";
 import { endpoint } from "../api";
 
+import PaymentCard from "@/components/card/PaymentCard.vue";
 export default {
   layout: "common",
   components: {
-    Reedem
+    Reedem,
+    PaymentCard
   },
   middleware: ["auth"],
   data() {
@@ -249,30 +216,6 @@ export default {
 .payments {
   background: $body-bg;
   height: 100%;
-
-  .payment-card {
-    &__holder {
-      font-family: $font-family;
-      font-weight: normal;
-      font-size: 14px;
-      line-height: 19px;
-      color: #15577c;
-    }
-    &__code {
-      font-family: $font-family;
-      font-weight: normal;
-      font-size: 14px;
-      line-height: 19px;
-      color: #15577c;
-    }
-    &__year {
-      font-family: $font-family;
-      font-weight: normal;
-      font-size: 14px;
-      line-height: 19px;
-      color: #15577c;
-    }
-  }
 
   .reedem-dialog {
     .redeem-title {

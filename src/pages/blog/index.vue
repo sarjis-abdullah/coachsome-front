@@ -90,10 +90,18 @@ export default {
     };
   },
   async asyncData({ query, app, $axios }) {
-    const allPost = await $axios.get("/tikcms/blog/all/published/show");
+    let allPost = [];
+    const { data } = await $axios.get("/tikcms/blog/list");
+    if(data.data.list){
+      if(data.data.list.hasOwnProperty(app.i18n.locale)){
+        allPost = data.data.list[app.i18n.locale];
+      } else {
+        allPost = data.data.list['en'];
+      }
+    }
 
     return {
-      allPost: allPost.data.blog
+      allPost: allPost
     };
   },
   methods: {
