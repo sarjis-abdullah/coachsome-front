@@ -18,20 +18,16 @@
       <v-row class="mt-10">
         <v-col cols="12" md="4">
           <div class="section-title pb-2">
-            {{ $t("Payment methods") }}
+            {{ $t("payment_section_title_payment_methods") }}
           </div>
           <div class="section-description">
-            {{
-              $t(
-                "Add and administrate your payment methods on Coachsome through our secure payment system. "
-              )
-            }}
+            {{ $t("payment_section_payment_method_desc") }}
           </div>
         </v-col>
         <v-col cols="12" md="6">
           <div v-if="loaderInitial">
             <v-skeleton-loader
-              type=" list-item-three-line, card-heading"
+              type="list-item-three-line, card-heading"
             ></v-skeleton-loader>
           </div>
           <div v-else>
@@ -47,7 +43,7 @@
                     small
                     @click="handleRemoveBtnClick"
                   >
-                    Remove card
+                    {{ $t("payment_label_remove_card") }}
                   </v-btn>
                 </div>
               </template>
@@ -59,7 +55,7 @@
                 text
                 type="info"
               >
-                You do not add any card
+                {{ $t("payment_alert_not_add_card") }}
               </v-alert>
             </div>
 
@@ -73,7 +69,7 @@
               @click="handlePaymentCardAddBtnClick"
             >
               <v-icon class="mr-3">mdi-plus-circle</v-icon>
-              {{ $t("Add payment method") }}
+              {{ $t("payment_label_add_payment_method") }}
             </v-btn>
           </div>
         </v-col>

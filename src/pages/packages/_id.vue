@@ -179,7 +179,9 @@
                             class="balance-btn"
                             @click="giftCard.dialog = true"
                           >
-                           {{ $t("package_booking_gift_card_use_balance_txt") }}
+                            {{
+                              $t("package_booking_gift_card_use_balance_txt")
+                            }}
                           </div>
                           <v-dialog v-model="giftCard.dialog" max-width="500">
                             <v-card>
@@ -196,14 +198,20 @@
                                   class="gift-card-balance-title text-center primary-light-1--text"
                                   style="font-weight: bold;font-size: 25px;"
                                 >
-                                   {{ $t("package_booking_gift_card_title_balance") }}
+                                  {{
+                                    $t(
+                                      "package_booking_gift_card_title_balance"
+                                    )
+                                  }}
                                 </div>
                                 <div
                                   class="text-center mb-5 mt-5"
                                   style="font-weight: bold;font-size: 36px;line-height: 49px;text-align: center;color: #1A202D;"
                                 >
                                   {{
-                                    currencyService.toCurrencyByBase(giftCard.balance)
+                                    currencyService.toCurrencyByBase(
+                                      giftCard.balance
+                                    )
                                   }}
                                 </div>
                                 <v-btn
@@ -212,17 +220,24 @@
                                   class="px-10 white--text text-normal"
                                   @click="handleGiftCardUseBtnClick"
                                 >
-                                  {{ $t("package_booking_gift_card_btn_label_use_balance") }}
+                                  {{
+                                    $t(
+                                      "package_booking_gift_card_btn_label_use_balance"
+                                    )
+                                  }}
                                 </v-btn>
                                 <v-btn
                                   block
                                   class="mt-5 text-normal"
                                   color="warning"
                                   @click="handleGiftCardCancleBtnClick"
-                                  >
-                                  {{ $t('package_booking_gift_card_btn_label_cancel') }}
-                                  </v-btn
                                 >
+                                  {{
+                                    $t(
+                                      "package_booking_gift_card_btn_label_cancel"
+                                    )
+                                  }}
+                                </v-btn>
                               </v-card-text>
                               <v-card-actions> </v-card-actions>
                             </v-card>
@@ -245,7 +260,11 @@
                               <v-card-text>
                                 <v-text-field
                                   v-model="promoCode.dialogValue"
-                                  :label="$t('package_booking_placeholder_enter_promo_code')"
+                                  :label="
+                                    $t(
+                                      'package_booking_placeholder_enter_promo_code'
+                                    )
+                                  "
                                 ></v-text-field>
                               </v-card-text>
                               <v-card-actions>
@@ -256,7 +275,11 @@
                                   text
                                   @click="handleRemoveBtnClick"
                                 >
-                                  {{ $t("pakcage_booking_promo_code_label_btn_remove") }}
+                                  {{
+                                    $t(
+                                      "pakcage_booking_promo_code_label_btn_remove"
+                                    )
+                                  }}
                                 </v-btn>
                                 <v-btn
                                   color="primary-light-1"
@@ -264,13 +287,20 @@
                                   :loading="isLoading"
                                   @click="handleApplyBtnClick"
                                 >
-                                  {{ $t("package_booking_promo_code_btn_label_apply") }}
+                                  {{
+                                    $t(
+                                      "package_booking_promo_code_btn_label_apply"
+                                    )
+                                  }}
                                 </v-btn>
                               </v-card-actions>
                             </v-card>
                           </v-dialog>
                         </div>
-                        <div class="payment" v-if="!isTotalAmountZero">
+                        <div
+                          class="payment"
+                          v-if="!isTotalAmountZero && !paymentCard"
+                        >
                           <v-radio-group v-model="selectedPaymentMethod" column>
                             <span
                               v-for="(paymentMethod, i) in paymentMethods"
@@ -291,6 +321,9 @@
                               </v-radio>
                             </span>
                           </v-radio-group>
+                        </div>
+                        <div class="my-5" v-if="paymentCard">
+                          <payment-card :payment-card="paymentCard" />
                         </div>
                         <div class="mt-2 mb-2">
                           <v-btn
@@ -401,11 +434,13 @@ import { currencyService, bookingService } from "@/services";
 import { constantData, pathData } from "@/data";
 import { storageHelper } from "@/helper";
 import { bookingApi } from "@/api";
+import PaymentCard from "@/components/card/PaymentCard.vue";
 export default {
   components: {
     ProfileSimpleCard,
     PackageSimpleCard,
-    ChargeBox
+    ChargeBox,
+    PaymentCard
   },
   data() {
     return {
@@ -426,6 +461,7 @@ export default {
       loadingRequestBookingBtn: false,
       selectedPaymentMethod: null,
       isLoading: false,
+      paymentCard: null,
       paymentMethods: [
         // {
         //   id: 1,
@@ -679,6 +715,7 @@ export default {
           let chargeBox = response.data.chargeBox;
           let packageSetting = response.data.packageSetting;
           let promoCode = response.data.promoCode;
+          let paymentCard = response.data.paymentCard;
 
           if (response.data.giftCardBalance) {
             this.giftCard.balance = response.data.giftCardBalance;
@@ -686,6 +723,17 @@ export default {
 
           if (packageSetting) {
             this.packageSetting = packageSetting;
+          }
+
+          if (paymentCard) {
+            this.selectedPaymentMethod = paymentCard.brand;
+            this.paymentCard = {
+              name:
+                this.$auth.user.first_name + " " + this.$auth.user.last_name,
+              brand: paymentCard.brand,
+              expYear: paymentCard.exp_year,
+              last4: paymentCard.last4
+            };
           }
 
           if (profileCardInfo) {
@@ -778,8 +826,12 @@ export default {
             booking.id = data.bookingId;
             bookingService.setBookingInfo(booking);
           }
+
           if (data.link) {
             window.location.assign(data.link);
+          } else if (data.useSavedCard) {
+            this.notify({ bookingId: data.bookingId });
+            this.step = 3;
           } else {
             this.step = 3;
           }
