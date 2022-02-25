@@ -1,27 +1,24 @@
 <template>
-  <v-dialog
-    v-model="dialog"
-    min-width="300"
-    max-width="1300"
-    scrollable
-    persistent
-  >
-    <v-card class="c-profile-image">
-      <v-card-title class="title">
-        Profile image
-        <v-spacer></v-spacer>
-        <v-btn icon @click="handleCloseBtnClick">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </v-card-title>
+  <div class="edit-image-dialog">
+    <v-dialog v-model="dialog" max-width="1300px" scrollable persistent>
+      <v-card class="edit-image-dialog__wrapper">
+        <v-card-title class="title">
+          <div class="subtitle">
+            {{ $t("profile_edit_image_title_profile_image") }}
+          </div>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="handleCloseBtnClick">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-divider></v-divider>
 
-      <v-card-text>
-        <section class="cropper-area">
+        <v-card-text class="pt-5">
           <v-row>
             <v-col v-show="isOriginalCropperShowing" cols="12" md="3" sm="12">
               <v-card class="mx-auto" elevation="0" tile>
                 <div class="subtitle">
-                  {{ $t("profile_edit_image_title_profile_image") }}
+                  {{ $t("profile_edit_image_title_original_image") }}
                 </div>
                 <cropper
                   ref="originalCropper"
@@ -111,6 +108,7 @@
                   minAspectRatio: 1 / 1,
                   maxAspectRatio: 1 / 1
                 }"
+                
                 ref="squareCropper"
               ></cropper>
               <div
@@ -155,25 +153,25 @@
               />
             </v-col>
           </v-row>
-          <v-row v-if="isShowingSaveBtn">
-            <v-col cols="12">
-              <v-btn
-                :loading="isLoadingSaveBtn"
-                color="success"
-                depressed
-                tile
-                @click="handleSaveBtnClick"
-              >
-                {{ $t("profile_edit_image_btn_label_save") }}
-              </v-btn>
-            </v-col>
-          </v-row>
-        </section>
-      </v-card-text>
+        </v-card-text>
+        <v-divider></v-divider>
 
-      <v-card-actions> </v-card-actions>
-    </v-card>
-  </v-dialog>
+        <v-card-actions>
+          <v-btn
+            v-if="isShowingSaveBtn"
+            :loading="isLoadingSaveBtn"
+            color="success"
+            depressed
+            tile
+            @click="handleSaveBtnClick"
+          >
+            {{ $t("profile_edit_image_btn_label_save") }}
+          </v-btn>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -352,12 +350,14 @@ export default {
           original: values[0],
           square: values[1],
           landscape: values[2],
-          portrait: values[3],
+          portrait: values[3]
         });
       });
     },
     handleCloseBtnClick() {
       this.$emit("hide");
+      this.imgSrc = null;
+      this.isLoadingSaveBtn = false;
     },
     showFileChooser() {
       this.$refs.input.click();
@@ -404,55 +404,58 @@ export default {
 </script>
 
 <style lang="scss">
-.c-profile-image {
-  .dropZone {
-    width: 100%;
-    height: 200px;
-    position: relative;
-    border: 2px dashed #eee;
-    &-info {
-      color: #a8a8a8;
-      position: absolute;
-      top: 50%;
+.edit-image-dialog {
+  &__wrapper {
+    max-height: 100px;
+    .dropZone {
       width: 100%;
-      transform: translate(0, -50%);
-      text-align: center;
+      height: 200px;
+      position: relative;
+      border: 2px dashed #eee;
+      &-info {
+        color: #a8a8a8;
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        transform: translate(0, -50%);
+        text-align: center;
+      }
+      &-title {
+        color: #787878;
+      }
+      & input {
+        position: absolute;
+        cursor: pointer;
+        top: 0px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+      }
+      &-upload-limit-info {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+      }
+      &-over {
+        background: #5c5c5c;
+        opacity: 0.8;
+      }
     }
-    &-title {
-      color: #787878;
+    .dropZone:hover {
+      border: 2px solid $primary-light-1;
     }
-    & input {
-      position: absolute;
-      cursor: pointer;
-      top: 0px;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
+    .dropZone:hover .dropZone-title {
+      color: $primary-light-1;
     }
-    &-upload-limit-info {
-      display: flex;
-      justify-content: flex-start;
-      flex-direction: column;
-    }
-    &-over {
-      background: #5c5c5c;
-      opacity: 0.8;
-    }
-  }
-  .dropZone:hover {
-    border: 2px solid $primary-light-1;
-  }
-  .dropZone:hover .dropZone-title {
-    color: $primary-light-1;
-  }
 
-  .crop-placeholder {
-    width: 100%;
-    height: 200px;
-    background: #ccc;
+    .crop-placeholder {
+      width: 200px;
+      height: 200px;
+      background: #ccc;
+    }
   }
 }
 </style>
