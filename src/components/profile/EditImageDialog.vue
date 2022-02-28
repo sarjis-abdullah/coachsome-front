@@ -374,8 +374,8 @@ export default {
         return;
       }
 
-      if (file.size >= 10240000) {
-        alert("Please check file size no over 10 MB.");
+      if (file.size >= 5240000) {
+        alert("Please check file size no over 5 MB.");
         this.dragging = false;
         return;
       }
