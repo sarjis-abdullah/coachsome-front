@@ -297,10 +297,7 @@
                             </v-card>
                           </v-dialog>
                         </div>
-                        <div
-                          class="payment"
-                          v-if="!isTotalAmountZero && !paymentCard"
-                        >
+                        <div class="payment" v-if="!isTotalAmountZero">
                           <v-radio-group v-model="selectedPaymentMethod" column>
                             <span
                               v-for="(paymentMethod, i) in paymentMethods"
@@ -319,11 +316,14 @@
                                   />
                                 </template>
                               </v-radio>
+                              <div
+                                class="my-5"
+                                v-if="paymentCard.brand == paymentMethod.value"
+                              >
+                                <payment-card :payment-card="paymentCard" />
+                              </div>
                             </span>
                           </v-radio-group>
-                        </div>
-                        <div class="my-5" v-if="paymentCard">
-                          <payment-card :payment-card="paymentCard" />
                         </div>
                         <div class="mt-2 mb-2">
                           <v-btn
@@ -465,19 +465,19 @@ export default {
       paymentMethods: [
         // {
         //   id: 1,
-        //   name: "Mobile Pay",
-        //   value: "mobile_pay",
+        //   name: "MobilePay",
+        //   value: "mobilepay",
         //   logo: "mobile-pay.svg",
         // },
         // {
         //   id: 2,
         //   name: "Apple Pay",
-        //   value: "apple_pay",
+        //   value: "apple-pay",
         //   logo: "apple-pay.svg",
         // },
         // {
         //   id: 3,
-        //   name: "Paypal",
+        //   name: "PayPal",
         //   value: "paypal",
         //   logo: "paypal.svg",
         // },
@@ -490,7 +490,7 @@ export default {
         {
           id: 5,
           name: "Master Card",
-          value: "master_card",
+          value: "mastercard",
           logo: "visa-circle.svg"
         }
       ],
@@ -726,7 +726,6 @@ export default {
           }
 
           if (paymentCard) {
-            this.selectedPaymentMethod = paymentCard.brand;
             this.paymentCard = {
               name:
                 this.$auth.user.first_name + " " + this.$auth.user.last_name,
@@ -734,6 +733,7 @@ export default {
               expYear: paymentCard.exp_year,
               last4: paymentCard.last4
             };
+            this.selectedPaymentMethod = paymentCard.brand;
           }
 
           if (profileCardInfo) {
