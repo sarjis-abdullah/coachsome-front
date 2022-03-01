@@ -108,7 +108,6 @@
                   minAspectRatio: 1 / 1,
                   maxAspectRatio: 1 / 1
                 }"
-                
                 ref="squareCropper"
               ></cropper>
               <div
@@ -158,9 +157,20 @@
 
         <v-card-actions>
           <v-btn
+            v-if="isShowingCroppedBtn"
+            :loading="isLoadingCroppedBtn"
+            color="success"
+            depressed
+            tile
+            @click="handleCroppedBtnClick"
+          >
+            {{ $t("Cropped") }}
+          </v-btn>
+          <v-btn
+            dark
             v-if="isShowingSaveBtn"
             :loading="isLoadingSaveBtn"
-            color="success"
+            color="primary-light-1"
             depressed
             tile
             @click="handleSaveBtnClick"
@@ -205,6 +215,14 @@ export default {
         portrait: {
           cropData: null
         }
+      },
+      isCropped: false,
+      isLoadingCroppedBtn: false,
+      cropped: {
+        original: null,
+        square: null,
+        landscape: null,
+        portrait: null
       }
     };
   },
@@ -216,6 +234,7 @@ export default {
     },
     show(val) {
       this.dialog = val;
+      this.isCropped = false;
       if (val) {
         this.getImages();
       }
@@ -234,7 +253,10 @@ export default {
       return this.imgSrc;
     },
     isShowingSaveBtn() {
-      return this.imgSrc;
+      return this.imgSrc && this.isCropped;
+    },
+    isShowingCroppedBtn() {
+      return !this.isCropped;
     },
     isShowingCroppingPlaceHolder() {
       return !this.imgSrc;
@@ -256,11 +278,12 @@ export default {
         console.log(error);
       }
     },
-    async uploadImages(images) {
+    async handleSaveBtnClick() {
       try {
-        const { data } = await sharedProfileApi(this.$axios).uploadImages(
-          images
-        );
+        this.isLoadingSaveBtn = true;
+        const { data } = await sharedProfileApi(this.$axios).uploadImages({
+          ...this.cropped
+        });
         if (data.image) {
           this.$auth.fetchUser();
           this.$emit("uploaded");
@@ -268,6 +291,8 @@ export default {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        this.isLoadingSaveBtn = false;
       }
     },
     async getImages(images) {
@@ -288,8 +313,8 @@ export default {
     handleRemoveBtnClick() {
       this.handleProfileImageDelete();
     },
-    handleSaveBtnClick() {
-      this.isLoadingSaveBtn = true;
+    handleCroppedBtnClick() {
+      this.isLoadingCroppedBtn = true;
       let p1 = new Promise(resolve => {
         const originalCropperResult = this.$refs.originalCropper.getResult();
         if (originalCropperResult.canvas) {
@@ -345,13 +370,12 @@ export default {
       });
 
       Promise.all([p1, p2, p3, p4]).then(values => {
-        this.isLoadingSaveBtn = false;
-        this.uploadImages({
-          original: values[0],
-          square: values[1],
-          landscape: values[2],
-          portrait: values[3]
-        });
+        this.isLoadingCroppedBtn = false;
+        this.isCropped = true;
+        this.cropped.original = values[0];
+        this.cropped.square = values[1];
+        this.cropped.landscape = values[2];
+        this.cropped.portrait = values[3];
       });
     },
     handleCloseBtnClick() {
