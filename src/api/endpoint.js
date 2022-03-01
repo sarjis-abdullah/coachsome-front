@@ -70,5 +70,10 @@ export default {
 
   // gift-transactions
   GIFT_TRANSACTIONS_POST: "/gift-transactions",
-  GIFT_BALANCES_GET: "/gift-balances"
+  GIFT_BALANCES_GET: "/gift-balances",
+
+  // payment-cards
+  PAYMENT_CARDS_GET: "/payment-cards",
+  PAYMENT_CARDS_POST: "/payment-cards",
+  PAYMENT_CARDS_CANCEL_POST: "/payment-cards/cancel"
 };

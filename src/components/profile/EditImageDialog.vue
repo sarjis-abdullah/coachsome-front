@@ -1,27 +1,24 @@
 <template>
-  <v-dialog
-    v-model="dialog"
-    min-width="300"
-    max-width="1300"
-    scrollable
-    persistent
-  >
-    <v-card class="c-profile-image">
-      <v-card-title class="title">
-        Profile image
-        <v-spacer></v-spacer>
-        <v-btn icon @click="handleCloseBtnClick">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </v-card-title>
+  <div class="edit-image-dialog">
+    <v-dialog v-model="dialog" max-width="1300px" scrollable persistent>
+      <v-card class="edit-image-dialog__wrapper">
+        <v-card-title class="title">
+          <div class="subtitle">
+            {{ $t("profile_edit_image_title_profile_image") }}
+          </div>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="handleCloseBtnClick">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-divider></v-divider>
 
-      <v-card-text>
-        <section class="cropper-area">
+        <v-card-text class="pt-5">
           <v-row>
             <v-col v-show="isOriginalCropperShowing" cols="12" md="3" sm="12">
               <v-card class="mx-auto" elevation="0" tile>
                 <div class="subtitle">
-                  {{ $t("profile_edit_image_title_profile_image") }}
+                  {{ $t("profile_edit_image_title_original_image") }}
                 </div>
                 <cropper
                   ref="originalCropper"
@@ -155,25 +152,36 @@
               />
             </v-col>
           </v-row>
-          <v-row v-if="isShowingSaveBtn">
-            <v-col cols="12">
-              <v-btn
-                :loading="isLoadingSaveBtn"
-                color="success"
-                depressed
-                tile
-                @click="handleSaveBtnClick"
-              >
-                {{ $t("profile_edit_image_btn_label_save") }}
-              </v-btn>
-            </v-col>
-          </v-row>
-        </section>
-      </v-card-text>
+        </v-card-text>
+        <v-divider></v-divider>
 
-      <v-card-actions> </v-card-actions>
-    </v-card>
-  </v-dialog>
+        <v-card-actions>
+          <v-btn
+            v-if="isShowingCroppedBtn"
+            :loading="isLoadingCroppedBtn"
+            color="success"
+            depressed
+            tile
+            @click="handleCroppedBtnClick"
+          >
+            {{ $t("Cropped") }}
+          </v-btn>
+          <v-btn
+            dark
+            v-if="isShowingSaveBtn"
+            :loading="isLoadingSaveBtn"
+            color="primary-light-1"
+            depressed
+            tile
+            @click="handleSaveBtnClick"
+          >
+            {{ $t("profile_edit_image_btn_label_save") }}
+          </v-btn>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -207,6 +215,14 @@ export default {
         portrait: {
           cropData: null
         }
+      },
+      isCropped: false,
+      isLoadingCroppedBtn: false,
+      cropped: {
+        original: null,
+        square: null,
+        landscape: null,
+        portrait: null
       }
     };
   },
@@ -218,6 +234,7 @@ export default {
     },
     show(val) {
       this.dialog = val;
+      this.isCropped = false;
       if (val) {
         this.getImages();
       }
@@ -236,7 +253,10 @@ export default {
       return this.imgSrc;
     },
     isShowingSaveBtn() {
-      return this.imgSrc;
+      return this.imgSrc && this.isCropped;
+    },
+    isShowingCroppedBtn() {
+      return !this.isCropped;
     },
     isShowingCroppingPlaceHolder() {
       return !this.imgSrc;
@@ -258,11 +278,12 @@ export default {
         console.log(error);
       }
     },
-    async uploadImages(images) {
+    async handleSaveBtnClick() {
       try {
-        const { data } = await sharedProfileApi(this.$axios).uploadImages(
-          images
-        );
+        this.isLoadingSaveBtn = true;
+        const { data } = await sharedProfileApi(this.$axios).uploadImages({
+          ...this.cropped
+        });
         if (data.image) {
           this.$auth.fetchUser();
           this.$emit("uploaded");
@@ -270,6 +291,8 @@ export default {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        this.isLoadingSaveBtn = false;
       }
     },
     async getImages(images) {
@@ -290,8 +313,8 @@ export default {
     handleRemoveBtnClick() {
       this.handleProfileImageDelete();
     },
-    handleSaveBtnClick() {
-      this.isLoadingSaveBtn = true;
+    handleCroppedBtnClick() {
+      this.isLoadingCroppedBtn = true;
       let p1 = new Promise(resolve => {
         const originalCropperResult = this.$refs.originalCropper.getResult();
         if (originalCropperResult.canvas) {
@@ -347,17 +370,18 @@ export default {
       });
 
       Promise.all([p1, p2, p3, p4]).then(values => {
-        this.isLoadingSaveBtn = false;
-        this.uploadImages({
-          original: values[0],
-          square: values[1],
-          landscape: values[2],
-          portrait: values[3],
-        });
+        this.isLoadingCroppedBtn = false;
+        this.isCropped = true;
+        this.cropped.original = values[0];
+        this.cropped.square = values[1];
+        this.cropped.landscape = values[2];
+        this.cropped.portrait = values[3];
       });
     },
     handleCloseBtnClick() {
       this.$emit("hide");
+      this.imgSrc = null;
+      this.isLoadingSaveBtn = false;
     },
     showFileChooser() {
       this.$refs.input.click();
@@ -374,8 +398,8 @@ export default {
         return;
       }
 
-      if (file.size >= 10240000) {
-        alert("Please check file size no over 10 MB.");
+      if (file.size >= 5240000) {
+        alert("Please check file size no over 5 MB.");
         this.dragging = false;
         return;
       }
@@ -404,55 +428,58 @@ export default {
 </script>
 
 <style lang="scss">
-.c-profile-image {
-  .dropZone {
-    width: 100%;
-    height: 200px;
-    position: relative;
-    border: 2px dashed #eee;
-    &-info {
-      color: #a8a8a8;
-      position: absolute;
-      top: 50%;
+.edit-image-dialog {
+  &__wrapper {
+    max-height: 100px;
+    .dropZone {
       width: 100%;
-      transform: translate(0, -50%);
-      text-align: center;
+      height: 200px;
+      position: relative;
+      border: 2px dashed #eee;
+      &-info {
+        color: #a8a8a8;
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        transform: translate(0, -50%);
+        text-align: center;
+      }
+      &-title {
+        color: #787878;
+      }
+      & input {
+        position: absolute;
+        cursor: pointer;
+        top: 0px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+      }
+      &-upload-limit-info {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+      }
+      &-over {
+        background: #5c5c5c;
+        opacity: 0.8;
+      }
     }
-    &-title {
-      color: #787878;
+    .dropZone:hover {
+      border: 2px solid $primary-light-1;
     }
-    & input {
-      position: absolute;
-      cursor: pointer;
-      top: 0px;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
+    .dropZone:hover .dropZone-title {
+      color: $primary-light-1;
     }
-    &-upload-limit-info {
-      display: flex;
-      justify-content: flex-start;
-      flex-direction: column;
-    }
-    &-over {
-      background: #5c5c5c;
-      opacity: 0.8;
-    }
-  }
-  .dropZone:hover {
-    border: 2px solid $primary-light-1;
-  }
-  .dropZone:hover .dropZone-title {
-    color: $primary-light-1;
-  }
 
-  .crop-placeholder {
-    width: 100%;
-    height: 200px;
-    background: #ccc;
+    .crop-placeholder {
+      width: 200px;
+      height: 200px;
+      background: #ccc;
+    }
   }
 }
 </style>
