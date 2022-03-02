@@ -325,7 +325,7 @@ export default {
               this.cropper.original.cropper = reader.result;
               resolve(reader.result);
             };
-          }, "image/jpeg");
+          }, "image/jpeg",0.20);
         }
       });
 
@@ -339,7 +339,7 @@ export default {
               this.cropper.square.cropper = reader.result;
               resolve(reader.result);
             };
-          }, "image/jpeg");
+          }, "image/jpeg",0.20);
         }
       });
       let p3 = new Promise(resolve => {
@@ -352,7 +352,7 @@ export default {
               this.cropper.landscape.cropper = reader.result;
               resolve(reader.result);
             };
-          }, "image/jpeg");
+          }, "image/jpeg",0.20);
         }
       });
       let p4 = new Promise(resolve => {
@@ -365,7 +365,7 @@ export default {
               this.cropper.portrait.cropper = reader.result;
               resolve(reader.result);
             };
-          }, "image/jpeg");
+          }, "image/jpeg",0.20);
         }
       });
 
