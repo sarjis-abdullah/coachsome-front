@@ -75,5 +75,5 @@ export default {
   // payment-cards
   PAYMENT_CARDS_GET: "/payment-cards",
   PAYMENT_CARDS_POST: "/payment-cards",
-  PAYMENT_CARDS_CANCEL_POST: "/payment-cards/cancel"
+  PAYMENT_CARDS_CANCEL_POST: "/payment-cards/cancel",
 };
