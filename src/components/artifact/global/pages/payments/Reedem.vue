@@ -22,7 +22,7 @@
             v-model="code"
             :rules="rules"
             solo
-            placeholder="Insert gift certificate code"
+            :placeholder="$t('payment_placeholder_insert_certificate')"
           ></v-text-field>
         </v-form>
       </v-card-text>

@@ -38,7 +38,7 @@
           <v-card>
             <v-card-title>
               <div>
-                Edit Image
+                {{ $t("chat_dialog_title_edit_image") }}
               </div>
               <v-spacer></v-spacer>
               <div>
@@ -574,6 +574,7 @@
                         />
                       </v-menu>
                       <v-menu
+                        v-if="$vuetify.breakpoint.mdAndUp"
                         v-model="emojiMenu"
                         :close-on-content-click="false"
                         :nudge-width="200"
