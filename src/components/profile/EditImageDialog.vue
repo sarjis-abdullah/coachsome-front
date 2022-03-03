@@ -318,54 +318,70 @@ export default {
       let p1 = new Promise(resolve => {
         const originalCropperResult = this.$refs.originalCropper.getResult();
         if (originalCropperResult.canvas) {
-          originalCropperResult.canvas.toBlob(blob => {
-            let reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => {
-              this.cropper.original.cropper = reader.result;
-              resolve(reader.result);
-            };
-          }, "image/jpeg",0.20);
+          originalCropperResult.canvas.toBlob(
+            blob => {
+              let reader = new FileReader();
+              reader.readAsDataURL(blob);
+              reader.onloadend = () => {
+                this.cropper.original.cropper = reader.result;
+                resolve(reader.result);
+              };
+            },
+            "image/jpeg",
+            0.2
+          );
         }
       });
 
       let p2 = new Promise(resolve => {
         const squareCropperResult = this.$refs.squareCropper.getResult();
         if (squareCropperResult.canvas) {
-          squareCropperResult.canvas.toBlob(blob => {
-            let reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => {
-              this.cropper.square.cropper = reader.result;
-              resolve(reader.result);
-            };
-          }, "image/jpeg",0.20);
+          squareCropperResult.canvas.toBlob(
+            blob => {
+              let reader = new FileReader();
+              reader.readAsDataURL(blob);
+              reader.onloadend = () => {
+                this.cropper.square.cropper = reader.result;
+                resolve(reader.result);
+              };
+            },
+            "image/jpeg",
+            0.2
+          );
         }
       });
       let p3 = new Promise(resolve => {
         const landscapeCropperResult = this.$refs.landscapeCropper.getResult();
         if (landscapeCropperResult.canvas) {
-          landscapeCropperResult.canvas.toBlob(blob => {
-            let reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => {
-              this.cropper.landscape.cropper = reader.result;
-              resolve(reader.result);
-            };
-          }, "image/jpeg",0.20);
+          landscapeCropperResult.canvas.toBlob(
+            blob => {
+              let reader = new FileReader();
+              reader.readAsDataURL(blob);
+              reader.onloadend = () => {
+                this.cropper.landscape.cropper = reader.result;
+                resolve(reader.result);
+              };
+            },
+            "image/jpeg",
+            0.2
+          );
         }
       });
       let p4 = new Promise(resolve => {
         const portraitCropperResult = this.$refs.portraitCropper.getResult();
         if (portraitCropperResult.canvas) {
-          portraitCropperResult.canvas.toBlob(blob => {
-            let reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => {
-              this.cropper.portrait.cropper = reader.result;
-              resolve(reader.result);
-            };
-          }, "image/jpeg",0.20);
+          portraitCropperResult.canvas.toBlob(
+            blob => {
+              let reader = new FileReader();
+              reader.readAsDataURL(blob);
+              reader.onloadend = () => {
+                this.cropper.portrait.cropper = reader.result;
+                resolve(reader.result);
+              };
+            },
+            "image/jpeg",
+            0.2
+          );
         }
       });
 
@@ -397,9 +413,10 @@ export default {
         alert("Please select an image file");
         return;
       }
+      let size = parseFloat(file.size / (1024 * 1024)).toFixed(2);
 
-      if (file.size <= 5240000) {
-        alert("Please check file size no over 5 MB.");
+      if (size > 6) {
+        alert("Please select image size less than 5 MB");
         this.dragging = false;
         return;
       }

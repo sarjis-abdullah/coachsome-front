@@ -15,7 +15,15 @@
                 </template>
                 <v-img :src="post.featured_image" height="538"></v-img>
                 <div class="px-5 pt-10 pb-10">
-                  <div class="post__title">
+                  <div
+                    :class="[
+                      'post__title',
+                      {
+                        'post__title--md': $vuetify.breakpoint.mdAndUp,
+                        'post__title--sm': $vuetify.breakpoint.smAndDown
+                      }
+                    ]"
+                  >
                     {{ post.title }}
                   </div>
                   <div class="post__subtitle pt-5">
@@ -93,7 +101,12 @@ export default {
       font-family: $font-family;
       font-style: normal;
       font-weight: bold;
-      font-size: 56.9141px;
+      &--md {
+        font-size: 56.9141px;
+      }
+      &--sm {
+        font-size: 30px;
+      }
       line-height: 78px;
       color: #2d3748;
     }
