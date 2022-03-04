@@ -318,7 +318,7 @@
                               </v-radio>
                               <div
                                 class="my-5"
-                                v-if="paymentCard.brand == paymentMethod.value"
+                                v-if="paymentCard && paymentCard.brand == paymentMethod.value"
                               >
                                 <payment-card :payment-card="paymentCard" />
                               </div>
