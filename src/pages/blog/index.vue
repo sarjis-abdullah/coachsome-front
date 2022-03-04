@@ -47,7 +47,11 @@
     <v-container style="max-width: 1110px;">
       <v-row>
         <v-col cols="12" md="4" v-for="(item, i) in allPost" :key="i">
-          <v-card class="mx-auto rounded-lg mt-5" max-width="370">
+          <v-card
+            @click.stop="handleReadMoreClick(item.slug_url)"
+            class="post-card mx-auto rounded-lg mt-5"
+            max-width="370"
+          >
             <v-img :src="item.featured_image" height="200"></v-img>
 
             <v-card-title>
@@ -67,7 +71,7 @@
                 color="#2D3748"
                 class="text-normal"
                 text
-                @click="handleReadMoreClick(item.slug_url)"
+                @click.stop="handleReadMoreClick(item.slug_url)"
               >
                 {{ $t("blog_txt_read_more") }}
               </v-btn>
@@ -92,12 +96,12 @@ export default {
   async asyncData({ query, app, $axios }) {
     let allPost = [];
     const { data } = await $axios.get("/tikcms/blog/list");
-    console.log(data)
-    if(data.data.list){
-      if(data.data.list.hasOwnProperty(app.i18n.locale)){
+    console.log(data);
+    if (data.data.list) {
+      if (data.data.list.hasOwnProperty(app.i18n.locale)) {
         allPost = data.data.list[app.i18n.locale];
       } else {
-        allPost = data.data.list['en'];
+        allPost = data.data.list["en"];
       }
     }
 
@@ -158,6 +162,12 @@ export default {
           font-size: 15.9427px;
         }
       }
+    }
+  }
+
+  .post-card {
+    .v-image {
+      cursor: pointer;
     }
   }
 }

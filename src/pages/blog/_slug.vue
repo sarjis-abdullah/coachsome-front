@@ -54,13 +54,13 @@ import moment from "moment";
 export default {
   head() {
     return {
-      title: "Blog",
+      title: this.title,
       titleTemplate: "Coachsome - %s",
       meta: [
         {
           hid: "description",
           name: "description",
-          content: this.title
+          content: this.description
         }
       ]
     };
@@ -68,12 +68,16 @@ export default {
   async asyncData({ params, app, $axios }) {
     let categories = [];
     let post = {};
+    let title = "";
+    let description = "";
 
     const blogRes = await pageBuilderApi($axios).getBlogPost();
     if (blogRes.data.blog) {
       post = blogRes.data.blog.find(item => item.slug_url == params.slug);
     }
     if (post) {
+      title = post.title;
+      description = post.short_description;
       const userResponse = await $axios.get(`/users/${post.author}`);
       if (userResponse.data.data) {
         post.authorName = userResponse.data.data.fullName;
@@ -83,7 +87,8 @@ export default {
       categories,
       post,
       selectedCategory: null,
-      title: params.slug
+      title: title,
+      description: description
     };
   },
   methods: {
