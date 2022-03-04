@@ -30,7 +30,7 @@
                     {{ moment(post.created_at).format("MMM Do YY") }}
                   </div>
                   <div class="post__subsubtitle pt-5">
-                    Written by {{ post.authorName }}
+                    Written by {{ post.author_name }}
                   </div>
                 </div>
                 <v-divider></v-divider>
