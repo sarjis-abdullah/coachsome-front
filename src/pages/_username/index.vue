@@ -66,7 +66,6 @@
             <v-col cols="12" md="6" v-for="item in 4" :key="item">
               <v-skeleton-loader
                 v-if="isServiceLoading"
-                v-bind="attrs"
                 type="article, actions"
               ></v-skeleton-loader>
             </v-col>
