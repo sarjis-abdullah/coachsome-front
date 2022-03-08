@@ -65,21 +65,28 @@ export default {
       ]
     };
   },
+  data() {
+    return {};
+  },
   async asyncData({ params, app, $axios }) {
     let post = {};
-    const blogRes = await pageBuilderApi($axios).getBlogPost();
-    if (blogRes.data.blog) {
-      post = blogRes.data.blog.find(item => item.slug_url == params.slug);
-      if (post) {
-        const userResponse = await $axios.get(`/users/${post.author}`);
-        if (userResponse.data.data) {
-          post.authorName = userResponse.data.data.fullName;
+    try {
+      const blogRes = await pageBuilderApi($axios).getBlogPost();
+      if (blogRes.data.blog) {
+        post = blogRes.data.blog.find(item => item.slug_url == params.slug);
+        if (post) {
+          const userResponse = await $axios.get(`/users/${post.author}`);
+          if (userResponse.data.data) {
+            post.authorName = userResponse.data.data.fullName;
+          }
         }
       }
+    } catch (error) {
+      console.log(error)
     }
 
     return {
-      post,
+      post
     };
   },
   methods: {
