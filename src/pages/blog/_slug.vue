@@ -51,6 +51,8 @@
 <script>
 import { pageBuilderApi } from "@/api";
 import moment from "moment";
+import { seoHelper } from "@/helper";
+
 export default {
   head() {
     return {
@@ -61,7 +63,12 @@ export default {
           hid: "description",
           name: "description",
           content: this.post ? this.post.short_description : ""
-        }
+        },
+         ...seoHelper.createSocialMeta({
+          title: this.post ? this.post.title : "",
+          description: this.post ? this.post.short_description : "",
+          image: this.post ? this.post.featured_image : ""
+        })
       ]
     };
   },
