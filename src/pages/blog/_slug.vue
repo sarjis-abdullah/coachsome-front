@@ -54,41 +54,32 @@ import moment from "moment";
 export default {
   head() {
     return {
-      title: this.title,
+      title: this.post ? this.post.title : "",
       titleTemplate: "Coachsome - %s",
       meta: [
         {
           hid: "description",
           name: "description",
-          content: this.description
+          content: this.post ? this.post.short_description : ""
         }
       ]
     };
   },
   async asyncData({ params, app, $axios }) {
-    let categories = [];
     let post = {};
-    let title = "";
-    let description = "";
-
     const blogRes = await pageBuilderApi($axios).getBlogPost();
     if (blogRes.data.blog) {
       post = blogRes.data.blog.find(item => item.slug_url == params.slug);
-    }
-    if (post) {
-      title = post.title;
-      description = post.short_description;
-      const userResponse = await $axios.get(`/users/${post.author}`);
-      if (userResponse.data.data) {
-        post.authorName = userResponse.data.data.fullName;
+      if (post) {
+        const userResponse = await $axios.get(`/users/${post.author}`);
+        if (userResponse.data.data) {
+          post.authorName = userResponse.data.data.fullName;
+        }
       }
     }
+
     return {
-      categories,
       post,
-      selectedCategory: null,
-      title: title,
-      description: description
     };
   },
   methods: {
