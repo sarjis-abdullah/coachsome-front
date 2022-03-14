@@ -6,6 +6,11 @@
         <TextMessage :message="{ ...message }" />
       </div>
 
+      <!-- Attachment Message -->
+      <div v-if="message.type == 'structure' && message.content && message.content.key == 'attachment'">
+        <Attachment :message="{ ...message }" />
+      </div>
+
       <!-- Structure message -->
       <div
         v-if="message.type == 'structure'"
@@ -367,9 +372,10 @@
 import { bookingTimeApi, bookingApi } from "@/api";
 import { currencyService } from "@/services";
 import TextMessage from "./messages/TextMessage";
+import Attachment from "./messages/Attachment";
 
 export default {
-  components: { TextMessage },
+  components: { TextMessage, Attachment },
   data: () => ({
     currencyService,
     trackingPixel: {
