@@ -84,6 +84,10 @@
             </v-card-text>
           </v-card>
         </v-dialog>
+        <!-- Attachment -->
+        <v-dialog v-model="addAttachmentDialog.value" max-width="400" style="z-index: 999!important; background: white">
+          <upload-attachment :loadingData="false" :image="[]" :imageUrl="null" @cancel="handleAttachmentUploadCancel" @sendAttachment="uploadAttachmentFile($event)"></upload-attachment>
+        </v-dialog>
         <a-drawer
           class="d-none d-sm-flex d-md-none pa-0"
           title="Actions"
@@ -533,7 +537,7 @@
                   >
                     <template v-slot:prepend>
                       <div>
-                        <v-btn icon>
+                        <v-btn icon @click="handleAttachmentUploadBtn()">
                           <img
                             :src="
                               require(`@/assets/images/icons/attachment.svg`)
@@ -662,6 +666,7 @@ import "vue-advanced-cropper/dist/style.css";
 import { endpoint } from "../api";
 import { pathData, contactData } from "@/data";
 import { messageData } from "@/data";
+import UploadAttachment from '@/components/artifact/global/pages/chat/UploadAttachment'
 
 export default {
   layout: "chat",
@@ -678,9 +683,13 @@ export default {
     PackageChoosing,
     ChatScreen,
     ChatSetting,
-    ContactList
+    ContactList,
+    UploadAttachment
   },
   data: () => ({
+    addAttachmentDialog:{
+      value: false
+    },
     messageData,
     contactData,
     topicEditMenu: false,
@@ -926,6 +935,113 @@ export default {
     }
   },
   methods: {
+        uploadAttachmentFile(attachment){
+      if (
+        this.selectedContact &&
+        attachment!= null &&
+        this.hasNetwork
+      ) {
+        // Modify the content
+        this.messageForm.content = this.messageForm.content.trim();
+
+        // It has to confirm that the updated date is not changed or mixed every where
+        let messageData = {
+          me: true,
+          type: "structure",
+          file: attachment,
+          createdAt: new Date()
+        }
+        let newMessage = Object.assign(
+          { ...messageData },
+          { ...this.duration }
+        );
+        if (
+          this.selectedContact.categoryId == contactData.CATEGORY_ID_PRIVATE
+        ) {
+          newMessage.scope = this.sendPrivateMessageToChatServer({
+            senderUserId: this.$auth.user.id,
+            receiverUserId: this.selectedContact.connectionUserId,
+            message: newMessage
+          });
+
+        const formData = new FormData();
+        formData.append('file', attachment);
+        formData.append('receiverUserId', this.selectedContact.connectionUserId);
+        formData.append('me',true);
+        formData.append('type', 'structure');
+        formData.append('createdAt', new Date());
+        const headers = { 'Content-Type': 'multipart/form-data' };
+
+          this.$axios
+            .post(endpoint.MESSAGES_ATTACHMENT_POST, formData, {
+              headers,
+            })
+            .then((data) => {
+              let contact = this.contacts[0];
+              if (contact.id != this.selectedContact.id) {
+                this.$store.dispatch("chat/getContacts");
+              }
+              this.pushMessage(data.data.message);
+              this.addAttachmentDialog.value = false;
+            })
+            .catch((e) => {
+              this.addAttachmentDialog.value = false;
+              this.$toast.error("Something went wrong, Please try again!")
+            });
+        } else {
+          const payload = {
+            type: "structure",
+            file: attachment,
+            groupId: this.selectedContact.groupId,
+            ...this.duration
+          };
+          this.sendGroupMessageToChatServer({
+            senderUser: {
+              id: this.$auth.user.id,
+              firstName: this.$auth.user.last_name,
+              lastName: this.$auth.user.first_name,
+              email: this.$auth.user.email,
+              image: this.$auth.user.image
+            },
+            groupId: this.selectedContact.groupId,
+            message: newMessage,
+            ...this.duration
+          });
+
+          const formData = new FormData();
+          formData.append('file', attachment);
+          formData.append('groupId', this.selectedContact.groupId);
+          formData.append('type', 'structure');
+          formData.append('createdAt', new Date());
+          const headers = { 'Content-Type': 'multipart/form-data' };
+
+          this.$axios
+            .post(endpoint.GROUP_MESSAGES_ATTACHMENT_POST, formData, {
+              headers,
+            })
+            .then(({ data }) => {
+              let contact = this.contacts[0];
+              if (contact.id != this.selectedContact.id) {
+                this.$store.dispatch("chat/getContacts");
+              }
+              this.pushMessage(data.data);
+              this.addAttachmentDialog.value = false;
+            })
+            .catch(err => {
+              this.addAttachmentDialog.value = false;
+              if (err.response.data.error) {
+                this.$toast.error(err.response.data.error.message);
+              }
+            });
+        }
+      }
+    },
+    handleAttachmentUploadBtn() {
+      this.addAttachmentDialog.value = true;
+    },
+    handleAttachmentUploadCancel() {
+      this.addAttachmentDialog.value = false;
+    },
     async handleGroupImageSaveBtnClick() {
       const groupCropperResult = this.$refs.groupCropper.getResult();
       if (groupCropperResult.canvas) {
