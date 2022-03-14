@@ -13,10 +13,12 @@ export default {
   // group message
   GROUP_MESSAGES_GET: "/group-messages",
   GROUP_MESSAGES_POST: "/group-messages",
+  GROUP_MESSAGES_ATTACHMENT_POST: "/group-messages/attachment",
 
   // messages
   MESSAGES_GET: "/messages",
   MESSAGES_POST: "/messages",
+  MESSAGES_ATTACHMENT_POST: "/messages/attachment",
   MESSAGES_ID_GET: id => `/messages/${id}`,
   MESSAGES_ID_EDIT: id => `/messages/${id}`,
   MESSAGES_ID_DELETE: id => `/messages/${id}`,
