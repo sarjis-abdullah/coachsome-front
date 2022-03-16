@@ -85,8 +85,8 @@
           </v-card>
         </v-dialog>
         <!-- Attachment -->
-        <v-dialog v-model="addAttachmentDialog.value" max-width="400" style="z-index: 999!important; background: white">
-          <upload-attachment :loadingData="false" :image="[]" :imageUrl="null" @cancel="handleAttachmentUploadCancel" @sendAttachment="uploadAttachmentFile($event)"></upload-attachment>
+        <v-dialog v-model="addAttachmentDialog" max-width="400" style="z-index: 999!important; background: white">
+          <upload-attachment ref="UploadAttachment" @cancel="handleAttachmentUploadCancel" @sendAttachment="uploadAttachmentFile($event)" ></upload-attachment>
         </v-dialog>
         <a-drawer
           class="d-none d-sm-flex d-md-none pa-0"
@@ -687,9 +687,7 @@ export default {
     UploadAttachment
   },
   data: () => ({
-    addAttachmentDialog:{
-      value: false
-    },
+    addAttachmentDialog:false,
     messageData,
     contactData,
     topicEditMenu: false,
@@ -895,6 +893,11 @@ export default {
             });
         }
       }
+    },
+    addAttachmentDialog(value){
+      if(!value){
+        this.$refs.UploadAttachment.reset();
+      }
     }
   },
   async mounted() {
@@ -982,10 +985,10 @@ export default {
                 this.$store.dispatch("chat/getContacts");
               }
               this.pushMessage(data.data.message);
-              this.addAttachmentDialog.value = false;
+              this.addAttachmentDialog = false;
             })
             .catch((e) => {
-              this.addAttachmentDialog.value = false;
+              this.addAttachmentDialog = false;
               this.$toast.error("Something went wrong, Please try again!")
             });
         } else {
@@ -1025,10 +1028,10 @@ export default {
                 this.$store.dispatch("chat/getContacts");
               }
               this.pushMessage(data.data);
-              this.addAttachmentDialog.value = false;
+              this.addAttachmentDialog = false;
             })
             .catch(err => {
-              this.addAttachmentDialog.value = false;
+              this.addAttachmentDialog = false;
               if (err.response.data.error) {
                 this.$toast.error(err.response.data.error.message);
               }
@@ -1037,10 +1040,10 @@ export default {
       }
     },
     handleAttachmentUploadBtn() {
-      this.addAttachmentDialog.value = true;
+      this.addAttachmentDialog = true;
     },
     handleAttachmentUploadCancel() {
-      this.addAttachmentDialog.value = false;
+      this.addAttachmentDialog = false;
     },
     async handleGroupImageSaveBtnClick() {
       const groupCropperResult = this.$refs.groupCropper.getResult();
