@@ -30,7 +30,7 @@
                     {{ moment(post.created_at).format("MMM Do YY") }}
                   </div>
                   <div class="post__subsubtitle pt-5">
-                    Written by {{ post.authorName }}
+                    Written by {{ post.author_name }}
                   </div>
                 </div>
                 <v-divider></v-divider>
@@ -51,39 +51,49 @@
 <script>
 import { pageBuilderApi } from "@/api";
 import moment from "moment";
+import { seoHelper } from "@/helper";
+
 export default {
   head() {
     return {
-      title: "Blog",
+      title: this.post ? this.post.title : "",
       titleTemplate: "Coachsome - %s",
       meta: [
         {
           hid: "description",
           name: "description",
-          content: this.title
-        }
+          content: this.post ? this.post.short_description : ""
+        },
+         ...seoHelper.createSocialMeta({
+          title: this.post ? this.post.title : "",
+          description: this.post ? this.post.short_description : "",
+          image: this.post ? this.post.featured_image : ""
+        })
       ]
     };
   },
+  data() {
+    return {};
+  },
   async asyncData({ params, app, $axios }) {
-    let categories = [];
     let post = {};
-
-    const blogRes = await pageBuilderApi($axios).getBlogPost();
-    if (blogRes.data.blog) {
-      post = blogRes.data.blog.find(item => item.slug_url == params.slug);
-    }
-    if (post) {
-      const userResponse = await $axios.get(`/users/${post.author}`);
-      if (userResponse.data.data) {
-        post.authorName = userResponse.data.data.fullName;
+    try {
+      const blogRes = await pageBuilderApi($axios).getBlogPost();
+      if (blogRes.data.blog) {
+        post = blogRes.data.blog.find(item => item.slug_url == params.slug);
+        if (post) {
+          const userResponse = await $axios.get(`/users/${post.author}`);
+          if (userResponse.data.data) {
+            post.authorName = userResponse.data.data.fullName;
+          }
+        }
       }
+    } catch (error) {
+      console.log(error)
     }
+
     return {
-      categories,
-      post,
-      selectedCategory: null,
-      title: params.slug
+      post
     };
   },
   methods: {
