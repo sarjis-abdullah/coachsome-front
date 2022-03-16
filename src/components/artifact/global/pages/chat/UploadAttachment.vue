@@ -80,27 +80,22 @@
 </template>
 
 <script>
+
 export default {
-   props:['loadingData','image','imageUrl'],
   data: () => ({
     fileName: "",
+    loadingData: false,
+    image: [],
+    imageUrl: null,
+
   }),
-  mounted(){
-    this.reset();
-  },
-  // computed:{
-  //   imageName(){
-  //     return document.querySelector('.v-chip__content').textContent;
-  //   }
-  // },
   methods: {
-  createImage(file) {
+    createImage(file) {
       const reader = new FileReader();
       reader.onload = e => {
         this.imageUrl = e.target.result;
       };
       reader.readAsDataURL(file);
-
     },
     onFileChange(file) {
       if (!file) {
@@ -108,7 +103,6 @@ export default {
       }
       this.image = file;
       this.fileName = file.name;
-      console.log(file);
       this.createImage(file);
     },
     cancelUpload() {
@@ -116,8 +110,9 @@ export default {
     },
 
     reset() {
-      this.image = null;
+      this.image = [];
       this.imageUrl = null;
+      this.loadingData=false;
     },
 
     uploadAttachment() {
@@ -243,7 +238,7 @@ export default {
   color: #0277bd;
   text-transform: uppercase;
   display: flex;
-  align-tems: center;
+  align-items: center;
   font-weight: 600;
   width: 100%;
   padding: 0.7em 0em;
