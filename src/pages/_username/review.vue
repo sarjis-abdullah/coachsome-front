@@ -137,6 +137,10 @@ export default {
     }
   },
   created() {
+    if(process.browser && this.$auth.user.user_name == this.$route.params.username){
+      this.$toast.error(this.$i18n.t("self_review_error"));
+      this.$router.push(this.localePath(pathData.pages.home));
+    }
     baseReviewApi(this.$axios)
       .getProfileInfo({
         userName: this.$route.params.username
