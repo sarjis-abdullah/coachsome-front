@@ -632,7 +632,8 @@ export default {
     // Notified if step at 3
     if (!booking.isNotified && this.$route.query.payment_status == "paid") {
       booking.isNotified = true;
-      this.notify({ bookingId: booking.id });
+      let promoCode = this.$route.query.promo ? this.$route.query.promo : null;
+      this.notify({ bookingId: booking.id, promoCodeValue: promoCode });
     }
 
     // if status is paid && not redirect to chat
