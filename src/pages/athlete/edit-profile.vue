@@ -727,6 +727,9 @@ export default {
   mounted() {
     this.init();
     this.origin = window.location.origin;
+    if(process.browser){
+      document.querySelector(".input-tel__label").innerHTML = "Phone Number";
+    }
   },
   methods: {
     handleTiptopUpdatedValue(value) {
