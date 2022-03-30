@@ -775,6 +775,9 @@ export default {
   },
   mounted() {
     this.init();
+    if(process.browser){
+      document.querySelector(".input-tel__label").innerHTML = "Phone Number";
+    }
   },
   methods: {
     moment,

@@ -47,7 +47,11 @@
               <infinite-loading
                 :identifier="infiniteId"
                 @infinite="infiniteHandler"
-              ></infinite-loading>
+              >
+                <template slot="no-more">
+                  <span></span>
+                </template>
+              </infinite-loading>
             </v-col>
           </v-row>
         </v-col>
