@@ -18,9 +18,12 @@
             Add People
           </div>
           <v-combobox
-            :rules="[v => !!v || 'At least one email is required']"
+            :rules="emailRules"
             v-model="form.emails"
             :items="items"
+            item-value="email"
+            item-text="profile.profileName"
+            :return-object="false"
             label="Add users by name or email address"
             multiple
             :search-input.sync="search"
@@ -73,7 +76,11 @@ export default {
       loading: false,
       form: {
         emails: null
-      }
+      },
+      emailRules: [
+        v => !!v || this.$i18n.t("valid_required_email"),
+        v => /.+@.+/.test(v) || this.$i18n.t("valid_valid_email")
+      ]
     };
   },
   watch: {
@@ -92,9 +99,9 @@ export default {
         this.$axios
           .get(endpoint.GROUP_INVITATIONS_PRIVATE_USERS_GET, { params })
           .then(({ data }) => {
-            console.log(data.data);
             if (data.data) {
-              this.items = data.data.map(item => item.email);
+              this.items = data.data;
+              // this.items = data.data.map(item => item.email);
             }
           });
       }
