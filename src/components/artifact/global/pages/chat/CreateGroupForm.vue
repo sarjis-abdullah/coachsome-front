@@ -114,8 +114,7 @@ export default {
         name: "",
         description: "",
         emails: null,
-        message: "",
-        pwa: true,
+        message: ""
       },
       search: "",
       emailRules: [
