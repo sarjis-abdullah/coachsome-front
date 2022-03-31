@@ -40,10 +40,9 @@
             {{ $t("chat_create_group_label_add_people") }}
           </div>
           <v-combobox
-            :rules="emailRules"
+            :rules="[v => !!v || 'At least one email is required']"
             item-value="email"
             item-text="profile.profileName"
-            :return-object="false"
             v-model="form.emails"
             :search-input.sync="search"
             :items="items"
@@ -66,8 +65,10 @@
                 :input-value="data.selected"
                 :disabled="data.disabled"
                 @click:close="data.parent.selectItem(data.item)"
+                class="my-1"
+                :class="{'has-chip-name' : data.item.profile}"
               >
-                {{ data.item }}
+                 {{ data.item.profile ? data.item.profile.profileName : data.item }}
               </v-chip>
             </template>
           </v-combobox>
@@ -106,6 +107,7 @@ export default {
   data() {
     return {
       valid: true,
+      validEmail: true,
       items: [],
       loading: false,
       form: {
@@ -147,11 +149,42 @@ export default {
     }
   },
   methods: {
+    validateEmail(email) {
+      this.validEmail = false;
+      let validation = String(email)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+      if(validation){
+        this.validEmail = true;
+      }else{
+        this.validEmail = false;
+        this.$toast.error(data + " is invalid email address.")
+      }
+      return validation;
+
+    },
     handleCreateBtnClick() {
-      if (this.$refs.form.validate()) {
+      let emailData = [];
+      
+      this.form.emails.map((item) => {
+        let data = item.email ? item.email : item;
+        if(this.validateEmail(data)){
+          emailData.push(data);
+        }
+      })
+
+      let payload = {
+        name: this.form.name,
+        description: this.form.description,
+        emails: emailData,
+        message: this.form.message,
+      }
+      if (this.$refs.form.validate() && this.validEmail == true) {
         this.loading = true;
         this.$axios
-          .post(endpoint.GROUPS_POST, this.form)
+          .post(endpoint.GROUPS_POST, payload)
           .then(({ data }) => {
             this.$toast.success("Successfully created");
             this.$emit("created");
@@ -190,5 +223,9 @@ export default {
     line-height: 25px;
     color: $primary-light-1;
   }
+}
+.has-chip-name{
+  background: #15577C !important;
+  color: white !important;
 }
 </style>
