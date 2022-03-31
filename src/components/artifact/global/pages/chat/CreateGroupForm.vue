@@ -40,7 +40,10 @@
             {{ $t("chat_create_group_label_add_people") }}
           </div>
           <v-combobox
-            :rules="[v => !!v || 'At least one email is required']"
+            :rules="emailRules"
+            item-value="email"
+            item-text="profile.profileName"
+            :return-object="false"
             v-model="form.emails"
             :search-input.sync="search"
             :items="items"
@@ -109,9 +112,14 @@ export default {
         name: "",
         description: "",
         emails: null,
-        message: ""
+        message: "",
+        pwa: true,
       },
-      search: ""
+      search: "",
+      emailRules: [
+        v => !!v || this.$i18n.t("valid_required_email"),
+        v => /.+@.+/.test(v) || this.$i18n.t("valid_valid_email")
+      ]
     };
   },
   watch: {
@@ -132,7 +140,8 @@ export default {
         .then(({ data }) => {
           console.log(data.data);
           if (data.data) {
-            this.items = data.data.map(item => item.email);
+            // this.items = data.data.map(item => item.email);
+            this.items = data.data;
           }
         });
     }
