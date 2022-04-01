@@ -19,6 +19,8 @@
           </div>
           <v-combobox
             :rules="[v => !!v || 'At least one email is required']"
+            item-value="email"
+            item-text="profile.profileName"
             v-model="form.emails"
             :items="items"
             label="Add users by name or email address"
@@ -40,8 +42,10 @@
                 :input-value="data.selected"
                 :disabled="data.disabled"
                 @click:close="data.parent.selectItem(data.item)"
+                class="my-1"
+                :class="{'has-chip-name' : data.item.profile}"
               >
-                {{ data.item }}
+                 {{ data.item.profile ? data.item.profile.profileName : data.item }}
               </v-chip>
             </template>
           </v-combobox>
@@ -68,12 +72,17 @@ export default {
   data() {
     return {
       valid: true,
+      validEmail: true,
       search: "",
       items: [],
       loading: false,
       form: {
         emails: null
-      }
+      },
+      emailRules: [
+        v => !!v || this.$i18n.t("valid_required_email"),
+        v => /.+@.+/.test(v) || this.$i18n.t("valid_valid_email")
+      ]
     };
   },
   watch: {
@@ -92,22 +101,49 @@ export default {
         this.$axios
           .get(endpoint.GROUP_INVITATIONS_PRIVATE_USERS_GET, { params })
           .then(({ data }) => {
-            console.log(data.data);
             if (data.data) {
-              this.items = data.data.map(item => item.email);
+              this.items = data.data;
+              // this.items = data.data.map(item => item.email);
             }
           });
       }
     }
   },
   methods: {
+    validateEmail(email) {
+      this.validEmail = false;
+      let validation = String(email)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+      if(validation){
+        this.validEmail = true;
+      }else{
+        this.validEmail = false;
+        this.$toast.error(data + " is invalid email address.")
+      }
+      return validation;
+    },
     handleInviteBtnClick() {
+      let emailData = [];
+      
+      this.form.emails.map((item) => {
+        let data = item.email ? item.email : item;
+        if(this.validateEmail(data)){
+          emailData.push(data);
+        }
+      })
+
+      let payload = {
+        emails: emailData
+      }
       const selectedContact = this.$store.getters["chat/selectedContact"];
-      if (this.$refs.form.validate() && selectedContact) {
+      if (this.$refs.form.validate() && selectedContact && this.validEmail == true) {
         const { groupId } = selectedContact;
         this.loading = true;
         this.$axios
-          .post(endpoint.GROUP_INVITATIONS_GROUP_ID_POST(groupId), this.form)
+          .post(endpoint.GROUP_INVITATIONS_GROUP_ID_POST(groupId), payload)
           .then(({ data }) => {
             this.$toast.success("Successfully invited");
             this.$emit("invited");
@@ -146,5 +182,9 @@ export default {
     line-height: 25px;
     color: $primary-light-1;
   }
+}
+.has-chip-name{
+  background: #15577C !important;
+  color: white !important;
 }
 </style>
