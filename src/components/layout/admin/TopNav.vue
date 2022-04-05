@@ -46,7 +46,7 @@
         v-for="(item, i) in mainMenu.items"
         :key="i"
         :to="localePath(item.path)"
-        >{{ item.text }}</v-btn
+        >{{ $t(item.t_key) }}</v-btn
       >
     </div>
 
@@ -105,13 +105,13 @@ export default {
             text: "Promo Codes",
             path: pathData.admin.promos,
             icon: "mdi-view-list",
-            t_key: "dropdown_item_promos"
+            t_key: "pwa_promo_codes"
           },
           payoutRequest: {
             text: "Payout Request",
             path: pathData.admin.payoutRequest,
             icon: "mdi-view-list",
-            t_key: "dropdown_item_pending_customer"
+            t_key: "pwa_payout_request"
           },
           logs: {
             text: "Logs",
