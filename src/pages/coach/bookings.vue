@@ -57,6 +57,7 @@
         </v-col>
         <v-col cols="12" md="4">
           <v-date-picker
+            :first-day-of-week="1"
             v-model="date"
             full-width
             color="primary-light-1"
