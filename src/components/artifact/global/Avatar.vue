@@ -230,7 +230,7 @@
             link
             :to="item.path"
           >
-            <v-list-item-title>{{ $t(item.name) }}</v-list-item-title>
+            <v-list-item-title>{{ $t(item.t_key) }}</v-list-item-title>
           </v-list-item>
         </v-list-group>
       </span>
@@ -410,7 +410,7 @@ export default {
               name: "Promo Codes",
               path: pathData.admin.promos,
               icon: "mdi-view-list",
-              t_key: "dropdown_item_promos"
+              t_key: "pwa_promo_codes"
             },
             {
               name: "Users",

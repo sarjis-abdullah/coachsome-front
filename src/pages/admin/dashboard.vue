@@ -2,7 +2,7 @@
   <v-container fluid class="page-container admin-dashboard">
     <v-row>
       <v-col cols="12" class="pb-0">
-        <div class="page-title">Dashboard</div>
+        <div class="page-title">{{$t("text_dashboard")}}</div>
       </v-col>
     </v-row>
 
@@ -15,7 +15,7 @@
     <v-row>
       <v-col cols="12">
         <div class="balance-card-filter d-flex align-center">
-          <div class="filter-text">Show</div>
+          <div class="filter-text">{{$t("text_show")}}</div>
           <div class="filter-content ml-2">
             <span v-if="startDate">
               {{ startDate.format("ll") }} - {{ endDate.format("ll") }}
@@ -84,7 +84,7 @@
         <v-row>
           <v-col cols="12" md="4" v-for="(item, i) in box" :key="i">
             <div class="box" tabindex="-1" @click="boxClickHandle(item)">
-              <div class="box__title">{{ item.text }}</div>
+              <div class="box__title">{{ $t('text_'+item.key) }}</div>
               <div class="box__description">
                 <span v-if="item.amountType == 'money'">
                   {{ currencyService.toCurrencyByBase(item.amount, true) }}
@@ -103,7 +103,7 @@
       <v-col cols="12" md="4">
         <v-card class="mt-3" flat :loading="loading">
           <v-card-title>
-            {{ selectedBox.text }}
+            {{ $t('text_'+selectedBox.key) }}
           </v-card-title>
           <v-divider></v-divider>
 
