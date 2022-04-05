@@ -81,19 +81,19 @@ export default {
             text: "CMS",
             path: pathData.admin.pageBuilder,
             icon: "mdi-view-list",
-            t_key: "dropdown_item_users"
+            t_key: "dropdown_item_cms"
           },
           orderList: {
             text: "Order List",
             path: pathData.admin.orderList,
             icon: "mdi-view-list",
-            t_key: "dropdown_item_users"
+            t_key: "dropdown_item_order_list"
           },
           translation: {
             text: "Translation",
             path: pathData.admin.translation,
             icon: "mdi-view-list",
-            t_key: "dropdown_item_users"
+            t_key: "dropdown_item_translation"
           },
           users: {
             text: "Users",
