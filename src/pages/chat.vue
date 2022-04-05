@@ -1248,6 +1248,7 @@ export default {
           receiverUserId: contact.connectionUserId,
           message: message
         });
+        this.$store.dispatch("chat/getContacts");
         this.bookingDialog.value = false;
       }
     },
