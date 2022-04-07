@@ -111,6 +111,7 @@ export default {
     { src: "~/plugins/vue-tribute", mode: "client" },
     { src: "~/plugins/socket", mode: "client" },
     { src: "~/plugins/v-emoji-picker", mode: "client" },
+    { src: "~/plugins/vue-social-share", mode: "client" },
     { src: "~/plugins/vuelidate" }
   ],
 
@@ -292,7 +293,8 @@ export default {
           "**/athlete/**"
         ]
       }
-    ]
+    ],
+    'vue-social-sharing/nuxt'
   ],
 
   // Build Configuration
