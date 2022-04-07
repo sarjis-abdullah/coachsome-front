@@ -9,6 +9,43 @@
               <profile-card v-bind="profileCard"></profile-card>
             </v-col>
             <v-col cols="12" md="6" class="mt-10">
+              <div class="social-share-section">
+                <p class="social-share-section__text">{{$t('pwa_social_share_title')}}</p>
+                <div>
+                  <ShareNetwork
+                    network="facebook"
+                    :url='serverLink+user_path'
+                    :title="profileCard.name"
+                    :hashtags="tagsData"
+                    :class="{'px-2' : $vuetify.breakpoint.smAndUp}"
+                  >
+                    <img  :src="require('@/assets/images/icons/Facebook_1.svg')" alt="facebook">
+                  </ShareNetwork>
+
+                  <ShareNetwork
+                    network="twitter"
+                    :url='serverLink+user_path'
+                    :title="profileCard.name"
+                    :hashtags="tagsData"
+                     :class="{'px-2' : $vuetify.breakpoint.smAndUp}"
+                  >
+                    <img  :src="require('@/assets/images/icons/twitter.svg')" alt="twitter">
+                  </ShareNetwork>
+                  <ShareNetwork
+                    network="linkedin"
+                    :url='serverLink+user_path'
+                    :title="profileCard.name"
+                     :class="{'px-2' : $vuetify.breakpoint.smAndUp}"
+                  >
+                    <img :src="require('@/assets/images/icons/linkedin.svg')" alt="linkedin">
+                  </ShareNetwork>
+
+                  <a :href="coachProfileLinkUrl" class="share-link" :class="{'px-2' : $vuetify.breakpoint.smAndUp}" ref="myUrl"  @click.prevent="copyUrl">
+                      <img  :src="require('@/assets/images/icons/link-share.svg')" alt="link">
+                  </a>
+                </div>
+              </div>
+          
               <div class="map-card">
                 <v-card>
                   <v-card-text class="px-0 py-0">
@@ -420,7 +457,9 @@ export default {
         instagram_link: ""
       },
       isServiceLoading: true,
-      services: []
+      services: [],
+      serverLink: process.env.CLIENT_BASE_URL,
+      user_path: this.$route.path,
     };
   },
   computed: {
@@ -445,6 +484,23 @@ export default {
       } else {
         return "300px";
       }
+    },
+    tagsData(){
+      return  this.profileCard.tags.map(el => el.name).join(', ');
+    },
+    quotes(){
+      if(this.travelCard.farAway && this.travelCard.isOfferOnlyOnline){
+        return this.$i18n.t("geography_distance_online_offer_only")
+      }else{
+          return this.$i18n.t("profile_content_map_title") + ' '+ this.travelCard.farAway + ' '+ this.travelCard.unit;
+      }
+    },
+    moreAboutText(){
+      return this.moreAbout;
+    },
+    coachProfileLinkUrl(){
+      let user_name = this.$route.path.replace('/', '')
+      return this.localePath(pathData.pages.publicProfile(user_name));
     }
   },
   watch: {
@@ -582,6 +638,11 @@ export default {
     this.getData();
   },
   methods: {
+    copyUrl() {
+      var Url = this.$refs.myUrl;
+      navigator.clipboard.writeText(Url);
+      this.$toast.success(this.$i18n.t("pwa_review_link_copy"));
+    },
     async getData() {
       try {
         const { data } = await profileApi(this.$axios).getProfileInformation(
@@ -782,6 +843,21 @@ export default {
     &__footer {
       padding-bottom: 18px;
     }
+  }
+}
+.social-share-section{
+  display: flex;
+  justify-content: space-between;
+  &__text{
+    font-family: 'Open Sans';
+    font-style: normal;
+    vertical-align: middle;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 25px;
+    text-align: center;
+
+    color: #15577C;
   }
 }
 </style>

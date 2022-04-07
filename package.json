@@ -51,6 +51,7 @@
     "vue-phone-number-input": "^1.1.10",
     "vue-read-more": "^1.1.1",
     "vue-scroll": "^2.1.13",
+    "vue-social-sharing": "^3.0.9",
     "vue-toastification": "^1.7.11",
     "vue-tribute": "^1.0.7",
     "vue2-transitions": "^0.3.0",
