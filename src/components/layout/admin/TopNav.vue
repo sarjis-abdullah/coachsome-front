@@ -46,7 +46,7 @@
         v-for="(item, i) in mainMenu.items"
         :key="i"
         :to="localePath(item.path)"
-        >{{ item.text }}</v-btn
+        >{{ $t(item.t_key) }}</v-btn
       >
     </div>
 
@@ -81,19 +81,19 @@ export default {
             text: "CMS",
             path: pathData.admin.pageBuilder,
             icon: "mdi-view-list",
-            t_key: "dropdown_item_users"
+            t_key: "dropdown_item_cms"
           },
           orderList: {
             text: "Order List",
             path: pathData.admin.orderList,
             icon: "mdi-view-list",
-            t_key: "dropdown_item_users"
+            t_key: "dropdown_item_order_list"
           },
           translation: {
             text: "Translation",
             path: pathData.admin.translation,
             icon: "mdi-view-list",
-            t_key: "dropdown_item_users"
+            t_key: "dropdown_item_translation"
           },
           users: {
             text: "Users",
@@ -105,13 +105,13 @@ export default {
             text: "Promo Codes",
             path: pathData.admin.promos,
             icon: "mdi-view-list",
-            t_key: "dropdown_item_promos"
+            t_key: "pwa_promo_codes"
           },
           payoutRequest: {
             text: "Payout Request",
             path: pathData.admin.payoutRequest,
             icon: "mdi-view-list",
-            t_key: "dropdown_item_pending_customer"
+            t_key: "pwa_payout_request"
           },
           logs: {
             text: "Logs",

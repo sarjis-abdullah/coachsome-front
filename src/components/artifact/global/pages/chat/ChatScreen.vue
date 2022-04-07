@@ -454,6 +454,7 @@ export default {
 
           if (data.messages) {
             this.$store.dispatch("chat/setMessages", data.messages);
+            this.$store.dispatch("chat/getContacts");
           }
         })
         .catch(({ response }) => {
@@ -497,6 +498,7 @@ export default {
 
           if (data.messages) {
             this.$store.dispatch("chat/setMessages", data.messages);
+            this.$store.dispatch("chat/getContacts");
           }
         })
         .catch(({ response }) => {
@@ -534,6 +536,7 @@ export default {
 
           if (data.messages) {
             this.$store.dispatch("chat/setMessages", data.messages);
+            this.$store.dispatch("chat/getContacts");
           }
         })
         .catch(error => {
@@ -586,6 +589,7 @@ export default {
 
           if (data.messages) {
             this.$store.dispatch("chat/setMessages", data.messages);
+            this.$store.dispatch("chat/getContacts");
           }
         })
         .catch(error => {

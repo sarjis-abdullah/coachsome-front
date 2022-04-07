@@ -4,6 +4,7 @@
       <div class="request-box">
         <div class="request-box__date-picker">
           <v-date-picker
+            :first-day-of-week="1"
             class="pt-5"
             color="primary-light-1"
             @input="handleDateChange"

@@ -265,7 +265,7 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker v-model="date">
+                <v-date-picker :first-day-of-week="1" v-model="date">
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="menu = false">
                     {{ $t("btn_label_cancel") }}
