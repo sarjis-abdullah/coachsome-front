@@ -18,7 +18,7 @@
       </v-list-item> -->
 
       <!-- Login -->
-      <v-list-item color="primary" link :to="localePath(items.login.path)">
+      <v-list-item color="primary" link @click.stop="goToLogin()">
         <v-list-item-content>
           <v-list-item-title>{{ $t(items.login.t_key) }}</v-list-item-title>
         </v-list-item-content>
@@ -158,6 +158,9 @@ export default {
     },
     handleLanguage(item) {
       this.$i18n.locale = item.lang;
+    },
+    goToLogin(){
+      this.$store.dispatch("toggleDialog");
     }
   }
 };
