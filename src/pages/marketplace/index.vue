@@ -23,6 +23,6 @@ export default {
 
 <style lang="scss" scoped>
 .marketplace-page {
-  background: $body-bg;
+  // background: $body-bg;
 }
 </style>

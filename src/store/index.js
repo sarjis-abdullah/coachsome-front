@@ -31,6 +31,7 @@ export const state = () => ({
   },
   existing_user_email: process.browser && localStorage.getItem("existing_user_email") || null,
   login_medium: process.browser && localStorage.getItem("login_medium") || null,
+  activeBottomNav: 0,
 });
 
 export const getters = {
@@ -84,7 +85,10 @@ export const getters = {
   },
   loginMedium(state){
     return state.login_medium;
-  }
+  },
+  activeBottomNav(state){
+    return state.activeBottomNav;
+  },
 };
 
 export const mutations = {
@@ -154,6 +158,9 @@ export const mutations = {
     state.login_medium = provider_name;
     localStorage.setItem("login_medium", provider_name);
   },
+  SET_ACTIVE_BOTTOM_NAV(state, item){
+    state.activeBottomNav = item;
+  },
 
 };
 
@@ -208,5 +215,8 @@ export const actions = {
   },
   setLoginMedium(context, medium) {
     context.commit("SET_LOGIN_MEDIUM", medium);
+  },
+  activeBottomNav(context, item){
+    context.commit("SET_ACTIVE_BOTTOM_NAV", item)
   },
 };

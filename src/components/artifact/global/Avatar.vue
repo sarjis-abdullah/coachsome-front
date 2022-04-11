@@ -575,7 +575,7 @@ export default {
       await this.$auth.logout();
       this.$socket.emit("force_disconnect");
       if (!this.$auth.loggedIn) {
-        this.$router.push(this.localePath(pathData.pages.login));
+        this.$router.push(this.localePath(pathData.pages.home));
       }
       this.$nuxt.$loading.finish();
     },

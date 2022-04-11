@@ -195,11 +195,13 @@ export default {
 
                 if(authUser.roles[0].name == "superadmin" || authUser.roles[0].name == "admin" || authUser.roles[0].name == "staff"){
                   this.$router.push(this.localePath(pathData.admin.dashboard));
-                }else if(authUser.roles[0].name == "coach"){
-                  this.$router.push(this.localePath(pathData.coach.home));
-                }else if(authUser.roles[0].name == "athlete"){
-                  this.$router.push(this.localePath(pathData.athlete.home));
-                }else{
+                }
+                // else if(authUser.roles[0].name == "coach"){
+                //   this.$router.push(this.localePath(pathData.coach.home));
+                // }else if(authUser.roles[0].name == "athlete"){
+                //   this.$router.push(this.localePath(pathData.athlete.home));
+                // }
+                else{
                   this.$router.push(this.localePath(pathData.pages.home));
                 }
               }else{
