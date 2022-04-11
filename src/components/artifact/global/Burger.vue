@@ -109,7 +109,7 @@ export default {
           key: "register",
           icon: "folder_open",
           t_key: "nav_item_create_free_user",
-          path: pathData.pages.register
+          path: pathData.pages.login
         }
       }
     };
