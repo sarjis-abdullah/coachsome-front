@@ -710,7 +710,7 @@ export default {
     },
     contactBtnHandle() {
       if (!this.$auth.loggedIn) {
-        this.$router.push(this.localePath(pathData.pages.register));
+        this.$router.push(this.localePath(pathData.pages.login));
         let questionBox = {
           userId: this.userInfo.id,
           userName: this.userInfo.userName,
@@ -729,7 +729,7 @@ export default {
     handleBooking(service = null) {
       bookingService.destroyBookingInfo();
       if (!this.$auth.loggedIn) {
-        this.$router.push(this.localePath(pathData.pages.register));
+        this.$router.push(this.localePath(pathData.pages.login));
       } else {
         this.$router.push(
           this.localePath(pathData.pages.bookingPackage(service.id))

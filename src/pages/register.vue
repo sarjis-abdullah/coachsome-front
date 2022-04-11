@@ -1,405 +1,307 @@
 <template>
-  <div class="register-page">
-    <v-container
-      class="py-0 my-0"
-      fill-height
-      fluid
-      :style="{ height: 100 + '%' }"
-    >
-      <v-row
-        justify="center"
-        class="py-0 my-0"
-        align="center"
-        :style="{ height: 100 + '%' }"
-      >
-        <v-col
-          cols="12"
-          md="5"
-          color="primary"
-          class="py-0 my-0"
-          :style="{ height: 100 + '%' }"
-        >
-          <v-card class="primary my-0 py-0" tile height="100%">
-            <v-card-text>
-              <!-- Logo -->
-              <v-row>
-                <v-col md="12" class="text-center">
-                  <nuxt-link text :to="localePath('/')">
-                    <img
-                      :src="require('@/assets/images/logo.svg')"
-                      alt="logo"
-                    />
-                  </nuxt-link>
-                </v-col>
-              </v-row>
-
-              <v-row justify="center" class="mt-md-10">
-                <v-col cols="11" md="11">
-                  <!-- Join coachsome -->
-                  <v-row justify="center">
-                    <v-col cols="12" md="12">
-                      <div class="user-type">
-                        <div class="user-type__title mb-2">
-                          {{ $t("register_user_type_title_join_coachsome") }}
-                        </div>
-                        <div class="user-type__body">
-                          <v-item-group v-model="tab.value">
-                            <v-row>
-                              <v-item
-                                v-for="(item, index) in tab.items"
-                                :key="index"
-                                v-slot="{ active }"
-                              >
-                                <v-col cols="12" md="6">
-                                  <v-card
-                                    :color="
-                                      active ? 'primary-light-1' : 'white'
-                                    "
-                                    class="d-flex justify-center  align-center"
-                                    height="50"
-                                    @click="handleOnTabClick(index)"
-                                  >
-                                    {{ $t(item.t_key) }}
-                                  </v-card>
-                                </v-col>
-                              </v-item>
-                            </v-row>
-                          </v-item-group>
-                        </div>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col>
-                      <v-form ref="form" v-model="form.valid">
-                        <!-- Facebook -->
-                        <v-row>
-                          <v-col cols="12">
-                            <v-btn
-                              block
-                              color="#1877F2"
-                              class="white--text"
-                              @click="registerWithFacebook()"
-                            >
-                              <v-icon class="mr-2"
-                                >$vuetify.icons.$myFacebookIcon</v-icon
-                              >
-                              {{ $t("reg_btn_label_join_with_fb") }}
-                            </v-btn>
-                          </v-col>
-                        </v-row>
-
-                        <!-- Google -->
-                        <v-row>
-                          <v-col cols="12">
-                            <v-btn
-                              block
-                              color="#F7FAFC"
-                              light
-                              @click="registerWithGoogle()"
-                            >
-                              <v-icon color="white" class="mr-2"
-                                >$vuetify.icons.$myGoogleIcon</v-icon
-                              >
-                              {{ $t("reg_btn_label_join_with_google") }}
-                            </v-btn>
-                          </v-col>
-                        </v-row>
-
-                        <!-- Or -->
-                        <v-row class="mb-4">
-                          <v-col cols="12">
-                            <div class="or-text">
-                              {{ $t("resigter_text_or") }}
-                            </div>
-                          </v-col>
-                        </v-row>
-
-                        <v-text-field
-                          v-model="form.first_name"
-                          :rules="rule.first_name"
-                          :label="$t('reg_hint_first_name')"
-                          solo
-                          dense
-                        ></v-text-field>
-                        <v-text-field
-                          v-model="form.last_name"
-                          :rules="rule.last_name"
-                          :label="$t('reg_hint_last_name')"
-                          solo
-                          dense
-                        ></v-text-field>
-
-                        <!-- Email -->
-                        <v-text-field
-                          v-model="form.email"
-                          :type="'email'"
-                          :rules="rule.email"
-                          :label="$t('reg_hint_email')"
-                          solo
-                          dense
-                        ></v-text-field>
-
-                        <!-- Password -->
-                        <v-text-field
-                          v-model="form.password"
-                          :rules="rule.password"
-                          :type="'password'"
-                          :label="$t('reg_hint_password')"
-                          solo
-                          dense
-                        ></v-text-field>
-
-                        <!-- Join with email -->
-                        <v-row>
-                          <v-col>
-                            <v-btn
-                              @click="register()"
-                              :loading="loading"
-                              block
-                              color="downy"
-                              class="_util-text-transform-none"
-                              >{{
-                                $t("regiser_btn_label_join_with_email")
-                              }}</v-btn
-                            >
-                          </v-col>
-                        </v-row>
-
-                        <!-- terms -->
-                        <v-row justify="center">
-                          <v-col>
-                            <div class="terms" color="white" dark>
-                              <span
-                                v-html="$t('reg_label_terms_conditions')"
-                              ></span>
-                            </div>
-                          </v-col>
-                        </v-row>
-                      </v-form>
-                      <!-- ./Form -->
-                    </v-col>
-                  </v-row>
-
-                  <!-- Existing acount -->
-                  <v-row>
-                    <v-col cols="12" class="text-center">
-                      <div
-                        class="existing-account"
-                        @click.stop="existingAccHandler"
-                      >
-                        {{ $t("register_btn_label_existing_account") }}
-                      </div>
-                    </v-col>
-                  </v-row>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+<v-container fluid grid-list-md text-xs-center class="d-flex" >
+    <v-layout row wrap class="align-items-to-center" >
+        <v-flex xs12>
+            <router-link to="/login-with-email"> 
+                <img class="caret-left" :src="require('@/assets/img/svg-icons/carrot-left.svg')" alt=""> 
+            </router-link>
+        </v-flex>
+        <v-flex xs12 class="align-items-to-center" >
+            <p class="register-title">{{$t("pwa_register_title")}}</p>
+        </v-flex>
+        <v-flex xs12 class="align-items-to-center">
+            <img class="trophy"  :src="require('@/assets/img/svg-icons/trophy.svg')" alt="">
+        </v-flex>
+        <v-flex xs12 class="align-items-to-center">
+            <img class="registration-steps" :src="require('@/assets/img/svg-icons/Steps-3.svg')" alt="">
+        </v-flex>
+        <v-flex xs10 > 
+            <p class="login-email-label mt-2 "> {{$t("pwa_email_label_text")}}</p>
+            <p class="login-email-text mt-2 "> {{email}}</p>
+        </v-flex>
+        <v-flex xs10 class="align-items-to-center ">
+                  <v-text-field
+                    outlined
+                    dense 
+                    id="first_name"
+                    v-model="first_name"
+                    class="cs-input-text-field-login"
+                    :placeholder="$t('pwa_first_name_hint')"
+                    required
+                    name="first_name"
+                    :label="$t('pwa_first_name')"
+                    :rules="first_name_rules"
+                  />
+        </v-flex>
+        <v-flex xs10 class="align-items-to-center ">
+                  <v-text-field
+                    outlined
+                    dense 
+                    id="last_name"
+                    v-model="last_name"
+                    class="cs-input-text-field-login"
+                    :placeholder="$t('pwa_last_name_hint')"
+                    required
+                    name="last_name"
+                    :label="$t('pwa_last_name')"
+                    :rules="last_name_rules"
+                  />
+        </v-flex>
+          <v-flex xs10 class="align-items-to-center ">
+                <v-text-field
+                    outlined
+                    dense
+                    v-model="password"
+                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show1 ? 'text' : 'password'"
+                    name="input-10-1"
+                    :label="$t('setting_sec_password_title')"
+                    @click:append="show1 = !show1"
+                    id="password"
+                    class="cs-input-text-field-login"
+                    :rules="password_rules"
+                    required
+                    style=""
+                    @keyup.enter="login"
+                  />
+                 </v-flex>
+        <v-flex xs10 class="align-items-to-center">
+          <v-form
+            ref="form"
+            v-model="valid"
+            lazy-validation
+            style="width:100%"
+          >
+            <v-btn 
+              block
+              color="#EDB041"
+              class="white--text continue-with-email-btn"
+              :loading="show_loading_on_login_btn"
+              @click="register()"
+            >
+                {{$t("pwa_finish")}}
+            </v-btn>
+          </v-form>
+        </v-flex>
+        <v-flex xs10 class="align-items-to-center mt-2" >
+            <p class="register-footer-text">{{ $t("pwa_login_footer_1") }} 
+                <router-link :to="uri.terms" class="link-text"><u>{{ $t("global_url_terms_of_use") }}</u></router-link>
+                  {{ $t("pwa_login_footer_2") }}
+                  <router-link :to="uri.policy" class="link-text"><u>{{ $t("global_url_privacy_policy") }}</u></router-link>
+              </p>
+        </v-flex>
+    </v-layout>
+  </v-container>
 </template>
+
 <script>
-import { pathData } from "@/data";
 import { authApi } from "@/api";
-export default {
+import { pathData } from "@/data";
+import axios from "@/plugins/axios";
+export default ({
   layout: "auth",
-  head() {
-    return {
-      title: this.$i18n.t("header_title_tag_front_register"),
-      titleTemplate: "%s"
-    };
-  },
-  data: () => ({
-    loading: false,
-    tab: {
-      value: 0,
-      items: [
-        {
-          text: "I’m an Athlete",
-          t_key: "register_tab_athlete",
-          key: "athlete"
+    data () {
+      return {
+        email: this.$store.getters.existingUserEmail || " ",
+        uri: {
+          policy: pathData.pages.policy,
+          terms: pathData.pages.terms,
         },
-        {
-          text: "I’m a Coach",
-          t_key: "register_tab_coach",
-          key: "coach"
-        }
-      ]
-    },
-    form: {
-      valid: true,
-      user_type: "coach",
-      first_name: "",
-      last_name: "",
-      email: "",
-      password: "",
-      agree_to_terms: true
-    },
-    rule: {
-      first_name: [],
-      last_name: [],
-      email: [],
-      password: []
-    }
-  }),
-  watch: {
-    "tab.value": {
-      handler: function(val) {
-        this.form.user_type = this.tab.items[val].key;
-      },
-      immediate: true
-    }
-  },
-  created() {
-    this.rule.first_name = [
-      v => !!v || this.$i18n.t("valid_required_first_name"),
-      v =>
-        /^([A-Za-zæøåÆØÅ]\s*)+$/.test(v) ||
-        this.$i18n.t("valid_first_name_only_letter")
-    ];
-    this.rule.last_name = [
-      v => !!v || this.$i18n.t("valid_required_last_name"),
-      v =>
-        /^([A-Za-zæøåÆØÅ]\s*)+$/.test(v) ||
-        this.$i18n.t("valid_last_name_only_letter")
-    ];
-    this.rule.email = [
-      v => !!v || this.$i18n.t("valid_required_email"),
-      v => /.+@.+\..+/.test(v) || this.$i18n.t("valid_valid_email")
-    ];
-    this.rule.password = [
-      v => !!v || this.$i18n.t("valid_pass_required"),
-      v =>
-        /^(?=.*[A-Z]).*$/.test(v) ||
-        this.$i18n.t("valid_at_least_one_upper_case_letter"),
-      v => (v && v.length >= 6) || this.$i18n.t("valid_pass_min_character")
-    ];
-  },
-  mounted() {
-    if (this.$route.query.user_type) {
-      if (this.$route.query.user_type == "athlete") {
-        this.tab.value = 0;
+        show1: false,
+        show2: true,
+        show3: false,
+        show4: false,
+        snackbar: {
+          multiLine: true,
+          show: false,
+          text: ""
+        },
+        show_loading_on_login_btn: false,
+        deferredPrompt: null,
+        loading: false,
+        name: false,
+        valid: true,
+        user_type: "coach",
+        agree_to_terms: true,
+        first_name: '',
+        first_name_rules: [
+          (v) => !!v || this.$i18n.t("valid_required_first_name"),
+          (v) => /^([A-Za-zæøåÆØÅ]\s*)+$/.test(v) || this.$i18n.t("valid_first_name_only_letter"),
+        ],
+        last_name: "",
+        last_name_rules: [
+          (v) => !!v || this.$i18n.t("valid_required_last_name"),
+          (v) => /^([A-Za-zæøåÆØÅ]\s*)+$/.test(v) || this.$i18n.t("valid_last_name_only_letter"),
+        ],
+        password: '',
+        password_rules: [
+          (v) => !!v || this.$i18n.t("valid_pass_required"),
+          (v) =>/^(?=.*[A-Z]).*$/.test(v) || this.$i18n.t("valid_at_least_one_upper_case_letter"),
+          (v) => (v && v.length >= 6) || this.$i18n.t("valid_pass_min_character"),
+        ],
       }
-      if (this.$route.query.user_type == "coach") {
-        this.tab.value = 1;
+    },
+    watch:{
+      "$vuetify.breakpoint.smAndUp" : function() {
+        this.$store.dispatch("setActivePopupItem", "Register");
+        this.$store.dispatch("toggleDialog");
       }
-    }
-  },
-  methods: {
-    handleOnTabClick(index) {
-      this.tab.value = index;
     },
-    existingAccHandler() {
-      this.$router.push(this.localePath(pathData.pages.login));
-    },
-    async register() {
-      let payload = {
-        first_name: this.form.first_name,
-        last_name: this.form.last_name,
-        email: this.form.email,
-        password: this.form.password,
-        user_type: this.form.user_type,
-        agree_to_terms: this.form.agree_to_terms,
-        lang: this.$i18n.locale
-      };
+    async created(){
+      let user_email = this.$route.query.email || '';
+      if(user_email != ''){
 
-      if (this.$refs.form.validate()) {
-        this.loading = true;
-        try {
-          await authApi(this.$axios).register(payload);
-          this.$router.push(pathData.pages.afterRegister);
-        } catch (error) {
-          this.$toast.error(error.response.data.message);
-        } finally{
-          this.loading = false;
+        let payload = {
+          email: this.email
+        };
+        const response =  await authApi(this.$axios).login(payload);
+        if(response.data.email_exist){
+          this.hideLoading();
+          this.$store.dispatch("setExistingEmail", this.email);
+          this.$router.push(this.localePath(pathData.pages.postEmailLogin));
+          this.$toast.error("You've already registered! please login to continue.");
+          this.$Progress.finish()
+        }else{
+            if (response.data.message) {
+            this.$toast.error(response.data.message);
+          }
         }
       }
     },
-    registerWithFacebook() {
-      window.location.href =
-        process.env.API_SERVER_URL +
-        "/auth/login/facebook?user_type=" +
-        this.form.user_type;
-    },
-    registerWithGoogle() {
-      window.location.href =
-        process.env.API_SERVER_URL +
-        "/auth/login/google?user_type=" +
-        this.form.user_type;
+    methods: {
+        backToLogin(){
+          this.$store.dispatch("setActivePopupItem", "loginUsingEmail")
+        },
+        async register() {
+          try {
+            let payload = {
+              first_name: this.first_name,
+              last_name: this.last_name,
+              email: this.email,
+              password: this.password,
+              user_type: this.user_type,
+              agree_to_terms: this.agree_to_terms,
+              lang: localStorage.getItem("curr_lang"),
+            };
+            const response = await authApi(this.$axios).postRegister(payload);
+            if (response.data.status == "success") {
+              this.$axios
+                .put("auth/emailVerification", {
+                  request_from_pwa: true,
+                  email: this.email,
+                })
+                .then(response => {
+                  if (response.status == 200) {
+                    this.$toast.success(
+                      "Congrats! You have registered successfully."
+                    );
+                    this.$router.push(this.localePath(pathData.pages.getStarted));
+                  }
+                })
+                .catch(error => {
+                  this.$toast.error(error.response.data.message);
+                });
+            }else{
+              if (response.data.message) {
+                this.$toast.error(response.data.message);
+              }
+            }
+          } catch (error) {
+            console.log(error.response.data.message);
+            this.$toast.error(error.response.data.message);
+          } finally {
+            //
+          }
+          
+        }
+
     }
-  }
-};
+})
 </script>
-<style lang="scss" scoped>
-.register-page {
-  background: $body-bg;
-  height: 100%;
-  .card-text {
-    color: #fcfdfe;
-    font-size: 12px;
-  }
 
-  .c-title {
-    font-family: $font-family;
+
+<style scoped>
+.align-items-to-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-title{
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 25px;
+    line-height: 34px;
+    display: flex;
+    align-items: center;
+
+    color: #15577C;
+
+}
+
+.mail-completed{
+    position: absolute;
+    width: 75px;
+    height: 56px;
+
+}
+.mail-open{
+    /* position: absolute; */
+    width: 140px;
+    height: 140px;
+}
+.login-email-label{
+    font-family: Open Sans;
     font-style: normal;
     font-weight: normal;
-  }
-
-  .mb-fixed {
-    margin-bottom: 50%;
-  }
-
-  .v-input input {
-    font-family: $font-family;
-    max-height: 60px !important;
-    height: 42px !important;
-    background: #f7fafc;
-    border-radius: 5px;
-    font-style: normal;
-    font-weight: normal;
-  }
-
-  .user-type {
-    &__title {
-      font-family: $font-family;
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 22px;
-      text-transform: uppercase;
-      color: #f4f4f4;
-    }
-    &__body {
-      .user-type-active {
-        background: $primary-light-1;
-        font-family: $font-family;
-      }
-    }
-  }
-
-  .existing-account {
-    font-family: $font-family;
     font-size: 14px;
     line-height: 19px;
-    color: #f7fafc;
-    text-align: center;
-    text-decoration-line: underline;
-    cursor: pointer;
-  }
+    /* identical to box height */
 
-  .or-text {
-    font-family: $font-family;
+
+    /* Dusty blue */
+
+    color: #15577C;
+
+}
+.login-email-text{
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
     font-size: 14px;
+    line-height: 19px;
+    /* identical to box height */
+
+    display: flex;
+    align-items: center;
+
+    color: #8692A6;
+
+}
+.continue-with-email-btn{
+  background: #EDB041;
+  border-radius: 6px;
+  width: 100%;
+  text-transform: none !important;
+}
+.register-footer-text{
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 10px;
+    line-height: 14px;
+
+    /* Dusty blue */
     text-align: center;
-    color: #9faec2;
-  }
-  .terms {
-    font-family: $font-family;
-    font-size: 12px;
-    line-height: 16px;
-    color: #9faec2;
-  }
+    color: #15577C;
+
+}
+.link-text{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration-line: underline;
+  color: #15577C;
 }
 </style>

@@ -13,6 +13,7 @@ export default {
     baseReviews: "/reviews",
     baseReviewAction: username => "/" + username + "/review",
     baseReviewSuccess: "/reviews/success",
+    coaches: "/coaches",
     chat: {
       name: "chat",
       path: "/chat"
@@ -33,13 +34,19 @@ export default {
     },
     price: "/price",
     payments: "/payments",
+    resetOTPValidation: "/password-reset-otp-validation",
     passwordReset: "/password-reset",
     publicProfile: username => "/" + username,
     policy: "/privacy-policy",
     refundPolicy: "/refund-policy",
-    register: "/register",
     redirect: "/redirect",
-    terms: "/terms-of-use"
+    terms: "/terms-of-use",
+    emailLogin: "/login-with-email",
+    postEmailLogin: "/post-login-with-email",
+    otpValidation: "/otp-validation",
+    register: "/register",
+    getStarted: "/get-started",
+    getStarted: "/select-role",
   },
   coach: {
     dashboard: "/coach/dashboard",
@@ -58,7 +65,8 @@ export default {
     balanceEarnings: "/coach/balance-earnings",
     verification: "/coach/verification",
     bookings: "/coach/bookings",
-    payoutInformation: "/coach/payout-info"
+    payoutInformation: "/coach/payout-info",
+    profileMenu: "/coach/profile-menu",
   },
   admin: {
     login: "/admin/login",
@@ -72,13 +80,15 @@ export default {
     pageBuilder: "/admin/page-builder",
     grapesJs: "/admin/grapes-js",
     promos: "/admin/promos",
-    trackingCodes: code => `/admin/tracking-codes/${code}`
+    trackingCodes: code => `/admin/tracking-codes/${code}`,
+    profileMenu: "/admin/profile-menu",
   },
   athlete: {
     editProfile: "/athlete/edit-profile",
     login: "/athlete/login",
     register: "/athlete/register",
     bookings: "/athlete/bookings",
-    settings: "/athlete/settings"
+    settings: "/athlete/settings",
+    profileMenu: "/athlete/profile-menu",
   }
 };

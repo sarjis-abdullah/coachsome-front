@@ -13,6 +13,16 @@ export default {
     }
     return isAuthUserRole;
   },
+  hasAnyRole: function () {
+    let hasRole = false
+    let user = null;
+    if (user) {
+      if (user.roles && user.roles.length > 0) {
+        hasRole = true;
+      }
+    }
+    return hasRole
+  },
   getRoleNameSuperadmin: function() {
     return roleConfig.role.superAdmin;
   },

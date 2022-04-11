@@ -1069,7 +1069,7 @@ export default {
       );
     },
     goToRegister() {
-      this.$router.push(this.localePath(pathData.pages.register));
+      this.$router.push(this.localePath(pathData.pages.login));
     }
   }
 };

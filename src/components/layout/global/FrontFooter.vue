@@ -254,7 +254,7 @@ export default {
         howItWorks: pathData.pages.howItWork,
         about: pathData.pages.about,
         login: pathData.pages.login,
-        register: pathData.pages.register,
+        register: pathData.pages.login,
         policy: pathData.pages.policy,
         cookiePolicy: pathData.pages.cookiePolicy,
         terms: pathData.pages.terms,

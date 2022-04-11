@@ -344,7 +344,7 @@ export default {
           key: "register",
           icon: "folder_open",
           t_key: "nav_item_signup",
-          path: pathData.pages.register
+          path: pathData.pages.login
         },
         coachEditProfile: {
           key: "coachEditProfile",
