@@ -140,9 +140,9 @@ export default ({
         this.value = this.$route.path == pathData.pages.home ? 0 : null;
 
         let a = this.$store.getters.activeLoginItem
-        for (const [key, value] of Object.entries(a)) {
+        for (const [key, item] of Object.entries(a)) {
 
-          if(value && this.$vuetify.breakpoint.xsOnly){
+          if(item && this.$vuetify.breakpoint.xsOnly && !this.$auth.loggedIn){
 
             if(key == "loginScreen"){ this.$router.push(this.localePath(pathData.pages.login))}
             else if(key == "loginUsingEmail"){ this.$router.push(this.localePath(pathData.pages.emailLogin))}
