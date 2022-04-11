@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <TopNav color="primary" :fixed="false">
+  <v-app class="body-bg">
+    <TopNav color="primary" :fixed="false" v-if="$vuetify.breakpoint.smAndUp">
       <template v-slot:sport-search>
         <span></span>
       </template>
@@ -10,20 +10,54 @@
         <GlobalHeader />
       </client-only>
       <nuxt />
+      <BottomNavigation v-if="$vuetify.breakpoint.xsOnly" />
     </v-main>
   </v-app>
 </template>
 
 <script>
 import GlobalHeader from "@/components/layout/global/GlobalHeader";
+import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import TopNav from "@/components/layout/global/TopNav";
+import { pathData } from "@/data";
+
 export default {
   components: {
     GlobalHeader,
-    TopNav
+    TopNav,
+    BottomNavigation
   },
   data() {
     return {};
+  },
+  created(){
+    const currentRoute = this.$route.path;
+    if(currentRoute == pathData.pages.home 
+    || currentRoute == pathData.admin.dashboard 
+    // || currentRoute == pathData.coach.home 
+    // || currentRoute == pathData.athlete.home
+    ){
+      this.$store.dispatch("activeBottomNav", 0);
+    }
+    else if(currentRoute == pathData.pages.chat){
+      this.$store.dispatch("activeBottomNav", 1);
+    }
+    else if(currentRoute == pathData.pages.coaches){
+      this.$store.dispatch("activeBottomNav", 2);
+    }
+    else if(currentRoute == pathData.pages.login){
+      this.$store.dispatch("activeBottomNav", 4);
+    }
+    else if(currentRoute == pathData.coach.bookings || currentRoute == pathData.athlete.bookings){
+      this.$store.dispatch("activeBottomNav", 3);
+    }
+    // else if(
+    //   currentRoute == pathData.pages.profileMenu 
+    // || currentRoute == pathData.admin.profileMenu 
+    // || currentRoute == pathData.coach.profileMenu 
+    // || currentRoute == pathData.athlete.profileMenu){
+    //   this.$store.dispatch("activeBottomNav", 4);
+    // }
   },
   mounted() {},
   methods: {}

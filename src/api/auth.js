@@ -13,5 +13,26 @@ export default axios => ({
   },
   passwordReset: payload => {
     return axios.post("auth/password/reset", payload);
+  },
+  preRegister: payload => {
+    return axios.post("pwa/register", payload);
+  },
+  postRegister: (payload) => {
+    return axios.post("pwa/post-register", payload)
+  },
+  otpValidation: (payload) => {
+    return axios.post("pwa/otp-validation", payload) 
+  },
+  passowrdRecovery: (payload) => {
+    return axios.post("pwa/recovery",payload)
+  },
+  resetOTPValidation: (payload) => {
+    return axios.post("pwa/password/otp-validation",payload)
+  },
+  resetOTPExist: (payload) => {
+    return axios.post("pwa/password/reset-request",payload)
+  },
+  passwordReset: (payload) => {
+    return axios.post("pwa/password/reset",payload)
   }
 });

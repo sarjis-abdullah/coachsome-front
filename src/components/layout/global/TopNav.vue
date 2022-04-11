@@ -185,7 +185,7 @@
           class="text-normal"
           :color="colorOfTheTextBtn"
           text
-          @click.stop="loginBtnHandle"
+          @click="goToLogin()"
           v-if="!isLoggedIn"
           >{{ $t(navItems.login.t_key) }}</v-btn
         >
@@ -255,7 +255,7 @@
           small
           depressed
           dark
-          :to="localePath(navItems.register.path)"
+          @click="goToLogin()"
           color="primary-light-1"
           >{{ $t(navItems.register.t_key) }}</v-btn
         >
@@ -270,6 +270,7 @@
         <burger />
       </span>
     </v-app-bar>
+    <login-dialog v-if="!isLoggedIn"></login-dialog>
   </div>
 </template>
 
@@ -280,6 +281,7 @@ import Avatar from "@/components/artifact/global/Avatar";
 import Burger from "@/components/artifact/global/Burger";
 import MessageBtn from "@/components/artifact/global/MessageBtn";
 import SportSearch from "@/components/artifact/global/SportSearch";
+import LoginDialog from '@/components/loginWithPopup/LoginDialog'
 
 export default {
   props: {
@@ -300,7 +302,8 @@ export default {
     avatar: Avatar,
     burger: Burger,
     MessageBtn,
-    SportSearch
+    SportSearch,
+    LoginDialog
   },
   data() {
     return {
@@ -341,7 +344,7 @@ export default {
           key: "register",
           icon: "folder_open",
           t_key: "nav_item_signup",
-          path: pathData.pages.register
+          path: pathData.pages.login
         },
         coachEditProfile: {
           key: "coachEditProfile",
@@ -459,6 +462,9 @@ export default {
     },
     loginBtnHandle() {
       return this.$router.push(this.localePath(pathData.pages.login));
+    },
+    goToLogin(){
+      this.$store.dispatch("toggleDialog");
     }
   }
 };
