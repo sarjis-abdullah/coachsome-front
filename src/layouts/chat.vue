@@ -1,12 +1,12 @@
 <template>
   <v-app>
     <TopNav color="primary" v-if="$vuetify.breakpoint.smAndUp" />
-    <v-main>
+    <v-main style="background: #f7fafc">
       <client-only>
         <GlobalHeader />
       </client-only>
       <nuxt />
-      <BottomNavigation v-if="$vuetify.breakpoint.xsOnly" />
+      <BottomNavigation v-if="$vuetify.breakpoint.xsOnly && !navStatus" />
     </v-main>
   </v-app>
 </template>
@@ -25,7 +25,15 @@ export default {
     BottomNavigation
   },
   data() {
-    return {};
+    return {
+       selectedContact : this.$store.getters["chat/selectedContact"],
+       showNav: true,
+    };
+  },
+  computed:{
+    navStatus(){
+      return this.$store.getters['chat/getNavOnChatStatus'];
+    },
   },
   created(){
     const currentRoute = this.$route.path;
@@ -56,21 +64,22 @@ export default {
     //   this.$store.dispatch("activeBottomNav", 4);
     // }
   },
-  mounted() {
-    // Tawk Api exist in static directory
-    // Only chat page do not effect
-    Tawk_API.onLoad = function() {
-      Tawk_API.hideWidget();
-    };
-    if (Tawk_API.hideWidget) {
-      Tawk_API.hideWidget();
-    }
-  },
-  destroyed() {
-    if (Tawk_API.hideWidget) {
-      Tawk_API.showWidget();
-    }
-  },
+  // mounted() {
+  //   // Tawk Api exist in static directory
+  //   // Only chat page do not effect
+  //   Tawk_API.onLoad = function() {
+  //     Tawk_API.hideWidget();
+  //   };
+  //   if (Tawk_API.showWidget) {
+  //     Tawk_API.hideWidget();
+  //   }
+  // },
+  // destroyed() {
+  //   console.log('chat layout');
+  //   if (Tawk_API.hideWidget) {
+  //     Tawk_API.showWidget();
+  //   }
+  // },
   methods: {}
 };
 </script>

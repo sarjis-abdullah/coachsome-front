@@ -37,6 +37,78 @@
                 />
               </div>
 
+              <!-- Field Block -->
+            <div class="fields-block mb-3" v-else>
+              <v-row>
+                <!-- <v-col cols-12>
+                  <span class="header-text">{{$t('pwa_coach_title')}}</span>
+                </v-col> -->
+                <v-col cols="12">
+                  <v-row>
+                    <!-- Category -->
+                    <v-col
+                      cols="12"
+                      class="mt-4"
+                      style="padding-bottom: 0;"
+                      v-if="filter.item.category.isActive"
+                    >
+                    <v-app-bar
+                      color="#ecf2f7"
+                      elevation="0"
+                      fixed
+                    >
+
+                      <v-autocomplete
+                        v-model="categoryFilter.selectedCategories"
+                        :items="categoryFilter.categories"
+                        @input="changeCategoryFilter"
+                        :menu-props="{ closeOnContentClick: true }"
+                        chips
+                        dense
+                        hide-details
+                        clearable
+                        color="white"
+                        item-text="name"
+                        item-value="id"
+                        :search-input.sync="categoryFilter.search"
+                        multiple
+                        solo
+                        append-icon
+                        autocomplete="off"
+                      >
+                        <template v-slot:label >
+                          <v-icon medium style="vertical-align: middle">mdi-magnify</v-icon>
+                          {{$t('pwa_search_sport')}}
+                          </template>
+                        <template v-slot:selection="data">
+                          <v-chip
+                            dark
+                            small
+                            color="primary-light-2"
+                            v-bind="data.attrs"
+                            :input-value="data.selected"
+                            close
+                            @click="data.select"
+                            @click:close="remove(data.item)"
+                            >{{ $t(data.item.t_key) }}</v-chip
+                          >
+                        </template>
+                        <template v-slot:item="data">
+                          <template>
+                            <v-list-item-content>{{
+                              $t(data.item.t_key)
+                            }}</v-list-item-content>
+                          </template>
+                        </template>
+                      </v-autocomplete>
+
+                    </v-app-bar>
+                    </v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+            </div>
+
               <!-- Filter Dialog -->
               <v-dialog v-model="filterDialog">
                 <v-card>
@@ -892,7 +964,7 @@ export default {
     z-index: 100;
     top: 0px;
     left: 0px;
-    background: $primary;
+    background: #ecf2f7;
     transition: background-color 0.5s ease;
     width: 100%;
   }

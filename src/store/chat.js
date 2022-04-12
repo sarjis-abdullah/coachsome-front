@@ -8,7 +8,8 @@ export const state = () => ({
   totalNewMessageCount: 0,
   statusFilter: null,
   search: "",
-  loading: false
+  loading: false,
+  hideNavOnChat: false,
 });
 
 export const getters = {
@@ -29,6 +30,9 @@ export const getters = {
   },
   statusFilter(state) {
     return state.statusFilter;
+  },
+  getNavOnChatStatus(state){
+    return state.hideNavOnChat;
   }
 };
 
@@ -108,6 +112,9 @@ export const mutations = {
   },
   UPDATE_SELECTED_CONTACT(state, payload) {
     state.selectedContact = { ...state.selectedContact, ...payload };
+  },
+  HIDE_NAV_ON_CHAT(state, flag){
+    state.hideNavOnChat = flag;
   }
 };
 
@@ -224,5 +231,8 @@ export const actions = {
       return contact;
     });
     commit("SET_CONTACTS", contacts);
+  },
+  setNavOnChat(context,flag){
+    context.commit("HIDE_NAV_ON_CHAT", flag);
   }
 };

@@ -25,7 +25,7 @@
         </v-row>
         <v-row>
           <v-col cols="12">
-            <v-list>
+            <v-list class="body-bg">
               <!-- Edit Profile -->
               <v-list-item link @click.stop="handleEditProfile">
                 <v-list-item-icon>
@@ -106,7 +106,7 @@
 
         <v-row>
           <v-col cols="12">
-            <v-list>
+            <v-list class="body-bg">
               <!-- Invite Friends -->
               <!-- <v-list-item>
                 <v-list-item-icon>
@@ -177,7 +177,7 @@
 
         <v-row>
           <v-col cols="12">
-            <v-list>
+            <v-list class="body-bg">
               <!-- terms -->
               <v-list-item link @click.stop="handleTermsBtn">
                 <v-list-item-icon>
@@ -358,7 +358,7 @@ export default ({
         this.$router.push(this.localePath(pathData.pages.home));
       },
       handleEditProfile() {
-        this.$router.push(this.localePath(pathData.coach.editMenu));
+        this.$router.push(this.localePath(pathData.coach.editProfile));
       },
       handleSetting(){
         this.$router.push(this.localePath(pathData.coach.settings));
@@ -367,7 +367,7 @@ export default ({
         this.$router.push(this.localePath(pathData.coach.balanceEarnings));
       },
       handlePayoutBtn(){
-        this.$router.push(this.localePath(pathData.coach.payout));
+        this.$router.push(this.localePath(pathData.coach.payoutInformation));
       },
       handlePaymentBtn(){
         this.$router.push(this.localePath(pathData.pages.payments));

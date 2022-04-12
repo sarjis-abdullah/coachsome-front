@@ -47,6 +47,9 @@ export default {
     register: "/register",
     getStarted: "/get-started",
     getStarted: "/select-role",
+    language: "/language",
+    currency: "/currency",
+    security: "/security"
   },
   coach: {
     dashboard: "/coach/dashboard",

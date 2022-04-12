@@ -8,5 +8,14 @@ var Tawk_API = Tawk_API || {},
   s1.charset = "UTF-8";
   s1.setAttribute("crossorigin", "*");
   s0.parentNode.insertBefore(s1, s0);
+
+  //here's all you need
+  Tawk_API.onLoad = function() {
+    if(this.$vuetify.breakpoint.xsOnly){
+      Tawk_API.hideWidget();
+    }else{
+      Tawk_API.showWidget();
+    }
+  };
 })();
 
