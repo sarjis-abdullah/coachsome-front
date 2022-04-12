@@ -196,7 +196,7 @@ export default ({
                 .preRegister(payload)
                 .then(response => {
                   if(response.status == 200){
-                    this.$toast.error(response.data.message);
+                    this.$toast.success(response.data.message);
                     this.$store.dispatch("setExistingEmail", this.email);
                     this.show_loading_on_login_btn = false;
                     this.$store.dispatch("setActivePopupItem", "OTPValidation")

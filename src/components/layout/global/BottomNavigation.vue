@@ -136,28 +136,28 @@ export default ({
         return this.$auth.hasRole(['superadmin', 'admin', 'staff']) ? false : true;
       }
     },
-    created(){
-        this.value = this.$route.path == pathData.pages.home ? 0 : null;
+    // created(){
+    //     this.value = this.$route.path == pathData.pages.home ? 0 : null;
 
-        let a = this.$store.getters.activeLoginItem
-        for (const [key, item] of Object.entries(a)) {
+    //     let a = this.$store.getters.activeLoginItem
+    //     for (const [key, item] of Object.entries(a)) {
 
-          if(item && this.$vuetify.breakpoint.xsOnly && !this.$auth.loggedIn){
+    //       if(item && this.$vuetify.breakpoint.xsOnly && !this.$auth.loggedIn){
 
-            if(key == "loginScreen"){ this.$router.push(this.localePath(pathData.pages.login))}
-            else if(key == "loginUsingEmail"){ this.$router.push(this.localePath(pathData.pages.emailLogin))}
-            else if(key == "postLoginUsingEmail"){ this.$router.push(this.localePath(pathData.pages.postEmailLogin))}
-            else if(key == "OTPValidation"){ this.$router.push(this.localePath(pathData.pages.otpValidation))}
-            else if(key == "Register"){ this.$router.push(this.localePath(pathData.pages.register))}
-            else if(key == "GetStarted"){ this.$router.push(this.localePath(pathData.pages.getStarted))}
-            else if(key == "ForgotPassword"){ this.$router.push(this.localePath(pathData.pages.forgotPassword))}
-            else if(key == "PasswordReset"){ this.$router.push(this.localePath(pathData.pages.passwordReset))}
-            else if(key == "ResetOTPValidation"){ this.$router.push(this.localePath(pathData.pages.resetOTPValidation))}
-          }
+    //         if(key == "loginScreen"){ this.$router.push(this.localePath(pathData.pages.login))}
+    //         else if(key == "loginUsingEmail"){ this.$router.push(this.localePath(pathData.pages.emailLogin))}
+    //         else if(key == "postLoginUsingEmail"){ this.$router.push(this.localePath(pathData.pages.postEmailLogin))}
+    //         else if(key == "OTPValidation"){ this.$router.push(this.localePath(pathData.pages.otpValidation))}
+    //         else if(key == "Register"){ this.$router.push(this.localePath(pathData.pages.register))}
+    //         else if(key == "GetStarted"){ this.$router.push(this.localePath(pathData.pages.getStarted))}
+    //         else if(key == "ForgotPassword"){ this.$router.push(this.localePath(pathData.pages.forgotPassword))}
+    //         else if(key == "PasswordReset"){ this.$router.push(this.localePath(pathData.pages.passwordReset))}
+    //         else if(key == "ResetOTPValidation"){ this.$router.push(this.localePath(pathData.pages.resetOTPValidation))}
+    //       }
           
-        }
+    //     }
 
-    },
+    // },
     mounted() {
       // Tawk Api exist in static directory
       // Only chat page do not effect
