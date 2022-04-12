@@ -2,7 +2,7 @@
   <v-app>
     <TopNav color="primary" v-if="$vuetify.breakpoint.smAndUp" />
     <CoachDrawer />
-    <v-main>
+    <v-main class="body-bg">
       <client-only>
         <GlobalHeader />
       </client-only>

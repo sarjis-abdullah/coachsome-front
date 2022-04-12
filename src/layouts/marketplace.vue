@@ -1,5 +1,5 @@
 <template>
-  <v-app class="body-bg">
+  <v-app>
     <TopNav color="primary" :fixed="false" v-if="$vuetify.breakpoint.smAndUp">
       <template v-slot:sport-search>
         <span></span>
@@ -64,8 +64,14 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 body{
-  background: $body-bg;
+  // background: $body-bg;
+}
+.v-application{
+  &--wrap{  
+      background: #ecf2f7!important;
+  }
+    
 }
 </style>

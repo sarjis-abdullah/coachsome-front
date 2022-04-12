@@ -125,6 +125,7 @@ export default {
   },
   computed: {
     contacts() {
+      this.$store.dispatch("chat/setNavOnChat", false);
       return this.$store.getters["chat/contacts"];
     }
   },

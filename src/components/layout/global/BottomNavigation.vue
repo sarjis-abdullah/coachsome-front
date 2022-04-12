@@ -1,10 +1,10 @@
 <template>
-  <v-container>
+  <v-container >
     <v-bottom-navigation
         fixed
         app
         horizontal
-        class="bottom_background"
+        class="bottom_background hidden-sm-and-up"
         background-color="#15577C"
         :value="activeItem"
         width="90%"
@@ -169,7 +169,7 @@ export default ({
       }
     },
     destroyed() {
-      if (Tawk_API.hideWidget) {
+      if (Tawk_API.hideWidget && this.$nuxt.$data.layoutName != "chat") {
         Tawk_API.showWidget();
       }
     },
