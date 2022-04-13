@@ -4,7 +4,7 @@
         fixed
         app
         horizontal
-        class="bottom_background hidden-sm-and-up"
+        class="bottom_background hidden-md-and-up"
         background-color="#15577C"
         :value="activeItem"
         width="90%"
@@ -142,7 +142,7 @@ export default ({
     //     let a = this.$store.getters.activeLoginItem
     //     for (const [key, item] of Object.entries(a)) {
 
-    //       if(item && this.$vuetify.breakpoint.xsOnly && !this.$auth.loggedIn){
+    //       if(item && this.$vuetify.breakpoint.smAndDown && !this.$auth.loggedIn){
 
     //         if(key == "loginScreen"){ this.$router.push(this.localePath(pathData.pages.login))}
     //         else if(key == "loginUsingEmail"){ this.$router.push(this.localePath(pathData.pages.emailLogin))}

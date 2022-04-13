@@ -407,7 +407,7 @@ export default {
     messages() {
       setTimeout(this.updateScroll, 0);
     },
-    "$vuetify.breakpoint.xsOnly": function(){
+    "$vuetify.breakpoint.smAndDown": function(){
       this.$store.dispatch("chat/setNavOnChat", true);
     }
   },

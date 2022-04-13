@@ -12,7 +12,7 @@
         xs="11"
       >
         <v-row class="page-top-header-row">
-            <v-col cols="12" class="page-top-header-column" >
+            <v-col cols="12" class="page-top-header-column px-0 mx-0" >
               <span class="header-title">{{$t("pwa_profile_menu")}}</span>
               <v-avatar size="32px" style="float:right" v-if="avatarImage">
                 <v-img aspect-ratio="1" :src="avatarImage" alt="Avatar" />

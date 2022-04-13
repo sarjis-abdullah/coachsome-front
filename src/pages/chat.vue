@@ -148,7 +148,25 @@
         <!-- left-sidebar -->
         <v-col cols="12" :md="leftSidebarMd" v-if="leftSidebarSection">
           <div class="left-sidebar">
-            <div class="left-sidebar__header">
+
+            <div class="left-sidebar__header page-top-header-row d-md-none" style="background: #f7fafc" >
+              <div class="left-sidebar-title">
+                <span class="common-top-page-title">{{ $t("pwa_chat_page_title_message") }}</span>
+              </div>
+              <div class="left-sidebar-action">
+                <v-btn
+                  icon
+                  color="primary-light-1"
+                  @click="handleGroupBtnClick"
+                >
+                  <v-icon color="primary-light-1">
+                    mdi-plus-circle-outline
+                  </v-icon>
+                </v-btn>
+              </div>
+            </div>
+
+            <div class="left-sidebar__header d-none d-md-block">
               <div class="left-sidebar-title">
                 {{ $t("chat_page_title_message") }}
               </div>
@@ -165,7 +183,44 @@
               </div>
             </div>
             <div class="left-sidebar__body">
-              <div class="pl-4 pr-4 pt-5">
+              <div class="pl-4 pr-4 pt-5 d-md-none">
+                <v-text-field
+                  :label="$t('chat_field_label_txt_search')"
+                  solo
+                  dense
+                  rounded
+                  hide-details
+                  prepend-inner-icon="search"
+                  v-model="search"
+                  clearable
+                  @input="handleSearch"
+                  @click="handleClearSearch"
+                ></v-text-field>
+                <v-select
+                  v-model="selectedFilterItem"
+                  class="mt-5"
+                  :items="filters"
+                  item-value="id"
+                  item-text="key"
+                  dense
+                  rounded
+                  solo
+                  @change="handleFilterChange"
+                  append-icon="expand_more"
+                >
+                  <template v-slot:selection="{ item }">
+                    <div>
+                      {{ $t(item.key) }}
+                    </div>
+                  </template>
+                  <template v-slot:item="{ item }">
+                    <div>
+                      {{ $t(item.key) }}
+                    </div>
+                  </template>
+                </v-select>
+              </div>
+              <div class="pl-4 pr-4 pt-5 d-none d-md-block">
                 <v-text-field
                   :label="$t('chat_field_label_txt_search')"
                   solo
@@ -228,10 +283,10 @@
                     >
                       <v-btn
                         icon
-                        v-if="$vuetify.breakpoint.smAndDown"
+                       class="d-md-none"
                         @click="handleBackBtnClick"
                       >
-                        <v-icon small>mdi-arrow-left</v-icon>
+                        <v-icon x-large>mdi-chevron-left</v-icon>
                       </v-btn>
                       <v-badge
                         bordered
@@ -331,22 +386,20 @@
                             </v-tooltip>
                           </div>
                           <v-btn
-                            v-if="$vuetify.breakpoint.smAndDown"
                             @click="handleMobileHideActionBtnClick"
                             icon
                             color="primary-light-1"
-                            class="text-normal"
+                            class="text-normal d-md-none"
                           >
                              <v-icon>mdi-filter-variant</v-icon>
                           </v-btn>
                           <v-btn
-                            v-if="!$vuetify.breakpoint.smAndDown"
                             @click="handleDesktopHideActionBtnClick"
                             outlined
                             small
                             rounded
                             color="primary-light-1"
-                            class="text-normal"
+                            class="text-normal d-none d-md-block"
                           >
                             {{
                               rightSidebar
@@ -365,7 +418,7 @@
                     >
                       <v-btn
                         icon
-                        v-if="$vuetify.breakpoint.smAndDown"
+                        class="d-md-none"
                         @click="handleBackBtnClick"
                       >
                         <v-icon small>mdi-arrow-left</v-icon>
@@ -505,22 +558,20 @@
                             </v-list>
                           </v-menu>
                           <v-btn
-                            v-if="$vuetify.breakpoint.smAndDown"
                             @click="handleMobileHideActionBtnClick"
                             icon
                             color="primary-light-1"
-                            class="text-normal"
+                            class="text-normal d-md-none"
                           >
                              <v-icon>mdi-filter-variant</v-icon>
                           </v-btn>
                           <v-btn
-                            v-if="!$vuetify.breakpoint.smAndDown"
                             @click="handleDesktopHideActionBtnClick"
                             outlined
                             small
                             rounded
                             color="primary-light-1"
-                            class="text-normal"
+                            class="text-normal d-none d-md-block"
                           >
                             {{
                               rightSidebar
@@ -1480,6 +1531,12 @@ export default {
     color: #15577C;
 
   }
+  .v-application{
+  &--wrap{  
+      background: #ecf2f7!important;
+  }
+    
+}
 $header-height: 60px;
 .chat-new-page {
   .fixed-bottom {

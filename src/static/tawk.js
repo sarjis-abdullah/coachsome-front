@@ -11,7 +11,7 @@ var Tawk_API = Tawk_API || {},
 
   //here's all you need
   Tawk_API.onLoad = function() {
-    if(this.$vuetify.breakpoint.xsOnly){
+    if(this.$vuetify.breakpoint.smAndDown){
       Tawk_API.hideWidget();
     }else{
       Tawk_API.showWidget();

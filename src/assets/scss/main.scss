@@ -232,3 +232,56 @@
   padding-right: 40px;
 }
 /* Page */
+.common-top-page-title{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 49px;
+  text-transform: uppercase;
+  color: #15577C;
+}
+
+.page-top-header-row{
+  position: sticky!important; 
+  top: 0!important; 
+  z-index: 1!important;
+  position: -webkit-sticky;
+  position: -moz-sticky;
+  position: -ms-sticky;
+  position: -o-sticky;
+}
+.page-top-header-column px-0 mx-0{
+  background-color: $body-bg;
+}
+
+.save-profile{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 25px;
+  text-align: right;
+  text-decoration-line: underline;
+
+  color: #15577C!important;
+}
+.edit-profile{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 19px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #FFFFFF;
+  text-shadow: 0px 2px 2px rgb(18 16 16 / 55%)
+}
+.chip-section{
+  background: #FFFFFF;
+  border: 1px solid #CAD5E1;
+  box-sizing: border-box;
+  border-radius: 8px;
+  padding: 10px;
+}

@@ -59,6 +59,7 @@ export default {
     reviews: "/coach/reviews",
     packages: "/coach/packages",
     profile: "/coach/profile",
+    editMenu: "/coach/profile/edit-menu",
     editProfile: "/coach/profile/edit",
     help: "/coach/help",
     services: "/coach/services",

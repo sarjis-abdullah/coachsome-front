@@ -11,7 +11,7 @@
         xs="11"
       >
         <v-row class="page-top-header-row">
-            <v-col cols="12" class="page-top-header-column"  style="vertical-align: middle">
+            <v-col cols="12" class="page-top-header-column px-0 mx-0"  style="vertical-align: middle">
               <span class="header-title">{{$t("pwa_profile_title")}}</span>
               <v-avatar size="32px" style="float:right" class="mt-2" v-if="avatarImage">
                 <v-img aspect-ratio="1" :src="avatarImage" alt="Avatar" />
@@ -358,7 +358,7 @@ export default ({
         this.$router.push(this.localePath(pathData.pages.home));
       },
       handleEditProfile() {
-        this.$router.push(this.localePath(pathData.coach.editProfile));
+        this.$router.push(this.localePath(pathData.coach.editMenu));
       },
       handleSetting(){
         this.$router.push(this.localePath(pathData.coach.settings));

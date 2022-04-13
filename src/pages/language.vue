@@ -12,7 +12,7 @@
         xs="11"
       >
         <v-row class="page-top-header-row">
-            <v-col cols="12" class="justify-center page-top-header-column">
+            <v-col cols="12" class="justify-center page-top-header-column px-0 mx-0">
                 <v-list width="100%" color="transparent" class="py-0 my-0">
                     <v-list-item class="pl-0 ml-0">
                       <v-btn
