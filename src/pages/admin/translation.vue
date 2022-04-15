@@ -1,17 +1,37 @@
 <template>
   <client-only>
     <v-container>
-      <v-row>
-        <v-col cols="12" class="pb-0">
-          <div class="page-title">{{ $t("page_title_translation") }}</div>
-        </v-col>
-      </v-row>
-
-      <v-row>
-        <v-col cols="12">
+    <v-row class="page-top-header-row d-md-none" style="background: #ecf2f7">
+      <v-col cols="12" class="justify-center page-top-header-column px-0 mx-0">
+          <v-list width="100%" color="transparent" class="py-0 my-0">
+              <v-list-item class="pl-0 ml-0">
+                <v-btn
+                  icon
+                  @click="handleBack"
+                >
+                  <v-icon x-large color="#15577C">mdi-chevron-left</v-icon>
+                </v-btn>
+                <v-list-item-content class="pl-1 py-0 my-0">
+                  <v-list-item-title class="common-top-page-title"
+                    v-text="$t('page_title_translation')"
+                  ></v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+          </v-list>
           <div class="line"></div>
-        </v-col>
-      </v-row>
+      </v-col>
+    </v-row>
+    <v-row class="d-none d-md-block">
+      <v-col cols="12" class="pb-0">
+        <div class="page-title">{{$t('page_title_translation')}}</div>
+      </v-col>
+    </v-row>
+
+    <v-row class="d-none d-md-block">
+      <v-col cols="12">
+        <div class="line"></div>
+      </v-col>
+    </v-row>
      
       <v-row>
         <v-col>
@@ -244,6 +264,7 @@ import ProfileSeo from "@/components/artifact/admin/translation/seo/ProfileSeo";
 import HomeSeo from "@/components/artifact/admin/translation/seo/HomeSeo";
 import MarketplaceSeo from "@/components/artifact/admin/translation/seo/MarketplaceSeo";
 import { adminTranslationApi } from "@/api";
+import { pathData } from "@/data";
 
 export default {
   layout: "admin",
@@ -318,6 +339,9 @@ export default {
   },
 
   methods: {
+    handleBack(){
+      this.$router.push(this.localePath(pathData.admin.profileMenu));
+    },
     truncate(str, num) {
       if (str && str.length > num) {
         return str.slice(0, num) + "...";

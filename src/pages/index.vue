@@ -205,7 +205,7 @@
                         </div>
                       </swiper-slide>
                       <div class="swiper-pagination" slot="pagination"></div>
-                      <div
+                      <!-- <div
                         class="swiper-button-prev"
                         slot="button-prev"
                         v-if="$vuetify.breakpoint.smAndDown"
@@ -214,7 +214,7 @@
                         class="swiper-button-next"
                         slot="button-next"
                         v-if="$vuetify.breakpoint.smAndDown"
-                      ></div>
+                      ></div> -->
                     </swiper>
                   </v-col>
                 </v-row>

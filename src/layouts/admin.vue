@@ -1,9 +1,9 @@
 <template>
   <v-app>
-    <TopNav v-if="$vuetify.breakpoint.smAndUp" />
+    <TopNav v-if="$vuetify.breakpoint.mdAndUp" />
     <v-main class="body-bg">
       <nuxt />
-      <BottomNavigation v-if="$vuetify.breakpoint.xsOnly" />
+      <BottomNavigation v-if="$vuetify.breakpoint.smAndDown" />
     </v-main>
   </v-app>
 </template>

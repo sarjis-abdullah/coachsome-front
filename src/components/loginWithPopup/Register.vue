@@ -10,7 +10,7 @@
               >
                   <v-icon  x-large>mdi-chevron-left</v-icon>
               </v-btn>
-              <p class="register-title">Finish Registration</p>
+              <p class="register-title">{{$t("pwa_register_title")}}</p>
               <v-btn
                   icon
                   color="#15577C"
@@ -99,9 +99,9 @@
         </v-flex>
         <v-flex xs10 class="align-items-to-center mt-2" >
             <p class="register-footer-text">{{ $t("pwa_login_footer_1") }} 
-                <router-link :to="uri.terms" class="link-text"><u>{{ $t("global_url_terms_of_use") }}</u></router-link>
+                <router-link :to="uri.terms" target="_blank" class="link-text"><u>{{ $t("global_url_terms_of_use") }}</u></router-link>
                   {{ $t("pwa_login_footer_2") }}
-                  <router-link :to="uri.policy" class="link-text"><u>{{ $t("global_url_privacy_policy") }}</u></router-link>
+                  <router-link :to="uri.policy" target="_blank" class="link-text"><u>{{ $t("global_url_privacy_policy") }}</u></router-link>
               </p>
         </v-flex>
     </v-layout>

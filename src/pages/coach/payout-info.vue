@@ -4,7 +4,7 @@
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-row>
           <v-col offset-md="2">
-            <v-row>
+            <v-row class="d-none d-md-block">
               <v-col cols="12" class="pb-0">
                 <div class="page-title">
                   {{ $t("payout_info_page_title") }}
@@ -12,20 +12,98 @@
               </v-col>
             </v-row>
 
-            <v-row>
+            <v-row class="d-none d-md-block">
               <v-col cols="12">
                 <div class="line"></div>
               </v-col>
             </v-row>
 
+            <v-row class="page-top-header-row d-md-none pt-0 mt-0" style="background: #ecf2f7">
+              <v-col cols="12" class="justify-center page-top-header-column pt-0 mt-0">
+                  <v-list width="100%" color="transparent" class="py-0 my-0">
+                      <v-list-item class="pl-0 ml-0">
+                        <v-btn
+                          icon
+                          @click="handleBack"
+                        >
+                          <v-icon x-large color="#15577C">mdi-chevron-left</v-icon>
+                        </v-btn>
+                        <v-list-item-content class="pl-1 py-0 my-0">
+                          <v-list-item-title
+                          class="common-top-page-title"
+                            v-text="$t('balance_earning_page_title')"
+                          ></v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                  </v-list>
+                  <div class="line"></div>
+              </v-col>
+            </v-row>
+
             <v-row class="invoice-identity">
               <v-col cols="12" md="4">
-                <div class="section-title">
+                <div class="section-title d-none d-md-block">
                   {{ $t("payout_info_section_title_invoice_identity") }}
                 </div>
-                <div class="section-description">
+                <div class="section-description d-none d-md-block">
                   {{ $t("payout_info_section_desc_invoice_identity") }}
                 </div>
+
+                <div class="section-title pb-2 text-uppercase d-md-none">
+                    {{ $t("payout_acc_text") }}
+                </div>
+                <div class="section-description text-justify d-md-none">
+                    {{ $t("payout_acc_desc") }}  
+                </div>
+              </v-col>
+
+
+              <v-col cols="12" class="d-md-none">
+                <v-text-field
+                  v-model="form.accHolderName"
+                  dense
+                  hide-details
+                  outlined
+                  :label="$t('payout_info_input_lable_acc_holder_name')"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" class="d-md-none">
+                <v-text-field
+                  v-model="form.bankName"
+                  dense
+                  hide-details
+                  outlined
+                  :label="$t('payout_info_input_label_name_of_bank')"
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="5" class="d-md-none">
+                <v-text-field
+                  v-model="form.registration"
+                  dense
+                  hide-details
+                  outlined
+                  label="Reg. nr"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="7" class="d-md-none">
+                <v-text-field
+                  v-model="form.account"
+                  dense
+                  hide-details
+                  outlined
+                  label="Account Number"
+                ></v-text-field>
+              </v-col>
+
+
+              <v-col cols="12" class="d-md-none">
+                  <div class="section-title text-uppercase pb-2">
+                      {{ $t("invoicing_details_text") }}
+                  </div>
+                  <div class="section-description text-justify">
+                      {{ $t("invoicing_details_desc") }}  
+                  </div>
               </v-col>
               <v-col cols="12" md="6">
                 <!-- Private person / Company -->
@@ -48,114 +126,207 @@
                   </v-col>
                 </v-row>
                 <span v-if="!isPersonal">
-                  <v-row align="center">
-                    <v-col cols="12" md="6">
-                      <v-text-field
-                        v-model="form.vatNumber"
-                        solo
-                        dense
-                        :label="$t('payout_info_input_label_vat_number')"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" md="6" class="d-flex align-center">
-                      <v-switch
-                        v-model="form.isVatRegistered"
-                        class="pb-5"
-                        dense
-                        color="primary-light-1"
-                        :label="$t('payout_info_input_label_is_vat_reg')"
-                      ></v-switch>
-                      <img
-                        class="pb-4 pl-1"
-                        :src="require('@/assets/images/icons/information.svg')"
-                        alt="Help Icon"
-                      />
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" md="12">
-                      <v-text-field
-                        v-model="form.companyName"
-                        solo
-                        dense
-                        :label="$t('setting_hint_company_name')"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" md="12">
-                      <v-row>
+                  <span class="d-none d-md-block">
+                    <v-row align="center">
+                      <v-col cols="12" md="6">
+                        <v-text-field
+                          v-model="form.vatNumber"
+                          solo
+                          dense
+                          :label="$t('payout_info_input_label_vat_number')"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" md="6" class="d-flex align-center">
+                        <v-switch
+                          v-model="form.isVatRegistered"
+                          class="pb-5"
+                          dense
+                          color="primary-light-1"
+                          :label="$t('payout_info_input_label_is_vat_reg')"
+                        ></v-switch>
+                        <img
+                          class="pb-4 pl-1"
+                          :src="require('@/assets/images/icons/information.svg')"
+                          alt="Help Icon"
+                        />
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12" md="12">
+                        <v-text-field
+                          v-model="form.companyName"
+                          solo
+                          dense
+                          :label="$t('setting_hint_company_name')"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12" md="12">
+                        <v-row>
+                          <v-col cols="12">
+                            <v-autocomplete
+                              autocomplete="off"
+                              v-model="form.cca2"
+                              @change="handleCountryChange"
+                              :items="form.countryList"
+                              item-text="displayName"
+                              item-value="code"
+                              solo
+                              dense
+                              hide-no-data
+                              hide-details
+                              append-icon="expand_more"
+                              :label="$t('setting_input_hint_country')"
+                            ></v-autocomplete>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12">
+                            <div v-show="!isTheCountryCodeDk">
+                              <v-text-field
+                                v-model="form.address"
+                                solo
+                                dense
+                                :placeholder="$t('geography_placeholder_address')"
+                              ></v-text-field>
+                            </div>
+                            <div
+                              v-show="isTheCountryCodeDk"
+                              class="autocomplete-container"
+                            >
+                              <v-text-field
+                                v-model="form.address"
+                                solo
+                                dense
+                                ref="input"
+                                type="search"
+                                :placeholder="$t('geography_placeholder_address')"
+                                id="dawa-autocomplete-input"
+                              ></v-text-field>
+                            </div>
+                          </v-col>
+                        </v-row>
+                        <v-row class="py-0">
+                          <v-col cols="12" md="6">
+                            <v-text-field
+                              autocomplete="off"
+                              v-model="form.zipCode"
+                              dense
+                              solo
+                              :label="$t('setting_input_hint_zip_code')"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" md="6">
+                            <v-text-field
+                              autocomplete="off"
+                              v-model="form.city"
+                              dense
+                              solo
+                              :label="$t('setting_input_hint_city')"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-col>
+                    </v-row>
+                  </span>
+                  <span class="d-md-none">
+                    <v-row>
                         <v-col cols="12">
-                          <v-autocomplete
-                            autocomplete="off"
-                            v-model="form.cca2"
-                            @change="handleCountryChange"
-                            :items="form.countryList"
-                            item-text="displayName"
-                            item-value="code"
-                            solo
+                            <v-text-field
+                            v-model="form.companyName"
                             dense
-                            hide-no-data
+                            outlined
                             hide-details
-                            append-icon="expand_more"
-                            :label="$t('setting_input_hint_country')"
-                          ></v-autocomplete>
+                            :label="$t('setting_hint_company_name')"
+                            ></v-text-field>
                         </v-col>
-                      </v-row>
-                      <v-row>
                         <v-col cols="12">
-                          <div v-show="!isTheCountryCodeDk">
+                            <div v-show="!isTheCountryCodeDk">
+                                <v-text-field
+                                    v-model="form.address"
+                                    outlined
+                                    hide-details
+                                    dense
+                                    :placeholder="$t('geography_placeholder_address')"
+                                ></v-text-field>
+                            </div>
+                            <div
+                                v-show="isTheCountryCodeDk"
+                                class="autocomplete-container"
+                            >
                             <v-text-field
-                              v-model="form.address"
-                              solo
-                              dense
-                              :placeholder="$t('geography_placeholder_address')"
+                                v-model="form.address"
+                                outlined
+                                hide-details
+                                dense
+                                ref="input"
+                                type="search"
+                                :label="$t('geography_placeholder_address')"
+                                id="dawa-autocomplete-input"
                             ></v-text-field>
-                          </div>
-                          <div
-                            v-show="isTheCountryCodeDk"
-                            class="autocomplete-container"
-                          >
+                            </div>
+                        </v-col>
+                        <v-col cols="5">
                             <v-text-field
-                              v-model="form.address"
-                              solo
-                              dense
-                              ref="input"
-                              type="search"
-                              :placeholder="$t('geography_placeholder_address')"
-                              id="dawa-autocomplete-input"
+                                autocomplete="off"
+                                v-model="form.zipCode"
+                                dense
+                                outlined
+                                hide-details
+                                :label="$t('setting_input_hint_zip_code')"
                             ></v-text-field>
-                          </div>
                         </v-col>
-                      </v-row>
-                      <v-row class="py-0">
-                        <v-col cols="12" md="6">
-                          <v-text-field
-                            autocomplete="off"
-                            v-model="form.zipCode"
-                            dense
-                            solo
-                            :label="$t('setting_input_hint_zip_code')"
-                          ></v-text-field>
+                        <v-col cols="7">
+                            <v-text-field
+                                autocomplete="off"
+                                v-model="form.city"
+                                dense
+                                outlined
+                                hide-details
+                                :label="$t('setting_input_hint_city')"
+                            ></v-text-field>
                         </v-col>
-                        <v-col cols="12" md="6">
-                          <v-text-field
-                            autocomplete="off"
-                            v-model="form.city"
-                            dense
-                            solo
-                            :label="$t('setting_input_hint_city')"
-                          ></v-text-field>
+                        <v-col cols="12">
+                            <v-autocomplete
+                                autocomplete="off"
+                                v-model="form.cca2"
+                                @change="handleCountryChange"
+                                :items="form.countryList"
+                                item-text="displayName"
+                                item-value="code"
+                                outlined
+                                dense
+                                hide-no-data
+                                hide-details
+                                append-icon="expand_more"
+                                :label="$t('setting_input_hint_country')"
+                            ></v-autocomplete>
                         </v-col>
-                      </v-row>
-                    </v-col>
-                  </v-row>
+                    </v-row>
+                    <v-row align="center">
+                        <v-col cols="12">
+                            <div class="section-description text-justify">
+                              {{ $t("add_vat_text") }}
+                            </div>
+                        </v-col>
+                        <v-col cols="12">
+                            <v-text-field
+                                v-model="form.vatNumber"
+                                outlined
+                                hide-details
+                                dense
+                                :label="$t('payout_info_input_label_vat_number')"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                  </span>
                 </span>
               </v-col>
             </v-row>
 
             <v-row>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="4" class="d-none d-md-block">
                 <div class="section-title pb-2">
                   {{ $t("payout_info_section_title_acc_for_payouts") }}
                 </div>
@@ -163,7 +334,7 @@
                   {{ $t("payout_info_section_desc_acc_for_payouts") }}
                 </div>
               </v-col>
-              <v-col cols="12" md="6">
+              <v-col class="d-none d-md-block" cols="12" md="6">
                 <v-row>
                   <v-col cols="12" md="12" class="pb-0">
                     <div class="input-title">
@@ -224,6 +395,18 @@
                 </v-row>
               </v-col>
             </v-row>
+            <v-row class="d-md-none">
+              <v-col cols="12" class="d-flex justify-center mt-5">
+                <v-btn
+                  @click.stop="handleSaveBtnClick"
+                  block
+                  color="primary-light-1"
+                  dark
+                >
+                  {{ $t("pyout_info_btn_label_save_info") }}
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-form>
@@ -233,6 +416,8 @@
 
 <script>
 import { countryApi, coachPayoutInformationApi } from "@/api";
+import { pathData } from "@/data";
+
 export default {
   layout: "coach-no-drawer",
   components: {},
@@ -365,7 +550,10 @@ export default {
         console.log(error);
         // this.$toast.error(error.response.data.errors[0]);
       }
-    }
+    },
+    handleBack(){
+      this.$router.push(this.localePath(pathData.coach.profileMenu));
+    },
   }
 };
 </script>

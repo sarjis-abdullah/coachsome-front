@@ -146,7 +146,7 @@
 
               <!-- coach-list -->
               <v-row class="card-container">
-                <v-col cols="12" md="4" v-for="(item, i) in coaches" :key="i">
+                <v-col cols="12" sm="6" md="4" v-for="(item, i) in coaches" :key="i">
                   <explore-card v-bind="item"></explore-card>
                 </v-col>
                 <v-col cols="12">

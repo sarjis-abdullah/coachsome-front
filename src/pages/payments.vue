@@ -1,7 +1,7 @@
 <template>
   <div class="payments">
     <v-container fluid class="page-container view-profile__wrapper">
-      <v-row>
+      <v-row class="d-none d-md-block"> 
         <v-col cols="12" class="pb-0">
           <div class="page-title">
             {{ $t("page_title_payments") }}
@@ -9,19 +9,54 @@
         </v-col>
       </v-row>
 
-      <v-row>
+      <v-row class="d-none d-md-block">
         <v-col cols="12">
           <div class="line"></div>
         </v-col>
       </v-row>
 
+      <v-row class="page-top-header-row d-md-none pt-0 mt-0" style="background: #ecf2f7">
+        <v-col cols="12" class="justify-center page-top-header-column pt-0 mt-0">
+            <v-list width="100%" color="transparent" class="py-0 my-0">
+                <v-list-item class="pl-0 ml-0">
+                  <v-btn
+                    icon
+                    @click="handleBack"
+                  >
+                    <v-icon x-large color="#15577C">mdi-chevron-left</v-icon>
+                  </v-btn>
+                  <v-list-item-content class="pl-1 py-0 my-0">
+                    <v-list-item-title
+                    class="common-top-page-title"
+                      v-text="$t('page_title_payments')"
+                    ></v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+            </v-list>
+            <div class="line"></div>
+        </v-col>
+      </v-row>
+
       <v-row class="mt-10">
         <v-col cols="12" md="4">
-          <div class="section-title pb-2">
+          <div class="section-title pb-2 d-none d-md-block">
             {{ $t("payment_section_title_payment_methods") }}
           </div>
-          <div class="section-description">
+          <div class="section-description d-none d-md-block">
             {{ $t("payment_section_payment_method_desc") }}
+          </div>
+          <div class="section-title payment-section-title pb-2 d-flex justify-space-between d-md-none">
+            {{ $t("payment_section_title_payment_methods") }}
+            <v-btn
+              v-if="!paymentCard"
+              class="text-normal"
+              text
+              small
+              :loading="loadingPaymentCard"
+              @click="handlePaymentCardAddBtnClick"
+            >
+              {{ $t("profile_add_more_btn_label") }}
+            </v-btn>
           </div>
         </v-col>
         <v-col cols="12" md="6">
@@ -61,7 +96,7 @@
 
             <v-btn
               v-if="!paymentCard"
-              class="text-normal mt-5"
+              class="text-normal mt-5 d-none d-md-block"
               x-large
               color="primary-light-1"
               depressed
@@ -77,22 +112,28 @@
 
       <v-row class="mt-10">
         <v-col cols="12" md="4">
-          <div class="section-title pb-2">
+          <div class="section-title pb-2 d-none d-md-block">
             {{ $t("payment_section_title_coachsome_gift_card") }}
           </div>
-          <div class="section-description">
+          <div class="section-description d-none d-md-block">
             {{ $t("payments_section_desc_gift_card_desc") }}
           </div>
+          <div class="section-title payment-section-title pb-2 d-md-none">
+            {{ $t("payment_section_title_coachsome_gift_card") }}
+            <v-btn class="text-normal" color="primary" dark text small @click="dialog = true">
+              {{ $t("profile_add_more_btn_label") }}
+            </v-btn>
+          </div>
         </v-col>
-        <v-col cols="12" md="8">
+        <v-col cols="12" md="8" :class="{'text-center' : $vuetify.breakpoint.xsOnly}">
           <div class="balance-title">
             {{ $t("payments_text_curr_credit_balance") }}
           </div>
-          <div class="balance mt-2 mb-3">
+          <div class="balance mt-2 mb-3 text-uppercase">
             {{ currencyService.toCurrencyByBase(balance) }}
           </div>
           <v-btn
-            class="text-normal"
+            class="text-normal d-none d-md-block"
             x-large
             color="primary-light-1"
             :loading="loading"
@@ -118,6 +159,7 @@
 import Reedem from "@/components/artifact/global/pages/payments/Reedem.vue";
 import { currencyService } from "@/services";
 import { endpoint } from "../api";
+import { pathData } from "@/data";
 
 import PaymentCard from "@/components/card/PaymentCard.vue";
 export default {
@@ -203,12 +245,39 @@ export default {
       } finally {
         this.loadingPaymentCard = false;
       }
+    },
+    handleBack(){
+      if(this.$auth.hasRole(["coach"])){
+        this.$router.push(this.localePath(pathData.coach.profileMenu));
+      }else if(this.$auth.hasRole(["athlete"])){
+        this.$router.push(this.localePath(pathData.athlete.profileMenu));
+      }
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.payments-title{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 49px;
+  /* identical to box height */
+
+  text-transform: uppercase;
+
+  /* Dusty blue */
+
+  color: #15577C;
+
+}
+.payment-section-title{
+  display: flex;
+  justify-content: space-between;
+  text-transform: uppercase;
+}
 .payments {
   background: $body-bg;
   height: 100%;

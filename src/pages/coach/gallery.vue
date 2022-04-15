@@ -1,15 +1,33 @@
 <template>
   <div class="coach-gallery-page">
-    <v-container fluid class="page-container gallery-page">
-      <v-row>
-        <v-col cols="12" class="pb-0">
+    <v-container fluid class="page-container gallery-page pt-0 mt-0">
+      <v-row class="d-none d-md-block">
+        <v-col cols="12" class="pb-0" >
           <div class="page-title">{{ $t("page_title_image_and_video") }}</div>
+        </v-col>
+        <v-col cols="12">
+          <div class="line"></div>
         </v-col>
       </v-row>
 
-      <v-row>
-        <v-col cols="12">
-          <div class="line"></div>
+      <v-row class="page-top-header-row body-bg d-md-none pt-0 mt-0">
+        <v-col cols="12" class="justify-center page-top-header-column px-0 mx-0">
+            <v-list width="100%" color="transparent" class="py-0 my-0">
+                <v-list-item class="pl-0 ml-0">
+                  <v-btn
+                    icon
+                    @click="handleBack"
+                  >
+                    <v-icon x-large color="#15577C">mdi-chevron-left</v-icon>
+                  </v-btn>
+                  <v-list-item-content class="pl-1 py-0 my-0">
+                    <v-list-item-title class="common-top-page-title"
+                      v-text="$t('text_gallery')"
+                    ></v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+            </v-list>
+            <div class="line"></div>
         </v-col>
       </v-row>
 
@@ -45,9 +63,12 @@
               </v-form>
             </v-col>
             <v-col cols="12" md="6">
-              <v-btn color="primary-light-1" dark @click="saveVideoUrl()">{{
+              <v-btn color="primary-light-1" dark @click="saveVideoUrl()"  class="d-none d-md-block">{{
                 $t("btn_label_add")
               }}</v-btn>
+              <v-btn block color="primary-light-1" dark @click="saveVideoUrl()" class="d-md-none">{{
+                    $t("btn_label_add")
+                  }}</v-btn>
             </v-col>
           </v-row>
         </v-col>
@@ -171,17 +192,18 @@
           </v-row>
         </v-col>
       </v-row>
-      <v-row class="d-sm-flex d-xs-flex d-lg-none">
+      <!-- <v-row class="d-md-none">
         <v-col cols="12" class="mx-0 px-0">
           <client-back-footer class="px-0 py-0" />
         </v-col>
-      </v-row>
+      </v-row> -->
     </v-container>
   </div>
 </template>
 
 <script>
 import { coachAssetApi } from "@/api";
+import { pathData } from "@/data";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import DarkboxGallery from "@/components/darkbox/Gallery";
 import { Cropper } from "vue-advanced-cropper";
@@ -219,6 +241,9 @@ export default {
     };
   },
   methods: {
+    handleBack(){
+      this.$router.push(this.localePath(pathData.coach.editMenu));
+    },
     handleCancelBtnClick() {
       this.imgSrc = null;
     },
@@ -381,7 +406,7 @@ export default {
     width: 100%;
     height: 200px;
     position: relative;
-    border: 2px dashed #eee;
+    border: 2px dashed #becce1;
     &__info {
       color: #a8a8a8;
       position: absolute;

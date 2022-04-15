@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <TopNav color="primary" :fixed="false" v-if="$vuetify.breakpoint.smAndUp">
+    <TopNav color="primary" :fixed="false" v-if="$vuetify.breakpoint.mdAndUp">
       <template v-slot:sport-search>
         <span></span>
       </template>
@@ -10,7 +10,7 @@
         <GlobalHeader />
       </client-only>
       <nuxt />
-      <BottomNavigation v-if="$vuetify.breakpoint.xsOnly" />
+      <BottomNavigation v-if="$vuetify.breakpoint.smAndDown" />
     </v-main>
   </v-app>
 </template>

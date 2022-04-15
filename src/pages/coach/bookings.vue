@@ -3,12 +3,30 @@
     <v-container>
       <v-row justify="center">
         <v-col cols="12" md="8">
-          <v-row align="center">
+          <v-row class="page-top-header-row d-md-none px-3" style="background: #ecf2f7">
+            <v-col cols="12" class="justify-center page-top-header-column px-0 mx-0">
+                <v-list width="100%" color="transparent" class="py-0 my-0">
+                    <v-list-item class="pl-0 ml-0">
+                      <v-list-item-content class="py-0 my-0">
+                        <v-list-item-title class="common-top-page-title"
+                          v-text="$t('app_bar_dashboard_booking')"
+                        ></v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                </v-list>
+                <div class="line"></div>
+            </v-col>
+          </v-row>
+          
+          <v-row align="center d-none d-md-block">
             <v-col cols="12" md="9">
               <span class="section-title">
                 {{ $t("coach_booking_package_active_package_titile") }}
               </span>
             </v-col>
+          </v-row>
+
+          <v-row align="center">
             <v-col cols="12" md="3">
               <v-select
                 v-model="filterValue"

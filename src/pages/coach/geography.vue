@@ -1,15 +1,33 @@
 <template>
   <div class="coach-geography-page">
-    <v-container fluid class="page-container">
-      <v-row>
+    <v-container fluid class="page-container mt-0 pt-0" >
+      <v-row class="d-none d-md-block">
         <v-col cols="12" class="pb-0">
           <div class="page-title">{{ $t("geography_page_title") }}</div>
         </v-col>
-      </v-row>
-
-      <v-row>
         <v-col cols="12">
           <div class="line"></div>
+        </v-col>
+      </v-row>
+
+      <v-row class="page-top-header-row body-bg d-md-none  mt-0 pt-0">
+        <v-col cols="12" class="justify-center page-top-header-column px-0 mx-0">
+            <v-list width="100%" color="transparent" class="py-0 my-0">
+                <v-list-item class="pl-0 ml-0">
+                  <v-btn
+                    icon
+                    @click="handleBack"
+                  >
+                    <v-icon x-large color="#15577C">mdi-chevron-left</v-icon>
+                  </v-btn>
+                  <v-list-item-content class="pl-1 py-0 my-0">
+                    <v-list-item-title class="common-top-page-title"
+                      v-text="$t('geography_page_title')"
+                    ></v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+            </v-list>
+            <div class="line"></div>
         </v-col>
       </v-row>
 
@@ -49,7 +67,7 @@
       </v-row>
 
       <!-- Location Data Table -->
-      <v-row>
+      <v-row class="d-none d-md-block">
         <v-col cols="12">
           <v-data-table
             :headers="locationDataTable.headers"
@@ -65,6 +83,22 @@
               <v-icon small @click="deleteLocationItem(item)">delete</v-icon>
             </template>
           </v-data-table>
+        </v-col>
+      </v-row>
+
+      <v-row class="d-md-none">
+        <v-col cols="12" v-for="location in locationList" :key="location.id">
+          <v-card
+          >
+            <v-card-title class="d-flex justify-space-between">
+              <span class="location-title">{{$t("setting_hint_address")}}</span>
+              <span><v-icon  @click="deleteLocationItem(location)">delete</v-icon></span>
+            </v-card-title>
+
+            <v-card-text>
+              <div class="location-address mt-2 mb-3">{{location.address}}</div>
+            </v-card-text>
+          </v-card>
         </v-col>
       </v-row>
       <!-- Location Data Table -->
@@ -108,14 +142,26 @@
           <v-row>
             <v-col cols="12" md="3">
               <v-btn
-                class="white--text"
+                class="white--text d-none d-md-block"
                 color="primary-light-1"
                 light
                 depressed
                 large
                 @click="addDistance()"
-                >{{ $t("profile_save_btn") }}</v-btn
-              >
+                >
+                  {{ $t("profile_save_btn") }}
+                </v-btn>
+                <v-btn
+                  class="white--text d-md-none"
+                  color="primary-light-1"
+                  light
+                  depressed
+                  block
+                  large
+                  @click="addDistance()"
+                >
+                  {{ $t("profile_save_btn") }}
+                </v-btn>
             </v-col>
           </v-row>
         </v-col>
@@ -143,17 +189,18 @@
           ></div>
         </v-col>
       </v-row>
-      <v-row class="d-sm-flex d-xs-flex d-lg-none">
+      <!-- <v-row class="d-sm-flex d-xs-flex d-lg-none" >
         <v-col cols="12" class="mx-0 px-0">
           <client-back-footer class="px-0 py-0" />
         </v-col>
-      </v-row>
+      </v-row> -->
     </v-container>
   </div>
 </template>
 
 <script>
 import { coachGeographyApi, countryApi } from "@/api";
+import { pathData } from "@/data";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import GooglePlaceSearch from "@/components/geography/GooglePlaceSearch";
 
@@ -246,6 +293,9 @@ export default {
   },
   mounted() {},
   methods: {
+    handleBack(){
+      this.$router.push(this.localePath(pathData.coach.editMenu));
+    },
     handleGoogleLocation(item) {
       console.log(item)
       this.isDisabled = false;
@@ -391,5 +441,35 @@ export default {
     height: 400px;
     z-index: 0;
   }
+}
+.location-title{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  /* identical to box height */
+
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+
+  /* Dusty blue */
+
+  color: #15577C;
+
+}
+.location-address{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+
+  /* G800 */
+
+  color: #2C3749;
 }
 </style>

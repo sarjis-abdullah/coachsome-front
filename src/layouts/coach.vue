@@ -1,13 +1,13 @@
 <template>
   <v-app>
-    <TopNav color="primary" v-if="$vuetify.breakpoint.smAndUp" />
+    <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp" />
     <CoachDrawer />
     <v-main class="body-bg">
       <client-only>
         <GlobalHeader />
       </client-only>
       <nuxt />
-      <BottomNavigation v-if="$vuetify.breakpoint.xsOnly" />
+      <BottomNavigation v-if="$vuetify.breakpoint.smAndDown" />
     </v-main>
   </v-app>
 </template>

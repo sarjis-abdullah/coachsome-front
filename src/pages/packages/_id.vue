@@ -154,11 +154,9 @@
                         />
                         <div class="promo-code">
                           <v-text-field
-                            v-model="promoCode.value"
+                            v-model="promoCode.dialogValue"
                             outlined
                             dense
-                            readonly
-                            @click="promoCode.dialog = true"
                             elevation="0"
                             hide-details
                             class="mt-5"
@@ -172,6 +170,31 @@
                               </div>
                             </template>
                           </v-text-field>
+
+                            <v-btn
+                              color="error"
+                              text
+                              @click="handleRemoveBtnClick"
+                            >
+                              {{
+                                $t(
+                                  "pakcage_booking_promo_code_label_btn_remove"
+                                )
+                              }}
+                            </v-btn>
+
+                            <v-btn
+                              color="primary-light-1"
+                              text
+                              :loading="isLoading"
+                              @click="handleApplyBtnClick"
+                            >
+                              {{
+                                $t(
+                                  "package_booking_promo_code_btn_label_apply"
+                                )
+                              }}
+                            </v-btn>
 
                           <!-- Gift Card -->
                           <div
@@ -244,7 +267,7 @@
                           </v-dialog>
                           <!-- Gift Card -->
 
-                          <v-dialog v-model="promoCode.dialog" max-width="290">
+                          <!-- <v-dialog v-model="promoCode.dialog" max-width="290">
                             <v-card>
                               <v-card-title>
                                 {{ $t("package_booking_promo_code_title") }}
@@ -295,7 +318,7 @@
                                 </v-btn>
                               </v-card-actions>
                             </v-card>
-                          </v-dialog>
+                          </v-dialog> -->
                         </div>
                         <div class="payment" v-if="!isTotalAmountZero">
                           <v-radio-group v-model="selectedPaymentMethod" column>

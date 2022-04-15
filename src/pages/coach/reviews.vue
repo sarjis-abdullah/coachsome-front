@@ -1,13 +1,32 @@
 <template>
   <div class="review-page">
     <v-container fluid class="page-container">
-      <v-row>
-        <v-col cols="12" class="pb-0">
-          <div class="page-title">{{ $t("review_page_title") }}</div>
+      <v-row class="page-top-header-row body-bg d-md-none">
+        <v-col cols="12" class="justify-center page-top-header-column px-0 mx-0">
+            <v-list width="100%" color="transparent" class="py-0 my-0">
+                <v-list-item class="pl-0 ml-0">
+                  <v-btn
+                    icon
+                    @click="handleBack"
+                  >
+                    <v-icon x-large color="#15577C">mdi-chevron-left</v-icon>
+                  </v-btn>
+                  <v-list-item-content class="pl-1 py-0 my-0">
+                    <v-list-item-title
+                    class="common-top-page-title"
+                      v-text="$t('review_page_title')"
+                    ></v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+            </v-list>
+            <div class="line"></div>
         </v-col>
       </v-row>
 
-      <v-row>
+      <v-row class="d-none d-md-block">
+        <v-col cols="12" class="pb-0">
+          <div class="page-title">{{ $t("review_page_title") }}</div>
+        </v-col>
         <v-col cols="12">
           <div class="line"></div>
         </v-col>
@@ -160,8 +179,9 @@
           </div>
         </v-col>
         <v-col cols="12" md="8">
-          <div>
+          <div class="text-center">
             <v-btn
+              block
               depressed
               color="accent"
               class="text--black"
@@ -169,7 +189,9 @@
             >
               {{ $t("coach_review_btn_label_request_a_review") }}
             </v-btn>
-            <!-- <div class="share-link ml-7 mt-2">Or share review link</div> -->
+            <a :href="reviewLinkUrl" class="share-link" ref="mylink"  @click.prevent="copyUrl">
+              {{$t("pwa_share_review_link")}}
+            </a>
           </div>
         </v-col>
       </v-row>
@@ -227,6 +249,7 @@
                     class="d-flex justify-space-between align-center mt-3 flex-wrap"
                   >
                     <v-btn
+                    block
                       @click="handleAddMoreBtnClick"
                       text
                       class="text-normal"
@@ -235,6 +258,7 @@
                     </v-btn>
                     <div class="mr-9 mt-4 mt-md-0">
                       <v-btn
+                      block
                         :loading="baseReview.isRequestLoading"
                         depressed
                         class="white--text"
@@ -274,6 +298,7 @@
                   @sdk-init="initFB"
                   @login="fbLogin"
                   :login-options="{ scope: 'manage_pages,pages_show_list' }"
+                  style="width:100%"
                 >
                   <template #login>
                     <span>{{ $t("button_label_fa_review") }}</span>
@@ -297,7 +322,8 @@
           <v-row>
             <v-col cols="12" md="12">
               <v-btn
-                large
+                large 
+                block
                 :loading="isUpdateBtnloading"
                 :disabled="!facebookLogin.connected"
                 @click="updateReview"
@@ -325,11 +351,11 @@
           <review-card v-bind="reviewer"></review-card>
         </v-col>
       </v-row>
-      <v-row class="d-sm-flex d-xs-flex d-lg-none">
+      <!-- <v-row class="d-sm-flex d-xs-flex d-lg-none">
         <v-col cols="12" class="mx-0 px-0">
           <client-back-footer class="px-0 py-0" />
         </v-col>
-      </v-row>
+      </v-row> -->
     </v-container>
   </div>
 </template>
@@ -340,6 +366,7 @@ import VFacebookLogin from "vue-facebook-login-component";
 import ReviewCard from "@/components/card/ReviewCard";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import { reviewApi, baseReviewApi } from "@/api";
+import { pathData } from "@/data";
 
 export default {
   layout: "coach",
@@ -389,6 +416,11 @@ export default {
       reviewers: []
     };
   },
+  computed:{
+    reviewLinkUrl(){
+       return this.localePath(pathData.pages.baseReviewAction(this.$auth.user.user_name));
+    }
+  },
   created() {
     reviewApi(this.$axios)
       .getReviews()
@@ -414,6 +446,14 @@ export default {
       });
   },
   methods: {
+    handleBack(){
+      this.$router.push(this.localePath(pathData.coach.editMenu));
+    },
+    copyUrl() {
+      var Url = this.$refs.mylink;
+      navigator.clipboard.writeText(Url);
+      this.$toast.success(this.$i18n.t("pwa_review_link_copy"));
+    },
     makeRequest() {
       if (this.$refs.form.validate()) {
         this.baseReview.isRequestLoading = true;
@@ -673,4 +713,11 @@ export default {
     }
   }
 }
+  .share-link {
+    font-family: $font-family;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    color: $primary-light-1;
+  }
 </style>

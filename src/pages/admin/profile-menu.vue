@@ -11,8 +11,8 @@
         lg="4"
         xs="11"
       >
-        <v-row class="page-top-header-row">
-            <v-col cols="12" class="page-top-header-column" >
+        <v-row class="page-top-header-row body-bg">
+            <v-col cols="12" class="page-top-header-column px-0 mx-0" >
               <span class="header-title">{{$t("pwa_profile_menu")}}</span>
               <v-avatar size="32px" style="float:right" v-if="avatarImage">
                 <v-img aspect-ratio="1" :src="avatarImage" alt="Avatar" />
@@ -270,6 +270,11 @@ export default ({
           icon: "mdi-menu-down",
           t_key: "dropdown_edit_profile"
         },
+    }
+  },
+  watch:{
+    "$vuetify.breakpoint.smAndUp" : function() {
+      this.$router.push(this.localePath(pathData.admin.dashboard));
     }
   },
   computed: {

@@ -27,14 +27,6 @@
         {{ currencyService.toCurrency(chargeInfo.serviceFee) }}
       </div>
     </div>
-    <div class="charge-box__item" v-if="campPackage">
-      <div class="charge-box__item-left">
-        {{ $t("booking_charge_box_total_per_person_txt") }}
-      </div>
-      <div class="charge-box__item-right">
-        {{ currencyService.toCurrency(chargeInfo.totalPerPerson) }}
-      </div>
-    </div>
 
     <div class="charge-box__item promo" v-if="promoCode.valid">
       <div class="charge-box__item-left">
@@ -54,6 +46,15 @@
       </div>
       <div class="charge-box__item-right stroke white--text pr-1">
         - {{ currencyService.toCurrency(chargeInfo.giftPayableAmount) }}
+      </div>
+    </div>
+
+    <div class="charge-box__item" v-if="campPackage">
+      <div class="charge-box__item-left">
+        {{ $t("booking_charge_box_total_per_person_txt") }}
+      </div>
+      <div class="charge-box__item-right">
+        {{ currencyService.toCurrency(chargeInfo.totalPerPerson) }}
       </div>
     </div>
 
