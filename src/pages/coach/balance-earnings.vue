@@ -1,7 +1,7 @@
 <template>
   <div class="balance-earnings-page">
     <v-container>
-      <v-row align="center">
+      <v-row align="center" class="d-none d-md-block">
         <v-col cols="12" md="6" class="pb-0">
           <div class="page-title">{{ $t("balance_earning_page_title") }}</div>
         </v-col>
@@ -30,13 +30,38 @@
         </v-col>
       </v-row>
 
-      <v-row>
+      <v-row class="d-none d-md-block">
         <v-col cols="12">
           <div class="line"></div>
         </v-col>
       </v-row>
 
-      <v-row>
+      <v-row class="page-top-header-row d-md-none pt-0 mt-0" style="background: #ecf2f7">
+        <v-col cols="12" class="justify-center page-top-header-column pt-0 mt-0">
+            <v-list width="100%" color="transparent" class="py-0 my-0">
+                <v-list-item class="pl-0 ml-0">
+                  <v-btn
+                    icon
+                    @click="handleBack"
+                  >
+                    <v-icon x-large color="#15577C">mdi-chevron-left</v-icon>
+                  </v-btn>
+                  <v-list-item-content class="pl-1 py-0 my-0">
+                    <v-list-item-title
+                    class="common-top-page-title"
+                      v-text="$t('balance_earning_page_title')"
+                    ></v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+            </v-list>
+            <div class="line"></div>
+        </v-col>
+      </v-row>
+
+
+
+
+      <v-row class="d-none d-md-block">
         <v-col cols="12" md="4">
           <div class="balance-card-filter d-flex align-center">
             <div class="filter-text">Filter</div>
@@ -136,6 +161,42 @@
           </div>
         </v-col>
         <v-col cols="12" md="4"> </v-col>
+      </v-row>
+
+      <v-row class="d-flex justify-center px-0 mx-0 d-md-none">
+        <v-col cols="12" class="d-flex justify-end" style="background: #cad5e1; border-radius: 8px;">
+          <div class="filter-content ml-2">Curves ({{ curve }})</div>
+          <div class="filter-content">
+            <v-menu
+              v-model="curveMenue"
+              bottom
+              offset-y
+              :close-on-content-click="false"
+              allow-overflow
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  text
+                  x-small
+                  class="primary-light-1--text"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon dark>keyboard_arrow_down</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="(item, index) in curves"
+                  :key="index"
+                  @click="curve = item"
+                >
+                  <v-list-item-title>{{ item }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </div>
+        </v-col>
       </v-row>
 
       <v-row>
@@ -261,6 +322,35 @@
               <div class="payout-info-card-description__currency">
                 {{ readyToPayout.currency }}
               </div>
+            </div>
+          </div>
+        </v-col>
+      </v-row>
+      <!-- payout button -->
+      <v-row class="d-flex justify-center d-md-none">
+        <v-col cols="12" class="text-center pb-0">
+          <div>
+            <v-btn
+              :loading="payoutRequest.loading"
+              dark
+              block
+              :disabled="available"
+              depressed
+              color="#EDB041"
+              @click="handlePayoutRequest"
+              style="border-radius: 8px"
+            >
+              {{ $t("balance_earning_btn_title_request_payout") }}
+
+              <template v-slot:loader>
+                <span class="custom-loader">
+                  <v-icon light>cached</v-icon>
+                </span>
+              </template>
+            </v-btn>
+            <div v-if="payoutRequest.lastRequestTime" class="last-request">
+              {{ $t("balance_earning_date_hint_last_req") }}
+              {{ moment(payoutRequest.lastRequestTime).format("DD/MM/YYYY") }}
             </div>
           </div>
         </v-col>
@@ -655,6 +745,7 @@
 <script>
 import { coachBalanceEarningApi, coachPayoutRequestApi } from "@/api";
 import { currencyService } from "@/services";
+import { pathData } from "@/data";
 import moment from "moment";
 import LineChart from "@/components/charts/LineChart";
 import RadarChart from "@/components/charts/RadarChart";
@@ -917,12 +1008,51 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    handleBack(){
+      this.$router.push(this.localePath(pathData.coach.profileMenu));
     }
   }
 };
 </script>
 
 <style lang="scss">
+
+.profile-title{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 49px;
+  /* identical to box height */
+
+  text-transform: uppercase;
+
+  /* Dusty blue */
+
+  color: #15577C;
+
+}
+.bottom-text{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 19px;
+  /* identical to box height */
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  /* Dusty blue */
+
+  color: #15577C;
+}
+.theme--dark.v-btn.v-btn--disabled.v-btn--has-bg {
+    background-color: rgb(202 213 225) !important;
+    /* color: white; */
+}
 .balance-earnings-page {
   background: $body-bg;
   height: 100%;
@@ -952,14 +1082,15 @@ export default {
     &__row {
       width: 100%;
       display: flex;
+      border-bottom: 1px solid $body-bg;
     }
     &__col-1 {
       text-align: right;
       padding-top: 15px;
       padding-bottom: 15px;
-      height: 100%;
+      height: auto;
       background: #cad5e1;
-      width: 20%;
+      width: 35%;
 
       font-family: $font-family;
       font-size: 14px;
@@ -970,7 +1101,7 @@ export default {
       padding-left: 10px;
       padding-top: 15px;
       padding-bottom: 15px;
-      width: 60%;
+      width: 55%;
       font-family: $font-family;
       font-size: 14px;
       background: #fcfdfe;
@@ -979,10 +1110,10 @@ export default {
     &__col-3 {
       background: #fcfdfe;
       text-align: right;
-      padding-right: 15px;
+      padding-right: 8px;
       padding-top: 15px;
       padding-bottom: 14px;
-      width: 20%;
+      width: 10%;
     }
     .last-row-last-col {
       border-radius: 0px 0px 10px 0px;
@@ -1047,8 +1178,11 @@ export default {
 
   .payout-info-card {
     // max-width: 250px;
-    background: #ecf2f7;
+    background: rgba(110, 181, 203, 0.4);
+    /* Shadow-2 */
+
     box-shadow: 0px 2px 4px rgba(73, 85, 106, 0.15);
+    border-radius: 8px;
     border-radius: 10px;
     padding-top: 15px;
     padding-bottom: 15px;

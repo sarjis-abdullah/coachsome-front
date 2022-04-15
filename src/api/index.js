@@ -55,6 +55,7 @@ export { default as athleteBookingApi } from "./athlete/booking";
 export { default as athleteBookingTimeApi } from "./coach/bookingTime";
 export { default as athleteSearchValueApi } from "./athlete/searchValue";
 export { default as athleteExploreCoachApi } from "./athlete/explore";
+export { default as athleteSettingApi } from "./athlete/settings"
 
 // Shared
 export { default as sharedProfileApi } from "./shared/profile";

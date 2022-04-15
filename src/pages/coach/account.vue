@@ -1,0 +1,865 @@
+<template>
+
+<v-container fluid grid-list-md text-xs-center class="d-flex">
+    <v-row
+      justify="center"
+    >
+      <v-col
+        cols="11"
+        sm="8"
+        md="6"
+        lg="4"
+        xs="11"
+      >
+        <v-row class="page-top-header-row">
+          <v-col cols="12" class="justify-center page-top-header-column px-0 mx-0">
+              <v-list width="100%" color="transparent" class="py-0 my-0">
+                  <v-list-item class="pl-0 ml-0">
+                    <v-btn
+                      icon
+                      @click="handleBack"
+                    >
+                      <v-icon x-large color="#15577C">mdi-chevron-left</v-icon>
+                    </v-btn>
+                    <v-list-item-content class="pl-1 py-0 my-0">
+                      <v-list-item-title class="setting-title"
+                        v-text="$t('payout_info_input_title_account')"
+                      ></v-list-item-title>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <router-link class="save-button" to="" @click.native="handleSaveBtnClick()">{{$t("btn_label_txt_save")}}</router-link>
+                    </v-list-item-action>
+                  </v-list-item>
+              </v-list>
+              <div class="line"></div>
+          </v-col>
+        </v-row>
+
+
+
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <v-col cols="12 " class="py-0 my-0">
+             <p class="account-label mt-2">{{$t("text_name")}}</p>
+          </v-col>
+          <v-col cols="6" class="py-0 my-0">
+            <!-- First name -->
+            <v-text-field
+              outlined
+              dense
+              hide-details
+              class="cs-input-text-field-login"
+              style="color:#15577C"
+              v-model="form.contactInformation.firstName"
+              :label="$t('setting_input_hint_first_name')"
+            />
+          </v-col>
+          <v-col cols="6" class="py-0 my-0">
+
+            <!-- Last Name -->
+            <v-text-field
+              outlined
+              dense
+              hide-details
+              class="cs-input-text-field-login"
+              style="color:#15577C"
+              v-model="form.contactInformation.lastName"
+              :label="$t('setting_input_hint_last_name')"
+            />
+          </v-col>
+          <v-col cols="12">
+            <!-- {{$t("pwa_email")}} -->
+            <p class="account-label">{{$t("pwa_email")}}</p>
+            <v-text-field
+              outlined
+              dense
+              hide-no-data
+              hide-details
+              v-model="form.email"
+              @click="emailClickHandler"
+              :label="$t('pwa_email')"
+              :rules="rule.email"
+              name="input-10-1"
+              color="red"
+              id="email"
+              class="cs-input-text-field-login"
+              required
+              style="color:#15577C"
+            />
+
+            <!-- Time-zone Start -->
+            <p class="account-label mt-2" >{{$t("filter_item_text_country")}}</p>
+            <v-autocomplete
+              autocomplete="off"
+              v-model="form.contactInformation.country"
+              @change="handleCountryChange"
+              :items="form.countryList"
+              item-text="displayName"
+              item-value="code"
+              outlined
+              dense
+              hide-no-data
+              hide-details
+              append-icon="expand_more"
+              :label="$t('setting_input_hint_country')"
+            ></v-autocomplete>
+            <p class="account-label mt-2" >{{$t("setting_sec_timezone_title")}}</p>
+            <v-text-field
+              v-model="form.contactInformation.timezone"
+              readonly
+              outlined
+              hide-no-data
+              hide-details
+              dense
+              :label="$t('setting_sec_timezone_title')"
+              class="mt-3"
+            ></v-text-field>
+
+            <!-- Time-zone End -->
+            
+            <!-- Password Area -->
+            <p class="account-label mt-2">{{$t("setting_label_old_password")}}</p>
+            <v-text-field
+              outlined
+              dense
+              hide-no-data
+              hide-details
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show1 ? 'text' : 'password'"
+              @click:append="show1 = !show1"
+              v-model="form.password.oldPassword"
+              :rules="rule.oldPassword"
+              name="input-10-1"
+              color="red"
+              id="old_password"
+              class="cs-input-text-field-login"
+              required
+              style="color:#15577C"
+            />
+            <p class="account-label mt-2">{{$t("setting_label_new_password")}}</p>
+            <v-text-field
+              outlined
+              dense
+              hide-no-data
+              hide-details
+              :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show2 ? 'text' : 'password'"
+              @click:append="show2 = !show2"
+              v-model="form.password.newPassword"
+              :rules="rule.newPassword"
+              name="input-10-1"
+              color="red"
+              id="new_password"
+              class="cs-input-text-field-login"
+              required
+              style="color:#15577C"
+            />
+            
+          </v-col>
+          <v-col cols="12" class="d-flex justify-center">
+            <v-btn
+              color="primary-light-1"
+              small
+              dark
+              @click.stop="handlePasswordChangeBtn()"
+              >{{ $t("setting_btn_label_change_password") }}
+            </v-btn>
+          </v-col>
+        </v-row>
+
+        <!-- {{$t("pwa_email")}} Reset Dialog Start -->
+        <v-row v-if="emailReset.dialog">
+          <v-col>
+            <v-dialog
+              v-model="emailReset.dialog"
+              persistent
+              max-width="400"
+            >
+              <v-card>
+                <v-card-title class="headline">{{$t("pwa_email")}}</v-card-title>
+                <v-card-text>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="emailReset.email"
+                        dense
+                        hide-details
+                        solo
+                        label="Enter your new email"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="emailReset.password"
+                        :rules="rule.password"
+                        dense
+                        solo
+                        type="password"
+                        label="Enter your current password"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="primary-light-1"
+                    text
+                    @click="emailResetCancelHandle"
+                  >
+                    {{$t("btn_label_cancel")}}
+                  </v-btn>
+                  <v-btn
+                    color="primary-light-1"
+                    text
+                    @click="emailResetSaveHandle"
+                  >
+                    {{$t("btn_label_txt_save")}}
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-col>
+        </v-row>
+        <!-- {{$t("pwa_email")}} Reset Dialog End -->
+        <!-- Password Reset Dialog Start -->
+        <v-row v-if="passwordReset.dialog">
+          <v-col>
+            <v-dialog
+              v-model="passwordReset.dialog"
+              persistent
+              max-width="400"
+            >
+              <v-card>
+                <v-card-title class="headline">{{$t("btn_label_send")}}</v-card-title>
+                <v-card-text>
+                  <v-row>
+                    <v-col cols="12">
+                     <p>{{$t("pwa_sure_alert")}}</p>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="primary-light-1"
+                    text
+                    @click="passwordResetCancelHandle"
+                  >
+                    {{$t("btn_label_cancel")}}
+                  </v-btn>
+                  <v-btn
+                    color="primary-light-1"
+                    text
+                    @click="passwordResetSaveHandle"
+                  >
+                    {{$t("pwa_yes_reset")}}
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-col>
+        </v-row>
+        <!-- Password Reset Dialog End -->
+        <!-- Delete Area -->
+        <v-row>
+          <v-col cols="12">
+            <v-expansion-panels focusable>
+              <v-expansion-panel>
+                <v-expansion-panel-header class="danger-title">{{$t("pwa_danger_zone")}}
+                  <template v-slot:actions>
+                    <v-icon color="error">
+                      mdi-chevron-down
+                    </v-icon>
+                  </template>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content class="danger-bg">
+                  <v-row justify="center" align="center mt-2">
+                    <v-col cols="12" class="d-flex justify-center">
+                      <span class="danger-body-title">{{$t("athlete_settings_card_title_delete_acc")}}</span>
+                    </v-col>
+                    <v-col cols="12" class="d-flex justify-center">
+                      <span class="danger-body-sub-title">{{$t("athlete_settings_section_delete_account_desc")}}</span>
+                    </v-col>
+                    <v-col cols="6" class="d-flex justify-center mb-10">
+                      <v-btn 
+                        color="#C7311D"
+                        class="white--text"
+                        block
+                        @click.stop="handleDeleteAccountBtnClick"
+                      >{{$t("athlete_settings_card_title_delete_acc")}}</v-btn>
+                    </v-col>
+                  </v-row>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </v-col>
+        </v-row>
+        <!-- Delete Account dialog -->
+        <v-row v-if="deleteAccount.dialog">
+          <v-col>
+            <v-dialog
+              v-model="deleteAccount.dialog"
+              persistent
+              max-width="400"
+            >
+              <v-card>
+                <v-card-title class="headline">
+                  {{$t("athlete_settings_card_title_delete_acc")}} ?
+                </v-card-title>
+                <v-card-text>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="deleteAccount.password"
+                        dense
+                        solo
+                        type="password"
+                        label="Enter Password"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="primary-light-1"
+                    text
+                    @click="deleteAccount.dialog = false"
+                  >
+                    {{ $t("btn_label_cancel") }}
+                  </v-btn>
+                  <v-btn
+                    color="primary-light-1"
+                    text
+                    @click="handleDeleteAccount"
+                  >
+                    {{ $t("btn_label_txt_save") }}
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-col>
+        </v-row>
+        <!-- <v-row>
+          <v-col cols="12">
+            <client-back-footer>
+              <template v-slot:left>
+                <v-btn
+                  class="ml-5 mb-5"
+                  color="primary-light-1"
+                  small
+                  dark
+                  @click.stop="handleSaveBtnClick()"
+                  >{{ $t("profile_save_btn") }}</v-btn
+                >
+              </template>
+              <template v-slot:right>
+                <span class="d-sm-flex d-xs-flex d-md-none justify-end mr-5">
+                </span>
+              </template>
+            </client-back-footer>
+          </v-col>
+        </v-row> -->
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+<script>
+import { coachSettingApi, coachTimezoneApi } from "@/api";
+import { endpoint } from "../../api";
+import { pathData } from "@/data";
+import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
+
+export default {
+  layout: "common",
+  components: {
+    ClientBackFooter
+  },
+  data() {
+    return {
+      show1: false,
+      show2: false,
+      tab: null,
+      emailReset: {
+        dialog: false,
+        email: "",
+        password: ""
+      },
+      passwordReset: {
+        dialog: false,
+      },
+      deleteAccount: {
+        dialog: false,
+        password: ""
+      },
+      defaultSelected: { id: 1, code: 88 },
+      items: [
+        { id: 1, code: "Denmark" },
+        { id: 2, code: "Australia" }
+      ],
+      form: {
+        isValidPasswordForm: true,
+        contactInformation: {
+          firstName: "",
+          lastName: "",
+          address: "",
+          zipCode: "",
+          city: "",
+          lat: "",
+          long: "",
+          country: "",
+          timezone: ""
+        },
+        email: "",
+        password: {
+          oldPassword: "",
+          newPassword: ""
+        },
+        timeZone: "",
+        countryList: [],
+      },
+      rule: {
+        oldPassword: [],
+        newPassword: [],
+        email: []
+      }
+    };
+  },
+  watch: {
+    "form.contactInformation.country": function() {},
+    "$vuetify.breakpoint.smAndUp" : function() {
+      this.$router.push(this.localePath(pathData.coach.settings));
+    }
+  },
+  computed: {
+    isTheCountryCodeDk() {
+      return this.form.contactInformation.country == "DK";
+    }
+  },
+  created() {
+    (this.rule = {
+      oldPassword: [v => !!v || this.$i18n.t("valid_pass_required")],
+      newPassword: [
+        v => !!v || this.$i18n.t("valid_pass_required"),
+        v =>
+          /^(?=.*[A-Z]).*$/.test(v) ||
+          this.$i18n.t("valid_at_least_one_upper_case_letter"),
+        v => (v && v.length >= 6) || this.$i18n.t("valid_pass_min_character")
+      ],
+      email: [
+      (v) => !!v || this.$i18n.t("valid_required_email"),
+      (v) => /.+@.+\..+/.test(v) || this.$i18n.t("valid_valid_email"),
+      ],
+    }),
+    this.fetchSettings();
+  },
+  methods: {
+    handleBack(){
+      this.$router.push(this.localePath(pathData.coach.settings));
+    },
+    async handleDeleteAccount() {
+      try {
+        await this.$axios.delete(
+          endpoint.ACCOUNTS_DELETE + "?password=" + this.deleteAccount.password
+        );
+        await this.$auth.logout();
+        this.$router.push(this.localePath(pathData.pages.home));
+      } catch (err) {
+        // this.$toast.error(err.response.data.error.message);
+        this.$toast.error("Something went wrong, Please try again!");
+      }
+    },
+    handleDeleteAccountBtnClick() {
+      if(this.$auth.user.is_social_account){
+        if(confirm("Are You sure? Your account will be deleted permanantly.")){
+          this.handleDeleteAccount();
+        }
+      } else {
+        this.deleteAccount.dialog = true;
+      }
+    },
+
+    handleCountryChange() {
+      this.form.contactInformation.long = "";
+      this.form.contactInformation.lat = "";
+      this.form.contactInformation.zipCode = "";
+      this.form.contactInformation.city = "";
+      this.form.contactInformation.address = "";
+      this.fetchTimeZone(this.form.contactInformation.country);
+    },
+    // async setTimezone() {
+    //   try {
+    //     let payload = {
+    //       firstName: this.form.contactInformation.firstName,
+    //       lastName: this.form.contactInformation.lastName,
+    //       cca2: this.form.contactInformation.country,
+    //       zipCode: this.form.contactInformation.zipCode,
+    //       lat: this.form.contactInformation.lat,
+    //       long: this.form.contactInformation.long,
+    //       city: this.form.contactInformation.city,
+    //       address: this.form.contactInformation.address,
+    //       timezone: this.form.contactInformation.timezone,
+    //       notificatonCategories: this.form.activeNotifications.map(
+    //         item => item.id
+    //       )
+    //     };
+    //     let { data } = await coachSettingApi(this.$axios).updateSetting(
+    //       payload
+    //     );
+    //     if (data.message) {
+    //       this.$toast.success(data.message);
+    //     }
+    //   } catch (error) {
+    //     let { data } = error.response;
+    //     if (data.message) {
+    //       this.$toast.error(data.message);
+    //     }
+    //   }
+    // },
+    async handleSaveBtnClick() {
+      try {
+        let payload = {
+          firstName: this.form.contactInformation.firstName,
+          lastName: this.form.contactInformation.lastName,
+          cca2: this.form.contactInformation.country,
+          zipCode: this.form.contactInformation.zipCode,
+          lat: this.form.contactInformation.lat,
+          long: this.form.contactInformation.long,
+          city: this.form.contactInformation.city,
+          address: this.form.contactInformation.address,
+          timezone: this.form.contactInformation.timezone,
+          notificatonCategories: this.form.activeNotifications.map(
+            item => item.id
+          )
+        };
+        let { data } = await coachSettingApi(this.$axios).updateSetting(
+          payload
+        );
+        if (data.message) {
+          this.$toast.success(data.message);
+        }
+      } catch (error) {
+        let { data } = error.response;
+        if (data.message) {
+          this.$toast.error(data.message);
+        }
+      }
+    },
+    handlePasswordChangeBtn(){
+      this.passwordReset.dialog = true;
+    },
+    async handlePasswordChange() {
+      try {
+        let payload = {
+          oldPassword: this.form.password.oldPassword,
+          newPassword: this.form.password.newPassword
+        };
+        let { data } = await coachSettingApi(this.$axios).changePassword(
+          payload
+        );
+        if (data.message) {
+          this.$toast.success(data.message);
+        }
+        this.form.password.oldPassword = "";
+        this.form.password.newPassword = "";
+      } catch (error) {
+        this.form.password.oldPassword = "";
+        this.form.password.newPassword = "";
+        let { data } = error.response;
+        if (data.message) {
+          this.$toast.error(data.message);
+        }
+      }
+      this.passwordReset.dialog = false;
+    },
+    emailResetCancelHandle() {
+      this.emailReset.dialog = false;
+    },
+    async emailResetSaveHandle() {
+      try {
+        let payload = {
+          email: this.emailReset.email,
+          password: this.emailReset.password
+        };
+        let { data } = await coachSettingApi(this.$axios).changeEmail(payload);
+        if (data.message) {
+          this.$toast.success(data.message);
+        }
+        console.log(data);
+      } catch (error) {
+        let { data } = error.response;
+        if (data.message) {
+          this.$toast.error(data.message);
+        }
+      }
+
+      this.emailReset.dialog = true;
+    },
+    passwordResetCancelHandle() {
+      this.form.password.oldPassword = "";
+      this.form.password.newPassword = "";
+      this.passwordReset.dialog = false;
+    },
+    passwordResetSaveHandle() {
+      this.handlePasswordChange();
+    },
+    emailClickHandler() {
+      this.emailReset.email = "";
+      this.emailReset.password = "";
+      this.emailReset.dialog = true;
+    },
+    async fetchTimeZone(val) {
+      let params = {
+        cca2: val
+      };
+
+      let { data } = await coachTimezoneApi(this.$axios).getTimezone(params);
+
+      if (data.timezone) {
+        this.form.contactInformation.timezone = data.timezone;
+        // this.setTimezone();
+      }
+    },
+    async fetchSettings() {
+      let { data } = await coachSettingApi(this.$axios).get();
+      if (data.countryList) {
+        data.countryList.forEach(item => {
+          this.form.countryList.push(item);
+        });
+      }
+
+      if (data.userSetting) {
+        this.form.contactInformation.firstName = data.userSetting.firstName;
+        this.form.contactInformation.lastName = data.userSetting.lastName;
+        this.form.contactInformation.country = data.userSetting.country;
+        this.form.contactInformation.address = data.userSetting.address;
+        this.form.contactInformation.zipCode = data.userSetting.zipCode;
+        this.form.contactInformation.city = data.userSetting.city;
+        this.form.contactInformation.timezone = data.userSetting.timezone;
+        this.form.activeNotifications =
+          data.userSetting.activeNotificationCategories;
+        this.form.email = data.userSetting.email;
+      }
+    },
+  }
+};
+</script>
+
+
+<style scoped>
+.save-button{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 25px;
+  /* identical to box height */
+
+  text-align: right;
+  text-decoration-line: underline;
+
+  color: #15577C!important;
+}
+.v-application {
+  line-height: 0!important;
+}
+.w-100{
+  width: 100% !important;
+}
+
+.setting-title{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 49px;
+  /* identical to box height */
+
+  text-transform: uppercase;
+
+  /* Dusty blue */
+
+  color: #15577C;
+
+}
+.danger-title{
+  /* Section headline */
+
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 25px;
+  /* identical to box height */
+
+  text-transform: uppercase;
+
+  /* Thunderbird */
+
+  color: #C7311D;
+  background: #f8e7e4!important;
+
+}
+.danger-bg{
+  background: #f8e7e4!important;
+}
+
+.danger-body-title{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 25px;
+  /* identical to box height */
+
+  text-transform: uppercase;
+
+  /* Dusty blue */
+
+  color: #15577C;
+
+}
+
+.danger-body-sub-title{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 19px;
+  text-align: center;
+
+  /* G600 */
+
+  color: #6F8098;
+
+}
+
+
+.list-text{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 25px;
+
+  /* Dusty blue */
+
+  color: #15577C;
+}
+
+.theme--light.v-icon{
+  color: #000;
+}
+.btn-icon{
+  margin-right: auto;
+}
+
+.btn-text{
+  margin-right: auto;
+}
+
+.login-option-btn{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 16px;
+  text-align: center;
+  letter-spacing: 1px;
+  width: 100%;
+  text-transform: none !important;
+  color: #15577C;
+  
+}
+
+
+.account-label{
+    /* Section headline */
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 25px;
+    /* identical to box height */
+
+    text-transform: uppercase;
+
+    /* Dusty blue */
+
+    color: #15577C;
+
+}
+
+
+
+
+
+
+.tm-login-logo {
+  height: 100px;
+}
+.cs-forgot-password-sec{
+  height: calc(100vh - 248px);
+  position: relative;
+  min-height: 280px;
+}
+.cs-forgot-password-middle {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.cs-forgot-password-footer {
+  height: 100px;
+}
+
+.align-items-to-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.forgot-password-title{
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 25px;
+    line-height: 34px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #15577C;
+}
+
+.forgot-password-validation-subtitle{
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #15577C;
+}
+
+.forgot-password-footer-text{
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 10px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #15577C;
+}
+</style>

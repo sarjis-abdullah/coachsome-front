@@ -35,7 +35,6 @@
         </v-col>
       </v-row>
 
-
       <v-row v-if="$vuetify.breakpoint.smAndDown">
         <v-col cols="12" class="d-flex flex-column justify-center align-center">
           <v-row>

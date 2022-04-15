@@ -1,12 +1,18 @@
 <template>
   <v-container fluid class="page-container admin-dashboard">
-    <v-row>
+    <v-row class="d-none d-md-block">
       <v-col cols="12" class="pb-0">
         <div class="page-title">{{$t("text_dashboard")}}</div>
       </v-col>
     </v-row>
+    <v-row class="page-top-header-row d-md-none pt-0 mt-0" style="background: #ecf2f7">
+      <v-col cols="12" class="justify-center page-top-header-column pt-0 mt-0">
+           <p class="common-top-page-title text-center px-5 pb-0 mb-0">{{$t("text_dashboard")}}</p>
+          <div class="line"></div>
+      </v-col>
+    </v-row>
 
-    <v-row>
+    <v-row class="d-none d-md-block">
       <v-col cols="12">
         <div class="line"></div>
       </v-col>

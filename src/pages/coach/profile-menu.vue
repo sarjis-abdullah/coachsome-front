@@ -10,7 +10,7 @@
         lg="4"
         xs="11"
       >
-        <v-row class="page-top-header-row">
+        <v-row class="page-top-header-row body-bg">
             <v-col cols="12" class="page-top-header-column px-0 mx-0"  style="vertical-align: middle">
               <span class="header-title">{{$t("pwa_profile_title")}}</span>
               <v-avatar size="32px" style="float:right" class="mt-2" v-if="avatarImage">

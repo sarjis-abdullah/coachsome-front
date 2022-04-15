@@ -3,554 +3,628 @@
     <v-container>
       <v-row>
         <v-col>
-          <v-row>
+
+          <v-row class="page-top-header-row body-bg d-md-none">
+            <v-col cols="12" class="justify-center page-top-header-column px-0 mx-0">
+                <v-list width="100%" color="transparent" class="py-0 my-0">
+                    <v-list-item class="pl-0 ml-0">
+                      <v-btn
+                        icon
+                        @click="handleBack"
+                      >
+                        <v-icon x-large color="#15577C">mdi-chevron-left</v-icon>
+                      </v-btn>
+                      <v-list-item-content class="pl-1 py-0 my-0">
+                        <v-list-item-title class="common-top-page-title"
+                          v-text="$t('setting_page_title')"
+                        ></v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                </v-list>
+                <div class="line"></div>
+            </v-col>
+          </v-row>
+
+          <v-row class="d-none d-md-block">
             <v-col cols="12" class="pb-0">
               <div class="page-title">{{ $t("setting_page_title") }}</div>
             </v-col>
           </v-row>
 
-          <v-row>
-            <v-col cols="12">
-              <v-tabs
-                v-model="tab"
-                background-color="transparent"
-                color="primary-light-1"
-              >
-                <v-tab class="text-normal">
-                  {{ $t("athlete_setting_tab_account") }}
-                </v-tab>
-                <v-tab class="text-normal">
-                  {{ $t("athlete_settings_tab_notifications") }}
-                </v-tab>
-                <v-tab class="text-normal">
-                  {{ $t("athlete_settings_tab_security") }}
-                </v-tab>
-              </v-tabs>
-              <div class="line"></div>
-            </v-col>
-          </v-row>
+          <div class="d-none d-md-block">
+            <v-row>
+              <v-col cols="12">
+                <v-tabs
+                  v-model="tab"
+                  background-color="transparent"
+                  color="primary-light-1"
+                >
+                  <v-tab class="text-normal">
+                    {{ $t("athlete_setting_tab_account") }}
+                  </v-tab>
+                  <v-tab class="text-normal">
+                    {{ $t("athlete_settings_tab_notifications") }}
+                  </v-tab>
+                  <v-tab class="text-normal">
+                    {{ $t("athlete_settings_tab_security") }}
+                  </v-tab>
+                </v-tabs>
+                <div class="line"></div>
+              </v-col>
+            </v-row>
 
-          <v-row justify="center">
-            <v-col cols="12" md="8">
-              <v-tabs-items v-model="tab">
-                <v-tab-item>
-                  <v-card flat class="body-bg">
-                    <v-card-text>
-                      <!-- Email -->
-                      <v-row>
-                        <v-col cols="12" md="4">
-                          <div class="section-title pb-2">
-                            {{ $t("setting_sec_email_title") }}
-                          </div>
-                          <div class="section-description">
-                            {{ $t("setting_sec_email_desc") }}
-                          </div>
-                        </v-col>
-                        <v-col cols="12" md="4">
-                          <v-text-field
-                            readonly
-                            v-model="form.email"
-                            dense
-                            solo
-                            @click="emailClickHandler"
-                            label="lorem@ipsum.dk"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row v-if="emailReset.dialog">
-                        <v-col>
-                          <v-dialog
-                            v-model="emailReset.dialog"
-                            persistent
-                            max-width="400"
-                          >
-                            <v-card>
-                              <v-card-title class="headline">
-                                {{ $t("athlete_settings_section_email_title") }}
-                              </v-card-title>
-                              <v-card-text>
-                                <v-row>
-                                  <v-col cols="12">
-                                    <v-text-field
-                                      v-model="emailReset.email"
-                                      dense
-                                      hide-details
-                                      solo
-                                      :label="
-                                        $t(
-                                          'athlete_settings_placeholder_enter_email'
-                                        )
-                                      "
-                                    ></v-text-field>
-                                  </v-col>
-                                </v-row>
-                                <v-row>
-                                  <v-col cols="12">
-                                    <v-text-field
-                                      v-model="emailReset.password"
-                                      :rules="rule.password"
-                                      dense
-                                      solo
-                                      type="password"
-                                      :label="
-                                        $t(
-                                          'athlete_settings_placeholder_enter_pass'
-                                        )
-                                      "
-                                    ></v-text-field>
-                                  </v-col>
-                                </v-row>
-                              </v-card-text>
-                              <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                  color="primary-light-1"
-                                  text
-                                  @click="emailResetCancelHandle"
-                                >
-                                  {{ $t("btn_label_cancel") }}
-                                </v-btn>
-                                <v-btn
-                                  color="primary-light-1"
-                                  text
-                                  @click="emailResetSaveHandle"
-                                >
-                                  {{ $t("btn_label_txt_save") }}
-                                </v-btn>
-                              </v-card-actions>
-                            </v-card>
-                          </v-dialog>
-                        </v-col>
-                      </v-row>
-
-                      <!-- Password  -->
-                      <v-form
-                        ref="passwordForm"
-                        v-model="form.isValidPasswordForm"
-                      >
+            <v-row justify="center">
+              <v-col cols="12" md="8">
+                <v-tabs-items v-model="tab">
+                  <v-tab-item>
+                    <v-card flat class="body-bg">
+                      <v-card-text>
+                        <!-- Email -->
                         <v-row>
                           <v-col cols="12" md="4">
                             <div class="section-title pb-2">
-                              {{ $t("setting_sec_password_title") }}
+                              {{ $t("setting_sec_email_title") }}
                             </div>
                             <div class="section-description">
-                              {{ $t("setting_sec_password_desc") }}
+                              {{ $t("setting_sec_email_desc") }}
+                            </div>
+                          </v-col>
+                          <v-col cols="12" md="4">
+                            <v-text-field
+                              readonly
+                              v-model="form.email"
+                              dense
+                              solo
+                              @click="emailClickHandler"
+                              label="lorem@ipsum.dk"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row v-if="emailReset.dialog">
+                          <v-col>
+                            <v-dialog
+                              v-model="emailReset.dialog"
+                              persistent
+                              max-width="400"
+                            >
+                              <v-card>
+                                <v-card-title class="headline">
+                                  {{ $t("athlete_settings_section_email_title") }}
+                                </v-card-title>
+                                <v-card-text>
+                                  <v-row>
+                                    <v-col cols="12">
+                                      <v-text-field
+                                        v-model="emailReset.email"
+                                        dense
+                                        hide-details
+                                        solo
+                                        :label="
+                                          $t(
+                                            'athlete_settings_placeholder_enter_email'
+                                          )
+                                        "
+                                      ></v-text-field>
+                                    </v-col>
+                                  </v-row>
+                                  <v-row>
+                                    <v-col cols="12">
+                                      <v-text-field
+                                        v-model="emailReset.password"
+                                        :rules="rule.password"
+                                        dense
+                                        solo
+                                        type="password"
+                                        :label="
+                                          $t(
+                                            'athlete_settings_placeholder_enter_pass'
+                                          )
+                                        "
+                                      ></v-text-field>
+                                    </v-col>
+                                  </v-row>
+                                </v-card-text>
+                                <v-card-actions>
+                                  <v-spacer></v-spacer>
+                                  <v-btn
+                                    color="primary-light-1"
+                                    text
+                                    @click="emailResetCancelHandle"
+                                  >
+                                    {{ $t("btn_label_cancel") }}
+                                  </v-btn>
+                                  <v-btn
+                                    color="primary-light-1"
+                                    text
+                                    @click="emailResetSaveHandle"
+                                  >
+                                    {{ $t("btn_label_txt_save") }}
+                                  </v-btn>
+                                </v-card-actions>
+                              </v-card>
+                            </v-dialog>
+                          </v-col>
+                        </v-row>
+
+                        <!-- Password  -->
+                        <v-form
+                          ref="passwordForm"
+                          v-model="form.isValidPasswordForm"
+                        >
+                          <v-row>
+                            <v-col cols="12" md="4">
+                              <div class="section-title pb-2">
+                                {{ $t("setting_sec_password_title") }}
+                              </div>
+                              <div class="section-description">
+                                {{ $t("setting_sec_password_desc") }}
+                              </div>
+                            </v-col>
+                            <v-col cols="12" md="6">
+                              <label for class="input-top-label">{{
+                                $t("setting_label_old_password")
+                              }}</label>
+                              <v-text-field
+                                v-model="form.password.oldPassword"
+                                solo
+                                dense
+                                :rules="rule.oldPassword"
+                                :label="$t('setting_input_hint_current_password')"
+                              ></v-text-field>
+
+                              <v-row>
+                                <v-col cols="12">
+                                  <label for class="input-top-label">{{
+                                    $t("setting_label_new_password")
+                                  }}</label>
+                                  <v-text-field
+                                    v-model="form.password.newPassword"
+                                    solo
+                                    dense
+                                    :rules="rule.newPassword"
+                                    :label="
+                                      $t('setting_input_hint_secure_password')
+                                    "
+                                  ></v-text-field>
+                                </v-col>
+                              </v-row>
+                              <v-row>
+                                <v-col cols="12" lg="6">
+                                  <v-btn
+                                    class="px-15"
+                                    color="#E1E8F1"
+                                    small
+                                    @click="handlePasswordChangeBtn"
+                                    >{{
+                                      $t("setting_btn_label_change_password")
+                                    }}</v-btn
+                                  >
+                                </v-col>
+                              </v-row>
+                            </v-col>
+                          </v-row>
+                        </v-form>
+                        <v-row class="mt-5">
+                          <v-col cols="12" md="4">
+                            <div class="section-title pb-2">
+                              {{ $t("athlete_settings_btn_label_delete_acc") }}
+                            </div>
+                            <div class="section-description">
+                              {{
+                                $t("athlete_settings_section_delete_account_desc")
+                              }}
+                            </div>
+                          </v-col>
+                          <v-col cols="12" md="4">
+                            <v-btn
+                              class="px-10 white--text"
+                              @click="handleDeleteAccountBtnClick"
+                              color="#FF633F"
+                              small
+                              >{{
+                                $t("athlete_settings_btn_label_delete_acc")
+                              }}</v-btn
+                            >
+                          </v-col>
+                        </v-row>
+                        <v-row v-if="deleteAccount.dialog">
+                          <v-col>
+                            <v-dialog
+                              v-model="deleteAccount.dialog"
+                              persistent
+                              max-width="400"
+                            >
+                              <v-card>
+                                <v-card-title class="headline">
+                                  {{
+                                    $t("athlete_settings_card_title_delete_acc")
+                                  }}
+                                </v-card-title>
+                                <v-card-text>
+                                  <v-row>
+                                    <v-col cols="12">
+                                      <v-text-field
+                                        v-model="deleteAccount.password"
+                                        dense
+                                        solo
+                                        type="password"
+                                        :label="
+                                          $t(
+                                            'athlete_settings_placeholder_enter_pass'
+                                          )
+                                        "
+                                      ></v-text-field>
+                                    </v-col>
+                                  </v-row>
+                                </v-card-text>
+                                <v-card-actions>
+                                  <v-spacer></v-spacer>
+                                  <v-btn
+                                    color="primary-light-1"
+                                    text
+                                    @click="deleteAccount.dialog = false"
+                                  >
+                                    {{ $t("btn_label_cancel") }}
+                                  </v-btn>
+                                  <v-btn
+                                    color="primary-light-1"
+                                    text
+                                    @click="handleDeleteAccount"
+                                  >
+                                    {{ $t("btn_label_txt_save") }}
+                                  </v-btn>
+                                </v-card-actions>
+                              </v-card>
+                            </v-dialog>
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-tab-item>
+
+                  <!-- Notification -->
+                  <v-tab-item>
+                    <v-card flat class="body-bg">
+                      <v-card-text>
+                        <v-row>
+                          <v-col cols="12" md="4">
+                            <div class="section-title pb-2">
+                              {{
+                                $t("athlete_settings_section_title_notifications")
+                              }}
+                            </div>
+                            <div class="section-description">
+                              {{
+                                $t("athlete_settings_sections_notification_desc")
+                              }}
                             </div>
                           </v-col>
                           <v-col cols="12" md="6">
-                            <label for class="input-top-label">{{
-                              $t("setting_label_old_password")
-                            }}</label>
-                            <v-text-field
-                              v-model="form.password.oldPassword"
-                              solo
-                              dense
-                              :rules="rule.oldPassword"
-                              :label="$t('setting_input_hint_current_password')"
-                            ></v-text-field>
-
-                            <v-row>
-                              <v-col cols="12">
-                                <label for class="input-top-label">{{
-                                  $t("setting_label_new_password")
-                                }}</label>
-                                <v-text-field
-                                  v-model="form.password.newPassword"
-                                  solo
-                                  dense
-                                  :rules="rule.newPassword"
-                                  :label="
-                                    $t('setting_input_hint_secure_password')
-                                  "
-                                ></v-text-field>
+                            <v-row justify="center">
+                              <v-col
+                                class="primary-light-1--text font-weight-bold"
+                              >
+                                {{ $t("athlete_settings_column_type_txt") }}
+                              </v-col>
+                              <v-col
+                                class="primary-light-1--text font-weight-bold text-center"
+                              >
+                                {{ $t("athlete_settings_column_email_txt") }}
+                              </v-col>
+                              <v-col
+                                v-if="false"
+                                class="primary-light-1--text font-weight-bold text-center"
+                              >
+                                {{ $t("athlete_settings_column_sms_txt") }}
                               </v-col>
                             </v-row>
+
+                            <!-- Inbox Message -->
+                            <v-row justify="center" align="center">
+                              <v-col class="primary-light-1--text">
+                                {{ $t("athlete_settings_item_inbox_message") }}
+                              </v-col>
+                              <v-col class="d-flex align-center justify-center">
+                                <v-checkbox
+                                  v-model="notificationType.inboxMessage"
+                                  value="email"
+                                  class="ma-0"
+                                  color="primary-light-1"
+                                  hide-details
+                                ></v-checkbox>
+                              </v-col>
+                            </v-row>
+
+                            <!-- Order message -->
+                            <v-row justify="center" align="center">
+                              <v-col class="primary-light-1--text">
+                                {{ $t("athlete_settings_item_order_message") }}
+                              </v-col>
+                              <v-col class="d-flex align-center justify-center">
+                                <v-checkbox
+                                  v-model="notificationType.orderMessage"
+                                  value="email"
+                                  class="ma-0"
+                                  color="primary-light-1"
+                                  hide-details
+                                ></v-checkbox>
+                              </v-col>
+                            </v-row>
+
+                            <!-- Order updates -->
+                            <v-row justify="center" align="center">
+                              <v-col class="primary-light-1--text">
+                                {{ $t("athlete_settings_item_order_updates") }}
+                              </v-col>
+                              <v-col class="d-flex align-center justify-center">
+                                <v-checkbox
+                                  v-model="notificationType.orderUpdate"
+                                  value="email"
+                                  class="ma-0"
+                                  color="primary-light-1"
+                                  hide-details
+                                ></v-checkbox>
+                              </v-col>
+                            </v-row>
+
+                            <!-- Booking request -->
+                            <v-row justify="center" align="center">
+                              <v-col class="primary-light-1--text">
+                                {{ $t("athlete_settings_item_booking_req") }}
+                              </v-col>
+                              <v-col class="d-flex align-center justify-center">
+                                <v-checkbox
+                                  v-model="notificationType.bookingRequest"
+                                  value="email"
+                                  class="ma-0"
+                                  color="primary-light-1"
+                                  hide-details
+                                ></v-checkbox>
+                              </v-col>
+                            </v-row>
+
+                            <!-- Booking chnages -->
+                            <v-row justify="center" align="center">
+                              <v-col class="primary-light-1--text">
+                                {{ $t("athlete_settings_item_booking_change") }}
+                              </v-col>
+                              <v-col class="d-flex align-center justify-center">
+                                <v-checkbox
+                                  v-model="notificationType.bookingChange"
+                                  value="email"
+                                  class="ma-0"
+                                  color="primary-light-1"
+                                  hide-details
+                                ></v-checkbox>
+                              </v-col>
+                            </v-row>
+
+                            <!-- My account -->
+                            <v-row justify="center" align="center">
+                              <v-col class="primary-light-1--text">
+                                {{ $t("athlete_settings_item_my_acc") }}
+                              </v-col>
+                              <v-col class="d-flex align-center justify-center">
+                                <v-checkbox
+                                  v-model="notificationType.account"
+                                  value="email"
+                                  class="ma-0"
+                                  color="primary-light-1"
+                                  hide-details
+                                ></v-checkbox>
+                              </v-col>
+                              <v-col
+                                class="d-flex align-center justify-center"
+                                v-if="false"
+                              >
+                              </v-col>
+                            </v-row>
+
+                            <!-- Marketting -->
+                            <v-row justify="center" align="center">
+                              <v-col class="primary-light-1--text">
+                                {{ $t("athlete_settings_item_marketting") }}
+                              </v-col>
+                              <v-col class="d-flex align-center justify-center">
+                                <v-checkbox
+                                  v-model="notificationType.marketting"
+                                  value="email"
+                                  class="ma-0"
+                                  color="primary-light-1"
+                                  hide-details
+                                ></v-checkbox>
+                              </v-col>
+                            </v-row>
+
                             <v-row>
-                              <v-col cols="12" lg="6">
+                              <v-col>
                                 <v-btn
-                                  class="px-15"
-                                  color="#E1E8F1"
-                                  small
-                                  @click="handlePasswordChangeBtn"
-                                  >{{
-                                    $t("setting_btn_label_change_password")
-                                  }}</v-btn
+                                  @click="handleNotificationSaveBtnClick"
+                                  color="primary-light-1"
+                                  class="px-12 white--text"
                                 >
+                                  {{ $t("btn_label_txt_save_change") }}
+                                </v-btn>
                               </v-col>
                             </v-row>
                           </v-col>
                         </v-row>
-                      </v-form>
-                      <v-row class="mt-5">
-                        <v-col cols="12" md="4">
-                          <div class="section-title pb-2">
-                            {{ $t("athlete_settings_btn_label_delete_acc") }}
-                          </div>
-                          <div class="section-description">
-                            {{
-                              $t("athlete_settings_section_delete_account_desc")
-                            }}
-                          </div>
-                        </v-col>
-                        <v-col cols="12" md="4">
-                          <v-btn
-                            class="px-10 white--text"
-                            @click="handleDeleteAccountBtnClick"
-                            color="#FF633F"
-                            small
-                            >{{
-                              $t("athlete_settings_btn_label_delete_acc")
-                            }}</v-btn
-                          >
-                        </v-col>
-                      </v-row>
-                      <v-row v-if="deleteAccount.dialog">
-                        <v-col>
-                          <v-dialog
-                            v-model="deleteAccount.dialog"
-                            persistent
-                            max-width="400"
-                          >
-                            <v-card>
-                              <v-card-title class="headline">
-                                {{
-                                  $t("athlete_settings_card_title_delete_acc")
-                                }}
-                              </v-card-title>
-                              <v-card-text>
-                                <v-row>
-                                  <v-col cols="12">
-                                    <v-text-field
-                                      v-model="deleteAccount.password"
-                                      dense
-                                      solo
-                                      type="password"
-                                      :label="
-                                        $t(
-                                          'athlete_settings_placeholder_enter_pass'
-                                        )
-                                      "
-                                    ></v-text-field>
-                                  </v-col>
-                                </v-row>
-                              </v-card-text>
-                              <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                  color="primary-light-1"
-                                  text
-                                  @click="deleteAccount.dialog = false"
-                                >
-                                  {{ $t("btn_label_cancel") }}
-                                </v-btn>
-                                <v-btn
-                                  color="primary-light-1"
-                                  text
-                                  @click="handleDeleteAccount"
-                                >
-                                  {{ $t("btn_label_txt_save") }}
-                                </v-btn>
-                              </v-card-actions>
-                            </v-card>
-                          </v-dialog>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                </v-tab-item>
-
-                <!-- Notification -->
-                <v-tab-item>
-                  <v-card flat class="body-bg">
-                    <v-card-text>
-                      <v-row>
-                        <v-col cols="12" md="4">
-                          <div class="section-title pb-2">
-                            {{
-                              $t("athlete_settings_section_title_notifications")
-                            }}
-                          </div>
-                          <div class="section-description">
-                            {{
-                              $t("athlete_settings_sections_notification_desc")
-                            }}
-                          </div>
-                        </v-col>
-                        <v-col cols="12" md="6">
-                          <v-row justify="center">
-                            <v-col
-                              class="primary-light-1--text font-weight-bold"
+                      </v-card-text>
+                    </v-card>
+                  </v-tab-item>
+                  <v-tab-item>
+                    <v-card flat class="body-bg">
+                      <v-card-text>
+                        <div class="security-title">
+                          {{ $t("athlete_settings_title_verify_email_phone") }}
+                        </div>
+                        <v-row class="mt-5">
+                          <v-col cols="4" class="d-flex align-center">
+                            <v-icon>mdi-email-outline</v-icon>
+                            <div class="security-subtitle">
+                              {{ $t("athlete_settigs_verify_item_email") }}
+                            </div>
+                          </v-col>
+                          <v-col cols="8">
+                            <v-btn
+                              color="success"
+                              depressed
+                              v-if="security.isEmailVerified"
                             >
-                              {{ $t("athlete_settings_column_type_txt") }}
-                            </v-col>
-                            <v-col
-                              class="primary-light-1--text font-weight-bold text-center"
+                              {{ $t("txt_verified") }}
+                            </v-btn>
+                            <v-btn
+                              depressed
+                              v-if="!security.isEmailVerified"
+                              @click="handleEmailVerifyBtnClick"
                             >
-                              {{ $t("athlete_settings_column_email_txt") }}
-                            </v-col>
-                            <v-col
-                              v-if="false"
-                              class="primary-light-1--text font-weight-bold text-center"
+                              {{ $t("txt_verify") }}
+                            </v-btn>
+                          </v-col>
+                        </v-row>
+                        <v-row class="mt-5">
+                          <v-col cols="4" class="d-flex align-center">
+                            <v-icon>mdi-phone</v-icon>
+                            <div class="security-subtitle">
+                              {{ $t("athlete_settigs_verify_item_phone") }}
+                            </div>
+                          </v-col>
+                          <v-col cols="8">
+                            <v-btn
+                              depressed
+                              color="success"
+                              disabled
+                              @click="handlePhoneVerifyBtnClick"
                             >
-                              {{ $t("athlete_settings_column_sms_txt") }}
-                            </v-col>
-                          </v-row>
-
-                          <!-- Inbox Message -->
-                          <v-row justify="center" align="center">
-                            <v-col class="primary-light-1--text">
-                              {{ $t("athlete_settings_item_inbox_message") }}
-                            </v-col>
-                            <v-col class="d-flex align-center justify-center">
-                              <v-checkbox
-                                v-model="notificationType.inboxMessage"
-                                value="email"
-                                class="ma-0"
-                                color="primary-light-1"
-                                hide-details
-                              ></v-checkbox>
-                            </v-col>
-                          </v-row>
-
-                          <!-- Order message -->
-                          <v-row justify="center" align="center">
-                            <v-col class="primary-light-1--text">
-                              {{ $t("athlete_settings_item_order_message") }}
-                            </v-col>
-                            <v-col class="d-flex align-center justify-center">
-                              <v-checkbox
-                                v-model="notificationType.orderMessage"
-                                value="email"
-                                class="ma-0"
-                                color="primary-light-1"
-                                hide-details
-                              ></v-checkbox>
-                            </v-col>
-                          </v-row>
-
-                          <!-- Order updates -->
-                          <v-row justify="center" align="center">
-                            <v-col class="primary-light-1--text">
-                              {{ $t("athlete_settings_item_order_updates") }}
-                            </v-col>
-                            <v-col class="d-flex align-center justify-center">
-                              <v-checkbox
-                                v-model="notificationType.orderUpdate"
-                                value="email"
-                                class="ma-0"
-                                color="primary-light-1"
-                                hide-details
-                              ></v-checkbox>
-                            </v-col>
-                          </v-row>
-
-                          <!-- Booking request -->
-                          <v-row justify="center" align="center">
-                            <v-col class="primary-light-1--text">
-                              {{ $t("athlete_settings_item_booking_req") }}
-                            </v-col>
-                            <v-col class="d-flex align-center justify-center">
-                              <v-checkbox
-                                v-model="notificationType.bookingRequest"
-                                value="email"
-                                class="ma-0"
-                                color="primary-light-1"
-                                hide-details
-                              ></v-checkbox>
-                            </v-col>
-                          </v-row>
-
-                          <!-- Booking chnages -->
-                          <v-row justify="center" align="center">
-                            <v-col class="primary-light-1--text">
-                              {{ $t("athlete_settings_item_booking_change") }}
-                            </v-col>
-                            <v-col class="d-flex align-center justify-center">
-                              <v-checkbox
-                                v-model="notificationType.bookingChange"
-                                value="email"
-                                class="ma-0"
-                                color="primary-light-1"
-                                hide-details
-                              ></v-checkbox>
-                            </v-col>
-                          </v-row>
-
-                          <!-- My account -->
-                          <v-row justify="center" align="center">
-                            <v-col class="primary-light-1--text">
-                              {{ $t("athlete_settings_item_my_acc") }}
-                            </v-col>
-                            <v-col class="d-flex align-center justify-center">
-                              <v-checkbox
-                                v-model="notificationType.account"
-                                value="email"
-                                class="ma-0"
-                                color="primary-light-1"
-                                hide-details
-                              ></v-checkbox>
-                            </v-col>
-                            <v-col
-                              class="d-flex align-center justify-center"
-                              v-if="false"
+                              {{ $t("txt_verify") }}
+                            </v-btn>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col>
+                            <div class="line"></div>
+                          </v-col>
+                        </v-row>
+                        <div class="security-title mt-5">
+                          {{ $t("athlete_settigs_conect_social_account") }}
+                        </div>
+                        <v-row class="mt-5">
+                          <v-col cols="4" class="d-flex align-center">
+                            <v-icon color="#4267B2">mdi-facebook</v-icon>
+                            <div class="security-subtitle">
+                              {{ $t("athlete_settings_connect_fb_acc") }}
+                            </div>
+                          </v-col>
+                          <v-col cols="8">
+                            <v-btn
+                              depressed
+                              v-if="!security.isConnectedFacebook"
+                              @click="handleFacebookVerifyBtnClick"
                             >
-                            </v-col>
-                          </v-row>
+                              {{ $t("txt_connect") }}
+                            </v-btn>
+                            <v-btn v-else depressed color="success">
+                              {{ $t("txt_connected") }}
+                            </v-btn>
+                          </v-col>
+                        </v-row>
+                        <v-row class="mt-5">
+                          <v-col cols="4" class="d-flex align-center">
+                            <v-icon color="#EB4335">mdi-google</v-icon>
+                            <div class="security-subtitle">
+                              {{ $t("athlete_settings_connect_google_acc") }}
+                            </div>
+                          </v-col>
+                          <v-col cols="8">
+                            <v-btn
+                              depressed
+                              v-if="!security.isConnectedGoogle"
+                              @click="handleGoogleVerifyBtnClick"
+                            >
+                              {{ $t("txt_connect") }}
+                            </v-btn>
+                            <v-btn v-else depressed color="success">
+                              {{ $t("txt_connected") }}
+                            </v-btn>
+                          </v-col>
+                        </v-row>
+                        <v-row class="mt-5" v-if="false">
+                          <v-col cols="4" class="d-flex align-center">
+                            <v-icon color="#47ACDF">mdi-twitter</v-icon>
+                            <div class="security-subtitle">
+                              {{ $t("athlete_settings_connect_twitter_acc") }}
+                            </div>
+                          </v-col>
+                          <v-col cols="8">
+                            <v-btn
+                              depressed
+                              v-if="!security.isConnectedTwitter"
+                              @click="handleTwitterVerifyBtnClick"
+                            >
+                              {{ $t("txt_connect") }}
+                            </v-btn>
+                            <v-btn v-else depressed color="success">
+                              {{ $t("txt_connected") }}
+                            </v-btn>
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-tab-item>
+                </v-tabs-items>
+              </v-col>
+            </v-row>
+          </div>
 
-                          <!-- Marketting -->
-                          <v-row justify="center" align="center">
-                            <v-col class="primary-light-1--text">
-                              {{ $t("athlete_settings_item_marketting") }}
-                            </v-col>
-                            <v-col class="d-flex align-center justify-center">
-                              <v-checkbox
-                                v-model="notificationType.marketting"
-                                value="email"
-                                class="ma-0"
-                                color="primary-light-1"
-                                hide-details
-                              ></v-checkbox>
-                            </v-col>
-                          </v-row>
+          <div class="d-md-none">
+            <v-row>
+              <v-col cols="12">
+                <v-list class="body-bg">
+                  <v-list-item link @click.stop="handleAccount">
+                    <v-list-item-icon>
+                      <v-img :src="require('@/assets/img/svg-icons/user-icon.svg')" alt="edit" />
+                    </v-list-item-icon>
 
-                          <v-row>
-                            <v-col>
-                              <v-btn
-                                @click="handleNotificationSaveBtnClick"
-                                color="primary-light-1"
-                                class="px-12 white--text"
-                              >
-                                {{ $t("btn_label_txt_save_change") }}
-                              </v-btn>
-                            </v-col>
-                          </v-row>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                </v-tab-item>
-                <v-tab-item>
-                  <v-card flat class="body-bg">
-                    <v-card-text>
-                      <div class="security-title">
-                        {{ $t("athlete_settings_title_verify_email_phone") }}
-                      </div>
-                      <v-row class="mt-5">
-                        <v-col cols="4" class="d-flex align-center">
-                          <v-icon>mdi-email-outline</v-icon>
-                          <div class="security-subtitle">
-                            {{ $t("athlete_settigs_verify_item_email") }}
-                          </div>
-                        </v-col>
-                        <v-col cols="8">
-                          <v-btn
-                            color="success"
-                            depressed
-                            v-if="security.isEmailVerified"
-                          >
-                            {{ $t("txt_verified") }}
-                          </v-btn>
-                          <v-btn
-                            depressed
-                            v-if="!security.isEmailVerified"
-                            @click="handleEmailVerifyBtnClick"
-                          >
-                            {{ $t("txt_verify") }}
-                          </v-btn>
-                        </v-col>
-                      </v-row>
-                      <v-row class="mt-5">
-                        <v-col cols="4" class="d-flex align-center">
-                          <v-icon>mdi-phone</v-icon>
-                          <div class="security-subtitle">
-                            {{ $t("athlete_settigs_verify_item_phone") }}
-                          </div>
-                        </v-col>
-                        <v-col cols="8">
-                          <v-btn
-                            depressed
-                            color="success"
-                            disabled
-                            @click="handlePhoneVerifyBtnClick"
-                          >
-                            {{ $t("txt_verify") }}
-                          </v-btn>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col>
-                          <div class="line"></div>
-                        </v-col>
-                      </v-row>
-                      <div class="security-title mt-5">
-                        {{ $t("athlete_settigs_conect_social_account") }}
-                      </div>
-                      <v-row class="mt-5">
-                        <v-col cols="4" class="d-flex align-center">
-                          <v-icon color="#4267B2">mdi-facebook</v-icon>
-                          <div class="security-subtitle">
-                            {{ $t("athlete_settings_connect_fb_acc") }}
-                          </div>
-                        </v-col>
-                        <v-col cols="8">
-                          <v-btn
-                            depressed
-                            v-if="!security.isConnectedFacebook"
-                            @click="handleFacebookVerifyBtnClick"
-                          >
-                            {{ $t("txt_connect") }}
-                          </v-btn>
-                          <v-btn v-else depressed color="success">
-                            {{ $t("txt_connected") }}
-                          </v-btn>
-                        </v-col>
-                      </v-row>
-                      <v-row class="mt-5">
-                        <v-col cols="4" class="d-flex align-center">
-                          <v-icon color="#EB4335">mdi-google</v-icon>
-                          <div class="security-subtitle">
-                            {{ $t("athlete_settings_connect_google_acc") }}
-                          </div>
-                        </v-col>
-                        <v-col cols="8">
-                          <v-btn
-                            depressed
-                            v-if="!security.isConnectedGoogle"
-                            @click="handleGoogleVerifyBtnClick"
-                          >
-                            {{ $t("txt_connect") }}
-                          </v-btn>
-                          <v-btn v-else depressed color="success">
-                            {{ $t("txt_connected") }}
-                          </v-btn>
-                        </v-col>
-                      </v-row>
-                      <v-row class="mt-5" v-if="false">
-                        <v-col cols="4" class="d-flex align-center">
-                          <v-icon color="#47ACDF">mdi-twitter</v-icon>
-                          <div class="security-subtitle">
-                            {{ $t("athlete_settings_connect_twitter_acc") }}
-                          </div>
-                        </v-col>
-                        <v-col cols="8">
-                          <v-btn
-                            depressed
-                            v-if="!security.isConnectedTwitter"
-                            @click="handleTwitterVerifyBtnClick"
-                          >
-                            {{ $t("txt_connect") }}
-                          </v-btn>
-                          <v-btn v-else depressed color="success">
-                            {{ $t("txt_connected") }}
-                          </v-btn>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                </v-tab-item>
-              </v-tabs-items>
-            </v-col>
-          </v-row>
+                    <v-list-item-content>
+                      <v-list-item-title class="list-text">{{$t("payout_info_input_title_account")}}</v-list-item-title>
+                    </v-list-item-content>
+
+                    <v-list-item-icon>
+                      <v-icon>mdi-chevron-right</v-icon>
+                    </v-list-item-icon>
+                  </v-list-item>
+
+                  <v-list-item @click.stop="handleNotifications">
+                    <v-list-item-icon>
+                      <v-img  :src="require('@/assets/img/svg-icons/bell.svg')" alt="payment" />
+                    </v-list-item-icon>
+
+                    <v-list-item-content>
+                      <v-list-item-title class="list-text">{{$t("setting_sec_notification_title")}}</v-list-item-title>
+                    </v-list-item-content>
+
+                    <v-list-item-icon>
+                      <v-icon>mdi-chevron-right</v-icon>
+                    </v-list-item-icon>
+                  </v-list-item>
+                  <v-list-item link @click.stop="handleSecurity">
+                    <v-list-item-icon>
+                      <v-img  :src="require('@/assets/img/svg-icons/padlock.svg')" alt="payment" />
+                    </v-list-item-icon>
+
+                    <v-list-item-content>
+                      <v-list-item-title class="list-text">{{$t("athlete_settings_tab_security")}}</v-list-item-title>
+                    </v-list-item-content>
+
+                    <v-list-item-icon>
+                      <v-icon>mdi-chevron-right</v-icon>
+                    </v-list-item-icon>
+                  </v-list-item>
+                </v-list>
+              </v-col>
+            </v-row>
+          </div>
+
         </v-col>
       </v-row>
     </v-container>
@@ -954,7 +1028,19 @@ export default {
       this.emailReset.email = "";
       this.emailReset.password = "";
       this.emailReset.dialog = true;
-    }
+    },
+    handleAccount() {
+      this.$router.push(this.localePath(pathData.athlete.account));
+    },
+    handleNotifications(){
+      this.$router.push(this.localePath(pathData.athlete.notification));
+    },
+    handleSecurity(){
+      this.$router.push(this.localePath(pathData.pages.security));
+    },
+    handleBack(){
+      this.$router.push(this.localePath(pathData.athlete.profileMenu));
+    },
   }
 };
 </script>
@@ -981,5 +1067,27 @@ export default {
     text-transform: capitalize;
     color: #7c8db0;
   }
+}
+.list-text{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 25px;
+
+  /* Dusty blue */
+
+  color: #15577C;
+}
+
+.theme--light.v-icon{
+  color: #000;
+}
+.btn-icon{
+  margin-right: auto;
+}
+
+.btn-text{
+  margin-right: auto;
 }
 </style>

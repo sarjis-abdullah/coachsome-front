@@ -38,7 +38,7 @@
 
         <v-row>
             <v-col cols="12">
-            <v-list dense >
+            <v-list dense  class="body-bg">
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title class="subtitle-2 text-uppercase">

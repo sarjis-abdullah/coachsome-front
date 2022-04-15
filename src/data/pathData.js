@@ -70,7 +70,9 @@ export default {
     verification: "/coach/verification",
     bookings: "/coach/bookings",
     payoutInformation: "/coach/payout-info",
+    account: "/coach/account",
     profileMenu: "/coach/profile-menu",
+    notification: "/coach/notification",
   },
   admin: {
     login: "/admin/login",
@@ -93,6 +95,8 @@ export default {
     register: "/athlete/register",
     bookings: "/athlete/bookings",
     settings: "/athlete/settings",
+    account: "/athlete/account",
     profileMenu: "/athlete/profile-menu",
+    notification: "/athlete/notification",
   }
 };
