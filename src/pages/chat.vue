@@ -156,10 +156,9 @@
               <div class="left-sidebar-action">
                 <v-btn
                   icon
-                  color="primary-light-1"
                   @click="handleGroupBtnClick"
                 >
-                  <v-icon color="primary-light-1">
+                  <v-icon class="common-top-add-icon">
                     mdi-plus-circle-outline
                   </v-icon>
                 </v-btn>
@@ -173,7 +172,6 @@
               <div class="left-sidebar-action">
                 <v-btn
                   icon
-                  color="primary-light-1"
                   @click="handleGroupBtnClick"
                 >
                   <v-icon color="primary-light-1">
@@ -283,7 +281,7 @@
                     >
                       <v-btn
                         icon
-                       class="d-md-none"
+                        class="d-md-none"
                         @click="handleBackBtnClick"
                       >
                         <v-icon x-large>mdi-chevron-left</v-icon>
@@ -421,7 +419,7 @@
                         class="d-md-none"
                         @click="handleBackBtnClick"
                       >
-                        <v-icon small>mdi-arrow-left</v-icon>
+                        <v-icon x-large>mdi-chevron-left</v-icon>
                       </v-btn>
                       <div class="group-avatar">
                         <v-avatar

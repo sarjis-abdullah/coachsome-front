@@ -233,14 +233,40 @@
 }
 /* Page */
 .common-top-page-title{
-  font-family: Open Sans;
+  font-family: 'Open Sans';
   font-style: normal;
-  font-weight: 300;
-  font-size: 36px;
-  line-height: 49px;
-  text-transform: uppercase;
-  color: #15577C;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 27px!important;
+  text-align: center;
+  text-transform: capitalize;
+  color: #49556A;
 }
+.common-top-back-icon{
+  color: #49556A!important;
+  font-size: 30px!important;
+  line-height: 27px!important;
+}
+
+.common-top-add-icon{
+  color: #49556A!important;
+  font-size: 30px!important;
+  line-height: 27px!important;
+}
+
+.common-top-save-button{
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 17px!important;
+  line-height: 27px!important;
+  text-align: right;
+  text-decoration-line: underline;
+  text-transform: capitalize;
+  color: #49556A!important;
+
+}
+
 
 .page-top-header-row{
   position: sticky!important; 

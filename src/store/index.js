@@ -32,6 +32,8 @@ export const state = () => ({
   existing_user_email: process.browser && localStorage.getItem("existing_user_email") || null,
   login_medium: process.browser && localStorage.getItem("login_medium") || null,
   activeBottomNav: 0,
+  bookingCoachInfo: process.browser && localStorage.getItem("booking_coach_info") || {},
+  bookingPackageInfo: process.browser && localStorage.getItem("booking_package_info") || {},
 });
 
 export const getters = {
@@ -88,6 +90,12 @@ export const getters = {
   },
   activeBottomNav(state){
     return state.activeBottomNav;
+  },
+  getBookingCoachInfo(state){
+    return JSON.parse(JSON.stringify(state.bookingCoachInfo));
+  },
+  getBookingPackageInfo(state){
+    return JSON.parse(JSON.stringify(state.bookingPackageInfo));
   },
 };
 
@@ -161,6 +169,14 @@ export const mutations = {
   SET_ACTIVE_BOTTOM_NAV(state, item){
     state.activeBottomNav = item;
   },
+  SET_BOOKING_COACH_INFO(state, item){
+    state.bookingCoachInfo = item;
+    localStorage.setItem("booking_coach_info", item);
+  },
+  SET_BOOKING_PACKAGE_INFO(state, item){
+    state.bookingPackageInfo = item;
+    localStorage.setItem("booking_package_info", item);
+  },
 
 };
 
@@ -218,5 +234,11 @@ export const actions = {
   },
   activeBottomNav(context, item){
     context.commit("SET_ACTIVE_BOTTOM_NAV", item)
+  },
+  setBookingCoachInfo(context, item){
+    context.commit("SET_BOOKING_COACH_INFO", item)
+  },
+  setBookingPackageInfo(context, item){
+    context.commit("SET_BOOKING_PACKAGE_INFO", item)
   },
 };

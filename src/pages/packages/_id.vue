@@ -1,6 +1,384 @@
 <template>
-  <div class="front-booking-page">
-    <v-container>
+  <div class="front-booking-page" :class="{'mb-15' : $vuetify.breakpoint.xsOnly}">
+    <v-stepper v-model="step" v-if="$vuetify.breakpoint.xsOnly">
+      <v-stepper-header>
+        <v-stepper-step
+          :complete="step > 1"
+          color="#15577C"
+          :step="1"
+          :editable="isFirstStepEditAble"
+        >
+          {{ $t("booking_step_order_details") }}
+        </v-stepper-step>
+        <v-divider></v-divider>
+        <v-stepper-step color="#15577C" :complete="step > 2" step="2">
+          {{ $t("booking_step_confirm_and_pay") }}
+        </v-stepper-step>
+        <v-divider></v-divider>
+        <v-stepper-step color="#15577C" step="3">
+          {{ $t("booking_step_waiting_for_coach") }}
+        </v-stepper-step>
+      </v-stepper-header>
+      <v-stepper-items>
+        <!-- Step One -->
+        <v-stepper-content step="1">
+          <v-spacer></v-spacer>
+          <v-row>
+            <v-col cols="12" class="mt-10">
+              <profile-card v-bind="profileCardData"></profile-card>
+            </v-col>
+            <v-col
+              cols="12"
+              class="d-flex justify-center align-center"
+            >
+              <div class="line--vertical text-center"></div>
+            </v-col>
+            <v-col cols="12">
+              <div class="person-number" v-if="isCampPackage">
+                <div class="person-number__text">
+                  {{ $t("booking_group_package_person_text") }}
+                </div>
+                <div class="person-number__select">
+                  <v-select
+                    dense
+                    height="10px"
+                    background-color="white"
+                    color="primary-light-1"
+                    outlined
+                    v-model="
+                      packageInfo.chargeBox.personNumbers.value
+                    "
+                    :items="packageInfo.chargeBox.personNumbers.items"
+                    
+                  ></v-select>
+                </div>
+              </div>
+              <charge-box
+                :charge-info="packageInfo.chargeBox"
+                :camp-package="isCampPackage"
+                :promo-code="promoCode"
+              />
+              <div class="package-info mb-15">
+                <package-simple-card
+                  v-bind="PackageData"
+                >
+                  <template v-slot:original-price="{ price, discount }">
+                    <div v-if="discount && discount > 0">
+                      {{ currencyService.toCurrencyByBase(price) }}
+                    </div>
+                    <div else></div>
+                  </template>
+                  <template v-slot:sale-price="{ price }">
+                    <span>{{ currencyService.toCurrencyByBase(price) }}</span>
+                  </template>
+                </package-simple-card>
+              </div>
+            </v-col>
+          </v-row>
+          <v-footer :class="{'action_bottom_md' : $vuetify.breakpoint.mdAndUp}" color="white" inset app bottom fixed > 
+            <v-row>
+              <v-col cols="12" class="pb-0 mb-0 mt-2">
+                <div class="continue-btn">
+                  <v-btn
+                    color="#EDB041"
+                    @click.stop="continueBtnHandler"
+                    dark
+                    block
+                    >{{ $t("booking_btn_label_continue") }}</v-btn
+                  >
+                </div>
+              </v-col>
+              <v-col cols="12" class="mb-2">
+                <div class="help-text d-flex justify-center">
+                  {{ $t("booking_continue_help_txt_not_charged_yet") }}
+                </div>
+              </v-col>
+            </v-row>
+          </v-footer>
+        </v-stepper-content>
+        <!-- ./Step One -->
+
+        <!-- Step Two -->
+        <v-stepper-content step="2">
+              <v-spacer></v-spacer>
+              <v-row>
+                <v-col cols="12" class="mt-10">
+                  <profile-card v-bind="profileCardData"></profile-card>
+                </v-col>
+                <v-col cols="12">
+                  <div class="message-box">
+                    <div class="message-box__title">
+                      {{ $t("booking_message_box_title") }}
+                      <span class="required">*</span>
+                    </div>
+                    <div class="message-box__field">
+                      <v-textarea
+                        ref="messageBoxTextArea"
+                        outlined
+                        flat
+                        :hint="$t('booking_message_box_text_area_label')"
+                        v-model="messageFromPackageBuyer"
+                      />
+                    </div>
+                  </div>
+                </v-col>
+                <v-col
+                  cols="12"
+                  class="d-flex justify-center align-center"
+                >
+                  <div class="line--vertical text-center"></div>
+                </v-col>
+                <v-col cols="12">
+                  <div class="person-number" v-if="isCampPackage">
+                    <div class="person-number__text">
+                      {{ $t("booking_group_package_person_text") }}
+                    </div>
+                    <div class="person-number__select">
+                      <v-select
+                        dense
+                        height="10px"
+                        background-color="white"
+                        color="primary-light-1"
+                        outlined
+                        v-model="
+                          packageInfo.chargeBox.personNumbers.value
+                        "
+                        :items="packageInfo.chargeBox.personNumbers.items"
+                      ></v-select>
+                    </div>
+                  </div>
+                  <charge-box
+                    :charge-info="packageInfo.chargeBox"
+                    :camp-package="isCampPackage"
+                    :promo-code="promoCode"
+                  />
+                  <div class="promo-code">
+                    <v-text-field
+                      v-model="promoCode.dialogValue"
+                      outlined
+                      dense
+                      clearable
+                      elevation="0"
+                      hide-details
+                      class="mt-5"
+                      @click:clear="handleRemoveBtnClick"
+                      @blur="handleApplyBtnClick"
+                      placeholder="Enter promo code or gift certificate code here"
+                    >
+                      <template v-slot:append>
+                        <div>
+                          <v-icon v-if="promoCode.valid" color="green">
+                            mdi-check
+                          </v-icon>
+                        </div>
+                      </template>
+                    </v-text-field>
+
+                    <!-- Gift Card -->
+                    <div
+                      v-if="giftCard.balance"
+                      class="balance-btn"
+                      @click="giftCard.dialog = true"
+                    >
+                      {{
+                        $t("package_booking_gift_card_use_balance_txt")
+                      }}
+                    </div>
+                    <v-dialog v-model="giftCard.dialog" max-width="500">
+                      <v-card>
+                        <v-card-title>
+                          <v-spacer></v-spacer>
+                          <v-btn icon @click="giftCard.dialog = false">
+                            <v-icon>mdi-close</v-icon>
+                          </v-btn>
+                        </v-card-title>
+                        <v-card-text
+                          class="d-flex flex-column justify-center pb-10 pt-10"
+                        >
+                          <div
+                            class="gift-card-balance-title text-center primary-light-1--text"
+                            style="font-weight: bold;font-size: 25px;"
+                          >
+                            {{
+                              $t(
+                                "package_booking_gift_card_title_balance"
+                              )
+                            }}
+                          </div>
+                          <div
+                            class="text-center mb-5 mt-5"
+                            style="font-weight: bold;font-size: 36px;line-height: 49px;text-align: center;color: #1A202D;"
+                          >
+                            {{
+                              currencyService.toCurrencyByBase(
+                                giftCard.balance
+                              )
+                            }}
+                          </div>
+                          <v-btn
+                            depressed
+                            color="primary-light-1"
+                            class="px-10 white--text text-normal"
+                            @click="handleGiftCardUseBtnClick"
+                          >
+                            {{
+                              $t(
+                                "package_booking_gift_card_btn_label_use_balance"
+                              )
+                            }}
+                          </v-btn>
+                          <v-btn
+                            block
+                            class="mt-5 text-normal"
+                            color="warning"
+                            @click="handleGiftCardCancleBtnClick"
+                          >
+                            {{
+                              $t(
+                                "package_booking_gift_card_btn_label_cancel"
+                              )
+                            }}
+                          </v-btn>
+                        </v-card-text>
+                        <v-card-actions> </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+                    <!-- Gift Card -->
+                  </div>
+                  <div class="payment mb-15" v-if="!isTotalAmountZero">
+                    <v-radio-group v-model="selectedPaymentMethod" column>
+                      <span
+                        v-for="(paymentMethod, i) in paymentMethods"
+                        :key="i"
+                      >
+                        <v-radio
+                          color="primary-light-1"
+                          style="padding: 5px 10px"
+                          :value="paymentMethod.value"
+                        >
+                          <template v-slot:label>
+                            <img
+                              :src="
+                                require('@/assets/images/booking/' +
+                                  paymentMethod.logo)
+                              "
+                            />
+                          </template>
+                        </v-radio>
+                        <div
+                          class="my-5"
+                          v-if="paymentCard && paymentCard.brand == paymentMethod.value"
+                        >
+                          <payment-card :payment-card="paymentCard" />
+                        </div>
+                      </span>
+                    </v-radio-group>
+                  </div>
+                </v-col>
+              </v-row>
+              <v-footer :class="{'action_bottom_md' : $vuetify.breakpoint.mdAndUp}" color="white" inset app bottom fixed > 
+                <v-row>
+                  <v-col cols="12" class="pb-0 mb-0 mt-2">
+                    <div class="mb-2">
+                      <v-btn
+                        depressed
+                        :disabled="isDisabledRequestAndAuthorisePaymentBtn"
+                        color="#EDB041"
+                        class="white--text"
+                        :loading="loadingRequestBookingBtn"
+                        @click.stop="requestBookingButtonHandler"
+                        
+                        block
+                      >
+                        <span
+                          v-html="$t('booking_btn_label_continue')"
+                        ></span>
+                      </v-btn>
+                    </div>
+                  </v-col>
+                  <v-col cols="12" class="mb-2">
+                    <div class="help-text d-flex justify-center" v-if="!isQuickBooking">
+                      {{ $t("booking_request_btn_help_text") }}
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-footer>
+        </v-stepper-content>
+        <!-- ./Step Two -->
+
+        <!-- Step Three -->
+        <v-stepper-content step="3">
+          <v-card color="#F7FAFC">
+            <v-card-text style="overflow-x:auto">
+              <img
+                v-if="$route.query.quick_booking"
+                :src="
+                  `https://makeinfluence.com/p?bid=7e4d005a-5ca9-11eb-8c81-02d6cc0d2b4c&value=${$route.query.sale_price}&uid=${$route.query.order_key}`
+                "
+              />
+              <div class="message-container">
+                <div class="quick-booking--dissable" v-if="true">
+                  <div class="quick-booking__message-box">
+                    <div class="message">
+                      <i18n
+                        path="booking_congrate_message_timer"
+                        tag="span"
+                      >
+                        <template v-slot:break>
+                          <span><br /></span>
+                        </template>
+                        <template v-slot:name>
+                          {{ profileCard.name }}
+                        </template>
+                      </i18n>
+                    </div>
+                  </div>
+                  <div class="quick-booking__chat-btn mt-10 px-2">
+                    <v-btn
+                      block
+                      class="white--text"
+                      :loading="isChatBtnLoading"
+                      color="#EDB041"
+                      @click="chatNowBtnClickHandle"
+                      >
+                        {{ $t("booking_btn_label_chat_now") }}
+                        {{ profileCard.name }}
+                      </v-btn
+                    >
+                  </div>
+                </div>
+                <div class="quick-booking--enable" v-if="false">
+                  <div class="quick-booking__message-box">
+                    <div class="message">
+                      <i18n
+                        path="booking_congrate_message_no_timer"
+                        tag="span"
+                      >
+                        <template v-slot:break>
+                          <span><br /></span>
+                        </template>
+                      </i18n>
+                    </div>
+                  </div>
+                  <div class="quick-booking__chat-btn mt-10 px-2">
+                    <v-btn
+                      block
+                      :loading="isChatBtnLoading"
+                      color="#EDB041"
+                      @click="chatNowBtnClickHandle"
+                      >{{ $t("booking_btn_label_chat_now") }}
+                      {{ profileCard.name }}</v-btn
+                    >
+                  </div>
+                </div>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-stepper-content>
+        <!-- ./ Step Three -->
+      </v-stepper-items>
+    </v-stepper>
+    <v-container v-else>
       <v-row justify="center">
         <v-col cols="12" md="10">
           <v-stepper v-model="step">
@@ -160,6 +538,8 @@
                             elevation="0"
                             hide-details
                             class="mt-5"
+                            @click:clear="handleRemoveBtnClick"
+                            @blur="handleApplyBtnClick"
                             placeholder="Enter promo code or gift certificate code here"
                           >
                             <template v-slot:append>
@@ -171,30 +551,6 @@
                             </template>
                           </v-text-field>
 
-                            <v-btn
-                              color="error"
-                              text
-                              @click="handleRemoveBtnClick"
-                            >
-                              {{
-                                $t(
-                                  "pakcage_booking_promo_code_label_btn_remove"
-                                )
-                              }}
-                            </v-btn>
-
-                            <v-btn
-                              color="primary-light-1"
-                              text
-                              :loading="isLoading"
-                              @click="handleApplyBtnClick"
-                            >
-                              {{
-                                $t(
-                                  "package_booking_promo_code_btn_label_apply"
-                                )
-                              }}
-                            </v-btn>
 
                           <!-- Gift Card -->
                           <div
@@ -267,58 +623,6 @@
                           </v-dialog>
                           <!-- Gift Card -->
 
-                          <!-- <v-dialog v-model="promoCode.dialog" max-width="290">
-                            <v-card>
-                              <v-card-title>
-                                {{ $t("package_booking_promo_code_title") }}
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                  icon
-                                  x-small
-                                  @click="promoCode.dialog = false"
-                                >
-                                  <v-icon>mdi-close</v-icon>
-                                </v-btn>
-                              </v-card-title>
-                              <v-card-text>
-                                <v-text-field
-                                  v-model="promoCode.dialogValue"
-                                  :label="
-                                    $t(
-                                      'package_booking_placeholder_enter_promo_code'
-                                    )
-                                  "
-                                ></v-text-field>
-                              </v-card-text>
-                              <v-card-actions>
-                                <v-spacer></v-spacer>
-
-                                <v-btn
-                                  color="error"
-                                  text
-                                  @click="handleRemoveBtnClick"
-                                >
-                                  {{
-                                    $t(
-                                      "pakcage_booking_promo_code_label_btn_remove"
-                                    )
-                                  }}
-                                </v-btn>
-                                <v-btn
-                                  color="primary-light-1"
-                                  text
-                                  :loading="isLoading"
-                                  @click="handleApplyBtnClick"
-                                >
-                                  {{
-                                    $t(
-                                      "package_booking_promo_code_btn_label_apply"
-                                    )
-                                  }}
-                                </v-btn>
-                              </v-card-actions>
-                            </v-card>
-                          </v-dialog> -->
                         </div>
                         <div class="payment" v-if="!isTotalAmountZero">
                           <v-radio-group v-model="selectedPaymentMethod" column>
@@ -451,6 +755,7 @@
 import _ from "lodash";
 
 import ProfileSimpleCard from "@/components/card/ProfileSimpleCard";
+import ProfileCard from "@/components/card/ProfileCard";
 import PackageSimpleCard from "@/components/card/PackageSimpleCard";
 import ChargeBox from "@/components/artifact/global/pages/booking/ChargeBox";
 import { currencyService, bookingService } from "@/services";
@@ -459,14 +764,18 @@ import { storageHelper } from "@/helper";
 import { bookingApi } from "@/api";
 import PaymentCard from "@/components/card/PaymentCard.vue";
 export default {
+  layout: "checkout",
   components: {
     ProfileSimpleCard,
     PackageSimpleCard,
     ChargeBox,
+    ProfileCard,
     PaymentCard
   },
   data() {
     return {
+      profileCardData : [],
+      PackageData: [],
       currencyService,
       promoCode: {
         valid: false,
@@ -624,7 +933,10 @@ export default {
   async asyncData({ params }) {
     return { packageId: params.id };
   },
-  created() {},
+  created() {
+      this.profileCardData =  this.$store.getters.getBookingCoachInfo;
+      this.PackageData = this.$store.getters.getBookingPackageInfo;
+  },
   mounted() {
     let initialValue = {
       id: null, // booking id
@@ -716,6 +1028,7 @@ export default {
       });
     },
     handleApplyBtnClick() {
+      console.log('tri');
       this.fetchBookingInfo({
         packageId: this.packageId,
         promoCode: this.promoCode.dialogValue,

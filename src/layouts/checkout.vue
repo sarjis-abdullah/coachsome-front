@@ -1,12 +1,11 @@
 <template>
   <v-app>
-    <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp" />
-    <v-main style="background: #f7fafc">
+    <v-main class="body-bg">
       <client-only>
         <GlobalHeader />
       </client-only>
       <nuxt />
-      <BottomNavigation v-if="$vuetify.breakpoint.smAndDown && !navStatus" />
+      <bottom-navigation v-if="$vuetify.breakpoint.smAndDown && showNav"></bottom-navigation>
     </v-main>
   </v-app>
 </template>
@@ -14,11 +13,10 @@
 <script>
 import GlobalHeader from "@/components/layout/global/GlobalHeader";
 import TopNav from "@/components/layout/global/TopNav";
-import BottomNavigation from "@/components/layout/global/BottomNavigation";
+import BottomNavigation from '@/components/layout/global/BottomNavigation.vue';
 import { pathData } from "@/data";
-
+import mixpanelService from '@/services/mixpanelService'
 export default {
-  middleware: ["auth"],
   components: {
     TopNav,
     GlobalHeader,
@@ -26,17 +24,11 @@ export default {
   },
   data() {
     return {
-       selectedContact : this.$store.getters["chat/selectedContact"],
-       showNav: true,
+      showNav: false,
     };
   },
-  computed:{
-    navStatus(){
-      return this.$store.getters['chat/getNavOnChatStatus'];
-    },
-  },
   created(){
-        const currentRoute = this.$route.path;
+    const currentRoute = this.$route.path;
     if(currentRoute == pathData.pages.home 
     || currentRoute == pathData.admin.dashboard 
     // || currentRoute == pathData.coach.home 
@@ -63,22 +55,18 @@ export default {
       this.$store.dispatch("activeBottomNav", 4);
     }
   },
-  // mounted() {
-  //   // Tawk Api exist in static directory
-  //   // Only chat page do not effect
-  //   Tawk_API.onLoad = function() {
-  //     Tawk_API.hideWidget();
-  //   };
-  //   if (Tawk_API.showWidget) {
-  //     Tawk_API.hideWidget();
-  //   }
-  // },
-  // destroyed() {
-  //   console.log('chat layout');
-  //   if (Tawk_API.hideWidget) {
-  //     Tawk_API.showWidget();
-  //   }
-  // },
+  mounted() {
+
+    if(process.browser){
+      if(this.$route.query.payment_status && this.$route.query.payment_status == "paid"){
+        this.showNav =  true;
+      }else if(this.$route.query.status && this.$route.query.status == "success"){
+        this.showNav = true;
+      }else{
+        this.showNav = false;
+      }
+    }
+  },
   methods: {}
 };
 </script>

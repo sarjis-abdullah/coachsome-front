@@ -19,17 +19,14 @@
                         icon
                         @click="handleBackBtnClick"
                       >
-                        <v-icon x-large color="#15577C">mdi-chevron-left</v-icon>
+                        <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
                       </v-btn>
                       <v-list-item-content class="pl-1 py-0 my-0">
                         <v-list-item-title
-                        class="currency-title"
+                          class="common-top-page-title"
                           v-text="$t('topnav_label_txt_currency')"
                         ></v-list-item-title>
                       </v-list-item-content>
-                      <!-- <v-list-item-action>
-                        <router-link class="save-profile" to="" @click.native="saveProfile()">{{$t("btn_label_txt_save")}}</router-link>
-                      </v-list-item-action> -->
                     </v-list-item>
                 </v-list>
                 <div class="line"></div>

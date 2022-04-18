@@ -1,6 +1,6 @@
 <template>
   <div class="payments">
-    <v-container fluid class="page-container view-profile__wrapper">
+    <v-container fluid class=" view-profile__wrapper" :class="{'page-container' : !$vuetify.breakpoint.xsOnly}">
       <v-row class="d-none d-md-block"> 
         <v-col cols="12" class="pb-0">
           <div class="page-title">
@@ -23,11 +23,11 @@
                     icon
                     @click="handleBack"
                   >
-                    <v-icon x-large color="#15577C">mdi-chevron-left</v-icon>
+                    <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
                   </v-btn>
                   <v-list-item-content class="pl-1 py-0 my-0">
                     <v-list-item-title
-                    class="common-top-page-title"
+                      class="common-top-page-title"
                       v-text="$t('page_title_payments')"
                     ></v-list-item-title>
                   </v-list-item-content>

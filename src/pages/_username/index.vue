@@ -779,6 +779,8 @@ export default {
       if (!this.$auth.loggedIn) {
         this.$router.push(this.localePath(pathData.pages.login));
       } else {
+        this.$store.dispatch("setBookingCoachInfo", this.profileCard);
+        this.$store.dispatch("setBookingPackageInfo", service);
         this.$router.push(
           this.localePath(pathData.pages.bookingPackage(service.id))
         );

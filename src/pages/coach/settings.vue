@@ -17,7 +17,7 @@
                         icon
                         @click="handleBack"
                       >
-                        <v-icon x-large color="#15577C">mdi-chevron-left</v-icon>
+                        <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
                       </v-btn>
                       <v-list-item-content class="pl-1 py-0 my-0">
                         <v-list-item-title
