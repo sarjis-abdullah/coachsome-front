@@ -53,13 +53,12 @@ export default {
     else if(currentRoute == pathData.coach.bookings || currentRoute == pathData.athlete.bookings){
       this.$store.dispatch("activeBottomNav", 3);
     }
-    // else if(
-    //   currentRoute == pathData.pages.profileMenu 
-    // || currentRoute == pathData.admin.profileMenu 
-    // || currentRoute == pathData.coach.profileMenu 
-    // || currentRoute == pathData.athlete.profileMenu){
-    //   this.$store.dispatch("activeBottomNav", 4);
-    // }
+    else if(
+    currentRoute == pathData.admin.profileMenu 
+    || currentRoute == pathData.coach.profileMenu 
+    || currentRoute == pathData.athlete.profileMenu){
+      this.$store.dispatch("activeBottomNav", 4);
+    }
   },
   mounted() {},
   methods: {}

@@ -103,10 +103,10 @@
       </v-row>
 
       <v-row justify="center">
-        <v-col cols="12" class="text-center">
+        <v-col cols="12" md="2" class="text-center">
           <v-btn
             class="px-15"
-            x-large
+            block
             color="#EDB041"
             @click="handleBuyNowBtnClick"
           >

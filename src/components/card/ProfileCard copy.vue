@@ -5,6 +5,31 @@
       <v-card-text class="text-xs-center">
         <div class="profile-card__top">
           <div class="profile-card__social-icons">
+            <!-- <v-btn text icon color="pink" v-if="fb_link" small :href="fb_link" target="_blank">
+              <v-icon color="#CAD5E1">fab fa-facebook-f</v-icon>
+            </v-btn>
+            <v-btn
+              text
+              icon
+              color="#CAD5E1"
+              v-if="twitter_link"
+              samll
+              :href="twitter_link"
+              target="_blank"
+            >
+              <v-icon>fab fa-twitter</v-icon>
+            </v-btn>
+            <v-btn
+              text
+              icon
+              color="#CAD5E1"
+              samll
+              v-if="instagram_link"
+              :href="instagram_link"
+              target="_blank"
+            >
+              <v-icon>fab fa-instagram</v-icon>
+            </v-btn> -->
           </div>
           <div class="profile-card__avatar">
             <single-image-lightbox :src="image" :title="name" :badge-key="badgeKey"/>
@@ -33,14 +58,14 @@
         <div class="profile-card__bottom">
           <div class="profile-card__category d-flex justify-center flex-wrap">
             <span class="primary--text font-weight-bold">{{
-              categories && categories.map(item => $t(item.t_key)).join(", ")
+              categories.map(item => $t(item.t_key)).join(", ")
             }}</span>
           </div>
-          <div class="profile-card__tag" v-if="tags && tags != ''">
+          <div class="profile-card__tag">
             <v-row>
               <v-col class="text-center">
                 <span v-for="(item, i) in tags.slice(0, 3)" :key="i">
-                  <v-chip class="mx-1 my-2" small>{{ item.name }}</v-chip>
+                  <v-chip class="mx-2 mb-2" small>{{ item.name }}</v-chip>
                   <v-dialog
                     v-model="tagDialog"
                     max-width="600px"
@@ -80,7 +105,7 @@
                           @click="tagDialog = false"
                           small
                         >
-                          {{$t("pwa_close")}}
+                          Close
                         </v-btn>
                       </v-card-actions>
                     </v-card>
