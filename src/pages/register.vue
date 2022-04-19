@@ -1,96 +1,108 @@
 <template>
 <v-container fluid grid-list-md text-xs-center class="d-flex" >
-    <v-layout row wrap class="align-items-to-center" >
-        <v-flex xs12>
-            <router-link to="/login-with-email"> 
-                <img class="caret-left" :src="require('@/assets/img/svg-icons/carrot-left.svg')" alt=""> 
-            </router-link>
-        </v-flex>
-        <v-flex xs12 class="align-items-to-center" >
-            <p class="register-title">{{$t("pwa_register_title")}}</p>
-        </v-flex>
-        <v-flex xs12 class="align-items-to-center">
-            <img class="trophy"  :src="require('@/assets/img/svg-icons/trophy.svg')" alt="">
-        </v-flex>
-        <v-flex xs12 class="align-items-to-center">
-            <img class="registration-steps" :src="require('@/assets/img/svg-icons/Steps-3.svg')" alt="">
-        </v-flex>
-        <v-flex xs10 > 
-            <p class="login-email-label mt-2 "> {{$t("pwa_email_label_text")}}</p>
-            <p class="login-email-text mt-2 "> {{email}}</p>
-        </v-flex>
-        <v-flex xs10 class="align-items-to-center ">
+  <v-row
+    justify="center"
+  >
+    <v-col
+      cols="11"
+      sm="8"
+      md="6"
+      lg="4"
+      xs="11"
+    >
+      <v-layout row wrap class="align-items-to-center" >
+          <v-flex xs12>
+              <router-link to="/login-with-email"> 
+                  <img class="caret-left" :src="require('@/assets/img/svg-icons/carrot-left.svg')" alt=""> 
+              </router-link>
+          </v-flex>
+          <v-flex xs12 class="align-items-to-center" >
+              <p class="register-title">{{$t("pwa_register_title")}}</p>
+          </v-flex>
+          <v-flex xs12 class="align-items-to-center">
+              <img class="trophy"  :src="require('@/assets/img/svg-icons/trophy.svg')" alt="">
+          </v-flex>
+          <v-flex xs12 class="align-items-to-center">
+              <img class="registration-steps" :src="require('@/assets/img/svg-icons/Steps-3.svg')" alt="">
+          </v-flex>
+          <v-flex xs12 > 
+              <p class="login-email-label mt-2 "> {{$t("pwa_email_label_text")}}</p>
+              <p class="login-email-text mt-2 "> {{email}}</p>
+          </v-flex>
+          <v-flex xs12 class="align-items-to-center ">
+                    <v-text-field
+                      outlined
+                      dense 
+                      id="first_name"
+                      v-model="first_name"
+                      class="cs-input-text-field-login"
+                      :placeholder="$t('pwa_first_name_hint')"
+                      required
+                      name="first_name"
+                      :label="$t('pwa_first_name')"
+                      :rules="first_name_rules"
+                    />
+          </v-flex>
+          <v-flex xs12 class="align-items-to-center ">
+                    <v-text-field
+                      outlined
+                      dense 
+                      id="last_name"
+                      v-model="last_name"
+                      class="cs-input-text-field-login"
+                      :placeholder="$t('pwa_last_name_hint')"
+                      required
+                      name="last_name"
+                      :label="$t('pwa_last_name')"
+                      :rules="last_name_rules"
+                    />
+          </v-flex>
+            <v-flex xs12 class="align-items-to-center ">
                   <v-text-field
-                    outlined
-                    dense 
-                    id="first_name"
-                    v-model="first_name"
-                    class="cs-input-text-field-login"
-                    :placeholder="$t('pwa_first_name_hint')"
-                    required
-                    name="first_name"
-                    :label="$t('pwa_first_name')"
-                    :rules="first_name_rules"
-                  />
-        </v-flex>
-        <v-flex xs10 class="align-items-to-center ">
-                  <v-text-field
-                    outlined
-                    dense 
-                    id="last_name"
-                    v-model="last_name"
-                    class="cs-input-text-field-login"
-                    :placeholder="$t('pwa_last_name_hint')"
-                    required
-                    name="last_name"
-                    :label="$t('pwa_last_name')"
-                    :rules="last_name_rules"
-                  />
-        </v-flex>
-          <v-flex xs10 class="align-items-to-center ">
-                <v-text-field
-                    outlined
-                    dense
-                    v-model="password"
-                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="show1 ? 'text' : 'password'"
-                    name="input-10-1"
-                    :label="$t('setting_sec_password_title')"
-                    @click:append="show1 = !show1"
-                    id="password"
-                    class="cs-input-text-field-login"
-                    :rules="password_rules"
-                    required
-                    style=""
-                    @keyup.enter="login"
-                  />
-                 </v-flex>
-        <v-flex xs10 class="align-items-to-center">
-          <v-form
-            ref="form"
-            v-model="valid"
-            lazy-validation
-            style="width:100%"
-          >
-            <v-btn 
-              block
-              color="#EDB041"
-              class="white--text continue-with-email-btn"
-              :loading="show_loading_on_login_btn"
-              @click="register()"
+                      outlined
+                      dense
+                      v-model="password"
+                      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                      :type="show1 ? 'text' : 'password'"
+                      name="input-10-1"
+                      :label="$t('setting_sec_password_title')"
+                      @click:append="show1 = !show1"
+                      id="password"
+                      class="cs-input-text-field-login"
+                      :rules="password_rules"
+                      required
+                      style=""
+                      @keyup.enter="login"
+                    />
+                  </v-flex>
+          <v-flex xs12 class="align-items-to-center">
+            <v-form
+              ref="form"
+              v-model="valid"
+              lazy-validation
+              style="width:100%"
             >
-                {{$t("pwa_finish")}}
-            </v-btn>
-          </v-form>
-        </v-flex>
-        <v-flex xs10 class="align-items-to-center mt-2" >
-            <p class="register-footer-text">{{ $t("pwa_login_footer_1") }} 
-                <router-link :to="uri.terms" target="_blank" class="link-text"><u>{{ $t("global_url_terms_of_use") }}</u></router-link>
-                  {{ $t("pwa_login_footer_2") }}
-                  <router-link :to="uri.policy" target="_blank" class="link-text"><u>{{ $t("global_url_privacy_policy") }}</u></router-link>
-              </p>
-        </v-flex>
-    </v-layout>
+              <v-btn 
+                block
+                color="#EDB041"
+                class="white--text continue-with-email-btn"
+                :loading="show_loading_on_login_btn"
+                @click="register()"
+              >
+                  {{$t("pwa_finish")}}
+              </v-btn>
+            </v-form>
+          </v-flex>
+          <v-flex xs12 class="align-items-to-center mt-2" >
+              <p class="register-footer-text">{{ $t("pwa_login_footer_1") }} 
+                  <router-link :to="uri.terms" target="_blank" class="link-text"><u>{{ $t("global_url_terms_of_use") }}</u></router-link>
+                    {{ $t("pwa_login_footer_2") }}
+                    <router-link :to="uri.policy" target="_blank" class="link-text"><u>{{ $t("global_url_privacy_policy") }}</u></router-link>
+                </p>
+          </v-flex>
+      </v-layout>
+    </v-col>
+  </v-row>
   </v-container>
 </template>
 
