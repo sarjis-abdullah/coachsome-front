@@ -73,6 +73,7 @@ export default {
     account: "/coach/account",
     profileMenu: "/coach/profile-menu",
     notification: "/coach/notification",
+    home: "/coach/home"
   },
   admin: {
     login: "/admin/login",
@@ -98,5 +99,6 @@ export default {
     account: "/athlete/account",
     profileMenu: "/athlete/profile-menu",
     notification: "/athlete/notification",
+    home: "/athlete/home"
   }
 };

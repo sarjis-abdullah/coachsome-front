@@ -824,7 +824,13 @@ export default {
           name: "Master Card",
           value: "mastercard",
           logo: "visa-circle.svg"
-        }
+        },
+        {
+          id: 1,
+          name: "MobilePay",
+          value: "mobilepay",
+          logo: "mobile-pay.svg",
+        },
       ],
       messageFromPackageBuyer: "",
       currency: currencyService.selectedCurrency(),

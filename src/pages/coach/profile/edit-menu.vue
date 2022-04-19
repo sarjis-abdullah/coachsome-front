@@ -11,7 +11,7 @@
         lg="4"
         xs="11"
       >
-        <v-row class="page-top-header-row">
+        <v-row class="page-top-header-row body-bg">
             <v-col cols="12" class="justify-center py-0 my-0 page-top-header-column px-0 mx-0">
                 <v-list width="100%" color="transparent">
                     <v-list-item class="pl-0 ml-0">
