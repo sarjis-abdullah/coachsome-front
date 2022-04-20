@@ -30,7 +30,7 @@
               <!-- Edit Profile -->
               <v-list-item link @click.stop="handleEditProfile">
                 <v-list-item-icon>
-                  <v-img :src="require('@/assets/img/svg-icons/edit.svg')" alt="edit" />
+                  <v-img :src="require('@/assets/img/svg-icons/new/edit.svg')" alt="edit" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -38,13 +38,13 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
               <!-- Payment -->
                <v-list-item link @click.stop="handlePaymentBtn">
                 <v-list-item-icon>
-                  <v-img  :src="require('@/assets/img/svg-icons/credit-card.svg')" alt="payment" />
+                  <v-img  :src="require('@/assets/img/svg-icons/new/credit-card.svg')" alt="payment" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -52,7 +52,7 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
             </v-list>
@@ -60,7 +60,7 @@
         </v-row>
         <v-row class="justify-center">
           <v-col cols="3">
-            <v-img  :src="require('@/assets/img/svg-icons/Line 55.svg')" alt="payment" />
+            <v-img  :src="require('@/assets/img/svg-icons/new/line.svg')" alt="payment" />
           </v-col>
         </v-row>
         <!-- <div class="cs-forgot-password-sec">
@@ -80,24 +80,9 @@
           <v-col cols="12">
             <v-list class="body-bg">
 
-              <!-- Invite friends -->
-              <!-- <v-list-item>
-                <v-list-item-icon>
-                  <v-img :src="require('@/assets/img/svg-icons/Invite.svg')" alt="invite" />
-                </v-list-item-icon>
-
-                <v-list-item-content>
-                  <v-list-item-title class="list-text">Invite your friends</v-list-item-title>
-                </v-list-item-content>
-
-                <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
-                </v-list-item-icon>
-              </v-list-item> -->
 
               <v-list-item link @click.stop="handleLanguageBtn">
                 <v-list-item-icon style="font-size:18px">
-                  <!-- <v-img  :src="require('@/assets/img/svg-icons/earth.svg')" alt="language" /> -->
                   <flag class="mt-1" :iso="currentLocale.icon" v-bind:squared="false" />
                 </v-list-item-icon>
 
@@ -106,14 +91,13 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
 
               <!-- Currency -->
               <v-list-item link @click.stop="handleCurrencyBtn">
                 <v-list-item-icon>
-                  <!-- <v-img  :src="require('@/assets/img/svg-icons/euro.svg')" alt="currency" /> -->
                   <h2 class="currency-symbol">{{currencySymbol}}</h2>
                 </v-list-item-icon>
 
@@ -122,13 +106,13 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
 
               <v-list-item link @click.stop="handleSetting">
                 <v-list-item-icon>
-                  <v-img  :src="require('@/assets/img/svg-icons/setting.svg')" alt="setting" />
+                  <v-img  :src="require('@/assets/img/svg-icons/new/setting.svg')" alt="setting" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -136,7 +120,7 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
             </v-list>
@@ -145,7 +129,7 @@
 
         <v-row class="justify-center">
           <v-col cols="3">
-            <v-img  :src="require('@/assets/img/svg-icons/Line 55.svg')" alt="payment" />
+            <v-img  :src="require('@/assets/img/svg-icons/new/line.svg')" alt="payment" />
           </v-col>
         </v-row>
 
@@ -155,7 +139,7 @@
               <!-- terms -->
               <v-list-item link @click.stop="handleTermsBtn">
                 <v-list-item-icon>
-                  <v-img  :src="require('@/assets/img/svg-icons/book-open.svg')" alt="payment" />
+                  <v-img  :src="require('@/assets/img/svg-icons/new/book-open.svg')" alt="payment" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -163,14 +147,14 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
 
               <!-- Privacy Policy -->
               <v-list-item link @click.stop="handlePrivacyPolicyBtn">
                 <v-list-item-icon>
-                  <v-img  :src="require('@/assets/img/svg-icons/book-open.svg')" alt="payment" />
+                  <v-img  :src="require('@/assets/img/svg-icons/new/book-open.svg')" alt="payment" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -178,14 +162,14 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
 
               <!-- Cookie Policy -->
               <v-list-item link @click.stop="handleCookiePolicyBtn">
                 <v-list-item-icon>
-                  <v-img  :src="require('@/assets/img/svg-icons/book-open.svg')" alt="payment" />
+                  <v-img  :src="require('@/assets/img/svg-icons/new/book-open.svg')" alt="payment" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -193,14 +177,14 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
 
               <!-- Refund Policy -->
               <v-list-item link @click.stop="handleRefundPolicyBtn">
                 <v-list-item-icon>
-                  <v-img  :src="require('@/assets/img/svg-icons/book-open.svg')" alt="payment" />
+                  <v-img  :src="require('@/assets/img/svg-icons/new/book-open.svg')" alt="payment" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -208,7 +192,7 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
             </v-list>
@@ -221,12 +205,12 @@
           <v-col cols="8">
             <v-btn
                 outlined
-                color="#15577C"
+                color="#49556A"
                 class="login-option-btn"
                 block
                 @click="logout()"
             >
-                <img class="btn-icon"  :src="require('@/assets/img/svg-icons/unlock.svg')" alt="">  <span class="social-login-btn-facebook-text btn-text">{{$t("dropdown_item_log_out")}}</span>
+                <img class="btn-icon"  :src="require('@/assets/img/svg-icons/new/unlock.svg')" alt="">  <span class="social-login-btn-facebook-text btn-text">{{$t("dropdown_item_log_out")}}</span>
             </v-btn>
           </v-col>
         </v-row>
@@ -394,10 +378,7 @@ export default ({
   /* identical to box height */
 
   text-transform: uppercase;
-
-  /* Dusty blue */
-
-  color: #15577C;
+  color: #49556A;
 
 }
 
@@ -407,10 +388,7 @@ export default ({
   font-weight: 600;
   font-size: 18px;
   line-height: 25px;
-
-  /* Dusty blue */
-
-  color: #15577C;
+  color: #49556A;
 }
 
 .theme--light.v-icon{
@@ -453,7 +431,7 @@ export default ({
 .currency-symbol{
   width: 15px;
   height: 16px;
-  color: #6EB5CB!important;
+  color: #49556A!important;
   text-align: center;
   text-transform: uppercase;
 }
@@ -527,6 +505,6 @@ export default ({
   line-height: 25px;
   text-decoration-line: underline;
 
-  color: #15577C;
+  color: #49556A;
 }
 </style>
