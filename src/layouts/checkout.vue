@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp" />
     <v-main class="body-bg">
       <client-only>
         <GlobalHeader />
@@ -15,7 +16,7 @@ import GlobalHeader from "@/components/layout/global/GlobalHeader";
 import TopNav from "@/components/layout/global/TopNav";
 import BottomNavigation from '@/components/layout/global/BottomNavigation.vue';
 import { pathData } from "@/data";
-import mixpanelService from '@/services/mixpanelService'
+import mixpanelService from '@/services/mixpanelService';
 export default {
   components: {
     TopNav,
