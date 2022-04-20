@@ -1,5 +1,11 @@
 <template>
+<span>
+  <v-skeleton-loader
+    v-if="chargeInfo.total < 0"
+    type="article"
+  ></v-skeleton-loader>
   <div
+    v-else
     class="charge-box"
     :style="{
       borderImage: `url(${require('@/assets/images/border-staircase.svg')}) 30 space`
@@ -68,6 +74,7 @@
       </div>
     </div>
   </div>
+</span>
 </template>
 
 <script>

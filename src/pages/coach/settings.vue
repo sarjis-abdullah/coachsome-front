@@ -36,7 +36,7 @@
             <v-list class="body-bg">
               <v-list-item link @click.stop="handleAccount">
                 <v-list-item-icon>
-                  <v-img :src="require('@/assets/img/svg-icons/user-icon.svg')" alt="edit" />
+                  <v-img :src="require('@/assets/img/svg-icons/new/user-icon.svg')" alt="edit" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -44,13 +44,13 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
               <!-- {{$t("setting_sec_notification_title")}} -->
                <v-list-item link @click.stop="handleNotifications">
                 <v-list-item-icon>
-                  <v-img  :src="require('@/assets/img/svg-icons/bell.svg')" alt="payment" />
+                  <v-img  :src="require('@/assets/img/svg-icons/new/bell.svg')" alt="payment" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -58,14 +58,14 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
 
               <!-- {{$t("athlete_settings_tab_security")}} -->
               <v-list-item link @click.stop="handleSecurity">
                 <v-list-item-icon>
-                  <v-img  :src="require('@/assets/img/svg-icons/padlock.svg')" alt="payment" />
+                  <v-img  :src="require('@/assets/img/svg-icons/new/padlock.svg')" alt="payment" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -73,7 +73,7 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
             </v-list>
@@ -961,7 +961,7 @@ export default {
   font-weight: 600;
   font-size: 18px;
   line-height: 25px;
-  color: #15577C;
+  color: #49556A;
 }
 .theme--light.v-icon{
   color: #000;

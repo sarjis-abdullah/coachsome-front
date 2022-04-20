@@ -41,7 +41,7 @@
               <!-- Edit Profile -->
               <v-list-item link @click.stop="handleEditProfile">
                 <v-list-item-icon>
-                  <v-img :src="require('@/assets/img/svg-icons/user-icon.svg')" alt="edit" />
+                  <v-img :src="require('@/assets/img/svg-icons/new/user-icon.svg')" alt="edit" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -49,13 +49,13 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
               <!-- Packages -->
                <v-list-item link @click.stop="handlePackagesBtn">
                 <v-list-item-icon>
-                  <v-img  :src="require('@/assets/img/svg-icons/gift.svg')" alt="packages" />
+                  <v-img  :src="require('@/assets/img/svg-icons/new/gift.svg')" alt="packages" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -63,14 +63,14 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
 
               <!-- Gallery -->
                <v-list-item link @click.stop="handleGalleryBtn">
                 <v-list-item-icon>
-                  <v-img  :src="require('@/assets/img/svg-icons/gallery.svg')" alt="Gallery" />
+                  <v-img  :src="require('@/assets/img/svg-icons/new/gallery.svg')" alt="Gallery" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -78,14 +78,14 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
               
               <!-- Geography -->
               <v-list-item link  @click.stop="handleGeographyBtn">
                 <v-list-item-icon>
-                  <v-img :src="require('@/assets/img/svg-icons/location.svg')" alt="edit" />
+                  <v-img :src="require('@/assets/img/svg-icons/new/location.svg')" alt="edit" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -93,14 +93,14 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
 
               <!-- Subscription -->
               <!-- <v-list-item link >
                 <v-list-item-icon>
-                  <v-img :src="require('@/assets/img/svg-icons/subscription.svg')" alt="edit" />
+                  <v-img :src="require('@/assets/img/svg-icons/new/subscription.svg')" alt="edit" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -108,7 +108,7 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item> -->
 
@@ -117,7 +117,7 @@
               <!-- Availibility -->
                <v-list-item link @click.stop="handleAvailabilityBtn">
                 <v-list-item-icon>
-                  <v-img  :src="require('@/assets/img/svg-icons/calendar-time.svg')" alt="payment" />
+                  <v-img  :src="require('@/assets/img/svg-icons/new/calendar-time.svg')" alt="payment" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -125,13 +125,13 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
               <!-- Reviews -->
                <v-list-item link @click.stop="handleReviewsBtn">
                 <v-list-item-icon>
-                  <v-img  :src="require('@/assets/img/svg-icons/star.svg')" alt="payment" />
+                  <v-img  :src="require('@/assets/img/svg-icons/new/star.svg')" alt="payment" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -139,7 +139,7 @@
                 </v-list-item-content>
 
                 <v-list-item-icon>
-                  <v-icon>mdi-chevron-right</v-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
 
@@ -253,10 +253,7 @@ export default ({
   /* identical to box height */
 
   text-transform: uppercase;
-
-  /* Dusty blue */
-
-  color: #15577C;
+  color: #49556A;
 
 }
 
@@ -266,10 +263,7 @@ export default ({
   font-weight: 600;
   font-size: 18px;
   line-height: 25px;
-
-  /* Dusty blue */
-
-  color: #15577C;
+  color: #49556A;
 }
 
 .theme--light.v-icon{

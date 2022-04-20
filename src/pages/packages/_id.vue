@@ -81,6 +81,7 @@
                 <div class="continue-btn">
                   <v-btn
                     color="#EDB041"
+                    :disabled="packageInfo.chargeBox.total < 0"
                     @click.stop="continueBtnHandler"
                     dark
                     block
@@ -282,7 +283,7 @@
                     <div class="mb-2">
                       <v-btn
                         depressed
-                        :disabled="isDisabledRequestAndAuthorisePaymentBtn"
+                        :disabled="isDisabledRequestAndAuthorisePaymentBtn || packageInfo.chargeBox.total < 0"
                         color="#EDB041"
                         class="white--text"
                         :loading="loadingRequestBookingBtn"
@@ -454,6 +455,7 @@
                         <div class="continue-btn mb-2">
                           <v-btn
                             color="#EDB041"
+                            :disabled="packageInfo.chargeBox.total < 0"
                             @click.stop="continueBtnHandler"
                             dark
                             >{{ $t("booking_btn_label_continue") }}</v-btn
@@ -632,6 +634,7 @@
                             >
                               <v-radio
                                 color="primary-light-1"
+                                style="padding: 5px 10px"
                                 :value="paymentMethod.value"
                               >
                                 <template v-slot:label>
@@ -655,7 +658,7 @@
                         <div class="mt-2 mb-2">
                           <v-btn
                             depressed
-                            :disabled="isDisabledRequestAndAuthorisePaymentBtn"
+                            :disabled="isDisabledRequestAndAuthorisePaymentBtn || packageInfo.chargeBox.total < 0"
                             color="#EDB041"
                             class="white--text"
                             :loading="loadingRequestBookingBtn"
@@ -795,41 +798,35 @@ export default {
       isLoading: false,
       paymentCard: null,
       paymentMethods: [
-        // {
-        //   id: 1,
-        //   name: "MobilePay",
-        //   value: "mobilepay",
-        //   logo: "mobile-pay.svg",
-        // },
-        // {
-        //   id: 2,
-        //   name: "Apple Pay",
-        //   value: "apple-pay",
-        //   logo: "apple-pay.svg",
-        // },
-        // {
-        //   id: 3,
-        //   name: "PayPal",
-        //   value: "paypal",
-        //   logo: "paypal.svg",
-        // },
         {
-          id: 4,
+          id: 1,
           name: "VISA",
           value: "visa",
           logo: "visa-text.svg"
         },
         {
-          id: 5,
+          id: 2,
           name: "Master Card",
           value: "mastercard",
           logo: "visa-circle.svg"
         },
         {
-          id: 1,
+          id: 3,
           name: "MobilePay",
           value: "mobilepay",
           logo: "mobile-pay.svg",
+        },
+        {
+          id: 4,
+          name: "Apple Pay",
+          value: "apple-pay",
+          logo: "apple-pay.svg",
+        },
+        {
+          id: 5,
+          name: "Google Pay",
+          value: "google-pay",
+          logo: "google-pay.svg",
         },
       ],
       messageFromPackageBuyer: "",
