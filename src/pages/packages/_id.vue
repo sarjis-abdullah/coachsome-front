@@ -81,7 +81,7 @@
                 <div class="continue-btn">
                   <v-btn
                     color="#EDB041"
-                    :disabled="packageInfo.chargeBox.total < 0"
+                    :disabled="!isTotalAmountZero"
                     @click.stop="continueBtnHandler"
                     dark
                     block
@@ -283,7 +283,7 @@
                     <div class="mb-2">
                       <v-btn
                         depressed
-                        :disabled="isDisabledRequestAndAuthorisePaymentBtn || packageInfo.chargeBox.total < 0"
+                        :disabled="isDisabledRequestAndAuthorisePaymentBtn || !isTotalAmountZero"
                         color="#EDB041"
                         class="white--text"
                         :loading="loadingRequestBookingBtn"
@@ -455,7 +455,7 @@
                         <div class="continue-btn mb-2">
                           <v-btn
                             color="#EDB041"
-                            :disabled="packageInfo.chargeBox.total < 0"
+                            :disabled="!isTotalAmountZero"
                             @click.stop="continueBtnHandler"
                             dark
                             >{{ $t("booking_btn_label_continue") }}</v-btn
@@ -658,7 +658,7 @@
                         <div class="mt-2 mb-2">
                           <v-btn
                             depressed
-                            :disabled="isDisabledRequestAndAuthorisePaymentBtn || packageInfo.chargeBox.total < 0"
+                            :disabled="isDisabledRequestAndAuthorisePaymentBtn || !isTotalAmountZero"
                             color="#EDB041"
                             class="white--text"
                             :loading="loadingRequestBookingBtn"
