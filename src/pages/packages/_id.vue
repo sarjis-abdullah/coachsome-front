@@ -1,5 +1,10 @@
 <template>
   <div class="front-booking-page" :class="{'mb-15' : $vuetify.breakpoint.xsOnly}">
+      <v-skeleton-loader
+        v-if="isLoading"
+        type="list-item-avatar, divider, list-item-three-line, card-heading, image, actions"
+      ></v-skeleton-loader>
+    <span v-else>
     <v-stepper v-model="step" v-if="$vuetify.breakpoint.xsOnly">
       <v-stepper-header>
         <v-stepper-step
@@ -751,6 +756,7 @@
         </v-col>
       </v-row>
     </v-container>
+    </span>
   </div>
 </template>
 
@@ -777,6 +783,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       profileCardData : [],
       PackageData: [],
       currencyService,
