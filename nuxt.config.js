@@ -294,7 +294,8 @@ export default {
         ]
       }
     ],
-    'vue-social-sharing/nuxt'
+    'vue-social-sharing/nuxt',
+    'nuxt-user-agent',
   ],
 
   // Build Configuration
