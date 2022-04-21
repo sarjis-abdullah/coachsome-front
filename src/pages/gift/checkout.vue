@@ -587,6 +587,7 @@ export default {
       ],
       selectedPaymentMethod: null,
       paymentMethods: [
+        
         // {
         //   id: 1,
         //   name: "Mobile Pay",
