@@ -58,13 +58,23 @@
                   ></v-select>
                 </div>
               </div>
+              <v-skeleton-loader
+                v-if="isTotalAmountZero"
+                type="article"
+              ></v-skeleton-loader>
               <charge-box
+                v-else
                 :charge-info="packageInfo.chargeBox"
                 :camp-package="isCampPackage"
                 :promo-code="promoCode"
               />
               <div class="package-info mb-15">
+                <v-skeleton-loader
+                  v-if="isTotalAmountZero"
+                  type="article, actions"
+                ></v-skeleton-loader>
                 <package-simple-card
+                  v-else
                   v-bind="PackageData"
                 >
                   <template v-slot:original-price="{ price, discount }">
@@ -88,8 +98,9 @@
                     color="#EDB041"
                     :disabled="isTotalAmountZero"
                     @click.stop="continueBtnHandler"
-                    dark
+                    depressed
                     block
+                    class="white--text"
                     >{{ $t("booking_btn_label_continue") }}</v-btn
                   >
                 </div>
@@ -260,10 +271,12 @@
                         <v-radio
                           color="primary-light-1"
                           style="padding: 5px 10px"
+                          v-if="paymentMethod.show"
                           :value="paymentMethod.value"
                         >
                           <template v-slot:label>
                             <img
+                              :style="{width: paymentMethod.width}"
                               :src="
                                 require('@/assets/images/booking/' +
                                   paymentMethod.logo)
@@ -447,13 +460,23 @@
                             ></v-select>
                           </div>
                         </div>
+                        <v-skeleton-loader
+                          v-if="isTotalAmountZero"
+                          type="article"
+                        ></v-skeleton-loader>
                         <charge-box
+                          v-else
                           :charge-info="packageInfo.chargeBox"
                           :camp-package="isCampPackage"
                           :promo-code="promoCode"
                         />
                         <div class="package-info">
+                          <v-skeleton-loader
+                            v-if="isTotalAmountZero"
+                            type="article, actions"
+                          ></v-skeleton-loader>
                           <package-simple-card
+                            v-else
                             v-bind="packageInfo"
                           ></package-simple-card>
                         </div>
@@ -462,7 +485,8 @@
                             color="#EDB041"
                             :disabled="isTotalAmountZero"
                             @click.stop="continueBtnHandler"
-                            dark
+                            depressed
+                            class="white--text"
                             >{{ $t("booking_btn_label_continue") }}</v-btn
                           >
                         </div>
@@ -641,9 +665,11 @@
                                 color="primary-light-1"
                                 style="padding: 5px 10px"
                                 :value="paymentMethod.value"
+                                v-if="paymentMethod.show"
                               >
                                 <template v-slot:label>
                                   <img
+                                    :style="{width: paymentMethod.width}"
                                     :src="
                                       require('@/assets/images/booking/' +
                                         paymentMethod.logo)
@@ -807,34 +833,44 @@ export default {
       paymentMethods: [
         {
           id: 1,
-          name: "VISA",
-          value: "visa",
-          logo: "visa-text.svg"
-        },
-        {
-          id: 2,
-          name: "Master Card",
-          value: "mastercard",
-          logo: "visa-circle.svg"
-        },
-        {
-          id: 3,
           name: "MobilePay",
           value: "mobilepay",
           logo: "mobile-pay.svg",
+          width: "126px",
+          show: true
         },
         {
-          id: 4,
+          id: 2,
           name: "Apple Pay",
           value: "apple-pay",
           logo: "apple-pay.svg",
+          width: "70px",
+          show: false
         },
         {
-          id: 5,
+          id: 3,
           name: "Google Pay",
           value: "google-pay",
           logo: "google-pay.svg",
+          width: "70px",
+          show: false
         },
+        {
+          id: 4,
+          name: "VISA",
+          value: "visa",
+          logo: "visa.svg",
+          width: "66px",
+          show: true
+        },
+        {
+          id: 5,
+          name: "Master Card",
+          value: "mastercard",
+          logo: "mastercard.svg",
+          width: "50px",
+          show: true
+        }
       ],
       messageFromPackageBuyer: "",
       currency: currencyService.selectedCurrency(),
@@ -918,7 +954,10 @@ export default {
   },
   watch: {
     selectedPaymentMethod() {
-      this.$refs.messageBoxTextArea.focus();
+      let booking = storageHelper.get("booking");
+      if(this.messageFromPackageBuyer == "" && booking.step == 2){
+        this.$refs.messageBoxTextArea.focus();
+      }
     },
     step: function(val) {
       if (val) {
@@ -946,8 +985,25 @@ export default {
   created() {
       this.profileCardData =  this.$store.getters.getBookingCoachInfo;
       this.PackageData = this.$store.getters.getBookingPackageInfo;
+
+      if(this.$ua.isFromIos()){
+        this.paymentMethods[1].show = true;
+      }
+      else if(this.$ua.isFromIphone()){
+        this.paymentMethods[1].show = true;
+      }
+      else if(this.$ua.isFromIpod()){
+        this.paymentMethods[1].show = true;
+      }
+      else if(this.$ua.os() == "Mac OSX"){
+        this.paymentMethods[1].show = true;
+      }
+      else{
+        this.paymentMethods[2].show = true;
+      }
   },
   mounted() {
+
     let initialValue = {
       id: null, // booking id
       step: 1,

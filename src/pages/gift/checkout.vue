@@ -609,7 +609,7 @@ export default {
           id: 4,
           name: "VISA",
           value: "visa",
-          logo: "visa-text.svg"
+          logo: "visa.svg"
         },
         {
           id: 5,
