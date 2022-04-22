@@ -1,7 +1,21 @@
 <template>
   <div class="coach-gallery-page">
-    <v-container fluid class="page-container gallery-page pt-0 mt-0">
-      <v-row class="d-none d-md-block">
+    <v-container fluid>
+      <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('text_gallery')">
+        <template v-slot:goBack>
+          <v-btn
+            icon
+            @click="handleBack"
+          >
+            <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+          </v-btn>
+        </template>
+        <template v-slot:action>
+          <span></span>
+        </template>
+      </mobile-top-nav>
+      <span class="page-container gallery-page">
+              <v-row class="d-none d-md-block">
         <v-col cols="12" class="pb-0" >
           <div class="page-title">{{ $t("page_title_image_and_video") }}</div>
         </v-col>
@@ -9,29 +23,7 @@
           <div class="line"></div>
         </v-col>
       </v-row>
-
-      <v-row class="page-top-header-row body-bg d-md-none pt-0 mt-0">
-        <v-col cols="12" class="justify-center page-top-header-column px-0 mx-0">
-            <v-list width="100%" color="transparent" class="py-0 my-0">
-                <v-list-item class="pl-0 ml-0">
-                  <v-btn
-                    icon
-                    @click="handleBack"
-                  >
-                    <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
-                  </v-btn>
-                  <v-list-item-content class="pl-1 py-0 my-0">
-                    <v-list-item-title class="common-top-page-title"
-                      v-text="$t('text_gallery')"
-                    ></v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-            </v-list>
-            <div class="line"></div>
-        </v-col>
-      </v-row>
-
-      <v-row>
+      <v-row class="pt-5">
         <v-col cols="12" md="4">
           <div class="section-title pb-2">{{ $t("text_video") }}</div>
           <div class="section-description">
@@ -197,6 +189,7 @@
           <client-back-footer class="px-0 py-0" />
         </v-col>
       </v-row> -->
+      </span>
     </v-container>
   </div>
 </template>
@@ -208,12 +201,16 @@ import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import DarkboxGallery from "@/components/darkbox/Gallery";
 import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
+
+
 export default {
   layout: "coach",
   components: {
     ClientBackFooter,
     DarkboxGallery,
-    Cropper
+    Cropper,
+    MobileTopNav
   },
   data() {
     return {

@@ -1,6 +1,14 @@
 <template>
   <div class="athlete-bookings">
     <v-container>
+      <mobile-top-nav extraClass="body-bg-secondary" actionClass="d-none" :headerText="$t('app_bar_dashboard_booking')">
+        <template v-slot:goBack>
+          <span></span>
+        </template>
+        <template v-slot:action>
+          <span></span>
+        </template>
+      </mobile-top-nav>
       <v-row justify="center">
         <v-col cols="12" md="7">
           <v-row>
@@ -280,6 +288,8 @@
 import PurchasedCard from "@/components/card/PurchasedCard";
 import NewsCard from "@/components/card/NewsCard";
 import { pathData } from "@/data";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
+
 import {
   athleteBookingApi,
   athleteBookingTimeApi,
@@ -290,7 +300,8 @@ export default {
   layout: "athlete",
   components: {
     PurchasedCard,
-    NewsCard
+    NewsCard,
+    MobileTopNav
   },
   data() {
     return {

@@ -1,302 +1,297 @@
 <template>
 
-<v-container fluid grid-list-md text-xs-center class="d-flex">
-    <v-row
-      justify="center"
-    >
-      <v-col
-        cols="11"
-        sm="8"
-        md="6"
-        lg="4"
-        xs="11"
+<v-container fluid >
+    <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('payout_info_input_title_account')">
+      <template v-slot:goBack>
+        <v-btn
+          icon
+          @click="handleBack"
+        >
+          <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+        </v-btn>
+      </template>
+      <template v-slot:action>
+        <span></span>
+      </template>
+    </mobile-top-nav>
+    <!-- <v-container grid-list-md text-xs-center class="d-flex"> -->
+      <v-row
+        justify="center"
       >
-          <v-row class="page-top-header-row">
-            <v-col cols="12" class="justify-center page-top-header-column px-0 mx-0">
-                <v-list width="100%" color="transparent" class="py-0 my-0">
-                    <v-list-item class="pl-0 ml-0">
-                      <v-btn
-                        icon
-                        @click="handleBack"
-                      >
-                        <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
-                      </v-btn>
-                      <v-list-item-content class="pl-1 py-0 my-0">
-                        <v-list-item-title class="common-top-page-title"
-                          v-text="$t('payout_info_input_title_account')"
-                        ></v-list-item-title>
-                      </v-list-item-content>
-                      <!-- <v-list-item-action>
-                        <router-link class="save-profile" to="" @click.native="saveProfile()">Save</router-link>
-                      </v-list-item-action> -->
-                    </v-list-item>
-                </v-list>
-                <div class="line"></div>
+        <v-col
+          cols="11"
+          sm="8"
+          md="6"
+          lg="4"
+          xs="11"
+        >
+            
+
+          <v-row
+            align="center"
+            justify="center"
+          >
+            <v-col cols="12">
+
+              <!-- Email -->
+              <p class="account-label mt-2">{{$t("pwa_email")}}</p>
+              <v-text-field
+                outlined
+                dense
+                hide-no-data
+                hide-details
+                v-model="form.email"
+                @click="emailClickHandler"
+                :label="$t('pwa_email')"
+                :rules="rule.email"
+                name="input-10-1"
+                color="red"
+                id="email"
+                class="cs-input-text-field-login"
+                required
+                style="color:#15577C"
+              />
+
+              
+              <!-- Password Area -->
+              <p class="account-label mt-2">{{$t("setting_label_old_password")}}</p>
+              <v-text-field
+                outlined
+                dense
+                hide-no-data
+                hide-details
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show1 ? 'text' : 'password'"
+                @click:append="show1 = !show1"
+                v-model="form.password.oldPassword"
+                :rules="rule.oldPassword"
+                name="input-10-1"
+                color="red"
+                id="old_password"
+                class="cs-input-text-field-login"
+                required
+                style="color:#15577C"
+              />
+              <p class="account-label mt-2">{{$t("setting_label_new_password")}}</p>
+              <v-text-field
+                outlined
+                dense
+                hide-no-data
+                hide-details
+                :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show2 ? 'text' : 'password'"
+                @click:append="show2 = !show2"
+                v-model="form.password.newPassword"
+                :rules="rule.newPassword"
+                name="input-10-1"
+                color="red"
+                id="new_password"
+                class="cs-input-text-field-login"
+                required
+                style="color:#15577C"
+              />
+              
+            </v-col>
+            <v-col cols="6">
+              <v-btn
+                color="primary-light-1"
+                small
+                dark
+                @click.stop="handlePasswordChangeBtn()"
+                >{{ $t("setting_btn_label_change_password") }}
+              </v-btn>
             </v-col>
           </v-row>
 
-        <v-row
-          align="center"
-          justify="center"
-        >
-          <v-col cols="12">
-
-            <!-- Email -->
-            <p class="account-label mt-2">{{$t("pwa_email")}}</p>
-            <v-text-field
-              outlined
-              dense
-              hide-no-data
-              hide-details
-              v-model="form.email"
-              @click="emailClickHandler"
-              :label="$t('pwa_email')"
-              :rules="rule.email"
-              name="input-10-1"
-              color="red"
-              id="email"
-              class="cs-input-text-field-login"
-              required
-              style="color:#15577C"
-            />
-
-            
-            <!-- Password Area -->
-            <p class="account-label mt-2">{{$t("setting_label_old_password")}}</p>
-            <v-text-field
-              outlined
-              dense
-              hide-no-data
-              hide-details
-              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show1 ? 'text' : 'password'"
-              @click:append="show1 = !show1"
-              v-model="form.password.oldPassword"
-              :rules="rule.oldPassword"
-              name="input-10-1"
-              color="red"
-              id="old_password"
-              class="cs-input-text-field-login"
-              required
-              style="color:#15577C"
-            />
-            <p class="account-label mt-2">{{$t("setting_label_new_password")}}</p>
-            <v-text-field
-              outlined
-              dense
-              hide-no-data
-              hide-details
-              :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show2 ? 'text' : 'password'"
-              @click:append="show2 = !show2"
-              v-model="form.password.newPassword"
-              :rules="rule.newPassword"
-              name="input-10-1"
-              color="red"
-              id="new_password"
-              class="cs-input-text-field-login"
-              required
-              style="color:#15577C"
-            />
-            
-          </v-col>
-          <v-col cols="6">
-            <v-btn
-              color="primary-light-1"
-              small
-              dark
-              @click.stop="handlePasswordChangeBtn()"
-              >{{ $t("setting_btn_label_change_password") }}
-            </v-btn>
-          </v-col>
-        </v-row>
-
-        <!-- Email Reset Dialog Start -->
-        <v-row v-if="emailReset.dialog">
-          <v-col>
-            <v-dialog
-              v-model="emailReset.dialog"
-              persistent
-              max-width="400"
-            >
-              <v-card>
-                <v-card-title class="headline">{{$t("pwa_email")}}</v-card-title>
-                <v-card-text>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="emailReset.email"
-                        dense
-                        hide-details
-                        solo
-                        label="Enter your new email"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="emailReset.password"
-                        :rules="rule.password"
-                        dense
-                        solo
-                        type="password"
-                        label="Enter your current password"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="primary-light-1"
-                    text
-                    @click="emailResetCancelHandle"
-                  >
-                    {{$t("btn_label_cancel")}}
-                  </v-btn>
-                  <v-btn
-                    color="primary-light-1"
-                    text
-                    @click="emailResetSaveHandle"
-                  >
-                    {{$t("btn_label_txt_save")}}
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-col>
-        </v-row>
-        <!-- Email Reset Dialog End -->
-        <!-- Password Reset Dialog Start -->
-        <v-row v-if="passwordReset.dialog">
-          <v-col>
-            <v-dialog
-              v-model="passwordReset.dialog"
-              persistent
-              max-width="400"
-            >
-              <v-card>
-                <v-card-title class="headline">{{$t("btn_label_send")}}</v-card-title>
-                <v-card-text>
-                  <v-row>
-                    <v-col cols="12">
-                     <p>{{$t("pwa_sure_alert")}}</p>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="primary-light-1"
-                    text
-                    @click="passwordResetCancelHandle"
-                  >
-                    {{$t("btn_label_cancel")}}
-                  </v-btn>
-                  <v-btn
-                    color="primary-light-1"
-                    text
-                    @click="passwordResetSaveHandle"
-                  >
-                    {{$t("pwa_yes_reset")}}
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-col>
-        </v-row>
-        <!-- Password Reset Dialog End -->
-        <!-- Delete Area -->
-        <v-row>
-          <v-col cols="12">
-            <v-expansion-panels focusable>
-              <v-expansion-panel>
-                <v-expansion-panel-header class="danger-title">{{$t("pwa_danger_zone")}}
-                  <template v-slot:actions>
-                    <v-icon color="error">
-                      mdi-chevron-down
-                    </v-icon>
-                  </template>
-                </v-expansion-panel-header>
-                <v-expansion-panel-content class="danger-bg">
-                  <v-row justify="center" align="center mt-2">
-                    <v-col cols="12" class="d-flex justify-center">
-                      <span class="danger-body-title">{{$t("athlete_settings_card_title_delete_acc")}}</span>
-                    </v-col>
-                    <v-col cols="12" class="d-flex justify-center">
-                      <span class="danger-body-sub-title">{{$t("athlete_settings_section_delete_account_desc")}}</span>
-                    </v-col>
-                    <v-col cols="6" class="d-flex justify-center mb-10">
-                      <v-btn 
-                        color="#C7311D"
-                        class="white--text"
-                        block
-                        @click.stop="handleDeleteAccountBtnClick"
-                      >{{$t("athlete_settings_card_title_delete_acc")}}</v-btn>
-                    </v-col>
-                  </v-row>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </v-expansion-panels>
-          </v-col>
-        </v-row>
-        <!-- Delete Account dialog -->
-        <v-row v-if="deleteAccount.dialog">
-          <v-col>
-            <v-dialog
-              v-model="deleteAccount.dialog"
-              persistent
-              max-width="400"
-            >
-              <v-card>
-                <v-card-title class="headline">
-                  {{$t("athlete_settings_card_title_delete_acc")}} ?
-                </v-card-title>
-                <v-card-text>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="deleteAccount.password"
-                        dense
-                        solo
-                        type="password"
-                        label="Enter Password"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="primary-light-1"
-                    text
-                    @click="deleteAccount.dialog = false"
-                  >
-                    {{ $t("btn_label_cancel") }}
-                  </v-btn>
-                  <v-btn
-                    color="primary-light-1"
-                    text
-                    @click="handleDeleteAccount"
-                  >
-                    {{ $t("btn_label_txt_save") }}
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+          <!-- Email Reset Dialog Start -->
+          <v-row v-if="emailReset.dialog">
+            <v-col>
+              <v-dialog
+                v-model="emailReset.dialog"
+                persistent
+                max-width="400"
+              >
+                <v-card>
+                  <v-card-title class="headline">{{$t("pwa_email")}}</v-card-title>
+                  <v-card-text>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="emailReset.email"
+                          dense
+                          hide-details
+                          solo
+                          label="Enter your new email"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="emailReset.password"
+                          :rules="rule.password"
+                          dense
+                          solo
+                          type="password"
+                          label="Enter your current password"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="primary-light-1"
+                      text
+                      @click="emailResetCancelHandle"
+                    >
+                      {{$t("btn_label_cancel")}}
+                    </v-btn>
+                    <v-btn
+                      color="primary-light-1"
+                      text
+                      @click="emailResetSaveHandle"
+                    >
+                      {{$t("btn_label_txt_save")}}
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-col>
+          </v-row>
+          <!-- Email Reset Dialog End -->
+          <!-- Password Reset Dialog Start -->
+          <v-row v-if="passwordReset.dialog">
+            <v-col>
+              <v-dialog
+                v-model="passwordReset.dialog"
+                persistent
+                max-width="400"
+              >
+                <v-card>
+                  <v-card-title class="headline">{{$t("btn_label_send")}}</v-card-title>
+                  <v-card-text>
+                    <v-row>
+                      <v-col cols="12">
+                      <p>{{$t("pwa_sure_alert")}}</p>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="primary-light-1"
+                      text
+                      @click="passwordResetCancelHandle"
+                    >
+                      {{$t("btn_label_cancel")}}
+                    </v-btn>
+                    <v-btn
+                      color="primary-light-1"
+                      text
+                      @click="passwordResetSaveHandle"
+                    >
+                      {{$t("pwa_yes_reset")}}
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-col>
+          </v-row>
+          <!-- Password Reset Dialog End -->
+          <!-- Delete Area -->
+          <v-row>
+            <v-col cols="12">
+              <v-expansion-panels focusable>
+                <v-expansion-panel>
+                  <v-expansion-panel-header class="danger-title">{{$t("pwa_danger_zone")}}
+                    <template v-slot:actions>
+                      <v-icon color="error">
+                        mdi-chevron-down
+                      </v-icon>
+                    </template>
+                  </v-expansion-panel-header>
+                  <v-expansion-panel-content class="danger-bg">
+                    <v-row justify="center" align="center mt-2">
+                      <v-col cols="12" class="d-flex justify-center">
+                        <span class="danger-body-title">{{$t("athlete_settings_card_title_delete_acc")}}</span>
+                      </v-col>
+                      <v-col cols="12" class="d-flex justify-center">
+                        <span class="danger-body-sub-title">{{$t("athlete_settings_section_delete_account_desc")}}</span>
+                      </v-col>
+                      <v-col cols="6" class="d-flex justify-center mb-10">
+                        <v-btn 
+                          color="#C7311D"
+                          class="white--text"
+                          block
+                          @click.stop="handleDeleteAccountBtnClick"
+                        >{{$t("athlete_settings_card_title_delete_acc")}}</v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </v-col>
+          </v-row>
+          <!-- Delete Account dialog -->
+          <v-row v-if="deleteAccount.dialog">
+            <v-col>
+              <v-dialog
+                v-model="deleteAccount.dialog"
+                persistent
+                max-width="400"
+              >
+                <v-card>
+                  <v-card-title class="headline">
+                    {{$t("athlete_settings_card_title_delete_acc")}} ?
+                  </v-card-title>
+                  <v-card-text>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="deleteAccount.password"
+                          dense
+                          solo
+                          type="password"
+                          label="Enter Password"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="primary-light-1"
+                      text
+                      @click="deleteAccount.dialog = false"
+                    >
+                      {{ $t("btn_label_cancel") }}
+                    </v-btn>
+                    <v-btn
+                      color="primary-light-1"
+                      text
+                      @click="handleDeleteAccount"
+                    >
+                      {{ $t("btn_label_txt_save") }}
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    <!-- </v-container> -->
   </v-container>
 </template>
 <script>
 import { endpoint, athleteSettingApi } from "../../api";
 import { pathData, settingValueData, roleData } from "@/data";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
+
 export default {
   layout: "athlete",
-  components: {},
+  components: {MobileTopNav},
   data() {
     return {
       show1: false,
@@ -405,7 +400,6 @@ export default {
     async fetchSettings() {
       let { data } = await athleteSettingApi(this.$axios).get();
       this.form.email = data.email;
-      console.log(data);
       // if (data.userSetting) {
       //   this.form.contactInformation.firstName = data.userSetting.firstName;
       //   this.form.contactInformation.lastName = data.userSetting.lastName;

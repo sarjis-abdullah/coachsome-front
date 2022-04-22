@@ -1,9 +1,18 @@
 <template>
   <div class="coach-booking-page">
     <v-container>
+      <mobile-top-nav extraClass="body-bg-secondary" actionClass="d-none" :headerText="$t('pwa_home')">
+        <template v-slot:goBack>
+          <span></span>
+        </template>
+        <template v-slot:action>
+          <span></span>
+        </template>
+      </mobile-top-nav>
       <v-row
         align="center"
         justify="center"
+        class="pt-8"
       >
         <v-col
           cols="11"
@@ -15,22 +24,6 @@
         >
       <v-row justify="center">
         <v-col cols="12">
-          <v-row class="page-top-header-row">
-            <v-col cols="12" class="justify-center page-top-header-column px-0 mx-0">
-                <v-list width="100%" color="transparent" class="py-0 my-0">
-                    <v-list-item class="pl-0 ml-0">
-                      <v-list-item-content class="py-0 my-0">
-                        <v-list-item-title class="common-top-page-title"
-                          v-text="$t('pwa_home')"
-                        ></v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                </v-list>
-                <div class="line"></div>
-            </v-col>
-          </v-row>
-
-
           <v-row align="center">
             <v-col cols="12">
               <span class="home-sub-title">
@@ -65,11 +58,13 @@
 <script>
 import SessionCard from "@/components/card/SessionCard";
 import { athleteBookingTimeApi } from "@/api";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
   layout: "athlete",
   components: {
-    SessionCard
+    SessionCard,
+    MobileTopNav
   },
   data() {
     return {

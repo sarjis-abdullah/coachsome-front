@@ -276,7 +276,7 @@
                         >
                           <template v-slot:label>
                             <img
-                              :style="{width: paymentMethod.width}"
+                              style="height: 35px; width: auto"
                               :src="
                                 require('@/assets/images/booking/' +
                                   paymentMethod.logo)
@@ -669,7 +669,7 @@
                               >
                                 <template v-slot:label>
                                   <img
-                                    :style="{width: paymentMethod.width}"
+                                    style="height: 35px; width: auto"
                                     :src="
                                       require('@/assets/images/booking/' +
                                         paymentMethod.logo)

@@ -1,361 +1,355 @@
 <template>
   <div class="review-page">
-    <v-container fluid class="page-container">
-      <v-row class="page-top-header-row body-bg d-md-none">
-        <v-col cols="12" class="justify-center page-top-header-column px-0 mx-0">
-            <v-list width="100%" color="transparent" class="py-0 my-0">
-                <v-list-item class="pl-0 ml-0">
-                  <v-btn
-                    icon
-                    @click="handleBack"
-                  >
-                    <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
-                  </v-btn>
-                  <v-list-item-content class="pl-1 py-0 my-0">
-                    <v-list-item-title
-                    class="common-top-page-title"
-                      v-text="$t('review_page_title')"
-                    ></v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-            </v-list>
-            <div class="line"></div>
-        </v-col>
-      </v-row>
+    <v-container fluid >
+      <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('review_page_title')">
+        <template v-slot:goBack>
+          <v-btn
+            icon
+            @click="handleBack"
+          >
+            <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+          </v-btn>
+        </template>
+        <template v-slot:action>
+          <span></span>
+        </template>
+      </mobile-top-nav>
 
-      <v-row class="d-none d-md-block">
-        <v-col cols="12" class="pb-0">
-          <div class="page-title">{{ $t("review_page_title") }}</div>
-        </v-col>
-        <v-col cols="12">
-          <div class="line"></div>
-        </v-col>
-      </v-row>
-
-      <v-row>
-        <v-col cols="12" md="4">
-          <div class="section-title pb-2">
-            {{ $t("coach_review_title_review_score") }}
-          </div>
-          <div class="section-description">
-            {{ $t("coach_review_description_total_review_received_txt") }}
-          </div>
-        </v-col>
-        <v-col cols="12" md="8">
-          <v-row>
-            <v-col cols="12" md="12">
-              <div class="d-flex align-center mt-2 flex-wrap">
-                <div class="total-review">
-                  {{ baseReview.totalCount }}
-                  {{ $t("coach_review_txt_reviews") }}
-                </div>
-                <div class="d-flex align-center ml-0 ml-sm-5 mt-1 mt-sm-0">
-                  <v-rating
-                    v-model="baseReview.overallStarRating"
-                    background-color="rating"
-                    color="rating"
-                    dense
-                    readonly
-                    half-increments
-                    hover
-                    size="18"
-                  ></v-rating>
-                  <span class="overall-rating ml-2">
-                    {{ baseReview.overallStarRating }}
-                  </span>
-                </div>
-              </div>
+      <span class="page-container">
+          <v-row class="d-none d-md-block">
+            <v-col cols="12" class="pb-0">
+              <div class="page-title">{{ $t("review_page_title") }}</div>
+            </v-col>
+            <v-col cols="12">
+              <div class="line"></div>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="12" md="8">
-              <div class="slider">
-                <div class="slider__title">
-                  {{ $t("coach_review_star_five") }}
-                </div>
-                <v-slider
-                  class="slider__rating"
-                  :value="baseReview.slider.fiveStar"
-                  :max="baseReview.max"
-                  :min="baseReview.min"
-                  color="accent"
-                  thumb-color="transparent"
-                  hide-details
-                  readonly
-                  track-color="white"
-                ></v-slider>
-                <div class="slider__value">
-                  ({{ baseReview.slider.fiveStar }})
-                </div>
-              </div>
-              <div class="slider">
-                <div class="slider__title">
-                  {{ $t("coach_review_star_four") }}
-                </div>
-                <v-slider
-                  class="slider__rating"
-                  :value="baseReview.slider.fourStar"
-                  :max="baseReview.max"
-                  :min="baseReview.min"
-                  color="accent"
-                  thumb-color="transparent"
-                  hide-details
-                  readonly
-                  track-color="white"
-                ></v-slider>
-                <div class="slider__value">
-                  ({{ baseReview.slider.fourStar }})
-                </div>
-              </div>
-              <div class="slider">
-                <div class="slider__title">
-                  {{ $t("coach_review_star_three") }}
-                </div>
-                <v-slider
-                  class="slider__rating"
-                  :value="baseReview.slider.threeStar"
-                  :max="baseReview.max"
-                  :min="baseReview.min"
-                  color="accent"
-                  thumb-color="transparent"
-                  hide-details
-                  readonly
-                  track-color="white"
-                ></v-slider>
-                <div class="slider__value">
-                  ({{ baseReview.slider.threeStar }})
-                </div>
-              </div>
-              <div class="slider">
-                <div class="slider__title">
-                  {{ $t("coach_review_star_two") }}
-                </div>
-                <v-slider
-                  class="slider__rating"
-                  :value="baseReview.slider.twoStar"
-                  :max="baseReview.max"
-                  :min="baseReview.min"
-                  color="accent"
-                  thumb-color="transparent"
-                  hide-details
-                  readonly
-                  track-color="white"
-                ></v-slider>
-                <div class="slider__value">
-                  ({{ baseReview.slider.twoStar }})
-                </div>
-              </div>
-              <div class="slider">
-                <div class="slider__title">
-                  {{ $t("coach_review_star_one") }}
-                </div>
-                <v-slider
-                  class="slider__rating"
-                  :value="baseReview.slider.oneStar"
-                  :max="baseReview.max"
-                  :min="baseReview.min"
-                  color="accent"
-                  thumb-color="transparent"
-                  hide-details
-                  readonly
-                  track-color="white"
-                ></v-slider>
-                <div class="slider__value">
-                  ({{ baseReview.slider.oneStar }})
-                </div>
-              </div>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
 
-      <v-row class="mt-10">
-        <v-col cols="12" md="4">
-          <div class="section-title pb-2">
-            {{ $t("coach_review_section_title_request_review") }}
-          </div>
-          <div class="section-description">
-            {{ $t("coach_review_section_description_request_review") }}
-          </div>
-        </v-col>
-        <v-col cols="12" md="8">
-          <div class="text-center">
-            <v-btn
-              block
-              depressed
-              color="accent"
-              class="text--black"
-              @click="baseReview.requestDialog = true"
-            >
-              {{ $t("coach_review_btn_label_request_a_review") }}
-            </v-btn>
-            <a :href="reviewLinkUrl" class="share-link" ref="mylink"  @click.prevent="copyUrl">
-              {{$t("pwa_share_review_link")}}
-            </a>
-          </div>
-        </v-col>
-      </v-row>
-
-      <!-- Base Review request dialog -->
-      <v-dialog
-        class="request-card"
-        v-model="baseReview.requestDialog"
-        max-width="600"
-      >
-        <v-card>
-          <v-card-title class="headline">
-            <v-spacer></v-spacer>
-            <v-btn x-small icon @click="baseReview.requestDialog = false">
-              <v-icon>
-                mdi-close
-              </v-icon>
-            </v-btn>
-          </v-card-title>
-
-          <v-card-text>
-            <v-row>
-              <v-col class="pt-0" cols="12" md="4">
-                <div class="section-title pb-2">
-                  {{ $t("coach_review_dialog_title_request_reviews") }}
-                </div>
-                <div class="section-description">
-                  {{ $t("coach_review_request_dialog_desc") }}
-                </div>
-              </v-col>
-              <v-col cols="12" md="8">
-                <div class="field-title">
-                  {{ $t("coach_review_text_email_address") }}
-                </div>
-                <v-form ref="form" v-model="baseReview.valid" lazy-validation>
-                  <div
-                    v-for="(item, i) in baseReview.elements"
-                    :key="i"
-                    class="d-flex"
-                  >
-                    <v-text-field
-                      v-model="item.email"
-                      :rules="item.emailRules"
-                      placeholder="example@email.com"
-                      solo
-                      dense
-                    ></v-text-field>
-                    <v-btn icon v-if="baseReview.elements.length > 1">
-                      <v-icon @click="handleRemoveBtnClick(i)" small
-                        >mdi-close</v-icon
-                      >
-                    </v-btn>
-                  </div>
-                  <div
-                    class="d-flex justify-space-between align-center mt-3 flex-wrap"
-                  >
-                    <v-btn
-                    block
-                      @click="handleAddMoreBtnClick"
-                      text
-                      class="text-normal"
-                    >
-                      {{ $t("coach_review_btn_label_add_more") }}
-                    </v-btn>
-                    <div class="mr-9 mt-4 mt-md-0">
-                      <v-btn
-                      block
-                        :loading="baseReview.isRequestLoading"
-                        depressed
-                        class="white--text"
-                        color="primary-light-1"
-                        @click="makeRequest"
-                      >
-                        {{ $t("coach_review_btn_label_send_req") }}
-                      </v-btn>
-                    </div>
-                  </div>
-                </v-form>
-              </v-col>
-            </v-row>
-          </v-card-text>
-          <v-card-actions> </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <!-- Base Review request dialog -->
-
-      <v-row class="mt-10">
-        <v-col cols="12" md="4">
-          <div class="section-title pb-2">
-            {{ $t("review_section_title_fa_review") }}
-          </div>
-          <div class="section-description">
-            {{ $t("review_section_desc_fa_review") }}
-          </div>
-        </v-col>
-        <v-col cols="12" md="8">
-          <v-row>
-            <v-col cols="12" md="6">
-              <client-only>
-                <v-facebook-login
-                  v-model="facebookLogin"
-                  app-id="730811284065741"
-                  version="v5.0"
-                  @sdk-init="initFB"
-                  @login="fbLogin"
-                  :login-options="{ scope: 'manage_pages,pages_show_list' }"
-                  style="width:100%"
-                >
-                  <template #login>
-                    <span>{{ $t("button_label_fa_review") }}</span>
-                  </template>
-                  <template #logout>
-                    <span>
-                      {{ $t("coach_review_btn_label_sign_out") }}
-                    </span>
-                  </template>
-                </v-facebook-login>
-              </client-only>
-            </v-col>
-          </v-row>
           <v-row>
             <v-col cols="12" md="4">
+              <div class="section-title pb-2">
+                {{ $t("coach_review_title_review_score") }}
+              </div>
               <div class="section-description">
-                {{ $t("review_helper_text_fa_btn") }}
+                {{ $t("coach_review_description_total_review_received_txt") }}
+              </div>
+            </v-col>
+            <v-col cols="12" md="8">
+              <v-row>
+                <v-col cols="12" md="12">
+                  <div class="d-flex align-center mt-2 flex-wrap">
+                    <div class="total-review">
+                      {{ baseReview.totalCount }}
+                      {{ $t("coach_review_txt_reviews") }}
+                    </div>
+                    <div class="d-flex align-center ml-0 ml-sm-5 mt-1 mt-sm-0">
+                      <v-rating
+                        v-model="baseReview.overallStarRating"
+                        background-color="rating"
+                        color="rating"
+                        dense
+                        readonly
+                        half-increments
+                        hover
+                        size="18"
+                      ></v-rating>
+                      <span class="overall-rating ml-2">
+                        {{ baseReview.overallStarRating }}
+                      </span>
+                    </div>
+                  </div>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" md="8">
+                  <div class="slider">
+                    <div class="slider__title">
+                      {{ $t("coach_review_star_five") }}
+                    </div>
+                    <v-slider
+                      class="slider__rating"
+                      :value="baseReview.slider.fiveStar"
+                      :max="baseReview.max"
+                      :min="baseReview.min"
+                      color="accent"
+                      thumb-color="transparent"
+                      hide-details
+                      readonly
+                      track-color="white"
+                    ></v-slider>
+                    <div class="slider__value">
+                      ({{ baseReview.slider.fiveStar }})
+                    </div>
+                  </div>
+                  <div class="slider">
+                    <div class="slider__title">
+                      {{ $t("coach_review_star_four") }}
+                    </div>
+                    <v-slider
+                      class="slider__rating"
+                      :value="baseReview.slider.fourStar"
+                      :max="baseReview.max"
+                      :min="baseReview.min"
+                      color="accent"
+                      thumb-color="transparent"
+                      hide-details
+                      readonly
+                      track-color="white"
+                    ></v-slider>
+                    <div class="slider__value">
+                      ({{ baseReview.slider.fourStar }})
+                    </div>
+                  </div>
+                  <div class="slider">
+                    <div class="slider__title">
+                      {{ $t("coach_review_star_three") }}
+                    </div>
+                    <v-slider
+                      class="slider__rating"
+                      :value="baseReview.slider.threeStar"
+                      :max="baseReview.max"
+                      :min="baseReview.min"
+                      color="accent"
+                      thumb-color="transparent"
+                      hide-details
+                      readonly
+                      track-color="white"
+                    ></v-slider>
+                    <div class="slider__value">
+                      ({{ baseReview.slider.threeStar }})
+                    </div>
+                  </div>
+                  <div class="slider">
+                    <div class="slider__title">
+                      {{ $t("coach_review_star_two") }}
+                    </div>
+                    <v-slider
+                      class="slider__rating"
+                      :value="baseReview.slider.twoStar"
+                      :max="baseReview.max"
+                      :min="baseReview.min"
+                      color="accent"
+                      thumb-color="transparent"
+                      hide-details
+                      readonly
+                      track-color="white"
+                    ></v-slider>
+                    <div class="slider__value">
+                      ({{ baseReview.slider.twoStar }})
+                    </div>
+                  </div>
+                  <div class="slider">
+                    <div class="slider__title">
+                      {{ $t("coach_review_star_one") }}
+                    </div>
+                    <v-slider
+                      class="slider__rating"
+                      :value="baseReview.slider.oneStar"
+                      :max="baseReview.max"
+                      :min="baseReview.min"
+                      color="accent"
+                      thumb-color="transparent"
+                      hide-details
+                      readonly
+                      track-color="white"
+                    ></v-slider>
+                    <div class="slider__value">
+                      ({{ baseReview.slider.oneStar }})
+                    </div>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+
+          <v-row class="mt-10">
+            <v-col cols="12" md="4">
+              <div class="section-title pb-2">
+                {{ $t("coach_review_section_title_request_review") }}
+              </div>
+              <div class="section-description">
+                {{ $t("coach_review_section_description_request_review") }}
+              </div>
+            </v-col>
+            <v-col cols="12" md="8">
+              <div class="text-center">
+                <v-btn
+                  block
+                  depressed
+                  color="accent"
+                  class="text--black"
+                  @click="baseReview.requestDialog = true"
+                >
+                  {{ $t("coach_review_btn_label_request_a_review") }}
+                </v-btn>
+                <a :href="reviewLinkUrl" class="share-link" ref="mylink"  @click.prevent="copyUrl">
+                  {{$t("pwa_share_review_link")}}
+                </a>
               </div>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="12" md="12">
-              <v-btn
-                large 
-                block
-                :loading="isUpdateBtnloading"
-                :disabled="!facebookLogin.connected"
-                @click="updateReview"
-                >{{ $t("btn_label_update_review") }}</v-btn
-              >
+
+          <!-- Base Review request dialog -->
+          <v-dialog
+            class="request-card"
+            v-model="baseReview.requestDialog"
+            max-width="600"
+          >
+            <v-card>
+              <v-card-title class="headline">
+                <v-spacer></v-spacer>
+                <v-btn x-small icon @click="baseReview.requestDialog = false">
+                  <v-icon>
+                    mdi-close
+                  </v-icon>
+                </v-btn>
+              </v-card-title>
+
+              <v-card-text>
+                <v-row>
+                  <v-col class="pt-0" cols="12" md="4">
+                    <div class="section-title pb-2">
+                      {{ $t("coach_review_dialog_title_request_reviews") }}
+                    </div>
+                    <div class="section-description">
+                      {{ $t("coach_review_request_dialog_desc") }}
+                    </div>
+                  </v-col>
+                  <v-col cols="12" md="8">
+                    <div class="field-title">
+                      {{ $t("coach_review_text_email_address") }}
+                    </div>
+                    <v-form ref="form" v-model="baseReview.valid" lazy-validation>
+                      <div
+                        v-for="(item, i) in baseReview.elements"
+                        :key="i"
+                        class="d-flex"
+                      >
+                        <v-text-field
+                          v-model="item.email"
+                          :rules="item.emailRules"
+                          placeholder="example@email.com"
+                          solo
+                          dense
+                        ></v-text-field>
+                        <v-btn icon v-if="baseReview.elements.length > 1">
+                          <v-icon @click="handleRemoveBtnClick(i)" small
+                            >mdi-close</v-icon
+                          >
+                        </v-btn>
+                      </div>
+                      <div
+                        class="d-flex justify-space-between align-center mt-3 flex-wrap"
+                      >
+                        <v-btn
+                        block
+                          @click="handleAddMoreBtnClick"
+                          text
+                          class="text-normal"
+                        >
+                          {{ $t("coach_review_btn_label_add_more") }}
+                        </v-btn>
+                        <div class="mr-9 mt-4 mt-md-0">
+                          <v-btn
+                          block
+                            :loading="baseReview.isRequestLoading"
+                            depressed
+                            class="white--text"
+                            color="primary-light-1"
+                            @click="makeRequest"
+                          >
+                            {{ $t("coach_review_btn_label_send_req") }}
+                          </v-btn>
+                        </div>
+                      </div>
+                    </v-form>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+              <v-card-actions> </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <!-- Base Review request dialog -->
+
+          <v-row class="mt-10">
+            <v-col cols="12" md="4">
+              <div class="section-title pb-2">
+                {{ $t("review_section_title_fa_review") }}
+              </div>
+              <div class="section-description">
+                {{ $t("review_section_desc_fa_review") }}
+              </div>
+            </v-col>
+            <v-col cols="12" md="8">
+              <v-row>
+                <v-col cols="12" md="6">
+                  <client-only>
+                    <v-facebook-login
+                      v-model="facebookLogin"
+                      app-id="730811284065741"
+                      version="v5.0"
+                      @sdk-init="initFB"
+                      @login="fbLogin"
+                      :login-options="{ scope: 'manage_pages,pages_show_list' }"
+                      style="width:100%"
+                    >
+                      <template #login>
+                        <span>{{ $t("button_label_fa_review") }}</span>
+                      </template>
+                      <template #logout>
+                        <span>
+                          {{ $t("coach_review_btn_label_sign_out") }}
+                        </span>
+                      </template>
+                    </v-facebook-login>
+                  </client-only>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" md="4">
+                  <div class="section-description">
+                    {{ $t("review_helper_text_fa_btn") }}
+                  </div>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" md="12">
+                  <v-btn
+                    large 
+                    block
+                    :loading="isUpdateBtnloading"
+                    :disabled="!facebookLogin.connected"
+                    @click="updateReview"
+                    >{{ $t("btn_label_update_review") }}</v-btn
+                  >
+                </v-col>
+              </v-row>
             </v-col>
           </v-row>
-        </v-col>
-      </v-row>
 
-      <v-row>
-        <v-col cols="12" class="pb-0">
-          <div class="page-title">{{ $t("review_title_imported_review") }}</div>
-        </v-col>
-      </v-row>
+          <v-row>
+            <v-col cols="12" class="pb-0">
+              <div class="page-title">{{ $t("review_title_imported_review") }}</div>
+            </v-col>
+          </v-row>
 
-      <v-row>
-        <v-col cols="12">
-          <div class="line"></div>
-        </v-col>
-      </v-row>
+          <v-row>
+            <v-col cols="12">
+              <div class="line"></div>
+            </v-col>
+          </v-row>
 
-      <v-row>
-        <v-col cols="12" md="4" v-for="(reviewer, i) in reviewers" :key="i">
-          <review-card v-bind="reviewer"></review-card>
-        </v-col>
-      </v-row>
-      <!-- <v-row class="d-sm-flex d-xs-flex d-lg-none">
-        <v-col cols="12" class="mx-0 px-0">
-          <client-back-footer class="px-0 py-0" />
-        </v-col>
-      </v-row> -->
+          <v-row>
+            <v-col cols="12" md="4" v-for="(reviewer, i) in reviewers" :key="i">
+              <review-card v-bind="reviewer"></review-card>
+            </v-col>
+          </v-row>
+          <!-- <v-row class="d-sm-flex d-xs-flex d-lg-none">
+            <v-col cols="12" class="mx-0 px-0">
+              <client-back-footer class="px-0 py-0" />
+            </v-col>
+          </v-row> -->
+        </span>
     </v-container>
   </div>
 </template>
@@ -367,13 +361,15 @@ import ReviewCard from "@/components/card/ReviewCard";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import { reviewApi, baseReviewApi } from "@/api";
 import { pathData } from "@/data";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
   layout: "coach",
   components: {
     VFacebookLogin,
     ReviewCard,
-    ClientBackFooter
+    ClientBackFooter,
+    MobileTopNav
   },
   data() {
     return {
