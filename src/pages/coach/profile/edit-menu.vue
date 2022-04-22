@@ -1,6 +1,19 @@
 <template>
 
-<v-container fluid grid-list-md text-xs-center class="d-flex">
+<v-container fluid>
+    <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_edit_profile_title')">
+      <template v-slot:goBack>
+        <v-btn
+          icon
+          @click="handleBackBtnClick"
+        >
+          <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+        </v-btn>
+      </template>
+      <template v-slot:action>
+        <span></span>
+      </template>
+    </mobile-top-nav>
     <v-row
       justify="center"
     >
@@ -11,30 +24,6 @@
         lg="4"
         xs="11"
       >
-        <v-row class="page-top-header-row body-bg">
-            <v-col cols="12" class="justify-center py-0 my-0 page-top-header-column px-0 mx-0">
-                <v-list width="100%" color="transparent">
-                    <v-list-item class="pl-0 ml-0">
-                      <v-btn
-                        icon
-                        @click="handleBackBtnClick"
-                      >
-                        <v-icon class="common-top-back-icon" color="#15577C">mdi-chevron-left</v-icon>
-                      </v-btn>
-                      <v-list-item-content class="pl-1 py-0 my-0">
-                        <v-list-item-title
-                        class="common-top-page-title"
-                          v-text="$t('pwa_edit_profile_title')"
-                        ></v-list-item-title>
-                      </v-list-item-content>
-                      <!-- <v-list-item-action>
-                        save
-                      </v-list-item-action> -->
-                    </v-list-item>
-                </v-list>
-                <div class="line"></div>
-            </v-col>
-        </v-row>
         <v-row>
           <v-col cols="12">
             <v-list class="body-bg">
@@ -153,8 +142,11 @@
 </template>
 <script>
 import { pathData } from "@/data";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
+
 export default ({
   layout: "coach",
+  components: {MobileTopNav},
   data(){
     return {
       editProfile: {

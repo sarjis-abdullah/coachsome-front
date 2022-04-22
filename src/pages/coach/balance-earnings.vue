@@ -1,6 +1,19 @@
 <template>
   <div class="balance-earnings-page">
     <v-container>
+      <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('balance_earning_page_title')">
+        <template v-slot:goBack>
+          <v-btn
+            icon
+            @click="handleBack"
+          >
+            <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+          </v-btn>
+        </template>
+        <template v-slot:action>
+          <span></span>
+        </template>
+      </mobile-top-nav>
       <v-row align="center" class="d-none d-md-block">
         <v-col cols="12" md="6" class="pb-0">
           <div class="page-title">{{ $t("balance_earning_page_title") }}</div>
@@ -35,30 +48,6 @@
           <div class="line"></div>
         </v-col>
       </v-row>
-
-      <v-row class="page-top-header-row d-md-none pt-0 mt-0" style="background: #ecf2f7">
-        <v-col cols="12" class="justify-center page-top-header-column pt-0 mt-0">
-            <v-list width="100%" color="transparent" class="py-0 my-0">
-                <v-list-item class="pl-0 ml-0">
-                  <v-btn
-                    icon
-                    @click="handleBack"
-                  >
-                    <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
-                  </v-btn>
-                  <v-list-item-content class="pl-1 py-0 my-0">
-                    <v-list-item-title
-                    class="common-top-page-title"
-                      v-text="$t('balance_earning_page_title')"
-                    ></v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-            </v-list>
-            <div class="line"></div>
-        </v-col>
-      </v-row>
-
-
 
 
       <v-row class="d-none d-md-block">
@@ -163,7 +152,7 @@
         <v-col cols="12" md="4"> </v-col>
       </v-row>
 
-      <v-row class="d-flex justify-center px-0 mx-0 d-md-none">
+      <v-row class="d-flex justify-center px-0 mx-0 pt-5 d-md-none">
         <v-col cols="12" class="d-flex justify-end" style="background: #cad5e1; border-radius: 8px;">
           <div class="filter-content ml-2">Curves ({{ curve }})</div>
           <div class="filter-content">
@@ -749,12 +738,14 @@ import { pathData } from "@/data";
 import moment from "moment";
 import LineChart from "@/components/charts/LineChart";
 import RadarChart from "@/components/charts/RadarChart";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
   layout: "coach-no-drawer",
   components: {
     LineChart,
-    RadarChart
+    RadarChart,
+    MobileTopNav
   },
   data() {
     return {

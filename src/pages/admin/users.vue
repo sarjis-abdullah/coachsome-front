@@ -1,26 +1,20 @@
 <template>
   <v-container fluid>
+    <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_user_list')">
+      <template v-slot:goBack>
+        <v-btn
+          icon
+          @click="handleBack"
+        >
+          <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+        </v-btn>
+      </template>
+      <template v-slot:action>
+        <span></span>
+      </template>
+    </mobile-top-nav>
 
-    <v-row class="page-top-header-row d-md-none" style="background: #ecf2f7">
-      <v-col cols="12" class="justify-center page-top-header-column px-0 mx-0">
-          <v-list width="100%" color="transparent" class="py-0 my-0">
-              <v-list-item class="pl-0 ml-0">
-                <v-btn
-                  icon
-                  @click="handleBack"
-                >
-                  <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
-                </v-btn>
-                <v-list-item-content class="pl-1 py-0 my-0">
-                  <v-list-item-title class="common-top-page-title"
-                    v-text="$t('pwa_user_list')"
-                  ></v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-          </v-list>
-          <div class="line"></div>
-      </v-col>
-    </v-row>
+
     <v-row class="d-none d-md-block">
       <v-col cols="12" class="pb-0">
         <div class="page-title">{{$t('pwa_user_list')}}</div>
@@ -469,11 +463,13 @@ import { imageService } from "@/services";
 import { adminUserApi, adminImpersonateApi } from "@/api";
 import { pathData } from "@/data";
 import VuePhoneNumberInput from "vue-phone-number-input";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
   layout: "admin",
   components: {
-    VuePhoneNumberInput
+    VuePhoneNumberInput,
+    MobileTopNav
   },
   data() {
     return {

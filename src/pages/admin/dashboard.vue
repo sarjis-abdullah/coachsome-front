@@ -1,125 +1,118 @@
 <template>
-  <v-container fluid class="page-container admin-dashboard">
-    <v-row class="d-none d-md-block">
-      <v-col cols="12" class="pb-0">
-        <div class="page-title">{{$t("text_dashboard")}}</div>
-      </v-col>
-    </v-row>
-    <v-row class="page-top-header-row d-md-none pt-0 mt-0" style="background: #ecf2f7">
-      <v-col cols="12" class="justify-center page-top-header-column pt-0 mt-0">
-           <p class="common-top-page-title text-center px-5 pb-0 mb-0">{{$t("text_dashboard")}}</p>
-          <div class="line"></div>
-      </v-col>
-    </v-row>
+  <v-container fluid >
+    <mobile-top-nav extraClass="body-bg-secondary" actionClass="d-none" :headerText="$t('text_dashboard')">
+      <template v-slot:goBack>
+        <span></span>
+      </template>
+      <template v-slot:action>
+        <span></span>
+      </template>
+    </mobile-top-nav>
 
-    <v-row class="d-none d-md-block">
-      <v-col cols="12">
-        <div class="line"></div>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col cols="12">
-        <div class="balance-card-filter d-flex align-center">
-          <div class="filter-text">{{$t("text_show")}}</div>
-          <div class="filter-content ml-2">
-            <span v-if="startDate">
-              {{ startDate.format("ll") }} - {{ endDate.format("ll") }}
-            </span>
-          </div>
-          <div class="filter-content">
-            <v-menu
-              v-model="filterMenue"
-              bottom
-              offset-y
-              :close-on-content-click="false"
-              allow-overflow
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  text
-                  x-small
-                  v-bind="attrs"
-                  v-on="on"
-                  class="primary-light-1--text"
-                >
-                  <v-icon dark>keyboard_arrow_down</v-icon>
-                </v-btn>
-              </template>
-              <v-card>
-                <v-card-text>
-                  <div class="d-flex">
-                    <div>
-                      <div class="caption">Start Date</div>
-                      <a-date-picker
-                        format="DD-MM-YYYY"
-                        :value="filterStartDate"
-                        @change="handleChangeFilterStartDate"
-                        placeholder="Start date"
-                      />
-                    </div>
-                    <div>
-                      <div class="caption">End Date</div>
-                      <a-date-picker
-                        format="DD-MM-YYYY"
-                        :value="filterEndDate"
-                        @change="handleChangeFilterEndDate"
-                        placeholder="End date"
-                      />
-                    </div>
-                  </div>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
+    <span class="page-container admin-dashboard">
+      <v-row :class="{'pt-5' : $vuetify.breakpoint.xsOnly}">
+        <v-col cols="12">
+          <div class="balance-card-filter d-flex align-center">
+            <div class="filter-text">{{$t("text_show")}}</div>
+            <div class="filter-content ml-2">
+              <span v-if="startDate">
+                {{ startDate.format("ll") }} - {{ endDate.format("ll") }}
+              </span>
+            </div>
+            <div class="filter-content">
+              <v-menu
+                v-model="filterMenue"
+                bottom
+                offset-y
+                :close-on-content-click="false"
+                allow-overflow
+              >
+                <template v-slot:activator="{ on, attrs }">
                   <v-btn
                     text
-                    color="primary-light-1"
-                    small
-                    @click="handleFilterMenuClick"
-                    >Apply</v-btn
+                    x-small
+                    v-bind="attrs"
+                    v-on="on"
+                    class="primary-light-1--text"
                   >
-                </v-card-actions>
-              </v-card>
-            </v-menu>
-          </div>
-        </div>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" md="8">
-        <v-row>
-          <v-col cols="12" md="4" v-for="(item, i) in box" :key="i">
-            <div class="box" tabindex="-1" @click="boxClickHandle(item)">
-              <div class="box__title">{{ $t('text_'+item.key) }}</div>
-              <div class="box__description">
-                <span v-if="item.amountType == 'money'">
-                  {{ currencyService.toCurrencyByBase(item.amount, true) }}
-                  <span class="currency">
-                    {{ selectedCurrency }}
-                  </span>
-                </span>
-                <span v-else>
-                  {{ item.amount }}
-                </span>
-              </div>
+                    <v-icon dark>keyboard_arrow_down</v-icon>
+                  </v-btn>
+                </template>
+                <v-card>
+                  <v-card-text>
+                    <div class="d-flex">
+                      <div>
+                        <div class="caption">Start Date</div>
+                        <a-date-picker
+                          format="DD-MM-YYYY"
+                          :value="filterStartDate"
+                          @change="handleChangeFilterStartDate"
+                          placeholder="Start date"
+                        />
+                      </div>
+                      <div>
+                        <div class="caption">End Date</div>
+                        <a-date-picker
+                          format="DD-MM-YYYY"
+                          :value="filterEndDate"
+                          @change="handleChangeFilterEndDate"
+                          placeholder="End date"
+                        />
+                      </div>
+                    </div>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      text
+                      color="primary-light-1"
+                      small
+                      @click="handleFilterMenuClick"
+                      >Apply</v-btn
+                    >
+                  </v-card-actions>
+                </v-card>
+              </v-menu>
             </div>
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-col cols="12" md="4">
-        <v-card class="mt-3" flat :loading="loading">
-          <v-card-title>
-            {{ $t('text_'+selectedBox.key) }}
-          </v-card-title>
-          <v-divider></v-divider>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" md="8">
+          <v-row>
+            <v-col cols="12" md="4" v-for="(item, i) in box" :key="i">
+              <div class="box" tabindex="-1" @click="boxClickHandle(item)">
+                <div class="box__title">{{ $t('text_'+item.key) }}</div>
+                <div class="box__description">
+                  <span v-if="item.amountType == 'money'">
+                    {{ currencyService.toCurrencyByBase(item.amount, true) }}
+                    <span class="currency">
+                      {{ selectedCurrency }}
+                    </span>
+                  </span>
+                  <span v-else>
+                    {{ item.amount }}
+                  </span>
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-card class="mt-3" flat :loading="loading">
+            <v-card-title>
+              {{ $t('text_'+selectedBox.key) }}
+            </v-card-title>
+            <v-divider></v-divider>
 
-          <v-card-text>
-            <line-chart :chart-data="datacollection"></line-chart>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-    <dialog-loading :show="loading"></dialog-loading>
+            <v-card-text>
+              <line-chart :chart-data="datacollection"></line-chart>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+      <dialog-loading :show="loading"></dialog-loading>
+    </span>
   </v-container>
 </template>
 
@@ -129,12 +122,14 @@ import { currencyService } from "@/services";
 import moment from "moment";
 import DialogLoading from "@/components/loading/DialogLoading";
 import { adminDashboardApi } from "@/api";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
   layout:"admin",
   components: {
     LineChart,
-    DialogLoading
+    DialogLoading,
+    MobileTopNav
   },
     head() {
     return {

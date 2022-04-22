@@ -1,26 +1,18 @@
 <template>
   <v-container>
-
-    <v-row class="page-top-header-row d-md-none" style="background: #ecf2f7">
-      <v-col cols="12" class="justify-center page-top-header-column px-0 mx-0">
-          <v-list width="100%" color="transparent" class="py-0 my-0">
-              <v-list-item class="pl-0 ml-0">
-                <v-btn
-                  icon
-                  @click="handleBack"
-                >
-                  <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
-                </v-btn>
-                <v-list-item-content class="pl-1 py-0 my-0">
-                  <v-list-item-title class="common-top-page-title"
-                    v-text="$t('pwa_log')"
-                  ></v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-          </v-list>
-          <div class="line"></div>
-      </v-col>
-    </v-row>
+    <mobile-top-nav  extraClass="body-bg-secondary" :headerText="$t('pwa_log')">
+      <template v-slot:goBack>
+        <v-btn
+          icon
+          @click="handleBack"
+        >
+          <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+        </v-btn>
+      </template>
+      <template v-slot:action>
+        <span></span>
+      </template>
+    </mobile-top-nav>
     <v-row class="d-none d-md-block">
       <v-col cols="12" class="pb-0">
         <div class="page-title">{{$t('pwa_log')}}</div>
@@ -33,7 +25,7 @@
       </v-col>
     </v-row>
 
-      <v-col cols="12">
+      <v-col cols="12" :class="{'pt-5' : $vuetify.breakpoint.xsOnly}">
         <div>
           <v-card>
             <v-card-title>
@@ -84,8 +76,13 @@
 import { adminUserLogApi } from "@/api";
 import { pathData } from "@/data";
 import { imageService } from "@/services";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
+
 export default {
   layout:"admin",
+  components:{
+    MobileTopNav
+  },
   data() {
     return {
       search: "",

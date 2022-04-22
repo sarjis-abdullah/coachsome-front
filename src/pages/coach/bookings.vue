@@ -1,23 +1,16 @@
 <template>
   <div class="coach-booking-page">
     <v-container>
+      <mobile-top-nav extraClass="body-bg-secondary" actionClass="d-none" :headerText="$t('app_bar_dashboard_booking')">
+        <template v-slot:goBack>
+          <span></span>
+        </template>
+        <template v-slot:action>
+          <span></span>
+        </template>
+      </mobile-top-nav>
       <v-row justify="center">
         <v-col cols="12" md="8">
-          <v-row class="page-top-header-row d-md-none px-3" style="background: #ecf2f7">
-            <v-col cols="12" class="justify-center page-top-header-column px-0 mx-0">
-                <v-list width="100%" color="transparent" class="py-0 my-0">
-                    <v-list-item class="pl-0 ml-0">
-                      <v-list-item-content class="py-0 my-0">
-                        <v-list-item-title class="common-top-page-title"
-                          v-text="$t('app_bar_dashboard_booking')"
-                        ></v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                </v-list>
-                <div class="line"></div>
-            </v-col>
-          </v-row>
-          
           <v-row align="center d-none d-md-block">
             <v-col cols="12" md="9">
               <span class="section-title">
@@ -150,11 +143,13 @@
 <script>
 import PurchasedCard from "@/components/card/PurchasedCard";
 import { coachBookingTimeApi, coachBookingApi } from "@/api";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
   layout: "coach-no-drawer",
   components: {
-    PurchasedCard
+    PurchasedCard,
+    MobileTopNav
   },
   data() {
     return {

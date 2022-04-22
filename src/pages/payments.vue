@@ -1,156 +1,149 @@
 <template>
   <div class="payments">
-    <v-container fluid class=" view-profile__wrapper" :class="{'page-container' : !$vuetify.breakpoint.xsOnly}">
-      <v-row class="d-none d-md-block"> 
-        <v-col cols="12" class="pb-0">
-          <div class="page-title">
-            {{ $t("page_title_payments") }}
-          </div>
-        </v-col>
-      </v-row>
-
-      <v-row class="d-none d-md-block">
-        <v-col cols="12">
-          <div class="line"></div>
-        </v-col>
-      </v-row>
-
-      <v-row class="page-top-header-row d-md-none pt-0 mt-0" style="background: #ecf2f7">
-        <v-col cols="12" class="justify-center page-top-header-column pt-0 mt-0">
-            <v-list width="100%" color="transparent" class="py-0 my-0">
-                <v-list-item class="pl-0 ml-0">
-                  <v-btn
-                    icon
-                    @click="handleBack"
-                  >
-                    <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
-                  </v-btn>
-                  <v-list-item-content class="pl-1 py-0 my-0">
-                    <v-list-item-title
-                      class="common-top-page-title"
-                      v-text="$t('page_title_payments')"
-                    ></v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-            </v-list>
-            <div class="line"></div>
-        </v-col>
-      </v-row>
-
-      <v-row class="mt-10">
-        <v-col cols="12" md="4">
-          <div class="section-title pb-2 d-none d-md-block">
-            {{ $t("payment_section_title_payment_methods") }}
-          </div>
-          <div class="section-description d-none d-md-block">
-            {{ $t("payment_section_payment_method_desc") }}
-          </div>
-          <div class="section-title payment-section-title pb-2 d-flex justify-space-between d-md-none">
-            {{ $t("payment_section_title_payment_methods") }}
-            <v-btn
-              v-if="!paymentCard"
-              class="text-normal"
-              text
-              small
-              :loading="loadingPaymentCard"
-              @click="handlePaymentCardAddBtnClick"
-            >
-              {{ $t("profile_add_more_btn_label") }}
-            </v-btn>
-          </div>
-        </v-col>
-        <v-col cols="12" md="6">
-          <div v-if="loaderInitial">
-            <v-skeleton-loader
-              type="list-item-three-line, card-heading"
-            ></v-skeleton-loader>
-          </div>
-          <div v-else>
-            <payment-card v-if="paymentCard" :payment-card="paymentCard">
-              <template v-slot:top-right>
-                <div>
-                  <v-btn
-                    :loading="loadingPaymentCardRemove"
-                    text
-                    color="#C7311D"
-                    class="px-0 py-0"
-                    height="0"
-                    small
-                    @click="handleRemoveBtnClick"
-                  >
-                    {{ $t("payment_label_remove_card") }}
-                  </v-btn>
-                </div>
-              </template>
-            </payment-card>
-            <div v-else>
-              <v-alert
-                icon="mdi-shield-lock-outline"
-                prominent
-                text
-                type="info"
-              >
-                {{ $t("payment_alert_not_add_card") }}
-              </v-alert>
+    <v-container fluid >
+      <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('page_title_payments')">
+        <template v-slot:goBack>
+          <v-btn
+            icon
+            @click="handleBack"
+          >
+            <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+          </v-btn>
+        </template>
+        <template v-slot:action>
+          <span></span>
+        </template>
+      </mobile-top-nav>
+      <span class=" view-profile__wrapper" :class="{'page-container' : !$vuetify.breakpoint.xsOnly}">
+        <v-row class="d-none d-md-block"> 
+          <v-col cols="12" class="pb-0">
+            <div class="page-title">
+              {{ $t("page_title_payments") }}
             </div>
+          </v-col>
+        </v-row>
 
+        <v-row class="d-none d-md-block">
+          <v-col cols="12">
+            <div class="line"></div>
+          </v-col>
+        </v-row>
+
+        <v-row class="mt-10">
+          <v-col cols="12" md="4">
+            <div class="section-title pb-2 d-none d-md-block">
+              {{ $t("payment_section_title_payment_methods") }}
+            </div>
+            <div class="section-description d-none d-md-block">
+              {{ $t("payment_section_payment_method_desc") }}
+            </div>
+            <div class="section-title payment-section-title pb-2 d-flex justify-space-between d-md-none">
+              {{ $t("payment_section_title_payment_methods") }}
+              <v-btn
+                v-if="!paymentCard"
+                class="text-normal"
+                text
+                small
+                :loading="loadingPaymentCard"
+                @click="handlePaymentCardAddBtnClick"
+              >
+                {{ $t("profile_add_more_btn_label") }}
+              </v-btn>
+            </div>
+          </v-col>
+          <v-col cols="12" md="6">
+            <div v-if="loaderInitial">
+              <v-skeleton-loader
+                type="list-item-three-line, card-heading"
+              ></v-skeleton-loader>
+            </div>
+            <div v-else>
+              <payment-card v-if="paymentCard" :payment-card="paymentCard">
+                <template v-slot:top-right>
+                  <div>
+                    <v-btn
+                      :loading="loadingPaymentCardRemove"
+                      text
+                      color="#C7311D"
+                      class="px-0 py-0"
+                      height="0"
+                      small
+                      @click="handleRemoveBtnClick"
+                    >
+                      {{ $t("payment_label_remove_card") }}
+                    </v-btn>
+                  </div>
+                </template>
+              </payment-card>
+              <div v-else>
+                <v-alert
+                  icon="mdi-shield-lock-outline"
+                  prominent
+                  text
+                  type="info"
+                >
+                  {{ $t("payment_alert_not_add_card") }}
+                </v-alert>
+              </div>
+
+              <v-btn
+                v-if="!paymentCard"
+                class="text-normal mt-5 d-none d-md-block"
+                x-large
+                color="primary-light-1"
+                depressed
+                :loading="loadingPaymentCard"
+                @click="handlePaymentCardAddBtnClick"
+              >
+                <v-icon class="mr-3">mdi-plus-circle</v-icon>
+                {{ $t("payment_label_add_payment_method") }}
+              </v-btn>
+            </div>
+          </v-col>
+        </v-row>
+
+        <v-row class="mt-10">
+          <v-col cols="12" md="4">
+            <div class="section-title pb-2 d-none d-md-block">
+              {{ $t("payment_section_title_coachsome_gift_card") }}
+            </div>
+            <div class="section-description d-none d-md-block">
+              {{ $t("payments_section_desc_gift_card_desc") }}
+            </div>
+            <div class="section-title payment-section-title pb-2 d-md-none">
+              {{ $t("payment_section_title_coachsome_gift_card") }}
+              <v-btn class="text-normal" color="primary" dark text small @click="dialog = true">
+                {{ $t("profile_add_more_btn_label") }}
+              </v-btn>
+            </div>
+          </v-col>
+          <v-col cols="12" md="8" :class="{'text-center' : $vuetify.breakpoint.xsOnly}">
+            <div class="balance-title">
+              {{ $t("payments_text_curr_credit_balance") }}
+            </div>
+            <div class="balance mt-2 mb-3 text-uppercase">
+              {{ currencyService.toCurrencyByBase(balance) }}
+            </div>
             <v-btn
-              v-if="!paymentCard"
-              class="text-normal mt-5 d-none d-md-block"
+              class="text-normal d-none d-md-block"
               x-large
               color="primary-light-1"
+              :loading="loading"
               depressed
-              :loading="loadingPaymentCard"
-              @click="handlePaymentCardAddBtnClick"
+              @click="dialog = true"
             >
               <v-icon class="mr-3">mdi-plus-circle</v-icon>
-              {{ $t("payment_label_add_payment_method") }}
+              {{ $t("payments_btn_label_add_gift_card") }}
             </v-btn>
-          </div>
-        </v-col>
-      </v-row>
-
-      <v-row class="mt-10">
-        <v-col cols="12" md="4">
-          <div class="section-title pb-2 d-none d-md-block">
-            {{ $t("payment_section_title_coachsome_gift_card") }}
-          </div>
-          <div class="section-description d-none d-md-block">
-            {{ $t("payments_section_desc_gift_card_desc") }}
-          </div>
-          <div class="section-title payment-section-title pb-2 d-md-none">
-            {{ $t("payment_section_title_coachsome_gift_card") }}
-            <v-btn class="text-normal" color="primary" dark text small @click="dialog = true">
-              {{ $t("profile_add_more_btn_label") }}
-            </v-btn>
-          </div>
-        </v-col>
-        <v-col cols="12" md="8" :class="{'text-center' : $vuetify.breakpoint.xsOnly}">
-          <div class="balance-title">
-            {{ $t("payments_text_curr_credit_balance") }}
-          </div>
-          <div class="balance mt-2 mb-3 text-uppercase">
-            {{ currencyService.toCurrencyByBase(balance) }}
-          </div>
-          <v-btn
-            class="text-normal d-none d-md-block"
-            x-large
-            color="primary-light-1"
-            :loading="loading"
-            depressed
-            @click="dialog = true"
-          >
-            <v-icon class="mr-3">mdi-plus-circle</v-icon>
-            {{ $t("payments_btn_label_add_gift_card") }}
-          </v-btn>
-        </v-col>
-      </v-row>
-      <v-dialog v-model="dialog" width="500">
-        <Reedem
-          @close="dialog = false"
-          @update:balance="handleUpdatedBalance"
-        />
-      </v-dialog>
+          </v-col>
+        </v-row>
+        <v-dialog v-model="dialog" width="500">
+          <Reedem
+            @close="dialog = false"
+            @update:balance="handleUpdatedBalance"
+          />
+        </v-dialog>
+      </span>
     </v-container>
   </div>
 </template>
@@ -160,13 +153,15 @@ import Reedem from "@/components/artifact/global/pages/payments/Reedem.vue";
 import { currencyService } from "@/services";
 import { endpoint } from "../api";
 import { pathData } from "@/data";
-
 import PaymentCard from "@/components/card/PaymentCard.vue";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
+
 export default {
   layout: "common",
   components: {
     Reedem,
-    PaymentCard
+    PaymentCard,
+    MobileTopNav
   },
   middleware: ["auth"],
   data() {

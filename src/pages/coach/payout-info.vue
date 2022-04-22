@@ -1,6 +1,19 @@
 <template>
   <div class="setting-page">
     <v-container>
+      <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('payout_info_page_title')">
+        <template v-slot:goBack>
+          <v-btn
+            icon
+            @click="handleBack"
+          >
+            <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+          </v-btn>
+        </template>
+        <template v-slot:action>
+          <span></span>
+        </template>
+      </mobile-top-nav>
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-row>
           <v-col offset-md="2">
@@ -17,29 +30,6 @@
                 <div class="line"></div>
               </v-col>
             </v-row>
-
-            <v-row class="page-top-header-row d-md-none pt-0 mt-0" style="background: #ecf2f7">
-              <v-col cols="12" class="justify-center page-top-header-column pt-0 mt-0">
-                  <v-list width="100%" color="transparent" class="py-0 my-0">
-                      <v-list-item class="pl-0 ml-0">
-                        <v-btn
-                          icon
-                          @click="handleBack"
-                        >
-                          <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
-                        </v-btn>
-                        <v-list-item-content class="pl-1 py-0 my-0">
-                          <v-list-item-title
-                          class="common-top-page-title"
-                            v-text="$t('balance_earning_page_title')"
-                          ></v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                  </v-list>
-                  <div class="line"></div>
-              </v-col>
-            </v-row>
-
             <v-row class="invoice-identity">
               <v-col cols="12" md="4">
                 <div class="section-title d-none d-md-block">
@@ -417,10 +407,11 @@
 <script>
 import { countryApi, coachPayoutInformationApi } from "@/api";
 import { pathData } from "@/data";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
   layout: "coach-no-drawer",
-  components: {},
+  components: {MobileTopNav},
   data() {
     return {
       valid: false,

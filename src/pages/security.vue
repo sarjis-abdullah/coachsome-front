@@ -1,6 +1,20 @@
 <template>
 
-    <v-container fluid grid-list-md text-xs-center class="d-flex">
+    <v-container fluid >
+        <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('athlete_settings_tab_security')">
+            <template v-slot:goBack>
+                <v-btn
+                icon
+                @click="handleBack"
+                >
+                <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+                </v-btn>
+            </template>
+            <template v-slot:action>
+                <span></span>
+            </template>
+        </mobile-top-nav>
+
         <v-row
         justify="center"
         >
@@ -11,26 +25,7 @@
             lg="4"
             xs="11"
         >
-        <v-row class="page-top-header-row d-md-none pt-0 mt-0" style="background: #ecf2f7">
-            <v-col cols="12" class="justify-center page-top-header-column pt-0 mt-0">
-                <v-list width="100%" color="transparent" class="py-0 my-0">
-                    <v-list-item class="pl-0 ml-0">
-                        <v-btn
-                        icon
-                        @click="handleBack"
-                        >
-                        <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
-                        </v-btn>
-                        <v-list-item-content class="pl-1 py-0 my-0">
-                        <v-list-item-title class="common-top-page-title"
-                            v-text="$t('athlete_settings_tab_security')"
-                        ></v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-list>
-                <div class="line"></div>
-            </v-col>
-            </v-row>
+
 
             <div class="security-title mt-5">
                 {{$t("text_verify_profile")}}
@@ -164,8 +159,11 @@
 <script>
 import { endpoint } from "../api";
 import { pathData, settingValueData, roleData } from "@/data";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
+
 export default ({
     layout: "common",
+    components: {MobileTopNav},
     data(){
         return {
             settingValueData,
