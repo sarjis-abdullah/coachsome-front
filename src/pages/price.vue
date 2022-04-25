@@ -55,15 +55,27 @@ export default {
     };
   },
   methods: {
-    handleClick(e) {
+handleClick(e) {
       const elt = e.target.closest(".btn-pricing");
-      if (elt) {
-        this.$store.dispatch("activeBottomNav", 4);
-        if(!this.$vuetify.breakpoint.xsOnly){
-            this.$store.dispatch("toggleDialog");
+      if(this.$auth.loggedIn){
+        if(this.$auth.loggedIn && this.$auth.hasRole(["superadmin", "admin", "staff"])){
+            this.$router.push(this.localePath(pathData.admin.dashboard))
+        }else if(this.$auth.loggedIn && this.$auth.hasRole(["coach"])){
+            this.$router.push(this.localePath(pathData.coach.home))
+        }else if(this.$auth.loggedIn && this.$auth.hasRole(["coach"])){
+            this.$router.push(this.localePath(pathData.coach.home))
         }else{
-          if(this.$route.path != pathData.pages.login){
-            this.$router.push(this.localePath(pathData.pages.login))
+            this.$router.push(this.localePath(pathData.pages.home))
+        }
+      }else{
+        if (elt) {
+          this.$store.dispatch("activeBottomNav", 4);
+          if(!this.$vuetify.breakpoint.xsOnly){
+              this.$store.dispatch("toggleDialog");
+          }else{
+            if(this.$route.path != pathData.pages.login){
+              this.$router.push(this.localePath(pathData.pages.login))
+            }
           }
         }
       }
