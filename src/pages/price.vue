@@ -12,6 +12,7 @@
 
 <script>
 import { pageBuilderApi } from "@/api";
+import {pathData} from '@/data'
 
 export default {
   head() {
@@ -57,7 +58,14 @@ export default {
     handleClick(e) {
       const elt = e.target.closest(".btn-pricing");
       if (elt) {
-        alert("Got a click on .play-video or a child element")
+        this.$store.dispatch("activeBottomNav", 4);
+        if(!this.$vuetify.breakpoint.xsOnly){
+            this.$store.dispatch("toggleDialog");
+        }else{
+          if(this.$route.path != pathData.pages.login){
+            this.$router.push(this.localePath(pathData.pages.login))
+          }
+        }
       }
     }
   }
