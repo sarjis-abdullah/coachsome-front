@@ -9,6 +9,10 @@
   background: $primary;
 }
 
+.body-bg-secondary{
+  background: #ecf2f7!important
+}
+
 .body-bg {
   background: $body-bg;
 }
@@ -232,3 +236,82 @@
   padding-right: 40px;
 }
 /* Page */
+.common-top-page-title{
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 27px!important;
+  text-align: center;
+  text-transform: capitalize;
+  color: #49556A;
+}
+.common-top-back-icon{
+  color: #49556A!important;
+  font-size: 30px!important;
+  line-height: 27px!important;
+}
+
+.common-top-add-icon{
+  color: #49556A!important;
+  font-size: 30px!important;
+  line-height: 27px!important;
+}
+
+.common-top-save-button{
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 17px!important;
+  line-height: 27px!important;
+  text-align: right;
+  text-decoration-line: underline;
+  text-transform: capitalize;
+  color: #49556A!important;
+
+}
+
+
+.page-top-header-row{
+  position: sticky!important; 
+  top: 0!important; 
+  z-index: 1!important;
+  position: -webkit-sticky;
+  position: -moz-sticky;
+  position: -ms-sticky;
+  position: -o-sticky;
+}
+.page-top-header-column px-0 mx-0{
+  background-color: $body-bg;
+}
+
+.save-profile{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 25px;
+  text-align: right;
+  text-decoration-line: underline;
+
+  color: #15577C!important;
+}
+.edit-profile{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 19px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #FFFFFF;
+  text-shadow: 0px 2px 2px rgb(18 16 16 / 55%)
+}
+.chip-section{
+  background: #FFFFFF;
+  border: 1px solid #CAD5E1;
+  box-sizing: border-box;
+  border-radius: 8px;
+  padding: 10px;
+}

@@ -1,68 +1,112 @@
 <template>
   <v-container>
-    <v-row justify="center">
-      <v-col cols="4">
-        <v-card elevation="0">
-          <v-card-title>Reset your password</v-card-title>
-          <v-card-text>
-            <v-form ref="form" v-model="valid" :lazy-validation="false">
-              <v-text-field
-                solo
-                dense
-                :rules="passwordRules"
-                v-model="password"
-                autocomplete="off"
-                type="password"
-                :label="'New password'"
-              ></v-text-field>
-              <v-text-field
-                solo
-                dense
-                :rules="[passwordConfirmationRule]"
-                v-model="rePassword"
-                autocomplete="off"
-                type="password"
-                :label="'Re-enter your new password'"
-              ></v-text-field>
-            </v-form>
-            <v-btn
-              :loading="loading"
-              outlined
-              depressed
-              type="submit"
-              color="primary-light-1"
-              block
-              dark
-              @click="passwordResetBtnHandle()"
-              >Change Password</v-btn
-            >
-          </v-card-text>
-          <v-card-actions></v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row justify="center" v-if="isPasswordReset">
-      <v-col cols="12" md="4" class="text-center">
-        <v-btn
-          color="primary-light-1"
-          dark
-          large
-          depressed
-          class="mt-md-3"
-          @click="loginBtnHandle"
-          >{{ $t("btn_label_go_to_login") }}</v-btn
+    <v-row
+      justify="center"
+    >
+      <v-col
+        cols="11"
+        sm="8"
+        md="6"
+        lg="4"
+        xs="11"
+      >
+      <!-- Snackbar  pwa -->
+        <v-snackbar
+          v-model="snackbar.show"
+          top
+          :multi-line="snackbar.multiLine"
         >
+          {{ snackbar.text }}
+          <template v-slot:action="{ attrs }">
+            <v-btn
+              color="red"
+              text
+              v-bind="attrs"
+              @click="snackbar.show = false"
+            >
+              {{$t("pwa_close")}}
+            </v-btn>
+          </template>
+        </v-snackbar>
+      <!-- ./Snackbar pwa -->
+
+        <v-row class="justify-center pt-5">
+            <v-col cols="12">
+              <p class="login-title">{{$t("pwa_reset_title")}}</p>
+              <v-divider></v-divider>
+            </v-col>
+        </v-row>
+
+        <v-row
+          align="center"
+          justify="center"
+          class="mt-5"
+        >
+          <v-col cols="12">
+            <p class="login-password-label mt-2">{{$t("setting_label_new_password")}}</p>
+            <v-text-field
+              outlined
+              dense
+              v-model="password"
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show1 ? 'text' : 'password'"
+              name="input-10-1"
+              color="red"
+              :label="$t('password_reset_title')"
+              @click:append="show1 = !show1"
+              id="password"
+              class="cs-input-text-field-login"
+              :rules="passwordRules"
+              required
+              style="color:#15577C"
+              @keyup.enter="passwordResetBtnHandle"
+            />
+            <p class="login-password-label">{{$t("pwa_confirm_new_password")}}</p>
+            <v-text-field
+              outlined
+              dense
+              v-model="rePassword"
+              :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show2 ? 'text' : 'password'"
+              name="input-10-1"
+              color="red"
+              :label="$t('pwa_confirm_new_password_hint')"
+              @click:append="show2 = !show2"
+              id="rePassword"
+              class="cs-input-text-field-login"
+              :rules="[passwordConfirmationRule]"
+              required
+              style="color:#15577C"
+              @keyup.enter="passwordResetBtnHandle"
+            />
+          </v-col>
+        </v-row>
+
+          <v-row class="justify-center">
+          <v-col cols="12">
+            <v-form
+              ref="form"
+              v-model="valid"
+              class="d-block w-100"
+              lazy-validation
+            >
+              <v-btn 
+                align="center"
+                justify="space-around"
+                color="#EDB041"
+                class="white--text continue-with-email-btn"
+                :loading="show_loading_on_reset_btn"
+                block
+                @click="passwordResetBtnHandle()"
+            >
+                {{$t("pwa_change_password")}}
+            </v-btn>
+            </v-form>
+          </v-col>
+        </v-row>   
+
       </v-col>
     </v-row>
-
-    <!-- Snackbar -->
-    <v-snackbar v-model="snackbar.show" :multi-line="snackbar.multiLine" top>
-      {{ snackbar.text }}
-      <v-btn color="red" text @click="snackbar.show = false">{{
-        $t("text_close")
-      }}</v-btn>
-    </v-snackbar>
-    <!-- Snackbar -->
   </v-container>
 </template>
 
@@ -71,20 +115,19 @@ import { authApi } from "@/api";
 import { pathData } from "@/data";
 
 export default {
+  layout: "auth",
   data() {
     return {
-      uri: {
-        login: pathData.pages.login
-      },
-      loading: false,
-      isPasswordReset: false,
+      show1: false,
+      show2: false,
+      loading: null,
+      show_loading_on_reset_btn: false,
       snackbar: {
         multiLine: true,
         show: false,
         text: ""
       },
-      email: this.$route.query.email || "",
-      token: this.$route.query.token || "",
+      email: this.$store.getters.existingUserEmail || "",
       valid: true,
       password: "",
       rePassword: "",
@@ -101,45 +144,132 @@ export default {
       ]
     };
   },
-  computed: {
-    passwordConfirmationRule() {
-      return () => this.password === this.rePassword || "Password must match";
+  watch:{
+    "$vuetify.breakpoint.smAndUp" : function() {
+      this.$store.dispatch("setActivePopupItem", "PasswordReset");
+      this.$store.dispatch("toggleDialog");
     }
   },
-  methods: {
-    loginBtnHandle() {
-      this.$router.push(this.localePath(pathData.pages.login));
-    },
+  computed: {
+    passwordConfirmationRule() {
+      return () => this.password === this.rePassword || "Password does not match";
+    }
+  },
+    methods: {
     passwordResetBtnHandle() {
       if (this.$refs.form.validate()) {
+        this.show_loading_on_reset_btn = true;
         let payload = {
           email: this.email,
-          token: this.token,
           password: this.password
         };
-        this.loading = true;
+        this.$store.dispatch("setExistingEmail", this.email);
         authApi(this.$axios)
           .passwordReset(payload)
-          .then(() => {
-            this.$toast.success("Successfully reset your password.");
-            this.isPasswordReset = true;
+          .then((response) => {
+            this.$toast.success(response.data.message);
+            this.show_loading_on_reset_btn = false;
+            this.$router.push(this.localePath(pathData.pages.postEmailLogin));
           })
           .catch(({ response }) => {
             if (response.data.message) {
-              this.show(response.data.message);
+              this.$toast.error(response.data.message);
             }
-          })
-          .finally(() => {
-            this.loading = false;
+            this.show_loading_on_reset_btn = false;
           });
       }
     },
-    show(msg) {
-      this.snackbar.show = true;
-      this.snackbar.text = msg;
-    }
+
   }
 };
 </script>
 
-<style lang="scss" scoped></style>
+
+<style scoped>
+
+.v-application {
+  line-height: 0!important;
+}
+.w-100{
+  width: 100% !important;
+}
+.tm-login-logo {
+  height: 100px;
+}
+.cs-login-sec{
+  height: calc(100vh - 248px);
+  position: relative;
+  min-height: 280px;
+}
+.cs-login-middle {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.cs-login-footer {
+  height: 100px;
+}
+
+.align-items-to-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.v-divider {
+    border-color: #15577C !important; 
+}
+
+a{
+  text-decoration: none!important;;
+}
+
+.login-title{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 25px;
+  text-align: center;
+  letter-spacing: -0.2px;
+  color: #15577C;
+
+}
+.login-password-label{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 19px;
+  /* identical to box height */
+
+
+  /* Dusty blue */
+
+  color: #15577C;
+
+}
+.login-footer-text{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 20px;
+  color: #15577C;
+
+}
+.continue-with-email-btn{
+  background: #EDB041;
+  border-radius: 6px;
+  width: 100%;
+  text-transform: none !important;
+}
+
+.v-text-field--outlined >>> fieldset {
+  border-color: #15577C;
+}
+.v-label {
+  color: red!important;
+}
+
+</style>

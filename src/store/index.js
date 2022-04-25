@@ -17,6 +17,23 @@ export const state = () => ({
   footer: {
     isFixed: false
   },
+  showDialog: false,
+  loginWithPopup: {
+    loginScreen: true,
+    loginUsingEmail: false,
+    postLoginUsingEmail: false,
+    OTPValidation: false,
+    Register: false,
+    GetStarted: false,
+    ForgotPassword : false,
+    PasswordReset: false,
+    ResetOTPValidation: false
+  },
+  existing_user_email: process.browser && localStorage.getItem("existing_user_email") || null,
+  login_medium: process.browser && localStorage.getItem("login_medium") || null,
+  activeBottomNav: 0,
+  bookingCoachInfo: process.browser && localStorage.getItem("booking_coach_info") || {},
+  bookingPackageInfo: process.browser && localStorage.getItem("booking_package_info") || {},
 });
 
 export const getters = {
@@ -58,7 +75,28 @@ export const getters = {
       }
     }
     return name;
-  }
+  },
+  isDialogOpen(state) {
+    return state.showDialog;
+  },
+  activeLoginItem(state) {
+    return state.loginWithPopup;
+  },
+  existingUserEmail(state){
+    return state.existing_user_email;
+  },
+  loginMedium(state){
+    return state.login_medium;
+  },
+  activeBottomNav(state){
+    return state.activeBottomNav;
+  },
+  getBookingCoachInfo(state){
+    return JSON.parse(JSON.stringify(state.bookingCoachInfo));
+  },
+  getBookingPackageInfo(state){
+    return JSON.parse(JSON.stringify(state.bookingPackageInfo));
+  },
 };
 
 export const mutations = {
@@ -110,6 +148,36 @@ export const mutations = {
       localStorage.setItem("user", JSON.stringify(state.user));
     }
   },
+  TOGGLE_DIALOG(state){
+    state.showDialog = !state.showDialog;
+  },
+  SET_ACTIVE_POPUP_ITEM(state, item) {
+    Object.keys(state.loginWithPopup).forEach(key => {
+      if (key == item){state.loginWithPopup[key] = true;}
+      else{ state.loginWithPopup[key] = false; }
+
+    });
+  },
+  SET_EXISTING_EMAIL(state, email){
+    state.existing_user_email = email;
+    localStorage.setItem("existing_user_email", email);
+  },
+  SET_LOGIN_MEDIUM(state, provider_name){
+    state.login_medium = provider_name;
+    localStorage.setItem("login_medium", provider_name);
+  },
+  SET_ACTIVE_BOTTOM_NAV(state, item){
+    state.activeBottomNav = item;
+  },
+  SET_BOOKING_COACH_INFO(state, item){
+    state.bookingCoachInfo = item;
+    localStorage.setItem("booking_coach_info", item);
+  },
+  SET_BOOKING_PACKAGE_INFO(state, item){
+    state.bookingPackageInfo = item;
+    localStorage.setItem("booking_package_info", item);
+  },
+
 };
 
 export const actions = {
@@ -151,5 +219,26 @@ export const actions = {
   },
   setLang(context, lang) {
     context.commit("SET_LANG", lang);
-  }
+  },
+  toggleDialog(context) {
+    context.commit("TOGGLE_DIALOG");
+  },
+  setActivePopupItem(context, item){
+    context.commit("SET_ACTIVE_POPUP_ITEM", item);
+  },
+  setExistingEmail(context, email) {
+    context.commit("SET_EXISTING_EMAIL", email);
+  },
+  setLoginMedium(context, medium) {
+    context.commit("SET_LOGIN_MEDIUM", medium);
+  },
+  activeBottomNav(context, item){
+    context.commit("SET_ACTIVE_BOTTOM_NAV", item)
+  },
+  setBookingCoachInfo(context, item){
+    context.commit("SET_BOOKING_COACH_INFO", item)
+  },
+  setBookingPackageInfo(context, item){
+    context.commit("SET_BOOKING_PACKAGE_INFO", item)
+  },
 };

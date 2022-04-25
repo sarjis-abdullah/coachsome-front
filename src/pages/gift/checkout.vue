@@ -1,6 +1,268 @@
 <template>
-  <div class="gift-checkout">
-    <v-container>
+  <div class="gift-checkout" :class="{'mb-15' : $vuetify.breakpoint.xsOnly}">
+    <v-stepper v-model="step" elevation="0" flat v-if="$vuetify.breakpoint.xsOnly">
+      <v-stepper-header>
+        <!-- <template v-for="n in steps">
+          <v-stepper-step
+            :key="n.value"
+            :complete="step > n.value"
+            :step="n.value"
+          >
+            {{ n.name }}
+          </v-stepper-step>
+
+          <v-divider
+            v-if="n.value !== steps.length"
+            :key="'divider' + n.value"
+          ></v-divider>
+        </template> -->
+        <v-stepper-step
+          color="#15577C"
+          :complete="step > 1"
+          :step="1"
+          :editable="isFirstStepEditAble"
+        >
+          {{ $t("gift_checkout_first_step") }}
+        </v-stepper-step>
+        <v-divider></v-divider>
+        <v-stepper-step color="#15577C" :complete="step > 2" step="2">
+          {{ $t("gift_checkout_second_step") }}
+        </v-stepper-step>
+        <v-divider></v-divider>
+        <v-stepper-step step="3" color="#15577C">
+          {{ $t("gift_checkout_third_step") }}
+        </v-stepper-step>
+      </v-stepper-header>
+
+      <v-stepper-items>
+        <!-- Step - 1 -->
+        <v-stepper-content :step="1">
+          <v-spacer></v-spacer>
+          <v-row>
+            <v-col cols="12">
+              <div class="order-details-title mt-5 mb-5">
+                {{ $t("checkout_selected_amount") }}
+              </div>
+              <v-card
+                rounded="lg"
+                class="gift-card"
+                color="primary-light-2"
+                height="200"
+              >
+                <div class="gift-card__body">
+                  {{ selectedAmount + " " + currency }}
+                </div>
+              </v-card>
+            </v-col>
+            <v-col cols="12">
+              <div
+                class="charge-box"
+                :style="{
+                  borderImage: `url(${require('@/assets/images/border-staircase.svg')}) 30 space`
+                }"
+              >
+                <div class="charge-box__item">
+                  <div class="charge-box__item-left">
+                    {{ $t("charge_box_gift_card_amount") }}
+                  </div>
+                  <div class="charge-box__item-right">
+                    {{ currencyService.toCurrency(selectedAmount) }}
+                  </div>
+                </div>
+                <div class="charge-box__item">
+                  <div class="charge-box__item-left"></div>
+                  <div class="charge-box__item-right"></div>
+                </div>
+
+                <div class="charge-box__item">
+                  <div class="charge-box__item-left stroke">
+                    {{ $t("booking_charge_box_total") }}
+                  </div>
+                  <div class="charge-box__item-right stroke">
+                    {{ currencyService.toCurrency(totalAmount) }}
+                  </div>
+                </div>
+              </div>
+            </v-col>
+
+            <v-col cols="12">
+                <v-btn
+                  block
+                  class="px-10 white--text text-normal rounded-lg"
+                  color="#EDB041"
+                  @click="handleContinueBtnClick"
+                >
+                  {{ $t("checkout_label_continue") }}
+                </v-btn>
+            </v-col>
+            <v-col cols="12" class=" d-flex justify-center pa-0 ma-0">
+              <div class="or-text mx-5">
+                {{ $t("checkout_text_or") }}
+              </div>
+            </v-col>
+
+            <v-col cols="12">
+              <v-btn
+                color="primary-light-1"
+                outlined
+                block
+                @click="handleChangeAmountBtnClick"
+              >
+                {{ $t("checkout_label_change_amount") }}
+              </v-btn>
+            </v-col>
+            <v-col cols="12" class=" d-flex justify-center">
+              <div class="helper-text">
+                {{ $t("checkout_helper_text_not_charged_yet") }}
+              </div>
+            </v-col>
+          </v-row>
+        </v-stepper-content>
+
+        <!-- Step - 2 -->
+        <v-stepper-content :step="2">
+          <v-spacer></v-spacer>
+          <v-row>
+            <v-col cols="12">
+              <div class="card">
+                <div class="card__header">
+                  <div class="card__title">
+                    {{ $t("recipent_title") }}
+                  </div>
+                </div>
+                <div class="card__body">
+                  <v-text-field
+                    v-model="recipentName"
+                    dense
+                    outlined
+                    flat
+                    :hint="$t('recipent_description')"
+                  >
+                  </v-text-field>
+                </div>
+              </div>
+              <div class="card mt-10">
+                <div class="card__header">
+                  <div class="card__title">
+                    {{ $t("checkout_personal_message_title") }}
+                  </div>
+                </div>
+                <div class="card__body">
+                  <v-textarea
+                    v-model="message"
+                    ref="messageBoxTextArea"
+                    outlined
+                    flat
+                    :hint="
+                      $t('checkout_personal_message_descritpiotn')
+                    "
+                  />
+                </div>
+              </div>
+            </v-col>
+            <v-col
+              cols="12"
+              class="d-flex justify-center align-center d-sm-none d-md-flex"
+            >
+              <div class="line--vertical text-center"></div>
+            </v-col>
+            <v-col cols="12">
+              <div
+                class="charge-box"
+                :style="{
+                  borderImage: `url(${require('@/assets/images/border-staircase.svg')}) 30 space`
+                }"
+              >
+                <div class="charge-box__item">
+                  <div class="charge-box__item-left">
+                    {{
+                      $t("checkout_title_amount_of_the_certificate")
+                    }}
+                  </div>
+                  <div class="charge-box__item-right">
+                    {{ currencyService.toCurrency(selectedAmount) }}
+                  </div>
+                </div>
+                <div class="charge-box__item">
+                  <div class="charge-box__item-left"></div>
+                  <div class="charge-box__item-right"></div>
+                </div>
+
+                <div class="charge-box__item">
+                  <div class="charge-box__item-left stroke">
+                    {{ $t("booking_charge_box_total") }}
+                  </div>
+                  <div class="charge-box__item-right stroke">
+                    {{ currencyService.toCurrency(totalAmount) }}
+                  </div>
+                </div>
+              </div>
+              <div class="payment">
+                <v-radio-group v-model="selectedPaymentMethod" column>
+                  <span
+                    v-for="(paymentMethod, i) in paymentMethods"
+                    :key="i"
+                  >
+                    <v-radio
+                      color="primary-light-1"
+                      style="padding: 5px 10px"
+                      :value="paymentMethod.value"
+                    >
+                      <template v-slot:label>
+                        <img
+                          :src="
+                            require('@/assets/images/booking/' +
+                              paymentMethod.logo)
+                          "
+                        />
+                      </template>
+                    </v-radio>
+                  </span>
+                </v-radio-group>
+              </div>
+
+              <v-btn
+                block
+                :loading="confirm_payment"
+                @click="handleConfirmAndPayBtnClick"
+                class="px-10 white--text text-normal"
+                color="primary-light-1"
+              >
+                {{ $t("checkout_label_confirm_and_pay") }}
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-stepper-content>
+
+        <!-- Step - 3 -->
+        <v-stepper-content :step="3">
+          <div class="gift-confirmation">
+            <div class="gift-confirmation__top">
+              <i18n path="gift_order_step_three_description">
+                <template #name>
+                  <span>{{ recipentName }}</span>
+                </template>
+              </i18n>
+            </div>
+            <div class="gift-confirmation__middle">
+              <v-btn
+                :loading="isDownloading"
+                @click="printDownload"
+                color="#EDB041"
+                block
+                class="text-normal white--text font-weight-bold"
+              >
+                {{ $t("checkout_label_download_gift_card") }}
+              </v-btn>
+            </div>
+            <div class="gift-confirmation__bottom">
+              {{ $t("checkout_helper_text_mailed_attach") }}
+            </div>
+          </div>
+        </v-stepper-content>
+      </v-stepper-items>
+    </v-stepper>
+    <v-container v-else>
       <v-row justify="center">
         <v-col cols="12" md="10">
           <v-stepper v-model="step" elevation="0" flat>
@@ -294,6 +556,7 @@ import { endpoint } from "../../api";
 import { pathData } from "@/data";
 
 export default {
+  layout: "checkout",
   components: {},
   data() {
     return {
@@ -324,6 +587,7 @@ export default {
       ],
       selectedPaymentMethod: null,
       paymentMethods: [
+        
         // {
         //   id: 1,
         //   name: "Mobile Pay",
@@ -346,7 +610,7 @@ export default {
           id: 4,
           name: "VISA",
           value: "visa",
-          logo: "visa-text.svg"
+          logo: "visa.svg"
         },
         {
           id: 5,

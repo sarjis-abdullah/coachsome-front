@@ -1,17 +1,30 @@
 <template>
   <client-only>
     <v-container>
-      <v-row>
-        <v-col cols="12" class="pb-0">
-          <div class="page-title">{{ $t("page_title_translation") }}</div>
-        </v-col>
-      </v-row>
+    <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('page_title_translation')">
+      <template v-slot:goBack>
+        <v-btn
+          icon
+          @click="handleBack"
+        >
+          <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+        </v-btn>
+      </template>
+      <template v-slot:action>
+        <span></span>
+      </template>
+    </mobile-top-nav>
+    <v-row class="d-none d-md-block">
+      <v-col cols="12" class="pb-0">
+        <div class="page-title">{{$t('page_title_translation')}}</div>
+      </v-col>
+    </v-row>
 
-      <v-row>
-        <v-col cols="12">
-          <div class="line"></div>
-        </v-col>
-      </v-row>
+    <v-row class="d-none d-md-block">
+      <v-col cols="12">
+        <div class="line"></div>
+      </v-col>
+    </v-row>
      
       <v-row>
         <v-col>
@@ -244,6 +257,8 @@ import ProfileSeo from "@/components/artifact/admin/translation/seo/ProfileSeo";
 import HomeSeo from "@/components/artifact/admin/translation/seo/HomeSeo";
 import MarketplaceSeo from "@/components/artifact/admin/translation/seo/MarketplaceSeo";
 import { adminTranslationApi } from "@/api";
+import { pathData } from "@/data";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
   layout: "admin",
@@ -255,7 +270,8 @@ export default {
   components: {
     ProfileSeo,
     HomeSeo,
-    MarketplaceSeo
+    MarketplaceSeo,
+    MobileTopNav
   },
   data: () => ({
     tributeValue: "",
@@ -318,6 +334,9 @@ export default {
   },
 
   methods: {
+    handleBack(){
+      this.$router.push(this.localePath(pathData.admin.profileMenu));
+    },
     truncate(str, num) {
       if (str && str.length > num) {
         return str.slice(0, num) + "...";

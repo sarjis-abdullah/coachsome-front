@@ -1,16 +1,31 @@
 <template>
   <v-container fluid>
-    <v-row>
+    <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_order_list')">
+      <template v-slot:goBack>
+        <v-btn
+          icon
+          @click="handleBack"
+        >
+          <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+        </v-btn>
+      </template>
+      <template v-slot:action>
+        <span></span>
+      </template>
+    </mobile-top-nav>
+
+    <v-row class="d-none d-md-block">
       <v-col cols="12" class="pb-0">
-        <div class="page-title">Order List</div>
+        <div class="page-title">{{$t('pwa_order_list')}}</div>
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row class="d-none d-md-block">
       <v-col cols="12">
         <div class="line"></div>
       </v-col>
     </v-row>
+
     <v-row>
       <v-col cols="12">
         <div>
@@ -235,10 +250,11 @@ import { adminOrderListApi, adminUserApi, adminImpersonateApi } from "@/api";
 import { currencyService, imageService } from "@/services";
 import "vue-phone-number-input/dist/vue-phone-number-input.css";
 import { pathData } from "@/data";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
   layout: "admin",
-  components: {},
+  components: {MobileTopNav},
   data() {
     return {
       currencyConfig: currencyService.selectedCurrency(),
@@ -348,6 +364,9 @@ export default {
     //   });
   },
   methods: {
+    handleBack(){
+      this.$router.push(this.localePath(pathData.admin.profileMenu));
+    },
     async fetchOrderList() {
       this.table.loading = true;
       try {

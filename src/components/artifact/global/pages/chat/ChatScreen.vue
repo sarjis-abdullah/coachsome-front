@@ -387,6 +387,7 @@ export default {
   }),
   computed: {
     messages() {
+      this.$store.dispatch("chat/setNavOnChat", true);
       return this.$store.getters["chat/messages"];
     },
     selectedContact() {
@@ -405,10 +406,12 @@ export default {
   watch: {
     messages() {
       setTimeout(this.updateScroll, 0);
+    },
+    "$vuetify.breakpoint.smAndDown": function(){
+      this.$store.dispatch("chat/setNavOnChat", true);
     }
   },
   created() {},
-  mounted() {},
   methods: {
     hasRole(roles = []) {
       return this.$auth.hasRole(roles);
@@ -644,10 +647,10 @@ export default {
 
 <style lang="scss" scoped>
 .chat-screen {
-  background: #fcfdfe;
+  background: #f7fafc;
   height: calc(100vh - 10.8rem);
   overflow-y: auto;
-  padding: 0 20px;
+  padding: 40px 20px 0 20px;
   width: 100%;
 
   /* width */

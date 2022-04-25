@@ -88,7 +88,7 @@
         <v-dialog v-model="addAttachmentDialog" max-width="400" style="z-index: 999!important; background: white">
           <upload-attachment ref="UploadAttachment" @cancel="handleAttachmentUploadCancel" @sendAttachment="uploadAttachmentFile($event)" ></upload-attachment>
         </v-dialog>
-        <a-drawer
+        <!-- <a-drawer
           class="d-none d-sm-flex d-md-none pa-0"
           title="Actions"
           placement="bottom"
@@ -112,20 +112,66 @@
               {{ $t("chat_title_booing_req") }}
             </div>
           </div>
+        </a-drawer> -->
+        <a-drawer
+          class="d-none d-sm-flex d-md-none pa-0"
+          title="Actions"
+          placement="bottom"
+          :visible="actionDialog"
+          :closable="false"
+          :height="400"
+          @close="actionDialog = false"
+        >
+          <div style="display: flex; justify-content: center;" @click="actionDialog = false">
+            <div class="drawer-close-btn" @click="actionDialog = false"></div>
+          </div>
+          <div
+            :style="{
+              display: 'flex',
+              cursor: 'pointer',
+              alignItems: 'center'
+            }"
+            @click="handleCalenderClick"
+          >
+            <v-icon
+              color="primary-light-1"
+              :style="{ marginRight: '5px', padding: 0 }"
+              >mdi-calendar-plus</v-icon
+            >
+            <div class="action-item__title primary-light-1--text">
+              {{ $t("chat_title_booing_req") }}
+            </div>
+          </div>
         </a-drawer>
         <!-- ./Dialog -->
 
         <!-- left-sidebar -->
         <v-col cols="12" :md="leftSidebarMd" v-if="leftSidebarSection">
           <div class="left-sidebar">
-            <div class="left-sidebar__header">
+
+            <div class="left-sidebar__header page-top-header-row d-md-none" style="background: #f7fafc" >
+              <div class="left-sidebar-title">
+                <span class="common-top-page-title">{{ $t("pwa_chat_page_title_message") }}</span>
+              </div>
+              <div class="left-sidebar-action">
+                <v-btn
+                  icon
+                  @click="handleGroupBtnClick"
+                >
+                  <v-icon class="common-top-add-icon">
+                    mdi-plus-circle-outline
+                  </v-icon>
+                </v-btn>
+              </div>
+            </div>
+
+            <div class="left-sidebar__header d-none d-md-block">
               <div class="left-sidebar-title">
                 {{ $t("chat_page_title_message") }}
               </div>
               <div class="left-sidebar-action">
                 <v-btn
                   icon
-                  color="primary-light-1"
                   @click="handleGroupBtnClick"
                 >
                   <v-icon color="primary-light-1">
@@ -135,7 +181,44 @@
               </div>
             </div>
             <div class="left-sidebar__body">
-              <div class="pl-4 pr-4 pt-5">
+              <div class="pl-4 pr-4 pt-5 d-md-none">
+                <v-text-field
+                  :label="$t('chat_field_label_txt_search')"
+                  solo
+                  dense
+                  rounded
+                  hide-details
+                  prepend-inner-icon="search"
+                  v-model="search"
+                  clearable
+                  @input="handleSearch"
+                  @click="handleClearSearch"
+                ></v-text-field>
+                <v-select
+                  v-model="selectedFilterItem"
+                  class="mt-5"
+                  :items="filters"
+                  item-value="id"
+                  item-text="key"
+                  dense
+                  rounded
+                  solo
+                  @change="handleFilterChange"
+                  append-icon="expand_more"
+                >
+                  <template v-slot:selection="{ item }">
+                    <div>
+                      {{ $t(item.key) }}
+                    </div>
+                  </template>
+                  <template v-slot:item="{ item }">
+                    <div>
+                      {{ $t(item.key) }}
+                    </div>
+                  </template>
+                </v-select>
+              </div>
+              <div class="pl-4 pr-4 pt-5 d-none d-md-block">
                 <v-text-field
                   :label="$t('chat_field_label_txt_search')"
                   solo
@@ -198,10 +281,10 @@
                     >
                       <v-btn
                         icon
-                        v-if="$vuetify.breakpoint.smAndDown"
+                        class="d-md-none"
                         @click="handleBackBtnClick"
                       >
-                        <v-icon small>mdi-arrow-left</v-icon>
+                        <v-icon x-large>mdi-chevron-left</v-icon>
                       </v-btn>
                       <v-badge
                         bordered
@@ -301,28 +384,20 @@
                             </v-tooltip>
                           </div>
                           <v-btn
-                            v-if="$vuetify.breakpoint.smAndDown"
                             @click="handleMobileHideActionBtnClick"
-                            outlined
-                            small
-                            rounded
+                            icon
                             color="primary-light-1"
-                            class="text-normal"
+                            class="text-normal d-md-none"
                           >
-                            {{
-                              actionDialog
-                                ? $t("chat_btn_label_hide_actions")
-                                : $t("chat_btn_label_show_actions")
-                            }}
+                             <v-icon>mdi-filter-variant</v-icon>
                           </v-btn>
                           <v-btn
-                            v-if="!$vuetify.breakpoint.smAndDown"
                             @click="handleDesktopHideActionBtnClick"
                             outlined
                             small
                             rounded
                             color="primary-light-1"
-                            class="text-normal"
+                            class="text-normal d-none d-md-block"
                           >
                             {{
                               rightSidebar
@@ -341,10 +416,10 @@
                     >
                       <v-btn
                         icon
-                        v-if="$vuetify.breakpoint.smAndDown"
+                        class="d-md-none"
                         @click="handleBackBtnClick"
                       >
-                        <v-icon small>mdi-arrow-left</v-icon>
+                        <v-icon x-large>mdi-chevron-left</v-icon>
                       </v-btn>
                       <div class="group-avatar">
                         <v-avatar
@@ -481,28 +556,20 @@
                             </v-list>
                           </v-menu>
                           <v-btn
-                            v-if="$vuetify.breakpoint.smAndDown"
                             @click="handleMobileHideActionBtnClick"
-                            outlined
-                            small
-                            rounded
+                            icon
                             color="primary-light-1"
-                            class="text-normal"
+                            class="text-normal d-md-none"
                           >
-                            {{
-                              actionDialog
-                                ? $t("chat_btn_label_hide_actions")
-                                : $t("chat_btn_label_show_actions")
-                            }}
+                             <v-icon>mdi-filter-variant</v-icon>
                           </v-btn>
                           <v-btn
-                            v-if="!$vuetify.breakpoint.smAndDown"
                             @click="handleDesktopHideActionBtnClick"
                             outlined
                             small
                             rounded
                             color="primary-light-1"
-                            class="text-normal"
+                            class="text-normal d-none d-md-block"
                           >
                             {{
                               rightSidebar
@@ -687,6 +754,9 @@ export default {
     UploadAttachment
   },
   data: () => ({
+    touch_start: 0,
+    touch_end: 0,
+    slide_touch_start: 0,
     addAttachmentDialog:false,
     messageData,
     contactData,
@@ -826,6 +896,14 @@ export default {
       }
     },
 
+    actionDialog(value){
+      if(value == true){
+        document.addEventListener( 'touchstart', this.startTouchListener);
+        document.addEventListener( 'touchmove', this.startTouchMoveListener);
+        document.addEventListener( 'touchend', this.touchEndListener);
+      }
+    },
+
     selectedContact(contact) {
       if (contact) {
         this.$store.dispatch("chat/destroyMessages");
@@ -937,8 +1015,55 @@ export default {
       }
     }
   },
+  beforeDestroy(){
+    document.removeEventListener( 'touchstart', this.startTouchListener);
+    document.removeEventListener( 'touchmove', this.startTouchMoveListener);
+    document.removeEventListener( 'touchend', this.touchEndListener);
+  },
   methods: {
-        uploadAttachmentFile(attachment){
+    startTouchListener(e){
+      this.touch_start = e.changedTouches[0].clientY;
+    },
+    startTouchMoveListener(e) {
+      var touch_end =e.changedTouches[0].clientY;
+
+      this.touch_end = touch_end;
+
+      var height = touch_end - this.touch_start ;
+
+      if(height > 0){
+        if(height > 350){
+          this.hideDrawer();
+        }else{
+          this.setDrawerHeight(height);
+        }
+        
+      }
+    },
+    touchEndListener(){
+      var touch_diff  = this.touch_end - this.touch_start
+
+      if(touch_diff < 350){
+        document.querySelector(".ant-drawer-content-wrapper").style.height = "400px";
+        this.touch_start = 0;
+        this.touch_end = 0;
+      }
+    },
+    hideDrawer(){
+      document.querySelector(".ant-drawer-content-wrapper").style.height = "0";
+      setTimeout(()=>{
+        this.actionDialog = false;
+      },100)
+      setTimeout(function(){
+        document.querySelector(".ant-drawer-content-wrapper").style.height = "400px";
+        this.touch_start = 0;
+        this.touch_end = 0;
+      }, 1000);
+    },
+    setDrawerHeight(height){
+     document.querySelector(".ant-drawer-content-wrapper").style.height = 400 - height +"px";
+    },
+    uploadAttachmentFile(attachment){
       if (
         this.selectedContact &&
         attachment!= null &&
@@ -1370,6 +1495,46 @@ export default {
 </script>
 
 <style lang="scss">
+.ant-drawer-content-wrapper{
+    // height: 400px!important;
+    border-top-left-radius: 20px!important;
+    border-top-right-radius: 20px!important;
+  }
+  .drawer-close-btn{
+      border-top: 6px solid #9FAEC2;
+      width: 80px;
+      border-radius: 80px;
+      position: absolute;
+      top: 0;
+      margin: 8px;
+      text-align: center;
+  }
+  .ant-drawer-content{
+    border-top-left-radius: 20px!important;
+    border-top-right-radius: 20px!important;
+  }
+  .ant-drawer-header {
+    display: flex!important;
+    justify-content: center!important;
+    border-bottom: 1px solid #9FAEC2!important;
+  }
+  .ant-drawer-title {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 25px;
+    text-align: center;
+    margin-top: 8px;
+    color: #15577C;
+
+  }
+  .v-application{
+  &--wrap{  
+      background: #ecf2f7!important;
+  }
+    
+}
 $header-height: 60px;
 .chat-new-page {
   .fixed-bottom {
@@ -1382,7 +1547,8 @@ $header-height: 60px;
     position: fixed;
     z-index: 100;
     background: #f7fafc;
-    top: 45px;
+    // top: 45px;
+    top: 0;
     -webkit-backface-visibility: hidden;
     width: 100%;
   }
@@ -1511,7 +1677,7 @@ $header-height: 60px;
       align-items: center;
     }
     &__body {
-      background: #fcfdfe;
+      background: #f7fafc;
       border-left: 1px solid #e1e8f1;
       border-right: 1px solid #e1e8f1;
       padding-bottom: 15px;

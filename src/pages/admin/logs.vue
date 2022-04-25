@@ -1,18 +1,31 @@
 <template>
   <v-container>
-    <v-row>
+    <mobile-top-nav  extraClass="body-bg-secondary" :headerText="$t('pwa_log')">
+      <template v-slot:goBack>
+        <v-btn
+          icon
+          @click="handleBack"
+        >
+          <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+        </v-btn>
+      </template>
+      <template v-slot:action>
+        <span></span>
+      </template>
+    </mobile-top-nav>
+    <v-row class="d-none d-md-block">
       <v-col cols="12" class="pb-0">
-        <div class="page-title">User Log</div>
+        <div class="page-title">{{$t('pwa_log')}}</div>
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row class="d-none d-md-block">
       <v-col cols="12">
         <div class="line"></div>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col cols="12">
+
+      <v-col cols="12" :class="{'pt-5' : $vuetify.breakpoint.xsOnly}">
         <div>
           <v-card>
             <v-card-title>
@@ -61,9 +74,15 @@
 
 <script>
 import { adminUserLogApi } from "@/api";
+import { pathData } from "@/data";
 import { imageService } from "@/services";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
+
 export default {
   layout:"admin",
+  components:{
+    MobileTopNav
+  },
   data() {
     return {
       search: "",
@@ -88,6 +107,9 @@ export default {
     };
   },
   methods: {
+    handleBack(){
+      this.$router.push(this.localePath(pathData.admin.profileMenu));
+    },
     getImageUrl(name) {
       return imageService.getImageByName(name);
     }

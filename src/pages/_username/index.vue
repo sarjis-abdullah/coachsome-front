@@ -3,13 +3,61 @@
     <v-container>
       <v-row justify="center">
         <v-col md="10" cols="12">
+          <v-row class="d-md-none">
+            <v-col cols="12" class="d-flex justify-center mt-3">
+              <img :src="require('@/assets/images/logo-dark.svg')" alt="">
+              <!-- <div class="line"></div> -->
+            </v-col>
+            <v-col cols="12" >
+              <div class="line"></div>
+            </v-col>
+          </v-row>
           <!-- Profile and Travel -->
           <v-row justify="center">
             <v-col cols="12" md="6" class="mt-10">
               <profile-card v-bind="profileCard"></profile-card>
             </v-col>
-            <v-col cols="12" md="6" class="mt-10">
-              <div class="social-share-section">
+            <v-col cols="12" md="6" :class="{'mt-10' : !$vuetify.breakpoint.smAndDown }">
+              <div class="social-share-section-sm" v-if="$vuetify.breakpoint.smAndDown">
+                <p class="social-share-section-sm__text">{{$t('pwa_social_share_title')}}</p>
+                <div class=" d-flex justify-center">
+
+                  <ShareNetwork
+                    network="facebook"
+                    :url='serverLink+user_path'
+                    :title="profileCard.name"
+                    :hashtags="tagsData"
+                    class="px-2"
+                  >
+                    <img  :src="require('@/assets/img/svg-icons/Facebook_1.svg')" alt="facebook">
+                  </ShareNetwork>
+
+                  <ShareNetwork
+                    network="twitter"
+                    :url='serverLink+user_path'
+                    :title="profileCard.name"
+                    :hashtags="tagsData"
+                    class="px-2"
+                  >
+                    <img  :src="require('@/assets/img/svg-icons/twitter.svg')" alt="twitter">
+                  </ShareNetwork>
+                  <ShareNetwork
+                    network="linkedin"
+                    :url='serverLink+user_path'
+                    :title="profileCard.name"
+                    class="px-2"
+                  >
+                    <img :src="require('@/assets/img/svg-icons/linkedin.svg')" alt="linkedin">
+                  </ShareNetwork>
+
+                  <a :href="coachProfileLinkUrl" class="share-link px-2" ref="myUrl"  @click.prevent="copyUrl">
+                      <img  :src="require('@/assets/img/svg-icons/link-share.svg')" alt="link">
+                  </a>
+
+                  
+                </div>
+              </div>
+              <div class="social-share-section" v-else>
                 <p class="social-share-section__text">{{$t('pwa_social_share_title')}}</p>
                 <div>
                   <ShareNetwork
@@ -46,7 +94,7 @@
                 </div>
               </div>
           
-              <div class="map-card">
+              <div class="map-card" :class="{'mt-5' : $vuetify.breakpoint.smAndDown }">
                 <v-card>
                   <v-card-text class="px-0 py-0">
                     <div>
@@ -710,7 +758,7 @@ export default {
     },
     contactBtnHandle() {
       if (!this.$auth.loggedIn) {
-        this.$router.push(this.localePath(pathData.pages.register));
+        this.$router.push(this.localePath(pathData.pages.login));
         let questionBox = {
           userId: this.userInfo.id,
           userName: this.userInfo.userName,
@@ -729,8 +777,10 @@ export default {
     handleBooking(service = null) {
       bookingService.destroyBookingInfo();
       if (!this.$auth.loggedIn) {
-        this.$router.push(this.localePath(pathData.pages.register));
+        this.$router.push(this.localePath(pathData.pages.login));
       } else {
+        this.$store.dispatch("setBookingCoachInfo", this.profileCard);
+        this.$store.dispatch("setBookingPackageInfo", service);
         this.$router.push(
           this.localePath(pathData.pages.bookingPackage(service.id))
         );
@@ -852,6 +902,21 @@ export default {
     font-family: 'Open Sans';
     font-style: normal;
     vertical-align: middle;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 25px;
+    text-align: center;
+
+    color: #15577C;
+  }
+}
+.social-share-section-sm{
+  background: #e1e6eb;
+  border-radius: 10px;
+  padding: 20px;
+  &__text{
+    font-family: 'Open Sans';
+    font-style: normal;
     font-weight: 700;
     font-size: 18px;
     line-height: 25px;

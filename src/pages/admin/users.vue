@@ -1,16 +1,32 @@
 <template>
   <v-container fluid>
-    <v-row>
+    <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_user_list')">
+      <template v-slot:goBack>
+        <v-btn
+          icon
+          @click="handleBack"
+        >
+          <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+        </v-btn>
+      </template>
+      <template v-slot:action>
+        <span></span>
+      </template>
+    </mobile-top-nav>
+
+
+    <v-row class="d-none d-md-block">
       <v-col cols="12" class="pb-0">
-        <div class="page-title">User List</div>
+        <div class="page-title">{{$t('pwa_user_list')}}</div>
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row class="d-none d-md-block">
       <v-col cols="12">
         <div class="line"></div>
       </v-col>
     </v-row>
+
     <v-row>
       <v-col cols="12">
         <div>
@@ -447,11 +463,13 @@ import { imageService } from "@/services";
 import { adminUserApi, adminImpersonateApi } from "@/api";
 import { pathData } from "@/data";
 import VuePhoneNumberInput from "vue-phone-number-input";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
   layout: "admin",
   components: {
-    VuePhoneNumberInput
+    VuePhoneNumberInput,
+    MobileTopNav
   },
   data() {
     return {
@@ -532,6 +550,9 @@ export default {
     this.getUser();
   },
   methods: {
+    handleBack(){
+      this.$router.push(this.localePath(pathData.admin.profileMenu));
+    },
     handleUserCreateSaveBtn() {
       if (this.$refs.form.validate()) {
         adminUserApi(this.$axios)

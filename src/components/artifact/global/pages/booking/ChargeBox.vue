@@ -1,5 +1,11 @@
 <template>
+<span>
+  <v-skeleton-loader
+    v-if="chargeInfo.total < 0"
+    type="article"
+  ></v-skeleton-loader>
   <div
+    v-else
     class="charge-box"
     :style="{
       borderImage: `url(${require('@/assets/images/border-staircase.svg')}) 30 space`
@@ -27,14 +33,6 @@
         {{ currencyService.toCurrency(chargeInfo.serviceFee) }}
       </div>
     </div>
-    <div class="charge-box__item" v-if="campPackage">
-      <div class="charge-box__item-left">
-        {{ $t("booking_charge_box_total_per_person_txt") }}
-      </div>
-      <div class="charge-box__item-right">
-        {{ currencyService.toCurrency(chargeInfo.totalPerPerson) }}
-      </div>
-    </div>
 
     <div class="charge-box__item promo" v-if="promoCode.valid">
       <div class="charge-box__item-left">
@@ -57,6 +55,15 @@
       </div>
     </div>
 
+    <div class="charge-box__item" v-if="campPackage">
+      <div class="charge-box__item-left">
+        {{ $t("booking_charge_box_total_per_person_txt") }}
+      </div>
+      <div class="charge-box__item-right">
+        {{ currencyService.toCurrency(chargeInfo.totalPerPerson) }}
+      </div>
+    </div>
+
     <!-- Total -->
     <div class="charge-box__item">
       <div class="charge-box__item-left stroke">
@@ -67,6 +74,7 @@
       </div>
     </div>
   </div>
+</span>
 </template>
 
 <script>

@@ -17,7 +17,7 @@
         />
         <img
           v-if="paymentCard.brand == 'visa'"
-          :src="require(`@/assets/images/booking/visa-text.svg`)"
+          :src="require(`@/assets/images/booking/visa.svg`)"
           height="50px"
           width="50px"
         />

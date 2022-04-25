@@ -427,7 +427,7 @@ export default {
   // }
   .footer-btn-wrapper {
     position: fixed;
-    bottom: 20px;
+    bottom: 80px;
     left: 10px;
     background: #49556a;
     display: flex;

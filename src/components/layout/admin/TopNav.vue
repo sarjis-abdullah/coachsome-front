@@ -75,7 +75,7 @@ export default {
             text: "Dashboard",
             path: pathData.admin.dashboard,
             icon: "mdi-view-list",
-            t_key: "dropdown_item_users"
+            t_key: "text_dashboard"
           },
           pageBuilder: {
             text: "CMS",
@@ -181,7 +181,7 @@ export default {
       this.$nuxt.$loading.start();
       await this.$auth.logout();
       if (!this.$auth.loggedIn) {
-        this.$router.push(this.localePath(pathData.pages.login));
+        this.$router.push(this.localePath(pathData.pages.home));
       }
       this.$nuxt.$loading.finish();
     }

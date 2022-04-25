@@ -1,435 +1,498 @@
 <template>
   <div class="setting-page--coach">
     <v-container>
+      <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('setting_page_title')">
+        <template v-slot:goBack>
+          <v-btn
+            icon
+            @click="handleBack"
+          >
+            <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+          </v-btn>
+        </template>
+        <template v-slot:action>
+          <span></span>
+        </template>
+      </mobile-top-nav>
       <v-row>
         <v-col offset-md="2">
-          <v-row>
+          <v-row class="d-none d-md-block">
             <v-col cols="12" class="pb-0">
               <div class="page-title">{{ $t("setting_page_title") }}</div>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="12">
-              <v-tabs
-                v-model="tab"
-                background-color="transparent"
-                color="primary-light-1"
-              >
-                <v-tab class="text-normal">
-                  {{ $t("athlete_setting_tab_account") }}
-                </v-tab>
-                <v-tab class="text-normal">
-                  {{ $t("athlete_settings_tab_security") }}
-                </v-tab>
-              </v-tabs>
-              <div class="line"></div>
-            </v-col>
-          </v-row>
+        <v-row class="d-md-none">
+          <v-col cols="12">
+            <v-list class="body-bg">
+              <v-list-item link @click.stop="handleAccount">
+                <v-list-item-icon>
+                  <v-img :src="require('@/assets/img/svg-icons/new/user-icon.svg')" alt="edit" />
+                </v-list-item-icon>
 
-          <v-tabs-items v-model="tab">
-            <v-tab-item>
-              <v-card color="body-bg pt-5">
+                <v-list-item-content>
+                  <v-list-item-title class="list-text">{{$t("payout_info_input_title_account")}}</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+              <!-- {{$t("setting_sec_notification_title")}} -->
+               <v-list-item link @click.stop="handleNotifications">
+                <v-list-item-icon>
+                  <v-img  :src="require('@/assets/img/svg-icons/new/bell.svg')" alt="payment" />
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title class="list-text">{{$t("setting_sec_notification_title")}}</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+
+              <!-- {{$t("athlete_settings_tab_security")}} -->
+              <v-list-item link @click.stop="handleSecurity">
+                <v-list-item-icon>
+                  <v-img  :src="require('@/assets/img/svg-icons/new/padlock.svg')" alt="payment" />
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title class="list-text">{{$t("athlete_settings_tab_security")}}</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+            </v-list>
+          </v-col>
+        </v-row>
+
+
+        <v-row class="d-none d-md-block">
+          <v-col cols="12">
+            <v-tabs
+              v-model="tab"
+              background-color="transparent"
+              color="primary-light-1"
+            >
+              <v-tab class="text-normal">
+                {{ $t("athlete_setting_tab_account") }}
+              </v-tab>
+              <v-tab class="text-normal">
+                {{ $t("athlete_settings_tab_security") }}
+              </v-tab>
+            </v-tabs>
+            <div class="line"></div>
+          </v-col>
+        </v-row>
+
+        <v-tabs-items v-model="tab" class="d-none d-md-block">
+          <v-tab-item>
+            <v-card color="body-bg pt-5">
+              <v-row>
+                <v-col cols="12" md="4">
+                  <div class="section-title pb-2">
+                    {{ $t("setting_sec_contact_info_title") }}
+                  </div>
+                  <div class="section-description">
+                    {{ $t("setting_sec_contact_info_user_desc") }}
+                  </div>
+                </v-col>
+                <v-col cols="12" md="3">
+                  <v-text-field
+                    v-model="form.contactInformation.firstName"
+                    dense
+                    autocomplete="off"
+                    solo
+                    :label="$t('setting_input_hint_first_name')"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" md="3">
+                  <v-text-field
+                    v-model="form.contactInformation.lastName"
+                    autocomplete="off"
+                    dense
+                    solo
+                    :label="$t('setting_input_hint_last_name')"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+
+              <v-row v-if="false">
+                <v-col cols="12" md="4">
+                  <div class="section-description">
+                    {{ $t("setting_sec_contact_info_loc_desc") }}
+                  </div>
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-row>
+                    <v-col cols="6">
+                      <v-autocomplete
+                        autocomplete="off"
+                        v-model="form.contactInformation.country"
+                        @change="handleCountryChange"
+                        :items="form.countryList"
+                        item-text="displayName"
+                        item-value="code"
+                        solo
+                        dense
+                        hide-no-data
+                        hide-details
+                        append-icon="expand_more"
+                        :label="$t('setting_input_hint_country')"
+                      ></v-autocomplete>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <div v-show="!isTheCountryCodeDk">
+                        <v-text-field
+                          v-model="form.contactInformation.address"
+                          solo
+                          dense
+                          :placeholder="$t('geography_placeholder_address')"
+                        ></v-text-field>
+                      </div>
+                      <div
+                        v-show="isTheCountryCodeDk"
+                        class="autocomplete-container"
+                      >
+                        <v-text-field
+                          v-model="form.contactInformation.address"
+                          solo
+                          dense
+                          ref="input"
+                          type="search"
+                          :placeholder="$t('geography_placeholder_address')"
+                          id="dawa-autocomplete-input"
+                        ></v-text-field>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row class="py-0">
+                    <v-col cols="12" md="3">
+                      <v-text-field
+                        autocomplete="off"
+                        v-model="form.contactInformation.zipCode"
+                        dense
+                        solo
+                        :label="$t('setting_input_hint_zip_code')"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <v-text-field
+                        autocomplete="off"
+                        v-model="form.contactInformation.city"
+                        dense
+                        solo
+                        :label="$t('setting_input_hint_city')"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+
+              <!-- Email -->
+              <v-row>
+                <v-col cols="12" md="4">
+                  <div class="section-title pb-2">
+                    {{ $t("setting_sec_email_title") }}
+                  </div>
+                  <div class="section-description">
+                    {{ $t("setting_sec_email_desc") }}
+                  </div>
+                </v-col>
+                <v-col cols="12" md="4">
+                  <v-text-field
+                    readonly
+                    v-model="form.email"
+                    dense
+                    solo
+                    @click="emailClickHandler"
+                    label="lorem@ipsum.dk"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row v-if="emailReset.dialog">
+                <v-col>
+                  <v-dialog
+                    v-model="emailReset.dialog"
+                    persistent
+                    max-width="400"
+                  >
+                    <v-card>
+                      <v-card-title class="headline">Email</v-card-title>
+                      <v-card-text>
+                        <v-row>
+                          <v-col cols="12">
+                            <v-text-field
+                              v-model="emailReset.email"
+                              dense
+                              hide-details
+                              solo
+                              label="Enter your new email"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12">
+                            <v-text-field
+                              v-model="emailReset.password"
+                              :rules="rule.password"
+                              dense
+                              solo
+                              type="password"
+                              label="Enter your current password"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          color="primary-light-1"
+                          text
+                          @click="emailResetCancelHandle"
+                        >
+                          Cancel
+                        </v-btn>
+                        <v-btn
+                          color="primary-light-1"
+                          text
+                          @click="emailResetSaveHandle"
+                        >
+                          Save
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-col>
+              </v-row>
+
+              <!-- Password  -->
+              <v-form ref="passwordForm" v-model="form.isValidPasswordForm">
                 <v-row>
                   <v-col cols="12" md="4">
                     <div class="section-title pb-2">
-                      {{ $t("setting_sec_contact_info_title") }}
+                      {{ $t("setting_sec_password_title") }}
                     </div>
                     <div class="section-description">
-                      {{ $t("setting_sec_contact_info_user_desc") }}
-                    </div>
-                  </v-col>
-                  <v-col cols="12" md="3">
-                    <v-text-field
-                      v-model="form.contactInformation.firstName"
-                      dense
-                      autocomplete="off"
-                      solo
-                      :label="$t('setting_input_hint_first_name')"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" md="3">
-                    <v-text-field
-                      v-model="form.contactInformation.lastName"
-                      autocomplete="off"
-                      dense
-                      solo
-                      :label="$t('setting_input_hint_last_name')"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-
-                <v-row v-if="false">
-                  <v-col cols="12" md="4">
-                    <div class="section-description">
-                      {{ $t("setting_sec_contact_info_loc_desc") }}
+                      {{ $t("setting_sec_password_desc") }}
                     </div>
                   </v-col>
                   <v-col cols="12" md="6">
-                    <v-row>
-                      <v-col cols="6">
-                        <v-autocomplete
-                          autocomplete="off"
-                          v-model="form.contactInformation.country"
-                          @change="handleCountryChange"
-                          :items="form.countryList"
-                          item-text="displayName"
-                          item-value="code"
-                          solo
-                          dense
-                          hide-no-data
-                          hide-details
-                          append-icon="expand_more"
-                          :label="$t('setting_input_hint_country')"
-                        ></v-autocomplete>
-                      </v-col>
-                    </v-row>
+                    <label for class="input-top-label">{{
+                      $t("setting_label_old_password")
+                    }}</label>
+                    <v-text-field
+                      v-model="form.password.oldPassword"
+                      solo
+                      dense
+                      :rules="rule.oldPassword"
+                      :label="$t('setting_input_hint_current_password')"
+                    ></v-text-field>
+
                     <v-row>
                       <v-col cols="12">
-                        <div v-show="!isTheCountryCodeDk">
-                          <v-text-field
-                            v-model="form.contactInformation.address"
-                            solo
-                            dense
-                            :placeholder="$t('geography_placeholder_address')"
-                          ></v-text-field>
-                        </div>
-                        <div
-                          v-show="isTheCountryCodeDk"
-                          class="autocomplete-container"
+                        <label for class="input-top-label">{{
+                          $t("setting_label_new_password")
+                        }}</label>
+                        <v-text-field
+                          v-model="form.password.newPassword"
+                          solo
+                          dense
+                          :rules="rule.newPassword"
+                          :label="$t('setting_input_hint_secure_password')"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12" lg="6">
+                        <v-btn
+                          block
+                          color="#E1E8F1"
+                          small
+                          @click="handlePasswordChangeBtn"
+                          >{{
+                            $t("setting_btn_label_change_password")
+                          }}</v-btn
                         >
-                          <v-text-field
-                            v-model="form.contactInformation.address"
-                            solo
-                            dense
-                            ref="input"
-                            type="search"
-                            :placeholder="$t('geography_placeholder_address')"
-                            id="dawa-autocomplete-input"
-                          ></v-text-field>
-                        </div>
-                      </v-col>
-                    </v-row>
-                    <v-row class="py-0">
-                      <v-col cols="12" md="3">
-                        <v-text-field
-                          autocomplete="off"
-                          v-model="form.contactInformation.zipCode"
-                          dense
-                          solo
-                          :label="$t('setting_input_hint_zip_code')"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" md="4">
-                        <v-text-field
-                          autocomplete="off"
-                          v-model="form.contactInformation.city"
-                          dense
-                          solo
-                          :label="$t('setting_input_hint_city')"
-                        ></v-text-field>
                       </v-col>
                     </v-row>
                   </v-col>
                 </v-row>
+              </v-form>
 
-                <!-- Email -->
-                <v-row>
-                  <v-col cols="12" md="4">
-                    <div class="section-title pb-2">
-                      {{ $t("setting_sec_email_title") }}
-                    </div>
-                    <div class="section-description">
-                      {{ $t("setting_sec_email_desc") }}
-                    </div>
-                  </v-col>
-                  <v-col cols="12" md="4">
-                    <v-text-field
-                      readonly
-                      v-model="form.email"
-                      dense
-                      solo
-                      @click="emailClickHandler"
-                      label="lorem@ipsum.dk"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row v-if="emailReset.dialog">
-                  <v-col>
-                    <v-dialog
-                      v-model="emailReset.dialog"
-                      persistent
-                      max-width="400"
-                    >
-                      <v-card>
-                        <v-card-title class="headline">Email</v-card-title>
-                        <v-card-text>
-                          <v-row>
-                            <v-col cols="12">
-                              <v-text-field
-                                v-model="emailReset.email"
-                                dense
-                                hide-details
-                                solo
-                                label="Enter your new email"
-                              ></v-text-field>
-                            </v-col>
-                          </v-row>
-                          <v-row>
-                            <v-col cols="12">
-                              <v-text-field
-                                v-model="emailReset.password"
-                                :rules="rule.password"
-                                dense
-                                solo
-                                type="password"
-                                label="Enter your current password"
-                              ></v-text-field>
-                            </v-col>
-                          </v-row>
-                        </v-card-text>
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
-                          <v-btn
-                            color="primary-light-1"
-                            text
-                            @click="emailResetCancelHandle"
-                          >
-                            Cancel
-                          </v-btn>
-                          <v-btn
-                            color="primary-light-1"
-                            text
-                            @click="emailResetSaveHandle"
-                          >
-                            Save
-                          </v-btn>
-                        </v-card-actions>
-                      </v-card>
-                    </v-dialog>
-                  </v-col>
-                </v-row>
-
-                <!-- Password  -->
-                <v-form ref="passwordForm" v-model="form.isValidPasswordForm">
+              <v-row>
+                <v-col cols="12" md="4">
+                  <div class="section-title pb-2">
+                    {{ $t("setting_sec_timezone_title") }}
+                  </div>
+                  <div class="section-description">
+                    {{ $t("setting_sec_timezone_desc") }}
+                  </div>
+                </v-col>
+                <v-col cols="12" md="4">
                   <v-row>
-                    <v-col cols="12" md="4">
-                      <div class="section-title pb-2">
-                        {{ $t("setting_sec_password_title") }}
-                      </div>
-                      <div class="section-description">
-                        {{ $t("setting_sec_password_desc") }}
-                      </div>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                      <label for class="input-top-label">{{
-                        $t("setting_label_old_password")
-                      }}</label>
-                      <v-text-field
-                        v-model="form.password.oldPassword"
+                    <v-col>
+                      <v-autocomplete
+                        autocomplete="off"
+                        v-model="form.contactInformation.country"
+                        @change="handleCountryChange"
+                        :items="form.countryList"
+                        item-text="displayName"
+                        item-value="code"
                         solo
                         dense
-                        :rules="rule.oldPassword"
-                        :label="$t('setting_input_hint_current_password')"
-                      ></v-text-field>
-
-                      <v-row>
-                        <v-col cols="12">
-                          <label for class="input-top-label">{{
-                            $t("setting_label_new_password")
-                          }}</label>
-                          <v-text-field
-                            v-model="form.password.newPassword"
-                            solo
-                            dense
-                            :rules="rule.newPassword"
-                            :label="$t('setting_input_hint_secure_password')"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12" lg="6">
-                          <v-btn
-                            block
-                            color="#E1E8F1"
-                            small
-                            @click="handlePasswordChangeBtn"
-                            >{{
-                              $t("setting_btn_label_change_password")
-                            }}</v-btn
-                          >
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                  </v-row>
-                </v-form>
-
-                <v-row>
-                  <v-col cols="12" md="4">
-                    <div class="section-title pb-2">
-                      {{ $t("setting_sec_timezone_title") }}
-                    </div>
-                    <div class="section-description">
-                      {{ $t("setting_sec_timezone_desc") }}
-                    </div>
-                  </v-col>
-                  <v-col cols="12" md="4">
-                    <v-row>
-                      <v-col>
-                        <v-autocomplete
-                          autocomplete="off"
-                          v-model="form.contactInformation.country"
-                          @change="handleCountryChange"
-                          :items="form.countryList"
-                          item-text="displayName"
-                          item-value="code"
-                          solo
-                          dense
-                          hide-no-data
-                          hide-details
-                          append-icon="expand_more"
-                          :label="$t('setting_input_hint_country')"
-                        ></v-autocomplete>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col>
-                        <v-text-field
-                          v-model="form.contactInformation.timezone"
-                          readonly
-                          solo
-                          dense
-                          :label="$t('setting_input_hint_country')"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-tab-item>
-            <v-tab-item>
-              <v-card flat class="body-bg">
-                <v-card-text>
-                  <div class="security-title">
-                    {{ $t("athlete_settings_title_verify_email_phone") }}
-                  </div>
-                  <v-row class="mt-5">
-                    <v-col cols="4" class="d-flex align-center">
-                      <v-icon>mdi-email-outline</v-icon>
-                      <div class="security-subtitle">
-                        {{ $t("athlete_settigs_verify_item_email") }}
-                      </div>
-                    </v-col>
-                    <v-col cols="8">
-                      <v-btn
-                        color="success"
-                        depressed
-                        v-if="security.isEmailVerified"
-                      >
-                        {{ $t("txt_verified") }}
-                      </v-btn>
-                      <v-btn
-                        depressed
-                        v-if="!security.isEmailVerified"
-                        @click="handleEmailVerifyBtnClick"
-                      >
-                        {{ $t("txt_verify") }}
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                  <v-row class="mt-5">
-                    <v-col cols="4" class="d-flex align-center">
-                      <v-icon>mdi-phone</v-icon>
-                      <div class="security-subtitle">
-                        {{ $t("athlete_settigs_verify_item_phone") }}
-                      </div>
-                    </v-col>
-                    <v-col cols="8">
-                      <v-btn
-                        depressed
-                        color="success"
-                        disabled
-                        @click="handlePhoneVerifyBtnClick"
-                      >
-                        {{ $t("txt_verify") }}
-                      </v-btn>
+                        hide-no-data
+                        hide-details
+                        append-icon="expand_more"
+                        :label="$t('setting_input_hint_country')"
+                      ></v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col>
-                      <div class="line"></div>
+                      <v-text-field
+                        v-model="form.contactInformation.timezone"
+                        readonly
+                        solo
+                        dense
+                        :label="$t('setting_input_hint_country')"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
-                  <div class="security-title mt-5">
-                    {{ $t("athlete_settigs_conect_social_account") }}
-                  </div>
-                  <v-row class="mt-5">
-                    <v-col cols="4" class="d-flex align-center">
-                      <v-icon color="#4267B2">mdi-facebook</v-icon>
-                      <div class="security-subtitle">
-                        {{ $t("athlete_settings_connect_fb_acc") }}
-                      </div>
-                    </v-col>
-                    <v-col cols="8">
-                      <v-btn
-                        depressed
-                        v-if="!security.isConnectedFacebook"
-                        @click="handleFacebookVerifyBtnClick"
-                      >
-                        {{ $t("txt_connect") }}
-                      </v-btn>
-                      <v-btn v-else depressed color="success">
-                        {{ $t("txt_connected") }}
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                  <v-row class="mt-5">
-                    <v-col cols="4" class="d-flex align-center">
-                      <v-icon color="#EB4335">mdi-google</v-icon>
-                      <div class="security-subtitle">
-                        {{ $t("athlete_settings_connect_google_acc") }}
-                      </div>
-                    </v-col>
-                    <v-col cols="8">
-                      <v-btn
-                        depressed
-                        v-if="!security.isConnectedGoogle"
-                        @click="handleGoogleVerifyBtnClick"
-                      >
-                        {{ $t("txt_connect") }}
-                      </v-btn>
-                      <v-btn v-else depressed color="success">
-                        {{ $t("txt_connected") }}
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                  <v-row class="mt-5" v-if="false">
-                    <v-col cols="4" class="d-flex align-center">
-                      <v-icon color="#47ACDF">mdi-twitter</v-icon>
-                      <div class="security-subtitle">
-                        {{ $t("athlete_settings_connect_twitter_acc") }}
-                      </div>
-                    </v-col>
-                    <v-col cols="8">
-                      <v-btn
-                        depressed
-                        v-if="!security.isConnectedTwitter"
-                        @click="handleTwitterVerifyBtnClick"
-                      >
-                        {{ $t("txt_connect") }}
-                      </v-btn>
-                      <v-btn v-else depressed color="success">
-                        {{ $t("txt_connected") }}
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </v-tab-item>
-          </v-tabs-items>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card flat class="body-bg">
+              <v-card-text>
+                <div class="security-title">
+                  {{ $t("athlete_settings_title_verify_email_phone") }}
+                </div>
+                <v-row class="mt-5">
+                  <v-col cols="4" class="d-flex align-center">
+                    <v-icon>mdi-email-outline</v-icon>
+                    <div class="security-subtitle">
+                      {{ $t("athlete_settigs_verify_item_email") }}
+                    </div>
+                  </v-col>
+                  <v-col cols="8">
+                    <v-btn
+                      color="success"
+                      depressed
+                      v-if="security.isEmailVerified"
+                    >
+                      {{ $t("txt_verified") }}
+                    </v-btn>
+                    <v-btn
+                      depressed
+                      v-if="!security.isEmailVerified"
+                      @click="handleEmailVerifyBtnClick"
+                    >
+                      {{ $t("txt_verify") }}
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                <v-row class="mt-5">
+                  <v-col cols="4" class="d-flex align-center">
+                    <v-icon>mdi-phone</v-icon>
+                    <div class="security-subtitle">
+                      {{ $t("athlete_settigs_verify_item_phone") }}
+                    </div>
+                  </v-col>
+                  <v-col cols="8">
+                    <v-btn
+                      depressed
+                      color="success"
+                      disabled
+                      @click="handlePhoneVerifyBtnClick"
+                    >
+                      {{ $t("txt_verify") }}
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <div class="line"></div>
+                  </v-col>
+                </v-row>
+                <div class="security-title mt-5">
+                  {{ $t("athlete_settigs_conect_social_account") }}
+                </div>
+                <v-row class="mt-5">
+                  <v-col cols="4" class="d-flex align-center">
+                    <v-icon color="#4267B2">mdi-facebook</v-icon>
+                    <div class="security-subtitle">
+                      {{ $t("athlete_settings_connect_fb_acc") }}
+                    </div>
+                  </v-col>
+                  <v-col cols="8">
+                    <v-btn
+                      depressed
+                      v-if="!security.isConnectedFacebook"
+                      @click="handleFacebookVerifyBtnClick"
+                    >
+                      {{ $t("txt_connect") }}
+                    </v-btn>
+                    <v-btn v-else depressed color="success">
+                      {{ $t("txt_connected") }}
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                <v-row class="mt-5">
+                  <v-col cols="4" class="d-flex align-center">
+                    <v-icon color="#EB4335">mdi-google</v-icon>
+                    <div class="security-subtitle">
+                      {{ $t("athlete_settings_connect_google_acc") }}
+                    </div>
+                  </v-col>
+                  <v-col cols="8">
+                    <v-btn
+                      depressed
+                      v-if="!security.isConnectedGoogle"
+                      @click="handleGoogleVerifyBtnClick"
+                    >
+                      {{ $t("txt_connect") }}
+                    </v-btn>
+                    <v-btn v-else depressed color="success">
+                      {{ $t("txt_connected") }}
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                <v-row class="mt-5" v-if="false">
+                  <v-col cols="4" class="d-flex align-center">
+                    <v-icon color="#47ACDF">mdi-twitter</v-icon>
+                    <div class="security-subtitle">
+                      {{ $t("athlete_settings_connect_twitter_acc") }}
+                    </div>
+                  </v-col>
+                  <v-col cols="8">
+                    <v-btn
+                      depressed
+                      v-if="!security.isConnectedTwitter"
+                      @click="handleTwitterVerifyBtnClick"
+                    >
+                      {{ $t("txt_connect") }}
+                    </v-btn>
+                    <v-btn v-else depressed color="success">
+                      {{ $t("txt_connected") }}
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+        </v-tabs-items>
         </v-col>
       </v-row>
 
-      <v-row>
+      <v-row class="d-none d-md-block">
         <v-col cols="12">
           <client-back-footer>
             <template v-slot:left>
@@ -457,11 +520,14 @@
 import { coachSettingApi, coachTimezoneApi } from "@/api";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import { endpoint } from "../../api";
+import { pathData } from "@/data";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
   layout: "coach-no-drawer",
   components: {
-    ClientBackFooter
+    ClientBackFooter,
+    MobileTopNav
   },
   data() {
     return {
@@ -539,6 +605,15 @@ export default {
     this.securityDetails();
   },
   methods: {
+    handleAccount() {
+      this.$router.push(this.localePath(pathData.coach.account));
+    },
+    handleNotifications(){
+      this.$router.push(this.localePath(pathData.coach.notification));
+    },
+    handleSecurity(){
+      this.$router.push(this.localePath(pathData.pages.security));
+    },
     beforeDestroy() {
       window.removeEventListener("message", this.onMessage);
     },
@@ -790,7 +865,10 @@ export default {
       } else {
         this.form.activeNotifications.push(notification);
       }
-    }
+    },
+    handleBack(){
+      this.$router.push(this.localePath(pathData.coach.profileMenu));
+    },
   }
 };
 </script>
@@ -868,5 +946,23 @@ export default {
   .dawa-autocomplete-suggestions .dawa-autocomplete-suggestion:hover {
     background: #f0f0f0;
   }
+}
+.list-text{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 25px;
+  color: #49556A;
+}
+.theme--light.v-icon{
+  color: #000;
+}
+.btn-icon{
+  margin-right: auto;
+}
+
+.btn-text{
+  margin-right: auto;
 }
 </style>

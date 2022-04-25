@@ -1,18 +1,31 @@
 <template>
   <v-container>
-    <v-row>
+    <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_payout_menu')">
+      <template v-slot:goBack>
+        <v-btn
+          icon
+          @click="handleBack"
+        >
+          <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+        </v-btn>
+      </template>
+      <template v-slot:action>
+        <span></span>
+      </template>
+    </mobile-top-nav>
+    <v-row class="d-none d-md-block">
       <v-col cols="12" class="pb-0">
-        <div class="page-title">Payout Request</div>
+        <div class="page-title">{{$t('pwa_payout_menu')}}</div>
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row class="d-none d-md-block">
       <v-col cols="12">
         <div class="line"></div>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col cols="12">
+
+      <v-col cols="12" :class="{'pt-5' : $vuetify.breakpoint.xsOnly}">
         <div>
           <v-card>
             <v-card-title>
@@ -75,10 +88,11 @@
 import { imageService } from "@/services";
 import { adminPayoutRequestApi, adminImpersonateApi } from "@/api";
 import { pathData } from "@/data";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
   layout: "admin",
-  components: {},
+  components: {MobileTopNav},
   data() {
     return {
       search: "",
@@ -129,6 +143,9 @@ export default {
     };
   },
   methods: {
+    handleBack(){
+      this.$router.push(this.localePath(pathData.admin.profileMenu));
+    },
     async handlePaidPayoutRequest(item) {
       let payload = {
         payoutRequestId: item.id
