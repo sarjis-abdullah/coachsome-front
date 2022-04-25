@@ -236,11 +236,11 @@ export default {
     },
     loginWithFacebook() {
       window.location.href =
-        process.env.API_SERVER_URL + "/auth/login/facebook?user_type=coach";
+        process.env.API_SERVER_URL + "/auth/login/facebook?pwa=pwa_auth";
     },
     loginWithGoogle() {
       window.location.href =
-        process.env.API_SERVER_URL + "/auth/login/google?user_type=coach";
+        process.env.API_SERVER_URL + "/auth/login/google?pwa=pwa_auth";
     },
     forgetPasswordBtnHandle() {
       this.$router.push(pathData.pages.forgotPassword);

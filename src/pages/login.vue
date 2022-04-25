@@ -144,12 +144,12 @@ export default ({
       loginWithFacebook() {
         this.show_loading_on_facebook_login_btn = true;
         window.location.href =
-          process.env.API_SERVER_URL + "/auth/login/facebook?user_type=coach";
+          process.env.API_SERVER_URL + "/auth/login/facebook?pwa=pwa_auth";
       },
       loginWithGoogle() {
         this.show_loading_on_google_login_btn = true;
         window.location.href =
-          process.env.API_SERVER_URL + "/auth/login/google?user_type=coach";
+          process.env.API_SERVER_URL + "/auth/login/google?pwa=pwa_auth";
       },
     },
 

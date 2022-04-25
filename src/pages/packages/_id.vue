@@ -197,7 +197,7 @@
                       elevation="0"
                       hide-details
                       class="mt-5"
-                      placeholder="Enter promo code or gift certificate code here"
+                      :placeholder="$t('pwa_enter_promo_or_gift_code')"
                     >
                       <template v-slot:append>
                         <div>
@@ -628,7 +628,7 @@
                             elevation="0"
                             hide-details
                             class="mt-5"
-                            placeholder="Enter promo code or gift certificate code here"
+                            :placeholder="$t('pwa_enter_promo_or_gift_code')"
                           >
                             <template v-slot:append>
                               <div>
@@ -1054,8 +1054,7 @@ export default {
   },
   watch: {
     selectedPaymentMethod() {
-      let booking = storageHelper.get("booking");
-      if(this.messageFromPackageBuyer == "" && booking.step == 2){
+      if(this.messageFromPackageBuyer == "" && this.paymentCard == ""){
         this.$refs.messageBoxTextArea.focus();
       }
     },
