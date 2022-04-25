@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12 px-md-0">
-          <div v-html="content"></div>
+          <div v-html="content" @click="handleClick"></div>
         </div>
       </div>
     </div>
@@ -53,7 +53,14 @@ export default {
       content
     };
   },
-  methods: {}
+  methods: {
+    handleClick(e) {
+      const elt = e.target.closest(".btn-pricing");
+      if (elt) {
+        alert("Got a click on .play-video or a child element")
+      }
+    }
+  }
 };
 </script>
 
