@@ -1,9 +1,27 @@
 <template>
   <div class="front-booking-page" :class="{'mb-15' : $vuetify.breakpoint.xsOnly}">
-      <v-skeleton-loader
-        v-if="isLoading"
-        type="list-item-avatar, divider, list-item-three-line, card-heading, image, actions"
-      ></v-skeleton-loader>
+      <v-row class="mt-5" justify="center" align="center"  v-if="isLoading">
+        <v-col cols="12" md="9">
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-skeleton-loader
+                type="list-item-avatar, divider, list-item-three-line, article, actions"
+              ></v-skeleton-loader>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-skeleton-loader
+                v-bind="attrs"
+                type="article"
+              ></v-skeleton-loader>
+
+              <v-skeleton-loader
+                v-bind="attrs"
+                type="divider, article, actions"
+              ></v-skeleton-loader>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
     <span v-else>
     <v-stepper v-model="step" v-if="$vuetify.breakpoint.xsOnly">
       <v-stepper-header>
@@ -171,15 +189,14 @@
                   />
                   <div class="promo-code">
                     <v-text-field
-                      v-model="promoCode.dialogValue"
+                      v-model="promoCode.value"
                       outlined
                       dense
-                      clearable
+                      readonly
+                      @click="promoCode.dialog = true"
                       elevation="0"
                       hide-details
                       class="mt-5"
-                      @click:clear="handleRemoveBtnClick"
-                      @blur="handleApplyBtnClick"
                       placeholder="Enter promo code or gift certificate code here"
                     >
                       <template v-slot:append>
@@ -191,6 +208,46 @@
                       </template>
                     </v-text-field>
 
+                    <v-dialog v-model="promoCode.dialog" max-width="290">
+                      <v-card class="px-2">
+                        <v-card-title>
+                          {{ $t("package_booking_promo_code_title") }}
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            icon
+                            x-small
+                            @click="promoCode.dialog = false"
+                          >
+                            <v-icon>mdi-close</v-icon>
+                          </v-btn>
+                        </v-card-title>
+                        <v-card-text>
+                          <v-text-field
+                            v-model="promoCode.dialogValue"
+                            :label="$t('package_booking_placeholder_enter_promo_code')"
+                          ></v-text-field>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+
+                          <v-btn
+                            color="error"
+                            text
+                            @click="handleRemoveBtnClick"
+                          >
+                            {{ $t("pakcage_booking_promo_code_label_btn_remove") }}
+                          </v-btn>
+                          <v-btn
+                            color="primary-light-1"
+                            text
+                            :loading="isLoading"
+                            @click="handleApplyBtnClick"
+                          >
+                            {{ $t("package_booking_promo_code_btn_label_apply") }}
+                          </v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
                     <!-- Gift Card -->
                     <div
                       v-if="giftCard.balance"
@@ -563,14 +620,14 @@
                         />
                         <div class="promo-code">
                           <v-text-field
-                            v-model="promoCode.dialogValue"
+                            v-model="promoCode.value"
                             outlined
                             dense
+                            readonly
+                            @click="promoCode.dialog = true"
                             elevation="0"
                             hide-details
                             class="mt-5"
-                            @click:clear="handleRemoveBtnClick"
-                            @blur="handleApplyBtnClick"
                             placeholder="Enter promo code or gift certificate code here"
                           >
                             <template v-slot:append>
@@ -583,7 +640,50 @@
                           </v-text-field>
 
 
+
                           <!-- Gift Card -->
+
+                         <v-dialog v-model="promoCode.dialog" max-width="290">
+                            <v-card class="px-2">
+                              <v-card-title>
+                                {{ $t("package_booking_promo_code_title") }}
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                  icon
+                                  x-small
+                                  @click="promoCode.dialog = false"
+                                >
+                                  <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                              </v-card-title>
+                              <v-card-text>
+                                <v-text-field
+                                  v-model="promoCode.dialogValue"
+                                  :label="$t('package_booking_placeholder_enter_promo_code')"
+                                ></v-text-field>
+                              </v-card-text>
+                              <v-card-actions>
+                                <v-spacer></v-spacer>
+
+                                <v-btn
+                                  color="error"
+                                  text
+                                  @click="handleRemoveBtnClick"
+                                >
+                                  {{ $t("pakcage_booking_promo_code_label_btn_remove") }}
+                                </v-btn>
+                                <v-btn
+                                  color="primary-light-1"
+                                  text
+                                  :loading="isLoading"
+                                  @click="handleApplyBtnClick"
+                                >
+                                  {{ $t("package_booking_promo_code_btn_label_apply") }}
+                                </v-btn>
+                              </v-card-actions>
+                            </v-card>
+                          </v-dialog>
+
                           <div
                             v-if="giftCard.balance"
                             class="balance-btn"
