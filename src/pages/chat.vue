@@ -1643,7 +1643,7 @@ $header-height: 60px;
         overflow: auto;
         overflow-y: scroll;
         // height: 100vh;
-        height: calc(100vh - 1rem);
+        height: calc(100vh - 16rem);
       }
       /* width */
       .contact::-webkit-scrollbar {
