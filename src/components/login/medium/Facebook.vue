@@ -54,7 +54,7 @@ export default {
       this.show_loading_on_facebook_login_btn = true;
       window.location.href =
         process.env.API_SERVER_URL +
-        "/auth/login/facebook";
+        "/auth/login/facebook?user_type=coach";
     },
     backToLogin(){
       this.$store.dispatch("setActivePopupItem", "loginUsingEmail")
