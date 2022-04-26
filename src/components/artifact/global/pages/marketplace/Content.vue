@@ -56,6 +56,7 @@
                       color="#ecf2f7"
                       elevation="0"
                       fixed
+                      class="coach-filter-sm"
                     >
 
                       <v-autocomplete
@@ -967,6 +968,46 @@ export default {
     background: #ecf2f7;
     transition: background-color 0.5s ease;
     width: 100%;
+  }
+}
+
+.v-toolbar{
+  &__content{
+    padding: 4px 12px!important;
+  }
+}
+
+.coach-filter-sm{
+  .v-input{
+    &__slot{
+      .v-select{
+        &__slot{
+            display: flex!important;
+            justify-content: center!important;
+            max-width: 100%!important;
+            min-width: 100%!important;
+            width: 100%!important;
+          .v-label{
+            left: auto!important;
+            // background: red!important;
+            right: auto!important;
+            text-align: center!important;
+            display: flex!important;
+            justify-content: center!important;
+            position: absolute!important;
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 19px;
+            color: #6F8098;
+
+          }
+        }
+
+      }
+
+    }
   }
 }
 </style>

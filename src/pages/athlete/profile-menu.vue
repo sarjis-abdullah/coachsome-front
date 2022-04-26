@@ -1,6 +1,17 @@
 <template>
 
-<v-container fluid grid-list-md text-xs-center class="d-flex">
+<v-container fluid >
+    <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_profile_menu')">
+      <template v-slot:goBack >
+       <span style="width: 16px"></span>
+        <v-avatar @click.native="showProfile()" size="32px"  v-if="avatarImage">
+          <v-img aspect-ratio="1" :src="avatarImage" alt="Avatar" />
+        </v-avatar>
+        <v-avatar @click.native="showProfile()" color="primary-light-1" size="32px" v-else>
+          <span>{{ initialImageContent }}</span>
+        </v-avatar>
+      </template>
+    </mobile-top-nav>
     <v-row
       justify="center"
     >
@@ -11,19 +22,6 @@
         lg="4"
         xs="11"
       >
-        <v-row class="page-top-header-row body-bg">
-            <v-col cols="12" class="page-top-header-column px-0 mx-0" style="vertical-align: middle">
-              <span class="header-title">{{$t("pwa_profile_menu")}}</span>
-              <v-avatar size="32px" style="float:right" class="mt-2" v-if="avatarImage">
-                <v-img aspect-ratio="1" :src="avatarImage" alt="Avatar" />
-              </v-avatar>
-              <v-avatar color="primary-light-1"  style="float:right" class="mt-2" size="55px" v-else>
-                <span>{{ initialImageContent }}</span>
-              </v-avatar>
-              <br>
-              <router-link class="show-profile" to="" @click.native="showProfile()">{{$t("pwa_show_profile")}}</router-link>
-            </v-col>
-        </v-row>
         <v-row>
           <v-col cols="12">
             <v-list class="body-bg">
@@ -235,9 +233,11 @@
 import { pathData } from "@/data";
 import { currencyService } from "@/services";
 import impersonateAdminApi from "@/api/admin/impersonate";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default ({
   layout: "common",
+  components: {MobileTopNav},
   data(){
     return {
       editProfile: {
