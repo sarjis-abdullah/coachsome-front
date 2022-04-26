@@ -274,7 +274,7 @@
                   </template>
                 </v-select>
               </div>
-              <div class="contact">
+              <div :class="{'contact' : !$vuetify.breakpoint.smAndDown, 'contact-sm' : $vuetify.breakpoint.smAndDown}">
                 <ContactList
                   :avatar-size="avatarSize"
                   @selected="onHandleContactItemSeleted"
@@ -1637,6 +1637,12 @@ $header-height: 60px;
       .contact {
         overflow: auto;
         height: 100%;
+        height: calc(100vh - 16rem);
+      }
+      .contact-sm {
+        overflow: auto;
+        overflow-y: scroll;
+        // height: 100vh;
         height: calc(100vh - 1rem);
       }
       /* width */
