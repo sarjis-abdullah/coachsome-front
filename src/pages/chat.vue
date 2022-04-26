@@ -186,7 +186,7 @@
           </v-list>
           <div class="line"></div>
 
-            <div class="left-sidebar__header d-none d-md-block">
+            <div class="left-sidebar__header " v-if="!$vuetify.breakpoint.xsOnly">
               <div class="left-sidebar-title">
                 {{ $t("chat_page_title_message") }}
               </div>
