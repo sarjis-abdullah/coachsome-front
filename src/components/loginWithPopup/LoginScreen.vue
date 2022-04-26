@@ -155,12 +155,12 @@ export default({
             this.show_loading_on_facebook_login_btn = true;
             window.location.href =
                 process.env.API_SERVER_URL +
-                "/auth/login/facebook?pwa=pwa_auth";
+                "/auth/login/facebook";
         },
         loginWithGoogle() {
             this.show_loading_on_google_login_btn = true;
             window.location.href =
-                process.env.API_SERVER_URL + "/auth/login/google?pwa=pwa_auth";
+                process.env.API_SERVER_URL + "/auth/login/google";
         },
         forgetPasswordBtnHandle() {
             this.$router.push(this.localePath(pathData.pages.forgotPassword));
