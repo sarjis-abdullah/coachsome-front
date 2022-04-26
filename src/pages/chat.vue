@@ -1,6 +1,21 @@
 <template>
   <div class="chat-new-page">
     <v-container fluid class="pa-0">
+      <mobile-top-nav extraClass="body-bg" :headerText="$t('pwa_chat_page_title_message')">
+        <template v-slot:goBack>
+          <span></span>
+        </template>
+        <template v-slot:action>
+          <v-btn
+            icon
+            @click="handleGroupBtnClick"
+          >
+            <v-icon class="common-top-add-icon">
+              mdi-plus-circle-outline
+            </v-icon>
+          </v-btn>
+        </template>
+      </mobile-top-nav>
       <v-row no-gutters>
         <!-- Dialog -->
         <v-dialog v-model="bookingDialog.value" max-width="400">
@@ -148,24 +163,7 @@
         <!-- left-sidebar -->
         <v-col cols="12" :md="leftSidebarMd" v-if="leftSidebarSection">
           <div class="left-sidebar">
-
-            <div class="left-sidebar__header page-top-header-row d-md-none" style="background: #f7fafc" >
-              <div class="left-sidebar-title">
-                <span class="common-top-page-title">{{ $t("pwa_chat_page_title_message") }}</span>
-              </div>
-              <div class="left-sidebar-action">
-                <v-btn
-                  icon
-                  @click="handleGroupBtnClick"
-                >
-                  <v-icon class="common-top-add-icon">
-                    mdi-plus-circle-outline
-                  </v-icon>
-                </v-btn>
-              </div>
-            </div>
-
-            <div class="left-sidebar__header d-none d-md-block">
+            <div class="left-sidebar__header" v-if="!$vuetify.breakpoint.xsOnly">
               <div class="left-sidebar-title">
                 {{ $t("chat_page_title_message") }}
               </div>
@@ -181,7 +179,7 @@
               </div>
             </div>
             <div class="left-sidebar__body">
-              <div class="pl-4 pr-4 pt-5 d-md-none">
+              <div class="pl-4 pr-4 d-md-none" :class="{'pt-5' : !$vuetify.breakpoint.xsOnly, 'pt-10' : $vuetify.breakpoint.xsOnly}">
                 <v-text-field
                   :label="$t('chat_field_label_txt_search')"
                   solo
@@ -733,7 +731,8 @@ import "vue-advanced-cropper/dist/style.css";
 import { endpoint } from "../api";
 import { pathData, contactData } from "@/data";
 import { messageData } from "@/data";
-import UploadAttachment from '@/components/artifact/global/pages/chat/UploadAttachment'
+import UploadAttachment from '@/components/artifact/global/pages/chat/UploadAttachment';
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
   layout: "chat",
@@ -751,7 +750,8 @@ export default {
     ChatScreen,
     ChatSetting,
     ContactList,
-    UploadAttachment
+    UploadAttachment,
+    MobileTopNav
   },
   data: () => ({
     touch_start: 0,

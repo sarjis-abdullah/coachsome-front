@@ -294,9 +294,223 @@ export default {
         ]
       }
     ],
+    [
+      '@nuxtjs/pwa',
+      {
+        meta: {
+          title: 'Coachsome',
+          author: 'Coachsome',
+        },
+        manifest: {
+          "name":"Coachsome",
+          "short_name":"Coachsome",
+          "description": "Coachsome",
+          "display": "standalone",
+          "background_color": "#E5E5E5",
+          "capture_links": "existing_client_event",
+          "url_handlers" : [
+            {
+              "origin": "https://test.coachsome.com/"
+            },
+            {
+              "origin": "https://coachsome.com/"
+            },
+            {
+              "origin": "https://*.coachsome.com/"
+            }
+          ],
+          "manifest_package": "org.chromium.webapk.test",
+          "scope": "/",
+          "intent_filters": {
+            "scope_url_scheme": "https",
+            "scope_url_host": "coachsome.com",
+            "scope_url_path": "/"
+          },
+          "start_url": "/",
+          "display_mode": "standalone",
+          "orientation": "portrait",
+          "version_code": "1",
+          "version_name": "1.0",
+          "bound_webapk": {
+            "runtime_host": "org.chromium.chrome",
+            "runtime_host_application_name": "Chromium"
+          },
+          "icons": [
+            {
+              "src": "/msapplication-icon-144x144.png",
+              "size": "144x144",
+              "type": "image/png"
+            },
+            {
+              "src": "/apple-touch-icon-120x120.png",
+              "size": "120x120",
+              "type": "image/png"
+            },
+            {
+              "src": "/apple-touch-icon-152x152.png",
+              "size": "152x152",
+              "type": "image/png"
+            },
+            {
+              "src": "/android-chrome-maskable-192x192.png",
+              "size": "192x192",
+              "type": "image/png"
+            },
+            {
+              "src": "/android-chrome-512x512.png",
+              "size": "512x512",
+              "type": "image/png"
+            },
+            {
+              "src": "/apple-touch-icon-60x60.png",
+              "sizes": "60x60",
+              "type": "image/png",
+              "purpose": "any maskable"
+            },
+            {
+              "src": "/apple-touch-icon-120x120.png",
+              "sizes": "120x120",
+              "type": "image/png",
+              "purpose": "any maskable"
+            },
+            {
+              "src": "/msapplication-icon-144x144.png",
+              "sizes": "144x144",
+              "type": "image/png",
+              "purpose": "any maskable"
+            },
+            {
+              "src": "/apple-touch-icon-152x152.png",
+              "sizes": "152x152",
+              "type": "image/png",
+              "purpose": "any maskable"
+            },
+            {
+              "src": "/android-chrome-maskable-192x192.png",
+              "sizes": "192x192",
+              "type": "image/png",
+              "purpose": "any maskable"
+            },
+            {
+              "src": "/android-chrome-maskable-512x512.png",
+              "sizes": "512x512",
+              "type": "image/png",
+              "purpose": "any maskable"
+            }
+          ],
+        },
+        
+      }
+    ],
     'vue-social-sharing/nuxt',
     'nuxt-user-agent',
   ],
+
+    // PWA module configuration: https://go.nuxtjs.dev/pwa
+    pwa: {
+      manifest: {
+        "name":"Coachsome",
+        icon:{
+          source: '/icon.png',
+          fileName: 'icon.png'
+        },
+        "short_name":"Coachsome",
+        "description": "Coachsome",
+        "display": "standalone",
+        "background_color": "#E5E5E5",
+        "capture_links": "existing_client_event",
+        "url_handlers" : [
+          {
+            "origin": "https://test.coachsome.com/"
+          },
+          {
+            "origin": "https://coachsome.com/"
+          },
+          {
+            "origin": "https://*.coachsome.com/"
+          }
+        ],
+        "manifest_package": "org.chromium.webapk.test",
+        "scope": "/",
+        "intent_filters": {
+          "scope_url_scheme": "https",
+          "scope_url_host": "coachsome.com",
+          "scope_url_path": "/"
+        },
+        "start_url": "/",
+        "display_mode": "standalone",
+        "orientation": "portrait",
+        "version_code": "1",
+        "version_name": "1.0",
+        "bound_webapk": {
+          "runtime_host": "org.chromium.chrome",
+          "runtime_host_application_name": "Chromium"
+        },
+        "icons": [
+          {
+            "src": "/msapplication-icon-144x144.png",
+            "size": "144x144",
+            "type": "image/png"
+          },
+          {
+            "src": "/apple-touch-icon-120x120.png",
+            "size": "120x120",
+            "type": "image/png"
+          },
+          {
+            "src": "/apple-touch-icon-152x152.png",
+            "size": "152x152",
+            "type": "image/png"
+          },
+          {
+            "src": "/android-chrome-maskable-192x192.png",
+            "size": "192x192",
+            "type": "image/png"
+          },
+          {
+            "src": "/android-chrome-512x512.png",
+            "size": "512x512",
+            "type": "image/png"
+          },
+          {
+            "src": "/apple-touch-icon-60x60.png",
+            "sizes": "60x60",
+            "type": "image/png",
+            "purpose": "any maskable"
+          },
+          {
+            "src": "/apple-touch-icon-120x120.png",
+            "sizes": "120x120",
+            "type": "image/png",
+            "purpose": "any maskable"
+          },
+          {
+            "src": "/msapplication-icon-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png",
+            "purpose": "any maskable"
+          },
+          {
+            "src": "/apple-touch-icon-152x152.png",
+            "sizes": "152x152",
+            "type": "image/png",
+            "purpose": "any maskable"
+          },
+          {
+            "src": "/android-chrome-maskable-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+          },
+          {
+            "src": "/android-chrome-maskable-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+          }
+        ],
+      }
+    },
 
   // Build Configuration
   build: {
