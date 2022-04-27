@@ -88,31 +88,6 @@
         <v-dialog v-model="addAttachmentDialog" max-width="400" style="z-index: 999!important; background: white">
           <upload-attachment ref="UploadAttachment" @cancel="handleAttachmentUploadCancel" @sendAttachment="uploadAttachmentFile($event)" ></upload-attachment>
         </v-dialog>
-        <!-- <a-drawer
-          class="d-none d-sm-flex d-md-none pa-0"
-          title="Actions"
-          placement="bottom"
-          :visible="actionDialog"
-          @close="actionDialog = false"
-        >
-          <div
-            :style="{
-              display: 'flex',
-              cursor: 'pointer',
-              alignItems: 'center'
-            }"
-            @click="handleCalenderClick"
-          >
-            <v-icon
-              color="primary-light-1"
-              :style="{ marginRight: '5px', padding: 0 }"
-              >mdi-calendar-plus</v-icon
-            >
-            <div class="action-item__title primary-light-1--text">
-              {{ $t("chat_title_booing_req") }}
-            </div>
-          </div>
-        </a-drawer> -->
         <a-drawer
           class="d-none d-sm-flex d-md-none pa-0"
           title="Actions"
@@ -149,24 +124,13 @@
         <v-col cols="12" :md="leftSidebarMd" v-if="leftSidebarSection">
           <div class="left-sidebar">
 
-            <!-- <div class="left-sidebar__header page-top-header-row d-md-none" style="background: #f7fafc" >
-              <div class="left-sidebar-title">
-                <span class="common-top-page-title">{{ $t("pwa_chat_page_title_message") }}</span>
-              </div>
-              <div class="left-sidebar-action">
-                <v-btn
-                  icon
-                  @click="handleGroupBtnClick"
-                >
-                  <v-icon class="common-top-add-icon">
-                    mdi-plus-circle-outline
-                  </v-icon>
-                </v-btn>
-              </div>
-            </div> -->
             <v-list width="100%" color="transparent" class="pa-0 ma-0 d-md-none">
               <v-list-item>
-                <span></span>
+                <v-btn
+                disabled
+                  icon
+                >
+                </v-btn>
                 <v-list-item-content class="pa-0 ma-0">
                   <v-list-item-title class="common-top-page-title"
                     
@@ -177,14 +141,14 @@
                   icon
                   @click="handleGroupBtnClick"
                 >
-                  <v-icon class="common-top-add-icon">
+                  <v-icon style="font-size: 25px!important;" class="common-top-add-icon">
                     mdi-plus-circle-outline
                   </v-icon>
                 </v-btn>
                 </v-list-item-action>
               </v-list-item>
-          </v-list>
-          <div class="line"></div>
+            </v-list>
+            <div class="line"></div>
 
             <div class="left-sidebar__header " v-if="!$vuetify.breakpoint.xsOnly">
               <div class="left-sidebar-title">
@@ -1755,4 +1719,12 @@ $header-height: 60px;
     }
   }
 }
+.v-list-item{
+	&__action{
+		margin: 0!important;
+	}
+}
+// .v-list-item{
+// 	padding: 0 16px 0 0!important;
+// }
 </style>
