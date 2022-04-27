@@ -979,7 +979,7 @@ export default {
 }
 
 .coach-filter-sm{
-  border-bottom: 1px solid #9faec2!important;
+  border-bottom: 2px solid #c2cdda!important;
   .v-input{
     &__slot{
       box-shadow: 0px 2px 4px rgba(73, 85, 106, 0.15)!important;

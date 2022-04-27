@@ -9,7 +9,7 @@
 									v-text="headerText"
 								></v-list-item-title>
 							</v-list-item-content>
-							<v-list-item-action style="text-align: center!important" :class="actionClass">
+							<v-list-item-action style="padding-right: 10px" :class="actionClass">
 								<slot name="action"></slot>
 							</v-list-item-action>
 						</v-list-item>
@@ -47,6 +47,6 @@
 	}
 }
 .v-list-item{
-	padding: 0 16px 0 0!important;
+	padding: 0!important;
 }
 </style>
