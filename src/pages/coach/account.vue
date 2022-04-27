@@ -107,56 +107,118 @@
             ></v-text-field>
 
             <!-- Time-zone End -->
-            
-            <!-- Password Area -->
-            <p class="account-label mt-2">{{$t("setting_label_old_password")}}</p>
-            <v-text-field
-              outlined
-              dense
-              hide-no-data
-              hide-details
-              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show1 ? 'text' : 'password'"
-              @click:append="show1 = !show1"
-              v-model="form.password.oldPassword"
-              :rules="rule.oldPassword"
-              name="input-10-1"
-              color="red"
-              id="old_password"
-              class="cs-input-text-field-login"
-              required
-              style="color:#15577C"
-            />
-            <p class="account-label mt-2">{{$t("setting_label_new_password")}}</p>
-            <v-text-field
-              outlined
-              dense
-              hide-no-data
-              hide-details
-              :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show2 ? 'text' : 'password'"
-              @click:append="show2 = !show2"
-              v-model="form.password.newPassword"
-              :rules="rule.newPassword"
-              name="input-10-1"
-              color="red"
-              id="new_password"
-              class="cs-input-text-field-login"
-              required
-              style="color:#15577C"
-            />
-            
-          </v-col>
-          <v-col cols="12" class="d-flex justify-center">
-            <v-btn
-              color="primary-light-1"
-              small
-              dark
-              @click.stop="handlePasswordChangeBtn()"
-              >{{ $t("setting_btn_label_change_password") }}
-            </v-btn>
           </v-col>
         </v-row>
+
+          <v-row v-if="form.contactInformation.has_password">
+            <v-col cols="12">
+              <!-- Password Area -->
+              <p class="account-label mt-2">{{$t("setting_label_old_password")}}</p>
+              <v-text-field
+                outlined
+                dense
+                hide-no-data
+                hide-details
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show1 ? 'text' : 'password'"
+                @click:append="show1 = !show1"
+                v-model="form.password.oldPassword"
+                :rules="rule.oldPassword"
+                name="input-10-1"
+                color="red"
+                id="old_password"
+                class="cs-input-text-field-login"
+                required
+                style="color:#15577C"
+              />
+              <p class="account-label mt-2">{{$t("setting_label_new_password")}}</p>
+              <v-text-field
+                outlined
+                dense
+                hide-no-data
+                hide-details
+                :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show2 ? 'text' : 'password'"
+                @click:append="show2 = !show2"
+                v-model="form.password.newPassword"
+                :rules="rule.newPassword"
+                name="input-10-1"
+                color="red"
+                id="new_password"
+                class="cs-input-text-field-login"
+                required
+                style="color:#15577C"
+              />
+              
+            </v-col>
+            <v-col cols="12" class="d-flex justify-center">
+              <v-btn
+                color="primary-light-1"
+                small
+                dark
+                @click.stop="handlePasswordChangeBtn()"
+                >{{ $t("setting_btn_label_change_password") }}
+              </v-btn>
+            </v-col>
+          </v-row>
+
+          <v-row v-else>
+            <v-col cols="12" class="pb-0 mb-0">
+              <p class="account-label">{{$t("setting_label_new_password")}}</p>
+              <v-text-field
+                outlined
+                dense
+                v-model="password"
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show1 ? 'text' : 'password'"
+                name="input-10-1"
+                color="red"
+                :label="$t('password_reset_title')"
+                @click:append="show1 = !show1"
+                id="password"
+                class="cs-input-text-field-login"
+                :rules="passwordRules"
+                required
+                style="color:#15577C"
+                @keyup.enter="addNewPassBtnHandle"
+              />
+              <p class="account-label">{{$t("pwa_confirm_new_password")}}</p>
+              <v-text-field
+                outlined
+                dense
+                v-model="rePassword"
+                :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show2 ? 'text' : 'password'"
+                name="input-10-1"
+                color="red"
+                :label="$t('pwa_confirm_new_password_hint')"
+                @click:append="show2 = !show2"
+                id="rePassword"
+                class="cs-input-text-field-login"
+                :rules="[passwordConfirmationRule]"
+                required
+                style="color:#15577C"
+                @keyup.enter="addNewPassBtnHandle"
+              />
+            </v-col>
+            <v-col cols="12" class="d-flex justify-center pt-0 mt-0">
+              <v-form
+                ref="passwordForm"
+                v-model="valid"
+                class="d-block w-100 d-flex justify-center"
+                lazy-validation
+              >
+                <v-btn
+                  color="primary-light-1"
+                  small
+                  dark
+                  :loading="show_loading_on_add_pass_btn"
+                  @click="addNewPassBtnHandle()"
+                  >{{ $t("text_add_new_pasword") }}
+                </v-btn>
+              </v-form>
+            </v-col>
+          </v-row>
 
         <!-- {{$t("pwa_email")}} Reset Dialog Start -->
         <v-row v-if="emailReset.dialog">
@@ -334,32 +396,12 @@
             </v-dialog>
           </v-col>
         </v-row>
-        <!-- <v-row>
-          <v-col cols="12">
-            <client-back-footer>
-              <template v-slot:left>
-                <v-btn
-                  class="ml-5 mb-5"
-                  color="primary-light-1"
-                  small
-                  dark
-                  @click.stop="handleSaveBtnClick()"
-                  >{{ $t("profile_save_btn") }}</v-btn
-                >
-              </template>
-              <template v-slot:right>
-                <span class="d-sm-flex d-xs-flex d-md-none justify-end mr-5">
-                </span>
-              </template>
-            </client-back-footer>
-          </v-col>
-        </v-row> -->
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
-import { coachSettingApi, coachTimezoneApi } from "@/api";
+import { coachSettingApi, coachTimezoneApi, authApi } from "@/api";
 import { endpoint } from "../../api";
 import { pathData } from "@/data";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
@@ -404,7 +446,8 @@ export default {
           lat: "",
           long: "",
           country: "",
-          timezone: ""
+          timezone: "",
+          has_password: ""
         },
         email: "",
         password: {
@@ -418,7 +461,22 @@ export default {
         oldPassword: [],
         newPassword: [],
         email: []
-      }
+      },
+      valid: true,
+      show_loading_on_add_pass_btn: false,
+      password: "",
+      rePassword: "",
+      passwordRules: [
+        v => !!v || "Password is required",
+        v => /^(?=.*[A-Z]).*$/.test(v) || "At least one upper case letter.",
+        v => (v && v.length >= 6) || "Password must be minimum 6 characters"
+      ],
+      reEnterPasswordRules: [
+        v => !!v || "Password is required",
+        v => /^(?=.*[A-Z]).*$/.test(v) || "At least one upper case letter.",
+        v => (v && v.length >= 6) || "Password must be minimum 6 characters",
+        v => (v && v.length >= 6) || "Password must be minimum 6 characters"
+      ]
     };
   },
   watch: {
@@ -450,6 +508,29 @@ export default {
     this.fetchSettings();
   },
   methods: {
+    addNewPassBtnHandle() {
+      if (this.$refs.passwordForm.validate()) {
+        this.show_loading_on_add_pass_btn = true;
+        let payload = {
+          email: this.form.email,
+          password: this.password
+        };
+        authApi(this.$axios)
+          .addNewPassword(payload)
+          .then((response) => {
+            this.$toast.success(response.data.message);
+            this.form.contactInformation.has_password = true;
+            this.show_loading_on_add_pass_btn = false;
+          })
+          .catch(({ response }) => {
+            if (response.data.message) {
+              this.$toast.error(response.data.message);
+            }
+            this.show_loading_on_add_pass_btn = false;
+          });
+      }
+
+    },
     handleBack(){
       this.$router.push(this.localePath(pathData.coach.settings));
     },
@@ -483,35 +564,6 @@ export default {
       this.form.contactInformation.address = "";
       this.fetchTimeZone(this.form.contactInformation.country);
     },
-    // async setTimezone() {
-    //   try {
-    //     let payload = {
-    //       firstName: this.form.contactInformation.firstName,
-    //       lastName: this.form.contactInformation.lastName,
-    //       cca2: this.form.contactInformation.country,
-    //       zipCode: this.form.contactInformation.zipCode,
-    //       lat: this.form.contactInformation.lat,
-    //       long: this.form.contactInformation.long,
-    //       city: this.form.contactInformation.city,
-    //       address: this.form.contactInformation.address,
-    //       timezone: this.form.contactInformation.timezone,
-    //       notificatonCategories: this.form.activeNotifications.map(
-    //         item => item.id
-    //       )
-    //     };
-    //     let { data } = await coachSettingApi(this.$axios).updateSetting(
-    //       payload
-    //     );
-    //     if (data.message) {
-    //       this.$toast.success(data.message);
-    //     }
-    //   } catch (error) {
-    //     let { data } = error.response;
-    //     if (data.message) {
-    //       this.$toast.error(data.message);
-    //     }
-    //   }
-    // },
     async handleSaveBtnClick() {
       try {
         let payload = {
@@ -632,6 +684,7 @@ export default {
         this.form.contactInformation.zipCode = data.userSetting.zipCode;
         this.form.contactInformation.city = data.userSetting.city;
         this.form.contactInformation.timezone = data.userSetting.timezone;
+        this.form.contactInformation.has_password = data.userSetting.has_password;
         this.form.activeNotifications =
           data.userSetting.activeNotificationCategories;
         this.form.email = data.userSetting.email;

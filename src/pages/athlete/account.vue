@@ -51,9 +51,12 @@
                 required
                 style="color:#15577C"
               />
+            </v-col>
+          </v-row>
 
-              
-              <!-- Password Area -->
+          <v-row v-if="form.contactInformation.has_password">
+            <v-col cols="12">
+               <!-- Password Area -->
               <p class="account-label mt-2">{{$t("setting_label_old_password")}}</p>
               <v-text-field
                 outlined
@@ -92,7 +95,7 @@
               />
               
             </v-col>
-            <v-col cols="6">
+            <v-col cols="12" class="d-flex justify-center">
               <v-btn
                 color="primary-light-1"
                 small
@@ -102,6 +105,67 @@
               </v-btn>
             </v-col>
           </v-row>
+
+          <v-row v-else>
+            <v-col cols="12" class="pb-0 mb-0">
+              <p class="account-label">{{$t("setting_label_new_password")}}</p>
+              <v-text-field
+                outlined
+                dense
+                v-model="password"
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show1 ? 'text' : 'password'"
+                name="input-10-1"
+                color="red"
+                :label="$t('password_reset_title')"
+                @click:append="show1 = !show1"
+                id="password"
+                class="cs-input-text-field-login"
+                :rules="passwordRules"
+                required
+                style="color:#15577C"
+                @keyup.enter="addNewPassBtnHandle"
+              />
+              <p class="account-label">{{$t("pwa_confirm_new_password")}}</p>
+              <v-text-field
+                outlined
+                dense
+                v-model="rePassword"
+                :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show2 ? 'text' : 'password'"
+                name="input-10-1"
+                color="red"
+                :label="$t('pwa_confirm_new_password_hint')"
+                @click:append="show2 = !show2"
+                id="rePassword"
+                class="cs-input-text-field-login"
+                :rules="[passwordConfirmationRule]"
+                required
+                style="color:#15577C"
+                @keyup.enter="addNewPassBtnHandle"
+              />
+            </v-col>
+            <v-col cols="12" class="d-flex justify-center pt-0 mt-0">
+              <v-form
+                ref="passwordForm"
+                v-model="valid"
+                class="d-block w-100 d-flex justify-center"
+                lazy-validation
+              >
+                <v-btn
+                  color="primary-light-1"
+                  small
+                  dark
+                  :loading="show_loading_on_add_pass_btn"
+                  @click="addNewPassBtnHandle()"
+                  >{{ $t("text_add_new_pasword") }}
+                </v-btn>
+              </v-form>
+            </v-col>
+          </v-row>
+
+
+
 
           <!-- Email Reset Dialog Start -->
           <v-row v-if="emailReset.dialog">
@@ -285,7 +349,7 @@
   </v-container>
 </template>
 <script>
-import { endpoint, athleteSettingApi } from "../../api";
+import { endpoint, athleteSettingApi, authApi } from "../../api";
 import { pathData, settingValueData, roleData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
@@ -313,6 +377,9 @@ export default {
       },
       form: {
         isValidPasswordForm: true,
+        contactInformation: {
+          has_password: ""
+        },
         email: "",
         password: {
           oldPassword: "",
@@ -322,7 +389,22 @@ export default {
       rule: {
         oldPassword: [],
         newPassword: []
-      }
+      },
+      valid: true,
+      show_loading_on_add_pass_btn: false,
+      password: "",
+      rePassword: "",
+      passwordRules: [
+        v => !!v || "Password is required",
+        v => /^(?=.*[A-Z]).*$/.test(v) || "At least one upper case letter.",
+        v => (v && v.length >= 6) || "Password must be minimum 6 characters"
+      ],
+      reEnterPasswordRules: [
+        v => !!v || "Password is required",
+        v => /^(?=.*[A-Z]).*$/.test(v) || "At least one upper case letter.",
+        v => (v && v.length >= 6) || "Password must be minimum 6 characters",
+        v => (v && v.length >= 6) || "Password must be minimum 6 characters"
+      ]
     };
   },
   watch: {
@@ -340,6 +422,29 @@ export default {
   },
   mounted() {},
   methods: {
+    addNewPassBtnHandle() {
+      if (this.$refs.passwordForm.validate()) {
+        this.show_loading_on_add_pass_btn = true;
+        let payload = {
+          email: this.form.email,
+          password: this.password
+        };
+        authApi(this.$axios)
+          .addNewPassword(payload)
+          .then((response) => {
+            this.$toast.success(response.data.message);
+            this.form.contactInformation.has_password = true;
+            this.show_loading_on_add_pass_btn = false;
+          })
+          .catch(({ response }) => {
+            if (response.data.message) {
+              this.$toast.error(response.data.message);
+            }
+            this.show_loading_on_add_pass_btn = false;
+          });
+      }
+
+    },
     handleBack(){
       this.$router.push(this.localePath(pathData.athlete.settings));
     },
@@ -400,18 +505,7 @@ export default {
     async fetchSettings() {
       let { data } = await athleteSettingApi(this.$axios).get();
       this.form.email = data.email;
-      // if (data.userSetting) {
-      //   this.form.contactInformation.firstName = data.userSetting.firstName;
-      //   this.form.contactInformation.lastName = data.userSetting.lastName;
-      //   this.form.contactInformation.country = data.userSetting.country;
-      //   this.form.contactInformation.address = data.userSetting.address;
-      //   this.form.contactInformation.zipCode = data.userSetting.zipCode;
-      //   this.form.contactInformation.city = data.userSetting.city;
-      //   this.form.contactInformation.timezone = data.userSetting.timezone;
-      //   this.form.activeNotifications =
-      //     data.userSetting.activeNotificationCategories;
-      //   this.form.email = data.userSetting.email;
-      // }
+      this.form.contactInformation.has_password = data.has_password;
     },
   }
 };
