@@ -12,6 +12,11 @@
           <span>{{ initialImageContent }}</span>
         </v-avatar>
       </template>
+      <template v-slot:action>
+        <v-avatar color="#ecf2f7" size="32px">
+          <span></span>
+        </v-avatar>
+      </template>
     </mobile-top-nav>
 
     <v-row

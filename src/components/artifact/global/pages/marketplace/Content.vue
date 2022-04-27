@@ -38,7 +38,7 @@
               </div>
 
               <!-- Field Block -->
-            <div class="fields-block mb-3" v-else>
+            <div class="fields-block" v-else>
               <v-row>
                 <!-- <v-col cols-12>
                   <span class="header-text">{{$t('pwa_coach_title')}}</span>
@@ -71,6 +71,7 @@
                         color="white"
                         item-text="name"
                         item-value="id"
+                        filled
                         :search-input.sync="categoryFilter.search"
                         multiple
                         solo
@@ -78,7 +79,7 @@
                         autocomplete="off"
                       >
                         <template v-slot:label >
-                          <v-icon medium style="vertical-align: middle">mdi-magnify</v-icon>
+                          <v-icon medium style="vertical-align: middle" color="#6F8098">mdi-magnify</v-icon>
                           {{$t('pwa_search_sport')}}
                           </template>
                         <template v-slot:selection="data">
@@ -978,8 +979,11 @@ export default {
 }
 
 .coach-filter-sm{
+  border-bottom: 1px solid #9faec2!important;
   .v-input{
     &__slot{
+      box-shadow: 0px 2px 4px rgba(73, 85, 106, 0.15)!important;
+      border-radius: 10px!important;
       .v-select{
         &__slot{
             display: flex!important;
@@ -998,7 +1002,7 @@ export default {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            font-size: 16px;
+            font-size: 17px;
             line-height: 19px;
             color: #6F8098;
 
