@@ -11,7 +11,10 @@ export default axios => ({
   passowrdRecovery: payload => {
     return axios.post("auth/recovery", payload);
   },
-  passwordReset: payload => {
+  addNewPassword: payload => {
+    return axios.post("auth/password/add", payload);
+  },
+  genPasswordReset: payload => {
     return axios.post("auth/password/reset", payload);
   },
   preRegister: payload => {

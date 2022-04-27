@@ -34,6 +34,7 @@ export const state = () => ({
   activeBottomNav: 0,
   bookingCoachInfo: process.browser && localStorage.getItem("booking_coach_info") || {},
   bookingPackageInfo: process.browser && localStorage.getItem("booking_package_info") || {},
+  has_password : process.browser && localStorage.getItem("has_password") || false,
 });
 
 export const getters = {
@@ -97,6 +98,9 @@ export const getters = {
   getBookingPackageInfo(state){
     return JSON.parse(JSON.stringify(state.bookingPackageInfo));
   },
+  getHasPassword(state){
+    return state.has_password;
+  }
 };
 
 export const mutations = {
@@ -177,6 +181,10 @@ export const mutations = {
     state.bookingPackageInfo = item;
     localStorage.setItem("booking_package_info", item);
   },
+  SET_HAS_PASSWORD(state, status){
+    state.has_password = status;
+    localStorage.setItem("has_password", status);
+  }
 
 };
 
@@ -241,4 +249,7 @@ export const actions = {
   setBookingPackageInfo(context, item){
     context.commit("SET_BOOKING_PACKAGE_INFO", item)
   },
+  setHasPassword(context, flag){
+    context.commit("SET_HAS_PASSWORD", flag)
+  }
 };

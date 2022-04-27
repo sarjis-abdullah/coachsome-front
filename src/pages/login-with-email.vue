@@ -197,6 +197,7 @@ export default ({
           .login(payload)
           .then(response => {
             this.$store.dispatch("setExistingEmail", this.email);
+            this.$store.dispatch("setHasPassword", response.data.has_password);
 
             if(response.data.is_social_register){
               this.$store.dispatch("setLoginMedium", response.data.social_acount.provider_name);
