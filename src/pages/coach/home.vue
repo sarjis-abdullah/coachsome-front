@@ -12,7 +12,7 @@
       <v-row
         align="center"
         justify="center"
-        class="pt-8"
+        class="pt-4"
       >
         <v-col
           cols="11"
@@ -23,9 +23,9 @@
           class="mb-10"
         >
       <v-row justify="center">
-        <v-col cols="12">
+         <v-col cols="12" v-if="bookingTimes.length > 0 && bookingTimes[0]">
           <v-row align="center">
-            <v-col cols="12">
+            <v-col cols="12" class="d-flex justify-center">
               <span class="home-sub-title">
                 {{ $t("pwa_upcoming_sessions") }}
               </span>
@@ -44,7 +44,7 @@
                 </template>
               </v-list>
               <div v-else class="body-bg no-session d-flex justify-center mt-10" style="background: #ecf2f7!important">
-                  <span>No upcoming <br/> sessions</span>
+                  <span>{{$t("no_upcoming")}} <br/> {{$t("text_session")}}</span>
               </div>
             </v-scroll-y-transition>
           </v-card>
