@@ -110,6 +110,21 @@
                 </v-list-item-icon>
               </v-list-item>
 
+              <!-- Invite Friends -->
+              <v-list-item link @click.stop="handleInviteFriends">
+                <v-list-item-icon>
+                  <v-img :src="require('@/assets/img/svg-icons/Invite.svg')" alt="invite" />
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title class="list-text">Invite your friends</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-icon>
+                  <v-icon>mdi-chevron-right</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+
               <v-list-item link @click.stop="handleSetting">
                 <v-list-item-icon>
                   <v-img  :src="require('@/assets/img/svg-icons/new/setting.svg')" alt="setting" />
@@ -354,7 +369,10 @@ export default ({
       },
       handleRefundPolicyBtn(){
         this.$router.push(this.localePath(pathData.pages.refundPolicy));
-      }
+      },
+      handleInviteFriends(){
+        this.$router.push(this.localePath(pathData.athlete.inviteYourFriends));
+      },
     }
 })
 </script>
