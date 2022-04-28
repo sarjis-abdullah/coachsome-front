@@ -1,35 +1,21 @@
 <template>
-<v-form ref="form" lazy-validation @submit.prevent="addEmail"> 
-    <v-row class="align-base">
-      <v-col
-            cols="12"
-          >
-            <section class="email-wrapper">
-              <div class="w-full">
-                <v-text-field
-                v-model="email"
-                placeholder="Enter Email-Address"
-                hide-details
-                dense
-                outlined
-                @blur="addEmail"
-                :rules="email_rules"
-              ></v-text-field>
-            </div>
-            <div v-if="item.index > 0" class="cursor-pointer" @click="removeEmail">
-              <img class="menu-icon-image" :src="require('@/assets/img/svg-icons/cancel.svg')" alt="">
-            </div>
-            </section>
-          </v-col>
-          <!-- <v-col
-          v-show="item.index > 0"
-            cols="1"
-          >
-            <div class="cursor-pointer" @click="removeEmail">
-              <img class="menu-icon-image" :src="require('@/assets/img/svg-icons/cancel.svg')" alt="">
-            </div>
-          </v-col> -->
-    </v-row>
+  <v-form ref="form" lazy-validation @submit.prevent="addEmail">
+    <section class="email-wrapper">
+      <div class="w-full">
+        <v-text-field
+        v-model="email"
+        placeholder="Enter Email-Address"
+        hide-details
+        dense
+        outlined
+        @blur="addEmail"
+        :rules="email_rules"
+      ></v-text-field>
+    </div>
+    <div v-if="item.index > 0" class="cursor-pointer" @click="removeEmail">
+      <img class="menu-icon-image" :src="require('@/assets/img/svg-icons/cancel.svg')" alt="">
+    </div>
+    </section>
   </v-form>
 </template>
 
