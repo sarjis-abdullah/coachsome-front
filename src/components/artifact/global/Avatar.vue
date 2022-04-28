@@ -215,6 +215,20 @@
           </v-list-item>
         </template>
       </v-list-group>
+      <v-dialog v-model="inviteFriendModal" persistent max-width="680">
+        <v-card>
+          <InviteYourFriends :isModal="true" @close-modal="inviteFriendModal = false"/>
+        </v-card>
+      </v-dialog>
+
+      <!-- Invite Friends -->
+      <v-list-item v-if="isAthlete || isCoach" color="primary" link @click.stop="handleInviteFriends">
+        <v-list-item-content>
+          <v-list-item-title>
+            Invite your friends
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
 
       <!-- Admin -->
       <span v-if="isAdmin">
@@ -278,7 +292,11 @@
 import { pathData } from "@/data";
 import impersonateAdminApi from "@/api/admin/impersonate";
 import { currencyService } from "@/services";
+import InviteYourFriends from '@/components/profile/invite-friends/InviteYourFriends.vue';
 export default {
+  components: {
+    InviteYourFriends,
+  },
   data() {
     return {
       menu: false,
@@ -468,7 +486,8 @@ export default {
           icon: "folder_open",
           t_key: "app_bar_setings"
         }
-      }
+      },
+      inviteFriendModal: false
     };
   },
   computed: {
@@ -590,6 +609,9 @@ export default {
     },
     handleAdminDashboard() {
       this.$router.push(this.localePath(this.items.adminDashBoard.path));
+    },
+    handleInviteFriends(){
+      this.inviteFriendModal = true
     }
   }
 };
