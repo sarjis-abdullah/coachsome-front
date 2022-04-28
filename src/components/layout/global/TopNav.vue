@@ -145,6 +145,17 @@
           </v-list>
         </v-menu>
 
+        <!-- coachContacts -->
+        <v-btn
+          v-if="isAuthCoach"
+          small
+          class="text-normal"
+          :color="colorOfTheTextBtn"
+          :to="localePath(navItems.coachContacts.path)"
+          text
+          nuxt
+          >{{ $t(navItems.coachContacts.t_key) }}</v-btn
+        >
         <!-- Marketplace -->
         <v-btn
           small
@@ -375,6 +386,12 @@ export default {
           icon: "folder_open",
           t_key: "app_bar_dashboard_booking",
           path: pathData.athlete.bookings
+        },
+        coachContacts: {
+          key: "coach_contacts",
+          icon: "folder_open",
+          t_key: "app_bar_coach_contacts_page",
+          path: pathData.coach.coachContacts
         }
       }
     };
@@ -471,7 +488,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.top-nav {
+// .top-nav {
   // .slogan {
   //   font-family: $font-family;
   //   font-style: italic;
@@ -479,5 +496,5 @@ export default {
   //   line-height: 19px;
   //   color: $primary-light-1;
   // }
-}
+// }
 </style>

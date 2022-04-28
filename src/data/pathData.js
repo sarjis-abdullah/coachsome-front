@@ -75,6 +75,7 @@ export default {
     notification: "/coach/notification",
     home: "/coach/home",
     inviteYourFriends: "/coach/invite-your-friends",
+    coachContacts: "/coach/contacts",
   },
   admin: {
     login: "/admin/login",
