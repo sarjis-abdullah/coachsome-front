@@ -101,6 +101,6 @@ export default {
     profileMenu: "/athlete/profile-menu",
     notification: "/athlete/notification",
     home: "/athlete/home",
-    inviteYourFriends: "/coach/invite-your-friends",
+    inviteYourFriends: "/athlete/invite-your-friends",
   }
 };
