@@ -89,6 +89,7 @@ export default {
     promos: "/admin/promos",
     trackingCodes: code => `/admin/tracking-codes/${code}`,
     profileMenu: "/admin/profile-menu",
+    exercises: "/admin/exercises",
   },
   athlete: {
     editProfile: "/athlete/edit-profile",
