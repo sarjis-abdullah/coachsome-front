@@ -123,33 +123,113 @@
         <!-- left-sidebar -->
         <v-col cols="12" :md="leftSidebarMd" v-if="leftSidebarSection">
           <div class="left-sidebar">
-
-            <v-list width="100%" color="transparent" class="pa-0 ma-0 d-md-none">
-              <v-list-item>
-                <v-btn
-                disabled
-                  icon
-                >
-                </v-btn>
-                <v-list-item-content class="pa-0 ma-0">
-                  <v-list-item-title class="common-top-page-title"
-                    
-                  >{{ $t("pwa_chat_page_title_message") }}</v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action style="text-align: center!important" :class="actionClass">
+            <span class="d-md-none" style="position: fixed!important; top : 0!important; width: 100%">
+              <v-list width="100%" color="transparent" class="pa-0 ma-0">
+                <v-list-item>
                   <v-btn
-                  icon
-                  @click="handleGroupBtnClick"
+                  disabled
+                    icon
+                  >
+                  </v-btn>
+                  <v-list-item-content class="pa-0 ma-0">
+                    <v-list-item-title class="common-top-page-title"
+                      
+                    >{{ $t("pwa_chat_page_title_message") }}</v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action style="text-align: center!important" :class="actionClass">
+                    <v-btn
+                    icon
+                    @click="handleGroupBtnClick"
+                  >
+                    <v-icon style="font-size: 25px!important;" class="common-top-add-icon">
+                      mdi-plus-circle-outline
+                    </v-icon>
+                  </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
+              <div class="line"></div>
+              <div class="left-sidebar__body">
+              <div class="pl-4 pr-4 pt-5 d-md-none">
+                <v-text-field
+                  :label="$t('chat_field_label_txt_search')"
+                  solo
+                  dense
+                  rounded
+                  hide-details
+                  prepend-inner-icon="search"
+                  v-model="search"
+                  clearable
+                  @input="handleSearch"
+                  @click="handleClearSearch"
+                ></v-text-field>
+                <v-select
+                  v-model="selectedFilterItem"
+                  class="mt-5"
+                  :items="filters"
+                  item-value="id"
+                  item-text="key"
+                  dense
+                  rounded
+                  solo
+                  @change="handleFilterChange"
+                  append-icon="expand_more"
                 >
-                  <v-icon style="font-size: 25px!important;" class="common-top-add-icon">
-                    mdi-plus-circle-outline
-                  </v-icon>
-                </v-btn>
-                </v-list-item-action>
-              </v-list-item>
-            </v-list>
-            <div class="line"></div>
-
+                  <template v-slot:selection="{ item }">
+                    <div>
+                      {{ $t(item.key) }}
+                    </div>
+                  </template>
+                  <template v-slot:item="{ item }">
+                    <div>
+                      {{ $t(item.key) }}
+                    </div>
+                  </template>
+                </v-select>
+              </div>
+              <div class="pl-4 pr-4 pt-5 d-none d-md-block">
+                <v-text-field
+                  :label="$t('chat_field_label_txt_search')"
+                  solo
+                  dense
+                  hide-details
+                  prepend-inner-icon="search"
+                  v-model="search"
+                  clearable
+                  @input="handleSearch"
+                  @click="handleClearSearch"
+                ></v-text-field>
+                <v-select
+                  v-model="selectedFilterItem"
+                  class="mt-5"
+                  :items="filters"
+                  item-value="id"
+                  item-text="key"
+                  dense
+                  solo
+                  @change="handleFilterChange"
+                  append-icon="expand_more"
+                >
+                  <template v-slot:selection="{ item }">
+                    <div>
+                      {{ $t(item.key) }}
+                    </div>
+                  </template>
+                  <template v-slot:item="{ item }">
+                    <div>
+                      {{ $t(item.key) }}
+                    </div>
+                  </template>
+                </v-select>
+              </div>
+              <div :class="{'contact' : !$vuetify.breakpoint.smAndDown, 'contact-sm' : $vuetify.breakpoint.smAndDown}">
+                <ContactList
+                  :avatar-size="avatarSize"
+                  @selected="onHandleContactItemSeleted"
+                />
+              </div>
+            </div>
+            </span>
             <div class="left-sidebar__header " v-if="!$vuetify.breakpoint.xsOnly">
               <div class="left-sidebar-title">
                 {{ $t("chat_page_title_message") }}
@@ -165,7 +245,7 @@
                 </v-btn>
               </div>
             </div>
-            <div class="left-sidebar__body">
+            <div class="left-sidebar__body d-none d-md-block">
               <div class="pl-4 pr-4 pt-5 d-md-none">
                 <v-text-field
                   :label="$t('chat_field_label_txt_search')"

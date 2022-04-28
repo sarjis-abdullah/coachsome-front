@@ -118,6 +118,12 @@ export default {
             path: pathData.admin.userLog,
             icon: "mdi-view-list",
             t_key: "dropdown_item_logs"
+          },
+          logs: {
+            text: "Exercises",
+            path: pathData.admin.exercises,
+            icon: "mdi-view-list",
+            t_key: "dropdown_item_exercises"
           }
         }
       },
