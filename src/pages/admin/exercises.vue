@@ -1,5 +1,7 @@
 <template>
   <v-container fluid>
+
+    <!-- Header start -->
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('dropdown_item_exercises')">
       <template v-slot:goBack>
         <v-btn
@@ -27,6 +29,10 @@
       </v-col>
     </v-row>
 
+    <!-- Header end -->
+
+    <!-- No exercise start -->
+
     <v-row class="d-flex justify-center">
         <v-col cols="12" md="4" class="no-exercise">
             <h4 class="no-exercise__text">{{$t("no_exercise_title")}}</h4>
@@ -40,6 +46,8 @@
             </v-btn>
         </v-col>
     </v-row>
+
+    <!-- No Exercise end -->
 
     <v-row>
       <v-col cols="12">
@@ -81,7 +89,6 @@
                     @click.stop="userCreate.dialog = true"
                     class="px-5"
                   >
-                    <!-- <v-icon>mdi-plus</v-icon> -->
                     {{$t("exercise_create_button")}}
                   </v-btn>
                 </v-col>
@@ -472,10 +479,35 @@
                                     text
                                     color="#15577C"
                                     class="px-0"
+                                    @click="saveVideoUrl()"
                                 >
                                     <img class="btn-icon"  :src="require('@/assets/images/icons/video-url.svg')" alt="">  <span class="btn-text"> Upload a Video</span>
                                 </v-btn>
                             </v-col>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                             <!-- image upload -->
                             <v-col cols="12">
@@ -484,45 +516,66 @@
                                     Upload up to 4 images. Accepted: jpg, jpeg, png
                                 </div>
                                 <v-row>
-                                    <v-col cols="3" v-if="imgSrc">
-                                        <v-card outlined elevation="0" color="transparent">
-                                            <v-card-text>
-                                            <cropper
-                                                classname="cropper"
-                                                :src="imgSrc"
-                                                imageClassname="imageCropClassCustom"
-                                                backgroundClassname="backgroundCropClassCustom"
-                                                :stencil-props="{
-                                                minAspectRatio: 1 / 1,
-                                                maxAspectRatio: 1 / 1
-                                                }"
-                                                ref="imageCropper"
-                                            ></cropper>
-                                            </v-card-text>
-                                            <v-card-actions class="justify-center">
-                                            <v-btn
-                                                @click="handleImageUploadBtnClick"
-                                                class="text-normal"
-                                                text
-                                                depressed
-                                                :loading="isLoading"
-                                                color="primary-light-1"
-                                                dark
-                                                >{{ $t("Upload") }}</v-btn
-                                            >
-                                            <v-btn
-                                                @click="handleCancelBtnClick"
-                                                class="text-normal"
-                                                text
-                                                depressed
-                                                color="red"
-                                                dark
-                                                >{{ $t("Cancel") }}</v-btn
-                                            >
-                                        </v-card-actions>
-                                    </v-card>
+                                    <v-col cols="12" md="3"  v-if="links != ''" v-for="(item, index) in links">
+                                                          <v-badge 
+                                                            top
+                                                            avatar
+                                                            color="rgb(0 0 0 / 0%) !important"
+                                                            offset-x="25"
+                                                            offset-y="10" 
+                                                            style="width: 100%; height: 200px;"
+                                                          >
+                                                            <v-btn style="height:22px!important; width:22px!important"  slot="badge" x-small fab color="#49556A" @click="handleRemoveBtnClick(index)">
+                                                               <v-icon color="white" x-small >mdi-close</v-icon>
+                                                            </v-btn>
+
+                                                            <img width="95%" style="border-radius: 8px;" :src="item.url" alt="">
+
+                                                          </v-badge>
+
+                                                    
                                     </v-col>
-                                    <v-col cols="3">
+                                    <v-col cols="12" md="3" v-if="imgSrc">
+                                      <v-card outlined elevation="0" color="transparent">
+                                        <v-card-text>
+                                          <cropper
+                                              classname="cropper"
+                                              :src="imgSrc"
+                                              imageClassname="imageCropClassCustom"
+                                              backgroundClassname="backgroundCropClassCustom"
+                                              :stencil-props="{
+                                              minAspectRatio: 1 / 1,
+                                              maxAspectRatio: 1 / 1
+                                              }"
+                                              ref="imageCropper"
+                                          ></cropper>
+                                        </v-card-text>
+                                        <v-card-actions class="justify-center py-0 my-0">
+                                          <v-btn
+                                              @click="handleImageUploadBtnClick"
+                                              class="text-normal"
+                                              text
+                                              x-small
+                                              depressed
+                                              :loading="isLoading"
+                                              color="primary-light-1"
+                                              dark
+                                              >{{ $t("Upload") }}</v-btn
+                                          >
+                                          <v-btn
+                                              @click="handleCancelBtnClick"
+                                              class="text-normal"
+                                              text
+                                              x-small
+                                              depressed
+                                              color="red"
+                                              dark
+                                              >{{ $t("Cancel") }}</v-btn
+                                          >
+                                        </v-card-actions>
+                                      </v-card>
+                                    </v-col>
+                                    <v-col cols="12" md="3" v-if="links.length <=3">
                                         <div
                                             class="drop-zone"
                                             @dragenter="dragging = true"
@@ -548,6 +601,9 @@
                                     </v-col>
                                 </v-row>
                             </v-col>
+
+
+
 
                             <!-- Category Section -->
                             <v-col cols="12" class="py-0 my-0">
@@ -647,7 +703,6 @@
                                     return-object
                                     chips
                                     clearable
-                                    persistent-placeholder
                                     label="What sport is this exercise targeted for?"
                                     multiple
                                     :menu-props="{closeOnContentClick: true}"
@@ -744,7 +799,7 @@
 
 <script>
 import { imageService } from "@/services";
-import { adminUserApi, adminImpersonateApi } from "@/api";
+import { adminUserApi, adminImpersonateApi, sportCategoryApi } from "@/api";
 import { pathData } from "@/data";
 import VuePhoneNumberInput from "vue-phone-number-input";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
@@ -753,7 +808,7 @@ import DarkboxGallery from "@/components/darkbox/Gallery";
 import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
 
-import { coachAssetApi } from "@/api";
+import { coachAssetApi, ExerciseApi } from "@/api";
 
 export default {
   layout: "admin",
@@ -786,6 +841,7 @@ export default {
         video: ""
       },
       links: [],
+      categories: [],
 
 
         // ------------------------------------
@@ -799,7 +855,7 @@ export default {
         category: false,
         tag: false,
       },
-      categories: [],
+
       categoriesSelected: [],
       tagData: {
         tags: [],
@@ -883,11 +939,41 @@ export default {
   },
   created() {
     this.getUser();
+    this.langCode = this.$i18n.locale;
+    this.fetchSportCategory();
   },
   methods: {
     handleBack(){
       this.$router.push(this.localePath(pathData.admin.profileMenu));
     },
+
+    async fetchSportCategory() {
+      const locale = this.$store.getters.getCurrLang;
+      try {
+        const { data } = await sportCategoryApi(
+          this.$axios
+        ).getSportCategories({ locale });
+        data.sportCategories.forEach(item => {
+          this.categories.push(
+            Object.assign(item, { name: this.$i18n.t(item.t_key) })
+          );
+        });
+        this.categories.sort(function(a, b) {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
+      } catch (error) {
+        console.log(error.response);
+      }
+    },
+
+
+
     showFileChooser() {
       this.$refs.fileInput.click();
     },
@@ -1155,10 +1241,10 @@ export default {
         this.loadMoreBtnLoading = false;
       }, 3000);
     },
-    handleDarkboxGalleryItemRemove(linkIndex) {
+    handleRemoveBtnClick(linkIndex) {
       let id = this.links[linkIndex].id;
-      coachAssetApi(this.$axios)
-        .removeGallery(id)
+      ExerciseApi(this.$axios)
+        .removeItem(id)
         .then(response => {
           if (response.data.status == "success") {
             this.$toast.success(response.data.message);
@@ -1174,7 +1260,7 @@ export default {
         image: croppedImage
       };
       this.isLoading = true;
-      coachAssetApi(this.$axios)
+      ExerciseApi(this.$axios)
         .saveImageUrl(payload)
         .then(({ data }) => {
           this.links.push(Object.assign(data.item, { src: data.item.url }));
@@ -1195,7 +1281,7 @@ export default {
           type: "video"
         };
         this.videoForm.isLoading = true;
-        coachAssetApi(this.$axios)
+        ExerciseApi(this.$axios)
           .saveVideoUrl(payload)
           .then(({ data }) => {
             this.$toast.success(data.message);
