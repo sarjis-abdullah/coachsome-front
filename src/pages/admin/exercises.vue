@@ -651,8 +651,8 @@
                             <v-col cols="12" class="py-0 my-0">
                                 <p class="create-exercise__label">Sports <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                                 <v-autocomplete
-                                    v-model="categoriesSelected"
-                                    :items="categories"
+                                    v-model="sportsSelected"
+                                    :items="sports"
                                     item-text="name"
                                     return-object
                                     chips
@@ -948,31 +948,31 @@ export default {
       this.$router.push(this.localePath(pathData.admin.profileMenu));
     },
 
-    // async fetchCategories() {
-    //   const locale = this.$store.getters.getCurrLang;
-    //   console.log(locale);
-    //   try {
-    //     const { data } = await ExerciseApi(
-    //       this.$axios
-    //     ).getCategories({ locale });
-    //     data.categories.forEach(item => {
-    //       this.categories.push(
-    //         Object.assign(item, { name: this.$i18n.t(item.t_key) })
-    //       );
-    //     });
-    //     this.categories.sort(function(a, b) {
-    //       if (a.name < b.name) {
-    //         return -1;
-    //       }
-    //       if (a.name > b.name) {
-    //         return 1;
-    //       }
-    //       return 0;
-    //     });
-    //   } catch (error) {
-    //     console.log(error.response);
-    //   }
-    // },
+    async fetchCategories() {
+      const locale = this.$store.getters.getCurrLang;
+      console.log(locale);
+      try {
+        const { data } = await ExerciseApi(
+          this.$axios
+        ).getCategories({ locale });
+        data.categories.forEach(item => {
+          this.categories.push(
+            Object.assign(item, { name: this.$i18n.t(item.t_key) })
+          );
+        });
+        this.categories.sort(function(a, b) {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
+      } catch (error) {
+        console.log(error.response);
+      }
+    },
 
     async fetchSports() {
       const locale = this.$store.getters.getCurrLang;
@@ -981,14 +981,14 @@ export default {
           this.$axios
         ).getSports({ locale });
         data.sportCategories.forEach(item => {
-          this.categories.push(
+          this.sports.push(
             Object.assign(item, { name: this.$i18n.t(item.t_key) })
           );
-          this.categories.push(
+          this.sports.push(
             Object.assign(item, { name: this.$i18n.t(item.t_key) })
           );
         });
-        this.categories.sort(function(a, b) {
+        this.sports.sort(function(a, b) {
           if (a.name < b.name) {
             return -1;
           }
