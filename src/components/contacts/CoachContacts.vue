@@ -9,27 +9,28 @@
         <section class="grid grid-cols-3-max-max gap-5">
           <div>
             <v-text-field
-            dense
-            label="Search"
-            outlined
-            prepend-inner-icon="mdi-magnify"
-            hide-details
-            class="search__text-field"
-          ></v-text-field>
+              dense
+              label="Search"
+              outlined
+              prepend-inner-icon="mdi-magnify"
+              hide-details
+              class="search__text-field"
+            ></v-text-field>
           </div>
           <div>
-            <v-btn class="add-new-contact-btn" depressed color="primary">
+            <v-btn
+              @click="showContactForm"
+              class="add-new-contact-btn"
+              depressed
+              color="primary"
+            >
               Add New Contact
             </v-btn>
           </div>
         </section>
       </v-card-title>
     </section>
-    <section
-      class=""
-      style="border: 1px solid #ECF2F7;
-    border-radius: 12px 12px 0 0;"
-    >
+    <section class="contacts-table__wrapper">
       <table class="contacts-table">
         <thead>
           <tr>
@@ -87,17 +88,27 @@
         </tbody>
       </table>
     </section>
+    <v-dialog v-model="toggleContactForm" persistent max-width="680">
+      <v-card>
+        <ContactForm
+          @close-modal="toggleContactForm = !toggleContactForm"
+        />
+      </v-card>
+    </v-dialog>
   </section>
 </template>
 
 <script>
 import CoachContactsSingleData from "@/components/contacts/CoachContactsSingleData";
+import ContactForm from "@/components/contacts/ContactForm";
 export default {
   components: {
-    CoachContactsSingleData
+    CoachContactsSingleData,
+    ContactForm
   },
   data() {
     return {
+      toggleContactForm: false,
       contactsData: [
         {
           package: {
@@ -108,6 +119,11 @@ export default {
         {}
       ]
     };
+  },
+  methods: {
+    showContactForm() {
+      this.toggleContactForm = true;
+    }
   }
 };
 </script>
@@ -160,7 +176,7 @@ export default {
   padding-left: 12px;
 }
 .contacts-table__parent .add-new-contact-btn {
-  background: #15577C !important;
+  background: #15577c !important;
   border-radius: 10px;
   padding: 19px !important;
   text-transform: capitalize;
@@ -172,6 +188,10 @@ export default {
   font-weight: 600;
   font-size: 20px;
   line-height: 27px;
-  color: #49556A;
+  color: #49556a;
+}
+.contacts-table__wrapper {
+  border: 1px solid #ecf2f7;
+  border-radius: 12px 12px 0 0;
 }
 </style>

@@ -37,7 +37,7 @@
           alt="notebook"
           @click="gotoChat"
         />
-        <img :src="require('@/assets/img/svg-icons/chat.svg')" alt="chat" />
+        <img @click="$router.replace('/chat')" class="cursor-pointer" :src="require('@/assets/img/svg-icons/chat.svg')" alt="chat" />
         <!-- Three Dots horizontal -->
         <template>
           <div class="text-center">
