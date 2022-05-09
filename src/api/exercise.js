@@ -1,4 +1,10 @@
 export default (axios) => ({
+
+
+  getSports: (params = {}) => axios.get("sportCategories", { params }),
+  
+  getCategories: (params = {}) => axios.get("exercise-categories", { params }),
+
   saveImageUrl: payload => {
     return axios.post("exercise-assets", payload);
   },

@@ -517,23 +517,21 @@
                                 </div>
                                 <v-row>
                                     <v-col cols="12" md="3"  v-if="links != ''" v-for="(item, index) in links">
-                                                          <v-badge 
-                                                            top
-                                                            avatar
-                                                            color="rgb(0 0 0 / 0%) !important"
-                                                            offset-x="25"
-                                                            offset-y="10" 
-                                                            style="width: 100%; height: 200px;"
-                                                          >
-                                                            <v-btn style="height:22px!important; width:22px!important"  slot="badge" x-small fab color="#49556A" @click="handleRemoveBtnClick(index)">
-                                                               <v-icon color="white" x-small >mdi-close</v-icon>
-                                                            </v-btn>
+                                      <v-badge 
+                                        top
+                                        avatar
+                                        color="rgb(0 0 0 / 0%) !important"
+                                        offset-x="25"
+                                        offset-y="10" 
+                                        style="width: 100%; height: 200px;"
+                                      >
+                                        <v-btn style="height:22px!important; width:22px!important"  slot="badge" x-small fab color="#49556A" @click="handleRemoveBtnClick(index)">
+                                            <v-icon color="white" x-small >mdi-close</v-icon>
+                                        </v-btn>
 
-                                                            <img width="95%" style="border-radius: 8px;" :src="item.url" alt="">
+                                        <img width="95%" style="border-radius: 8px;" :src="item.url" alt="">
 
-                                                          </v-badge>
-
-                                                    
+                                      </v-badge>   
                                     </v-col>
                                     <v-col cols="12" md="3" v-if="imgSrc">
                                       <v-card outlined elevation="0" color="transparent">
@@ -842,7 +840,9 @@ export default {
       },
       links: [],
       categories: [],
-
+      categoriesSelected: [],
+      sports: [],
+      sportsSelected: [],
 
         // ------------------------------------
 
@@ -856,7 +856,7 @@ export default {
         tag: false,
       },
 
-      categoriesSelected: [],
+      
       tagData: {
         tags: [],
         tagsSelected: []
@@ -940,20 +940,50 @@ export default {
   created() {
     this.getUser();
     this.langCode = this.$i18n.locale;
-    this.fetchSportCategory();
+    // this.fetchCategories();
+    this.fetchSports();
   },
   methods: {
     handleBack(){
       this.$router.push(this.localePath(pathData.admin.profileMenu));
     },
 
-    async fetchSportCategory() {
+    // async fetchCategories() {
+    //   const locale = this.$store.getters.getCurrLang;
+    //   console.log(locale);
+    //   try {
+    //     const { data } = await ExerciseApi(
+    //       this.$axios
+    //     ).getCategories({ locale });
+    //     data.categories.forEach(item => {
+    //       this.categories.push(
+    //         Object.assign(item, { name: this.$i18n.t(item.t_key) })
+    //       );
+    //     });
+    //     this.categories.sort(function(a, b) {
+    //       if (a.name < b.name) {
+    //         return -1;
+    //       }
+    //       if (a.name > b.name) {
+    //         return 1;
+    //       }
+    //       return 0;
+    //     });
+    //   } catch (error) {
+    //     console.log(error.response);
+    //   }
+    // },
+
+    async fetchSports() {
       const locale = this.$store.getters.getCurrLang;
       try {
-        const { data } = await sportCategoryApi(
+        const { data } = await ExerciseApi(
           this.$axios
-        ).getSportCategories({ locale });
+        ).getSports({ locale });
         data.sportCategories.forEach(item => {
+          this.categories.push(
+            Object.assign(item, { name: this.$i18n.t(item.t_key) })
+          );
           this.categories.push(
             Object.assign(item, { name: this.$i18n.t(item.t_key) })
           );
