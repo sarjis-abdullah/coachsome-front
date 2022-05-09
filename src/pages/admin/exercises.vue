@@ -86,7 +86,7 @@
                   <v-btn
                     solo
                     color="primary-light-1"
-                    @click.stop="userCreate.dialog = true"
+                    @click.stop="exerciseCreate.dialog = true"
                     class="px-5"
                   >
                     {{$t("exercise_create_button")}}
@@ -402,7 +402,7 @@
             <template>
               <v-row justify="center">
                 <v-dialog
-                  v-model="userCreate.dialog"
+                  v-model="exerciseCreate.dialog"
                   persistent
                   max-width="800px"
                 >
@@ -413,7 +413,7 @@
                       <v-btn
                             color="#49556A"
                             icon
-                            @click="userCreate.dialog = false"
+                            @click="exerciseCreate.dialog = false"
                             class="exercise__close-button"
                         >
                             <v-icon>mdi-close</v-icon>
@@ -424,7 +424,7 @@
                       <v-container>
                         <v-form
                           ref="form"
-                          v-model="userCreate.valid"
+                          v-model="exerciseCreate.valid"
                           lazy-validation
                         >
                           <v-row>
@@ -434,7 +434,7 @@
                                     outlined
                                     dense
                                     label="Name your exercise"
-                                    v-model="userCreate.initialValue.firstName"
+                                    v-model="exerciseCreate.initialValue.name"
                                     :rules="[v => !!v || 'Exercise Name is required']"
                                     required
                                     class="create-exercise__input-field"
@@ -444,9 +444,9 @@
                                 <p class="create-exercise__label">Instructions <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                                 <v-textarea
                                     outlined
+                                    v-model="exerciseCreate.initialValue.instructions"
                                     name="input-7-4"
                                     label="Add exercise instructions"
-                                    value=""
                                     class="create-exercise__input-field"
                                 ></v-textarea>
                             </v-col>
@@ -516,7 +516,7 @@
                                     Upload up to 4 images. Accepted: jpg, jpeg, png
                                 </div>
                                 <v-row>
-                                    <v-col cols="12" md="3"  v-if="links != ''" v-for="(item, index) in links">
+                                    <v-col cols="12" md="3"  v-if="links != ''" v-for="(link, index) in links" v-bind:key="index">
                                       <v-badge 
                                         top
                                         avatar
@@ -529,7 +529,7 @@
                                             <v-icon color="white" x-small >mdi-close</v-icon>
                                         </v-btn>
 
-                                        <img width="95%" style="border-radius: 8px;" :src="item.url" alt="">
+                                        <img width="95%" style="border-radius: 8px;" :src="link.url" alt="">
 
                                       </v-badge>   
                                     </v-col>
@@ -601,8 +601,6 @@
                             </v-col>
 
 
-
-
                             <!-- Category Section -->
                             <v-col cols="12" class="py-0 my-0">
                                 <p class="create-exercise__label">Category <v-badge color="white"><span style="color: red">*</span></v-badge></p>
@@ -614,7 +612,6 @@
                                     chips
                                     clearable
                                     label="What category suits this exercise best?"
-                                    multiple
                                     :menu-props="{closeOnContentClick: true}"
                                     outlined
                                     dense
@@ -630,9 +627,7 @@
                                         :input-value="selected"
                                         small
                                         label
-                                        close
                                         @click="select"
-                                        @click:close="removeCategory(item)"
                                     >
                                         <strong>{{ item.name }}</strong
                                         >&nbsp;
@@ -647,6 +642,7 @@
                                     </template>
                                 </v-autocomplete>
                             </v-col>
+
                             <!-- Sports Section -->
                             <v-col cols="12" class="py-0 my-0">
                                 <p class="create-exercise__label">Sports <v-badge color="white"><span style="color: red">*</span></v-badge></p>
@@ -658,7 +654,6 @@
                                     chips
                                     clearable
                                     label="What sport is this exercise targeted for?"
-                                    multiple
                                     :menu-props="{closeOnContentClick: true}"
                                     outlined
                                     dense
@@ -674,9 +669,7 @@
                                         :input-value="selected"
                                         small
                                         label
-                                        close
                                         @click="select"
-                                        @click:close="removeCategory(item)"
                                     >
                                         <strong>{{ item.name }}</strong
                                         >&nbsp;
@@ -691,18 +684,18 @@
                                     </template>
                                 </v-autocomplete>
                             </v-col>
+
                             <!-- lavel Section -->
                             <v-col cols="12" class="py-0 my-0">
                                 <p class="create-exercise__label">Lavel <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                                 <v-autocomplete
-                                    v-model="categoriesSelected"
-                                    :items="categories"
+                                    v-model="lavelsSelected"
+                                    :items="lavels"
                                     item-text="name"
                                     return-object
                                     chips
                                     clearable
                                     label="What sport is this exercise targeted for?"
-                                    multiple
                                     :menu-props="{closeOnContentClick: true}"
                                     outlined
                                     dense
@@ -719,9 +712,7 @@
                                         :input-value="selected"
                                         small
                                         label
-                                        close
                                         @click="select"
-                                        @click:close="removeCategory(item)"
                                     >
                                         <strong>{{ item.name }}</strong
                                         >&nbsp;
@@ -775,6 +766,7 @@
                                     elevation="2"
                                     color="#15577C"
                                     class="no-exercise__button px-5"
+                                    @click="handleCreateExercise"
                                 >
                                     Create Exercise
                                 </v-btn>
@@ -806,7 +798,7 @@ import DarkboxGallery from "@/components/darkbox/Gallery";
 import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
 
-import { coachAssetApi, ExerciseApi } from "@/api";
+import { ExerciseApi } from "@/api";
 
 export default {
   layout: "admin",
@@ -843,6 +835,20 @@ export default {
       categoriesSelected: [],
       sports: [],
       sportsSelected: [],
+      lavels: [],
+      lavelsSelected: [],
+      exerciseCreate: {
+        dialog: false,
+        valid: true,
+        initialValue: {
+          name: "",
+          instructions: "",
+        }
+      },
+      tagData: {
+        tags: [],
+        tagsSelected: []
+      },
 
         // ------------------------------------
 
@@ -857,10 +863,7 @@ export default {
       },
 
       
-      tagData: {
-        tags: [],
-        tagsSelected: []
-      },
+      
 
       url: {
         image: "",
@@ -875,17 +878,7 @@ export default {
       activityStatusList: [],
       starStatusList: [],
       roleList: [],
-      userCreate: {
-        dialog: false,
-        valid: true,
-        initialValue: {
-          firstName: "",
-          lastName: "",
-          email: "",
-          role: null,
-          password: ""
-        }
-      },
+      
       userEdit: {
         editedIndex: -1,
         dialog: false,
@@ -928,24 +921,92 @@ export default {
       }
     };
   },
+  computed:{
+    instruction() {
+      return this.exerciseCreate.initialValue.instructions;
+    }
+  },
   watch: {
-    "userCreate.dialog": function() {
-      this.userCreate.initialValue.firstName = "";
-      this.userCreate.initialValue.lastName = "";
-      this.userCreate.initialValue.email = "";
-      this.userCreate.initialValue.role = null;
-      this.userCreate.initialValue.password = "";
+    "exerciseCreate.dialog": function() {
+      this.exerciseCreate.initialValue.name = "";
+      this.exerciseCreate.initialValue.instructions = "";
     }
   },
   created() {
     this.getUser();
     this.langCode = this.$i18n.locale;
-    // this.fetchCategories();
+    this.fetchCategories();
     this.fetchSports();
+    this.fetchLavels();
   },
   methods: {
     handleBack(){
       this.$router.push(this.localePath(pathData.admin.profileMenu));
+    },
+
+    handleCreateExercise(){
+
+      if(this.$auth && this.$auth.hasRole(['superadmin', 'admin', 'staff'])){
+        var role = 1
+      }else{
+        role = 2
+      }
+
+      let payload = {};
+      payload.name = this.exerciseCreate.initialValue.name;
+      payload.instructions = this.instruction;
+      payload.assets = this.links;
+      payload.category = this.categoriesSelected;
+      payload.sport = this.sportsSelected;
+      payload.lavel = this.lavelsSelected;
+      payload.tags = this.tagData.tagsSelected;
+      payload.type = role;
+
+      //  if (this.$refs.form.validate()) {
+        ExerciseApi(this.$axios)
+          .createExercise(payload)
+          .then(({ data }) => {
+            if (data.exercise) {
+              // let formattedRowList = this.formatUserRow([{ ...data.exercise }]);
+              // this.table.rows.unshift(formattedRowList[0]);
+              this.$toast.success("This Exercise has been created successfully.");
+              this.exerciseCreate.dialog = false;
+            }
+          })
+          .catch(({ response }) => {
+            const { data } = response;
+            if (data.message) {
+              this.$toast.error(data.message);
+            }
+          });
+      // }
+
+    },
+
+     async fetchLavels() {
+      const locale = this.$store.getters.getCurrLang;
+      console.log(locale);
+      try {
+        const { data } = await ExerciseApi(
+          this.$axios
+        ).getLavels({ locale });
+        data.lavels.forEach(item => {
+          this.lavels.push(
+            Object.assign(item, { name: this.$i18n.t(item.t_key) })
+          );
+        });
+        this.lavels.sort(function(a, b) {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
+      } catch (error) {
+        console.log(error.response);
+      }
     },
 
     async fetchCategories() {
@@ -1008,28 +1069,6 @@ export default {
       this.$refs.fileInput.click();
     },
 
-
-    handleUserCreateSaveBtn() {
-      if (this.$refs.form.validate()) {
-        adminUserApi(this.$axios)
-          .storeUser(this.userCreate.initialValue)
-          .then(({ data }) => {
-            if (data.user) {
-              let formattedRowList = this.formatUserRow([{ ...data.user }]);
-              this.table.rows.unshift(formattedRowList[0]);
-              this.$toast.success("The user is created successfully.");
-              this.userCreate.dialog = false;
-            }
-            console.log(data);
-          })
-          .catch(({ response }) => {
-            const { data } = response;
-            if (data.message) {
-              this.$toast.error(data.message);
-            }
-          });
-      }
-    },
     getUser() {
       adminUserApi(this.$axios)
         .getUserList()
