@@ -54,55 +54,37 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>
-            <v-avatar>
-              <img
-                src="https://cdn.vuetifyjs.com/images/john.jpg"
-                alt="John"
-                width="40"
-                height="40"
-              />
-            </v-avatar>
-          </td>
-          <td>Kasper Frandsen</td>
-          <td>
-            <v-chip x-small>
-              Active
-            </v-chip>
-          </td>
-          <td>Online</td>
-          <td>No Active Packages</td>
-          <td class="text-center">1 month ago</td>
-          <td>
-            <section class="grid grid-cols-3 gap-5 justify-end">
-              <img
-                :src="require('@/assets/img/svg-icons/notebook.svg')"
-                alt="notebook"
-              />
-              <img
-                :src="require('@/assets/img/svg-icons/chat.svg')"
-                alt="chat"
-              />
-              <img
-                :src="
-                  require('@/assets/img/svg-icons/three-dot-horizontal.svg')
-                "
-                alt="three-dot-horizontal"
-              />
-            </section>
-          </td>
-        </tr>
+        <template v-for="(item, i) in contactsData">
+          <CoachContactsSingleData :contact="item" :key="i"/>
+        </template>
       </tbody>
     </table>
   </section>
 </template>
 
 <script>
-export default {};
+import CoachContactsSingleData from "@/components/contacts/CoachContactsSingleData"
+export default {
+  components: {
+    CoachContactsSingleData,
+  },
+  data() {
+    return {
+      contactsData: [
+        {
+          package: {
+            name: "Package_Name"
+          }
+        },
+        {},
+        {}
+      ]
+    };
+  }
+};
 </script>
 
-<style scoped>
+<style>
 .contacts-table {
   width: 100%;
   text-align: left;
