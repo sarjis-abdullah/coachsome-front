@@ -1,0 +1,14 @@
+.cursor-pointer {
+    cursor: pointer;
+}
+.grid {
+    display: grid;
+}
+/* grid column css */
+.grid-cols-3-max-max {
+    grid-template-columns: max-content max-content;
+}
+/* gap css */
+.gap-5 {
+    gap: 20px;
+}

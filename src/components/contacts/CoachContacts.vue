@@ -1,72 +1,100 @@
 <template>
-  <section
-    class=""
-    style="border: 1px solid #ECF2F7;
+  <section class="contacts-table__parent">
+    <section>
+      <v-card-title class="px-0">
+        <header>
+          <h6 class="left-title">Total Contacts: 4</h6>
+        </header>
+        <v-spacer />
+        <section class="grid grid-cols-3-max-max gap-5">
+          <div>
+            <v-text-field
+            dense
+            label="Search"
+            outlined
+            prepend-inner-icon="mdi-magnify"
+            hide-details
+            class="search__text-field"
+          ></v-text-field>
+          </div>
+          <div>
+            <v-btn class="add-new-contact-btn" depressed color="primary">
+              Add New Contact
+            </v-btn>
+          </div>
+        </section>
+      </v-card-title>
+    </section>
+    <section
+      class=""
+      style="border: 1px solid #ECF2F7;
     border-radius: 12px 12px 0 0;"
-  >
-    <table class="contacts-table">
-      <thead>
-        <tr>
-          <th>
-            <img
-              :src="require('@/assets/img/svg-icons/checkbox.svg')"
-              alt="checkbox"
-            />
-          </th>
-          <th>
-            Name
-            <img
-              :src="require('@/assets/img/svg-icons/keyboard-arrow-down.svg')"
-              alt="keyboard-arrow-down"
-            />
-          </th>
-          <th>
-            Status
-            <img
-              :src="require('@/assets/img/svg-icons/keyboard-arrow-down.svg')"
-              alt="keyboard-arrow-down"
-            />
-          </th>
-          <th>
-            Category
-            <img
-              :src="require('@/assets/img/svg-icons/keyboard-arrow-down.svg')"
-              alt="keyboard-arrow-down"
-            />
-          </th>
-          <th>
-            Active Packages
-            <img
-              :src="require('@/assets/img/svg-icons/keyboard-arrow-down.svg')"
-              alt="keyboard-arrow-down"
-            />
-          </th>
-          <th class="text-center">
-            Last Active
-            <img
-              :src="require('@/assets/img/svg-icons/keyboard-arrow-down.svg')"
-              alt="keyboard-arrow-down"
-            />
-          </th>
-          <th>
-            <span></span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <template v-for="(item, i) in contactsData">
-          <CoachContactsSingleData :contact="item" :key="i"/>
-        </template>
-      </tbody>
-    </table>
+    >
+      <table class="contacts-table">
+        <thead>
+          <tr>
+            <th>
+              <img
+                :src="require('@/assets/img/svg-icons/checkbox.svg')"
+                alt="checkbox"
+                class="custom-checkbox"
+              />
+            </th>
+            <th>
+              Name
+              <img
+                :src="require('@/assets/img/svg-icons/keyboard-arrow-down.svg')"
+                alt="keyboard-arrow-down"
+              />
+            </th>
+            <th>
+              Status
+              <img
+                :src="require('@/assets/img/svg-icons/keyboard-arrow-down.svg')"
+                alt="keyboard-arrow-down"
+              />
+            </th>
+            <th>
+              Category
+              <img
+                :src="require('@/assets/img/svg-icons/keyboard-arrow-down.svg')"
+                alt="keyboard-arrow-down"
+              />
+            </th>
+            <th>
+              Active Packages
+              <img
+                :src="require('@/assets/img/svg-icons/keyboard-arrow-down.svg')"
+                alt="keyboard-arrow-down"
+              />
+            </th>
+            <th class="text-center">
+              Last Active
+              <img
+                :src="require('@/assets/img/svg-icons/keyboard-arrow-down.svg')"
+                alt="keyboard-arrow-down"
+              />
+            </th>
+            <th>
+              <span></span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-for="(item, i) in contactsData">
+            <CoachContactsSingleData :contact="item" :key="i" />
+          </template>
+        </tbody>
+      </table>
+    </section>
   </section>
 </template>
 
 <script>
-import CoachContactsSingleData from "@/components/contacts/CoachContactsSingleData"
+import CoachContactsSingleData from "@/components/contacts/CoachContactsSingleData";
 export default {
   components: {
-    CoachContactsSingleData,
+    CoachContactsSingleData
   },
   data() {
     return {
@@ -127,5 +155,23 @@ export default {
 }
 .gap-5 {
   gap: 20px;
+}
+.contacts-table .custom-checkbox {
+  padding-left: 12px;
+}
+.contacts-table__parent .add-new-contact-btn {
+  background: #15577C !important;
+  border-radius: 10px;
+  padding: 19px !important;
+  text-transform: capitalize;
+}
+.contacts-table__parent .search__text-field {
+  border-radius: 8px;
+}
+.contacts-table__parent .left-title {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 27px;
+  color: #49556A;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid style="background: #F7FAFC">
+  <v-container fluid style="background: #F7FAFC; padding-bottom:100vh">
     <!-- Mobile Nav -->
     <mobile-top-nav
       extraClass="body-bg-secondary"

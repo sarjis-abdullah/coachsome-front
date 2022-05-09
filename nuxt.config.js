@@ -90,7 +90,8 @@ export default {
 
   css: [
     "@mdi/font/css/materialdesignicons.css",
-    "material-design-icons-iconfont/dist/material-design-icons.css"
+    "material-design-icons-iconfont/dist/material-design-icons.css",
+    '@/assets/css/global.css',
   ],
 
   // Plugins to run before rendering page
