@@ -13,9 +13,15 @@ export default (axios) => ({
   saveVideoUrl: payload => {
     return axios.post("exercise-assets", payload);
   },
-  exercises: () => {
-    return axios.get("exercises");
+
+
+  getExerciseList: () => axios.get("exercises"),
+
+  previewExercise: id => {
+    return axios.get(`exercises/${id}`);
   },
+
+  updateExercise: payload => axios.put("exercises/" + payload.id, payload),
 
   createExercise: payload => {
     return axios.post("exercises", payload);

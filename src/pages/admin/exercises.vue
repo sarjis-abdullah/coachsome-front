@@ -33,7 +33,7 @@
 
     <!-- No exercise start -->
 
-    <v-row class="d-flex justify-center">
+    <v-row class="d-flex justify-center" v-if="!exercises.length">
         <v-col cols="12" md="4" class="no-exercise">
             <h4 class="no-exercise__text">{{$t("no_exercise_title")}}</h4>
             <p class="no-exercise__sub-text">{{$t("no_execise_sub_title")}}</p>
@@ -41,6 +41,7 @@
                 elevation="2"
                 color="#15577C"
                 class="no-exercise__button px-5"
+                @click.stop="exerciseCreate.dialog = true"
             >
                 {{$t("no_exercise_button")}}
             </v-btn>
@@ -53,7 +54,7 @@
       <v-col cols="12">
         <div>
           <v-card>
-            <v-card-title>
+            <v-card-title v-if="exercises.length">
               <v-row align="center" justify="space-between">
                 <v-col cols="12" md="4">
                   <v-text-field
@@ -96,40 +97,69 @@
             </v-card-title>
 
             <v-data-table
+              v-if="exercises.length"
               :headers="table.headers"
               :items="table.rows"
               :search="search"
+              class="exercise-table"
+              :header-props="{ sortIcon: 'mdi-chevron-down' }"
             >
-            <template v-slot:header.id="{ header }">
-                <div class="name-btn">
-                  qqqqqqqqqqqqqq
-                </div>
+
+              <template v-slot:header.assets="{ header }">
+                <v-checkbox
+                ></v-checkbox>
               </template>
 
-              <template v-slot:item.name="{ item }">
-                <div class="name-btn">
-                  <v-btn @click.stop="setUserDataToEdit(item)" text>{{
-                    item.name
-                  }}</v-btn>
+              <template v-slot:header.exercise="{ header }">
+                Exercises( {{table.rows.length}} )
+              </template>
+              
+
+              <template v-slot:item.assets="{ item }">
+                    <list-asset-view :asset_type="item.asset_type" :url="item.assets"></list-asset-view>
+              </template>
+
+              <template v-slot:item.exercise="{ item }">
+                <div class="exercise-table--text">
+                    {{item.exercise}}
                 </div>
               </template>
-              <template v-slot:item.image="{ item }">
-                  <div v-if="!item.image">
-                      <v-img width="35" :src="require('@/assets/images/exercise/default.png')"></v-img>
-                  </div>
-                  <div v-if="item.image">
-                      <v-img width="35" :src="item.image"></v-img>
-                  </div>
+              <template v-slot:item.category="{ item }">
+                <div class="exercise-table--text">
+                  {{item.category}}
+                </div>
               </template>
-            </v-data-table>
-            <template v-slot:item.actions="{ item }">
-                <v-icon
-                    large
-                    @click="deleteItem(item)"
-                >
-                   mdi-dots-horizontal
-                </v-icon>
+              <template v-slot:item.type="{ item }">
+                 <div class="exercise-table--text">
+                    {{item.type}}
+                </div>
+              </template>
+              <template v-slot:item.actions="{ item }">
+                <v-menu offset-y>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                        mdi-dots-horizontal
+                    </v-icon>
+                  </template>
+                  <v-list>
+                    <v-list-item @click.stop="exerciseCreate.dialog = true">
+                      <v-list-item-title>Edit</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click.stop="showExercise(item)">
+                      <v-list-item-title>Preview</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click.stop="exerciseCreate.dialog = true">
+                      <v-list-item-title style="color: #FF3A0D">Remove</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
             </template>
+
+            </v-data-table>
+
 
             <!-- Reason Dialog -->
             <v-dialog v-model="userEdit.reasonDialog" max-width="290">
@@ -487,28 +517,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                             <!-- image upload -->
                             <v-col cols="12">
                                 <div class="create-exercise__label pb-2">Upload Photos</div>
@@ -516,24 +524,22 @@
                                     Upload up to 4 images. Accepted: jpg, jpeg, png
                                 </div>
                                 <v-row>
-                                    <v-col cols="12" md="3"  v-if="links != ''" v-for="(link, index) in links" v-bind:key="index">
+                                    <v-col cols="3"  v-if="links != ''" v-for="(link, index) in links" v-bind:key="index">
                                       <v-badge 
                                         top
                                         avatar
                                         color="rgb(0 0 0 / 0%) !important"
-                                        offset-x="25"
-                                        offset-y="10" 
+                                        offset-x="15"
+                                        offset-y="15" 
                                         style="width: 100%; height: 200px;"
                                       >
                                         <v-btn style="height:22px!important; width:22px!important"  slot="badge" x-small fab color="#49556A" @click="handleRemoveBtnClick(index)">
                                             <v-icon color="white" x-small >mdi-close</v-icon>
                                         </v-btn>
-
-                                        <img width="95%" style="border-radius: 8px;" :src="link.url" alt="">
-
+                                        <asset-view :url="link.url" :asset_type="link.type"></asset-view>
                                       </v-badge>   
                                     </v-col>
-                                    <v-col cols="12" md="3" v-if="imgSrc">
+                                    <v-col cols="3" v-if="imgSrc">
                                       <v-card outlined elevation="0" color="transparent">
                                         <v-card-text>
                                           <cropper
@@ -573,7 +579,7 @@
                                         </v-card-actions>
                                       </v-card>
                                     </v-col>
-                                    <v-col cols="12" md="3" v-if="links.length <=3">
+                                    <v-col cols="3" v-if="links.length <=3">
                                         <div
                                             class="drop-zone"
                                             @dragenter="dragging = true"
@@ -780,6 +786,26 @@
                 </v-dialog>
               </v-row>
             </template>
+
+            <!-- Exercise Preview Dialog -->
+            <template>
+              <v-row justify="center">
+                <v-dialog
+                  v-model="exercisePreviewDialog"
+                  persistent
+                  max-width="800px"
+                >
+                  <v-card class="create-exercise">
+                    <!-- {{exerciseData.assets.map(exercise)}} -->
+                    <!-- <span v-for="asset in exerciseData.assets">
+                      <asset-preview :asset_type="asset.type" :url="asset.url"></asset-preview>
+                    </span> -->
+                    
+                    
+                  </v-card>
+                </v-dialog>
+              </v-row>
+            </template>
           </v-card>
         </div>
       </v-col>
@@ -793,12 +819,15 @@ import { adminUserApi, adminImpersonateApi, sportCategoryApi } from "@/api";
 import { pathData } from "@/data";
 import VuePhoneNumberInput from "vue-phone-number-input";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
-// ---------------
-import DarkboxGallery from "@/components/darkbox/Gallery";
 import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
-
 import { ExerciseApi } from "@/api";
+// ---------------
+import DarkboxGallery from "@/components/darkbox/Gallery";
+import ListAssetView from '../../components/exercise/ListAssetView.vue';
+import AssetView from '../../components/exercise/AssetView.vue';
+import AssetPreview from '../../components/exercise/AssetPreview.vue';
+
 
 export default {
   layout: "admin",
@@ -807,10 +836,15 @@ export default {
     MobileTopNav,
     DarkboxGallery,
     Cropper,
+    ListAssetView,
+    AssetView,
+    AssetPreview,
   },
   data() {
     return {
-        file: "",
+      exerciseData: null,
+      exercises: [],
+      file: "",
       dragging: false,
       imgSrc: null,
       videoForm: {
@@ -845,15 +879,31 @@ export default {
           instructions: "",
         }
       },
+      exercisePreviewDialog: false,
       tagData: {
         tags: [],
         tagsSelected: []
       },
+      search: "",
+      table: {
+        headers: [
+          {
+            text: "",
+            align: "start",
+            filterable: false,
+            value: "assets",
+            sortable: false,  
+            class: "exercise-table--header"
+          },
+          { text: "Exercises("+'0'+")", value: "exercise", class: "exercise-table--header"},
+          { text: "Category", value: "category", class: "exercise-table--header" },
+          { text: "Type", value: "type", class: "exercise-table--header" },
+          { text: 'Actions', value: 'actions', sortable: false, class: "exercise-table--header" },
+        ],
+        rows: []
+      },
 
         // ------------------------------------
-
-
-
 
 
 
@@ -861,9 +911,6 @@ export default {
         category: false,
         tag: false,
       },
-
-      
-      
 
       url: {
         image: "",
@@ -873,7 +920,7 @@ export default {
         valid: true,
         isLoading: false
       },
-      search: "",
+      
       badges: [],
       activityStatusList: [],
       starStatusList: [],
@@ -904,26 +951,15 @@ export default {
           roleId: null
         }
       },
-      table: {
-        headers: [
-          {
-            text: "id",
-            align: "start",
-            filterable: false,
-            value: "image"
-          },
-          { text: "Exercises", value: "name" },
-          { text: "Category", value: "email" },
-          { text: "Type", value: "type" },
-          { text: 'Actions', value: 'status', sortable: false },
-        ],
-        rows: []
-      }
+      
     };
   },
   computed:{
     instruction() {
       return this.exerciseCreate.initialValue.instructions;
+    },
+    exerciseCount(){
+      return 0; 
     }
   },
   watch: {
@@ -933,7 +969,7 @@ export default {
     }
   },
   created() {
-    this.getUser();
+    this.getExercise();
     this.langCode = this.$i18n.locale;
     this.fetchCategories();
     this.fetchSports();
@@ -942,6 +978,20 @@ export default {
   methods: {
     handleBack(){
       this.$router.push(this.localePath(pathData.admin.profileMenu));
+    },
+
+    async showExercise(exercise){
+      this.exercisePreviewDialog = true;
+      console.log(exercise.id);
+
+      const { data } = await ExerciseApi(this.$axios).previewExercise(
+        encodeURIComponent(exercise.id)
+      );
+
+      this.exerciseData = [];
+      if(data.exercise){
+        this.exerciseData = data.exercise;
+      }
     },
 
     handleCreateExercise(){
@@ -967,8 +1017,8 @@ export default {
           .createExercise(payload)
           .then(({ data }) => {
             if (data.exercise) {
-              // let formattedRowList = this.formatUserRow([{ ...data.exercise }]);
-              // this.table.rows.unshift(formattedRowList[0]);
+              let formattedRowList = this.formatExerciseRow([{ ...data.exercise }]);
+              this.table.rows.unshift(formattedRowList[0]);
               this.$toast.success("This Exercise has been created successfully.");
               this.exerciseCreate.dialog = false;
             }
@@ -985,7 +1035,6 @@ export default {
 
      async fetchLavels() {
       const locale = this.$store.getters.getCurrLang;
-      console.log(locale);
       try {
         const { data } = await ExerciseApi(
           this.$axios
@@ -1011,7 +1060,6 @@ export default {
 
     async fetchCategories() {
       const locale = this.$store.getters.getCurrLang;
-      console.log(locale);
       try {
         const { data } = await ExerciseApi(
           this.$axios
@@ -1063,37 +1111,26 @@ export default {
       }
     },
 
-
-
     showFileChooser() {
       this.$refs.fileInput.click();
     },
 
-    getUser() {
-      adminUserApi(this.$axios)
-        .getUserList()
+    getExercise() {
+      ExerciseApi(this.$axios)
+        .getExerciseList()
         .then(({ data }) => {
-          if (data.activityStatusList) {
-            this.activityStatusList = data.activityStatusList;
-          }
-
-          if (data.badges) {
-            this.badges = data.badges;
-          }
-
-          if (data.starStatusList) {
-            this.starStatusList = data.starStatusList;
-          }
-
-          if (data.users) {
-            this.makeUserTableRow(data.users);
-          }
-          if (data.roles) {
-            this.roleList = data.roles;
+          // console.log(data);
+          if (data.exercises) {
+            if(data.exercises.length){
+              this.exercises.push(data.exercises);
+            }
+            this.makeExerciseTableRow(data.exercises);
           }
         })
         .catch(() => {});
     },
+
+
     updateUser() {
       let payload = {};
       payload.id = this.userEdit.data.id;
@@ -1131,7 +1168,7 @@ export default {
             );
             Object.assign(
               this.table.rows[index],
-              this.formatUserItem(data.user)
+              this.formatExerciseItem(data.user)
             );
             console.log(this.table.rows[index]);
           }
@@ -1155,37 +1192,25 @@ export default {
       this.userEdit.data.badgeId = null;
       this.userEdit.data.roleId = null;
     },
-    makeUserTableRow(users) {
+    makeExerciseTableRow(exercise) {
       this.table.rows = [];
-      this.table.rows = this.formatUserRow(users);
+      this.table.rows = this.formatExerciseRow(exercise);
     },
-    formatUserRow(users) {
-      return users.map(item => {
-        return this.formatUserItem(item);
+    formatExerciseRow(exercise) {
+      
+      return exercise.map(item => {
+        return this.formatExerciseItem(item);
       });
     },
-    formatUserItem(item) {
+    formatExerciseItem(item) {
       return {
         id: item.id,
-        image: item.image ? item.image : null,
-        email: item.email,
-        phoneCode: item.phoneCode,
-        phoneNumber: item.phoneNumber,
-        phoneText: item.phoneText,
-        name: item.fullName,
-        type: item.type,
-        status: item.status,
-        ranking: item.ranking,
-        badgeId: item.badgeId,
-        roleId: item.roles.length ? item.roles[0].id : null,
-        booking: item.booking,
-        decline: item.declined,
-        package: item.packageCount,
-        media: item.mediaCount,
-        activityStatusReason: item.activityStatusReason,
-        activityStatusId: item.activityStatusId,
-        starStatusId: item.starStatusId
-      };
+        exercise: item.name,
+        assets : item.assets[Object.keys(item.assets)[0]].url,
+        asset_type: item.assets[Object.keys(item.assets)[0]].type,
+        category: item.category[0].name,
+        type: item.type
+      }
     },
     setUserEditDataMobileInfo(item) {
       if (item.countryCode) {
@@ -1376,12 +1401,6 @@ export default {
       return validate;
     }
 
-
-
-
-
-
-
   }
 };
 </script>
@@ -1426,41 +1445,53 @@ export default {
 
 
     .create-exercise{
-        &__title{
-            font-family: 'Open Sans';
-            font-style: normal;
-            font-weight: 400;
-            font-size: 25px;
-            line-height: 34px;
-            color: #49556A;
-        }
-        &__description{
-            font-family: 'Open Sans';
-            font-style: normal;
-            font-weight: 400;
-            font-size: 14px;
-            line-height: 24px;
-            display: flex;
-            align-items: center;
-            color: #9FAEC2;
-            padding-bottom: 15px;
-        }
-        &__close-button{
-            //
-        }
-        &__label{
-            font-family: 'Open Sans';
-            font-style: normal;
-            font-weight: 600;
-            font-size: 16px;
-            line-height: 24px;
-            display: flex;
-            align-items: center;
-            color: #49556A;
-        }
-        &__input-field{
-            color: #9FAEC2!important;
-        }
+      iframe{
+        max-height: 160px;
+        max-width: 160px;
+        border-radius: 10px!important;
+        margin: 5px;
+      }
+      &__title{
+          font-family: 'Open Sans';
+          font-style: normal;
+          font-weight: 400;
+          font-size: 25px;
+          line-height: 34px;
+          color: #49556A;
+      }
+      &__img{
+        max-height: 155px;
+        max-width: 155px;
+        border-radius: 10px!important;
+        margin: 5px;
+      }
+      &__description{
+          font-family: 'Open Sans';
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 24px;
+          display: flex;
+          align-items: center;
+          color: #9FAEC2;
+          padding-bottom: 15px;
+      }
+      &__close-button{
+          //
+      }
+      &__label{
+          font-family: 'Open Sans';
+          font-style: normal;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 24px;
+          display: flex;
+          align-items: center;
+          color: #49556A;
+      }
+      &__input-field{
+          color: #9FAEC2!important;
+      }
     }
 
 
@@ -1535,5 +1566,62 @@ export default {
         color: white;
 
     }
+}
+.exercise-table{
+  // &--img{
+  //   max-height: 60px;
+  //   max-width: 60px;
+  //   border-radius: 10px!important;
+  //   margin: 5px;
+  // }
+  &--text{
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+    display: flex;
+    align-items: center;
+    color: #49556A;
+  }
+  &--header{
+    font-family: 'Open Sans'!important;
+    font-style: normal!important;
+    font-weight: 600!important;
+    font-size: 12px!important;
+    line-height: 16px!important;
+    letter-spacing: 0.05em!important;
+    text-transform: uppercase!important;
+    color: #49556A!important;
+  }
+}
+.exercise-video{
+  iframe {
+    max-height: 60px;
+    max-width: 60px;
+    border-radius: 10px;
+    margin: 5px;
+  }
+}
+
+.v-menu{
+  &__content {
+    background: #FFFFFF!important;
+    border-radius: 10px!important;
+  }
+}
+::v-deep .v-data-table-header {
+  background-color: #ECF2F7;
+  font-family: 'Open Sans'!important;
+    font-style: normal!important;
+    font-weight: 600!important;
+    font-size: 12px!important;
+    line-height: 16px!important;
+    letter-spacing: 0.05em!important;
+    text-transform: uppercase!important;
+    color: #49556A!important;
+}
+::v-deep .v-data-table {
+  border-radius: 5px;  
 }
 </style>
