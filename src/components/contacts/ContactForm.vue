@@ -1,6 +1,6 @@
 <template>
-  <section class="form-parent">
-    <header @click="$emit('close-modal')" class="cursor-pointer">
+  <section class="contact-form-parent">
+    <header @click="closeForm" class="cursor-pointer">
       <img
         class="pb-5"
         :src="require('@/assets/img/svg-icons/cancel.svg')"
@@ -9,24 +9,36 @@
     </header>
 
     <v-form ref="form" v-model="valid" lazy-validation>
-      <div>
-        <div class="form-label">Category <sup class="red--text">*</sup></div>
+      <div v-for="(item, i) in formItems" :key="i">
+        <div class="form-label">
+          {{ item.label }} <sup class="red--text">*</sup>
+        </div>
         <v-select
-          v-model="select"
+          v-if="item.type == 'select'"
+          v-model="item.model"
           :items="items"
-          :rules="[v => !!v || 'Item is required']"
-          placeholder="How do you coach the athlete?"
+          :rules="item.rules"
+          :placeholder="item.placeholder"
           hide-details
           class="form-input"
+          outlined
+          dense
           required
         ></v-select>
+        <v-text-field
+          v-else
+          v-model="item.model"
+          :rules="item.rules"
+          :placeholder="item.placeholder"
+          hide-details
+          class="form-input"
+          outlined
+          dense
+          required
+        ></v-text-field>
       </div>
       <div>
-        <v-btn
-          @click="validate"
-          class="add-form-btn"
-          depressed
-        >
+        <v-btn @click="validate" class="add-form-btn" depressed>
           Add Contact
         </v-btn>
       </div>
@@ -37,65 +49,106 @@
 export default {
   data: () => ({
     valid: true,
-    name: "",
-    nameRules: [
-      v => !!v || "Name is required",
-      v => (v && v.length <= 10) || "Name must be less than 10 characters"
-    ],
-    email: "",
-    emailRules: [
-      v => !!v || "E-mail is required",
-      v => /.+@.+\..+/.test(v) || "E-mail must be valid"
-    ],
-    select: null,
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
-    checkbox: false
   }),
   computed: {
-      formItems() {
-          return [
-              {
-                  type: "select",
-                  placeholder: "",
-                  rules: [v => !!v || 'Item is required']
-              }
-          ] 
-      }
+    formItems() {
+      return [
+        {
+          type: "select",
+          placeholder: "How do you coach the athlete?",
+          label: "Category",
+          key: "categoryName",
+          rules: [v => !!v || "Category is required"],
+          model: null
+        },
+        {
+          label: "First Name",
+          key: "firstName",
+          placeholder: "Enter First name",
+          rules: [v => !!v || "First Name is required"],
+          model: null
+        },
+        {
+          label: "Last Name",
+          key: "lastName",
+          placeholder: "Enter Last Name",
+          rules: [v => !!v || "Last Name is required"],
+          model: null
+        },
+        {
+          label: "Email Address",
+          key: "email",
+          placeholder: "Enter Email Address",
+          rules: [
+            v => !!v || "E-mail is required",
+            v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+          ],
+          model: null
+        }
+      ];
+    },
+    
   },
 
   methods: {
     validate() {
-      this.$refs.form.validate();
+      if (this.$refs.form.validate()) {
+        console.log("object", this.payloadData());
+        this.reset()
+      }
     },
     reset() {
       this.$refs.form.reset();
     },
     resetValidation() {
       this.$refs.form.resetValidation();
+    },
+    closeForm(){
+      this.$emit('close-modal');
+      this.reset()
+    },
+    payloadData() {
+      const data = {};
+      this.formItems.forEach(({firstName,lastName, model, categoryName, key}) => {
+        if (key == "email") {
+          data.email = model;
+        } else if (key == "firstName") {
+          data.firstName = model
+        } else if (key == "lastName") {
+          data.lastName = model
+        } else {
+          data.categoryName = model
+        }
+      });
+      return data;
     }
   }
 };
 </script>
-<style scoped>
-.form-parent {
+<style>
+.contact-form-parent {
   padding: 40px 67px;
 }
-.add-form-btn {
-    background: #15577c !important;
-    border-radius: 10px;
-    padding: 19px !important;
-    text-transform: capitalize;
-    color: white;
+.contact-form-parent .add-form-btn {
+  background: #15577c !important;
+  border-radius: 10px;
+  padding: 19px !important;
+  text-transform: capitalize;
+  color: white;
 }
-.form-label {
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-    color: #49556A;
+.contact-form-parent .form-label {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: #49556a;
 }
-.form-input {
-    margin-top: 0;
-    padding-top: 10px;
-    padding-bottom: 16px;
+.contact-form-parent .form-input {
+  margin-top: 0;
+  padding-top: 10px;
+  padding-bottom: 16px;
+}
+.contact-form-parent .v-input__slot {
+  border-radius: 8px !important;
 }
 </style>

@@ -88,7 +88,7 @@
         </tbody>
       </table>
     </section>
-    <v-dialog v-model="toggleContactForm" persistent max-width="680">
+    <v-dialog v-model="toggleContactForm" max-width="680">
       <v-card>
         <ContactForm
           @close-modal="toggleContactForm = !toggleContactForm"
