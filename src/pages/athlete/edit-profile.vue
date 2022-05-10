@@ -1071,12 +1071,12 @@ export default {
     },
     init() {
       // Redirect booking page if booking not completed
-      let booking = bookingService.getBookingInfo();
-      if (booking && booking.status != "Completed") {
-        this.$router.push(
-          this.localePath(pathData.pages.bookingPackage(booking.packageId))
-        );
-      }
+      // let booking = bookingService.getBookingInfo();
+      // if (booking && booking.status != "Completed") {
+      //   this.$router.push(
+      //     this.localePath(pathData.pages.bookingPackage(booking.packageId))
+      //   );
+      // }
 
       // If any question found in local storage
       let questionBox = storageHelper.get("question_box");
