@@ -49,7 +49,7 @@
 export default {
   data: () => ({
     valid: true,
-    items: ["Item 1", "Item 2", "Item 3", "Item 4"],
+    items: ["In-person", "Online", "Hybrid"],
   }),
   computed: {
     formItems() {
