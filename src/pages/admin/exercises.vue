@@ -41,7 +41,7 @@
                 elevation="2"
                 color="#15577C"
                 class="no-exercise__button px-5"
-                @click.stop="exerciseCreate.dialog = true"
+                @click.stop="handleExerciseCreateBtn"
             >
                 {{$t("no_exercise_button")}}
             </v-btn>
@@ -87,7 +87,7 @@
                   <v-btn
                     solo
                     color="primary-light-1"
-                    @click.stop="exerciseCreate.dialog = true"
+                    @click.stop="handleExerciseCreateBtn"
                     class="px-5"
                   >
                     {{$t("exercise_create_button")}}
@@ -145,7 +145,7 @@
                     </v-icon>
                   </template>
                   <v-list>
-                    <v-list-item @click.stop="exerciseCreate.dialog = true">
+                    <v-list-item @click.stop="editExercise(item)">
                       <v-list-item-title>Edit</v-list-item-title>
                     </v-list-item>
                     <v-list-item @click.stop="showExercise(item)">
@@ -427,6 +427,7 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
+
 
             <!-- Exercise Create Dialog -->
             <template>
@@ -869,7 +870,7 @@
                       </v-col>
                       <v-col cols="12" class="py-1 my-1">
                         <span class="exercise-preview--title">Sport</span>
-                        <span class="exercise-preview--description">{{exerciseData.sport.name}}</span>
+                        <span class="exercise-preview--description">{{exerciseData.sport[0].name}}</span>
                       </v-col>
                       <v-col cols="12" class="py-1 my-1">
                         <span class="exercise-preview--title">Lavel</span>
@@ -894,6 +895,376 @@
                 </v-dialog>
               </v-row>
             </template>
+
+            <!-- Exercise Edit Dialog -->
+            <template>
+              <v-row justify="center">
+                <v-dialog
+                  v-model="exerciseEdit.dialog"
+                  persistent
+                  max-width="800px"
+                >
+                  <v-card class="create-exercise">
+                    <v-card-title>
+                      <span class="create-exercise__title">Edit Exercise</span>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                            color="#49556A"
+                            icon
+                            @click="exerciseEdit.dialog = false"
+                            class="exercise__close-button"
+                        >
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                        <div class="line"></div>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-container>
+                        <v-form
+                          ref="form"
+                          v-model="exerciseEdit.valid"
+                          lazy-validation
+                        >
+                          <v-row>
+                            <v-col cols="12" class="pb-0 mb-0">
+                                <p class="create-exercise__label">Exercise Name <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <v-text-field
+                                    outlined
+                                    dense
+                                    label="Name your exercise"
+                                    v-model="exerciseEdit.data.name"
+                                    :rules="[v => !!v || 'Exercise Name is required']"
+                                    required
+                                    class="create-exercise__input-field"
+                                />
+                            </v-col>
+                            <v-col cols="12" class="py-0 my-0">
+                                <p class="create-exercise__label">Instructions <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <v-textarea
+                                    outlined
+                                    v-model="exerciseEdit.data.instructions"
+                                    name="input-7-4"
+                                    label="Add exercise instructions"
+                                    class="create-exercise__input-field"
+                                ></v-textarea>
+                            </v-col>
+                            <v-col cols="12" class="py-0 my-0">
+                                <p class="create-exercise__label">Video URL <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <v-form ref="videoForm" v-model="videoForm.valid" lazy-validation>
+                                    <v-text-field
+                                        label="Enter a valid youtube or vimoe link"
+                                        :rules="[
+                                            v => !!v || 'Youtube or vimoe url is required',
+                                            v =>
+                                            /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/.test(
+                                                v
+                                            ) ||
+                                            /^(http\:\/\/|https\:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/.test(
+                                                v
+                                            ) ||
+                                            'Url is not valid'
+                                        ]"
+                                        v-model="url.video"
+                                        :loading="videoForm.isLoading"
+                                        outlined
+                                        dense
+                                        class="create-exercise__input-field"
+                                    ></v-text-field>
+                                </v-form>
+                            </v-col>
+                            <v-col cols="12" class="py-0 my-0">
+                                <v-btn
+                                    text
+                                    color="#15577C"
+                                    class="px-0"
+                                    @click="saveVideoUrl()"
+                                >
+                                    <img class="btn-icon"  :src="require('@/assets/images/icons/video-url.svg')" alt="">  <span class="btn-text"> Upload a Video</span>
+                                </v-btn>
+                            </v-col>
+
+
+
+                            <!-- image upload -->
+                            <v-col cols="12">
+                                <div class="create-exercise__label pb-2">Upload Photos</div>
+                                <div class="create-exercise__description pb-2">
+                                    Upload up to 4 images. Accepted: jpg, jpeg, png
+                                </div>
+                                <v-row>
+                                    <v-col cols="3"  v-if="links != ''" v-for="(link, index) in links" v-bind:key="index">
+                                      <v-badge 
+                                        top
+                                        avatar
+                                        color="rgb(0 0 0 / 0%) !important"
+                                        offset-x="15"
+                                        offset-y="15" 
+                                        style="width: 100%; height: 200px;"
+                                      >
+                                        <v-btn style="height:22px!important; width:22px!important"  slot="badge" x-small fab color="#49556A" @click="handleRemoveBtnClick(index)">
+                                            <v-icon color="white" x-small >mdi-close</v-icon>
+                                        </v-btn>
+                                        <asset-view :url="link.url" :asset_type="link.type"></asset-view>
+                                      </v-badge>   
+                                    </v-col>
+                                    <v-col cols="3" v-if="imgSrc">
+                                      <v-card outlined elevation="0" color="transparent">
+                                        <v-card-text>
+                                          <cropper
+                                              classname="cropper"
+                                              :src="imgSrc"
+                                              imageClassname="imageCropClassCustom"
+                                              backgroundClassname="backgroundCropClassCustom"
+                                              :stencil-props="{
+                                              minAspectRatio: 1 / 1,
+                                              maxAspectRatio: 1 / 1
+                                              }"
+                                              ref="imageCropper"
+                                          ></cropper>
+                                        </v-card-text>
+                                        <v-card-actions class="justify-center py-0 my-0">
+                                          <v-btn
+                                              @click="handleImageUploadBtnClick"
+                                              class="text-normal"
+                                              text
+                                              x-small
+                                              depressed
+                                              :loading="isLoading"
+                                              color="primary-light-1"
+                                              dark
+                                              >{{ $t("Upload") }}</v-btn
+                                          >
+                                          <v-btn
+                                              @click="handleCancelBtnClick"
+                                              class="text-normal"
+                                              text
+                                              x-small
+                                              depressed
+                                              color="red"
+                                              dark
+                                              >{{ $t("Cancel") }}</v-btn
+                                          >
+                                        </v-card-actions>
+                                      </v-card>
+                                    </v-col>
+                                    <v-col cols="3" v-if="links.length <=3">
+                                        <div
+                                            class="drop-zone"
+                                            @dragenter="dragging = true"
+                                            @dragleave="dragging = false"
+                                        >
+                                            <div class="drop-zone__info" @drag="showFileChooser">
+                                            <div class="drop-zone__icon">
+                                                <img
+                                                :src="require('@/assets/img/svg-icons/image-upload.svg')"
+                                                alt=""
+                                                />
+                                            </div>
+                                            <div class="drop-zone__limit-info"></div>
+                                            </div>
+                                            <input
+                                            ref="fileInput"
+                                            type="file"
+                                            name="image"
+                                            accept="image/*"
+                                            @change="setImage"
+                                            />
+                                        </div>
+                                    </v-col>
+                                </v-row>
+                            </v-col>
+
+
+                            <!-- Category Section -->
+                            <v-col cols="12" class="py-0 my-0">
+                                <p class="create-exercise__label">Category <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                
+                                <v-autocomplete
+                                    v-model="exerciseEdit.data.category"
+                                    :items="categories"
+                                    item-text="name"
+                                    return-object
+                                    chips
+                                    multiple
+                                    clearable
+                                    label="What category suits this exercise best?"
+                                    :menu-props="{closeOnContentClick: true}"
+                                    outlined
+                                    dense
+                                    persistent-hint
+                                    autocomplete="off"
+                                    class="create-exercise__input-field"
+                                >
+                                    <template
+                                    v-slot:selection="{ attrs, item, select, selected }"
+                                    >
+                                    <v-chip
+                                        v-bind="attrs"
+                                        :input-value="selected"
+                                        small
+                                        label
+                                        close
+                                        @click="select"
+                                        @click:close="removeEditCategory(item)"
+                                    >
+                                        <strong>{{ item.name }}</strong
+                                        >&nbsp;
+                                    </v-chip>
+                                    </template>
+                                    <template v-slot:item="data">
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                        {{ data.item.name }}
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                    </template>
+                                </v-autocomplete>
+                            </v-col>
+
+                            <!-- Sports Section -->
+                            <v-col cols="12" class="py-0 my-0">
+                                <p class="create-exercise__label">Sports <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <v-autocomplete
+                                    v-model="exerciseEdit.data.sport"
+                                    :items="sports"
+                                    item-text="name"
+                                    return-object
+                                    chips
+                                    multiple
+                                    clearable
+                                    label="What sport is this exercise targeted for?"
+                                    :menu-props="{closeOnContentClick: true}"
+                                    outlined
+                                    dense
+                                    persistent-hint
+                                    autocomplete="off"
+                                    class="create-exercise__input-field"
+                                >
+                                    <template
+                                    v-slot:selection="{ attrs, item, select, selected }"
+                                    >
+                                    <v-chip
+                                        v-bind="attrs"
+                                        :input-value="selected"
+                                        small
+                                        label
+                                        @click="select"
+                                        close
+                                        @click:close="removeEditSport(item)"
+                                    >
+                                        <strong>{{ item.name }}</strong
+                                        >&nbsp;
+                                    </v-chip>
+                                    </template>
+                                    <template v-slot:item="data">
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                        {{ data.item.name }}
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                    </template>
+                                </v-autocomplete>
+                            </v-col>
+
+                            <!-- lavel Section -->
+                            <v-col cols="12" class="py-0 my-0">
+                                <p class="create-exercise__label">Lavel <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <v-autocomplete
+                                    v-model="exerciseEdit.data.lavel"
+                                    :items="lavels"
+                                    item-text="t_key"
+                                    return-object
+                                    chips
+                                    multiple
+                                    clearable
+                                    label="What sport is this exercise targeted for?"
+                                    :menu-props="{closeOnContentClick: true}"
+                                    outlined
+                                    dense
+                                    persistent-hint
+                                    autocomplete="off"
+                                    color="#9FAEC2"
+                                    class="create-exercise__input-field"
+                                >
+                                    <template
+                                    v-slot:selection="{ attrs, item, select, selected }"
+                                    >
+                                    <v-chip
+                                        v-bind="attrs"
+                                        :input-value="selected"
+                                        small
+                                        label
+                                        @click="select"
+                                        close
+                                        @click:close="removeEditLavel(item)"
+                                    >
+                                        <strong>{{ item.name }}</strong
+                                        >&nbsp;
+                                    </v-chip>
+                                    </template>
+                                    <template v-slot:item="data">
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                        {{ data.item.name }}
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                    </template>
+                                </v-autocomplete>
+                            </v-col>
+
+                            <!-- Tags -->
+                            <v-col cols="12" class="py-0 my-0">
+                                <p class="create-exercise__label">Tags <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <v-combobox
+                                    v-model="exerciseEdit.data.tags"
+                                    :items="tagData.tags"
+                                    clearable
+                                    label="Add relevant tags to easilier identify the exercise"
+                                    multiple
+                                    outlined
+                                    dense
+                                    append-icon
+                                    color="#9FAEC2"
+                                    class="create-exercise__input-field"
+                                >
+                                    <template
+                                    v-slot:selection="{ attrs, item, select, selected }"
+                                    >
+                                    <v-chip
+                                        v-bind="attrs"
+                                        :input-value="selected"
+                                        close
+                                        @click="select"
+                                        @click:close="removeTag(item)"
+                                        label
+                                        small
+                                    >
+                                        <strong>{{ item }}</strong
+                                        >&nbsp;
+                                    </v-chip>
+                                    </template>
+                                </v-combobox>
+                            </v-col>
+                            <v-col cols="12" class="pt-0 mt-0">
+                                <v-btn
+                                    elevation="2"
+                                    color="#15577C"
+                                    class="no-exercise__button px-5"
+                                    @click="handleUpateExercise"
+                                >
+                                    Save Exercise
+                                </v-btn>
+                            </v-col>
+
+                          </v-row>
+                        </v-form>
+                      </v-container>
+                    </v-card-text>
+                  </v-card>
+                </v-dialog>
+              </v-row>
+            </template>
+
           </v-card>
         </div>
       </v-col>
@@ -961,6 +1332,23 @@ export default {
       sportsSelected: [],
       lavels: [],
       lavelsSelected: [],
+
+      exerciseEdit: {
+        editedIndex: -1,
+        dialog: false,
+        valid: true,
+        data: {
+          id: null,
+          name: "",
+          assets: [],
+          instructions: "",
+          category: [],
+          sport: [],
+          lavel: [],
+          tags: [],
+          type: ""
+        }
+      },
       exerciseCreate: {
         dialog: false,
         valid: true,
@@ -1015,6 +1403,8 @@ export default {
       activityStatusList: [],
       starStatusList: [],
       roleList: [],
+
+      
       
       userEdit: {
         editedIndex: -1,
@@ -1066,6 +1456,28 @@ export default {
     this.fetchLavels();
   },
   methods: {
+
+    handleExerciseCreateBtn(){
+      this.resetExerciseData();
+      this.exerciseCreate.dialog = true;
+    },
+
+    removeEditCategory(item) {
+      this.exerciseEdit.data.category.splice(this.exerciseEdit.data.category.indexOf(item), 1);
+      this.exerciseEdit.data.category = [...this.exerciseEdit.data.category];
+    },
+
+    removeEditSport(item) {
+      this.exerciseEdit.data.sport.splice(this.exerciseEdit.data.sport.indexOf(item), 1);
+      this.exerciseEdit.data.sport = [...this.exerciseEdit.data.sport];
+    },
+
+    removeEditLavel(item) {
+      this.exerciseEdit.data.lavel.splice(this.exerciseEdit.data.lavel.indexOf(item), 1);
+      this.exerciseEdit.data.lavel = [...this.exerciseEdit.data.lavel];
+    },
+
+
     handleBack(){
       this.$router.push(this.localePath(pathData.admin.profileMenu));
     },
@@ -1075,12 +1487,12 @@ export default {
         encodeURIComponent(exercise.id)
       );
 
-      this.exerciseData = [];
+      this.resetExerciseData();
+
       if(data.exercise){
         this.exerciseData = data.exercise;
         this.exercisePreviewDialog = true;
       }
-      console.log(this.exerciseData);
     },
 
     deleteExercise(exercise){
@@ -1247,55 +1659,99 @@ export default {
         .catch(() => {});
     },
 
+    async editExercise(exercise){
+      const { data } = await ExerciseApi(this.$axios).previewExercise(
+        encodeURIComponent(exercise.id)
+      );
+      this.resetExerciseData();
+      if(data.exercise){
+        
+        this.exerciseEdit.data.id = data.exercise.id;
+        this.exerciseEdit.data.name = data.exercise.name;
+        this.exerciseEdit.data.assets = data.exercise.assets;
 
-    updateUser() {
+        this.links = data.exercise.assets;
+
+        this.exerciseEdit.data.instructions = data.exercise.instructions;
+
+        this.exerciseEdit.data.category = data.exercise.category;
+
+        this.exerciseEdit.data.sport = data.exercise.sport;
+
+        this.exerciseEdit.data.lavel = data.exercise.lavel;
+
+        this.exerciseEdit.data.tags = data.exercise.tags;
+
+        this.exerciseEdit.data.type = data.exercise.type;
+
+        this.exerciseEdit.dialog = true;
+      }
+    },
+
+    resetExerciseData() {
+      this.exerciseEdit.data.id = null;
+      this.exerciseEdit.data.name = "";
+      this.exerciseEdit.data.assets = [];
+      this.exerciseEdit.data.instructions = "";
+      this.exerciseEdit.data.category = [];
+      this.exerciseEdit.data.sport = [];
+      this.exerciseEdit.data.lavel = [];
+      this.exerciseEdit.data.tags = [];
+      this.exerciseEdit.data.type = "";
+      this.exerciseCreate.initialValue.name = "";
+      this.instruction = "";
+      this.tagData.tagsSelected = [];
+      this.categoriesSelected = [];
+      this.sportsSelected = [],
+      this.lavelsSelected = [],
+      this.links = [];
+      this.exerciseData = null;
+    },
+
+    handleUpateExercise(){
+
+      if(this.$auth && this.$auth.hasRole(['superadmin', 'admin', 'staff'])){
+        var role = 1
+      }else{
+        role = 2
+      }
+
       let payload = {};
-      payload.id = this.userEdit.data.id;
-      payload.email = this.userEdit.data.email;
-      payload.phoneCode = this.userEdit.data.phone.code;
-      payload.phoneNumber = this.userEdit.data.phone.number;
-      payload.skillLevelValue = this.userEdit.data.skillLevelSlider.value;
-      payload.starStatusId = this.userEdit.data.activityStatusId;
-      payload.activityStatusId = this.userEdit.data.activityStatusId;
-      payload.activityStatusReason = this.userEdit.data.reason;
-      payload.ranking = this.userEdit.data.ranking;
-      payload.badgeId = this.userEdit.data.badgeId;
-      payload.roleId = this.userEdit.data.roleId;
-      adminUserApi(this.$axios)
-        .updateUser(payload)
-        .then(({ data }) => {
-          if (data.status == "success") {
-            let rowIndex = this.table.rows.findIndex(
-              item => item.id == data.user.id
-            );
-            this.table.rows[rowIndex].status = data.user.status;
-            this.table.rows[rowIndex].phoneCode = data.user.phoneCode;
-            this.table.rows[rowIndex].phoneNumber = data.user.phoneNumber;
-            this.table.rows[rowIndex].activityStatusId =
-              data.user.activityStatusId;
-            this.table.rows[rowIndex].activityStatusReason =
-              data.user.activityStatusReason;
-            this.userEdit.dialog = false;
-            this.$toast.success(data.message);
-          }
+      payload.id = this.exerciseEdit.data.id;
+      payload.name = this.exerciseEdit.data.name;
+      payload.instructions = this.exerciseEdit.data.instructions;
+      payload.assets = this.links;
+      payload.category = this.exerciseEdit.data.category;
+      payload.sport = this.exerciseEdit.data.sport;
+      payload.lavel = this.exerciseEdit.data.lavel;
+      payload.tags = this.exerciseEdit.data.tags;
+      payload.type = role;
 
-          if (data.user) {
+       ExerciseApi(this.$axios)
+        .updateExercise(payload)
+        .then(({ data }) => {
+          if (data.exercise) {
             const index = this.table.rows.findIndex(
-              item => item.id == data.user.id
+              item => item.id == data.exercise.id
             );
             Object.assign(
               this.table.rows[index],
-              this.formatExerciseItem(data.user)
+              this.formatExerciseItem(data.exercise)
             );
-            console.log(this.table.rows[index]);
+            this.$toast.success('Exercise has been updated successfully!');
           }
+          this.exerciseEdit.dialog = false;
+          
         })
         .catch(({ response }) => {
           if (response.data.status == "error") {
             this.$toast.error(response.data.message);
           }
         });
+
     },
+    
+
     resetUserData() {
       this.userEdit.data.id = "";
       this.userEdit.data.email = "";
@@ -1329,6 +1785,7 @@ export default {
         type: item.type
       }
     },
+
     setUserEditDataMobileInfo(item) {
       if (item.countryCode) {
         this.userEdit.data.phone.code = item.countryCode;
@@ -1337,6 +1794,8 @@ export default {
         this.userEdit.data.phone.number = item.phoneNumber;
       }
     },
+
+
     setUserDataToEdit(selectedRow) {
       this.resetUserData();
       if (selectedRow) {
