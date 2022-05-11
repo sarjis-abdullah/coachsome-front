@@ -21,13 +21,14 @@
 
 <style lang="scss">
 
- iframe {
+
+  .exercise-table{
+     iframe {
     max-height: 90px;
     max-width: 90px;
     border-radius: 10px;
     margin: 5px;
   }
-  .exercise-table{
     &--img{
         max-height: 90px;
         max-width: 90px;

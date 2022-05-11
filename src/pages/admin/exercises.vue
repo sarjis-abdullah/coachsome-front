@@ -151,7 +151,7 @@
                     <v-list-item @click.stop="showExercise(item)">
                       <v-list-item-title>Preview</v-list-item-title>
                     </v-list-item>
-                    <v-list-item @click.stop="exerciseCreate.dialog = true">
+                    <v-list-item @click.stop="deleteExercise(item)">
                       <v-list-item-title style="color: #FF3A0D">Remove</v-list-item-title>
                     </v-list-item>
                   </v-list>
@@ -792,14 +792,102 @@
               <v-row justify="center">
                 <v-dialog
                   v-model="exercisePreviewDialog"
-                  persistent
-                  max-width="800px"
+                  max-width="600px"
                 >
-                  <v-card class="create-exercise">
-                    <!-- {{exerciseData.assets.map(exercise)}} -->
-                    <!-- <span v-for="asset in exerciseData.assets">
-                      <asset-preview :asset_type="asset.type" :url="asset.url"></asset-preview>
-                    </span> -->
+                  <v-card class="exercise-preview">
+
+                    <v-row v-if="exerciseData!=null" class="mt-0 pt-0">
+                      <v-col cols="12" class="mt-n10 pt-n10">
+                        <swiper
+                          class="swiper"
+                          :options="{
+                            slidesPerView: 1,
+                            spaceBetween: 10,
+                            direction: 'horizontal',
+                            loop: true,
+                            speed: 2500,
+                            autoplay:false,
+                            navigation: {
+                              nextEl: '.swiper-button-next',
+                              prevEl: '.swiper-button-prev'
+                            },
+
+                            breakpoints: {
+                              1024: {
+                                slidesPerView: 1,
+                                spaceBetween: 30
+                              },
+                              768: {
+                                slidesPerView: 1,
+                                spaceBetween: 30
+                              },
+                              640: {
+                                slidesPerView: 1,
+                                spaceBetween: 20
+                              },
+                              320: {
+                                slidesPerView: 1,
+                                spaceBetween: 10
+                              }
+                            }
+                          }"
+                        >
+                    
+                          <swiper-slide class="d-flex justify-center" v-for="(asset, index) in exerciseData.assets" :key="index">
+                            <div class="logo-slide">
+                              <asset-preview :asset_type="asset.type" :url="asset.url"></asset-preview>
+                            </div>
+                          </swiper-slide>
+                      
+                          <div class="swiper-pagination" slot="pagination"></div>
+                          <div
+                            class="swiper-button-prev"
+                            slot="button-prev"
+                          ></div>
+                          <div
+                            class="swiper-button-next"
+                            slot="button-next"
+                          ></div>
+                        </swiper>
+                      </v-col>
+                    </v-row>
+                    <v-row v-if="exerciseData!=null">
+                      <v-col cols="12" class="py-1 my-1">
+                        <span class="exercise-preview--title">Exercise Name</span>
+                        <span class="exercise-preview--description">{{exerciseData.name}}</span>
+                      </v-col>
+                      <v-col cols="12" class="py-1 my-1">
+                        <span class="exercise-preview--title">Exercise Description</span>
+                        <span class="exercise-preview--description">{{exerciseData.instructions}}</span>
+                      </v-col>
+                      <v-col cols="12" class="py-1 my-1">
+                        <span class="exercise-preview--breakdown">Exercise Breakdown</span>
+                      </v-col>
+                      <v-col cols="12" class="py-1 my-1">
+                        <span class="exercise-preview--title">Category</span>
+                        <span class="exercise-preview--description">{{exerciseData.category[0].name}}</span>
+                      </v-col>
+                      <v-col cols="12" class="py-1 my-1">
+                        <span class="exercise-preview--title">Sport</span>
+                        <span class="exercise-preview--description">{{exerciseData.sport.name}}</span>
+                      </v-col>
+                      <v-col cols="12" class="py-1 my-1">
+                        <span class="exercise-preview--title">Lavel</span>
+                        <span class="exercise-preview--description">{{exerciseData.lavel[0].name}}</span>
+                      </v-col>
+                      <v-col cols="12" class="py-1 my-1">
+                        <span class="exercise-preview--title">Tags</span>
+                          <v-chip
+                            v-for="(tag, index) in exerciseData.tags" :key="index"
+                            class="exercise-preview--tag"
+                            color="#6EB5CB"
+                            small
+                          >{{tag}}</v-chip>
+                      </v-col>
+
+                    </v-row>
+
+                    
                     
                     
                   </v-card>
@@ -815,13 +903,15 @@
 
 <script>
 import { imageService } from "@/services";
-import { adminUserApi, adminImpersonateApi, sportCategoryApi } from "@/api";
+import { adminUserApi, adminImpersonateApi, ExerciseApi } from "@/api";
 import { pathData } from "@/data";
 import VuePhoneNumberInput from "vue-phone-number-input";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
-import { ExerciseApi } from "@/api";
+
+
+
 // ---------------
 import DarkboxGallery from "@/components/darkbox/Gallery";
 import ListAssetView from '../../components/exercise/ListAssetView.vue';
@@ -838,7 +928,7 @@ export default {
     Cropper,
     ListAssetView,
     AssetView,
-    AssetPreview,
+    AssetPreview
   },
   data() {
     return {
@@ -981,9 +1071,6 @@ export default {
     },
 
     async showExercise(exercise){
-      this.exercisePreviewDialog = true;
-      console.log(exercise.id);
-
       const { data } = await ExerciseApi(this.$axios).previewExercise(
         encodeURIComponent(exercise.id)
       );
@@ -991,7 +1078,37 @@ export default {
       this.exerciseData = [];
       if(data.exercise){
         this.exerciseData = data.exercise;
+        this.exercisePreviewDialog = true;
       }
+      console.log(this.exerciseData);
+    },
+
+    deleteExercise(exercise){
+            
+      if (confirm("Are you sure?")) {
+        this.isLoading = true;
+        ExerciseApi(this.$axios)
+          .destroyExercise(exercise.id)
+          .then(({ data }) => {
+            let index = this.table.rows.findIndex(
+              exercise => exercise.id == exercise.id
+            );
+
+            if (index != undefined) {
+              this.table.rows.splice(index, 1);
+            }
+            this.$toast.success("Successfully deleted");
+          })
+          .catch(({ response }) => {
+            if (response.data.message) {
+              this.$toast.error(response.data.message);
+            }
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
+      }
+
     },
 
     handleCreateExercise(){
@@ -1624,4 +1741,71 @@ export default {
 ::v-deep .v-data-table {
   border-radius: 5px;  
 }
+
+.exercise-preview{
+  padding: 15px;
+  &--title{
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    color: #49556A;
+  }
+  &--description{
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    color: #9FAEC2;
+  }
+  &--breakdown{
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 25px;
+    line-height: 34px;
+    color: #49556A;
+  }
+  &--tag{
+    margin: 0 2px;
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    /* identical to box height, or 171% */
+
+    text-align: center;
+    letter-spacing: 0.4px;
+    text-transform: capitalize;
+
+    color: #FFFFFF;
+  }
+}
+
+  .logos-swiper {
+    background: rgba(196, 196, 196, 0.1);
+  }
+  .logo-slide {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    img {
+      width: 100%;
+    }
+  }
+  .swiper-slide {
+    display: inline-flex;
+    width: auto;
+  }
+
 </style>

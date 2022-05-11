@@ -21,6 +21,8 @@ export default (axios) => ({
     return axios.get(`exercises/${id}`);
   },
 
+  destroyExercise: id => axios.delete(`exercises/${id}`),
+
   updateExercise: payload => axios.put("exercises/" + payload.id, payload),
 
   createExercise: payload => {
