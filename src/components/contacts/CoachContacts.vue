@@ -42,7 +42,7 @@
               />
             </th>
             <th>
-              Name
+              Email
               <img
                 :src="require('@/assets/img/svg-icons/keyboard-arrow-down.svg')"
                 alt="keyboard-arrow-down"
@@ -101,6 +101,7 @@
 <script>
 import CoachContactsSingleData from "@/components/contacts/CoachContactsSingleData";
 import ContactForm from "@/components/contacts/ContactForm";
+import API from "@/api/coach/contactUser";
 export default {
   components: {
     CoachContactsSingleData,
@@ -120,9 +121,16 @@ export default {
       ]
     };
   },
+  created () {
+    this.getAllData();
+  },
   methods: {
     showContactForm() {
       this.toggleContactForm = true;
+    },
+    async getAllData(){
+      const response = await API(this.$axios).getAllContactUsers()
+      this.contactsData = response.data.data
     }
   }
 };

@@ -10,13 +10,15 @@
         />
       </v-avatar>
     </td>
-    <td>Kasper Frandsen</td>
+    <td>
+      {{contact.email}}
+    </td>
     <td>
       <v-chip x-small>
         Active
       </v-chip>
     </td>
-    <td>Online</td>
+    <td>{{contact && contact.categoryName ? contact.categoryName : ""}}</td>
     <td>
       <span v-if="contact && contact.package">
         <img
@@ -29,7 +31,9 @@
 
       <span v-else class="no-package">No Active Packages </span>
     </td>
-    <td class="text-center">1 month ago</td>
+    <td class="text-center">
+      {{contact && contact.lastActiveAt ? contact.lastActiveAt : ''}}
+    </td>
     <td class="cursor-pointer">
       <section class="grid grid-cols-3 gap-5 justify-end">
         <img
@@ -37,7 +41,7 @@
           alt="notebook"
           @click="gotoChat"
         />
-        <img @click="$router.replace('/chat')" class="cursor-pointer" :src="require('@/assets/img/svg-icons/chat.svg')" alt="chat" />
+        <img @click="$router.replace('/chat?contactUserId='+ contact.id)" class="cursor-pointer" :src="require('@/assets/img/svg-icons/chat.svg')" alt="chat" />
         <!-- Three Dots horizontal -->
         <template>
           <div class="text-center">
