@@ -20,16 +20,42 @@
 </script>
 
 <style lang="scss">
-  .exercise-preview{
-    iframe{
-      width: 556px !important;
-      height: 400px!important;
-      margin: 5px;
+
+
+  @media only screen and (min-width: 400px ) {
+    .exercise-preview{
+      iframe{ 
+        height:400px!important; 
+        width:100%; 
+        position:absolute; 
+        z-index:999;
+        left: 0;
+        right: 0;
+      }
+      &__img{
+        height:400px; 
+        width:100%; 
+        left: 0;
+        right: 0;
+      }
     }
-    &__img{
-      height: 400px!important;
-      width: 556px !important;
-      margin: 5px;
+  }
+  @media only screen and (max-width: 399px) {
+    .exercise-preview{
+      iframe{ 
+        height:300px!important; 
+        width:100%; 
+        position:absolute; 
+        z-index:999;
+        left: 0;
+        right: 0;
+      }
+      &__img{
+        height:300px; 
+        width:100%; 
+        left: 0;
+        right: 0;
+      }
     }
   }
 </style>

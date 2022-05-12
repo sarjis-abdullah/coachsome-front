@@ -219,7 +219,7 @@
                                 <v-text-field
                                     outlined
                                     dense
-                                    label="Name your exercise"
+                                    :label="$t('hint_name')"
                                     v-model="exerciseCreate.initialValue.name"
                                     :rules="[v => !!v || 'Exercise Name is required']"
                                     required
@@ -232,7 +232,7 @@
                                     outlined
                                     v-model="exerciseCreate.initialValue.instructions"
                                     name="input-7-4"
-                                    label="Add exercise instructions"
+                                    :label="$t('hint_instructions')"
                                     class="create-exercise__input-field"
                                 ></v-textarea>
                             </v-col>
@@ -375,7 +375,7 @@
                                     return-object
                                     chips
                                     clearable
-                                    label="What category suits this exercise best?"
+                                    :label="$t('hint_cat_ex')"
                                     :menu-props="{closeOnContentClick: true}"
                                     outlined
                                     multiple
@@ -421,7 +421,7 @@
                                     chips
                                     multiple
                                     clearable
-                                    label="What sport is this exercise targeted for?"
+                                    :label="$t('hint_sport_ex')"
                                     :menu-props="{closeOnContentClick: true}"
                                     outlined
                                     dense
@@ -465,7 +465,7 @@
                                     return-object
                                     chips
                                     clearable
-                                    label="What sport is this exercise targeted for?"
+                                    :label="$t('hint_sport_ex')"
                                     :menu-props="{closeOnContentClick: true}"
                                     outlined
                                     dense
@@ -508,7 +508,7 @@
                                     v-model="tagData.tagsSelected"
                                     :items="tagData.tags"
                                     clearable
-                                    label="Add relevant tags to easilier identify the exercise"
+                                    :label="$t('hint_tags_ex')"
                                     multiple
                                     outlined
                                     dense
@@ -559,7 +559,7 @@
               <v-row justify="center">
                 <v-dialog
                   v-model="exercisePreviewDialog"
-                  max-width="600px"
+                  max-width="550px"
                 >
                   <v-card class="exercise-preview">
 
@@ -569,34 +569,15 @@
                           class="swiper"
                           :options="{
                             slidesPerView: 1,
-                            spaceBetween: 10,
+                            spaceBetween: 30,
                             direction: 'horizontal',
                             loop: true,
-                            speed: 2500,
+                            speed: 2450,
                             autoplay:false,
                             navigation: {
                               nextEl: '.swiper-button-next',
                               prevEl: '.swiper-button-prev'
                             },
-
-                            breakpoints: {
-                              1024: {
-                                slidesPerView: 1,
-                                spaceBetween: 30
-                              },
-                              768: {
-                                slidesPerView: 1,
-                                spaceBetween: 30
-                              },
-                              640: {
-                                slidesPerView: 1,
-                                spaceBetween: 20
-                              },
-                              320: {
-                                slidesPerView: 1,
-                                spaceBetween: 10
-                              }
-                            }
                           }"
                         >
                     
@@ -620,30 +601,30 @@
                       </v-col>
                     </v-row>
                     <v-row v-if="exerciseData!=null">
-                      <v-col cols="12" class="py-1 my-1">
+                      <v-col cols="12" class="pb-0 mb-0 mt-1 pt-0">
                         <span class="exercise-preview--title">{{$t("lbl_ex_name")}}</span>
                         <span class="exercise-preview--description">{{exerciseData.name}}</span>
                       </v-col>
-                      <v-col cols="12" class="py-1 my-1">
+                      <v-col cols="12" class="pb-0 mb-0 mt-1 pt-0">
                         <span class="exercise-preview--title">{{$t("lbl_ex_desc")}}</span>
                         <span class="exercise-preview--description">{{exerciseData.instructions}}</span>
                       </v-col>
-                      <v-col cols="12" class="py-1 my-1">
+                      <v-col cols="12" class="pb-0 mb-0 mt-1 pt-0">
                         <span class="exercise-preview--breakdown">{{$t("lbl_ex_brk")}}</span>
                       </v-col>
-                      <v-col cols="12" class="py-1 my-1">
+                      <v-col cols="12" class="pb-0 mb-0 mt-1 pt-0">
                         <span class="exercise-preview--title">{{$t("lbl_ex_cat")}}</span>
                         <span class="exercise-preview--description">{{$t(exerciseData.category[0].t_key)}}</span>
                       </v-col>
-                      <v-col cols="12" class="py-1 my-1">
+                      <v-col cols="12" class="pb-0 mb-0 mt-1 pt-0">
                         <span class="exercise-preview--title">{{$t("lbl_ex_sport")}}</span>
                         <span class="exercise-preview--description">{{$t(exerciseData.sport[0].t_key)}}</span>
                       </v-col>
-                      <v-col cols="12" class="py-1 my-1">
+                      <v-col cols="12" class="pb-0 mb-0 mt-1 pt-0">
                         <span class="exercise-preview--title">{{$t("lbl_ex_lvl")}}</span>
                         <span class="exercise-preview--description">{{$t(exerciseData.lavel[0].t_key)}}</span>
                       </v-col>
-                      <v-col cols="12" class="py-1 my-1 mb-10">
+                      <v-col cols="12" class="pb-0 mb-4 mt-1 pt-0">
                         <span class="exercise-preview--title">{{$t("lbl_ex_tags")}}</span>
                           <v-chip
                             v-for="(tag, index) in exerciseData.tags" :key="index"
@@ -695,7 +676,7 @@
                                 <v-text-field
                                     outlined
                                     dense
-                                    label="Name your exercise"
+                                    :label="$t('hint_name')"
                                     v-model="exerciseEdit.data.name"
                                     :rules="[v => !!v || 'Exercise Name is required']"
                                     required
@@ -708,7 +689,7 @@
                                     outlined
                                     v-model="exerciseEdit.data.instructions"
                                     name="input-7-4"
-                                    label="Add exercise instructions"
+                                    :label="$t('hint_instructions')"
                                     class="create-exercise__input-field"
                                 ></v-textarea>
                             </v-col>
@@ -853,7 +834,7 @@
                                     chips
                                     multiple
                                     clearable
-                                    label="What category suits this exercise best?"
+                                    :label="$t('hint_cat_ex')"
                                     :menu-props="{closeOnContentClick: true}"
                                     outlined
                                     dense
@@ -898,7 +879,7 @@
                                     chips
                                     multiple
                                     clearable
-                                    label="What sport is this exercise targeted for?"
+                                    :label="$t('hint_sport_ex')"
                                     :menu-props="{closeOnContentClick: true}"
                                     outlined
                                     dense
@@ -943,7 +924,7 @@
                                     chips
                                     multiple
                                     clearable
-                                    label="What sport is this exercise targeted for?"
+                                    :label="$t('hint_sport_ex')"
                                     :menu-props="{closeOnContentClick: true}"
                                     outlined
                                     dense
@@ -985,7 +966,7 @@
                                     v-model="exerciseEdit.data.tags"
                                     :items="tagData.tags"
                                     clearable
-                                    label="Add relevant tags to easilier identify the exercise"
+                                    :label="$t('hint_tags_ex')"
                                     multiple
                                     outlined
                                     dense
@@ -1046,7 +1027,7 @@ import VuePhoneNumberInput from "vue-phone-number-input";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
-import DarkboxGallery from "@/components/darkbox/Gallery";
+import DarkboxExercise from "@/components/darkbox/Gallery";
 import ListAssetView from '../../components/exercise/ListAssetView.vue';
 import AssetView from '../../components/exercise/AssetView.vue';
 import AssetPreview from '../../components/exercise/AssetPreview.vue';
@@ -1057,7 +1038,7 @@ export default {
   components: {
     VuePhoneNumberInput,
     MobileTopNav,
-    DarkboxGallery,
+    DarkboxExercise,
     Cropper,
     ListAssetView,
     AssetView,
@@ -1932,6 +1913,13 @@ export default {
   .swiper-button-prev:after, .swiper-button-next:after {
     font-size: 40px!important;
     font-weight: bold!important;
+}
+
+.v-data-footer{
+  &__select {
+    margin-left: auto;
+    margin-right: auto!important;
+  }
 }
 
 </style>

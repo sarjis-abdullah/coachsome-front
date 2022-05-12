@@ -44,7 +44,7 @@
 import overlay from "./Overlay";
 import itemMixin from "./mixins/item";
 export default {
-  name: "DarkboxGallery",
+  name: "DarkboxExercise",
   mixins: [itemMixin],
   props: {
     lazyLoading: {
@@ -134,13 +134,6 @@ export default {
           };
         });
       }
-      // return [
-      //   {
-      //     ...this.overlay.item,
-      //     ...this.image,
-      //     thumbnail: this.setThumbnail(this.image)
-      //   }
-      // ];
     }
   },
   methods: {
@@ -248,5 +241,16 @@ export default {
       width: 10px;
     }
   }
+}
+.ytp-large-play-button {
+    top: 45%!important;
+    width: 70px!important;
+    height: 70px;
+    border: 7px solid white!important;
+    border-radius: 100%!important;
+}
+
+.ytp-large-play-button-bg {
+    fill: transparent!important;
 }
 </style>
