@@ -92,6 +92,7 @@
       <v-card>
         <ContactForm
           @close-modal="toggleContactForm = !toggleContactForm"
+          @reloadAllData="reloadAllData"
         />
       </v-card>
     </v-dialog>
@@ -110,15 +111,7 @@ export default {
   data() {
     return {
       toggleContactForm: false,
-      contactsData: [
-        {
-          package: {
-            name: "Package_Name"
-          }
-        },
-        {},
-        {}
-      ]
+      contactsData: []
     };
   },
   created () {
@@ -131,6 +124,9 @@ export default {
     async getAllData(){
       const response = await API(this.$axios).getAllContactUsers()
       this.contactsData = response.data.data
+    },
+    async reloadAllData(){
+      await this.getAllData()
     }
   }
 };

@@ -30,15 +30,16 @@
           v-model="item.model"
           :rules="item.rules"
           :placeholder="item.placeholder"
-          hide-details
           class="form-input"
           outlined
+          :hide-details="item.error && item.error != '' ? false : true"
           dense
           required
+          :error-messages="item.error"
         ></v-text-field>
       </div>
       <div>
-        <v-btn @click="validate" class="add-form-btn" depressed>
+        <v-btn :loading="loading" @click="submitForm" class="add-form-btn" depressed>
           Add Contact
         </v-btn>
       </div>
@@ -46,56 +47,68 @@
   </section>
 </template>
 <script>
+import item from "../darkbox/mixins/item";
 export default {
   data: () => ({
     valid: true,
     items: ["In-person", "Online", "Hybrid"],
+    loading: false,
+    formItems: [
+      {
+        type: "select",
+        placeholder: "How do you coach the athlete?",
+        label: "Category",
+        key: "categoryName",
+        rules: [v => !!v || "Category is required"],
+        model: null
+      },
+      {
+        label: "First Name",
+        key: "firstName",
+        placeholder: "Enter First name",
+        rules: [v => !!v || "First Name is required"],
+        model: null
+      },
+      {
+        label: "Last Name",
+        key: "lastName",
+        placeholder: "Enter Last Name",
+        rules: [v => !!v || "Last Name is required"],
+        model: null
+      },
+      {
+        label: "Email Address",
+        key: "email",
+        placeholder: "Enter Email Address",
+        rules: [
+          v => !!v || "E-mail is required",
+          v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+        ],
+        model: null
+      }
+    ]
   }),
-  computed: {
-    formItems() {
-      return [
-        {
-          type: "select",
-          placeholder: "How do you coach the athlete?",
-          label: "Category",
-          key: "categoryName",
-          rules: [v => !!v || "Category is required"],
-          model: null
-        },
-        {
-          label: "First Name",
-          key: "firstName",
-          placeholder: "Enter First name",
-          rules: [v => !!v || "First Name is required"],
-          model: null
-        },
-        {
-          label: "Last Name",
-          key: "lastName",
-          placeholder: "Enter Last Name",
-          rules: [v => !!v || "Last Name is required"],
-          model: null
-        },
-        {
-          label: "Email Address",
-          key: "email",
-          placeholder: "Enter Email Address",
-          rules: [
-            v => !!v || "E-mail is required",
-            v => /.+@.+\..+/.test(v) || "E-mail must be valid"
-          ],
-          model: null
-        }
-      ];
-    },
-    
-  },
+  computed: {},
 
   methods: {
-    validate() {
+    async submitForm() {
       if (this.$refs.form.validate()) {
-        console.log("object", this.payloadData());
-        this.reset()
+        this.loading = true
+        const data = this.payloadData();
+        try {
+          await this.$axios.post("coach/contact-user", data);
+          this.$emit("reloadAllData")
+          console.log(4567);
+          this.closeForm()
+        } catch (error) {
+          if (error?.response?.data?.errors) {
+            this.handleServerErrorMessage(error.response.data.errors);
+          }else{
+            this.closeForm()
+          }
+        }finally {
+          this.loading = false
+        }
       }
     },
     reset() {
@@ -104,24 +117,41 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     },
-    closeForm(){
-      this.$emit('close-modal');
-      this.reset()
+    closeForm() {
+      this.$emit("close-modal");
+      this.formItems = this.formItems.map(item => {
+        delete item.error
+        return item
+      })
+      this.reset();
     },
     payloadData() {
-      const data = {};
-      this.formItems.forEach(({firstName,lastName, model, categoryName, key}) => {
+      const data = {
+        contactByUserId: this.$auth.user.id
+      };
+      this.formItems.forEach(({ model, key }) => {
         if (key == "email") {
           data.email = model;
         } else if (key == "firstName") {
-          data.firstName = model
+          data.firstName = model;
         } else if (key == "lastName") {
-          data.lastName = model
+          data.lastName = model;
         } else {
-          data.categoryName = model
+          data.categoryName = model;
         }
       });
       return data;
+    },
+    handleServerErrorMessage(errors) {
+      for (const field in errors) {
+        this.formItems = this.formItems.map(item => {
+          if (item.key == field) {
+            item.error = errors[field]
+            return {...item}
+          }
+          return item
+        });
+      }
     }
   }
 };

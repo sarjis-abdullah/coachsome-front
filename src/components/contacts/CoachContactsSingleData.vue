@@ -41,7 +41,7 @@
           alt="notebook"
           @click="gotoChat"
         />
-        <img @click="$router.replace('/chat?contactUserId='+ contact.id)" class="cursor-pointer" :src="require('@/assets/img/svg-icons/chat.svg')" alt="chat" />
+        <img @click="$router.replace('/chat?contactByUserId='+ contact.contactByUserId)" class="cursor-pointer" :src="require('@/assets/img/svg-icons/chat.svg')" alt="chat" />
         <!-- Three Dots horizontal -->
         <template>
           <div class="text-center">
