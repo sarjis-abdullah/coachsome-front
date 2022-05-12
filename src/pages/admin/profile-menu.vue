@@ -63,6 +63,21 @@
                 </v-list-item-icon>
               </v-list-item>
 
+              <!-- Exercise List -->
+              <v-list-item link @click.stop="handleExercise">
+                <v-list-item-icon>
+                  <v-img :src="require('@/assets/img/svg-icons/new/exercise.svg')" alt="order_list" />
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title class="list-text">{{$t("dropdown_item_exercises")}}</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+
               <!-- Promo Codes -->
               <v-list-item link @click.stop="handlePromoCodes">
                 <v-list-item-icon>
@@ -337,6 +352,9 @@ export default ({
 
       handleOrders(){
         this.$router.push(this.localePath(pathData.admin.orderList));
+      },
+      handleExercise(){
+        this.$router.push(this.localePath(pathData.admin.exercises));
       },
       handlePromoCodes(){
         this.$router.push(this.localePath(pathData.admin.promos));

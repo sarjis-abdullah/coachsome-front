@@ -413,6 +413,12 @@ export default {
           t_key: "",
           subItems: [
             {
+              name: "Exercises",
+              path: pathData.admin.exercises,
+              icon: "mdi-view-list",
+              t_key: "dropdown_item_exercises"
+            },
+            {
               name: "Translation",
               path: pathData.admin.translation,
               icon: "mdi-view-list",

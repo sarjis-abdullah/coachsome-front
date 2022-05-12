@@ -20,6 +20,7 @@ export { default as profileApi } from "./profile";
 export { default as reviewApi } from "./review";
 export { default as sportCategoryApi } from "./sportCategory";
 export { default as userApi } from "./user";
+export { default as ExerciseApi } from "./exercise";
 
 // Admin
 export { default as adminAuthApi } from "./admin/auth";
@@ -56,6 +57,8 @@ export { default as athleteBookingTimeApi } from "./coach/bookingTime";
 export { default as athleteSearchValueApi } from "./athlete/searchValue";
 export { default as athleteExploreCoachApi } from "./athlete/explore";
 export { default as athleteSettingApi } from "./athlete/settings"
+
+
 
 // Shared
 export { default as sharedProfileApi } from "./shared/profile";
