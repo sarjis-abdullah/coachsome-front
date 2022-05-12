@@ -951,7 +951,7 @@ export default {
   async asyncData({ $axios, i18n }) {
     const { data } = await frontHomeApi($axios).getInitialData({});
     let categoryList = [];
-    if (data.categoryList.length > 0) {
+    if (data.categoryList && data.categoryList.length > 0) {
       for (const item of data.categoryList) {
         categoryList.push({
           id: item.id,

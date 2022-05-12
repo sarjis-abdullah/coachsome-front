@@ -1174,6 +1174,7 @@ export default {
           // });
 
           this.languagesSelected = response.data.selectedLanguages;
+          console.log(response.data.selectedCategories);
           this.categoriesSelected = response.data.selectedCategories;
           this.tagData.tagsSelected = response.data.selectedSportTags.map(
             item => item.name
