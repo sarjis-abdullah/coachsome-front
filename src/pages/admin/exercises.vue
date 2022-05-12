@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="pt-0 mt-0">
 
     <!-- Header start -->
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('dropdown_item_exercises')">
@@ -73,6 +73,7 @@
                     color="#49556A"
                     @click="loader = 'loading3'"
                     class="px-10"
+                    :block="$vuetify.breakpoint.xsOnly"
                     >
                         <v-icon
                             left
@@ -80,12 +81,13 @@
                         >
                             mdi-filter-outline
                         </v-icon>
-                        Filter
+                        {{$t("btn_filter")}}
                     </v-btn>
                 </v-col>
                 <v-col class="d-flex justify-end">
                   <v-btn
                     solo
+                    :block="$vuetify.breakpoint.xsOnly"
                     color="primary-light-1"
                     @click.stop="handleExerciseCreateBtn"
                     class="px-5"
@@ -105,15 +107,32 @@
               :header-props="{ sortIcon: 'mdi-chevron-down' }"
             >
 
+              <!-- table head start -->
+
               <template v-slot:header.assets="{ header }">
                 <v-checkbox
                 ></v-checkbox>
               </template>
 
               <template v-slot:header.exercise="{ header }">
-                Exercises( {{table.rows.length}} )
+                {{$t("thead_exercises")}}( {{table.rows.length}} )
+              </template>
+
+              <template v-slot:header.category="{ header }">
+                {{$t("thead_category")}}
+              </template>
+
+              <template v-slot:header.type="{ header }">
+                {{$t("thead_type")}}
+              </template>
+
+              <template v-slot:header.actions="{ header }">
+                <span></span>
               </template>
               
+              <!-- table head end -->
+
+              <!-- table column start -->
 
               <template v-slot:item.assets="{ item }">
                     <list-asset-view :asset_type="item.asset_type" :url="item.assets"></list-asset-view>
@@ -126,8 +145,11 @@
               </template>
               <template v-slot:item.category="{ item }">
                 <div class="exercise-table--text">
-                  {{item.category}}
+                  {{$t(item.category)}}
                 </div>
+                <!-- <span v-for="category in item.categories">
+                  {{$t(category.t_key)}} <span v-if="item.categories.length > 1">,</span>
+                </span> -->
               </template>
               <template v-slot:item.type="{ item }">
                  <div class="exercise-table--text">
@@ -146,288 +168,20 @@
                   </template>
                   <v-list>
                     <v-list-item @click.stop="editExercise(item)">
-                      <v-list-item-title>Edit</v-list-item-title>
+                      <v-list-item-title>{{$t("btn_edit_ex")}}</v-list-item-title>
                     </v-list-item>
                     <v-list-item @click.stop="showExercise(item)">
-                      <v-list-item-title>Preview</v-list-item-title>
+                      <v-list-item-title>{{$t("btn_preview")}}</v-list-item-title>
                     </v-list-item>
                     <v-list-item @click.stop="deleteExercise(item)">
-                      <v-list-item-title style="color: #FF3A0D">Remove</v-list-item-title>
+                      <v-list-item-title style="color: #FF3A0D">{{$t("btn_remove")}}</v-list-item-title>
                     </v-list-item>
                   </v-list>
                 </v-menu>
-            </template>
+              </template>
+              <!-- table column end -->
 
             </v-data-table>
-
-
-            <!-- Reason Dialog -->
-            <v-dialog v-model="userEdit.reasonDialog" max-width="290">
-              <v-card>
-                <v-card-title class="headline">Reason</v-card-title>
-
-                <v-card-text>
-                  <v-textarea
-                    solo
-                    counter="42"
-                    maxlength="42"
-                    v-model="userEdit.data.reason"
-                    label="Enter the reason"
-                  ></v-textarea>
-                </v-card-text>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-
-                  <v-btn
-                    color="primary-light-1"
-                    text
-                    @click="userEdit.reasonDialog = false"
-                    >Cancel</v-btn
-                  >
-
-                  <v-btn
-                    color="primary-light-1"
-                    text
-                    @click="userEdit.reasonDialog = false"
-                    >Ok</v-btn
-                  >
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-
-            <!-- User Edit Dialog -->
-            <v-dialog
-              v-model="userEdit.dialog"
-              persistent
-              max-width="70%"
-              scrollable
-            >
-              <v-card>
-                <v-card-title>
-                  <span class="title black--text">User Profile</span>
-                  <span class="ml-5 primary-light-1--text">{{
-                    userEdit.data.name
-                  }}</span>
-                </v-card-title>
-                <v-divider></v-divider>
-                <v-card-text>
-                  <v-container>
-                    <!-- General Group -->
-                    <v-row>
-                      <v-col cols="12">
-                        <span class="subtitle-2">General</span>
-                      </v-col>
-                    </v-row>
-                    <!-- Email -->
-                    <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">EMAIL</div>
-                        <div class="section-description">
-                          Create a catchy title for your package
-                        </div>
-                      </v-col>
-                      <v-col cols="12" md="6">
-                        <v-text-field
-                          v-model="userEdit.data.email"
-                          label="Email"
-                          required
-                          solo
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-
-                    <!-- Role -->
-                    <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">Role</div>
-                        <div class="section-description">
-                          Role is the part of the system.
-                        </div>
-                      </v-col>
-                      <v-col cols="12" md="6">
-                        <v-select
-                          solo
-                          v-model="userEdit.data.roleId"
-                          :items="roleList"
-                          item-text="name"
-                          item-value="id"
-                          label="Select badge"
-                        ></v-select>
-                      </v-col>
-                    </v-row>
-
-                    <!-- Mobile -->
-                    <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">MOBILE</div>
-                        <div class="section-description">
-                          This number will be used to notify you of changes in
-                          you bookings or other time critical information
-                        </div>
-                      </v-col>
-                      <v-col cols="12" md="6">
-                        <VuePhoneNumberInput
-                          :default-country-code="userEdit.data.phone.code"
-                          :only-countries="['DK', 'US']"
-                          v-model="userEdit.data.phone.number"
-                          @update="setUserEditDataMobileInfo"
-                          :translations="{
-                            countrySelectorLabel: $t(
-                              'profile_section_mobile_label_country_code'
-                            ),
-                            phoneNumberLabel: $t(
-                              'profile_section_mobile_input_label_phone_number'
-                            ),
-                            example: $t(
-                              'profile_section_mobile_input_label_example'
-                            )
-                          }"
-                        />
-                      </v-col>
-                    </v-row>
-
-                    <!-- User Status -->
-                    <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">USER STATUS</div>
-                        <div class="section-description">
-                          This status show a coachsome select status of a
-                          specific user in relation to the world
-                        </div>
-                      </v-col>
-                      <v-col cols="12" md="6">
-                        <v-select
-                          @change="userEdit.reasonDialog = true"
-                          solo
-                          v-model="userEdit.data.activityStatusId"
-                          :items="activityStatusList"
-                          item-text="display_text"
-                          item-value="id"
-                          label="Select status"
-                        ></v-select>
-                        <div v-if="userEdit.data.reason">
-                          <div class="caption warning--text">Reason</div>
-                          <div>{{ userEdit.data.reason }}</div>
-                        </div>
-                      </v-col>
-                    </v-row>
-
-                    <!-- Ranking Group -->
-                    <v-row>
-                      <v-col cols="12">
-                        <span class="subtitle-2">Ranking</span>
-                      </v-col>
-                    </v-row>
-                    <!-- Ranking -->
-                    <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">RANKING</div>
-                        <div class="section-description">
-                          Internal ranking points to promote a coach. Calculated
-                          from the system
-                        </div>
-                      </v-col>
-                      <v-col cols="12" md="6">
-                        <v-slider
-                          color="primary-light-1"
-                          v-model="userEdit.data.ranking"
-                          :max="100"
-                          class="align-center"
-                        >
-                          <template v-slot:append>
-                            <v-text-field
-                              v-model="userEdit.data.ranking"
-                              class="mt-0 pt-0"
-                              type="number"
-                              style="width: 60px"
-                            ></v-text-field>
-                          </template>
-                        </v-slider>
-                      </v-col>
-                    </v-row>
-
-                    <!-- Star Status -->
-                    <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">STAR STATUS</div>
-                        <div class="section-description">
-                          This status show a coachsome select status of a
-                          specific user in relation to the world
-                        </div>
-                      </v-col>
-                      <v-col cols="12" md="6">
-                        <v-select
-                          solo
-                          v-model="userEdit.data.starStatusId"
-                          :items="starStatusList"
-                          item-text="display_text"
-                          item-value="id"
-                          label="Select status"
-                          persistent-hint
-                          single-line
-                        ></v-select>
-                      </v-col>
-                    </v-row>
-
-                    <!-- Skill Level -->
-                    <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">SKILL LEVEL</div>
-                        <div class="section-description">
-                          This is a Coachsome chosen skill level on the coach
-                          and it is an estimation from our limited experience
-                        </div>
-                      </v-col>
-                      <v-col cols="12" md="6">
-                        <span>
-                          <v-slider
-                            v-model="userEdit.data.skillLevelSlider.value"
-                            :min="userEdit.data.skillLevelSlider.min"
-                            :max="userEdit.data.skillLevelSlider.max"
-                          ></v-slider>
-                        </span>
-                      </v-col>
-                    </v-row>
-
-                    <!-- Coach badge -->
-                    <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">Coach badge</div>
-                        <div class="section-description">
-                          Select the badge the coach should have. There are four
-                          levels total.
-                        </div>
-                      </v-col>
-                      <v-col cols="12" md="6">
-                        <v-select
-                          solo
-                          v-model="userEdit.data.badgeId"
-                          :items="badges"
-                          item-text="name"
-                          item-value="id"
-                          label="Select badge"
-                        ></v-select>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="primary-light-1"
-                    text
-                    @click="userEdit.dialog = false"
-                    >Close</v-btn
-                  >
-                  <v-btn color="primary-light-1" text @click="updateUser"
-                    >Save</v-btn
-                  >
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-
 
             <!-- Exercise Create Dialog -->
             <template>
@@ -439,7 +193,7 @@
                 >
                   <v-card class="create-exercise">
                     <v-card-title>
-                      <span class="create-exercise__title">Create New Exercise</span>
+                      <span class="create-exercise__title">{{$t("ex_create")}}</span>
                       <v-spacer></v-spacer>
                       <v-btn
                             color="#49556A"
@@ -457,10 +211,11 @@
                           ref="form"
                           v-model="exerciseCreate.valid"
                           lazy-validation
+                          class="mb-10"
                         >
                           <v-row>
                             <v-col cols="12" class="pb-0 mb-0">
-                                <p class="create-exercise__label">Exercise Name <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_name")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                                 <v-text-field
                                     outlined
                                     dense
@@ -472,7 +227,7 @@
                                 />
                             </v-col>
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">Instructions <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_instructions")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                                 <v-textarea
                                     outlined
                                     v-model="exerciseCreate.initialValue.instructions"
@@ -482,10 +237,12 @@
                                 ></v-textarea>
                             </v-col>
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">Video URL <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_video")}}
+                                  <!-- <v-badge color="white"><span style="color: red">*</span></v-badge> -->
+                                </p>
                                 <v-form ref="videoForm" v-model="videoForm.valid" lazy-validation>
                                     <v-text-field
-                                        label="Enter a valid youtube or vimoe link"
+                                        :label="$t('hint_video')"
                                         :rules="[
                                             v => !!v || 'Youtube or vimoe url is required',
                                             v =>
@@ -512,7 +269,7 @@
                                     class="px-0"
                                     @click="saveVideoUrl()"
                                 >
-                                    <img class="btn-icon"  :src="require('@/assets/images/icons/video-url.svg')" alt="">  <span class="btn-text"> Upload a Video</span>
+                                    <img class="btn-icon"  :src="require('@/assets/images/icons/video-url.svg')" alt="">  <span class="btn-text"> {{$t("ex_upload_video")}}</span>
                                 </v-btn>
                             </v-col>
 
@@ -520,17 +277,17 @@
 
                             <!-- image upload -->
                             <v-col cols="12">
-                                <div class="create-exercise__label pb-2">Upload Photos</div>
+                                <div class="create-exercise__label pb-2">{{$t("ex_up_photos")}}</div>
                                 <div class="create-exercise__description pb-2">
-                                    Upload up to 4 images. Accepted: jpg, jpeg, png
+                                    {{$t("ex_up_photos_desc")}}
                                 </div>
                                 <v-row>
-                                    <v-col cols="3"  v-if="links != ''" v-for="(link, index) in links" v-bind:key="index">
+                                    <v-col cols="12" sm="3"  v-if="links != ''" v-for="(link, index) in links" v-bind:key="index">
                                       <v-badge 
                                         top
                                         avatar
                                         color="rgb(0 0 0 / 0%) !important"
-                                        offset-x="15"
+                                        :offset-x="{'15' : !$vuetify.breakpoint.xsOnly}"
                                         offset-y="15" 
                                         style="width: 100%; height: 200px;"
                                       >
@@ -540,7 +297,7 @@
                                         <asset-view :url="link.url" :asset_type="link.type"></asset-view>
                                       </v-badge>   
                                     </v-col>
-                                    <v-col cols="3" v-if="imgSrc">
+                                    <v-col cols="12" sm="3" v-if="imgSrc">
                                       <v-card outlined elevation="0" color="transparent">
                                         <v-card-text>
                                           <cropper
@@ -580,7 +337,7 @@
                                         </v-card-actions>
                                       </v-card>
                                     </v-col>
-                                    <v-col cols="3" v-if="links.length <=3">
+                                    <v-col cols="12" sm="3" v-if="links.length <=3">
                                         <div
                                             class="drop-zone"
                                             @dragenter="dragging = true"
@@ -610,17 +367,18 @@
 
                             <!-- Category Section -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">Category <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_cat")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                                 <v-autocomplete
                                     v-model="categoriesSelected"
                                     :items="categories"
-                                    item-text="name"
+                                    :item-text="$t('t_key')"
                                     return-object
                                     chips
                                     clearable
                                     label="What category suits this exercise best?"
                                     :menu-props="{closeOnContentClick: true}"
                                     outlined
+                                    multiple
                                     dense
                                     persistent-hint
                                     autocomplete="off"
@@ -635,6 +393,8 @@
                                         small
                                         label
                                         @click="select"
+                                        close
+                                        @click:close="removeCategory(item)"
                                     >
                                         <strong>{{ item.name }}</strong
                                         >&nbsp;
@@ -652,13 +412,14 @@
 
                             <!-- Sports Section -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">Sports <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_sport")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                                 <v-autocomplete
                                     v-model="sportsSelected"
                                     :items="sports"
-                                    item-text="name"
+                                    :item-text="$t('t_key')"
                                     return-object
                                     chips
+                                    multiple
                                     clearable
                                     label="What sport is this exercise targeted for?"
                                     :menu-props="{closeOnContentClick: true}"
@@ -677,6 +438,8 @@
                                         small
                                         label
                                         @click="select"
+                                        close
+                                        @click:close="removesport(item)"
                                     >
                                         <strong>{{ item.name }}</strong
                                         >&nbsp;
@@ -694,11 +457,11 @@
 
                             <!-- lavel Section -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">Lavel <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_lvl")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                                 <v-autocomplete
                                     v-model="lavelsSelected"
                                     :items="lavels"
-                                    item-text="name"
+                                    :item-text="$t('t_key')"
                                     return-object
                                     chips
                                     clearable
@@ -706,6 +469,7 @@
                                     :menu-props="{closeOnContentClick: true}"
                                     outlined
                                     dense
+                                    multiple
                                     persistent-hint
                                     autocomplete="off"
                                     color="#9FAEC2"
@@ -720,6 +484,8 @@
                                         small
                                         label
                                         @click="select"
+                                        close
+                                        @click:close="removeLavel(item)"
                                     >
                                         <strong>{{ item.name }}</strong
                                         >&nbsp;
@@ -737,7 +503,7 @@
 
                             <!-- Tags -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">Tags <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_tags")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                                 <v-combobox
                                     v-model="tagData.tagsSelected"
                                     :items="tagData.tags"
@@ -775,7 +541,7 @@
                                     class="no-exercise__button px-5"
                                     @click="handleCreateExercise"
                                 >
-                                    Create Exercise
+                                    {{$t("create_ex_btn")}}
                                 </v-btn>
                             </v-col>
 
@@ -842,11 +608,12 @@
                       
                           <div class="swiper-pagination" slot="pagination"></div>
                           <div
-                            class="swiper-button-prev"
+                            class="swiper-button-prev swiper-button-white"
                             slot="button-prev"
-                          ></div>
+                          >
+                          </div>
                           <div
-                            class="swiper-button-next"
+                            class="swiper-button-next swiper-button-white"
                             slot="button-next"
                           ></div>
                         </swiper>
@@ -854,30 +621,30 @@
                     </v-row>
                     <v-row v-if="exerciseData!=null">
                       <v-col cols="12" class="py-1 my-1">
-                        <span class="exercise-preview--title">Exercise Name</span>
+                        <span class="exercise-preview--title">{{$t("lbl_ex_name")}}</span>
                         <span class="exercise-preview--description">{{exerciseData.name}}</span>
                       </v-col>
                       <v-col cols="12" class="py-1 my-1">
-                        <span class="exercise-preview--title">Exercise Description</span>
+                        <span class="exercise-preview--title">{{$t("lbl_ex_desc")}}</span>
                         <span class="exercise-preview--description">{{exerciseData.instructions}}</span>
                       </v-col>
                       <v-col cols="12" class="py-1 my-1">
-                        <span class="exercise-preview--breakdown">Exercise Breakdown</span>
+                        <span class="exercise-preview--breakdown">{{$t("lbl_ex_brk")}}</span>
                       </v-col>
                       <v-col cols="12" class="py-1 my-1">
-                        <span class="exercise-preview--title">Category</span>
-                        <span class="exercise-preview--description">{{exerciseData.category[0].name}}</span>
+                        <span class="exercise-preview--title">{{$t("lbl_ex_cat")}}</span>
+                        <span class="exercise-preview--description">{{$t(exerciseData.category[0].t_key)}}</span>
                       </v-col>
                       <v-col cols="12" class="py-1 my-1">
-                        <span class="exercise-preview--title">Sport</span>
-                        <span class="exercise-preview--description">{{exerciseData.sport[0].name}}</span>
+                        <span class="exercise-preview--title">{{$t("lbl_ex_sport")}}</span>
+                        <span class="exercise-preview--description">{{$t(exerciseData.sport[0].t_key)}}</span>
                       </v-col>
                       <v-col cols="12" class="py-1 my-1">
-                        <span class="exercise-preview--title">Lavel</span>
-                        <span class="exercise-preview--description">{{exerciseData.lavel[0].name}}</span>
+                        <span class="exercise-preview--title">{{$t("lbl_ex_lvl")}}</span>
+                        <span class="exercise-preview--description">{{$t(exerciseData.lavel[0].t_key)}}</span>
                       </v-col>
-                      <v-col cols="12" class="py-1 my-1">
-                        <span class="exercise-preview--title">Tags</span>
+                      <v-col cols="12" class="py-1 my-1 mb-10">
+                        <span class="exercise-preview--title">{{$t("lbl_ex_tags")}}</span>
                           <v-chip
                             v-for="(tag, index) in exerciseData.tags" :key="index"
                             class="exercise-preview--tag"
@@ -887,10 +654,6 @@
                       </v-col>
 
                     </v-row>
-
-                    
-                    
-                    
                   </v-card>
                 </v-dialog>
               </v-row>
@@ -906,7 +669,7 @@
                 >
                   <v-card class="create-exercise">
                     <v-card-title>
-                      <span class="create-exercise__title">Edit Exercise</span>
+                      <span class="create-exercise__title">{{$t("ex_edit")}}</span>
                       <v-spacer></v-spacer>
                       <v-btn
                             color="#49556A"
@@ -924,10 +687,11 @@
                           ref="form"
                           v-model="exerciseEdit.valid"
                           lazy-validation
+                          class="mb-10"
                         >
                           <v-row>
                             <v-col cols="12" class="pb-0 mb-0">
-                                <p class="create-exercise__label">Exercise Name <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_name")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                                 <v-text-field
                                     outlined
                                     dense
@@ -939,7 +703,7 @@
                                 />
                             </v-col>
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">Instructions <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_instructions")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                                 <v-textarea
                                     outlined
                                     v-model="exerciseEdit.data.instructions"
@@ -949,10 +713,12 @@
                                 ></v-textarea>
                             </v-col>
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">Video URL <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_video")}}
+                                  <!-- <v-badge color="white"><span style="color: red">*</span></v-badge> -->
+                                </p>
                                 <v-form ref="videoForm" v-model="videoForm.valid" lazy-validation>
                                     <v-text-field
-                                        label="Enter a valid youtube or vimoe link"
+                                        :label="$t('hint_video')"
                                         :rules="[
                                             v => !!v || 'Youtube or vimoe url is required',
                                             v =>
@@ -979,7 +745,7 @@
                                     class="px-0"
                                     @click="saveVideoUrl()"
                                 >
-                                    <img class="btn-icon"  :src="require('@/assets/images/icons/video-url.svg')" alt="">  <span class="btn-text"> Upload a Video</span>
+                                    <img class="btn-icon"  :src="require('@/assets/images/icons/video-url.svg')" alt="">  <span class="btn-text"> {{$t("ex_upload_video")}}</span>
                                 </v-btn>
                             </v-col>
 
@@ -987,9 +753,9 @@
 
                             <!-- image upload -->
                             <v-col cols="12">
-                                <div class="create-exercise__label pb-2">Upload Photos</div>
+                                <div class="create-exercise__label pb-2">{{$t("ex_up_photos")}}</div>
                                 <div class="create-exercise__description pb-2">
-                                    Upload up to 4 images. Accepted: jpg, jpeg, png
+                                    {{$t("ex_up_photos_desc")}}
                                 </div>
                                 <v-row>
                                     <v-col cols="3"  v-if="links != ''" v-for="(link, index) in links" v-bind:key="index">
@@ -997,7 +763,7 @@
                                         top
                                         avatar
                                         color="rgb(0 0 0 / 0%) !important"
-                                        offset-x="15"
+                                        :offset-x="{'15' : !$vuetify.breakpoint.xsOnly}"
                                         offset-y="15" 
                                         style="width: 100%; height: 200px;"
                                       >
@@ -1077,12 +843,12 @@
 
                             <!-- Category Section -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">Category <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_cat")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                                 
                                 <v-autocomplete
                                     v-model="exerciseEdit.data.category"
                                     :items="categories"
-                                    item-text="name"
+                                    :item-text="$t('t_key')"
                                     return-object
                                     chips
                                     multiple
@@ -1123,11 +889,11 @@
 
                             <!-- Sports Section -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">Sports <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_sport")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                                 <v-autocomplete
                                     v-model="exerciseEdit.data.sport"
                                     :items="sports"
-                                    item-text="name"
+                                    :item-text="$t('t_key')"
                                     return-object
                                     chips
                                     multiple
@@ -1168,7 +934,7 @@
 
                             <!-- lavel Section -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">Lavel <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_lvl")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                                 <v-autocomplete
                                     v-model="exerciseEdit.data.lavel"
                                     :items="lavels"
@@ -1214,7 +980,7 @@
 
                             <!-- Tags -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">Tags <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_tags")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                                 <v-combobox
                                     v-model="exerciseEdit.data.tags"
                                     :items="tagData.tags"
@@ -1252,7 +1018,7 @@
                                     class="no-exercise__button px-5"
                                     @click="handleUpateExercise"
                                 >
-                                    Save Exercise
+                                    {{$t("ex_save")}}
                                 </v-btn>
                             </v-col>
 
@@ -1274,16 +1040,12 @@
 
 <script>
 import { imageService } from "@/services";
-import { adminUserApi, adminImpersonateApi, ExerciseApi } from "@/api";
+import {  ExerciseApi } from "@/api";
 import { pathData } from "@/data";
 import VuePhoneNumberInput from "vue-phone-number-input";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
-
-
-
-// ---------------
 import DarkboxGallery from "@/components/darkbox/Gallery";
 import ListAssetView from '../../components/exercise/ListAssetView.vue';
 import AssetView from '../../components/exercise/AssetView.vue';
@@ -1381,15 +1143,6 @@ export default {
         rows: []
       },
 
-        // ------------------------------------
-
-
-
-     dialog: {
-        category: false,
-        tag: false,
-      },
-
       url: {
         image: "",
         video: ""
@@ -1397,41 +1150,7 @@ export default {
       videoForm: {
         valid: true,
         isLoading: false
-      },
-      
-      badges: [],
-      activityStatusList: [],
-      starStatusList: [],
-      roleList: [],
-
-      
-      
-      userEdit: {
-        editedIndex: -1,
-        dialog: false,
-        reasonDialog: false,
-        data: {
-          id: null,
-          name: "",
-          email: "",
-          phone: {
-            code: "",
-            number: ""
-          },
-          ranking: 0,
-          skillLevelSlider: {
-            min: 0,
-            max: 100,
-            value: 40
-          },
-          starStatusId: null,
-          activityStatusId: null,
-          reason: null,
-          badgeId: null,
-          roleId: null
-        }
-      },
-      
+      }
     };
   },
   computed:{
@@ -1449,8 +1168,8 @@ export default {
     }
   },
   created() {
-    this.getExercise();
     this.langCode = this.$i18n.locale;
+    this.getExercise();
     this.fetchCategories();
     this.fetchSports();
     this.fetchLavels();
@@ -1467,9 +1186,20 @@ export default {
       this.exerciseEdit.data.category = [...this.exerciseEdit.data.category];
     },
 
+    removeCategory(item) {
+      this.categoriesSelected.splice(this.categoriesSelected.indexOf(item), 1);
+      this.categoriesSelected = [...this.categoriesSelected];
+    },
+    
+
     removeEditSport(item) {
       this.exerciseEdit.data.sport.splice(this.exerciseEdit.data.sport.indexOf(item), 1);
       this.exerciseEdit.data.sport = [...this.exerciseEdit.data.sport];
+    },
+
+    removeSport(item) {
+      this.sportsSelected.splice(this.sportsSelected.indexOf(item), 1);
+      this.sportsSelected = [...this.sportsSelected];
     },
 
     removeEditLavel(item) {
@@ -1477,6 +1207,10 @@ export default {
       this.exerciseEdit.data.lavel = [...this.exerciseEdit.data.lavel];
     },
 
+    removeLavel(item) {
+      this.lavelsSelected.splice(this.lavelsSelected.indexOf(item), 1);
+      this.lavelsSelected = [...this.lavelsSelected];
+    },
 
     handleBack(){
       this.$router.push(this.localePath(pathData.admin.profileMenu));
@@ -1648,7 +1382,6 @@ export default {
       ExerciseApi(this.$axios)
         .getExerciseList()
         .then(({ data }) => {
-          // console.log(data);
           if (data.exercises) {
             if(data.exercises.length){
               this.exercises.push(data.exercises);
@@ -1751,20 +1484,6 @@ export default {
 
     },
     
-
-    resetUserData() {
-      this.userEdit.data.id = "";
-      this.userEdit.data.email = "";
-      this.userEdit.data.phone.code = "";
-      this.userEdit.data.phone.number = "";
-      this.userEdit.data.skillLevelSlider.value = "";
-      this.userEdit.data.activityStatusId = "";
-      this.userEdit.data.activityStatusId = "";
-      this.userEdit.data.reason = "";
-      this.userEdit.data.ranking = "";
-      this.userEdit.data.badgeId = null;
-      this.userEdit.data.roleId = null;
-    },
     makeExerciseTableRow(exercise) {
       this.table.rows = [];
       this.table.rows = this.formatExerciseRow(exercise);
@@ -1781,70 +1500,14 @@ export default {
         exercise: item.name,
         assets : item.assets[Object.keys(item.assets)[0]].url,
         asset_type: item.assets[Object.keys(item.assets)[0]].type,
-        category: item.category[0].name,
-        type: item.type
-      }
-    },
-
-    setUserEditDataMobileInfo(item) {
-      if (item.countryCode) {
-        this.userEdit.data.phone.code = item.countryCode;
-      }
-      if (item.phoneNumber) {
-        this.userEdit.data.phone.number = item.phoneNumber;
-      }
-    },
-
-
-    setUserDataToEdit(selectedRow) {
-      this.resetUserData();
-      if (selectedRow) {
-        console.log(selectedRow);
-        this.userEdit.data.id = selectedRow.id;
-        this.userEdit.data.name = selectedRow.name;
-        this.userEdit.data.email = selectedRow.email;
-        this.userEdit.data.phone.code = selectedRow.phoneCode;
-        this.userEdit.data.phone.number = selectedRow.phoneNumber;
-        this.userEdit.data.activityStatusId = selectedRow.activityStatusId;
-        this.userEdit.data.starStatusId = selectedRow.starStatusId;
-        this.userEdit.data.reason = selectedRow.activityStatusReason;
-        this.userEdit.data.ranking = selectedRow.ranking;
-        this.userEdit.data.badgeId = selectedRow.badgeId;
-        this.userEdit.data.roleId = selectedRow.roleId;
-        this.userEdit.dialog = true;
-      }
-    },
-    async changeUser(item) {
-      if (!this.$auth.user.is_switched) {
-        try {
-          const { data } = await adminImpersonateApi(this.$axios).switched({
-            id: item.id
-          });
-          this.$auth.setUser(data.user);
-          this.$auth.setUserToken(data.accessToken);
-          if (this.$auth.hasRole(["coach"])) {
-            this.$router.push(this.localePath(pathData.coach.editProfile));
-          } else if (this.$auth.hasRole(["athlete"])) {
-            this.$router.push(this.localePath(pathData.athlete.editProfile));
-          } else {
-            this.$router.push(this.localePath(pathData.admin.dashboard));
-          }
-        } catch (error) {
-          this.$toast.error(error.response.data.message);
-        }
-      } else {
-        this.$toast.error("You are now switched user.");
+        category: item.category[0].t_key,
+        type: item.type,
+        categories: item.category,
       }
     },
     getImageUrl(name) {
       return imageService.getImageByName(name);
     },
-
-
-
-
-
-    // -----------------------------------
 
     handleCancelBtnClick() {
       this.imgSrc = null;
@@ -1976,7 +1639,6 @@ export default {
       }
       return validate;
     }
-
   }
 };
 </script>
@@ -2072,11 +1734,12 @@ export default {
 
 
   .drop-zone {
-    width: 150px;
-    height: 150px;
+    width: 155px;
+    height: 155px;
     border-radius: 15px;
     position: relative;
     border: 2px dashed #becce1;
+    margin-top: 5px;
     &__info {
       color: #a8a8a8;
       position: absolute;
@@ -2266,5 +1929,9 @@ export default {
     display: inline-flex;
     width: auto;
   }
+  .swiper-button-prev:after, .swiper-button-next:after {
+    font-size: 40px!important;
+    font-weight: bold!important;
+}
 
 </style>
