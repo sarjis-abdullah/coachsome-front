@@ -113,7 +113,8 @@ export default {
     { src: "~/plugins/socket", mode: "client" },
     { src: "~/plugins/v-emoji-picker", mode: "client" },
     { src: "~/plugins/vue-social-share", mode: "client" },
-    { src: "~/plugins/vuelidate" }
+    { src: "~/plugins/vuelidate" },
+    { src: "~/plugins/vue-debounce", mode: "client" }
   ],
 
   /**

@@ -7,9 +7,11 @@
         alt="Cancel Button"
       />
     </header>
-
     <v-form ref="form" v-model="valid" lazy-validation>
-      <div v-for="(item, i) in formItems" :key="i">
+      <div
+        v-for="(item, i) in editMode ? editModeFormItems : formItems"
+        :key="i"
+      >
         <div class="form-label">
           {{ item.label }} <sup class="red--text">*</sup>
         </div>
@@ -39,8 +41,13 @@
         ></v-text-field>
       </div>
       <div>
-        <v-btn :loading="loading" @click="submitForm" class="add-form-btn" depressed>
-          Add Contact
+        <v-btn
+          :loading="loading"
+          @click="editMode ? updateForm() : submitForm()"
+          class="add-form-btn"
+          depressed
+        >
+          {{ editMode ? "Update" : "Add" }} Contact
         </v-btn>
       </div>
     </v-form>
@@ -49,6 +56,16 @@
 <script>
 import item from "../darkbox/mixins/item";
 export default {
+  props: {
+    editMode: {
+      type: Boolean,
+      default: false
+    },
+    editContactData: {
+      type: Object,
+      default: {}
+    }
+  },
   data: () => ({
     valid: true,
     items: ["In-person", "Online", "Hybrid"],
@@ -88,26 +105,29 @@ export default {
       }
     ]
   }),
-  computed: {},
+  computed: {
+    editModeFormItems() {
+      return [this.formItems.find(item => item.key == "categoryName")];
+    }
+  },
 
   methods: {
     async submitForm() {
       if (this.$refs.form.validate()) {
-        this.loading = true
+        this.loading = true;
         const data = this.payloadData();
         try {
           await this.$axios.post("coach/contact-user", data);
-          this.$emit("reloadAllData")
-          console.log(4567);
-          this.closeForm()
+          this.$emit("reloadAllData");
+          this.closeForm();
         } catch (error) {
           if (error?.response?.data?.errors) {
             this.handleServerErrorMessage(error.response.data.errors);
-          }else{
-            this.closeForm()
+          } else {
+            this.closeForm();
           }
-        }finally {
-          this.loading = false
+        } finally {
+          this.loading = false;
         }
       }
     },
@@ -120,9 +140,9 @@ export default {
     closeForm() {
       this.$emit("close-modal");
       this.formItems = this.formItems.map(item => {
-        delete item.error
-        return item
-      })
+        delete item.error;
+        return item;
+      });
       this.reset();
     },
     payloadData() {
@@ -146,11 +166,30 @@ export default {
       for (const field in errors) {
         this.formItems = this.formItems.map(item => {
           if (item.key == field) {
-            item.error = errors[field]
-            return {...item}
+            item.error = errors[field];
+            return { ...item };
           }
-          return item
+          return item;
         });
+      }
+    },
+    async updateForm() {
+      if (this.$refs.form.validate()) {
+        this.loading = true;
+        try {
+          const data = this.payloadData();
+          await this.$axios.put(
+            "coach/contact-user/" + this.editContactData.id,
+            {
+              categoryName: data.categoryName
+            }
+          );
+          this.$emit("reloadAllData");
+        } catch (error) {}
+        finally {
+          this.loading = false;
+          this.closeForm();
+        }
       }
     }
   }
