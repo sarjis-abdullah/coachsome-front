@@ -17,6 +17,10 @@ export default (axios) => ({
 
   getExerciseList: () => axios.get("exercises"),
 
+  filterExerciseList: payload => {
+    return axios.post("filter-exercises", payload);
+  },
+
   previewExercise: id => {
     return axios.get(`exercises/${id}`);
   },
