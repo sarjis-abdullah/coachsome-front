@@ -5,17 +5,17 @@
 
 <script>
     export default {
-        props: 
-		{
-			asset_type: {
-				type: String,
-				default: ""
-			},
-			url: {
-				type: String,
-				default: ""
-			}
-		}
+      props: 
+        {
+          asset_type: {
+            type: String,
+            default: ""
+          },
+          url: {
+            type: String,
+            default: ""
+          }
+        }
     }
 </script>
 
