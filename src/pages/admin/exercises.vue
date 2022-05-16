@@ -811,7 +811,7 @@
                         >
                     
                           <swiper-slide class="d-flex justify-center" v-for="(asset, index) in exerciseData.assets" :key="index">
-                            <div class="logo-slide">
+                            <div class="preview-slide">
                               <asset-preview :asset_type="asset.type" :url="asset.url"></asset-preview>
                             </div>
                           </swiper-slide>
@@ -2216,29 +2216,7 @@ export default {
   }
 }
 
-  .logos-swiper {
-    background: rgba(196, 196, 196, 0.1);
-  }
-  .logo-slide {
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    img {
-      width: 100%;
-    }
-  }
-  .swiper-slide {
-    display: inline-flex;
-    width: auto;
-  }
-  .swiper-button-prev:after, .swiper-button-next:after {
-    font-size: 40px!important;
-    font-weight: bold!important;
-}
-
+  
 .v-data-footer{
   &__select {
     margin-left: auto;
