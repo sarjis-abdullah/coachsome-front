@@ -214,7 +214,7 @@
                                           label
                                           @click="select"
                                           close
-                                          @click:close="removesport(item)"
+                                          @click:close="removeSport(item)"
                                       >
                                           <strong>{{ item.name }}</strong
                                           >&nbsp;
@@ -668,7 +668,7 @@
                                         label
                                         @click="select"
                                         close
-                                        @click:close="removesport(item)"
+                                        @click:close="removeSport(item)"
                                     >
                                         <strong>{{ item.name }}</strong
                                         >&nbsp;
@@ -1210,7 +1210,7 @@
                                         :input-value="selected"
                                         close
                                         @click="select"
-                                        @click:close="removeTag(item)"
+                                        @click:close="removeEditTag(item)"
                                         label
                                         small
                                     >
@@ -1430,6 +1430,16 @@ export default {
     removeLavel(item) {
       this.lavelsSelected.splice(this.lavelsSelected.indexOf(item), 1);
       this.lavelsSelected = [...this.lavelsSelected];
+    },
+
+    removeEditTag(item){
+      this.exerciseEdit.data.tags.splice(this.exerciseEdit.data.tags.indexOf(item), 1);
+      this.exerciseEdit.data.tags = [...this.exerciseEdit.data.tags];
+    },
+
+    removeTag(item){
+      this.tagData.tagsSelected.splice(this.tagData.tagsSelected.indexOf(item), 1);
+      this.tagData.tagsSelected = [...this.tagData.tagsSelected];
     },
 
     handleBack(){
