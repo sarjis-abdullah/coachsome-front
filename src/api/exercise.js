@@ -25,6 +25,10 @@ export default (axios) => ({
     return axios.get(`exercises/${id}`);
   },
 
+  editExercise: id => {
+    return axios.get(`exercises/${id}/edit`);
+  },
+
   destroyExercise: id => axios.delete(`exercises/${id}`),
 
   updateExercise: payload => axios.put("exercises/" + payload.id, payload),

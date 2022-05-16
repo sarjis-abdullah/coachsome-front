@@ -843,24 +843,26 @@
                       </v-col>
                       <v-col cols="12">
                         <span class="exercise-preview--title">{{$t("lbl_ex_cat")}}</span>
-                        <span class="exercise-preview--description">{{$t(exerciseData.category[0].t_key)}}</span>
+                        <span class="exercise-preview--description" v-if="exerciseData.category.length">{{$t(exerciseData.category[0].t_key)}}</span>
                       </v-col>
                       <v-col cols="12">
                         <span class="exercise-preview--title">{{$t("lbl_ex_sport")}}</span>
-                        <span class="exercise-preview--description">{{$t(exerciseData.sport[0].t_key)}}</span>
+                        <span class="exercise-preview--description" v-if="exerciseData.sport.length">{{$t(exerciseData.sport[0].t_key)}}</span>
                       </v-col>
                       <v-col cols="12">
                         <span class="exercise-preview--title">{{$t("lbl_ex_lvl")}}</span>
-                        <span class="exercise-preview--description">{{$t(exerciseData.lavel[0].t_key)}}</span>
+                        <span class="exercise-preview--description" v-if="exerciseData.lavel.length">{{$t(exerciseData.lavel[0].t_key)}}</span>
                       </v-col>
                       <v-col cols="12" class="mb-5">
                         <span class="exercise-preview--title">{{$t("lbl_ex_tags")}}</span>
+                        <span v-if="exerciseData.tags.length">
                           <v-chip
                             v-for="(tag, index) in exerciseData.tags" :key="index"
                             class="exercise-preview--tag mt-2"
                             color="#6EB5CB"
                             small
                           >{{tag}}</v-chip>
+                        </span>
                       </v-col>
 
                     </v-row>
@@ -1460,8 +1462,9 @@ export default {
           .destroyExercise(exercise.id)
           .then(({ data }) => {
             let index = this.table.rows.findIndex(
-              exercise => exercise.id == exercise.id
+              exercise => exercise.id == data.exercise.id
             );
+
 
             if (index != undefined) {
               this.table.rows.splice(index, 1);
@@ -1482,7 +1485,7 @@ export default {
 
     async duplicateExercise(exercise){
 
-      const { data } = await ExerciseApi(this.$axios).previewExercise(
+      const { data } = await ExerciseApi(this.$axios).editExercise(
         encodeURIComponent(exercise.id)
       );
 
@@ -1642,7 +1645,7 @@ export default {
     },
 
     async editExercise(exercise){
-      const { data } = await ExerciseApi(this.$axios).previewExercise(
+      const { data } = await ExerciseApi(this.$axios).editExercise(
         encodeURIComponent(exercise.id)
       );
       this.resetExerciseData();
