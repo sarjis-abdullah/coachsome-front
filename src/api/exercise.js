@@ -25,6 +25,10 @@ export default (axios) => ({
     return axios.get(`exercises/${id}`);
   },
 
+  duplicateExercise: id => {
+    return axios.get(`exercises/duplicate/${id}`);
+  },
+
   editExercise: id => {
     return axios.get(`exercises/${id}/edit`);
   },
