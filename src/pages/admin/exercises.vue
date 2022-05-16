@@ -1495,9 +1495,10 @@ export default {
 
     async duplicateExercise(exercise){
 
-      const { data } = await ExerciseApi(this.$axios).editExercise(
+      const { data } = await ExerciseApi(this.$axios).duplicateExercise(
         encodeURIComponent(exercise.id)
       );
+
 
       this.resetExerciseData();
       if(data.exercise){
