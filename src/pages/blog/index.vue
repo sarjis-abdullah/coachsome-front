@@ -6,7 +6,7 @@
           <v-card
             min-height="422"
             class="feature-card ma-0"
-            color="#ECF2F7"
+            color="#F7FAFC"
             flat
           >
             <div

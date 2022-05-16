@@ -813,7 +813,7 @@
 
               <!-- Step Three -->
               <v-stepper-content step="3">
-                <v-card color="#ECF2F7">
+                <v-card color="#F7FAFC">
                   <v-card-text>
                     <img
                       v-if="$route.query.quick_booking"

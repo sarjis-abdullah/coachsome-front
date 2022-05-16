@@ -1,6 +1,6 @@
 <template>
   <div class="balance-earnings-page">
-    <v-container>
+    <v-container fluid :class="{'px-8' : $vuetify.breakpoint.mdAndUp}">
       <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('balance_earning_page_title')">
         <template v-slot:goBack>
           <v-btn
@@ -14,34 +14,36 @@
           <span></span>
         </template>
       </mobile-top-nav>
-      <v-row align="center" class="d-none d-md-block">
-        <v-col cols="12" md="6" class="pb-0">
-          <div class="page-title">{{ $t("balance_earning_page_title") }}</div>
-        </v-col>
-        <v-col cols="12" md="6" class="text-right pb-0">
-          <div>
-            <v-btn
-              :loading="payoutRequest.loading"
-              dark
-              depressed
-              color="#EDB041"
-              @click="handlePayoutRequest"
-            >
-              {{ $t("balance_earning_btn_title_request_payout") }}
+      <span class="d-none d-md-block"> 
+        <v-row align="center pb-2 mb-2" >
+          <v-col cols="12" md="6" class="pb-0">
+            <div class="page-title">{{ $t("balance_earning_page_title") }}</div>
+          </v-col>
+          <v-col cols="12" md="6" class="text-right pb-0">
+            <div>
+              <v-btn
+                :loading="payoutRequest.loading"
+                dark
+                depressed
+                color="#EDB041"
+                @click="handlePayoutRequest"
+              >
+                {{ $t("balance_earning_btn_title_request_payout") }}
 
-              <template v-slot:loader>
-                <span class="custom-loader">
-                  <v-icon light>cached</v-icon>
-                </span>
-              </template>
-            </v-btn>
-            <div v-if="payoutRequest.lastRequestTime" class="last-request">
-              {{ $t("balance_earning_date_hint_last_req") }}
-              {{ moment(payoutRequest.lastRequestTime).format("DD/MM/YYYY") }}
+                <template v-slot:loader>
+                  <span class="custom-loader">
+                    <v-icon light>cached</v-icon>
+                  </span>
+                </template>
+              </v-btn>
+              <div v-if="payoutRequest.lastRequestTime" class="last-request">
+                {{ $t("balance_earning_date_hint_last_req") }}
+                {{ moment(payoutRequest.lastRequestTime).format("DD/MM/YYYY") }}
+              </div>
             </div>
-          </div>
-        </v-col>
-      </v-row>
+          </v-col>
+        </v-row>
+      </span>
 
       <v-row class="d-none d-md-block">
         <v-col cols="12">

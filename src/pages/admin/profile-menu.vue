@@ -4,7 +4,7 @@
 
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_profile_menu')">
       <template v-slot:goBack >
-       <span style="width: 16px"></span>
+       <span style="width: 22px"></span>
         <v-avatar size="32px"  v-if="avatarImage">
           <v-img aspect-ratio="1" :src="avatarImage" alt="Avatar" />
         </v-avatar>
@@ -13,7 +13,7 @@
         </v-avatar>
       </template>
       <template v-slot:action>
-        <v-avatar color="#ecf2f7" size="32px">
+        <v-avatar color="#F7FAFC" size="32px">
           <span></span>
         </v-avatar>
       </template>

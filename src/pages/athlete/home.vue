@@ -35,14 +35,14 @@
         <v-col cols="12" class="py-0 my-0">
           <v-card class="mx-auto" flat tile>
             <v-scroll-y-transition mode="out-in">
-              <v-list v-if="bookingTimes.length > 0 && bookingTimes[0]" elevation="0" class="body-bg" style="background: #ecf2f7!important">
+              <v-list v-if="bookingTimes.length > 0 && bookingTimes[0]" elevation="0" class="body-bg" style="background: #F7FAFC!important">
                 <template>
                   <div v-for="(bookingTime, i) in bookingTimes" :key="i" >
                     <session-card v-bind="bookingTime" class="my-2"></session-card>
                   </div>
                 </template>
               </v-list>
-              <div v-else class="body-bg no-session d-flex justify-center mt-10" style="background: #ecf2f7!important">
+              <div v-else class="body-bg no-session d-flex justify-center mt-10" style="background: #F7FAFC!important">
                   <span>{{$t("no_upcoming")}} <br/> {{$t("text_session")}}</span>
               </div>
             </v-scroll-y-transition>
