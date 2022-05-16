@@ -133,8 +133,34 @@
                               <v-col cols="12">
                                 <div class="line"></div>
                               </v-col>
-                               <v-col cols="12" class="mt-0 pt-0">
-                                  <r-t-l-switch :withVideo="filter.withVideo" @updated="handleWithVideo"></r-t-l-switch>
+                               <v-col cols="12" class="my-0 py-0">
+                                  <!-- <r-t-l-switch :withVideo="filter.withVideo" @updated="handleWithVideo"></r-t-l-switch> -->
+
+                                  <v-list class="pa-0 ma-0">
+                                    <!-- Profile Status -->
+                                    <v-list-item text class="pa-0 ma-0"> 
+                                    <v-list-item-content>
+                                      <v-list-item-title>
+                                        <v-list-item-title class="filter-exercise--switch">{{$t('ex_with_video')}}</v-list-item-title>
+                                      </v-list-item-title>
+                                    </v-list-item-content>
+                                      <v-list-item-icon>
+                                        <client-only>
+                                          <toggle-button
+                                            :value="filter.withVideo"
+                                            @input="handleWithVideo"
+                                            :color="{ checked: '#5CC866', unchecked: '#EFEFEF' }"
+                                            :sync="true"
+                                            :font-size="12"
+                                            :width="60"
+                                            :height="30"
+                                          />
+                                        </client-only>
+                                      </v-list-item-icon>
+                                  </v-list-item>
+                                  </v-list>
+
+
                               </v-col>
                               <v-col cols="12">
                                 <div class="line"></div>
@@ -2247,6 +2273,16 @@ export default {
     background: #15577C;
     color: white;
     text-transform: none;
+  }
+  &--switch{
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    color: #49556A!important;
   }
 }
 
