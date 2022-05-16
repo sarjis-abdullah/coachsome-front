@@ -24,25 +24,26 @@ export default {
   data() {
     return {
       extensions: [
-        History,
-        Blockquote,
-        Link,
-        Underline,
-        Strike,
+        Bold,
         Italic,
-        ListItem,
+        Underline,
         BulletList,
         OrderedList,
+        Link,
+        Paragraph,
         [Heading, {
           options: {
             levels: [1, 2, 3]
           }
         }],
-        Bold,
+        ListItem,
+        Blockquote,
+        Strike,
         Code,
         HorizontalRule,
-        Paragraph,
-        HardBreak
+        
+        HardBreak,
+        History,
       ],
 
     };
