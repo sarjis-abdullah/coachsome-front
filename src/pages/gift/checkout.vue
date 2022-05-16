@@ -745,7 +745,7 @@ export default {
   height: 100%;
   .gift-confirmation {
     padding: 100px 0;
-    background: #ecf2f7;
+    background: #F7FAFC;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

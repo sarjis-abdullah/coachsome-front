@@ -141,7 +141,7 @@
                         >
                       </span>
                     </v-card-title>
-                    <v-card-text :style="{ backgroundColor: '#ECF2F7' }">
+                    <v-card-text :style="{ backgroundColor: '#F7FAFC' }">
                       <v-row>
                         <v-col v-for="(day, dayIndex) in week.days" :key="dayIndex">
                           <div>{{ $t(day.t_key) }}</div>

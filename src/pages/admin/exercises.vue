@@ -2154,7 +2154,7 @@ export default {
   }
 }
 ::v-deep .v-data-table-header {
-  background-color: #ECF2F7;
+  background-color: #F7FAFC;
   font-family: 'Open Sans'!important;
     font-style: normal!important;
     font-weight: 600!important;
@@ -2190,6 +2190,7 @@ export default {
     display: flex;
     align-items: center;
     color: #9FAEC2;
+    display: block!important;
   }
   &--breakdown{
     font-family: 'Open Sans';

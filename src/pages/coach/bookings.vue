@@ -68,6 +68,7 @@
         </v-col>
         <v-col cols="12" md="4">
           <v-date-picker
+            class="d-none d-md-block"
             :first-day-of-week="1"
             v-model="date"
             full-width

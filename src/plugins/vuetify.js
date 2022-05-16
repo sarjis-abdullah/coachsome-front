@@ -27,7 +27,7 @@ export default {
         success: "#5cb860",
         warning: "#ffa21a",
         "primary-light-1": "#15577C",
-        "body-bg": "#ECF2F7",
+        "body-bg": "#F7FAFC",
         rating: "#edb041"
       }
     }
