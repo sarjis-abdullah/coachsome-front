@@ -1,15 +1,15 @@
 <template>
-	<v-row class="page-top-header-row d-md-none" :class="extraClass">
+	<v-row class="page-top-header-row d-md-none" justify="center" :class="extraClass">
 		<v-col cols="12" class="justify-center page-top-header-column pa-0 ma-0">
-				<v-list width="100%" color="transparent" class="pa-0 ma-0">
+				<v-list width="100%" color="transparent" class="py-0 my-0">
 						<v-list-item>
 							<slot name="goBack"></slot>
-							<v-list-item-content class="pa-0 ma-0">
+							<v-list-item-content class="py-0 my-0">
 								<v-list-item-title class="common-top-page-title"
 									v-text="headerText"
 								></v-list-item-title>
 							</v-list-item-content>
-							<v-list-item-action style="padding-right: 10px" :class="actionClass">
+							<v-list-item-action :class="actionClass">
 								<slot name="action"></slot>
 							</v-list-item-action>
 						</v-list-item>
@@ -41,12 +41,4 @@
 
 <style scoped lang="scss">
 
-.v-list-item{
-	&__action{
-		margin: 0!important;
-	}
-}
-.v-list-item{
-	padding: 0!important;
-}
 </style>
