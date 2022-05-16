@@ -464,7 +464,6 @@
                             </v-col>
                             <v-col cols="12" class="py-0 my-0">
                                 <p class="create-exercise__label">{{$t("lbl_video")}}
-                                  <!-- <v-badge color="white"><span style="color: red">*</span></v-badge> -->
                                 </p>
                                 <v-form ref="videoForm" v-model="videoForm.valid" lazy-validation>
                                     <v-text-field
@@ -597,7 +596,7 @@
 
                             <!-- Category Section -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">{{$t("lbl_ex_cat")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_cat")}} </p>
                                 <v-autocomplete
                                     v-model="categoriesSelected"
                                     :items="categories"
@@ -642,7 +641,7 @@
 
                             <!-- Sports Section -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">{{$t("lbl_ex_sport")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_sport")}} </p>
                                 <v-autocomplete
                                     v-model="sportsSelected"
                                     :items="sports"
@@ -687,7 +686,7 @@
 
                             <!-- lavel Section -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">{{$t("lbl_ex_lvl")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_lvl")}} </p>
                                 <v-autocomplete
                                     v-model="lavelsSelected"
                                     :items="lavels"
@@ -733,7 +732,7 @@
 
                             <!-- Tags -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">{{$t("lbl_ex_tags")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_tags")}} </p>
                                 <v-combobox
                                     v-model="tagData.tagsSelected"
                                     :items="tagData.tags"
@@ -921,7 +920,6 @@
                             </v-col>
                             <v-col cols="12" class="py-0 my-0">
                                 <p class="create-exercise__label">{{$t("lbl_video")}}
-                                  <!-- <v-badge color="white"><span style="color: red">*</span></v-badge> -->
                                 </p>
                                 <v-form ref="videoForm" v-model="videoForm.valid" lazy-validation>
                                     <v-text-field
@@ -1052,7 +1050,7 @@
                             </v-col>
                             <!-- Category Section -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">{{$t("lbl_ex_cat")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_cat")}} </p>
                                 
                                 <v-autocomplete
                                     v-model="exerciseEdit.data.category"
@@ -1098,7 +1096,7 @@
 
                             <!-- Sports Section -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">{{$t("lbl_ex_sport")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_sport")}} </p>
                                 <v-autocomplete
                                     v-model="exerciseEdit.data.sport"
                                     :items="sports"
@@ -1143,7 +1141,7 @@
 
                             <!-- lavel Section -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">{{$t("lbl_ex_lvl")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_lvl")}} </p>
                                 <v-autocomplete
                                     v-model="exerciseEdit.data.lavel"
                                     :items="lavels"
@@ -1189,7 +1187,7 @@
 
                             <!-- Tags -->
                             <v-col cols="12" class="py-0 my-0">
-                                <p class="create-exercise__label">{{$t("lbl_ex_tags")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                                <p class="create-exercise__label">{{$t("lbl_ex_tags")}} </p>
                                 <v-combobox
                                     v-model="exerciseEdit.data.tags"
                                     :items="tagData.tags"
@@ -1783,11 +1781,11 @@ export default {
       return {
         id: item.id,
         exercise: item.name,
-        assets : item.assets[Object.keys(item.assets)[0]].url,
-        asset_type: item.assets[Object.keys(item.assets)[0]].type,
-        category: item.category[0].t_key,
+        assets : item.assets.length ?  item.assets[Object.keys(item.assets)[0]].url : null,
+        asset_type: item.assets.length ? item.assets[Object.keys(item.assets)[0]].type : 'image',
+        category: item.category.length ? item.category[0].t_key : null,
         type: item.type,
-        categories: item.category,
+        categories: item.category.length ? item.category : [],
       }
     },
     getImageUrl(name) {
