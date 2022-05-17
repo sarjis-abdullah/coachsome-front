@@ -113,6 +113,8 @@ export default {
     { src: "~/plugins/v-emoji-picker", mode: "client" },
     { src: "~/plugins/vue-social-share", mode: "client" },
     { src: "~/plugins/v-video-embed", mode: "client" },
+    { src: "~/plugins/vue-file-agent", mode: "client" },
+    { src: "~/plugins/vue-video-player", mode: "client" },
     { src: "~/plugins/vuelidate" }
   ],
 

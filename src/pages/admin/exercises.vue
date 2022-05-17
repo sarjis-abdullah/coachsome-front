@@ -33,7 +33,7 @@
 
     <!-- No exercise start -->
 
-    <v-row class="d-flex justify-center" v-if="!exercises.length">
+    <v-row class="d-flex justify-center" v-if="noExercise">
         <v-col cols="12" md="4" class="no-exercise">
             <h4 class="no-exercise__text">{{$t("no_exercise_title")}}</h4>
             <p class="no-exercise__sub-text">{{$t("no_execise_sub_title")}}</p>
@@ -323,9 +323,9 @@
                 <v-col class="d-flex justify-end">
                   <v-btn
                     solo
-                    rounded
                     :block="$vuetify.breakpoint.xsOnly"
                     color="primary-light-1"
+                    style="text-transform: none"
                     @click.stop="handleExerciseCreateBtn"
                     class="px-5"
                   >
@@ -439,6 +439,70 @@
 
             </v-data-table>
 
+            <!-- Video Upload Dialog -->
+
+            <v-dialog
+              v-model="uploadVideoDialog"
+              max-width="400px"
+            >
+              <v-card class="pa-5">
+                <v-card-title class="pt-0 mt-0">
+                  <span class="upload-video-title">Choose a video</span>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                        color="#49556A"
+                        icon
+                        @click="uploadVideoDialog = false"
+                        class="exercise__close-button"
+                    >
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <div class="line"></div>
+                </v-card-title>
+                <v-card-body>
+                  <v-row>
+                    <v-col cols="12" >
+                      <!-- <form @submit="formSubmit" enctype="multipart/form-data">
+                        <strong>File:</strong>
+                          <input type="file" class="form-control" v-on:change="onFileChange">
+                        <button class="btn btn-success">Submit</button>
+                        </form> -->
+                      <template>
+                        <VueFileAgent
+                          class="px-15 py-10"
+                          ref="exerciseFile"
+                          :theme="'grid'"
+                          :multiple="true"
+                          :deletable="true"
+                          :meta="true"
+                          :accept="'video/*'"
+                          :maxSize="'20MB'"
+                          :maxFiles="1"
+                          :helpText="'Choose images or video files'"
+                          :errorText="{
+                            type: 'Invalid file type. Only images or zip Allowed',
+                            size: 'Files should not exceed 20MB in size',
+                          }"
+                          @select="filesSelected($event)"
+                          v-model="fileRecords"
+                        >
+                        <template v-slot:file-preview-new>
+                          <div style="padding: 50px 0" key="new">
+                            <img
+                              :src="require('@/assets/img/svg-icons/image-upload.svg')"
+                              alt=""
+                              />
+                          </div>
+                        </template >
+                        
+                        </VueFileAgent>
+                      </template>
+                    </v-col>
+                  </v-row>
+                </v-card-body>
+              </v-card>
+            </v-dialog>
+
             <!-- Exercise Create Dialog -->
             <template>
               <v-row justify="center">
@@ -510,6 +574,7 @@
                                         outlined
                                         dense
                                         class="create-exercise__input-field"
+                                        @change="saveVideoUrl()"
                                     ></v-text-field>
                                 </v-form>
                             </v-col>
@@ -518,7 +583,7 @@
                                     text
                                     color="#15577C"
                                     class="px-0"
-                                    @click="saveVideoUrl()"
+                                    @click="uploadVideoDialog = true"
                                 >
                                     <img class="btn-icon"  :src="require('@/assets/images/icons/video-url.svg')" alt="">  <span class="btn-text"> {{$t("ex_upload_video")}}</span>
                                 </v-btn>
@@ -588,7 +653,8 @@
                                         </v-card-actions>
                                       </v-card>
                                     </v-col>
-                                    <v-col cols="12" sm="3" v-if="links.length <=3">
+                                    <v-col cols="12" sm="3">
+
                                         <div
                                             class="drop-zone"
                                             @dragenter="dragging = true"
@@ -611,8 +677,10 @@
                                             @change="setImage"
                                             />
                                         </div>
+
                                     </v-col>
                                 </v-row>
+
                             </v-col>
 
                             <v-col cols="12">
@@ -826,12 +894,12 @@
                             slidesPerView: 1,
                             spaceBetween: 30,
                             direction: 'horizontal',
-                            loop: true,
+                            loop: exerciseData.assets.length > 1 ? true : false,
                             speed: 2450,
                             autoplay:false,
                             navigation: {
-                              nextEl: '.swiper-button-next',
-                              prevEl: '.swiper-button-prev'
+                              nextEl: exerciseData.assets.length > 1 ? '.swiper-button-next' : '',
+                              prevEl: exerciseData.assets.length > 1 ? '.swiper-button-prev' : '',
                             },
                           }"
                         >
@@ -844,11 +912,13 @@
                       
                           <div class="swiper-pagination" slot="pagination"></div>
                           <div
+                            v-if="exerciseData.assets.length > 1 "
                             class="swiper-button-prev swiper-button-white"
                             slot="button-prev"
                           >
                           </div>
                           <div
+                            v-if="exerciseData.assets.length > 1 "
                             class="swiper-button-next swiper-button-white"
                             slot="button-next"
                           ></div>
@@ -1304,6 +1374,14 @@ export default {
   },
   data() {
     return {
+      fileRecords: [],
+      uploadHeaders: { 'X-Test-Header': 'vue-file-agent' },
+      fileRecordsForUpload: [],
+      name: '',
+      file: '',
+      success: '',
+      uploadVideoDialog: false,
+      noExercise: false,
       filter : {
         typeSytem: false,
         typeCustom: false,
@@ -1411,6 +1489,43 @@ export default {
   },
   methods: {
 
+    uploadFiles: function () {
+
+      var form = new FormData();
+
+      form.append('type', 'custom-video');
+      form.append('file',this.fileRecordsForUpload[0].file);
+      
+      this.$axios.post( '/exercise-assets',
+        form,
+        {
+          headers: {
+              'Content-Type': 'multipart/form-data'
+          }
+        }
+      ).then(({ data }) => {
+        this.links.push(Object.assign(data.item, { src: data.item.url }));
+        this.$toast.success(data.message);
+        this.setImageAndVideoProgress(data.progress);
+        this.imgSrc = null;
+        this.$refs.fileInput.value = null;
+        this.fileRecordsForUpload = [],
+        this.fileRecords = [];
+        this.uploadVideoDialog = false;
+      })
+      .catch(function(){})
+      .finally(() => {
+        this.isLoading = false;
+      });
+      
+    },
+    
+    filesSelected: function (fileRecordsNewlySelected) {
+      var validFileRecords = fileRecordsNewlySelected.filter((fileRecord) => !fileRecord.error);
+      this.fileRecordsForUpload = this.fileRecordsForUpload.concat(validFileRecords);
+      this.uploadFiles();
+    },
+      
     handleTiptopUpdatedValue(value) {
       this.exerciseCreate.initialValue.instructions = value;
     },
@@ -1500,12 +1615,15 @@ export default {
             let index = this.table.rows.findIndex(
               exercise => exercise.id == data.exercise.id
             );
-
-
             if (index != undefined) {
               this.table.rows.splice(index, 1);
             }
             this.$toast.success("Successfully deleted");
+
+            if(this.table.rows.length == 0){
+              this.noExercise = true;
+              this.exercises = [];
+            }
           })
           .catch(({ response }) => {
             if (response.data.message) {
@@ -1570,7 +1688,9 @@ export default {
           .then(({ data }) => {
             if (data.exercise) {
               let formattedRowList = this.formatExerciseRow([{ ...data.exercise }]);
+              this.noExercise = false;
               this.table.rows.unshift(formattedRowList[0]);
+              this.exercises.push(formattedRowList[0]);
               this.$toast.success("This Exercise has been created successfully.");
               this.exerciseCreate.dialog = false;
             }
@@ -1673,7 +1793,10 @@ export default {
         .then(({ data }) => {
           if (data.exercises) {
             if(data.exercises.length){
+              this.noExercise = false;
               this.exercises.push(data.exercises);
+            }else{
+              this.noExercise = true;
             }
             this.makeExerciseTableRow(data.exercises);
           }
@@ -1762,6 +1885,9 @@ export default {
       this.filter.lavelsSelected = [];
       this.filter.sportsSelected = [];
       this.filter.withVideo = false;
+      this.fileRecordsForUpload = [],
+      this.fileRecords = [];
+      this.uploadVideoDialog = false;
     },
 
     handleUpateExercise(){
@@ -1812,7 +1938,6 @@ export default {
       this.table.rows = this.formatExerciseRow(exercise);
     },
     formatExerciseRow(exercise) {
-      
       return exercise.map(item => {
         return this.formatExerciseItem(item);
       });
@@ -1915,6 +2040,7 @@ export default {
         type: "image",
         image: croppedImage
       };
+      console.log(payload);
       this.isLoading = true;
       ExerciseApi(this.$axios)
         .saveImageUrl(payload)
@@ -2128,6 +2254,14 @@ export default {
         color: white;
 
     }
+}
+.upload-video-title{
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  text-align: center;
+  color: #49556A;
 }
 .exercise-table{
   // &--img{
