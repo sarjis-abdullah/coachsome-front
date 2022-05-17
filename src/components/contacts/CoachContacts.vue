@@ -5,7 +5,7 @@
       :items="contactsData"
       :loading="loading"
       :options.sync="options"
-      class="exercise-table"
+      class="contact-user-table"
       :header-props="{ sortIcon: 'mdi-chevron-down' }"
       :footer-props="{
         'items-per-page-options': [5, 10, 15, 20, 50, 100, -1]
@@ -203,40 +203,39 @@ export default {
             filterable: false,
             value: "assets",
             sortable: false,
-            class: "exercise-table--header"
+            class: "contact-user-table--header"
           },
-          { text: "Name", value: "firstName", class: "exercise-table--header" },
-          { text: "Status", value: "status", class: "exercise-table--header" },
+          { text: "Name", value: "firstName", class: "contact-user-table--header" },
+          { text: "Status", value: "status", class: "contact-user-table--header" },
           {
             text: "Category",
             value: "categoryName",
-            class: "exercise-table--header"
+            class: "contact-user-table--header"
           },
           {
             text: "Active Package",
             value: "package",
             sortable: false,
-            class: "exercise-table--header"
+            class: "contact-user-table--header"
           },
           {
             text: "Last Active",
             value: "lastActiveAt",
-            class: "exercise-table--header"
+            class: "contact-user-table--header"
           },
           {
             text: "Actions",
             value: "actions",
             sortable: false,
-            class: "exercise-table--header"
+            class: "contact-user-table--header"
           }
         ],
         rows: []
       },
       options: {
         page: 1,
-        itemsPerPage: 2,
+        itemsPerPage: 5,
         sortBy: ["id"]
-        // sortBy: ["id", "firstName", "categoryname", "email", "status"]
       },
       totalItems: null,
       editMode: false,
