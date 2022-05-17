@@ -188,7 +188,7 @@ export const actions = {
     const { data } = await contactApi(this.$axios).get(params);
     commit("SET_LOADING", false);
 
-    let contacts = data && data.data && data.data.length && data.data.map(item => {
+    let contacts = data && data.data && data.data.length ? data.data.map(item => {
       let contact = {
         id: item.id,
         title: "",
