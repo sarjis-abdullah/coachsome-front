@@ -16,7 +16,7 @@
         <section>
           <v-card-title class="px-0">
             <header v-if="contactsData">
-              <h6 class="left-title">Total Contacts: {{ totalItems }}</h6>
+              <h6 class="left-title">{{$t("coach_contacts_top_left_subtitle")}}: {{ totalItems }}</h6>
             </header>
             <v-spacer />
             <section class="grid grid-cols-3-max-max gap-5">
@@ -39,7 +39,7 @@
                   depressed
                   color="primary"
                 >
-                  Add New Contact
+                  {{ $t("contact_user_add_new_contact") }}
                 </v-btn>
               </div>
             </section>
@@ -71,7 +71,7 @@
           text-color="#991B1B"
           style="font-weight: 500;"
         >
-          Not active
+          Not Active
         </v-chip>
         <v-chip
           v-else-if="item && item.status == 'active'"
@@ -195,43 +195,6 @@ export default {
       toggleContactForm: false,
       loading: false,
       contactsData: [],
-      table: {
-        headers: [
-          {
-            text: "",
-            align: "start",
-            filterable: false,
-            value: "assets",
-            sortable: false,
-            class: "contact-user-table--header"
-          },
-          { text: "Name", value: "firstName", class: "contact-user-table--header" },
-          { text: "Status", value: "status", class: "contact-user-table--header" },
-          {
-            text: "Category",
-            value: "categoryName",
-            class: "contact-user-table--header"
-          },
-          {
-            text: "Active Package",
-            value: "package",
-            sortable: false,
-            class: "contact-user-table--header"
-          },
-          {
-            text: "Last Active",
-            value: "lastActiveAt",
-            class: "contact-user-table--header"
-          },
-          {
-            text: "Actions",
-            value: "actions",
-            sortable: false,
-            class: "contact-user-table--header"
-          }
-        ],
-        rows: []
-      },
       options: {
         page: 1,
         itemsPerPage: 5,
@@ -246,24 +209,27 @@ export default {
     moreItems() {
       return [
         {
-          text: "Edit",
+          text: this.$t("coach_contacts_edit"),
+          key: "edit",
           color: "#000000",
           method: this.toggleEditForm
         },
         {
-          text: "Resend Invitation Email",
+          text: this.$t("coach_contacts_resend_invitation_mail"),
+          key: "resendInvitationEmail",
           color: "#000000",
           method: this.resendInvitationMail
         },
         {
-          text: "Remove Contact",
+          text: this.$t("coach_contacts_remove_contact"),
+          key: "removeContact",
           color: "#FF633F",
           method: this.removeContactUser
         }
       ];
     },
     filteredMoreItems() {
-      return this.moreItems.filter(item => item.text != "Edit");
+      return this.moreItems.filter(item => item.key != "edit");
     },
     paginationQuery() {
       let sortBy =
@@ -280,7 +246,46 @@ export default {
     query() {
       const q = this.paginationQuery;
       return this.search != "" ? q + "&lazyQuery=" + this.search : q;
-    }
+    },
+    table() {
+      return {
+        headers: [
+          {
+            text: "",
+            align: "start",
+            filterable: false,
+            value: "assets",
+            sortable: false,
+            class: "contact-user-table--header"
+          },
+          { text: this.$t("coach_contacts_name_header"), value: "firstName", class: "contact-user-table--header" },
+          { text: this.$t("coach_contacts_status_header"), value: "status", class: "contact-user-table--header" },
+          {
+            text: this.$t("coach_contacts_category"),
+            value: "categoryName",
+            class: "contact-user-table--header"
+          },
+          {
+            text: this.$t("coach_contacts_active_package"),
+            value: "package",
+            sortable: false,
+            class: "contact-user-table--header"
+          },
+          {
+            text: this.$t("coach_contacts_last_active"),
+            value: "lastActiveAt",
+            class: "contact-user-table--header"
+          },
+          {
+            text: this.$t("coach_contacts_actions"),
+            value: "actions",
+            sortable: false,
+            class: "contact-user-table--header"
+          }
+        ],
+        rows: []
+      }
+    },
   },
   watch: {
     paginationQuery: {

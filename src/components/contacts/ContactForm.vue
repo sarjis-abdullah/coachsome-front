@@ -47,7 +47,7 @@
           class="add-form-btn"
           depressed
         >
-          {{ editMode ? "Update" : "Add" }} Contact
+          {{ editMode ? $t('coach_contacts_update_contact') : $t('coach_contacts_save_contact') }}
         </v-btn>
       </div>
     </v-form>
@@ -110,7 +110,24 @@ export default {
       return [this.formItems.find(item => item.key == "categoryName")];
     }
   },
-
+  created () {
+    this.formItems = this.formItems.map(item=> {
+      if (item.key == "categoryName") {
+        item.label = this.$t("coach_contacts_category_label")
+        item.placeholder = this.$t("coach_contacts_category_placeholder")
+      }else if (item.key == "firstName") {
+        item.label = this.$t("coach_contacts_first_name_label")
+        item.placeholder = this.$t("coach_contacts_first_name_placeholder")
+      }else if (item.key == "lastName") {
+        item.label = this.$t("coach_contacts_last_name_label")
+        item.placeholder = this.$t("coach_contacts_last_name_placeholder")
+      }else {
+        item.label = this.$t("coach_contacts_email_label")
+        item.placeholder = this.$t("coach_contacts_email_placeholder")
+      }
+      return item
+    })
+  },
   methods: {
     async submitForm() {
       if (this.$refs.form.validate()) {
