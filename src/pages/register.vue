@@ -110,6 +110,7 @@
 <script>
 import { authApi } from "@/api";
 import { pathData } from "@/data";
+import ContactUserAPI from "@/api/coach/contactUser";
 import axios from "@/plugins/axios";
 export default ({
   layout: "auth",
@@ -269,6 +270,10 @@ export default ({
           .post("pwa/attach-user-role", { email: this.email,
           user_type: this.user_type })
           this.$router.push("/post-login-with-email?email=" + this.email)
+          await ContactUserAPI(this.$axios).activateContactUser({
+            id: this.$route.query.id,
+            email: this.email
+          })
         }
     }
 })
