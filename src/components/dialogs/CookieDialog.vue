@@ -1,7 +1,7 @@
 <template>
   <div class="cookie-dialog">
     <v-dialog v-model="dialog" persistent max-width="600">
-      <v-card class="cookie" color="#ECF2F7">
+      <v-card class="cookie" color="#F7FAFC">
         <v-card-text>
           <div class="cookie__title">
             {{ $t("header_cookie_title") }}

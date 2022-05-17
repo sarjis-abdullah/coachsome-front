@@ -69,7 +69,7 @@ body{
 }
 .v-application{
   &--wrap{  
-      background: #ecf2f7!important;
+      background: #F7FAFC!important;
   }
     
 }

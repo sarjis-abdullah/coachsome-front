@@ -136,6 +136,58 @@
             </v-list>
           </v-col>
         </v-row>
+        <v-row>
+          <v-col cols="12">
+            <div class="line"></div>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col cols="12">
+            <v-list class="body-bg">
+              <!-- Profile Status -->
+              <v-list-item text>
+              <v-list-item-content>
+                <v-list-item-title>
+                  <v-list-item-title class="list-text">{{$t('edit_profile_status')}}</v-list-item-title>
+                </v-list-item-title>
+              </v-list-item-content>
+                <v-list-item-icon>
+                  <client-only>
+                    <toggle-button
+                      :value="isActive"
+                      @input="handleActivityStatus"
+                      :color="{ checked: '#5CC866', unchecked: '#EFEFEF' }"
+                      :sync="true"
+                      :font-size="12"
+                      :width="60"
+                      :height="30"
+                    />
+                  </client-only>
+                </v-list-item-icon>
+            </v-list-item>
+            </v-list>
+            <!-- Dialog -->
+            <v-dialog v-model="activityStatus.dialog" max-width="500">
+              <v-card>
+                <v-card-title class="headline">{{
+                  $t("attention_headline_text")
+                }}</v-card-title>
+                <v-card-text v-html="$t('attention_content_list')"></v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+
+                  <v-btn
+                    color="primary-light-1"
+                    text
+                    @click="activityStatus.dialog = false"
+                    >Ok</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -143,12 +195,14 @@
 <script>
 import { pathData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import { clientBackDrawerApi } from "@/api";
 
 export default ({
   layout: "coach",
   components: {MobileTopNav},
   data(){
     return {
+      activityStatus: { value: false, dialog: false, loading: false },
       editProfile: {
           name: "Edit Profile",
           path: pathData.coach.editProfile,
@@ -182,6 +236,9 @@ export default ({
         } else {
           return "";
         }
+      },
+      isActive() {
+        return this.$auth.user.is_active;
       },
 
     },
@@ -221,7 +278,22 @@ export default ({
       },
       handleGalleryBtn(){
         this.$router.push(this.localePath(pathData.coach.imageAndVideo));
-      }
+      },
+      handleActivityStatus() {
+        clientBackDrawerApi(this.$axios)
+          .changeActiveStatus()
+          .then(() => {
+            this.refreshPageProgress();
+          })
+          .catch(error => {
+            if (error.response.data.status == "error") {
+              this.activityStatus.dialog = true;
+            }
+          });
+      },
+      refreshPageProgress() {
+        this.$store.dispatch("pageProgress/refresh");
+      },
     }
 })
 </script>

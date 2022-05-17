@@ -10,7 +10,7 @@
 }
 
 .body-bg-secondary{
-  background: #ecf2f7!important
+  background: #F7FAFC!important
 }
 
 .body-bg {
@@ -314,4 +314,18 @@
   box-sizing: border-box;
   border-radius: 8px;
   padding: 10px;
+}
+
+.v-switch-core {
+  box-shadow: inset 0px 6px 8px 3px rgb(0 0 0 / 10%)!important;
+}
+
+.v-switch-button{
+  background: linear-gradient(180deg, #FFFFFF 0%, #E8EAEA 100%)!important;
+  filter: drop-shadow(-2px 1px 6px rgba(0, 0, 0, 0.25))!important;
+}
+
+.vue-file-agent.file-input-wrapper {
+  border: 2px dashed #9FAEC2!important;
+  border-radius: 8.44444px!important;
 }

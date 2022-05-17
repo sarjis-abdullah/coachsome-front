@@ -69,7 +69,7 @@ export default {
     }
   }
   &--opponent {
-    background: #ecf2f7;
+    background: #F7FAFC;
     border-radius: 5px;
     display: inline-block;
     padding: 8px 15px 12px 10px;

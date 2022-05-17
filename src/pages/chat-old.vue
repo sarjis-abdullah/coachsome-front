@@ -125,7 +125,7 @@
                         </v-col>
                         <v-col cols="12" md="10">
                           <div class="cantact">
-                            <v-card elevation="0" class="mt-10" color="#ECF2F7">
+                            <v-card elevation="0" class="mt-10" color="#F7FAFC">
                               <v-card-title>
                                 <div class="contact__title">
                                   {{ $t("chat_contact_box_title") }}
@@ -719,7 +719,7 @@ export default {
           display: flex;
           box-sizing: border-box;
           align-items: center;
-          background: #ecf2f7;
+          background: #F7FAFC;
           border-radius: 20px;
           box-shadow: 0px 2px 2px rgba(73, 85, 106, 0.15);
           padding: 10px 10px;

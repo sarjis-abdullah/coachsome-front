@@ -4,7 +4,7 @@
 
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_profile_menu')">
       <template v-slot:goBack >
-       <span style="width: 16px"></span>
+       <span style="width: 22px"></span>
         <v-avatar size="32px"  v-if="avatarImage">
           <v-img aspect-ratio="1" :src="avatarImage" alt="Avatar" />
         </v-avatar>
@@ -13,7 +13,7 @@
         </v-avatar>
       </template>
       <template v-slot:action>
-        <v-avatar color="#ecf2f7" size="32px">
+        <v-avatar color="#F7FAFC" size="32px">
           <span></span>
         </v-avatar>
       </template>
@@ -56,6 +56,21 @@
 
                 <v-list-item-content>
                   <v-list-item-title class="list-text">{{$t("pwa_order_list")}}</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+
+              <!-- Exercise List -->
+              <v-list-item link @click.stop="handleExercise">
+                <v-list-item-icon>
+                  <v-img :src="require('@/assets/img/svg-icons/new/exercise.svg')" alt="order_list" />
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title class="list-text">{{$t("dropdown_item_exercises")}}</v-list-item-title>
                 </v-list-item-content>
 
                 <v-list-item-icon>
@@ -337,6 +352,9 @@ export default ({
 
       handleOrders(){
         this.$router.push(this.localePath(pathData.admin.orderList));
+      },
+      handleExercise(){
+        this.$router.push(this.localePath(pathData.admin.exercises));
       },
       handlePromoCodes(){
         this.$router.push(this.localePath(pathData.admin.promos));

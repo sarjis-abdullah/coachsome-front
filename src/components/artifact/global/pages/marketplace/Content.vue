@@ -53,7 +53,7 @@
                       v-if="filter.item.category.isActive"
                     >
                     <v-app-bar
-                      color="#ecf2f7"
+                      color="#F7FAFC"
                       elevation="0"
                       fixed
                       class="coach-filter-sm"
@@ -966,7 +966,7 @@ export default {
     z-index: 100;
     top: 0px;
     left: 0px;
-    background: #ecf2f7;
+    background: #F7FAFC;
     transition: background-color 0.5s ease;
     width: 100%;
   }
@@ -979,7 +979,7 @@ export default {
 }
 
 .coach-filter-sm{
-  border-bottom: 2px solid #c2cdda!important;
+  border-bottom: .15em solid rgb(199 209 221)!important;
   .v-input{
     &__slot{
       box-shadow: 0px 2px 4px rgba(73, 85, 106, 0.15)!important;
