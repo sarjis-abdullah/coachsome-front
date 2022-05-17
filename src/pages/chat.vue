@@ -818,6 +818,12 @@ export default {
     ContactList,
     UploadAttachment
   },
+  props: {
+    actionClass:{
+      type: String,
+      default: ""
+    }
+  },
   data: () => ({
     touch_start: 0,
     touch_end: 0,
@@ -906,7 +912,7 @@ export default {
       type: "text",
       content: "",
       createdAt: new Date()
-    }
+    },
   }),
   computed: {
     isArchiveFilter() {
@@ -1021,7 +1027,7 @@ export default {
           this.$axios
             .get(endpoint.GROUP_MESSAGES_GET, { params })
             .then(({ data }) => {
-              data.data.forEach(item => {
+              data && data.data.length && data.data.forEach(item => {
                 let newMessage = {
                   id: item.id,
                   type: item.type,

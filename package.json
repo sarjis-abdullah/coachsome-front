@@ -61,7 +61,8 @@
     "vue-video-player": "^5.0.2",
     "vue2-transitions": "^0.3.0",
     "vuedraggable": "^2.24.3",
-    "vuelidate": "^0.7.6"
+    "vuelidate": "^0.7.6",
+    "vue-debounce": "^2.5.7"
   },
   "devDependencies": {
     "@mdi/font": "^5.9.55",

@@ -4,7 +4,7 @@
     <Google v-else-if="loginMedium == 'google'" />
     <v-row
       justify="center"
-      v-else-if="loginMedium == 'email'"
+      v-else-if="loginMedium == 'email' || queryParamsLoginMedium == 'email'"
     >
       <v-col
         cols="11"
@@ -34,6 +34,12 @@ export default ({
       loginMedium() {
         return this.$store.getters.loginMedium;
       },
+      queryParamsLoginMedium(){
+        if (this.$route?.query?.email) {
+          return "email"
+        }
+        return ""
+      }
     },
     data () {
       return{

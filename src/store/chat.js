@@ -229,7 +229,7 @@ export const actions = {
         }
       }
       return contact;
-    });
+    }) : []
     commit("SET_CONTACTS", contacts);
   },
   setNavOnChat(context,flag){
