@@ -54,8 +54,18 @@
       <template v-slot:header.actions="{ header }">
         <span></span>
       </template>
-      <template v-slot:item.status="{ status }">
+      <template v-slot:item.status="{ item }">
         <v-chip
+          v-if="item && item.status == 'pending'"
+          color="#EDB041"
+          x-small
+          text-color="#775D00"
+          style="font-weight: 500;"
+        >
+          Pending
+        </v-chip>
+        <v-chip
+          v-else-if="item && item.status == 'inactive' || !item.package"
           color="#FEE2E2"
           x-small
           text-color="#991B1B"
@@ -63,6 +73,16 @@
         >
           Not active
         </v-chip>
+        <v-chip
+          v-else-if="item && item.status == 'active'"
+          color="#D1FAE5"
+          x-small
+          text-color="#065F46"
+          style="font-weight: 500;"
+        >
+          Active
+        </v-chip>
+        
       </template>
       <template v-slot:item.package="{ item }">
         <span v-if="item.package">
@@ -71,31 +91,35 @@
             alt="contacts-package"
             class="pr-2"
           />
-          {{ item.package.name }}
+          {{ item.package.title }}
         </span>
 
         <span v-else class="no-package">No Active Packages </span>
       </template>
 
       <!-- table head end -->
-      <template v-slot:item.assets="{ assets }">
+      <template v-slot:item.assets="{ item }">
         <v-avatar>
           <img
-            src="https://cdn.vuetifyjs.com/images/john.jpg"
-            alt="John"
+            v-if="!item && item.profileUrl && item.profileUrl.square"
+            :src="item.profileUrl.square"
+            :alt="item.name"
             width="40"
             height="40"
           />
+          <v-btn icon v-else>
+            <v-icon size="50">mdi-account-box</v-icon>
+          </v-btn>
         </v-avatar>
       </template>
 
       <template v-slot:item.actions="{ item }">
         <section class="grid grid-cols-3 gap-5 justify-end">
-          <img
+          <!-- <img
             :src="require('@/assets/img/svg-icons/notebook.svg')"
             alt="notebook"
-            @click="gotoChat"
-          />
+            @click="gotoNotesPage"
+          /> -->
           <img
             @click="
               $router.replace('/chat?contactByUserId=' + item.contactByUserId)
@@ -140,11 +164,13 @@
     <v-dialog v-model="toggleContactForm" max-width="680">
       <v-card>
         <ContactForm
-          @close-modal="()=> {
-            toggleContactForm = !toggleContactForm
-            editMode = false
-            editContactData = {}
-            }"
+          @close-modal="
+            () => {
+              toggleContactForm = !toggleContactForm;
+              editMode = false;
+              editContactData = {};
+            }
+          "
           @reloadAllData="reloadAllData"
           :editMode="editMode"
           :editContactData="editContactData"
@@ -214,7 +240,7 @@ export default {
       },
       totalItems: null,
       editMode: false,
-      editContactData: {},
+      editContactData: {}
     };
   },
   computed: {
@@ -261,8 +287,8 @@ export default {
     paginationQuery: {
       handler() {
         this.getAllData();
-        this.editMode = false
-        this.editContactData = {}
+        this.editMode = false;
+        this.editContactData = {};
       },
       deep: true,
       immediate: true
@@ -282,8 +308,17 @@ export default {
         this.contactsData = response.data.data;
         this.contactsData = this.contactsData.map(item => {
           let name = item.email;
-          if (item.firstName && item.lastname) {
+          if (item.firstName && item.lastName) {
             name = item.firstName + " " + item.lastName;
+          }
+          if (item.bookedItems && item.bookedItems.length) {
+            let data = item.bookedItems[0];
+            if (data?.order?.package_snapshot) {
+              data = JSON.parse(data.order.package_snapshot);
+            }
+            if (data?.details) {
+              item.package = data.details;
+            }
           }
           return { ...item, name };
         });
@@ -296,8 +331,8 @@ export default {
     async reloadAllData() {
       await this.getAllData();
     },
-    gotoChat() {
-      console.log("gotoChat");
+    gotoNotesPage() {
+      console.log("gotoNotesPage");
     },
     async resendInvitationMail(item) {
       try {
@@ -321,9 +356,9 @@ export default {
       }
     },
     toggleEditForm(item) {
-      this.editMode = true
-      this.toggleContactForm = true
-      this.editContactData = {...item}
+      this.editMode = true;
+      this.toggleContactForm = true;
+      this.editContactData = { ...item };
     },
     debouncedInitData() {
       this.getAllData(this.query);

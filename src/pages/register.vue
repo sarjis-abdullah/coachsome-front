@@ -93,6 +93,7 @@
               </v-btn>
             </v-form>
           </v-flex>
+          {{this.hasContactUserQueryParams}}
           <v-flex xs12 class="align-items-to-center mt-2" >
               <p class="register-footer-text">{{ $t("pwa_login_footer_1") }} 
                   <router-link :to="uri.terms" target="_blank" class="link-text"><u>{{ $t("global_url_terms_of_use") }}</u></router-link>
@@ -153,33 +154,41 @@ export default ({
         ],
       }
     },
-    watch:{
-      "$vuetify.breakpoint.smAndUp" : function() {
-        this.$store.dispatch("setActivePopupItem", "Register");
-        this.$store.dispatch("toggleDialog");
+    computed: {
+      hasContactUserQueryParams(){
+        const q = this.$route.query
+        if (q.email && q.id && q.firstName && q.lastName) {
+          return true
+        }
+        return false
       }
     },
-    async created(){
-      let user_email = this.$route.query.email || '';
-      if(user_email != ''){
-
-        let payload = {
-          email: this.email
-        };
-        const response =  await authApi(this.$axios).login(payload);
-        if(response.data.email_exist){
-          this.hideLoading();
-          this.$store.dispatch("setExistingEmail", this.email);
-          this.$router.push(this.localePath(pathData.pages.postEmailLogin));
-          this.$toast.error("You've already registered! please login to continue.");
-          this.$Progress.finish()
-        }else{
-            if (response.data.message) {
-            this.$toast.error(response.data.message);
+    watch: {
+      $route: {
+        immediate: true,
+        deep: true,
+        handler(newValue, oldValue) {
+          if (this.hasContactUserQueryParams) {
+            const {firstName, lastName, email} = this.$route.query
+            this.first_name = firstName
+            this.last_name = lastName
+            this.email = email
+            this.user_type = "athlete"
+          }else {
+            if (this.email && this.email.trim() && this.email.length > 4){
+              this.handleEmailValidationTask()
+            }
           }
+        }
+      },
+      "$vuetify.breakpoint.smAndUp" : function() {
+        if (!this.hasContactUserQueryParams) {
+          this.$store.dispatch("setActivePopupItem", "Register");
+          this.$store.dispatch("toggleDialog");
         }
       }
     },
+  
     methods: {
         backToLogin(){
           this.$store.dispatch("setActivePopupItem", "loginUsingEmail")
@@ -197,7 +206,7 @@ export default ({
             };
             const response = await authApi(this.$axios).postRegister(payload);
             if (response.data.status == "success") {
-              this.$axios
+              await this.$axios
                 .put("auth/emailVerification", {
                   request_from_pwa: true,
                   email: this.email,
@@ -207,8 +216,16 @@ export default ({
                     this.$toast.success(
                       "Congrats! You have registered successfully."
                     );
-                    this.$router.push(this.localePath(pathData.pages.getStarted));
+                    if (!this.hasContactUserQueryParams) {
+                      this.$router.push(this.localePath(pathData.pages.getStarted));
+                    }
                   }
+                })
+                return Promise.resolve(response)
+                .then(res=> {
+                  if (this.hasContactUserQueryParams) {
+                      this.assignRole()
+                    }
                 })
                 .catch(error => {
                   this.$toast.error(error.response.data.message);
@@ -225,8 +242,34 @@ export default ({
             //
           }
           
-        }
+        },
+        async handleEmailValidationTask(){
+          let user_email = this.$route.query.email || '';
+            if(user_email != ''){
 
+              let payload = {
+                email: this.email
+              };
+              const response =  await authApi(this.$axios).login(payload);
+              if(response.data.email_exist){
+                this.hideLoading();
+                this.$store.dispatch("setExistingEmail", this.email);
+                this.$router.push(this.localePath(pathData.pages.postEmailLogin));
+                this.$toast.error("You've already registered! please login to continue.");
+                this.$Progress.finish()
+              }else{
+                  if (response.data.message) {
+                  this.$toast.error(response.data.message);
+                }
+              }
+            }
+        },
+        async assignRole(){
+          await this.$axios
+          .post("pwa/attach-user-role", { email: this.email,
+          user_type: this.user_type })
+          this.$router.push("/post-login-with-email?email=" + this.email)
+        }
     }
 })
 </script>

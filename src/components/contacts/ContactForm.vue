@@ -147,7 +147,7 @@ export default {
     },
     payloadData() {
       const data = {
-        contactByUserId: this.$auth.user.id
+        receiverUserId: this.$auth.user.id
       };
       this.formItems.forEach(({ model, key }) => {
         if (key == "email") {

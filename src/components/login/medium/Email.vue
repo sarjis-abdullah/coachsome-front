@@ -147,7 +147,7 @@ export default {
     async login() {
       if (this.$refs.form.validate()) {
         const credentials = {
-          email: this.email,
+          email: this.email || this.$route?.query?.email,
           password: this.password,
           is_remember: this.is_remember
         };
