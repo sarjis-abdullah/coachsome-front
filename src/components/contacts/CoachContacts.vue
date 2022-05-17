@@ -96,6 +96,11 @@
 
         <span v-else class="no-package">No Active Packages </span>
       </template>
+      <template v-slot:item.lastActiveAt="{ item }">
+        <span>
+          {{getTime(item.lastActiveAt)}}
+        </span>
+      </template>
 
       <!-- table head end -->
       <template v-slot:item.assets="{ item }">
@@ -184,6 +189,7 @@
 import ContactForm from "@/components/contacts/ContactForm";
 import API from "@/api/coach/contactUser";
 const threeDotIcon = require("@/assets/img/svg-icons/three-dot-horizontal.svg");
+import moment from 'moment';
 export default {
   components: {
     ContactForm
@@ -369,6 +375,14 @@ export default {
     },
     handleClick(item, data) {
       item.method(data);
+    },
+    getTime(date){
+      if (!date) {
+        return ""
+      }
+      var stillUtc = moment.utc(date).toDate();
+      var local = moment(stillUtc).local().format('YYYY-MM-DD HH:mm:ss');
+      return local ? moment(local, "YYYY-MM-DD HH:mm:ss").fromNow() : "";
     }
   }
 };
