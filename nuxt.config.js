@@ -90,7 +90,8 @@ export default {
 
   css: [
     "@mdi/font/css/materialdesignicons.css",
-    "material-design-icons-iconfont/dist/material-design-icons.css"
+    "material-design-icons-iconfont/dist/material-design-icons.css",
+    '@/assets/css/global.css',
   ],
 
   // Plugins to run before rendering page
@@ -115,7 +116,8 @@ export default {
     { src: "~/plugins/v-video-embed", mode: "client" },
     { src: "~/plugins/vue-file-agent", mode: "client" },
     { src: "~/plugins/vue-video-player", mode: "client" },
-    { src: "~/plugins/vuelidate" }
+    { src: "~/plugins/vuelidate" },
+    { src: "~/plugins/vue-debounce", mode: "client" }
   ],
 
   /**
