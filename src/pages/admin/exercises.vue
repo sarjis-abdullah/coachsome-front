@@ -482,11 +482,6 @@
                 <v-card-body>
                   <v-row>
                     <v-col cols="12" >
-                      <!-- <form @submit="formSubmit" enctype="multipart/form-data">
-                        <strong>File:</strong>
-                          <input type="file" class="form-control" v-on:change="onFileChange">
-                        <button class="btn btn-success">Submit</button>
-                        </form> -->
                       <template>
                         <VueFileAgent
                           class="px-15 py-10"
@@ -1076,18 +1071,27 @@
                                         outlined
                                         dense
                                         class="create-exercise__input-field"
+                                        @change="saveVideoUrl()"
                                     ></v-text-field>
                                 </v-form>
                             </v-col>
                             <v-col cols="12" class="py-0 my-0">
-                                <v-btn
+                              <v-btn
+                                    text
+                                    color="#15577C"
+                                    class="px-0"
+                                    @click="uploadVideoDialog = true"
+                                >
+                                    <img class="btn-icon"  :src="require('@/assets/images/icons/video-url.svg')" alt="">  <span class="btn-text"> {{$t("ex_upload_video")}}</span>
+                                </v-btn>
+                                <!-- <v-btn
                                     text
                                     color="#15577C"
                                     class="px-0"
                                     @click="saveVideoUrl()"
                                 >
                                     <img class="btn-icon"  :src="require('@/assets/images/icons/video-url.svg')" alt="">  <span class="btn-text"> {{$t("ex_upload_video")}}</span>
-                                </v-btn>
+                                </v-btn> -->
                             </v-col>
 
 
