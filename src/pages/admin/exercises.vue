@@ -215,7 +215,7 @@
                                           label
                                           @click="select"
                                           close
-                                          @click:close="removeCategory(item)"
+                                          @click:close="removeFilterCategory(item)"
                                       >
                                           <strong>{{ item.name }}</strong
                                           >&nbsp;
@@ -260,7 +260,7 @@
                                           label
                                           @click="select"
                                           close
-                                          @click:close="removeSport(item)"
+                                          @click:close="removeFilterSport(item)"
                                       >
                                           <strong>{{ item.name }}</strong
                                           >&nbsp;
@@ -306,7 +306,7 @@
                                           label
                                           @click="select"
                                           close
-                                          @click:close="removeLavel(item)"
+                                          @click:close="removeFilterLavel(item)"
                                       >
                                           <strong>{{ item.name }}</strong
                                           >&nbsp;
@@ -959,15 +959,33 @@
                       </v-col>
                       <v-col cols="12">
                         <span class="exercise-preview--title">{{$t("lbl_ex_cat")}}</span>
-                        <span class="exercise-preview--description" v-if="exerciseData.category.length">{{$t(exerciseData.category[0].t_key)}}</span>
+                        <span class="exercise-preview--description" v-if="exerciseData.category.length" >
+                          <template v-for="(category, index) in exerciseData.category" >
+                            {{$t(category.t_key)}}  
+                            <span v-if="index == ( exerciseData.category.length-1)" :key="index"></span>
+                            <span v-else :key="index">,</span>
+                          </template>
+                        </span>
                       </v-col>
                       <v-col cols="12">
                         <span class="exercise-preview--title">{{$t("lbl_ex_sport")}}</span>
-                        <span class="exercise-preview--description" v-if="exerciseData.sport.length">{{$t(exerciseData.sport[0].t_key)}}</span>
+                        <span class="exercise-preview--description" v-if="exerciseData.sport.length">
+                          <template v-for="(sport, index) in exerciseData.sport" >
+                            {{$t(sport.t_key)}}  
+                            <span v-if="index == ( exerciseData.sport.length-1)" :key="index"></span>
+                            <span v-else :key="index">,</span>
+                          </template>
+                        </span>
                       </v-col>
                       <v-col cols="12">
                         <span class="exercise-preview--title">{{$t("lbl_ex_lvl")}}</span>
-                        <span class="exercise-preview--description" v-if="exerciseData.lavel.length">{{$t(exerciseData.lavel[0].t_key)}}</span>
+                        <span class="exercise-preview--description" v-if="exerciseData.lavel.length">
+                          <template v-for="(lavel, index) in exerciseData.lavel" >
+                            {{$t(lavel.t_key)}}  
+                            <span v-if="index == ( exerciseData.lavel.length-1)" :key="index"></span>
+                            <span v-else :key="index">,</span>
+                          </template>
+                          </span>
                       </v-col>
                       <v-col cols="12" class="mb-5">
                         <span class="exercise-preview--title">{{$t("lbl_ex_tags")}}</span>
@@ -1573,6 +1591,10 @@ export default {
       this.categoriesSelected = [...this.categoriesSelected];
     },
     
+    removeFilterCategory(item) {
+      this.filter.categoriesSelected.splice(this.filter.categoriesSelected.indexOf(item), 1);
+      this.filter.categoriesSelected = [...this.filter.categoriesSelected];
+    },
 
     removeEditSport(item) {
       this.exerciseEdit.data.sport.splice(this.exerciseEdit.data.sport.indexOf(item), 1);
@@ -1583,6 +1605,10 @@ export default {
       this.sportsSelected.splice(this.sportsSelected.indexOf(item), 1);
       this.sportsSelected = [...this.sportsSelected];
     },
+    removeFilterSport(item) {
+      this.filter.sportsSelected.splice(this.filter.sportsSelected.indexOf(item), 1);
+      this.filter.sportsSelected = [...this.filter.sportsSelected];
+    },
 
     removeEditLavel(item) {
       this.exerciseEdit.data.lavel.splice(this.exerciseEdit.data.lavel.indexOf(item), 1);
@@ -1592,6 +1618,11 @@ export default {
     removeLavel(item) {
       this.lavelsSelected.splice(this.lavelsSelected.indexOf(item), 1);
       this.lavelsSelected = [...this.lavelsSelected];
+    },
+
+    removeFilterLavel(item) {
+      this.filter.lavelsSelected.splice(this.filter.lavelsSelected.indexOf(item), 1);
+      this.filter.lavelsSelected = [...this.filter.lavelsSelected];
     },
 
     removeEditTag(item){

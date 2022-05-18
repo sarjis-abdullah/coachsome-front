@@ -47,7 +47,14 @@
           </v-row>
           <v-row v-for="(item, i) in activePackages" :key="i">
             <v-col>
+              <purchased-card-mobile
+                v-if="$vuetify.breakpoint.xsOnly"
+                v-bind="item"
+                @click-favourite-btn="favouriteBtnClickHandle"
+              ></purchased-card-mobile>
+
               <purchased-card
+                v-else
                 v-bind="item"
                 @click-favourite-btn="favouriteBtnClickHandle"
               ></purchased-card>
@@ -61,6 +68,10 @@
               >
                 <template slot="no-more">
                   <span></span>
+                </template>
+                <template slot="no-results" class="no-results">
+                    <div class="no-results__title">{{$t("no_bookings_title")}}</div>
+                    <div class="no-results__description">{{$t("no_bookings_description")}}</div>
                 </template>
               </infinite-loading>
             </v-col>
@@ -145,12 +156,14 @@
 import PurchasedCard from "@/components/card/PurchasedCard";
 import { coachBookingTimeApi, coachBookingApi } from "@/api";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import PurchasedCardMobile from '@/components/card/PurchasedCardMobile.vue';
 
 export default {
   layout: "coach-no-drawer",
   components: {
     PurchasedCard,
-    MobileTopNav
+    MobileTopNav,
+    PurchasedCardMobile
   },
   data() {
     return {
@@ -317,5 +330,27 @@ export default {
 .coach-booking-page {
   background: $body-bg;
   height: 100%;
+}
+.no-results{
+  &__title{
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 27px;
+    text-align: center;
+    text-transform: capitalize;
+    color: #49556A;
+  }
+  &__description{
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+    color: #9FAEC2;
+    margin-top: 5px;
+  }
 }
 </style>
