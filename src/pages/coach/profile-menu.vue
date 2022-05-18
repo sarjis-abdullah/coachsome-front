@@ -44,7 +44,7 @@
                 </v-list-item-icon>
               </v-list-item>
               <!-- Coach Contacts -->
-              <v-list-item link @click.stop="handleEditProfile">
+              <v-list-item v-if="isAuthCoach" link @click.stop="handleEditProfile">
                 <v-list-item-icon>
                   <v-img :src="require('@/assets/img/svg-icons/coach-contact.svg')" alt="coach-contact" />
                 </v-list-item-icon>
