@@ -11,7 +11,12 @@
         </v-btn>
       </template>
       <template v-slot:action>
-        <span></span>
+        <img
+            :src="require('@/assets/img/svg-icons/add-circle.svg')"
+            alt="contacts-package cursor-pointer"
+            class="pr-2"
+            @click="$router.push('/coach/contacts?contactForm=1')"
+          />
       </template>
     </mobile-top-nav>
     <!-- Desktop Nav -->
@@ -47,7 +52,7 @@ export default {
   },
   methods: {
     handleBack() {
-      console.log("object");
+      this.$router.replace("/")
     }
   }
 };

@@ -1,6 +1,19 @@
 <template>
-  <section class="contact-form-parent">
-    <header @click="closeForm" class="cursor-pointer">
+  <section class="contact-form-parent body-bg-secondary" :class="!$vuetify.breakpoint.mdAndUp ? 'p-7' : 'contact-form-parent__space '">
+    <header v-if="!$vuetify.breakpoint.mdAndUp" class="mb-8">
+      <!-- Mobile Nav -->
+      <mobile-top-nav
+        extraClass="body-bg-secondary"
+        :headerText="$t('app_bar_coach_contacts_page')"
+      >
+        <template v-slot:goBack>
+          <v-btn icon @click="closeForm">
+            <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+          </v-btn>
+        </template>
+      </mobile-top-nav>
+    </header>
+    <header v-else @click="closeForm" class="cursor-pointer">
       <img
         class="pb-5"
         :src="require('@/assets/img/svg-icons/cancel.svg')"
@@ -42,6 +55,7 @@
       </div>
       <div>
         <v-btn
+          :block="$vuetify.breakpoint.mdAndUp ? false : true"
           :loading="loading"
           @click="editMode ? updateForm() : submitForm()"
           class="add-form-btn"
@@ -54,8 +68,11 @@
   </section>
 </template>
 <script>
-import item from "../darkbox/mixins/item";
+import MobileTopNav from "@/components/layout/global/MobileTopNav";
 export default {
+  components: {
+    MobileTopNav,
+  },
   props: {
     editMode: {
       type: Boolean,
@@ -161,6 +178,9 @@ export default {
         return item;
       });
       this.reset();
+      if (this.$route?.query?.contactForm) {
+        this.$router.replace('/coach/contacts')
+      }
     },
     payloadData() {
       const data = {
@@ -213,7 +233,7 @@ export default {
 };
 </script>
 <style>
-.contact-form-parent {
+.contact-form-parent__space {
   padding: 40px 67px;
 }
 .contact-form-parent .add-form-btn {
@@ -236,5 +256,11 @@ export default {
 }
 .contact-form-parent .v-input__slot {
   border-radius: 8px !important;
+}
+.p-7{
+  padding: 28px;
+}
+.mb-8 {
+  margin-bottom: 32px;
 }
 </style>

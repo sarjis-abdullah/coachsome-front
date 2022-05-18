@@ -44,7 +44,9 @@
                 </v-list-item-icon>
               </v-list-item>
               <!-- Coach Contacts -->
-              <v-list-item v-if="isAuthCoach" link @click.stop="handleEditProfile">
+              <v-list-item v-if="isAuthCoach" link @click.stop="()=>{
+                $router.push('/coach/contacts')
+                }">
                 <v-list-item-icon>
                   <v-img :src="require('@/assets/img/svg-icons/coach-contact.svg')" alt="coach-contact" />
                 </v-list-item-icon>
