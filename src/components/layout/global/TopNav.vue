@@ -145,9 +145,8 @@
           </v-list>
         </v-menu>
 
-        <!-- TODO for now -->
         <!-- coachContacts -->
-        <!-- <v-btn
+        <v-btn
           v-if="isAuthCoach"
           small
           class="text-normal"
@@ -156,7 +155,7 @@
           text
           nuxt
           >{{ $t(navItems.coachContacts.t_key) }}</v-btn
-        > -->
+        >
         <!-- Marketplace -->
         <v-btn
           small
