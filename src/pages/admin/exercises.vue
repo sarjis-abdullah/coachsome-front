@@ -97,9 +97,29 @@
 
 
                     <v-card class="filter-exercise">
-                      <v-card-title>
-                        <span class="filter-exercise__title">{{$t("ex_filter")}}</span>
-                      </v-card-title>
+                      <v-card-title class="px-0">
+                        <span class="filter-exercise__title pl-5">{{$t("ex_filter")}}</span>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          v-if="filterRequest"
+                          v-bind="attrs"
+                          v-on="on"
+                          outlined
+                          color="#49556A"
+                          style="text-transform: none"
+                          @click="handleRefresh"
+                          class="mr-5"
+                        >
+                          <v-icon
+                              left
+                              dark
+                          >
+                              mdi-refresh
+                          </v-icon>
+                          {{$t("btn_refresh")}}
+                        </v-btn>
+                        <div class="line mt-4"></div>
+                    </v-card-title>
                       <v-card-text>
                         <v-container>
                           <v-form
@@ -1374,6 +1394,7 @@ export default {
   },
   data() {
     return {
+      filterRequest: false,
       fileRecords: [],
       uploadHeaders: { 'X-Test-Header': 'vue-file-agent' },
       fileRecordsForUpload: [],
@@ -1788,6 +1809,7 @@ export default {
     },
 
     getExercise() {
+      this.resetExerciseData();
       ExerciseApi(this.$axios)
         .getExerciseList()
         .then(({ data }) => {
@@ -1837,6 +1859,8 @@ export default {
 
     handleFilterExercise(){
 
+      this.filterRequest = true;
+
       let payload = {};
       payload.typeSytem = this.filter.typeSytem;
       payload.typeCustom = this.filter.typeCustom;
@@ -1852,7 +1876,7 @@ export default {
             if(data.exercises.length){
               this.exercises.push(data.exercises);
             }
-            this.resetExerciseData();
+            // this.resetExerciseData();
             this.makeExerciseTableRow(data.exercises);
           }
         })
@@ -1860,7 +1884,12 @@ export default {
 
     },
 
+    handleRefresh(){
+      this.getExercise();
+    },
+
     resetExerciseData() {
+
       this.exerciseEdit.data.id = null;
       this.exerciseEdit.data.name = "";
       this.exerciseEdit.data.assets = [];
@@ -1888,6 +1917,7 @@ export default {
       this.fileRecordsForUpload = [],
       this.fileRecords = [];
       this.uploadVideoDialog = false;
+      this.filterRequest = false;
     },
 
     handleUpateExercise(){
