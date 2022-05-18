@@ -57,6 +57,7 @@
         width: 500px!important;
         border-radius: 10px!important;
         margin: 5px;
+        overflow: hidden;
       }
 
       $background-color_1: #2B333F;
@@ -132,6 +133,7 @@
         width: 400px!important;
         border-radius: 10px!important;
         margin: 5px;
+        overflow: hidden;
 
       }
 

@@ -54,9 +54,11 @@
       width: 90px!important;
       border-radius: 10px!important;
       margin: 5px;
+      overflow: hidden;
     }
+    
     $background-color_1: #2B333F;
-  $background-color_2: rgba(43, 51, 63, 0.7);
+    $background-color_2: rgba(43, 51, 63, 0.7);
 
   .video-js {
     .vjs-big-play-button {

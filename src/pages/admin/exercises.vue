@@ -12,7 +12,14 @@
         </v-btn>
       </template>
       <template v-slot:action>
-        <span></span>
+        <v-btn
+          icon
+          @click="handleNewExercise"
+        >
+          <v-icon style="font-size: 25px!important;" class="common-top-add-icon">
+            mdi-plus-circle-outline
+          </v-icon>
+        </v-btn>
       </template>
     </mobile-top-nav>
 
@@ -50,7 +57,29 @@
 
     <!-- No Exercise end -->
 
-    <v-row>
+    <!-- mobile view -->
+    <v-row class="d-md-none">
+      <v-col cols="12" v-if="exercises.length" class="py-10">
+        <v-row>
+          <v-col cols="12" v-for="(item, index) in table.rows" :key="index" class="py-0 my-0">
+            <v-card color="#FFFFFF" class="exercise-table mobile-view ">
+              <v-card-text class="pa-2 ma-2">
+                <div style="display:inline-block; align: center;vertical-align: middle;" >
+                  <list-asset-view :asset_type="item.asset_type" :url="item.assets" ></list-asset-view>
+                </div>
+                <div style="display:inline-block;vertical-align: middle; padding-left: 8px" class="exercise-table--text mobile-view--text" >
+                    {{item.exercise}}
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+
+
+    <!-- desktop view -->
+    <v-row class="d-none d-md-block">
       <v-col cols="12">
         <div>
           <v-card>
@@ -1382,6 +1411,7 @@
         </div>
       </v-col>
     </v-row>
+
   </v-container>
 </template>
 
@@ -1394,9 +1424,9 @@ import MobileTopNav from '@/components/layout/global/MobileTopNav'
 import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
 import DarkboxExercise from "@/components/darkbox/Gallery";
-import ListAssetView from '../../components/exercise/ListAssetView.vue';
-import AssetView from '../../components/exercise/AssetView.vue';
-import AssetPreview from '../../components/exercise/AssetPreview.vue';
+import ListAssetView from '@/components/exercise/ListAssetView.vue';
+import AssetView from '@/components/exercise/AssetView.vue';
+import AssetPreview from '@/components/exercise/AssetPreview.vue';
 import ExerciseEditor from "@/components/editor/ExerciseEditor";
 import RTLSwitch from '@/components/exercise/RTLSwitch'
 
@@ -1531,6 +1561,10 @@ export default {
     this.fetchLavels();
   },
   methods: {
+
+    handleNewExercise(){
+      this.$router.push(this.localePath(pathData.admin.createExercise));
+    },
 
     uploadFiles: function () {
 
@@ -2482,6 +2516,19 @@ export default {
     display: flex;
     align-items: center;
     color: #49556A!important;
+  }
+}
+
+.mobile-view{
+  background: #FFFFFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  &--text{
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600!important;
+    font-size: 16px!important;
+    line-height: 22px!important;
   }
 }
 
