@@ -3,15 +3,14 @@
     <v-container>
       <v-row justify="center">
         <v-col md="10" cols="12">
-          <v-row class="d-md-none">
+          <!-- <v-row class="d-md-none">
             <v-col cols="12" class="d-flex justify-center mt-3">
               <img :src="require('@/assets/images/logo-dark.svg')" alt="">
-              <!-- <div class="line"></div> -->
             </v-col>
             <v-col cols="12" >
               <div class="line"></div>
             </v-col>
-          </v-row>
+          </v-row> -->
           <!-- Profile and Travel -->
           <v-row justify="center">
             <v-col cols="12" md="6" class="mt-10">
