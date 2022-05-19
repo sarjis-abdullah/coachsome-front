@@ -147,7 +147,7 @@
 
         <!-- coachContacts -->
         <v-btn
-          v-if="isAuthCoach"
+          v-if="isAuthCoach && (isDevelopment || isStaging)"
           small
           class="text-normal"
           :color="colorOfTheTextBtn"
@@ -433,12 +433,6 @@ export default {
     },
     isDark() {
       return this.theme === "dark";
-    },
-    isAuthCoach() {
-      return this.$auth.loggedIn && this.$auth.hasRole("coach");
-    },
-    isAuthAthlete() {
-      return this.$auth.loggedIn && this.$auth.hasRole("athlete");
     },
     showSignUpBtn() {
       return !this.$auth.loggedIn;

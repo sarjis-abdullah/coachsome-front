@@ -43,6 +43,22 @@
                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
+              <!-- Coach Contacts -->
+              <v-list-item v-if="isAuthCoach" link @click.stop="()=>{
+                $router.push('/coach/contacts')
+                }">
+                <v-list-item-icon>
+                  <v-img :src="require('@/assets/img/svg-icons/coach-contact.svg')" alt="coach-contact" />
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title class="list-text">{{$t('app_bar_coach_contacts_page')}}</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
               <!-- Earnings -->
               <v-list-item link @click.stop="handleEarningBtn">
                 <v-list-item-icon>
