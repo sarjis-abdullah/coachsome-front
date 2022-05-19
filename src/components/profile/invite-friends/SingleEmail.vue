@@ -4,7 +4,7 @@
       <div class="w-full">
         <v-text-field
         v-model="email"
-        placeholder="Enter Email-Address"
+        :placeholder="$t('invite_your_friends_email_placeholder')"
         hide-details
         dense
         outlined
