@@ -55,31 +55,38 @@
       border-radius: 10px!important;
       margin: 5px;
       overflow: hidden;
+      .vjs-big-play-button {
+        font-size: 1.8em;
+        line-height: 1.5em;
+        height: 1.5em;
+        width: 1.5em;
+        display: block;
+        position: absolute;
+        top: 35% !important;
+        left: 35% !important;
+        padding: 0;
+        cursor: pointer;
+        opacity: 1;
+        border: 0.08em solid #fff!important;
+        background-color: #2b333f;
+        background-color: transparent;
+        border-radius: 50px!important;
+        transition: all .4s;
+      }
+      
     }
-    
-    $background-color_1: #2B333F;
-    $background-color_2: rgba(43, 51, 63, 0.7);
 
-  .video-js {
-    .vjs-big-play-button {
-      font-size: 1.8em;
-      line-height: 1.5em;
-      height: 1.5em;
-      width: 3em;
-      display: block;
-      position: absolute;
-      top: 35%!important;
-      left: 20%!important;
-      padding: 0;
-      cursor: pointer;
-      opacity: 1;
-      border: 0.06666em solid #fff;
-      background-color: $background-color_1;
-      background-color: $background-color_2;
-      border-radius: 0.3em;
-      transition: all 0.4s;
-    }
-  }
+    .ytp-large-play-button {
+        left: 30% !important;
+        top: 55% !important;
+        width: 3em !important;
+        height: 3em!important;
+        border: 2px solid white !important;
+        border-radius: 50px!important;
+      }
+      .ytp-large-play-button-bg {
+          fill: transparent!important;
+      }
 
 
   }

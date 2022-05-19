@@ -59,32 +59,26 @@
       border-radius: 10px!important;
       margin: 5px;
       overflow: hidden;
-
-  }
-
-  $background-color_1: #2B333F;
-  $background-color_2: rgba(43, 51, 63, 0.7);
-
-  .video-js {
-    .vjs-big-play-button {
-      font-size: 1.8em;
-      line-height: 1.5em;
-      height: 1.5em;
-      width: 3em;
-      display: block;
-      position: absolute;
-      top: 40%!important;
-      left: 32%!important;
-      padding: 0;
-      cursor: pointer;
-      opacity: 1;
-      border: 0.06666em solid #fff;
-      background-color: $background-color_1;
-      background-color: $background-color_2;
-      border-radius: 0.3em;
-      transition: all 0.4s;
+      .vjs-big-play-button {
+        font-size: 1.8em;
+        line-height: 2.1em;
+        height: 2.1em;
+        width: 2.1em;
+        display: block;
+        position: absolute;
+        top: 38% !important;
+        left: 38% !important;
+        padding: 0;
+        cursor: pointer;
+        opacity: 1;
+        border: 0.08em solid #fff;
+        background-color: #2B333F;
+        background-color: transparent;
+        border-radius: 0.3em;
+        transition: all 0.4s;
+        border-radius: 50px;
+      }
     }
-  }
 
 
   }
