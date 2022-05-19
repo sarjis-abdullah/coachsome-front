@@ -92,7 +92,6 @@ export default {
     trackingCodes: code => `/admin/tracking-codes/${code}`,
     profileMenu: "/admin/profile-menu",
     exercises: "/admin/exercises",
-    createExercise: "/admin/create-exercise",
   },
   athlete: {
     editProfile: "/athlete/edit-profile",
