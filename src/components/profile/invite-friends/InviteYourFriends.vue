@@ -7,11 +7,15 @@
               <img class="menu-icon-image" :src="require('@/assets/img/svg-icons/cancel.svg')" alt="Cancel Button">
             </div>
             <div class="hidden-sm-and-down" style="padding:20px 0 0 0">
-              <div class="form-title">Invite Friends to Join Coachsome</div>
-              <p class="form-top-description">Select all the people that you would like to join Coachsome. You can select multiple people at once.  </p>
+              <div class="form-title">
+                {{$t('invite_your_friends_form_title')}}
+              </div>
+              <p class="form-top-description">
+                {{$t('invite_your_friends_form_subtitle')}}
+              </p>
             </div>
             <div class="email-label">
-              E-mail Address <sup class="red--text">*</sup>
+              {{$t('invite_your_friends_email_label')}} <sup class="red--text">*</sup>
             </div>
           </section>
           <div v-for="(item, index) in emails" :key="item.id">
@@ -21,11 +25,13 @@
             />
           </div>
           <div @click="addTextbox" class="cursor-pointer py-2">
-            + Add More
+            + {{$t('invite_your_friends_add_more_btn')}}
           </div>
         </v-col>
         <v-col :cols="isModal ? 4 : 12" class="send-invite-btn-wrapper">
-          <v-btn :loading="loading" @click="inviteFriends" block class="btn-color white--text send-invite-btn">Send Invitation</v-btn>
+          <v-btn :loading="loading" @click="inviteFriends" block class="btn-color white--text send-invite-btn">
+            {{$t('invite_your_friends_send_invitation_btn')}}
+          </v-btn>
         </v-col>
       </v-row>
   </v-container>

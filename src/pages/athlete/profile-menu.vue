@@ -120,7 +120,9 @@
                 </v-list-item-icon>
 
                 <v-list-item-content>
-                  <v-list-item-title class="list-text">Invite your friends</v-list-item-title>
+                  <v-list-item-title class="list-text">
+                    {{$t("invite_your_friends_title")}}
+                  </v-list-item-title>
                 </v-list-item-content>
 
                 <v-list-item-icon>
