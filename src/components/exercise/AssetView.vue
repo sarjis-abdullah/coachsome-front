@@ -53,11 +53,12 @@
     }
 
     .video-js{
-
+      
       max-height: 155px!important;
       max-width: 155px!important;
       border-radius: 10px!important;
       margin: 5px;
+      overflow: hidden;
 
   }
 

@@ -49,9 +49,16 @@
 
           <v-row v-for="(item, i) in purchasedPackages" :key="i">
             <v-col>
-              <purchased-card
-                @click-favourite-btn="favouriteBtnClickHandle"
+              <purchased-card-mobile
+                v-if="$vuetify.breakpoint.xsOnly"
                 v-bind="item"
+                @click-favourite-btn="favouriteBtnClickHandle"
+              ></purchased-card-mobile>
+
+              <purchased-card
+                v-else
+                v-bind="item"
+                @click-favourite-btn="favouriteBtnClickHandle"
               ></purchased-card>
             </v-col>
           </v-row>
@@ -62,9 +69,13 @@
               class="text-center"
               v-if="purchasedPackages.length < 1"
             >
-              <span class="caption">
+              <!-- <span class="caption">
                 {{ $t("athlete_booking_not_found_anything") }}
-              </span>
+              </span> -->
+                <template class="no-results">
+                    <div class="no-results__title">{{$t("no_bookings_title")}}</div>
+                    <div class="no-results__description">{{$t("no_bookings_description")}}</div>
+                </template>
             </v-col>
             <v-col
               cols="12"
@@ -84,118 +95,6 @@
               </v-btn>
             </v-col>
           </v-row>
-          <!-- 
-          <v-row>
-            <v-col>
-              <div class="line"></div>
-            </v-col>
-          </v-row> -->
-          <!-- 
-          <v-row>
-            <v-col cols="12">
-              <div class="section-title">
-                {{ $t("section_title_recent_search") }}
-              </div>
-            </v-col>
-
-            <v-col cols="12" v-if="searchValue.today.length > 0">
-              <div class="section-sub-title">
-                {{ $t("athlete_booking_search_value_txt_today") }}
-              </div>
-              <v-row>
-                <v-col cols="8">
-                  <v-btn
-                    v-for="(item, i) in searchValue.today"
-                    :key="i"
-                    x-small
-                    color="primary-light-2"
-                    rounded
-                    dark
-                    class="mr-2"
-                  >
-                    {{ $t(item.t_key) }}
-                  </v-btn>
-                </v-col>
-                <v-col cols="4">
-                  <v-btn x-small color="primary" @click="goToMarketplace">
-                    {{ $t("btn_label_search_again") }}
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-col>
-
-            <v-col cols="12" v-if="searchValue.yesterday.length > 0">
-              <div class="section-sub-title">{{ $t("text_yesterday") }}</div>
-              <v-row>
-                <v-col cols="8">
-                  <v-btn
-                    v-for="(item, i) in searchValue.yesterday"
-                    :key="i"
-                    x-small
-                    color="primary-light-2"
-                    rounded
-                    dark
-                    class="mr-2"
-                  >
-                    {{ $t(item.t_key) }}
-                  </v-btn>
-                </v-col>
-                <v-col cols="4">
-                  <v-btn x-small color="primary" @click="goToMarketplace">
-                    {{ $t("btn_label_search_again") }}
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-col>
-
-            <v-col cols="12" v-if="searchValue.week.length > 0">
-              <div class="section-sub-title">{{ $t("text_week_ago") }}</div>
-              <v-row>
-                <v-col cols="8">
-                  <v-btn
-                    v-for="(item, i) in searchValue.week"
-                    :key="i"
-                    x-small
-                    color="primary-light-2"
-                    rounded
-                    dark
-                    class="mr-2"
-                  >
-                    {{ $t(item.t_key) }}
-                  </v-btn>
-                </v-col>
-                <v-col cols="4">
-                  <v-btn x-small color="primary" @click="goToMarketplace">
-                    {{ $t("btn_label_search_again") }}
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-col>
-
-            <v-col cols="12" v-if="searchValue.later.length > 0">
-              <div class="section-sub-title">{{ $t("text_later") }}</div>
-              <v-row>
-                <v-col cols="8">
-                  <v-btn
-                    v-for="(item, i) in searchValue.later"
-                    :key="i"
-                    x-small
-                    color="primary-light-2"
-                    rounded
-                    dark
-                    class="mr-2"
-                  >
-                    {{ $t(item.t_key) }}
-                  </v-btn>
-                </v-col>
-                <v-col cols="4">
-                  <v-btn x-small color="primary" @click="goToMarketplace">
-                    {{ $t("btn_label_search_again") }}
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row> -->
         </v-col>
 
         <v-col cols="12" md="4">
@@ -290,6 +189,7 @@ import PurchasedCard from "@/components/card/PurchasedCard";
 import NewsCard from "@/components/card/NewsCard";
 import { pathData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import PurchasedCardMobile from '@/components/card/PurchasedCardMobile.vue';
 
 import {
   athleteBookingApi,
@@ -302,7 +202,8 @@ export default {
   components: {
     PurchasedCard,
     NewsCard,
-    MobileTopNav
+    MobileTopNav,
+    PurchasedCardMobile
   },
   data() {
     return {
@@ -518,5 +419,27 @@ export default {
 .athlete-bookings {
   height: 100%;
   background: $body-bg;
+}
+.no-results{
+  &__title{
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 27px;
+    text-align: center;
+    text-transform: capitalize;
+    color: #49556A;
+  }
+  &__description{
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+    color: #9FAEC2;
+    margin-top: 5px;
+  }
 }
 </style>

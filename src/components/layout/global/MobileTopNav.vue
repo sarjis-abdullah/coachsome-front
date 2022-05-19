@@ -41,4 +41,8 @@
 
 <style scoped lang="scss">
 
+.page-top-header-row{
+	z-index: 999!important;
+}
+
 </style>
