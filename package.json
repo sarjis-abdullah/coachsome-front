@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@bachdgvn/vue-otp-input": "^1.0.8",
+    "@dongido/vue-viaudio": "^0.3.5",
     "@nuxt/modules": "^0.5.0-88614a",
     "@nuxtjs/auth-next": "5.0.0-1618502945.2770f1f",
     "@nuxtjs/axios": "^5.13.1",
@@ -45,6 +46,7 @@
     "vue-chartjs": "^3.5.1",
     "vue-country-flag": "^2.0.4",
     "vue-currency-filter": "^5.2.0",
+    "vue-debounce": "^2.5.7",
     "vue-easy-lightbox": "^0.15.2",
     "vue-facebook-login-component": "^4.0.1",
     "vue-file-agent": "^1.7.3",
@@ -61,8 +63,7 @@
     "vue-video-player": "^5.0.2",
     "vue2-transitions": "^0.3.0",
     "vuedraggable": "^2.24.3",
-    "vuelidate": "^0.7.6",
-    "vue-debounce": "^2.5.7"
+    "vuelidate": "^0.7.6"
   },
   "devDependencies": {
     "@mdi/font": "^5.9.55",
