@@ -442,6 +442,15 @@
                 <div class="exercise-table--text">
                   {{$t(item.category)}}
                 </div>
+                
+                <!-- <span class="exercise-table--text" v-if="exerciseData.category.length" >
+                  <template v-for="(category, index) in exerciseData.category" >
+                    {{$t(category.t_key)}}  
+                    <span v-if="index == ( exerciseData.category.length-1)" :key="index"></span>
+                    <span v-else :key="index">,</span>
+                  </template>
+                </span> -->
+
               </template>
               <template v-slot:item.type="{ item }">
                  <div class="exercise-table--text">
@@ -498,7 +507,7 @@
               <v-btn
                     color="#49556A"
                     icon
-                    @click="uploadVideoDialog = false"
+                    @click="handleUploadVideo"
                     class="exercise__close-button"
                 >
                     <v-icon>mdi-close</v-icon>
@@ -525,6 +534,8 @@
                         size: 'Files should not exceed 20MB in size',
                       }"
                       @select="filesSelected($event)"
+                      @beforedelete="onBeforeDelete($event)"
+                      @delete="fileDeleted($event)"
                       v-model="fileRecords"
                     >
                     <template v-slot:file-preview-new>
@@ -1655,6 +1666,30 @@ export default {
   },
   methods: {
 
+    handleUploadVideo(){
+      this.$refs.fileInput.value = null;
+      this.fileRecordsForUpload = [],
+      this.fileRecords = [];
+      this.uploadVideoDialog = false;
+    },
+
+    onBeforeDelete: function (fileRecord) {
+      var i = this.fileRecordsForUpload.indexOf(fileRecord);
+      if (i !== -1) {
+        this.fileRecordsForUpload.splice(i, 1);
+      } else {
+        if (confirm('Are you sure you want to delete?')) {
+          this.fileDelete(fileRecord); // will trigger 'delete' event
+        }
+      }
+    },
+    fileDelete: function (fileRecord) {
+      var i = this.fileRecordsForUpload.indexOf(fileRecord);
+      this.$refs.fileInput.value = null;
+      this.fileRecordsForUpload = [],
+      this.fileRecords = [];
+    },
+
     uploadFiles: function () {
 
       var form = new FormData();
@@ -2490,6 +2525,26 @@ export default {
     text-transform: none;
     font-weight: bold!important;
   }
+  .video-js {
+		.vjs-big-play-button {
+			font-size: 1.8em;
+			line-height: 1.5em;
+			height: 1.5em;
+			width: 1.5em;
+			display: block;
+			position: absolute;
+			top: 35% !important;
+			left: 35% !important;
+			padding: 0;
+			cursor: pointer;
+			opacity: 1;
+			border: 0.08em solid #fff!important;
+			background-color: #2b333f;
+			background-color: transparent;
+			border-radius: 50px!important;
+			transition: all .4s;
+		}
+	}
 }
 .exercise-video{
   iframe {
