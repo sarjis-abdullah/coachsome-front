@@ -147,7 +147,7 @@
 
         <!-- coachContacts -->
         <v-btn
-          v-if="isAuthCoach"
+          v-if="isAuthCoach && (isDevelopment || isStaging)"
           small
           class="text-normal"
           :color="colorOfTheTextBtn"
