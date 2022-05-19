@@ -439,6 +439,9 @@ export default {
     },
     isLoggedIn() {
       return this.$auth.loggedIn;
+    },
+    showContacts(){
+      return this.isAuthCoach && (this.isStaging || this.isDevelopment)
     }
   },
   watch: {
@@ -451,7 +454,18 @@ export default {
       }
     }
   },
-  created() {},
+  created() {
+    console.log("this.isStaging || this.isDevelopment: ", this.isStaging || this.isDevelopment);
+    console.log("isStaging", this.isStaging, "isDevelopment", this.isDevelopment);
+    console.log("showContacts", this.showContacts);
+    console.log("isAuthCoach", this.isAuthCoach);
+    console.log("isAuthAthlete", this.isAuthAthlete);
+    if (process?.env?.NODE_ENV) {
+      console.log(process.env.NODE_ENV);
+    }else {
+      console.log("NODE_ENV not found");
+    }
+  },
   methods: {
     handleMessageBtnClick() {
       this.$store.dispatch("chat/refreshTotalNewMessageCount");
