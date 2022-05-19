@@ -1,24 +1,42 @@
 <template>
-  <section class="contact-form-parent body-bg-secondary" :class="!$vuetify.breakpoint.mdAndUp ? 'p-7' : 'contact-form-parent__space '">
-    <header v-if="!$vuetify.breakpoint.mdAndUp" class="mb-8">
-      <!-- Mobile Nav -->
+  <section
+    class="contact-form-parent body-bg-secondary"
+    :class="
+      !$vuetify.breakpoint.mdAndUp ? 'p-6' : 'contact-form-parent__space '
+    "
+  >
+   <!-- Mobile Nav -->
+    <header class="hidden-md-and-up form-title">
       <mobile-top-nav
         extraClass="body-bg-secondary"
-        :headerText="$t('app_bar_coach_contacts_page')"
+        :headerText="$t('coach_contacts_add_form_title')"
       >
         <template v-slot:goBack>
           <v-btn icon @click="closeForm">
             <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
           </v-btn>
         </template>
+        <template v-slot:action>
+          <v-btn v-if="editMode" :loading="loading" @click="updateForm()" text small>
+            <span class="edit-mode-save-btn">
+              {{$t("coach_contacts_update_contact")}}
+            </span>
+          </v-btn>
+        </template>
       </mobile-top-nav>
     </header>
-    <header v-else @click="closeForm" class="cursor-pointer">
-      <img
-        class="pb-5"
-        :src="require('@/assets/img/svg-icons/cancel.svg')"
-        alt="Cancel Button"
-      />
+     <!-- Desktop Nav -->
+    <header class="hidden-sm-and-down">
+      <div @click="closeForm" class="cursor-pointer">
+        <img
+          class="pb-5"
+          :src="require('@/assets/img/svg-icons/cancel.svg')"
+          alt="Cancel Button"
+        />
+      </div>
+      <div class="form-title">
+        {{ $t("coach_contacts_add_form_title") }}
+      </div>
     </header>
     <v-form ref="form" v-model="valid" lazy-validation>
       <div
@@ -53,15 +71,17 @@
           :error-messages="item.error"
         ></v-text-field>
       </div>
-      <div>
+      <div v-if="!editMode">
         <v-btn
           :block="$vuetify.breakpoint.mdAndUp ? false : true"
           :loading="loading"
-          @click="editMode ? updateForm() : submitForm()"
+          @click="submitForm()"
           class="add-form-btn"
           depressed
         >
-          {{ editMode ? $t('coach_contacts_update_contact') : $t('coach_contacts_save_contact') }}
+          {{
+            $t("coach_contacts_save_contact")
+          }}
         </v-btn>
       </div>
     </v-form>
@@ -71,7 +91,7 @@
 import MobileTopNav from "@/components/layout/global/MobileTopNav";
 export default {
   components: {
-    MobileTopNav,
+    MobileTopNav
   },
   props: {
     editMode: {
@@ -127,23 +147,23 @@ export default {
       return [this.formItems.find(item => item.key == "categoryName")];
     }
   },
-  created () {
-    this.formItems = this.formItems.map(item=> {
+  created() {
+    this.formItems = this.formItems.map(item => {
       if (item.key == "categoryName") {
-        item.label = this.$t("coach_contacts_category_label")
-        item.placeholder = this.$t("coach_contacts_category_placeholder")
-      }else if (item.key == "firstName") {
-        item.label = this.$t("coach_contacts_first_name_label")
-        item.placeholder = this.$t("coach_contacts_first_name_placeholder")
-      }else if (item.key == "lastName") {
-        item.label = this.$t("coach_contacts_last_name_label")
-        item.placeholder = this.$t("coach_contacts_last_name_placeholder")
-      }else {
-        item.label = this.$t("coach_contacts_email_label")
-        item.placeholder = this.$t("coach_contacts_email_placeholder")
+        item.label = this.$t("coach_contacts_category_label");
+        item.placeholder = this.$t("coach_contacts_category_placeholder");
+      } else if (item.key == "firstName") {
+        item.label = this.$t("coach_contacts_first_name_label");
+        item.placeholder = this.$t("coach_contacts_first_name_placeholder");
+      } else if (item.key == "lastName") {
+        item.label = this.$t("coach_contacts_last_name_label");
+        item.placeholder = this.$t("coach_contacts_last_name_placeholder");
+      } else {
+        item.label = this.$t("coach_contacts_email_label");
+        item.placeholder = this.$t("coach_contacts_email_placeholder");
       }
-      return item
-    })
+      return item;
+    });
   },
   methods: {
     async submitForm() {
@@ -154,12 +174,14 @@ export default {
           await this.$axios.post("coach/contact-user", data);
           this.$emit("reloadAllData");
           this.closeForm();
+          this.$toast.success("Contact successfully added!");
         } catch (error) {
           if (error?.response?.data?.errors) {
             this.handleServerErrorMessage(error.response.data.errors);
           } else {
             this.closeForm();
           }
+          this.$toast.success("Something went wrong!");
         } finally {
           this.loading = false;
         }
@@ -179,7 +201,7 @@ export default {
       });
       this.reset();
       if (this.$route?.query?.contactForm) {
-        this.$router.replace('/coach/contacts')
+        this.$router.replace("/coach/contacts");
       }
     },
     payloadData() {
@@ -222,8 +244,10 @@ export default {
             }
           );
           this.$emit("reloadAllData");
-        } catch (error) {}
-        finally {
+          this.$toast.success("Contact successfully updated!");
+        } catch (error) {
+          this.$toast.success("Something went wrong!");
+        } finally {
           this.loading = false;
           this.closeForm();
         }
@@ -232,7 +256,7 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss">
 .contact-form-parent__space {
   padding: 40px 67px;
 }
@@ -257,10 +281,33 @@ export default {
 .contact-form-parent .v-input__slot {
   border-radius: 8px !important;
 }
-.p-7{
-  padding: 28px;
+.p-6 {
+  padding: 24px;
 }
 .mb-8 {
   margin-bottom: 32px;
+}
+.contact-form-parent {
+  .form-title {
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 35px;
+    margin-bottom: 32px;
+    color: #49556a;
+  }
+  .edit-mode-save-btn {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 27px;
+    text-decoration-line: underline;
+    text-transform: capitalize;
+    color: #49556A;
+  }
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.contact-form-parent .v-list-item {
+    padding: 0;
 }
 </style>

@@ -128,13 +128,12 @@
             @click="gotoNotesPage"
           /> -->
             <img
-              @click="
-                $router.replace('/chat?contactByUserId=' + item.contactByUserId)
-              "
+              @click="gotoChat(item)"
               class="cursor-pointer"
               :src="require('@/assets/img/svg-icons/chat.svg')"
               alt="chat"
             />
+            <!-- Desktop -->
             <div class="text-center">
               <v-menu top offset-y close-on-content-click>
                 <template v-slot:activator="{ on, attrs }">
@@ -148,9 +147,7 @@
 
                 <v-list>
                   <v-list-item
-                    v-for="(data, index) in !item.categoryName
-                      ? moreItems
-                      : filteredMoreItems"
+                    v-for="(data, index) in conditionalMoreItems(item)"
                     :key="index"
                   >
                     <v-list-item-title
@@ -170,14 +167,106 @@
       </v-data-table>
     </template>
     <template v-else>
-      hello
+      <template>
+        <div>
+          <div class="contacts-table__searchbox--wrapper">
+            <v-text-field
+              :debounce-events="['onclick', 'oninput', 'onkeydown']"
+              v-debounce:800ms="debouncedInitData"
+              dense
+              v-model="search"
+              label="Search"
+              outlined
+              prepend-inner-icon="mdi-magnify"
+              hide-details
+              class="contacts-table__searchbox"
+            ></v-text-field>
+          </div>
+          <v-list subheader class="body-bg-secondary">
+            <div v-if="loading" class="p-2">
+              <v-skeleton-loader
+                v-for="i in 5"
+                :key="i"
+                type="list-item-avatar, divider"
+              ></v-skeleton-loader>
+            </div>
+            <template v-if="!loading">
+              <div
+                v-for="item in contactsData"
+                :key="item.id"
+                class="contacts-table__list-card"
+              >
+                <v-list-item @click="gotoChat(item)">
+                  <v-list-item-avatar height="40" width="40">
+                    <v-img
+                      v-if="item && item.profileUrl && item.profileUrl.square"
+                      :src="item.profileUrl.square"
+                      :alt="item.name"
+                    ></v-img>
+                    <v-btn icon v-else>
+                      <v-icon size="40">mdi-account-box</v-icon>
+                    </v-btn>
+                  </v-list-item-avatar>
+
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      <span class="contacts-list__name">
+                        {{ item.name }}
+                      </span>
+                    </v-list-item-title>
+                  </v-list-item-content>
+
+                  <v-list-item-icon>
+                    <!-- Mobile -->
+                    <div class="text-center">
+                      <v-menu offset-y close-on-content-click>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon v-bind="attrs" v-on="on" color="grey">
+                            mdi-dots-horizontal
+                          </v-icon>
+                        </template>
+
+                        <v-list>
+                          <v-list-item
+                            v-for="(data, index) in conditionalMoreItems(item)"
+                            :key="index"
+                          >
+                            <v-list-item-title
+                              @click="handleClick(data, item)"
+                              class="cursor-pointer"
+                            >
+                              <span :style="`color: ${data.color}`">
+                                {{ data.text }}
+                              </span>
+                            </v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
+                    </div>
+                  </v-list-item-icon>
+                </v-list-item>
+              </div>
+            </template>
+            <template v-if="notFoundMsg">
+              <div class="contacts-table__list-card py-4 text-center">
+                No data found!
+              </div>
+            </template>
+             <template v-if="!notFoundMsg && options">
+              <div class="text-center">
+                <v-pagination v-model="options.page" :length="lastPage" circle></v-pagination>
+              </div>
+            </template>
+          </v-list>
+        </div>
+      </template>
     </template>
     <v-dialog
       v-model="toggleContactForm"
       max-width="680"
       :fullscreen="!$vuetify.breakpoint.mdAndUp"
     >
-      <v-card>
+      <v-card style="background: #F7FAFC;">
         <ContactForm
           @close-modal="
             () => {
@@ -213,12 +302,33 @@ export default {
       contactsData: [],
       options: {
         page: 1,
-        itemsPerPage: 5,
+        itemsPerPage: 2,
         sortBy: ["id"]
       },
+      lastPage: null,
       totalItems: null,
       editMode: false,
-      editContactData: {}
+      editContactData: {},
+      recent: [
+        {
+          active: true,
+          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+          title: "Jason Oner"
+        },
+        {
+          active: true,
+          avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
+          title: "Mike Carlson"
+        },
+        {
+          avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
+          title: "Cindy Baker"
+        },
+        {
+          avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
+          title: "Ali Connors"
+        }
+      ]
     };
   },
   computed: {
@@ -309,6 +419,9 @@ export default {
         ],
         rows: []
       };
+    },
+    notFoundMsg(){
+      return !this.loading && !(this.contactsData && this.contactsData.length)
     }
   },
   watch: {
@@ -332,9 +445,6 @@ export default {
       deep: true,
       immediate: true
     }
-  },
-  created() {
-    // this.getAllData();
   },
   methods: {
     showContactForm() {
@@ -361,7 +471,10 @@ export default {
           }
           return { ...item, name };
         });
-        this.totalItems = response?.data?.meta?.total;
+        if (response?.data?.meta) {
+          this.lastPage = response?.data.meta?.last_page
+          this.totalItems = response.data.meta?.total;
+        }
       } catch (error) {
       } finally {
         this.loading = false;
@@ -385,13 +498,15 @@ export default {
       }
     },
     async removeContactUser(item) {
-      try {
-        this.loading = true;
-        const response = await API(this.$axios).removeContactUser(item.id);
-        this.getAllData();
-      } catch (error) {
-      } finally {
-        this.loading = false;
+      if (window.confirm("Do you really want to leave?")) {
+        try {
+          this.loading = true;
+          const response = await API(this.$axios).removeContactUser(item.id);
+          this.getAllData();
+        } catch (error) {
+        } finally {
+          this.loading = false;
+        }
       }
     },
     toggleEditForm(item) {
@@ -414,6 +529,22 @@ export default {
         .local()
         .format("YYYY-MM-DD HH:mm:ss");
       return local ? moment(local, "YYYY-MM-DD HH:mm:ss").fromNow() : "";
+    },
+    gotoChat(item) {
+      item.contactAbleUserId &&
+        this.$router.replace(
+          "/chat?contactAbleUserId=" + item.contactAbleUserId
+        );
+    },
+    conditionalMoreItems(item){
+      let items = this.moreItems
+      if (item.categoryName) {
+        items = items.filter(item => item.key != "edit");
+      }
+      if (item.status && item.status == 'active') {
+        items = items.filter(item => item.key != "resendInvitationEmail");
+      }
+      return items
     }
   }
 };
@@ -461,6 +592,32 @@ export default {
     font-size: 20px;
     line-height: 27px;
     color: #49556a;
+  }
+  // Mobile Design
+  .contacts-list__name {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #49556a;
+  }
+  .contacts-table__list-card {
+    border-radius: 10px !important;
+    margin-bottom: 10px;
+    background: #ffffff;
+    border-radius: 10px;
+  }
+  .v-list-item__avatar {
+    margin-top: 12px;
+    margin-bottom: 12px;
+  }
+  .contacts-table__searchbox--wrapper {
+    margin-top: 20px;
+    margin-bottom: 18px;
+  }
+  .contacts-table__searchbox {
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid #9faec2;
   }
 }
 </style>
