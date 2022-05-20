@@ -4,11 +4,11 @@
     justify="center"
   >
     <v-col
-      cols="11"
+      cols="12"
       sm="8"
       md="6"
       lg="4"
-      xs="11"
+      xs="12"
     >
       <v-layout row wrap class="align-items-to-center" >
           <v-flex xs12>

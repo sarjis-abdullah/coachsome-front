@@ -80,6 +80,12 @@
       }
     }
 
+    .ytp-large-play-button {
+      left: 70%!important;
+      top: 60%!important;
+      width: 30px!important;
+      height: 30px!important;
+    }
 
   }
   

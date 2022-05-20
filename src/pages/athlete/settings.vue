@@ -568,50 +568,62 @@
           </div>
 
           <div class="d-md-none">
-            <v-row>
-              <v-col cols="12">
-                <v-list class="body-bg">
-                  <v-list-item link @click.stop="handleAccount">
-                    <v-list-item-icon>
-                      <v-img :src="require('@/assets/img/svg-icons/new/user-icon.svg')" alt="edit" />
-                    </v-list-item-icon>
+            <v-row
+              justify="center"
+            >
+              <v-col
+                cols="12"
+                sm="8"
+                md="6"
+                lg="4"
+                xs="12"
+              >
+                <v-row>
+                  <v-col cols="12">
+                    <v-list class="body-bg">
+                      <v-list-item link @click.stop="handleAccount">
+                        <v-list-item-icon>
+                          <v-img :src="require('@/assets/img/svg-icons/new/user-icon.svg')" alt="edit" />
+                        </v-list-item-icon>
 
-                    <v-list-item-content>
-                      <v-list-item-title class="list-text">{{$t("payout_info_input_title_account")}}</v-list-item-title>
-                    </v-list-item-content>
+                        <v-list-item-content>
+                          <v-list-item-title class="list-text">{{$t("payout_info_input_title_account")}}</v-list-item-title>
+                        </v-list-item-content>
 
-                    <v-list-item-icon>
-                      <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
-                    </v-list-item-icon>
-                  </v-list-item>
+                        <v-list-item-icon>
+                          <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
+                        </v-list-item-icon>
+                      </v-list-item>
 
-                  <v-list-item @click.stop="handleNotifications">
-                    <v-list-item-icon>
-                      <v-img  :src="require('@/assets/img/svg-icons/new/bell.svg')" alt="payment" />
-                    </v-list-item-icon>
+                      <v-list-item @click.stop="handleNotifications">
+                        <v-list-item-icon>
+                          <v-img  :src="require('@/assets/img/svg-icons/new/bell.svg')" alt="payment" />
+                        </v-list-item-icon>
 
-                    <v-list-item-content>
-                      <v-list-item-title class="list-text">{{$t("setting_sec_notification_title")}}</v-list-item-title>
-                    </v-list-item-content>
+                        <v-list-item-content>
+                          <v-list-item-title class="list-text">{{$t("setting_sec_notification_title")}}</v-list-item-title>
+                        </v-list-item-content>
 
-                    <v-list-item-icon>
-                      <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
-                    </v-list-item-icon>
-                  </v-list-item>
-                  <v-list-item link @click.stop="handleSecurity">
-                    <v-list-item-icon>
-                      <v-img  :src="require('@/assets/img/svg-icons/new/padlock.svg')" alt="payment" />
-                    </v-list-item-icon>
+                        <v-list-item-icon>
+                          <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
+                        </v-list-item-icon>
+                      </v-list-item>
+                      <v-list-item link @click.stop="handleSecurity">
+                        <v-list-item-icon>
+                          <v-img  :src="require('@/assets/img/svg-icons/new/padlock.svg')" alt="payment" />
+                        </v-list-item-icon>
 
-                    <v-list-item-content>
-                      <v-list-item-title class="list-text">{{$t("athlete_settings_tab_security")}}</v-list-item-title>
-                    </v-list-item-content>
+                        <v-list-item-content>
+                          <v-list-item-title class="list-text">{{$t("athlete_settings_tab_security")}}</v-list-item-title>
+                        </v-list-item-content>
 
-                    <v-list-item-icon>
-                      <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
-                    </v-list-item-icon>
-                  </v-list-item>
-                </v-list>
+                        <v-list-item-icon>
+                          <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
+                        </v-list-item-icon>
+                      </v-list-item>
+                    </v-list>
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
           </div>
