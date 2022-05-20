@@ -96,7 +96,7 @@ export default {
   async asyncData({ query, app, $axios }) {
     let allPost = [];
     const { data } = await $axios.get("/tikcms/blog/list");
-    console.log(data);
+    // console.log(data);
     if (data.data.list) {
       if (data.data.list.hasOwnProperty(app.i18n.locale)) {
         allPost = data.data.list[app.i18n.locale];

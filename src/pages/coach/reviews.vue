@@ -502,7 +502,7 @@ export default {
 
           axios.get(reviewOverAllRatting).then(reviewOverAllRattingResponse => {
             axios.get(reviewUrl).then(reviewsResponse => {
-              console.log(reviewsResponse);
+              // console.log(reviewsResponse);
 
               let promises = [];
               reviewsResponse.data.data.forEach(reviewsItem => {

@@ -214,7 +214,7 @@ export default {
   },
   watch: {
     isOpen(val) {
-      console.log(val);
+      // console.log(val);
       if (val) {
         this.datePicker.value = new Date().toISOString().substr(0, 10);
       }

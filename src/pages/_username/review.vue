@@ -150,7 +150,7 @@ export default {
         this.profile.name = data.profileName;
         this.profile.image = data.profileImage;
         this.profile.nameAvatar = data.nameAvatar;
-        console.log(data);
+        // console.log(data);
       })
       .catch(() => {});
   },

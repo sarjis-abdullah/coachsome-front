@@ -110,7 +110,7 @@ export default {
             let l = this.locations.find(
               item => item.lat == e.latlng.lat && item.lang == e.latlng.lang
             );
-            console.log(l);
+            // console.log(l);
             if (l) {
               this.address = l.address;
               this.zip = l.zip;

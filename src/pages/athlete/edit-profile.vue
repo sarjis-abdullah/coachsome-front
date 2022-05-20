@@ -1154,7 +1154,7 @@ export default {
       this.$router.push(this.localePath(pathData.athlete.profileMenu));
     },
     removeTag(item) {
-      console.log(item);
+      // console.log(item);
       this.tagData.tagsSelected.splice(
         this.tagData.tagsSelected.indexOf(item),
         1

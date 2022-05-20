@@ -799,7 +799,7 @@ export default {
         const { data } = await this.$axios.post(
           endpoint.VERIFICATIONS_TWITTER_VERIFY_POST
         );
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         this.$toast.error(error.response.data.error.message);
       }

@@ -638,7 +638,7 @@ export default {
               this.table.rows[index],
               this.formatUserItem(data.user)
             );
-            console.log(this.table.rows[index]);
+            // console.log(this.table.rows[index]);
           }
         })
         .catch(({ response }) => {
@@ -703,7 +703,7 @@ export default {
     setUserDataToEdit(selectedRow) {
       this.resetUserData();
       if (selectedRow) {
-        console.log(selectedRow);
+        // console.log(selectedRow);
         this.userEdit.data.id = selectedRow.id;
         this.userEdit.data.name = selectedRow.name;
         this.userEdit.data.email = selectedRow.email;

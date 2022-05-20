@@ -293,7 +293,7 @@ export default {
       this.$router.push(this.localePath(pathData.coach.editMenu));
     },
     handleGoogleLocation(item) {
-      console.log(item)
+      // console.log(item)
       this.isDisabled = false;
       let {
         zipCode,
@@ -325,7 +325,7 @@ export default {
       }
     },
     handleCountryChange() {
-      console.log(this.cca2);
+      // console.log(this.cca2);
     },
     refreshPageProgress() {
       this.$store.dispatch("pageProgress/refresh");

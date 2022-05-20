@@ -633,7 +633,7 @@ export default {
         if (data.message) {
           this.$toast.success(data.message);
         }
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         let { data } = error.response;
         if (data.message) {

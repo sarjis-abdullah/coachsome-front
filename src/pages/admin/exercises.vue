@@ -2279,7 +2279,7 @@ export default {
         type: "image",
         image: croppedImage
       };
-      console.log(payload);
+      // console.log(payload);
       this.isLoading = true;
       ExerciseApi(this.$axios)
         .saveImageUrl(payload)

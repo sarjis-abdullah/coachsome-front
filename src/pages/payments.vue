@@ -189,7 +189,7 @@ export default {
           };
         }
 
-        console.log(data);
+        // console.log(data);
       })
       .finally(() => {
         this.loaderInitial = false;

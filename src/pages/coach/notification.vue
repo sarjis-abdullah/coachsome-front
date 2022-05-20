@@ -173,7 +173,7 @@ export default {
         let { data } = await coachSettingApi(this.$axios).updateSetting(
           payload
         );
-        console.log(data);
+        // console.log(data);
         if (data.message) {
           this.$toast.success(data.message);
         }
@@ -187,7 +187,7 @@ export default {
 
     async fetchSettings() {
       let { data } = await coachSettingApi(this.$axios).get();
-        console.log(data.notificationCategoryList);
+        // console.log(data.notificationCategoryList);
       if (data.notificationCategoryList.length) {
         data.notificationCategoryList.forEach(item => {
           this.form.notifications.push(item);
@@ -202,7 +202,7 @@ export default {
     },
     changeNotification() {
       let hasNotificaion = false;
-      console.log(this.notificationType);
+      // console.log(this.notificationType);
 
     //   this.notificationType.forEach(item => {
     //     if (item.id == notification.id) {

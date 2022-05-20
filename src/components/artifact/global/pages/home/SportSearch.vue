@@ -142,7 +142,7 @@ export default {
     },
 
     handleBtnClick() {
-      console.log("handleBtnClick");
+      // console.log("handleBtnClick");
     },
     navigate(item) {
       if (item) {

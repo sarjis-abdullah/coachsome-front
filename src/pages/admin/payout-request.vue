@@ -151,7 +151,7 @@ export default {
         payoutRequestId: item.id
       };
 
-      console.log(payload);
+      // console.log(payload);
       try {
         let { data } = await adminPayoutRequestApi(this.$axios).paid(payload);
 

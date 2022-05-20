@@ -484,7 +484,7 @@ export default {
       await this.getAllData();
     },
     gotoNotesPage() {
-      console.log("gotoNotesPage");
+      // console.log("gotoNotesPage");
     },
     async resendInvitationMail(item) {
       try {

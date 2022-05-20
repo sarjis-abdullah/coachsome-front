@@ -139,7 +139,7 @@ export default {
       this.$axios
         .get(endpoint.CONTACTS_PRIVATE_USERS_GET, { params })
         .then(({ data }) => {
-          console.log(data.data);
+          // console.log(data.data);
           if (data.data) {
             // this.items = data.data.map(item => item.email);
             this.items = data.data;

@@ -961,7 +961,7 @@ export default {
           this.$emit("image-selected");
         };
         reader.readAsDataURL(val);
-        console.log(val);
+        // console.log(val);
       } else {
         this.groupEditImgCropper = "";
       }

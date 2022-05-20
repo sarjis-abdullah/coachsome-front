@@ -584,7 +584,7 @@ export default {
       this.dialog.inviteFriend = true;
     },
     handleAdminSubItem(item) {
-      console.log(item);
+      // console.log(item);
     },
     handleMarketplace() {
       this.$router.push(this.localePath(this.items.marketplace.path));
