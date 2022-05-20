@@ -51,5 +51,8 @@
 .page-top-header-row{
 	z-index: 999!important;
 }
+.v-list-item {
+    height: 48px!important;
+}
 
 </style>

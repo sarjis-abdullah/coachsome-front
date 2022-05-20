@@ -64,7 +64,7 @@
                         v-model="categoryFilter.selectedCategories"
                         :items="categoryFilter.categories"
                         @input="changeCategoryFilter"
-                        :menu-props="{ closeOnContentClick: true }"
+                        :menu-props="{ closeOnContentClick: true}"
                         chips
                         dense
                         hide-details
@@ -80,7 +80,7 @@
                         autocomplete="off"
                       >
                         <template v-slot:label >
-                          <v-icon medium style="vertical-align: middle" color="#6F8098">mdi-magnify</v-icon>
+                          <v-icon small style="vertical-align: middle" color="#6F8098">mdi-magnify</v-icon>
                           {{$t('pwa_search_sport')}}
                           </template>
                         <template v-slot:selection="data">
@@ -981,11 +981,12 @@ export default {
 
 .coach-filter-sm{
   border-bottom: 1px solid #9FAEC2!important;
-
   .v-input{
     &__slot{
       box-shadow: 0px 2px 4px rgba(73, 85, 106, 0.15)!important;
       border-radius: 6px!important;
+      min-height:36px!important;
+      height:36px!important;
       .v-select{
         &__slot{
             display: flex!important;
@@ -1004,8 +1005,8 @@ export default {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            font-size: 17px;
-            line-height: 19px;
+            font-size: 16px!important;
+            line-height: 16px!important;
             color: #6F8098;
 
           }
