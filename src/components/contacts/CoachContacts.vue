@@ -68,22 +68,22 @@
             Pending
           </v-chip>
           <v-chip
-            v-else-if="(item && item.status == 'inactive') || !item.package"
+            v-else-if="(item && item.status == 'Rejected') || !item.package"
             color="#FEE2E2"
             x-small
             text-color="#991B1B"
             style="font-weight: 500;"
           >
-            Not Active
+            {{item.status == 'Rejected' ? item.status : 'Not Active'}}
           </v-chip>
           <v-chip
-            v-else-if="item && item.status == 'active'"
+            v-else-if="item && item.status"
             color="#D1FAE5"
             x-small
             text-color="#065F46"
             style="font-weight: 500;"
           >
-            Active
+            {{item.status}}
           </v-chip>
         </template>
         <template v-slot:item.package="{ item }">
@@ -302,7 +302,7 @@ export default {
       contactsData: [],
       options: {
         page: 1,
-        itemsPerPage: 2,
+        itemsPerPage: 5,
         sortBy: ["id"]
       },
       lastPage: null,
@@ -449,6 +449,7 @@ export default {
   methods: {
     showContactForm() {
       this.toggleContactForm = true;
+      this.$router.push('/coach/contacts?contactForm=1')
     },
     async getAllData(query = this.paginationQuery) {
       this.loading = true;
