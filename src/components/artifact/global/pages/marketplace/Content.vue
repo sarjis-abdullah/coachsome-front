@@ -975,7 +975,7 @@ export default {
 
 .v-toolbar{
   &__content{
-    padding: 4px 12px!important;
+    padding: 2px 12px!important;
   }
 }
 
