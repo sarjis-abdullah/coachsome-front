@@ -215,7 +215,7 @@
           </v-list-item>
         </template>
       </v-list-group>
-      <v-dialog v-model="inviteFriendModal" persistent max-width="680">
+      <v-dialog v-model="inviteFriendModal" max-width="680">
         <v-card>
           <InviteYourFriends :isModal="true" @close-modal="inviteFriendModal = false"/>
         </v-card>
@@ -225,7 +225,7 @@
       <v-list-item v-if="isAthlete || isCoach" color="primary" link @click.stop="handleInviteFriends">
         <v-list-item-content>
           <v-list-item-title>
-            Invite your friends
+            {{$t("invite_your_friends_title")}}
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
