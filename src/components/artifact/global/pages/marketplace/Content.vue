@@ -56,6 +56,7 @@
                       color="#F7FAFC"
                       elevation="0"
                       fixed
+                      dense
                       class="coach-filter-sm"
                     >
 
@@ -979,11 +980,12 @@ export default {
 }
 
 .coach-filter-sm{
-  border-bottom: .15em solid rgb(199 209 221)!important;
+  border-bottom: 1px solid #9FAEC2!important;
+
   .v-input{
     &__slot{
       box-shadow: 0px 2px 4px rgba(73, 85, 106, 0.15)!important;
-      border-radius: 10px!important;
+      border-radius: 6px!important;
       .v-select{
         &__slot{
             display: flex!important;
