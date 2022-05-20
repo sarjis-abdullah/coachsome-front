@@ -581,17 +581,22 @@
 
                 <v-card elevation="0" class="body-bg">
                   <v-card-title v-if="$vuetify.breakpoint.mdAndUp">
-                    <span class="create-exercise__title">{{$t("ex_create")}}</span>
-                    <v-spacer></v-spacer>
-                    <v-btn
+                    <v-row>
+                      <v-col cols="12" class="py-0 px-0">
+                        <v-btn
                           color="#49556A"
                           icon
+                          large
                           @click="exerciseCreate.dialog = false"
                           class="exercise__close-button"
-                      >
-                          <v-icon>mdi-close</v-icon>
-                      </v-btn>
-                      <div class="line"></div>
+                        >
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                      </v-col>
+                      <v-col cols="12" class="py-0">
+                        <span class="create-exercise__title">{{$t("ex_create")}}</span>
+                      </v-col>
+                    </v-row>
                   </v-card-title>
                   <v-card-text>
                     <v-form
@@ -1136,30 +1141,35 @@
                   </template>
                 </mobile-top-nav>
 
-                <v-card elevation="0" class="create-exercise body-bg">
+                <v-card elevation="0" class="body-bg">
                   <v-card-title v-if="$vuetify.breakpoint.mdAndUp">
-                    <span class="create-exercise__title">{{$t("ex_edit")}}</span>
-                    <v-spacer></v-spacer>
-                    <v-btn
+                    <v-row>
+                      <v-col cols="12" class="py-0 px-0">
+                        <v-btn
                           color="#49556A"
                           icon
+                          large
                           @click="exerciseEdit.dialog = false"
                           class="exercise__close-button"
-                      >
-                          <v-icon>mdi-close</v-icon>
-                      </v-btn>
-                      <div class="line"></div>
+                        >
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                      </v-col>
+                      <v-col cols="12" class="py-0">
+                        <span class="create-exercise__title">{{$t("ex_edit")}}</span>
+                      </v-col>
+                    </v-row>
                   </v-card-title>
-                  <v-card-text>
+                  <v-card-text >
                     <v-container>
                       <v-form
                         ref="form"
                         v-model="exerciseEdit.valid"
                         lazy-validation
-                        class="mb-10"
+                        class="mb-10 create-exercise"
                       >
                         <v-row>
-                          <v-col cols="12" class="pb-0 mb-0" :class="{'pt-8' : $vuetify.breakpoint.smAndDown}">
+                          <v-col cols="12" class="pb-0 mb-0 px-0" :class="{'pt-8' : $vuetify.breakpoint.smAndDown}">
                               <p class="create-exercise__label">{{$t("lbl_ex_name")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                               <v-text-field
                                   outlined
@@ -1171,14 +1181,14 @@
                                   class="create-exercise__input-field"
                               />
                           </v-col>
-                          <v-col cols="12" class="py-0 my-0">
+                          <v-col cols="12" class="py-0 my-0 px-0">
                               <p class="create-exercise__label">{{$t("lbl_instructions")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
                               <ExerciseEditor
                                 :value="exerciseEdit.data.instructions"
                                 @updated="handleTiptopUpdatedValueEdit"
                               />
                           </v-col>
-                          <v-col cols="12" class="py-0 my-0">
+                          <v-col cols="12" class="py-0 my-0 px-0">
                               <p class="create-exercise__label">{{$t("lbl_video")}}
                               </p>
                               <v-form ref="videoForm" v-model="videoForm.valid" lazy-validation>
@@ -1204,7 +1214,7 @@
                                   ></v-text-field>
                               </v-form>
                           </v-col>
-                          <v-col cols="12" class="py-0 my-0">
+                          <v-col cols="12" class="py-0 my-0 px-0">
                             <v-btn
                                   text
                                   color="#15577C"
@@ -1216,7 +1226,7 @@
                           </v-col>
 
                           <!-- image upload -->
-                          <v-col cols="12">
+                          <v-col cols="12" class="px-0">
                               <div class="create-exercise__label pb-2">{{$t("ex_up_photos")}}</div>
                               <div class="create-exercise__description pb-2">
                                   {{$t("ex_up_photos_desc")}}
@@ -1304,11 +1314,11 @@
                               </v-row>
                           </v-col>
 
-                          <v-col cols="12">
+                          <v-col cols="12" class="px-0">
                             <span class="exercise-preview--breakdown">{{$t("lbl_ex_brk")}}</span>
                           </v-col>
                           <!-- Category Section -->
-                          <v-col cols="12" class="py-0 my-0">
+                          <v-col cols="12" class="py-0 my-0 px-0">
                               <p class="create-exercise__label">{{$t("lbl_ex_cat")}} </p>
                               
                               <v-autocomplete
@@ -1354,7 +1364,7 @@
                           </v-col>
 
                           <!-- Sports Section -->
-                          <v-col cols="12" class="py-0 my-0">
+                          <v-col cols="12" class="py-0 my-0 px-0">
                               <p class="create-exercise__label">{{$t("lbl_ex_sport")}} </p>
                               <v-autocomplete
                                   v-model="exerciseEdit.data.sport"
@@ -1399,7 +1409,7 @@
                           </v-col>
 
                           <!-- lavel Section -->
-                          <v-col cols="12" class="py-0 my-0">
+                          <v-col cols="12" class="py-0 my-0 px-0">
                               <p class="create-exercise__label">{{$t("lbl_ex_lvl")}} </p>
                               <v-autocomplete
                                   v-model="exerciseEdit.data.lavel"
@@ -1445,7 +1455,7 @@
                           </v-col>
 
                           <!-- Tags -->
-                          <v-col cols="12" class="py-0 my-0" :class="{'pb-15' : $vuetify.breakpoint.smAndDown}">
+                          <v-col cols="12" class="py-0 my-0 px-0" :class="{'pb-15' : $vuetify.breakpoint.smAndDown}">
                               <p class="create-exercise__label">{{$t("lbl_ex_tags")}} </p>
                               <v-combobox
                                   v-model="exerciseEdit.data.tags"
@@ -1477,7 +1487,7 @@
                                   </template>
                               </v-combobox>
                           </v-col>
-                          <v-col cols="12" class="pt-0 mt-0">
+                          <v-col cols="12" class="pt-0 mt-0 px-0">
                               <v-btn
                                   elevation="2"
                                   color="#15577C"
@@ -1714,7 +1724,9 @@ export default {
         this.fileRecords = [];
         this.uploadVideoDialog = false;
       })
-      .catch(function(){})
+      .catch(function(){
+          this.$toast.success("File is too large.");
+      })
       .finally(() => {
         this.isLoading = false;
       });
