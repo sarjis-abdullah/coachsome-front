@@ -1174,7 +1174,7 @@ export default {
           // });
 
           this.languagesSelected = response.data.selectedLanguages;
-          console.log(response.data.selectedCategories);
+          // console.log(response.data.selectedCategories);
           this.categoriesSelected = response.data.selectedCategories;
           this.tagData.tagsSelected = response.data.selectedSportTags.map(
             item => item.name
@@ -1228,10 +1228,10 @@ export default {
       return `${day}/${month}/${year}`;
     },
     getImage() {
-      console.log(this.profilePicture.img);
+      // console.log(this.profilePicture.img);
     },
     change({ coordinates, canvas }) {
-      console.log(coordinates, canvas);
+      // console.log(coordinates, canvas);
     },
     updateUserName() {
       if (

@@ -172,7 +172,7 @@ export default {
               this.ammountCurrency
           )
         );
-        console.log("selectedAmount");
+        // console.log("selectedAmount");
       }
       if (this.customAmmount) {
         this.$router.push(

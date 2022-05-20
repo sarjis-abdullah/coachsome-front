@@ -690,7 +690,7 @@ export default {
         let { data } = await coachSettingApi(this.$axios).updateSetting(
           payload
         );
-        console.log(data);
+        // console.log(data);
         if (data.message) {
           this.$toast.success(data.message);
         }
@@ -740,7 +740,7 @@ export default {
         if (data.message) {
           this.$toast.success(data.message);
         }
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         let { data } = error.response;
         if (data.message) {
@@ -794,7 +794,7 @@ export default {
         this.form.email = data.userSetting.email;
       }
 
-      console.log(data);
+      // console.log(data);
     },
     async handlePhoneVerifyBtnClick() {
       try {
@@ -828,7 +828,7 @@ export default {
         const { data } = await this.$axios.post(
           endpoint.VERIFICATIONS_TWITTER_VERIFY_POST
         );
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         this.$toast.error(error.response.data.error.message);
       }
@@ -860,7 +860,7 @@ export default {
         let index = this.form.activeNotifications.findIndex(
           item => item.id == notification.id
         );
-        console.log(index);
+        // console.log(index);
         this.form.activeNotifications.splice(index, 1);
       } else {
         this.form.activeNotifications.push(notification);

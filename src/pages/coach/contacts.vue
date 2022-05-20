@@ -1,7 +1,7 @@
 <template>
   <v-container fluid style="background: #F7FAFC; padding-bottom:100vh">
     <!-- Mobile Nav -->
-    <template>
+    <template v-if="$route && $route.query && !$route.query.contactForm">
       <span class="hidden-md-and-up">
         <mobile-top-nav
         extraClass="body-bg-secondary mb-0"

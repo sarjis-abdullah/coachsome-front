@@ -104,7 +104,7 @@ export default {
 
           // Country finder
           if (item.types.includes("country")) {
-            console.log(item.short_name);
+            // console.log(item.short_name);
             this.location.cca2 = item.short_name;
           }
         });

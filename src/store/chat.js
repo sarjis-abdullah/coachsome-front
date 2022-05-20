@@ -87,8 +87,8 @@ export const mutations = {
         item.newMessageCount += 1;
       }
     });
-    console.log("SenderId -> ", id);
-    console.log("SelectedId -> ", state.selectedContact.id);
+    // console.log("SenderId -> ", id);
+    // console.log("SelectedId -> ", state.selectedContact.id);
   },
   REFRESH_CONTACT_USER_NEW_MESSAGE_COUNT(state, payload) {
     const { id } = payload;

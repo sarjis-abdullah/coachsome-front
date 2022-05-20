@@ -165,7 +165,7 @@ export default {
   computed: {
     isCampPackage() {
       let isCampPackage = false;
-      console.log(this.category);
+      // console.log(this.category);
       if (this.category) {
         isCampPackage = packageHelper.getCampPackageId() == this.category.id;
       }
