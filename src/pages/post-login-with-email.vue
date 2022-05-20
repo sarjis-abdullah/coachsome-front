@@ -7,11 +7,11 @@
       v-else-if="loginMedium == 'email' || queryParamsLoginMedium == 'email'"
     >
       <v-col
-        cols="11"
+        cols="12"
         sm="8"
         md="6"
         lg="4"
-        xs="11"
+        xs="12"
       >
         <Email />
       </v-col>

@@ -2,7 +2,7 @@
   <v-container>
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_profile_title')">
       <template v-slot:goBack >
-       <span style="width: 22px"></span>
+       <span style="width: 10px"></span>
         <v-avatar @click.native="showProfile()" size="32px"  v-if="avatarImage">
           <v-img aspect-ratio="1" :src="avatarImage" alt="Avatar" />
         </v-avatar>
@@ -20,11 +20,11 @@
       justify="center"
     >
       <v-col
-        cols="11"
+        cols="12"
         sm="8"
         md="6"
         lg="4"
-        xs="11"
+        xs="12"
       >
         <v-row>
           <v-col cols="12">

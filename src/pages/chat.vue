@@ -230,7 +230,7 @@
               </div>
             </div>
             </span>
-            <div class="left-sidebar__header " v-if="!$vuetify.breakpoint.xsOnly">
+            <div class="left-sidebar__header " v-if="!$vuetify.breakpoint.smAndDown">
               <div class="left-sidebar-title">
                 {{ $t("chat_page_title_message") }}
               </div>

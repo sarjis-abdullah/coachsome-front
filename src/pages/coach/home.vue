@@ -15,11 +15,11 @@
         class="pt-4"
       >
         <v-col
-          cols="11"
+          cols="12"
           sm="8"
           md="6"
           lg="4"
-          xs="11"
+          xs="12"
           class="mb-10"
         >
       <v-row justify="center">
