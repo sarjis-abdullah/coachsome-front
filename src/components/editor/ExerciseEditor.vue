@@ -61,6 +61,6 @@ export default {
   margin-top: 0px !important;
 }
 .tiptap-vuetify-editor__content {
-  background: white!important;
+  background: #f7fafc!important;
 }
 </style>
