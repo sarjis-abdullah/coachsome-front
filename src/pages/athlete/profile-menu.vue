@@ -3,13 +3,14 @@
 <v-container fluid >
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_profile_menu')">
       <template v-slot:goBack >
-       <span style="width: 10px"></span>
-        <v-avatar @click.native="showProfile()" size="32px"  v-if="avatarImage">
-          <v-img aspect-ratio="1" :src="avatarImage" alt="Avatar" />
-        </v-avatar>
-        <v-avatar @click.native="showProfile()" color="primary-light-1" size="32px" v-else>
-          <span>{{ initialImageContent }}</span>
-        </v-avatar>
+        <v-btn icon large >
+          <v-avatar @click.native="showProfile()" size="32px"  v-if="avatarImage">
+            <v-img aspect-ratio="1" :src="avatarImage" alt="Avatar" />
+          </v-avatar>
+          <v-avatar @click.native="showProfile()" color="primary-light-1" size="32px" v-else>
+            <span>{{ initialImageContent }}</span>
+          </v-avatar>
+        </v-btn>
       </template>
       <template v-slot:action>
         <v-avatar color="#F7FAFC" size="32px">
@@ -62,8 +63,8 @@
           </v-col>
         </v-row>
         <v-row class="justify-center">
-          <v-col cols="3">
-            <v-img  :src="require('@/assets/img/svg-icons/new/line.svg')" alt="payment" />
+          <v-col cols="11" class="pr-5 py-0">
+            <div class="line"></div>
           </v-col>
         </v-row>
         <!-- <div class="cs-forgot-password-sec">
@@ -148,8 +149,8 @@
         </v-row>
 
         <v-row class="justify-center">
-          <v-col cols="3">
-            <v-img  :src="require('@/assets/img/svg-icons/new/line.svg')" alt="payment" />
+          <v-col cols="11" class="pr-5 py-0">
+            <div class="line"></div>
           </v-col>
         </v-row>
 
@@ -219,7 +220,11 @@
           </v-col>
         </v-row>
 
-
+        <v-row class="justify-center">
+          <v-col cols="11" class="pr-5 pt-0">
+            <div class="line"></div>
+          </v-col>
+        </v-row>
 
         <v-row class="justify-center">
           <v-col cols="8">

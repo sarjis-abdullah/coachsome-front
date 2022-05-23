@@ -1193,7 +1193,7 @@ export default {
       });
     },
     handleApplyBtnClick() {
-      console.log('tri');
+      // console.log('tri');
       this.fetchBookingInfo({
         packageId: this.packageId,
         promoCode: this.promoCode.dialogValue,

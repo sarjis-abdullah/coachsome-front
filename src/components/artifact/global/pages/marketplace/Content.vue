@@ -202,7 +202,7 @@
 
     
       <!-- Footer -->
-      <client-only v-if="footer.toggleButton">
+      <client-only v-if="footer.toggleButton && $vuetify.breakpoint.mdAndUp">
         <v-row>
           <v-col>
             <slide-x-left-transition>

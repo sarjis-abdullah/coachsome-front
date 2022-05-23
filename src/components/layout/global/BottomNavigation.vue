@@ -58,16 +58,11 @@
             <span>{{ initialImageContent }}</span>
           </v-avatar>
         </v-btn>
-        <!-- <v-btn icon large class="menu-icon-button" >
-          <v-avatar size="32px" item >
-            <v-img aspect-ratio="1" :src="require('@/assets/img/svg-icons/lock.svg')" alt="Avatar_not_logged_in" />
-          </v-avatar>
-        </v-btn> -->
         <v-btn
           icon
           large
           text
-          v-else  
+          v-if="!isLoggedIn"
           @click="goToLogin()"
           class="menu-icon-button"
         >
