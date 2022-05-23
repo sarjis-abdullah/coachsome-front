@@ -1,6 +1,6 @@
 <template>
   <section class="contacts-table__parent">
-    <template v-if="$vuetify.breakpoint.mdAndUp">
+    <span class="hidden-sm-and-down">
       <v-data-table
         :headers="table.headers"
         :items="contactsData"
@@ -16,36 +16,30 @@
         <template v-slot:top>
           <section>
             <v-card-title class="px-0">
-              <header v-if="contactsData">
-                <h6 class="left-title">
-                  {{ $t("coach_contacts_top_left_subtitle") }}: {{ totalItems }}
-                </h6>
-              </header>
-              <v-spacer />
-              <section class="grid grid-cols-3-max-max gap-5">
-                <div>
+              <div>
                   <v-text-field
                     :debounce-events="['onclick', 'oninput', 'onkeydown']"
                     v-debounce:800ms="debouncedInitData"
                     dense
                     v-model="search"
                     label="Search"
+                    color="#9faec2"
                     outlined
                     prepend-inner-icon="mdi-magnify"
                     hide-details
                   ></v-text-field>
                 </div>
+                <v-spacer />
                 <div>
                   <v-btn
                     @click="showContactForm"
-                    class="add-new-contact-btn"
+                    class="add-new-contact-btn white--text"
                     depressed
-                    color="primary"
+                    color="#15577C"
                   >
                     {{ $t("contact_user_add_new_contact") }}
                   </v-btn>
                 </div>
-              </section>
             </v-card-title>
           </section>
         </template>
@@ -165,20 +159,21 @@
           </section>
         </template>
       </v-data-table>
-    </template>
-    <template v-else>
+    </span>
+    <span class="hidden-md-and-up">
       <template>
-        <div>
+        <div class="px-4">
           <div class="contacts-table__searchbox--wrapper">
             <v-text-field
               :debounce-events="['onclick', 'oninput', 'onkeydown']"
               v-debounce:800ms="debouncedInitData"
-              dense
               v-model="search"
+              dense
               label="Search"
               outlined
               prepend-inner-icon="mdi-magnify"
               hide-details
+              color="#9faec2"
               class="contacts-table__searchbox"
             ></v-text-field>
           </div>
@@ -260,7 +255,7 @@
           </v-list>
         </div>
       </template>
-    </template>
+    </span>
     <v-dialog
       v-model="toggleContactForm"
       max-width="680"
@@ -385,7 +380,7 @@ export default {
             class: "contact-user-table--header"
           },
           {
-            text: this.$t("coach_contacts_name_header"),
+            text: this.$t("coach_contacts_name_header")  + (this.totalItems ? ` (${this.totalItems})` : ""),
             value: "firstName",
             class: "contact-user-table--header"
           },
@@ -618,7 +613,6 @@ export default {
   .contacts-table__searchbox {
     border-radius: 10px;
     background: #ffffff;
-    border: 1px solid #9faec2;
   }
 }
 </style>
