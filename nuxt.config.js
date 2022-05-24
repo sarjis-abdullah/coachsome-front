@@ -523,10 +523,5 @@ export default {
   // Build Configuration
   build: {
     transpile: ["vuetify/lib", "tiptap-vuetify"]
-  },
-  server: {
-    // helpful to check in mobile device
-    port: 3000,
-    host: '0.0.0.0',
   }
 };
