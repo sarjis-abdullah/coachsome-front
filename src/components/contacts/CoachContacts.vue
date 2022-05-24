@@ -1,22 +1,23 @@
 <template>
   <section class="contacts-table__parent">
-    <span class="hidden-sm-and-down">
-      <v-data-table
-        :headers="table.headers"
-        :items="contactsData"
-        :loading="loading"
-        :options.sync="options"
-        class="contact-user-table"
-        :header-props="{ sortIcon: 'mdi-chevron-down' }"
-        :footer-props="{
-          'items-per-page-options': [5, 10, 15, 20, 50, 100, -1]
-        }"
-        :server-items-length="totalItems"
-      >
-        <template v-slot:top>
-          <section>
-            <v-card-title class="px-0">
-              <div>
+    <section v-show="$vuetify.breakpoint.mdAndUp || !mobileContactForm">
+      <span class="hidden-sm-and-down">
+        <v-data-table
+          :headers="table.headers"
+          :items="contactsData"
+          :loading="loading"
+          :options.sync="options"
+          class="contact-user-table"
+          :header-props="{ sortIcon: 'mdi-chevron-down' }"
+          :footer-props="{
+            'items-per-page-options': [5, 10, 15, 20, 50, 100, -1]
+          }"
+          :server-items-length="totalItems"
+        >
+          <template v-slot:top>
+            <section>
+              <v-card-title class="px-0">
+                <div>
                   <v-text-field
                     :debounce-events="['onclick', 'oninput', 'onkeydown']"
                     v-debounce:800ms="debouncedInitData"
@@ -40,222 +41,244 @@
                     {{ $t("contact_user_add_new_contact") }}
                   </v-btn>
                 </div>
-            </v-card-title>
-          </section>
-        </template>
-        <!-- table head start -->
+              </v-card-title>
+            </section>
+          </template>
+          <!-- table head start -->
 
-        <template v-slot:header.assets="{ header }">
-          <v-checkbox></v-checkbox>
-        </template>
-        <template v-slot:header.actions="{ header }">
-          <span></span>
-        </template>
-        <template v-slot:item.status="{ item }">
-          <v-chip
-            v-if="item && item.status == 'pending'"
-            color="#EDB041"
-            x-small
-            text-color="#775D00"
-            style="font-weight: 500;"
-          >
-            Pending
-          </v-chip>
-          <v-chip
-            v-else-if="(item && item.status == 'Rejected') || !item.package"
-            color="#FEE2E2"
-            x-small
-            text-color="#991B1B"
-            style="font-weight: 500;"
-          >
-            {{item.status == 'Rejected' ? item.status : 'Not Active'}}
-          </v-chip>
-          <v-chip
-            v-else-if="item && item.status"
-            color="#D1FAE5"
-            x-small
-            text-color="#065F46"
-            style="font-weight: 500;"
-          >
-            {{item.status}}
-          </v-chip>
-        </template>
-        <template v-slot:item.package="{ item }">
-          <span v-if="item.package">
-            <img
-              :src="require('@/assets/img/svg-icons/contacts-package.svg')"
-              alt="contacts-package"
-              class="pr-2"
-            />
-            {{ item.package.title }}
-          </span>
+          <template v-slot:header.assets="{ header }">
+            <v-checkbox></v-checkbox>
+          </template>
+          <template v-slot:header.actions="{ header }">
+            <span></span>
+          </template>
+          <template v-slot:item.status="{ item }">
+            <v-chip
+              v-if="item && item.status == 'pending'"
+              color="#EDB041"
+              x-small
+              text-color="#775D00"
+              style="font-weight: 500;"
+            >
+              Pending
+            </v-chip>
+            <v-chip
+              v-else-if="(item && item.status == 'Rejected') || !item.package"
+              color="#FEE2E2"
+              x-small
+              text-color="#991B1B"
+              style="font-weight: 500;"
+            >
+              {{ item.status == "Rejected" ? item.status : "Not Active" }}
+            </v-chip>
+            <v-chip
+              v-else-if="item && item.status"
+              color="#D1FAE5"
+              x-small
+              text-color="#065F46"
+              style="font-weight: 500;"
+            >
+              {{ item.status }}
+            </v-chip>
+          </template>
+          <template v-slot:item.package="{ item }">
+            <span v-if="item.package">
+              <img
+                :src="require('@/assets/img/svg-icons/contacts-package.svg')"
+                alt="contacts-package"
+                class="pr-2"
+              />
+              {{ item.package.title }}
+            </span>
 
-          <span v-else class="no-package">No Active Packages </span>
-        </template>
-        <template v-slot:item.lastActiveAt="{ item }">
-          <span>
-            {{ getTime(item.lastActiveAt) }}
-          </span>
-        </template>
+            <span v-else class="no-package">No Active Packages </span>
+          </template>
+          <template v-slot:item.lastActiveAt="{ item }">
+            <span>
+              {{ getTime(item.lastActiveAt) }}
+            </span>
+          </template>
 
-        <!-- table head end -->
-        <template v-slot:item.assets="{ item }">
-          <v-avatar>
-            <img
-              v-if="!item && item.profileUrl && item.profileUrl.square"
-              :src="item.profileUrl.square"
-              :alt="item.name"
-              width="40"
-              height="40"
-            />
-            <v-btn icon v-else>
-              <v-icon size="50">mdi-account-box</v-icon>
-            </v-btn>
-          </v-avatar>
-        </template>
+          <!-- table head end -->
+          <template v-slot:item.assets="{ item }">
+            <v-avatar>
+              <img
+                v-if="!item && item.profileUrl && item.profileUrl.square"
+                :src="item.profileUrl.square"
+                :alt="item.name"
+                width="40"
+                height="40"
+              />
+              <v-btn icon v-else>
+                <v-icon size="50">mdi-account-box</v-icon>
+              </v-btn>
+            </v-avatar>
+          </template>
 
-        <template v-slot:item.actions="{ item }">
-          <section class="grid grid-cols-3 gap-5 justify-end">
-            <!-- <img
+          <template v-slot:item.actions="{ item }">
+            <section class="grid grid-cols-3 gap-5 justify-end">
+              <!-- <img
             :src="require('@/assets/img/svg-icons/notebook.svg')"
             alt="notebook"
             @click="gotoNotesPage"
           /> -->
-            <img
-              @click="gotoChat(item)"
-              class="cursor-pointer"
-              :src="require('@/assets/img/svg-icons/chat.svg')"
-              alt="chat"
-            />
-            <!-- Desktop -->
-            <div class="text-center">
-              <v-menu top offset-y close-on-content-click>
-                <template v-slot:activator="{ on, attrs }">
-                  <img
-                    v-bind="attrs"
-                    v-on="on"
-                    :src="threeDotIcon"
-                    alt="three-dot-horizontal"
-                  />
-                </template>
-
-                <v-list>
-                  <v-list-item
-                    v-for="(data, index) in conditionalMoreItems(item)"
-                    :key="index"
-                  >
-                    <v-list-item-title
-                      @click="handleClick(data, item)"
-                      class="cursor-pointer"
-                    >
-                      <span :style="`color: ${data.color}`">
-                        {{ data.text }}
-                      </span>
-                    </v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-          </section>
-        </template>
-      </v-data-table>
-    </span>
-    <span class="hidden-md-and-up">
-      <template>
-        <div class="px-4">
-          <div class="contacts-table__searchbox--wrapper">
-            <v-text-field
-              :debounce-events="['onclick', 'oninput', 'onkeydown']"
-              v-debounce:800ms="debouncedInitData"
-              v-model="search"
-              dense
-              label="Search"
-              outlined
-              prepend-inner-icon="mdi-magnify"
-              hide-details
-              color="#9faec2"
-              class="contacts-table__searchbox"
-            ></v-text-field>
-          </div>
-          <v-list subheader class="body-bg-secondary">
-            <div v-if="loading" class="p-2">
-              <v-skeleton-loader
-                v-for="i in 5"
-                :key="i"
-                type="list-item-avatar, divider"
-              ></v-skeleton-loader>
-            </div>
-            <template v-if="!loading">
-              <div
-                v-for="item in contactsData"
-                :key="item.id"
-                class="contacts-table__list-card"
-              >
-                <v-list-item @click="gotoChat(item)">
-                  <v-list-item-avatar height="40" width="40">
-                    <v-img
-                      v-if="item && item.profileUrl && item.profileUrl.square"
-                      :src="item.profileUrl.square"
-                      :alt="item.name"
-                    ></v-img>
-                    <v-btn icon v-else>
-                      <v-icon size="40">mdi-account-box</v-icon>
-                    </v-btn>
-                  </v-list-item-avatar>
-
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      <span class="contacts-list__name">
-                        {{ item.name }}
-                      </span>
-                    </v-list-item-title>
-                  </v-list-item-content>
-
-                  <v-list-item-icon>
-                    <!-- Mobile -->
-                    <div class="text-center">
-                      <v-menu offset-y close-on-content-click>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-icon v-bind="attrs" v-on="on" color="grey">
-                            mdi-dots-horizontal
-                          </v-icon>
-                        </template>
-
-                        <v-list>
-                          <v-list-item
-                            v-for="(data, index) in conditionalMoreItems(item)"
-                            :key="index"
-                          >
-                            <v-list-item-title
-                              @click="handleClick(data, item)"
-                              class="cursor-pointer"
-                            >
-                              <span :style="`color: ${data.color}`">
-                                {{ data.text }}
-                              </span>
-                            </v-list-item-title>
-                          </v-list-item>
-                        </v-list>
-                      </v-menu>
-                    </div>
-                  </v-list-item-icon>
-                </v-list-item>
-              </div>
-            </template>
-            <template v-if="notFoundMsg">
-              <div class="contacts-table__list-card py-4 text-center">
-                No data found!
-              </div>
-            </template>
-             <template v-if="!notFoundMsg && options">
+              <img
+                @click="gotoChat(item)"
+                class="cursor-pointer"
+                :src="require('@/assets/img/svg-icons/chat.svg')"
+                alt="chat"
+              />
+              <!-- Desktop -->
               <div class="text-center">
-                <v-pagination v-model="options.page" :length="lastPage" circle></v-pagination>
+                <v-menu top offset-y close-on-content-click>
+                  <template v-slot:activator="{ on, attrs }">
+                    <img
+                      v-bind="attrs"
+                      v-on="on"
+                      :src="threeDotIcon"
+                      alt="three-dot-horizontal"
+                    />
+                  </template>
+
+                  <v-list>
+                    <v-list-item
+                      v-for="(data, index) in conditionalMoreItems(item)"
+                      :key="index"
+                    >
+                      <v-list-item-title
+                        @click="handleClick(data, item)"
+                        class="cursor-pointer"
+                      >
+                        <span :style="`color: ${data.color}`">
+                          {{ data.text }}
+                        </span>
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </div>
-            </template>
-          </v-list>
-        </div>
-      </template>
-    </span>
+            </section>
+          </template>
+        </v-data-table>
+      </span>
+      <span class="hidden-md-and-up">
+        <template>
+          <div class="px-4">
+            <div class="contacts-table__searchbox--wrapper">
+              <v-text-field
+                :debounce-events="['onclick', 'oninput', 'onkeydown']"
+                v-debounce:800ms="debouncedInitData"
+                v-model="search"
+                dense
+                label="Search"
+                outlined
+                prepend-inner-icon="mdi-magnify"
+                hide-details
+                color="#9faec2"
+                class="contacts-table__searchbox"
+              ></v-text-field>
+            </div>
+            <v-list subheader class="body-bg-secondary">
+              <div v-if="loading" class="p-2">
+                <v-skeleton-loader
+                  v-for="i in 5"
+                  :key="i"
+                  type="list-item-avatar, divider"
+                ></v-skeleton-loader>
+              </div>
+              <template v-if="!loading">
+                <div
+                  v-for="item in contactsData"
+                  :key="item.id"
+                  class="contacts-table__list-card"
+                >
+                  <v-list-item @click="gotoChat(item)">
+                    <v-list-item-avatar height="40" width="40">
+                      <v-img
+                        v-if="item && item.profileUrl && item.profileUrl.square"
+                        :src="item.profileUrl.square"
+                        :alt="item.name"
+                      ></v-img>
+                      <v-btn icon v-else>
+                        <v-icon size="40">mdi-account-box</v-icon>
+                      </v-btn>
+                    </v-list-item-avatar>
+
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        <span class="contacts-list__name">
+                          {{ item.name }}
+                        </span>
+                      </v-list-item-title>
+                    </v-list-item-content>
+
+                    <v-list-item-icon>
+                      <!-- Mobile -->
+                      <div class="text-center">
+                        <v-menu offset-y close-on-content-click>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-icon v-bind="attrs" v-on="on" color="grey">
+                              mdi-dots-horizontal
+                            </v-icon>
+                          </template>
+
+                          <v-list>
+                            <v-list-item
+                              v-for="(data, index) in conditionalMoreItems(
+                                item
+                              )"
+                              :key="index"
+                            >
+                              <v-list-item-title
+                                @click="handleClick(data, item)"
+                                class="cursor-pointer"
+                              >
+                                <span :style="`color: ${data.color}`">
+                                  {{ data.text }}
+                                </span>
+                              </v-list-item-title>
+                            </v-list-item>
+                          </v-list>
+                        </v-menu>
+                      </div>
+                    </v-list-item-icon>
+                  </v-list-item>
+                </div>
+              </template>
+              <template v-if="notFoundMsg">
+                <div class="contacts-table__list-card py-4 text-center">
+                  No data found!
+                </div>
+              </template>
+              <template v-if="!notFoundMsg && options">
+                <div class="text-center">
+                  <v-pagination
+                    v-model="options.page"
+                    :length="lastPage"
+                    circle
+                  ></v-pagination>
+                </div>
+              </template>
+            </v-list>
+          </div>
+        </template>
+      </span>
+    </section>
+    <v-card flat v-show="mobileContactForm" style="background: #F7FAFC;" class="hidden-md-and-up">
+      <ContactForm
+        @close-modal="
+          () => {
+            toggleContactForm = false;
+            mobileContactForm = false;
+            editMode = false;
+            editContactData = {};
+          }
+        "
+        @reloadAllData="reloadAllData"
+        :editMode="editMode"
+        :editContactData="editContactData"
+      />
+    </v-card>
     <v-dialog
       v-model="toggleContactForm"
       max-width="680"
@@ -265,7 +288,8 @@
         <ContactForm
           @close-modal="
             () => {
-              toggleContactForm = !toggleContactForm;
+              toggleContactForm = false;
+              mobileContactForm = false;
               editMode = false;
               editContactData = {};
             }
@@ -293,6 +317,7 @@ export default {
       threeDotIcon,
       search: "",
       toggleContactForm: false,
+      mobileContactForm: false,
       loading: false,
       contactsData: [],
       options: {
@@ -304,26 +329,6 @@ export default {
       totalItems: null,
       editMode: false,
       editContactData: {},
-      recent: [
-        {
-          active: true,
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          title: "Jason Oner"
-        },
-        {
-          active: true,
-          avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-          title: "Mike Carlson"
-        },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-          title: "Cindy Baker"
-        },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-          title: "Ali Connors"
-        }
-      ]
     };
   },
   computed: {
@@ -380,8 +385,10 @@ export default {
             class: "contact-user-table--header"
           },
           {
-            text: this.$t("coach_contacts_name_header")  + (this.totalItems ? ` (${this.totalItems})` : ""),
-            value: "firstName",
+            text:
+              this.$t("coach_contacts_name_header") +
+              (this.totalItems ? ` (${this.totalItems})` : ""),
+            value: "name",
             class: "contact-user-table--header"
           },
           {
@@ -415,8 +422,8 @@ export default {
         rows: []
       };
     },
-    notFoundMsg(){
-      return !this.loading && !(this.contactsData && this.contactsData.length)
+    notFoundMsg() {
+      return !this.loading && !(this.contactsData && this.contactsData.length);
     }
   },
   watch: {
@@ -432,19 +439,34 @@ export default {
     $route: {
       handler() {
         if (this.$route?.query?.contactForm) {
-          this.toggleContactForm = true;
+          this.mobileContactForm = true;
         } else {
-          this.toggleContactForm = false;
+          this.mobileContactForm = false;
         }
       },
       deep: true,
       immediate: true
+    },
+    '$vuetify.breakpoint.mdAndUp': {
+      immediate: true,
+      deep: true,
+      handler(newValue, oldValue) {
+        if (this.$route?.query?.contactForm) {
+          if (this.$vuetify.breakpoint.mdAndUp) {
+          this.mobileContactForm = false;
+          this.toggleContactForm = true;
+        }else{
+          this.mobileContactForm = true;
+          this.toggleContactForm = false;
+        }
+        }
+      }
     }
   },
   methods: {
     showContactForm() {
       this.toggleContactForm = true;
-      this.$router.push('/coach/contacts?contactForm=1')
+      this.$router.push("/coach/contacts?contactForm=1");
     },
     async getAllData(query = this.paginationQuery) {
       this.loading = true;
@@ -468,7 +490,7 @@ export default {
           return { ...item, name };
         });
         if (response?.data?.meta) {
-          this.lastPage = response?.data.meta?.last_page
+          this.lastPage = response?.data.meta?.last_page;
           this.totalItems = response.data.meta?.total;
         }
       } catch (error) {
@@ -532,15 +554,15 @@ export default {
           "/chat?contactAbleUserId=" + item.contactAbleUserId
         );
     },
-    conditionalMoreItems(item){
-      let items = this.moreItems
+    conditionalMoreItems(item) {
+      let items = this.moreItems;
       if (item.categoryName) {
         items = items.filter(item => item.key != "edit");
       }
-      if (item.status && item.status == 'active') {
+      if (item.status && item.status == "active") {
         items = items.filter(item => item.key != "resendInvitationEmail");
       }
-      return items
+      return items;
     }
   }
 };
