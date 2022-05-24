@@ -2,7 +2,7 @@
 	<v-row class="page-top-header-row d-md-none" justify="center" :class="extraClass">
 		<v-col
 		cols="12"
-        sm="8"
+        sm="12"
         md="6"
         lg="4"
         xs="12" class="justify-center page-top-header-column pa-0 ma-0">

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid style="background: #F7FAFC; padding-bottom:100vh">
+  <v-container fluid style="background: #F7FAFC;">
     <!-- Mobile Nav -->
     <template v-if="$route && $route.query && !$route.query.contactForm">
       <span class="hidden-md-and-up">
@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     handleBack() {
-      this.$router.replace("/");
+      this.$router.replace("/coach/profile-menu");
     }
   }
 };
