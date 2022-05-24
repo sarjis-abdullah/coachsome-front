@@ -141,8 +141,8 @@
           </v-col>
         </v-row>
         <v-row class="justify-center">
-          <v-col cols="3">
-            <v-img  :src="require('@/assets/img/svg-icons/new/line.svg')" alt="line" />
+          <v-col cols="11" class="pr-5 py-0">
+            <div class="line"></div>
           </v-col>
         </v-row>
         <v-row>
@@ -182,8 +182,8 @@
         </v-row>
 
         <v-row class="justify-center">
-          <v-col cols="3">
-            <v-img  :src="require('@/assets/img/svg-icons/new/line.svg')" alt="payment" />
+          <v-col cols="11" class="pr-5 py-0">
+            <div class="line"></div>
           </v-col>
         </v-row>
 
@@ -250,6 +250,12 @@
                 </v-list-item-icon>
               </v-list-item>
             </v-list>
+          </v-col>
+        </v-row>
+
+        <v-row class="justify-center">
+          <v-col cols="11" class="pr-5 pt-0">
+            <div class="line"></div>
           </v-col>
         </v-row>
         <v-row class="justify-center">

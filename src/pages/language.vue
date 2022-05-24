@@ -26,7 +26,7 @@
       >
         <v-row>
             <v-col cols="12">
-            <v-list dense  class="body-bg">
+            <v-list  nav class="body-bg">
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title class="subtitle-2 text-uppercase">
@@ -37,7 +37,8 @@
               <v-list-item-group
                 v-model="currentLocaleIndex"
                 color="primary-light-1"
-                dense
+                
+                class="py-0 my-0"
               >
                 <template>
                   <nuxt-link
@@ -45,7 +46,7 @@
                     :key="locale.code"
                     :to="switchLocalePath(locale.code)"
                   >
-                    <v-list-item :key="i" :value="i">
+                    <v-list-item :key="i" :value="i" class="py-0 my-0">
                       <v-list-item-avatar size="20" tile>
                         <flag :iso="locale.icon" v-bind:squared="false" />
                       </v-list-item-avatar>
@@ -55,6 +56,8 @@
                         </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
+                    <!-- <v-divider></v-divider> -->
+                      <div class="line"></div>
                   </nuxt-link>
                 </template>
               </v-list-item-group>

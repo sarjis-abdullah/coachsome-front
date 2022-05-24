@@ -2,13 +2,14 @@
   <v-container>
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_profile_title')">
       <template v-slot:goBack >
-       <span style="width: 10px"></span>
-        <v-avatar @click.native="showProfile()" size="32px"  v-if="avatarImage">
-          <v-img aspect-ratio="1" :src="avatarImage" alt="Avatar" />
-        </v-avatar>
-        <v-avatar @click.native="showProfile()" color="primary-light-1" size="32px" v-else>
-          <span>{{ initialImageContent }}</span>
-        </v-avatar>
+        <v-btn icon large >
+          <v-avatar @click.native="showProfile()" size="32px"  v-if="avatarImage">
+            <v-img aspect-ratio="1" :src="avatarImage" alt="Avatar" />
+          </v-avatar>
+          <v-avatar @click.native="showProfile()" color="primary-light-1" size="32px" v-else>
+            <span>{{ initialImageContent }}</span>
+          </v-avatar>
+        </v-btn>
       </template>
       <template v-slot:action>
         <v-avatar color="#F7FAFC" size="32px">
@@ -43,6 +44,7 @@
                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
+
               <!-- Coach Contacts -->
               <v-list-item v-if="isAuthCoach && (isDevelopment || isStaging)" link @click.stop="()=>{
                 $router.push('/coach/contacts')
@@ -106,8 +108,8 @@
           </v-col>
         </v-row>
         <v-row class="justify-center">
-          <v-col cols="3">
-            <v-img  :src="require('@/assets/img/svg-icons/new/line.svg')" alt="payment" />
+          <v-col cols="11" class="pr-5 py-0">
+            <div class="line"></div>
           </v-col>
         </v-row>
         <!-- <div class="cs-forgot-password-sec">
@@ -172,7 +174,7 @@
               </v-list-item>
 
               <!-- Invite Friends -->
-              <v-list-item link @click.stop="handleInviteFriends">
+              <v-list-item v-if="!isProd" link @click.stop="handleInviteFriends">
                 <v-list-item-icon>
                   <v-img :src="require('@/assets/img/svg-icons/Invite.svg')" alt="invite" />
                 </v-list-item-icon>
@@ -206,8 +208,8 @@
         </v-row>
 
         <v-row class="justify-center">
-          <v-col cols="3">
-            <v-img  :src="require('@/assets/img/svg-icons/new/line.svg')" alt="payment" />
+          <v-col cols="11" class="pr-5 py-0">
+            <div class="line"></div>
           </v-col>
         </v-row>
 
@@ -276,7 +278,11 @@
             </v-list>
           </v-col>
         </v-row>
-
+        <v-row class="justify-center">
+          <v-col cols="11" class="pr-5 pt-0">
+            <div class="line"></div>
+          </v-col>
+        </v-row>
         <v-row class="justify-center">
           <v-col cols="8">
             <v-btn

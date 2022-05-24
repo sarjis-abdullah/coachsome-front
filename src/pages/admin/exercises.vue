@@ -58,20 +58,22 @@
     <!-- No Exercise end -->
 
     <!-- mobile view -->
-    <v-row class="d-md-none">
-      <v-col cols="12" v-if="exercises.length" class="py-10">
+    <v-row class="d-md-none" justify="center" align="center">
+      <v-col cols="12" sm="8" md="6" lg="4" xs="12" v-if="exercises.length" class="py-10">
         <v-row>
           <v-col cols="12" v-for="(item, index) in table.rows" :key="index" class="py-0 my-0">
-            <v-card color="#FFFFFF" class="exercise-table mobile-view " @click.native="showExercise(item)" exact>
-              <v-card-text class="pa-2 ma-2">
-                <div style="display:inline-block; align: center;vertical-align: middle;" >
-                  <list-asset-view :asset_type="item.asset_type" :url="item.assets" ></list-asset-view>
-                </div>
-                <div style="display:inline-block;vertical-align: middle; padding-left: 8px" class="exercise-table--text mobile-view--text" >
-                    {{item.exercise}}
-                </div>
-              </v-card-text>
-            </v-card>
+            <v-hover v-slot="{ hover }">
+              <v-card :color="hover ? '#eef1f3' : '#FFFFFF'" class="exercise-table mobile-view " @click.native="showExercise(item)" exact >
+                <v-card-text class="pa-2 ma-2">
+                  <div style="display:inline-block; align: center;vertical-align: middle;" >
+                    <list-asset-view :asset_type="item.asset_type" :url="item.assets" ></list-asset-view>
+                  </div>
+                  <div style="display:inline-block;vertical-align: middle; padding-left: 8px" class="exercise-table--text mobile-view--text" >
+                      {{item.exercise}}
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-hover>
           </v-col>
         </v-row>
       </v-col>
@@ -607,7 +609,7 @@
                     >
                       <v-row>
                         <v-col cols="12" class="pb-0 mb-0" :class="{'pt-8' : $vuetify.breakpoint.smAndDown}">
-                            <p class="create-exercise__label">{{$t("lbl_ex_name")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                            <p class="create-exercise__label">{{$t("lbl_ex_name")}} <v-badge color="#f7fafc"><span style="color: red">*</span></v-badge></p>
                             <v-text-field
                                 outlined
                                 dense
@@ -619,7 +621,7 @@
                             />
                         </v-col>
                         <v-col cols="12" class="py-0 my-0">
-                            <p class="create-exercise__label">{{$t("lbl_instructions")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                            <p class="create-exercise__label">{{$t("lbl_instructions")}} <v-badge color="#f7fafc"><span style="color: red">*</span></v-badge></p>
                             <ExerciseEditor
                               :value="exerciseCreate.initialValue.instructions"
                               @updated="handleTiptopUpdatedValue"
@@ -1170,7 +1172,7 @@
                       >
                         <v-row>
                           <v-col cols="12" class="pb-0 mb-0 px-0" :class="{'pt-8' : $vuetify.breakpoint.smAndDown}">
-                              <p class="create-exercise__label">{{$t("lbl_ex_name")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                              <p class="create-exercise__label">{{$t("lbl_ex_name")}} <v-badge color="#f7fafc"><span style="color: red">*</span></v-badge></p>
                               <v-text-field
                                   outlined
                                   dense
@@ -1182,7 +1184,7 @@
                               />
                           </v-col>
                           <v-col cols="12" class="py-0 my-0 px-0">
-                              <p class="create-exercise__label">{{$t("lbl_instructions")}} <v-badge color="white"><span style="color: red">*</span></v-badge></p>
+                              <p class="create-exercise__label">{{$t("lbl_instructions")}} <v-badge color="#f7fafc"><span style="color: red">*</span></v-badge></p>
                               <ExerciseEditor
                                 :value="exerciseEdit.data.instructions"
                                 @updated="handleTiptopUpdatedValueEdit"

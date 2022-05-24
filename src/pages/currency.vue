@@ -26,7 +26,7 @@
       >
         <v-row>
             <v-col cols="12">
-              <v-list dense nav class="body-bg">
+              <v-list  nav class="body-bg">
                 <v-list-item>
                   <v-list-item-content>
                     <v-list-item-title class="subtitle-2 text-uppercase">
@@ -39,21 +39,25 @@
                   color="primary-light-1"
                 >
                   <template v-for="(item, i) in currencyItems">
-                    <v-list-item
-                      :key="i"
-                      :value="item.code"
-                      @click="handleCurrencyChnage(item)"
-                    >
-                      <v-list-item-avatar size="20" tile>
-                        <span>
-                          {{ item.symbol }}
-                        </span>
-                      </v-list-item-avatar>
+                    <span :key="i">
+                      <v-list-item
+                        :key="i"
+                        :value="item.code"
+                        @click="handleCurrencyChnage(item)"
+                        class="py-0 my-0"
+                      >
+                        <v-list-item-avatar size="20" tile>
+                          <span>
+                            {{ item.symbol }}
+                          </span>
+                        </v-list-item-avatar>
 
-                      <v-list-item-content>
-                        <v-list-item-title v-text="item.code"></v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
+                        <v-list-item-content>
+                          <v-list-item-title v-text="item.code"></v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                      <div class="line"></div>
+                    </span>
                   </template>
                 </v-list-item-group>
               </v-list>
