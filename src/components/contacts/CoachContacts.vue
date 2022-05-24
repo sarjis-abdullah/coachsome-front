@@ -244,19 +244,11 @@
                     </v-list-item-icon>
                   </v-list-item>
                 </div>
+                <div ref="scroll"></div>
               </template>
               <template v-if="notFoundMsg">
                 <div class="contacts-table__list-card py-4 text-center">
                   No data found!
-                </div>
-              </template>
-              <template v-if="!notFoundMsg && options">
-                <div class="text-center">
-                  <v-pagination
-                    v-model="options.page"
-                    :length="lastPage"
-                    circle
-                  ></v-pagination>
                 </div>
               </template>
             </v-list>
@@ -307,6 +299,7 @@
 import ContactForm from "@/components/contacts/ContactForm";
 import API from "@/api/coach/contactUser";
 const threeDotIcon = require("@/assets/img/svg-icons/three-dot-horizontal.svg");
+import {getUniqueListBy} from '@/helper/index';
 import moment from "moment";
 export default {
   components: {
@@ -329,6 +322,8 @@ export default {
       totalItems: null,
       editMode: false,
       editContactData: {},
+      intersectionObserver: null,
+      scrollCount: 0
     };
   },
   computed: {
@@ -434,7 +429,7 @@ export default {
         this.editContactData = {};
       },
       deep: true,
-      immediate: true
+      immediate: false
     },
     $route: {
       handler() {
@@ -451,6 +446,9 @@ export default {
       immediate: true,
       deep: true,
       handler(newValue, oldValue) {
+        if (!this.$vuetify.breakpoint.mdAndUp) {
+          this.options.itemsPerPage = 15
+        }
         if (this.$route?.query?.contactForm) {
           if (this.$vuetify.breakpoint.mdAndUp) {
           this.mobileContactForm = false;
@@ -463,7 +461,28 @@ export default {
       }
     }
   },
+  beforeDestroy() {
+    this.intersectionObserver && this.intersectionObserver.disconnect();
+  },
+  mounted () {
+    this.scrollTrigger()
+  },
   methods: {
+    scrollTrigger() {
+      this.intersectionObserver = new IntersectionObserver((entries) => {
+        if (
+          entries[0].intersectionRatio > 0 &&
+          this.scrollCount
+        ) {
+          if (this.lastPage > this.options.page) {
+            this.options.page += 1
+            this.blogPaginationCurrentPage += 1;
+          }
+        }
+        this.scrollCount++;
+      });
+      this.$refs.scroll && this.intersectionObserver.observe(this.$refs.scroll);
+    },
     showContactForm() {
       this.toggleContactForm = true;
       this.$router.push("/coach/contacts?contactForm=1");
@@ -472,8 +491,12 @@ export default {
       this.loading = true;
       try {
         const response = await API(this.$axios).getAllContactUsers(query);
-        this.contactsData = response.data.data;
-        this.contactsData = this.contactsData.map(item => {
+        if (this.contactsData?.length) {
+          this.contactsData = [...this.contactsData, ...response.data.data];
+        }else {
+          this.contactsData = response.data.data;
+        }
+        this.contactsData = getUniqueListBy(this.contactsData.map(item => {
           let name = item.email;
           if (item.firstName && item.lastName) {
             name = item.firstName + " " + item.lastName;
@@ -488,9 +511,9 @@ export default {
             }
           }
           return { ...item, name };
-        });
+        }), 'id');
         if (response?.data?.meta) {
-          this.lastPage = response?.data.meta?.last_page;
+          this.lastPage = response.data.meta.last_page;
           this.totalItems = response.data.meta?.total;
         }
       } catch (error) {
