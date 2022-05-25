@@ -231,7 +231,7 @@
       </v-list-item>
 
       <!-- Admin -->
-      <span v-if="isAdmin">
+      <!-- <span v-if="isAdmin">
         <v-list-group v-model="adminGroup" link>
           <template v-slot:activator>
             <v-list-item-content>
@@ -247,7 +247,7 @@
             <v-list-item-title>{{ $t(item.t_key) }}</v-list-item-title>
           </v-list-item>
         </v-list-group>
-      </span>
+      </span> -->
 
       <!-- Athelete Switched Button -->
       <v-list-item

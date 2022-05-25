@@ -15,7 +15,7 @@
 }
 
 .body-bg-secondary{
-  background: #F7FAFC!important
+  background: $grey-100!important
 }
 
 .body-bg {
@@ -31,7 +31,7 @@
 }
 //vuetify table header
 .v-data-table-header {
-  background-color: #ecf2f7;
+  background-color: $grey-100;
 }
 
 .primary-light-1 {
@@ -63,7 +63,7 @@
 
 .line {
   width: 100%;
-  background: #9faec2;
+  background: $grey-500;
   height: 1px;
 }
 
