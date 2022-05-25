@@ -285,7 +285,7 @@
                       </v-col>
                       <v-col cols="6" class="d-flex justify-center mb-10">
                         <v-btn 
-                          color="#C7311D"
+                          color="#FF633F"
                           class="white--text"
                           block
                           @click.stop="handleDeleteAccountBtnClick"

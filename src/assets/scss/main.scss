@@ -347,3 +347,12 @@
     color: $grey-700!important;
   }
 }
+
+.no-transform{
+  text-transform: none!important;
+}
+.theme--light {
+  .v-label  {
+    color: $grey-500 !important;
+  }
+}

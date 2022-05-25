@@ -31,29 +31,31 @@
           justify="center"
         >
           <v-col cols="12 " class="py-0 my-0">
-             <p class="account-label mt-2">{{$t("text_name")}}</p>
+             <p class="account-label mt-2">{{$t("coach_contacts_first_name_label")}}</p>
           </v-col>
-          <v-col cols="6" class="py-0 my-0">
+          <v-col cols="12" md="6" lg="6" sm="12" xs="12" class="py-0 my-0">
             <!-- First name -->
             <v-text-field
               outlined
               dense
               hide-details
-              class="cs-input-text-field-login"
-              style="color:#15577C"
+              class="default-text-field"
+              color="#9FAEC2"
               v-model="form.contactInformation.firstName"
               :label="$t('setting_input_hint_first_name')"
             />
           </v-col>
-          <v-col cols="6" class="py-0 my-0">
-
+          <v-col cols="12 " class="py-0 my-0">
+             <p class="account-label mt-2">{{$t("coach_contacts_last_name_label")}}</p>
+          </v-col>
+          <v-col cols="12" md="6" lg="6" sm="12" xs="12" class="py-0 my-0">
             <!-- Last Name -->
             <v-text-field
               outlined
               dense
               hide-details
-              class="cs-input-text-field-login"
-              style="color:#15577C"
+              class="default-text-field"
+              color="#9FAEC2"
               v-model="form.contactInformation.lastName"
               :label="$t('setting_input_hint_last_name')"
             />
@@ -64,18 +66,14 @@
             <v-text-field
               outlined
               dense
-              hide-no-data
               hide-details
+              class="default-text-field"
+              color="#9FAEC2"
               v-model="form.email"
               @click="emailClickHandler"
-              :label="$t('pwa_email')"
+              :label="$t('coach_contacts_email_placeholder')"
               :rules="rule.email"
-              name="input-10-1"
-              color="red"
-              id="email"
-              class="cs-input-text-field-login"
               required
-              style="color:#15577C"
             />
 
             <!-- Time-zone Start -->
@@ -89,21 +87,22 @@
               item-value="code"
               outlined
               dense
-              hide-no-data
               hide-details
+              class="default-text-field"
+              color="#9FAEC2"
               append-icon="expand_more"
-              :label="$t('setting_input_hint_country')"
+              :label="$t('pwa_select_country')"
             ></v-autocomplete>
             <p class="account-label mt-2" >{{$t("setting_sec_timezone_title")}}</p>
             <v-text-field
               v-model="form.contactInformation.timezone"
               readonly
               outlined
-              hide-no-data
-              hide-details
               dense
+              hide-details
+              class="default-text-field mt-3"
+              color="#9FAEC2"
               :label="$t('setting_sec_timezone_title')"
-              class="mt-3"
             ></v-text-field>
 
             <!-- Time-zone End -->
@@ -117,44 +116,41 @@
               <v-text-field
                 outlined
                 dense
-                hide-no-data
                 hide-details
+                class="default-text-field"
+                color="#9FAEC2"
                 :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="show1 ? 'text' : 'password'"
                 @click:append="show1 = !show1"
                 v-model="form.password.oldPassword"
                 :rules="rule.oldPassword"
                 name="input-10-1"
-                color="red"
                 id="old_password"
-                class="cs-input-text-field-login"
                 required
-                style="color:#15577C"
               />
               <p class="account-label mt-2">{{$t("setting_label_new_password")}}</p>
               <v-text-field
                 outlined
                 dense
-                hide-no-data
                 hide-details
+                class="default-text-field"
+                color="#9FAEC2"
                 :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="show2 ? 'text' : 'password'"
                 @click:append="show2 = !show2"
                 v-model="form.password.newPassword"
                 :rules="rule.newPassword"
                 name="input-10-1"
-                color="red"
                 id="new_password"
-                class="cs-input-text-field-login"
                 required
-                style="color:#15577C"
               />
               
             </v-col>
             <v-col cols="12" class="d-flex justify-center">
               <v-btn
-                color="primary-light-1"
-                small
+                color="primary-light-1 no-transform"
+                block
+                solo
                 dark
                 @click.stop="handlePasswordChangeBtn()"
                 >{{ $t("setting_btn_label_change_password") }}
@@ -168,36 +164,36 @@
               <v-text-field
                 outlined
                 dense
+                hide-details
+                class="default-text-field"
+                color="#9FAEC2"
                 v-model="password"
                 :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="show1 ? 'text' : 'password'"
                 name="input-10-1"
-                color="red"
                 :label="$t('password_reset_title')"
                 @click:append="show1 = !show1"
                 id="password"
-                class="cs-input-text-field-login"
                 :rules="passwordRules"
                 required
-                style="color:#15577C"
                 @keyup.enter="addNewPassBtnHandle"
               />
               <p class="account-label">{{$t("pwa_confirm_new_password")}}</p>
               <v-text-field
                 outlined
                 dense
+                hide-details
+                class="default-text-field"
+                color="#9FAEC2"
                 v-model="rePassword"
                 :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="show2 ? 'text' : 'password'"
                 name="input-10-1"
-                color="red"
                 :label="$t('pwa_confirm_new_password_hint')"
                 @click:append="show2 = !show2"
                 id="rePassword"
-                class="cs-input-text-field-login"
                 :rules="[passwordConfirmationRule]"
                 required
-                style="color:#15577C"
                 @keyup.enter="addNewPassBtnHandle"
               />
             </v-col>
@@ -338,7 +334,7 @@
                     </v-col>
                     <v-col cols="6" class="d-flex justify-center mb-10">
                       <v-btn 
-                        color="#C7311D"
+                        color="#FF633F"
                         class="white--text"
                         block
                         @click.stop="handleDeleteAccountBtnClick"
@@ -695,7 +691,7 @@ export default {
 </script>
 
 
-<style scoped>
+<style scoped lang="scss">
 .save-button{
   font-family: Open Sans;
   font-style: normal;
@@ -820,31 +816,15 @@ export default {
 
 
 .account-label{
-    /* Section headline */
-
     font-family: Open Sans;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
     line-height: 25px;
-    /* identical to box height */
-
-    text-transform: uppercase;
-
-    /* Dusty blue */
-
-    color: #15577C;
-
+    text-transform: none;
+    color: $grey-700!important;
 }
 
-
-
-
-
-
-.tm-login-logo {
-  height: 100px;
-}
 .cs-forgot-password-sec{
   height: calc(100vh - 248px);
   position: relative;
