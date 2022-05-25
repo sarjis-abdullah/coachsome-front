@@ -181,7 +181,7 @@ export default {
           } else {
             this.closeForm();
           }
-          this.$toast.success("Something went wrong!");
+          this.$toast.error("Something went wrong!");
         } finally {
           this.loading = false;
         }
