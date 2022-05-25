@@ -487,11 +487,11 @@ export default {
       this.toggleContactForm = true;
       this.$router.push("/coach/contacts?contactForm=1");
     },
-    async getAllData(query = this.paginationQuery) {
+    async getAllData(query = this.paginationQuery, refetechAllData = false) {
       this.loading = true;
       try {
         const response = await API(this.$axios).getAllContactUsers(query);
-        if (this.contactsData?.length) {
+        if (this.contactsData?.length && !refetechAllData) {
           this.contactsData = [...this.contactsData, ...response.data.data];
         }else {
           this.contactsData = response.data.data;
@@ -533,7 +533,9 @@ export default {
         const response = await API(this.$axios).resendInvitationMail(
           "?id=" + item.id
         );
+        this.$toast.success("Invitation resent successfully!!");
       } catch (error) {
+        this.$toast.error("Something went wrong!");
       } finally {
         this.loading = false;
       }
@@ -543,8 +545,11 @@ export default {
         try {
           this.loading = true;
           const response = await API(this.$axios).removeContactUser(item.id);
-          this.getAllData();
+          this.$toast.success("Successfully removed from contact list!");
+          const refetechAllData = true
+          this.getAllData(this.paginationQuery, refetechAllData);
         } catch (error) {
+          this.$toast.error("Something went wrong!");
         } finally {
           this.loading = false;
         }
