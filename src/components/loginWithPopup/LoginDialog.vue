@@ -6,8 +6,6 @@
       @click:outside="hideDialog"
       max-width="500px"
       height="100%"
-      overlay-color="#15577C"
-      :overlay-opacity="opacityValue"
     >
     <v-card class="login-dialog">
     <v-container fluid grid-list-md no-gutter text-xs-center class="d-flex">

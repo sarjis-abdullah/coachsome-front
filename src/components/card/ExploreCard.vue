@@ -129,10 +129,11 @@ export default {
   },
   methods: {
     gotTo(username) {
-      window.open(
-        this.localePath(pathData.pages.publicProfile(username)),
-        "_blank"
-      );
+      // window.open(
+      //   this.localePath(pathData.pages.publicProfile(username)),
+      //   "_blank"
+      // );
+      this.$router.push(this.localePath(pathData.pages.publicProfile(username)));
     },
     imageLoadError() {
       console.log("Image failed to load");
