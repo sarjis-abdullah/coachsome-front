@@ -47,7 +47,6 @@
           <!-- table head start -->
 
           <template v-slot:header.assets="{ header }">
-            <v-checkbox></v-checkbox>
           </template>
           <template v-slot:header.actions="{ header }">
             <span></span>
