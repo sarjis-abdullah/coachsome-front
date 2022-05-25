@@ -27,12 +27,36 @@
               <!-- Notification Section -->
           <v-row class="notification">
             <v-col cols="12" md="4">
-              <div class="section-title pb-2" style="text-transform: uppercase">
-                {{$t("pwa_via_email")}}
+              <div class="default--title pb-2">
+                {{$t("pwa_email_notification")}}
               </div>
             </v-col>
-            <v-col cols="12" class="mb-5">
-                <v-switch 
+            <v-col cols="12" class="px-0">
+              <v-list class="body-bg">
+               
+                <v-list-item text >
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <v-list-item-title class="default--sub-title">{{$t('pwa_system_message')}}</v-list-item-title>
+                  </v-list-item-title>
+                </v-list-item-content>
+                  <v-list-item-icon>
+                    <client-only>
+                      <toggle-button
+                        :value="notificationType.inboxMessage"
+                        @input="handleSystemMessage"
+                        :color="{ checked: '#5CC866', unchecked: '#EFEFEF' }"
+                        :sync="true"
+                        :font-size="12"
+                        :width="60"
+                        :height="30"
+                      />
+                    </client-only>
+                  </v-list-item-icon>
+              </v-list-item>
+              </v-list>
+               <!-- Profile Status -->
+                <!-- <v-switch 
                     class="v-input--reverse v-input--expand" 
                     inset
                     color="primary-light-1"
@@ -102,7 +126,7 @@
                     @change="changeNotification()"
                 >
                     <template #label >{{$t("athlete_settings_item_todo")}}</template>
-                </v-switch>
+                </v-switch> -->
             </v-col>
             <!-- <v-col cols="12">
               <v-row v-for="(notification, i) in form.notifications" :key="i">
@@ -124,7 +148,7 @@
 </v-container>
 </template>
 <script>
-import { coachSettingApi } from "@/api";
+import { endpoint, coachSettingApi } from "@/api";
 import { pathData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
@@ -159,6 +183,10 @@ export default {
   },
   mounted() {},
   methods: {
+    handleSystemMessage(value){
+      this.notificationType.inboxMessage = value;
+      this.changeNotification();
+    },
     handleBack(){
         this.$router.push(this.localePath(pathData.coach.settings));
     },
@@ -186,39 +214,58 @@ export default {
     },
 
     async fetchSettings() {
-      let { data } = await coachSettingApi(this.$axios).get();
-        // console.log(data.notificationCategoryList);
+      // let { data } = await coachSettingApi(this.$axios).get();
+      const { data } = await this.$axios.get(endpoint.COACH_SETTINGS_GET);
+        console.log(data.notificationCategoryList);
       if (data.notificationCategoryList.length) {
         data.notificationCategoryList.forEach(item => {
           this.form.notifications.push(item);
         });
       }
-      if (data.userSetting) {
-        this.form.activeNotifications =
-          data.userSetting.activeNotificationCategories;
-      }
+      // if (data.userSetting) {
+      //   this.form.activeNotifications =
+      //     data.userSetting.activeNotificationCategories;
+      // }
+
+       if (data.data) {
+          this.notificationType.id = data.data.id;
+          this.notificationType.inboxMessage = data.data.inboxMessage == 1 ? true : false;
+          this.notificationType.orderMessage = data.data.orderMessage  == 1 ? true : false;
+          this.notificationType.orderUpdate = data.data.orderUpdate  == 1 ? true : false;
+          this.notificationType.bookingRequest = data.data.bookingRequest  == 1 ? true : false;
+          this.notificationType.bookingChange = data.data.bookingChange  == 1 ? true : false;
+          this.notificationType.account = data.data.account  == 1 ? true : false;
+          this.notificationType.marketting = data.data.marketting  == 1 ? true : false;
+        }
 
       console.log(data);
     },
-    changeNotification() {
-      let hasNotificaion = false;
-      // console.log(this.notificationType);
+    async changeNotification() {
+      let payload = {
+          id: this.notificationType.id,
+          inboxMessage: this.notificationType.inboxMessage == true ? 1 : 0,
+          orderMessage: this.notificationType.orderMessage == true ? 1 : 0,
+          orderUpdate: this.notificationType.orderUpdate == true ? 1 : 0,
+          bookingRequest: this.notificationType.bookingRequest == true ? 1 : 0,
+          bookingChange: this.notificationType.bookingChange == true ? 1 : 0,
+          account: this.notificationType.account == true ? 1 : 0,
+          marketting: this.notificationType.marketting == true ? 1 : 0
+        };
 
-    //   this.notificationType.forEach(item => {
-    //     if (item.id == notification.id) {
-    //       hasNotificaion = true;
-    //     }
-    //   });
-    //   if (hasNotificaion) {
-    //     let index = this.form.activeNotifications.findIndex(
-    //       item => item.id == notification.id
-    //     );
-    //     console.log(index);
-    //     this.form.activeNotifications.splice(index, 1);
-    //   } else {
-    //     this.form.activeNotifications.push(notification);
-    //   }
-    }
+      try {
+        let response = await coachSettingApi(this.$axios).updateSetting(
+          payload
+        );
+        if (response.status == 200) {
+          this.$toast.success("Notification has been updated successfully!");
+        }
+      } catch (error) {
+        let response = error.response;
+        if (response.message) {
+          this.$toast.error(response.message);
+        }
+      }
+    },
   }
 };
 </script>

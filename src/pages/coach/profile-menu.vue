@@ -284,7 +284,7 @@
           </v-col>
         </v-row>
         <v-row class="justify-center">
-          <v-col cols="11">
+          <v-col cols="11" >
             <v-btn
               solo
               color="#15577C"

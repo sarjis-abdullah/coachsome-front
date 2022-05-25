@@ -2,11 +2,21 @@
   <v-container fluid class="pt-0 mt-0">
 
     <!-- Header start -->
-    <mobile-top-nav v-if="!hideTable" extraClass="body-bg-secondary" :headerText="$t('dropdown_item_exercises')">
+
+    <!-- Mobile Header Start -->
+    <mobile-top-nav extraClass="body-bg-secondary" :headerText="headerText">
       <template v-slot:goBack>
         <v-btn
           icon
           @click="handleBack"
+          v-if="!hideTable"
+        >
+          <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+        </v-btn>
+        <v-btn
+          icon
+          @click="handleMobileCreateBack"
+          v-else
         >
           <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
         </v-btn>
@@ -15,40 +25,13 @@
         <v-btn
           icon
           @click.stop="handleExerciseCreateBtn"
+          v-if="!hideTable"
         >
           <v-icon style="font-size: 25px!important;" class="common-top-add-icon">
             mdi-plus-circle-outline
           </v-icon>
         </v-btn>
-      </template>
-    </mobile-top-nav>
-
-    <mobile-top-nav extraClass="body-bg" :headerText="$t( exerciseInitialData.id != null ? 'ex_edit' : 'ex_create')" v-if="hideTable && !previewPage">
-      <template v-slot:goBack>
-        <v-btn
-          icon
-          @click="handleMobileCreateBack"
-        >
-          <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
-        </v-btn>
-      </template>
-      <template v-slot:action>
-        <span></span>
-      </template>
-    </mobile-top-nav>
-
-    <mobile-top-nav extraClass="body-bg" :headerText="exerciseData.name" v-if="hideTable && previewPage">
-      <template v-slot:goBack>
-        <v-btn
-          icon
-          @click.stop="handleMobileCreateBack"
-        >
-          <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
-        </v-btn>
-      </template>
-      <template v-slot:action>
-
-        <v-menu offset-y >
+        <v-menu offset-y v-else-if="hideTable && previewPage">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               icon
@@ -70,21 +53,25 @@
             </v-list-item>
           </v-list>
         </v-menu>
+        <span v-else></span>
       </template>
     </mobile-top-nav>
 
+    <!-- Mobile Header End -->
+
+    <!-- Desktop Header Start -->
 
     <v-row class="d-none d-md-block">
       <v-col cols="12" class="pb-0">
         <div class="page-title">{{$t('dropdown_item_exercises')}}</div>
       </v-col>
-    </v-row>
-
-    <v-row class="d-none d-md-block">
       <v-col cols="12">
         <div class="line"></div>
       </v-col>
     </v-row>
+
+    <!-- Desktop Header End -->
+
 
     <!-- Header end -->
 
@@ -107,10 +94,25 @@
 
     <!-- No Exercise end -->
 
-    <!-- mobile view -->
+    <!-- mobile view start -->
     <v-row class="d-md-none" justify="center" align="center" >
 
-      <v-col cols="12" sm="8" md="6" lg="4" xs="12" v-if="exercises.length && !hideTable" class="py-10">
+
+      <v-col cols="12" sm="8" md="6" lg="4" xs="12" class="pt-5 pb-2" v-if="!hideTable">
+        <v-text-field
+          v-model="search"
+          prepend-inner-icon="search"
+          label="Search"
+          single-line
+          solo
+          @input="filteredList"
+          dense
+          hide-details
+        ></v-text-field>
+      </v-col>
+
+      <!-- Exercise Table For Mobile Start -->
+      <v-col cols="12" sm="8" md="6" lg="4" xs="12"  v-if="exercises.length && !hideTable" class="pb-10">
         <v-row>
           <v-col cols="12" v-for="(item, index) in table.rows" :key="index" class="py-0 my-0">
             <v-hover v-slot="{ hover }">
@@ -128,7 +130,9 @@
           </v-col>
         </v-row>
       </v-col>
+      <!-- Exercise Table For Mobile End -->
 
+      <!-- Exercise Form For Mobile Start -->
       <v-col cols="12" class="d-md-none" v-if="hideTable && !previewPage">
         <ExerciseForm 
           @newExerciseAdded="handleCreateExercise($event)"
@@ -137,10 +141,15 @@
           :exerciseNewData="exerciseInitialData"
         />
       </v-col>
+      <!-- Create Exercise For Mobile End -->
+
+      <!-- Preview Exercise For Mobile Start -->
       <v-col cols="12" v-if="hideTable && previewPage">
         <ExercisePreview  :exerciseData="exerciseData"/>
       </v-col>
+      <!-- Preview Exercise For Mobile End -->
     </v-row>
+    <!-- mobile view end -->
 
 
     <!-- desktop view -->
@@ -554,11 +563,8 @@
           </v-card>
         </div>
       </v-col>
-    </v-row>
 
-    <v-row class="d-none d-md-block">
       <v-col cols="12">
-
         <!-- Exercise Form Dialog -->
         <template>
           <v-row justify="center">
@@ -672,43 +678,13 @@ export default {
     };
   },
   watch:{
-    // $route: {
-    //   handler() {
-    //     // if (this.$route?.query?.mode) {
-    //     //   this.toggleContactForm = true;
-    //     // } else {
-    //     //   this.toggleContactForm = false;
-    //     // }
-    //   },
-    //   deep: true,
-    //   immediate: true
-    // },
-
     "$vuetify.breakpoint.mdAndUp": function(){
-      // if(this.$route?.query?.mode == "create" || this.$route?.query?.mode == "edit"){this.exerciseDialog = true}
-      // else if(this.$route?.query?.mode == "preview"){this.exercisePreviewDialog = true}
+      this.search = null;
+      this.getExercises();
       this.$router.replace(this.localePath(pathData.admin.exercises));
     },
 
     "$vuetify.breakpoint.smAndDown": function(){
-        // if(this.exercisePreviewDialog){
-        //   this.$router.push(this.localePath(pathData.admin.createExercises));
-        //   this.hideTable = true;
-        //   this.previewPage = true;
-        // }
-        // else if(this.exerciseDialog){
-        //   this.$router.push(this.localePath(pathData.admin.createExercises));
-        //   this.hideTable = true;
-        //   this.previewPage = false;
-        // }
-        // else if(this.exerciseDialog && this.exerciseInitialData.id != null){
-        //   this.$router.push(this.localePath(pathData.admin.editExercises));
-        //   this.hideTable = true;
-        //   this.previewPage = false;
-        // }
-        // else{
-        //   this.hideTable = false;
-        // }
         this.exerciseDialog = false;
         this.exercisePreviewDialog = false;
         this.$router.replace(this.localePath(pathData.admin.exercises));
@@ -718,16 +694,46 @@ export default {
   computed:{
     exerciseCount(){
       return 0; 
+    },
+    headerText(){
+      let title = this.$i18n.t('dropdown_item_exercises');
+      if(this.hideTable && !this.previewPage){
+        title = this.exerciseInitialData.id != null ? this.$i18n.t('ex_edit') : this.$i18n.t('ex_create');
+      }
+      else if(this.hideTable && this.previewPage){
+        title = this.exerciseData.name;
+      }
+      else if(!this.hideTable && !this.previewPage){
+        title = this.$i18n.t('dropdown_item_exercises');
+      }
+      return title;
     }
   },
   created() {
     this.langCode = this.$i18n.locale;
-    this.getExercise();
+    this.getExercises();
     this.fetchCategories();
     this.fetchSports();
     this.fetchLavels();
   },
   methods: {
+
+    filteredList() {
+      let filteredData = [];
+      if(this.search != null){
+
+        this.exercises.filter((item)=>{
+          if(this.search.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))){
+            filteredData.push(item);
+          }
+        })
+        this.makeExerciseTableRow(filteredData);
+
+      }else{
+        this.makeExerciseTableRow(this.exercises);
+      }
+    },
+
 
     handleMobileCreateBack(){
 
@@ -865,7 +871,7 @@ export default {
     },
 
 
-    getExercise() {
+    getExercises() {
       this.resetExerciseData();
       ExerciseApi(this.$axios)
         .getExerciseList()
@@ -873,7 +879,7 @@ export default {
           if (data.exercises) {
             if(data.exercises.length){
               this.noExercise = false;
-
+              this.exercises = [];
               data.exercises.map(item => {
                 this.exercises.push(item);
               });
@@ -1123,7 +1129,7 @@ export default {
     },
 
     handleRefresh(){
-      this.getExercise();
+      this.getExercises();
     },
 
     resetExerciseData() {
@@ -1147,12 +1153,12 @@ export default {
       this.exerciseDialog = false;
     },
 
-    makeExerciseTableRow(exercise) {
+    makeExerciseTableRow(exercises) {
       this.table.rows = [];
-      this.table.rows = this.formatExerciseRow(exercise);
+      this.table.rows = this.formatExerciseRow(exercises);
     },
-    formatExerciseRow(exercise) {
-      return exercise.map(item => {
+    formatExerciseRow(exercises) {
+      return exercises.map(item => {
         return this.formatExerciseItem(item);
       });
     },

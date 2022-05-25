@@ -26,12 +26,35 @@
         <!-- Notification Section -->
         <v-row class="notification">
           <v-col cols="12" md="4">
-            <div class="section-title pb-2" style="text-transform: uppercase">
-              {{$t("pwa_via_email")}}
+            <div class="default--title" style="text-transform: uppercase">
+              {{$t("pwa_email_notification")}}
             </div>
           </v-col>
-          <v-col cols="12" class="mb-5">
-              <v-switch 
+          <v-col cols="12" class="px-0" >
+              <v-list class="body-bg">
+                <!-- Profile Status -->
+                <v-list-item text >
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <v-list-item-title class="default--sub-title">{{$t('pwa_system_message')}}</v-list-item-title>
+                  </v-list-item-title>
+                </v-list-item-content>
+                  <v-list-item-icon>
+                    <client-only>
+                      <toggle-button
+                        :value="notificationType.inboxMessage"
+                        @input="handleSystemMessage"
+                        :color="{ checked: '#5CC866', unchecked: '#EFEFEF' }"
+                        :sync="true"
+                        :font-size="12"
+                        :width="60"
+                        :height="30"
+                      />
+                    </client-only>
+                  </v-list-item-icon>
+              </v-list-item>
+              </v-list>
+              <!-- <v-switch 
                   class="v-input--reverse v-input--expand" 
                   inset
                   color="primary-light-1"
@@ -107,7 +130,7 @@
                   @change="changeNotification()"
               >
                   <template #label >{{$t("athlete_settings_item_todo")}}</template>
-              </v-switch>
+              </v-switch> -->
           </v-col>
         </v-row>
       </v-col>
@@ -127,7 +150,7 @@ export default {
       settingValueData,
       notificationType: {
         id: null,
-        inboxMessage: false,
+        inboxMessage: 1,
         orderMessage: false,
         orderUpdate: false,
         bookingRequest: false,
@@ -145,13 +168,17 @@ export default {
   computed: {
     redirectLink(){
       return this.localePath(pathData.athlete.settings);
-    }
+    },
   },
   created() {},
   mounted() {
     this.getAthleteSetting();
   },
   methods: {
+    handleSystemMessage(value){
+      this.notificationType.inboxMessage = value;
+      this.changeNotification();
+    },
     handleBack(){
       this.$router.push(this.localePath(pathData.athlete.settings));
     },

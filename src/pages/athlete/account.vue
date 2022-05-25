@@ -42,7 +42,7 @@
                 hide-details
                 v-model="form.email"
                 @click="emailClickHandler"
-                :label="$t('pwa_email')"
+                :label="$t('coach_contacts_email_placeholder')"
                 :rules="rule.email"
                 name="input-10-1"
                 color="red"

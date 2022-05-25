@@ -351,6 +351,24 @@
   &--text{
     color: $grey-700!important;
   }
+  &--title{
+    font-family: $font-family;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 27px;
+    text-transform: capitalize;
+    color: $grey-700;
+
+  }
+  &--sub-title{
+    font-family: $font-family;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: $grey-700;
+  }
 }
 
 .no-transform{
