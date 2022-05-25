@@ -329,3 +329,9 @@
   border: 2px dashed #9FAEC2!important;
   border-radius: 8.44444px!important;
 }
+
+.default{
+  &--text{
+    color: $grey-700!important;
+  }
+}
