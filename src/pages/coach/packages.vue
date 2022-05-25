@@ -36,7 +36,7 @@
           </v-col>
           <v-col cols="12" md="2" class="mt-0 pt-0">
             <!-- Hourly Rate Dialog -->
-            <!-- <v-dialog v-model="hourlyRate.dialog" persistent max-width="800px">
+            <v-dialog v-model="hourlyRate.dialog" persistent max-width="800px">
               <template v-slot:activator="{ on }">
                 <v-text-field
                   label
@@ -89,6 +89,7 @@
                       <v-btn
                         dark
                         depressed
+                        :loading="loading"
                         color="primary-light-1"
                         @click="saveHourlyRate()"
                         >{{ $t("btn_label_save_and_continue") }}</v-btn
@@ -97,7 +98,7 @@
                   </v-row>
                 </v-card-text>
               </v-card>
-            </v-dialog> -->
+            </v-dialog>
             <!-- Hourly Rate Dialog -->
           </v-col>
           <v-col cols="12" md="1" class="mb-md-7 mt-0 pt-0" >
@@ -170,7 +171,7 @@
               dark
               depressed
               block
-              :loading="hourlyRateSave"
+              :loading="loading"
               color="primary-light-1"
               @click="saveHourlyRate()"
               >{{ $t("btn_label_save_and_continue") }}</v-btn
@@ -441,7 +442,8 @@ export default {
       tabs: ["default", "camp"],
       packageList: [],
       highestLimit: 8,
-      drag: false
+      drag: false,
+      loading: false,
     };
   },
   validations: {
@@ -604,6 +606,7 @@ export default {
     },
     saveHourlyRate() {
       if (!this.$v.$invalid) {
+        this.loading = true
         let payload = {
           hourly_rate: this.hourlyRate.dialogInputVal
         };
@@ -617,7 +620,10 @@ export default {
             }
             this.hourlyRate.dialog = false;
           })
-          .catch(() => {});
+          .catch(() => {})
+          .finally(()=> {
+            this.loading = false
+          })
       }
     }
   },
