@@ -1,33 +1,34 @@
 <template>
   <div class="reedem">
-    <v-card>
-      <v-card-title class="">
-        <v-spacer></v-spacer>
-        <v-btn icon @click="$emit('close')">
-          <v-icon>
+    <v-card class="bg-1">
+      <v-card-title class="px-5 pt-4 pb-2">
+        <v-btn icon @click="close">
+          <v-icon class="font-color-1">
             mdi-close
           </v-icon>
         </v-btn>
       </v-card-title>
 
-      <v-card-text>
-        <div class="redeem-title">
+      <v-card-text class="px-6.5">
+        <div class="redeem-title font-color-1">
           {{ $t('payment_redeem_title') }}
         </div>
-        <div class="field-label mt-10 mb-2">
+        <div class="field-label mt-4 mb-2 font-color-1">
           {{ $t("payment_redeem_code_title") }}
         </div>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
             v-model="code"
             :rules="rules"
-            solo
+            outlined
+            dense
+            class="font-color-2"
             :placeholder="$t('payment_placeholder_insert_certificate')"
           ></v-text-field>
         </v-form>
       </v-card-text>
 
-      <v-card-actions class="pb-5">
+      <v-card-actions class="pb-6 px-5">
         <v-btn
           :loading="loading"
           color="primary-light-1"
@@ -37,9 +38,9 @@
         >
           {{ $t("payment_redeem_btn_label_redeem_accept") }}
         </v-btn>
-        <v-btn text class="text-normal" @click="$emit('close')">
+        <!-- <v-btn text class="text-normal" @click="$emit('close')">
            {{ $t("payment_redeem_btn_label_cancel") }}
-        </v-btn>
+        </v-btn> -->
       </v-card-actions>
     </v-card>
   </div>
@@ -83,6 +84,12 @@ export default {
             this.loading = false;
           });
       }
+    },
+    close(){
+      if (this.$refs.form) {
+        this.$refs.form.reset()
+      }
+      this.$emit('close')
     }
   }
 };
@@ -95,7 +102,6 @@ export default {
     font-weight: bold;
     font-size: 25px;
     line-height: 34px;
-    color: #6e7491;
   }
 
   .field-label {
@@ -103,7 +109,12 @@ export default {
     font-weight: bold;
     font-size: 15px;
     line-height: 20px;
-    color: #6e7491;
+  }
+  .px-6\.5 {
+    padding: 0 26px;
+  }
+  .px-5 {
+    padding: 0 20px;
   }
 }
 </style>

@@ -5,6 +5,11 @@
 @import "_util";
 @import "_typography";
 
+//background 
+.bg-1 {
+  background-color: $bg-coach-1;
+}
+
 .primary {
   background: $primary;
 }
@@ -17,6 +22,13 @@
   background: $body-bg;
 }
 
+//color 
+.font-color-1 {
+  color: $grey-700 !important;
+}
+.font-color-2 {
+  color: $grey-500 !important;
+}
 .primary-light-1 {
   color: $grey-200;
   background: $primary-light-1;

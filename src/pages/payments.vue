@@ -137,8 +137,11 @@
             </v-btn>
           </v-col>
         </v-row>
-        <v-dialog v-model="dialog" width="500">
+        <v-dialog v-model="dialog" width="500" @click:outside="()=>{
+          $refs.reedem.close()
+          }">
           <Reedem
+            ref="reedem"
             @close="dialog = false"
             @update:balance="handleUpdatedBalance"
           />
