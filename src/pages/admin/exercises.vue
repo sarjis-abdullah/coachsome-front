@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pt-0 mt-0">
+  <v-container fluid class="pt-0 mt-0" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
 
     <!-- Header start -->
 

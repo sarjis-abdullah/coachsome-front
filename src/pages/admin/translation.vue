@@ -1,6 +1,6 @@
 <template>
   <client-only>
-    <v-container>
+    <v-container fluid :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('page_title_translation')">
       <template v-slot:goBack>
         <v-btn
