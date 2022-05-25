@@ -609,17 +609,22 @@ export default ({
         return validate;
         },
         handleRemoveBtnClick(linkIndex) {
-        let id = this.exercisePropsData.links[linkIndex].id;
-        ExerciseApi(this.$axios)
-            .removeItem(id)
-            .then(response => {
-            if (response.data.status == "success") {
-                this.$toast.success(response.data.message);
-                this.exercisePropsData.links.splice(linkIndex, 1);
-                this.loadingLimit = this.loadingLimit - 1;
+            let id = this.exercisePropsData.links[linkIndex].id;
+            if(confirm(this.$i18n.t("exercise_file_delete"))){
+                ExerciseApi(this.$axios)
+                    .removeItem(id)
+                    .then(response => {
+                        if (response.data.status == "success") {
+                            this.$toast.success(response.data.message);
+                            this.exercisePropsData.links.splice(linkIndex, 1);
+                            this.loadingLimit = this.loadingLimit - 1;
+                        }
+                        if(response.data.exercise){
+                            this.$emit('exerciseDataUpdated', response.data.exercise)
+                        }
+                    })
+                    .catch(() => {});
             }
-            })
-            .catch(() => {});
         },
 
         handleSaveExercise(){

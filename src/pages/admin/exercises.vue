@@ -138,6 +138,7 @@
           @newExerciseAdded="handleCreateExercise($event)"
           @saveExerciseData="handleUpdateExercise($event)" 
           @closeCreateDialog="handleCloseExercise"
+          @exerciseDataUpdated="handleModifyExercise($event)"
           :exerciseNewData="exerciseInitialData"
         />
       </v-col>
@@ -577,7 +578,8 @@
               <ExerciseForm 
                 v-if="exerciseDialog"
                 @newExerciseAdded="handleCreateExercise($event)"
-                @saveExerciseData="handleUpdateExercise($event)" 
+                @saveExerciseData="handleUpdateExercise($event)"
+                @exerciseDataUpdated="handleModifyExercise($event)"
                 @closeCreateDialog="handleCloseExercise"
                 :exerciseNewData="exerciseInitialData"
               />
@@ -892,7 +894,7 @@ export default {
         .catch(() => {});
     },
 
-    duplicateExercise(selectedExercise){
+    async duplicateExercise(selectedExercise){
 
       this.exercisePreviewDialog = false;
 
@@ -902,17 +904,17 @@ export default {
 
       let exercise = this.exercises[index];
 
-      // const { data } = await ExerciseApi(this.$axios).duplicateExercise(
-      //   encodeURIComponent(exercise.id)
-      // );
+      const { data } = await ExerciseApi(this.$axios).duplicateExercise(
+        encodeURIComponent(selectedExercise.id)
+      );
 
       this.resetExerciseData();
       
       if(exercise){
         this.exerciseInitialData.name = exercise.name;
         this.exerciseInitialData.instructions = exercise.instructions;
-       this.exerciseInitialData.assets = exercise.assets[0].url_type == "default" ? [] : exercise.assets;
-        this.exerciseInitialData.links = exercise.assets[0].url_type == "default" ? [] : exercise.assets;
+        this.exerciseInitialData.assets = data.exercise.assets;
+        this.exerciseInitialData.links = data.exercise.assets;
         this.exerciseInitialData.categoriesSelected = exercise.category;
         this.exerciseInitialData.sportsSelected = exercise.sport;
         this.exerciseInitialData.lavelsSelected = exercise.lavel;
@@ -928,6 +930,13 @@ export default {
         
       }
 
+    },
+
+    handleModifyExercise(exercise){
+      const index = this.table.rows.findIndex(
+              item => item.id == exercise.id
+            );
+      Object.assign(this.table.rows[index],this.formatExerciseItem(exercise));
     },
 
     handleCreateExercise(payload){
