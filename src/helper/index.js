@@ -5,3 +5,6 @@ export { default as storageHelper } from './storage'
 export { default as packageHelper } from './package'
 export { default as priceHelper } from './price'
 export { default as seoHelper } from './seo'
+export function getUniqueListBy(arr, key) {
+    return [...new Map(arr.map((item) => [item[key], item])).values()];
+}

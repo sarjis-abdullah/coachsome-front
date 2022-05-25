@@ -2,7 +2,7 @@
   <section
     class="contact-form-parent body-bg-secondary"
     :class="
-      !$vuetify.breakpoint.mdAndUp ? 'p-6' : 'contact-form-parent__space '
+      !$vuetify.breakpoint.mdAndUp ? 'px-3' : 'contact-form-parent__space '
     "
   >
    <!-- Mobile Nav -->
@@ -281,8 +281,8 @@ export default {
 .contact-form-parent .v-input__slot {
   border-radius: 8px !important;
 }
-.p-6 {
-  padding: 24px;
+.px-3 {
+  padding: 0 12px;
 }
 .mb-8 {
   margin-bottom: 32px;

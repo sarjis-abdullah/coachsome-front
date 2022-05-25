@@ -11,5 +11,8 @@ Vue.mixin({
         isStaging() {
             return process?.env?.NODE_ENV == 'test' ? true : false
         },
+        isProd() {
+            return !this.isDevelopment && !this.isStaging
+        },
     },
 })
