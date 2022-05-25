@@ -5,16 +5,33 @@
 @import "_util";
 @import "_typography";
 
+//background 
+.bg-1 {
+  background-color: $bg-coach-1;
+}
+
 .primary {
   background: $primary;
 }
 
 .body-bg-secondary{
-  background: #F7FAFC!important
+  background: $grey-100!important
 }
 
 .body-bg {
   background: $body-bg;
+}
+
+//color 
+.font-color-1 {
+  color: $grey-700 !important;
+}
+.font-color-2 {
+  color: $grey-500 !important;
+}
+//vuetify table header
+.v-data-table-header {
+  background-color: $grey-100;
 }
 
 .primary-light-1 {
@@ -46,7 +63,7 @@
 
 .line {
   width: 100%;
-  background: #9faec2;
+  background: $grey-500;
   height: 1px;
 }
 
@@ -328,4 +345,37 @@
 .vue-file-agent.file-input-wrapper {
   border: 2px dashed #9FAEC2!important;
   border-radius: 8.44444px!important;
+}
+
+.default{
+  &--text{
+    color: $grey-700!important;
+  }
+  &--title{
+    font-family: $font-family;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 27px;
+    text-transform: capitalize;
+    color: $grey-700;
+
+  }
+  &--sub-title{
+    font-family: $font-family;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: $grey-700;
+  }
+}
+
+.no-transform{
+  text-transform: none!important;
+}
+.theme--light {
+  .v-label  {
+    color: $grey-500 !important;
+  }
 }

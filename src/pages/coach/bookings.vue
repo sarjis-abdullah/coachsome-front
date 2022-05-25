@@ -85,6 +85,7 @@
             full-width
             color="primary-light-1"
             flat
+            :locale="getLocale"
           ></v-date-picker>
           <v-card class="mx-auto" flat tile>
             <v-scroll-y-transition mode="out-in">
@@ -239,7 +240,14 @@ export default {
       this.reloadInfiniteLoader();
     }
   },
-  computed: {},
+  computed: {
+    getLocale(){
+      if (this.$i18n?.locale) {
+        return this.$i18n.locale
+      }
+      return "en"
+    }
+  },
   created() {},
   methods: {
     reloadInfiniteLoader() {

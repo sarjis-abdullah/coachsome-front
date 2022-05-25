@@ -207,7 +207,7 @@ export default {
   },
   data() {
     return {
-      filterValue: 1,
+      filterValue: 2,
       filterItems: [
         {
           id: 1,

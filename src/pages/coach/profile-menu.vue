@@ -284,28 +284,29 @@
           </v-col>
         </v-row>
         <v-row class="justify-center">
-          <v-col cols="8">
+          <v-col cols="11" >
             <v-btn
-                outlined
-                color="#49556A"
-                class="login-option-btn"
-                block
-                @click="logout()"
+              solo
+              color="#15577C"
+              class="login-option-btn"
+              block
+              @click="logout()"
             >
-                <img class="btn-icon"  :src="require('@/assets/img/svg-icons/new/unlock.svg')" alt="">  <span class="social-login-btn-facebook-text btn-text">{{$t("dropdown_item_log_out")}}</span>
+              <img class="btn-icon"  :src="require('@/assets/img/svg-icons/unlock-white.svg')" alt="">  <span class="btn-text">{{$t("dropdown_item_log_out")}}</span>
             </v-btn>
           </v-col>
         </v-row>
         <v-row class="justify-center pt-0 mt-0 pb-8">
-          <v-col cols="8">
+          <v-col cols="11">
             <v-btn
-              color="#D61BA2"
+              color="#49556A"
               class="switch-option-btn"
               block
+              outlined
               v-if="isSwitchedUser"
               @click="revertUser()"
             >
-              {{$t("pwa_switch_to_own_user")}}
+              <img class="btn-icon"  :src="require('@/assets/img/svg-icons/switch-flip.svg')" alt="">  <span class="default--text">{{$t("pwa_switch_to_own_user")}}</span>
             </v-btn>
           </v-col>
         </v-row>
@@ -492,11 +493,13 @@ export default ({
   color: #000;
 }
 .btn-icon{
-  margin-right: auto;
+  /* margin-right: auto; */
+  padding-right: 5px!important ;
 }
 
 .btn-text{
-  margin-right: auto;
+  /* margin-right: auto; */
+  color: white;
 }
 
 .login-option-btn{

@@ -42,7 +42,7 @@
                 hide-details
                 v-model="form.email"
                 @click="emailClickHandler"
-                :label="$t('pwa_email')"
+                :label="$t('coach_contacts_email_placeholder')"
                 :rules="rule.email"
                 name="input-10-1"
                 color="red"
@@ -285,7 +285,7 @@
                       </v-col>
                       <v-col cols="6" class="d-flex justify-center mb-10">
                         <v-btn 
-                          color="#C7311D"
+                          color="#FF633F"
                           class="white--text"
                           block
                           @click.stop="handleDeleteAccountBtnClick"

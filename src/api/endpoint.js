@@ -53,6 +53,9 @@ export default {
   ATHLETE_SETTINGS_GET: "/athlete/settings",
   ATHLETE_SETTINGS_PUT: id => `/athlete/settings/${id}`,
 
+  // Coach
+  COACH_SETTINGS_GET: "/coach/settings",
+
   // accounts
   ACCOUNTS_DELETE: "/accounts/delete",
 

@@ -259,15 +259,14 @@
           </v-col>
         </v-row>
         <v-row class="justify-center">
-          <v-col cols="6">
+          <v-col cols="11">
             <v-btn
-                outlined
-                color="#49556A"
-                class="login-option-btn"
-                block
-                @click="logout()"
+              solo
+              color="#15577C"
+              class="login-option-btn"
+              @click="logout()"
             >
-                <img class="btn-icon"  :src="require('@/assets/img/svg-icons/new/unlock.svg')" alt="">  <span class="social-login-btn-facebook-text btn-text">{{$t("dropdown_item_log_out")}}</span>
+              <img class="btn-icon"  :src="require('@/assets/img/svg-icons/unlock-white.svg')" alt="">  <span class="btn-text">{{$t("dropdown_item_log_out")}}</span>
             </v-btn>
           </v-col>
         </v-row>
@@ -436,11 +435,13 @@ export default ({
   color: #000;
 }
 .btn-icon{
-  margin-right: auto;
+  /* margin-right: auto; */
+  padding-right: 5px!important ;
 }
 
 .btn-text{
-  margin-right: auto;
+  /* margin-right: auto; */
+  color: white;
 }
 
 .login-option-btn{
