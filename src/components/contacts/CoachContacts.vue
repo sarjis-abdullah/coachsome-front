@@ -603,9 +603,6 @@ export default {
       border-radius: 10px !important;
     }
   }
-  .v-data-table-header {
-    background-color: #ecf2f7;
-  }
   ::v-deep .v-data-table {
     border-radius: 5px;
   }
