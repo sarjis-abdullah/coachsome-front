@@ -103,7 +103,7 @@
       <div class="no-contact__title">
         {{ $t("chat_contact_list_no_contact_title") }}
       </div>
-      <div class="no-contact__description">
+      <div class="no-contact__description px-4">
         {{ $t("chat_contact_list_no_contact_desc") }}
       </div>
     </div>
@@ -144,4 +144,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.no-contact{
+  &__description{
+    word-break: keep-all;
+  }
+}
+</style>

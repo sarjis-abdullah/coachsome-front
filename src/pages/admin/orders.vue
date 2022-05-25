@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_order_list')">
       <template v-slot:goBack>
         <v-btn
