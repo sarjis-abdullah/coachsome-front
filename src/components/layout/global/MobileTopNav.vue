@@ -1,11 +1,6 @@
 <template>
 	<v-row class="page-top-header-row d-md-none" justify="center" :class="extraClass">
-		<v-col
-		cols="12"
-        sm="8"
-        md="6"
-        lg="4"
-        xs="12" class="justify-center page-top-header-column pa-0 ma-0">
+		<v-col cols="12" sm="8" md="6" lg="4" xs="12" class="justify-center page-top-header-column pa-0 ma-0">
 				<v-list width="100%" color="transparent" class="py-0 my-0">
 						<v-list-item>
 							<slot name="goBack"></slot>
