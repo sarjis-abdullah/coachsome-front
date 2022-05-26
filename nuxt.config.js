@@ -19,8 +19,8 @@ export default {
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "apple-mobile-web-app-status-bar-style", content: "red" },
-      { name: "theme-color",  content: "#f50505" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent"},
+      { name: "theme-color",  content: "#000000" },
       {
         name: "facebook-domain-verification",
         content: "7ilgh3d5ukfpfwwspw4chai9zokx7u"
