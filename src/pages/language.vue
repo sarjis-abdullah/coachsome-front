@@ -27,13 +27,13 @@
         <v-row>
             <v-col cols="12">
             <v-list  nav class="body-bg">
-              <v-list-item>
+              <!-- <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title class="subtitle-2 text-uppercase">
                     {{ $t("topnav_label_txt_translation") }}
                   </v-list-item-title>
                 </v-list-item-content>
-              </v-list-item>
+              </v-list-item> -->
               <v-list-item-group
                 v-model="currentLocaleIndex"
                 color="primary-light-1"

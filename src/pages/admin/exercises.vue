@@ -1106,8 +1106,16 @@ export default {
               exercise => exercise.id == data.exercise.id
             );
 
+            let exerciseIndex = this.exercises.findIndex(
+              item => item.id == data.exercise.id
+            );
+
             if (index != undefined) {
               this.table.rows.splice(index, 1);
+            }
+            
+            if (exerciseIndex != undefined) {
+              this.exercises.splice(exerciseIndex, 1);
             }
 
             this.$toast.success("Successfully deleted");
