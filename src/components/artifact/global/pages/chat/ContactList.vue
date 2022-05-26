@@ -134,6 +134,23 @@ export default {
       if (val) {
         this.active = val.id;
       }
+    },
+    '$route': {
+      immediate: true,
+      deep: true,
+      handler(newValue, oldValue) {
+        if (this.$route?.query?.contactAbleUserId && this.contacts?.length && !this.$route?.query.checkContactUserQuery) {
+          const item = this.contacts.find(item=> item.connectionUserId == this.$route?.query?.contactAbleUserId)
+          if (item) {
+            const query = {
+              ...this.$route?.query,
+              checkContactUserQuery: true
+            }
+            this.$router.push({query})
+            this.$emit("selected", item);
+          }
+        }
+      }
     }
   },
   methods: {

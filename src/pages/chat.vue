@@ -825,6 +825,7 @@ export default {
     }
   },
   data: () => ({
+    chechContactQuery: false,
     touch_start: 0,
     touch_end: 0,
     slide_touch_start: 0,
@@ -975,7 +976,16 @@ export default {
       }
     },
 
-    selectedContact(contact) {
+    selectedContact(data) {
+      let contact = data
+      if (!this.chechContactQuery && this.$route?.query?.contactAbleUserId) {
+        this.chechContactQuery = true
+        const obj = this.contacts.find(item => item.connectionUserId == this.$route.query.contactAbleUserId)
+        if (obj) {
+          contact = obj
+          this.onHandleContactItemSeleted(contact)
+        }
+      }
       if (contact) {
         this.$store.dispatch("chat/destroyMessages");
         this.$store.dispatch("chat/setSelectedContact", contact);
@@ -1399,6 +1409,13 @@ export default {
       this.messageForm.content += emoji.data;
     },
     handleBackBtnClick() {
+      if (this.$route?.query?.contactAbleUserId) {
+        const query = {
+          ...this.$route?.query,
+          checkContactUserQuery: true
+        }
+        this.$router.push({query})
+      }
       this.selectedContact = null;
     },
     handleDesktopHideActionBtnClick() {
@@ -1412,9 +1429,10 @@ export default {
     handleMobileHideActionBtnClick() {
       this.actionDialog = !this.actionDialog;
     },
-    handleBackBtnClick() {
-      this.selectedContact = null;
-    },
+    //duplicated method
+    // handleBackBtnClick() {
+    //   this.selectedContact = null;
+    // },
     handleRequestBoxCancelBtn() {
       this.bookingDialog.value = false;
     },
