@@ -222,7 +222,7 @@
       </v-dialog>
 
       <!-- Invite Friends -->
-      <v-list-item v-if="!isProd && (isAthlete || isCoach)" color="primary" link @click.stop="handleInviteFriends">
+      <v-list-item v-if="isAthlete || isCoach" color="primary" link @click.stop="handleInviteFriends">
         <v-list-item-content>
           <v-list-item-title>
             {{$t("invite_your_friends_title")}}
