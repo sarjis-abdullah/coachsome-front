@@ -29,21 +29,21 @@ export default {
         Underline,
         BulletList,
         OrderedList,
-        Link,
-        Paragraph,
-        [Heading, {
-          options: {
-            levels: [1, 2, 3]
-          }
-        }],
-        ListItem,
-        Blockquote,
-        Strike,
-        Code,
-        HorizontalRule,
+        // Link,
+        // Paragraph,
+        // [Heading, {
+        //   options: {
+        //     levels: [1, 2, 3]
+        //   }
+        // }],
+        // ListItem,
+        // Blockquote,
+        // Strike,
+        // Code,
+        // HorizontalRule,
         
-        HardBreak,
-        History,
+        // HardBreak,
+        // History,
       ],
 
     };
@@ -57,10 +57,5 @@ export default {
 </script>
 
 <style lang="scss">
-.tiptap-vuetify-editor__content p {
-  margin-top: 0px !important;
-}
-.tiptap-vuetify-editor__content {
-  background: #f7fafc!important;
-}
+
 </style>

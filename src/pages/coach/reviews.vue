@@ -30,7 +30,7 @@
               <div class="section-title pb-2">
                 {{ $t("coach_review_title_review_score") }}
               </div>
-              <div class="section-description">
+              <div class="section-description text-justify">
                 {{ $t("coach_review_description_total_review_received_txt") }}
               </div>
             </v-col>
@@ -167,11 +167,11 @@
               <div class="section-title pb-2">
                 {{ $t("coach_review_section_title_request_review") }}
               </div>
-              <div class="section-description">
+              <div class="section-description text-justify">
                 {{ $t("coach_review_section_description_request_review") }}
               </div>
             </v-col>
-            <v-col cols="12" md="8">
+            <v-col cols="12" md="4">
               <div class="text-center">
                 <v-btn
                   block
@@ -211,7 +211,7 @@
                     <div class="section-title pb-2">
                       {{ $t("coach_review_dialog_title_request_reviews") }}
                     </div>
-                    <div class="section-description">
+                    <div class="section-description text-justify">
                       {{ $t("coach_review_request_dialog_desc") }}
                     </div>
                   </v-col>
@@ -276,7 +276,7 @@
               <div class="section-title pb-2">
                 {{ $t("review_section_title_fa_review") }}
               </div>
-              <div class="section-description">
+              <div class="section-description text-justify">
                 {{ $t("review_section_desc_fa_review") }}
               </div>
             </v-col>
@@ -306,14 +306,14 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col cols="12" md="4">
-                  <div class="section-description">
+                <v-col cols="12" md="6">
+                  <div class="section-description text-md-justify">
                     {{ $t("review_helper_text_fa_btn") }}
                   </div>
                 </v-col>
               </v-row>
               <v-row>
-                <v-col cols="12" md="12">
+                <v-col cols="12" md="6">
                   <v-btn
                     large 
                     block

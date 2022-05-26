@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-list color="transparent">
+  <div >
+    <v-list color="transparent" class="pb-15">
       <v-list-item-group
         active-class="border"
         color="primary-light-1"
@@ -97,7 +97,7 @@
     <div class="no-contact" v-if="!contacts.length">
       <img
         class="no-contact__icon"
-        :src="require(`@/assets/images/icons/message-tick.svg`)"
+        :src="require(`@/assets/images/icons/message-tick-dark.svg`)"
         alt=""
       />
       <div class="no-contact__title">
@@ -146,8 +146,14 @@ export default {
 
 <style lang="scss" scoped>
 .no-contact{
+  &__title{
+    font-family: $font-family!important;
+    color: $grey-500 !important;
+  }
   &__description{
+    font-family: $font-family!important;
     word-break: keep-all;
+    color: $grey-500 !important;
   }
 }
 </style>

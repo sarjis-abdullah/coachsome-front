@@ -7,6 +7,8 @@
         :placeholder="$t('profile_athlete_placeholder_about_us')"
         counter="35"
         maxlength="150"
+        :card-props="{ flat: true, outlined: true, dense: true, color: '#9e9e9e' }"
+        class="mb-4"
       />
     </client-only>
   </div>
@@ -36,8 +38,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.tiptap-vuetify-editor__content p {
-  margin-top: 0px !important;
-}
-</style>
+<style lang="scss"></style>

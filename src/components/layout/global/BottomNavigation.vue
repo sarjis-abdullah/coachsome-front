@@ -98,7 +98,7 @@ export default ({
     }),
     computed: {
       isLoggedIn(){
-        return this.$auth.loggedIn;
+        return this.$auth?.loggedIn;
       },
       role_name() { 
         if(this.user.roles){
