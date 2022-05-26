@@ -139,7 +139,7 @@ export default {
       immediate: true,
       deep: true,
       handler(newValue, oldValue) {
-        if (this.$route?.query?.contactAbleUserId && this.contacts?.length && !this.$route?.query.checkContactUserQuery) {
+        if (this.$route?.query?.contactAbleUserId && this.contacts?.length && !this.$route?.query.checkContactUserQuery && this.$vuetify.breakpoint.smAndDown) {
           const item = this.contacts.find(item=> item.connectionUserId == this.$route?.query?.contactAbleUserId)
           if (item) {
             const query = {
