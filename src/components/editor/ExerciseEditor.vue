@@ -14,7 +14,7 @@
   </div>
 </template>
 <script>
-import { TiptapVuetify, Heading, Bold, Italic, Strike, Underline, Code, Paragraph, BulletList, OrderedList, ListItem, Link, Blockquote, HardBreak, HorizontalRule, History } from 'tiptap-vuetify'
+import { TiptapVuetify, Bold, Italic,Underline,  BulletList, OrderedList, ListItem } from 'tiptap-vuetify'
 
 export default {
   props: ["value",],
@@ -29,21 +29,7 @@ export default {
         Underline,
         BulletList,
         OrderedList,
-        // Link,
-        // Paragraph,
-        // [Heading, {
-        //   options: {
-        //     levels: [1, 2, 3]
-        //   }
-        // }],
-        // ListItem,
-        // Blockquote,
-        // Strike,
-        // Code,
-        // HorizontalRule,
-        
-        // HardBreak,
-        // History,
+        ListItem
       ],
 
     };
