@@ -1727,7 +1727,7 @@ $header-height: 60px;
           line-height: 25px;
           text-align: center;
           text-transform: capitalize;
-          color: $primary-light-1;
+          color: $grey-700!important;
           padding-top: 5px;
           padding-bottom: 5px;
         }
@@ -1737,7 +1737,7 @@ $header-height: 60px;
           line-height: 19px;
           text-align: center;
           text-transform: capitalize;
-          color: $primary-light-1;
+          color: $grey-700!important;
         }
       }
     }

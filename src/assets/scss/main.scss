@@ -327,7 +327,7 @@
 }
 .chip-section{
   background: #FFFFFF;
-  border: 1px solid #CAD5E1;
+  border: 1px solid $grey-500 !important;;
   box-sizing: border-box;
   border-radius: 8px;
   padding: 10px;
@@ -343,7 +343,7 @@
 }
 
 .vue-file-agent.file-input-wrapper {
-  border: 2px dashed #9FAEC2!important;
+  border: 2px dashed $grey-500 !important;;
   border-radius: 8.44444px!important;
 }
 
@@ -360,6 +360,27 @@
     text-transform: capitalize;
     color: $grey-700;
 
+  }
+  &--label{
+    font-family: $font-family;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    color: $grey-700;
+  }
+  &--placeholder{
+    font-family: $font-family;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    color: $grey-500;
   }
   &--sub-title{
     font-family: $font-family;
@@ -379,3 +400,37 @@
     color: $grey-500 !important;
   }
 }
+
+.tiptap-vuetify-editor__content p {
+  margin-top: 0px !important;
+}
+.tiptap-vuetify-editor__content {
+  background: #f7fafc!important;
+}
+.tiptap-vuetify-editor__toolbar {
+	.v-toolbar {
+		border-top-left-radius: 4px!important;
+		border-top-right-radius: 4px!important;
+	}
+}
+
+// .v-text-field--outlined ::v-deep fieldset {
+//   border: 2px solid $grey-500 !important;
+// }
+
+// .v-text-field--outlined {
+// 	> .v-input__control {
+// 		> .v-input__slot {
+// 			background: transparent;
+// 			border: 1px solid $grey-500 !important;
+//       box-shadow: none;
+//       // border-top: 2px solid $grey-500 !important;
+//       // border-bottom: 2px solid $grey-500 !important;
+//       // border-left: 2px solid $grey-500 !important;
+//       // border-right: 2px solid $grey-500 !important;
+//       background: white;
+// 		}
+// 	}
+// }
+
+
