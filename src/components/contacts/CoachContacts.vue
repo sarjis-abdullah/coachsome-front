@@ -183,6 +183,7 @@
                   v-for="i in 5"
                   :key="i"
                   type="list-item-avatar, divider"
+                  class="py-2"
                 ></v-skeleton-loader>
               </div>
               <template v-if="!loading">

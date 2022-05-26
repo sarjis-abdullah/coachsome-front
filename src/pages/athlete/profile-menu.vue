@@ -115,7 +115,7 @@
               </v-list-item>
 
               <!-- Invite Friends -->
-              <v-list-item v-if="!isProd" link @click.stop="handleInviteFriends">
+              <v-list-item link @click.stop="handleInviteFriends">
                 <v-list-item-icon>
                   <v-img :src="require('@/assets/img/svg-icons/Invite.svg')" alt="invite" />
                 </v-list-item-icon>
