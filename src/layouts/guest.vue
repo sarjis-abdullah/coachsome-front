@@ -1,7 +1,10 @@
 <template>
   <v-app>
-    <TopNav v-if="$vuetify.breakpoint.mdAndUp" />
-    <v-main class="body-bg">
+    <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp" />
+    <v-main>
+      <client-only>
+        <GlobalHeader />
+      </client-only>
       <nuxt />
       <BottomNavigation v-if="$vuetify.breakpoint.smAndDown" />
     </v-main>
@@ -9,18 +12,23 @@
 </template>
 
 <script>
-import TopNav from "@/components/layout/admin/TopNav";
+import GlobalHeader from "@/components/layout/global/GlobalHeader";
+import TopNav from "@/components/layout/global/TopNav";
 import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import { pathData } from "@/data";
 
 export default {
-  middleware: ["auth-admin"],
+  middleware: ["authenticated"],
   components: {
     TopNav,
+    GlobalHeader,
     BottomNavigation
   },
+  data() {
+    return {};
+  },
   created(){
-    const currentRoute = this.$route.path;
+        const currentRoute = this.$route.path;
     if(currentRoute == pathData.pages.home 
     || currentRoute == pathData.admin.dashboard 
     || currentRoute == pathData.coach.home 
@@ -46,6 +54,8 @@ export default {
     || currentRoute == pathData.athlete.profileMenu){
       this.$store.dispatch("activeBottomNav", 4);
     }
-  }
+  },
+  mounted() {},
+  methods: {}
 };
 </script>

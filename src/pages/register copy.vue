@@ -24,7 +24,7 @@
               <!-- Logo -->
               <v-row>
                 <v-col md="12" class="text-center">
-                  <nuxt-link text :to="localePath('/')">
+                  <nuxt-link text :to="localePath('/home')">
                     <img
                       :src="require('@/assets/images/logo.svg')"
                       alt="logo"

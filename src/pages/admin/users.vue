@@ -726,10 +726,14 @@ export default {
           });
           this.$auth.setUser(data.user);
           this.$auth.setUserToken(data.accessToken);
+          this.$store.dispatch("putToken", data.accessToken);
+          if (this.$store.getters.isAuthenticated) {
+            this.$store.dispatch("setUser", data.user);
+          }
           if (this.$auth.hasRole(["coach"])) {
-            this.$router.push(this.localePath(pathData.coach.editProfile));
+            this.$router.push(this.localePath(pathData.coach.home));
           } else if (this.$auth.hasRole(["athlete"])) {
-            this.$router.push(this.localePath(pathData.athlete.editProfile));
+            this.$router.push(this.localePath(pathData.athlete.home));
           } else {
             this.$router.push(this.localePath(pathData.admin.dashboard));
           }

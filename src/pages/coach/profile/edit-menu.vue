@@ -136,8 +136,8 @@
             </v-list>
           </v-col>
         </v-row>
-        <v-row>
-          <v-col cols="12">
+        <v-row class="justify-center">
+          <v-col cols="11" class="pr-5 py-0">
             <div class="line"></div>
           </v-col>
         </v-row>

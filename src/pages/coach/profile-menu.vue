@@ -50,7 +50,7 @@
                 $router.push('/coach/contacts')
                 }">
                 <v-list-item-icon>
-                  <v-img :src="require('@/assets/img/svg-icons/coach-contact.svg')" alt="coach-contact" />
+                  <v-img :src="require('@/assets/img/svg-icons/new/contact-card.svg')" alt="coach-contact" />
                 </v-list-item-icon>
 
                 <v-list-item-content>

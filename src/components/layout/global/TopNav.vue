@@ -13,7 +13,7 @@
       <!-- Logo and Slogan-->
       <v-toolbar-title class="ml-0">
         <div v-if="isLight" class="d-flex justify-center align-center">
-          <NuxtLink :to="localePath('/')">
+          <NuxtLink :to="localePath('/home')">
             <img :src="require('@/assets/images/logo-dark.svg')" alt="logo" />
           </NuxtLink>
           <span class="slogan d-none d-md-flex d-lg-flex ml-2 mt-2">{{
@@ -21,7 +21,7 @@
           }}</span>
         </div>
         <div v-if="isDark" class="d-flex justify-center align-center">
-          <NuxtLink :to="localePath('/')">
+          <NuxtLink :to="localePath('/home')">
             <img
               class="d-none d-md-flex d-lg-flex"
               :src="require('@/assets/images/logo.svg')"
@@ -156,6 +156,7 @@
           nuxt
           >{{ $t(navItems.coachContacts.t_key) }}</v-btn
         >
+
         <!-- Marketplace -->
         <v-btn
           small
@@ -221,6 +222,18 @@
           text
           :color="colorOfTheTextBtn"
           >{{ $t(navItems.athleteBooking.t_key) }}</v-btn
+        >
+
+        <!-- Earnings -->
+        <v-btn
+          v-if="isAuthCoach"
+          small
+          class="text-normal"
+          :color="colorOfTheTextBtn"
+          :to="localePath(navItems.coachEarnings.path)"
+          text
+          nuxt
+          >{{ $t(navItems.coachEarnings.t_key) }}</v-btn
         >
 
         <!-- Coach-Edit-Profile -->
@@ -392,6 +405,12 @@ export default {
           icon: "folder_open",
           t_key: "app_bar_coach_contacts_page",
           path: pathData.coach.coachContacts
+        },
+        coachEarnings: {
+          key: "coach_earnings",
+          icon: "folder_open",
+          t_key: "pwa_profile_earnings",
+          path: pathData.coach.balanceEarnings
         }
       }
     };

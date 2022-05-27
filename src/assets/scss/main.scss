@@ -393,6 +393,9 @@
     line-height: 22px;
     color: $grey-700;
   }
+  &--button{
+    text-transform: capitalize;
+  }
 }
 
 .no-transform{
@@ -408,7 +411,7 @@
   margin-top: 0px !important;
 }
 .tiptap-vuetify-editor__content {
-  background: #f7fafc!important;
+  background: white!important;
 }
 .tiptap-vuetify-editor__toolbar {
 	.v-toolbar {
@@ -416,24 +419,9 @@
 		border-top-right-radius: 4px!important;
 	}
 }
-
-// .v-text-field--outlined ::v-deep fieldset {
-//   border: 2px solid $grey-500 !important;
-// }
-
-// .v-text-field--outlined {
-// 	> .v-input__control {
-// 		> .v-input__slot {
-// 			background: transparent;
-// 			border: 1px solid $grey-500 !important;
-//       box-shadow: none;
-//       // border-top: 2px solid $grey-500 !important;
-//       // border-bottom: 2px solid $grey-500 !important;
-//       // border-left: 2px solid $grey-500 !important;
-//       // border-right: 2px solid $grey-500 !important;
-//       background: white;
-// 		}
-// 	}
-// }
-
+.v-list-item{
+  &__icon {
+    align-self: center!important;
+  }
+}
 

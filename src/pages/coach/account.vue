@@ -31,7 +31,7 @@
           justify="center"
         >
           <v-col cols="12 " class="py-0 my-0">
-             <p class="account-label mt-2">{{$t("coach_contacts_first_name_label")}}</p>
+             <p class="default--label mt-2">{{$t("coach_contacts_first_name_label")}}</p>
           </v-col>
           <v-col cols="12" md="6" lg="6" sm="12" xs="12" class="py-0 my-0">
             <!-- First name -->
@@ -46,7 +46,7 @@
             />
           </v-col>
           <v-col cols="12 " class="py-0 my-0">
-             <p class="account-label mt-2">{{$t("coach_contacts_last_name_label")}}</p>
+             <p class="default--label mt-2">{{$t("coach_contacts_last_name_label")}}</p>
           </v-col>
           <v-col cols="12" md="6" lg="6" sm="12" xs="12" class="py-0 my-0">
             <!-- Last Name -->
@@ -62,7 +62,7 @@
           </v-col>
           <v-col cols="12">
             <!-- {{$t("pwa_email")}} -->
-            <p class="account-label">{{$t("pwa_email")}}</p>
+            <p class="default--label">{{$t("pwa_email")}}</p>
             <v-text-field
               outlined
               dense
@@ -77,7 +77,7 @@
             />
 
             <!-- Time-zone Start -->
-            <p class="account-label mt-2" >{{$t("filter_item_text_country")}}</p>
+            <p class="default--label mt-2" >{{$t("filter_item_text_country")}}</p>
             <v-autocomplete
               autocomplete="off"
               v-model="form.contactInformation.country"
@@ -93,7 +93,7 @@
               append-icon="expand_more"
               :label="$t('pwa_select_country')"
             ></v-autocomplete>
-            <p class="account-label mt-2" >{{$t("setting_sec_timezone_title")}}</p>
+            <p class="default--label mt-2" >{{$t("setting_sec_timezone_title")}}</p>
             <v-text-field
               v-model="form.contactInformation.timezone"
               readonly
@@ -112,7 +112,7 @@
           <v-row v-if="form.contactInformation.has_password">
             <v-col cols="12">
               <!-- Password Area -->
-              <p class="account-label mt-2">{{$t("setting_label_old_password")}}</p>
+              <p class="default--label mt-2">{{$t("setting_label_old_password")}}</p>
               <v-text-field
                 outlined
                 dense
@@ -128,7 +128,7 @@
                 id="old_password"
                 required
               />
-              <p class="account-label mt-2">{{$t("setting_label_new_password")}}</p>
+              <p class="default--label mt-2">{{$t("setting_label_new_password")}}</p>
               <v-text-field
                 outlined
                 dense
@@ -160,7 +160,7 @@
 
           <v-row v-else>
             <v-col cols="12" class="pb-0 mb-0">
-              <p class="account-label">{{$t("setting_label_new_password")}}</p>
+              <p class="default--label">{{$t("setting_label_new_password")}}</p>
               <v-text-field
                 outlined
                 dense
@@ -178,7 +178,7 @@
                 required
                 @keyup.enter="addNewPassBtnHandle"
               />
-              <p class="account-label">{{$t("pwa_confirm_new_password")}}</p>
+              <p class="default--label pt-2">{{$t("pwa_confirm_new_password")}}</p>
               <v-text-field
                 outlined
                 dense
@@ -197,7 +197,7 @@
                 @keyup.enter="addNewPassBtnHandle"
               />
             </v-col>
-            <v-col cols="12" class="d-flex justify-center pt-0 mt-0">
+            <v-col cols="12" class="d-flex justify-center">
               <v-form
                 ref="passwordForm"
                 v-model="valid"
@@ -206,8 +206,9 @@
               >
                 <v-btn
                   color="primary-light-1"
-                  small
+                  class="default--button"
                   dark
+                  :block="$vuetify.breakpoint.smAndDown"
                   :loading="show_loading_on_add_pass_btn"
                   @click="addNewPassBtnHandle()"
                   >{{ $t("text_add_new_pasword") }}
@@ -815,7 +816,7 @@ export default {
 }
 
 
-.account-label{
+.default--label{
     font-family: Open Sans;
     font-style: normal;
     font-weight: normal;
@@ -883,4 +884,9 @@ export default {
 
     color: #15577C;
 }
+</style>
+<style scoped>
+  .v-text-field--outlined >>> fieldset {
+    border-color: #9FAEC2!important;
+  }
 </style>

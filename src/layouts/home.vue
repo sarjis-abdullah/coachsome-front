@@ -1,10 +1,11 @@
 <template>
   <v-app>
-    <top-nav :theme="theme" :color="color" v-if="$vuetify.breakpoint.mdAndUp">
+    <top-nav :theme="theme" :color="color" v-if="$vuetify.breakpoint.mdAndUp && !isAdmin">
       <template v-slot:sport-search>
         <div></div>
       </template>
     </top-nav>
+    <admin-top-nav v-if="isAdmin"></admin-top-nav>
     <v-main class="pt-0">
       <client-only>
         <GlobalHeader />
@@ -20,6 +21,7 @@
 import FrontFooter from "@/components/layout/global/FrontFooter";
 import GlobalHeader from "@/components/layout/global/GlobalHeader";
 import TopNav from "@/components/layout/global/TopNav";
+import AdminTopNav from "@/components/layout/admin/TopNav";
 import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import { pathData } from "@/data";
 
@@ -28,6 +30,7 @@ export default {
     FrontFooter,
     GlobalHeader,
     TopNav,
+    AdminTopNav,
     BottomNavigation
   },
   data() {
@@ -69,7 +72,19 @@ export default {
       this.changeColor();
     };
   },
+  computed:{
+    isAdmin() {
+      if(this.$auth?.loggedIn){
+        return this.hasRole(["superadmin", "admin", "staff"]);
+      }else{
+        return false;
+      }
+    },
+  },
   methods: {
+    hasRole(roles = []) {
+      return this.$auth.hasRole(roles);
+    },
     changeColor() {
       if (document.documentElement.scrollTop > 100) {
         this.theme = "dark";

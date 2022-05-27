@@ -33,6 +33,7 @@
                     <v-col
                       cols="12"
                       class="d-flex flex-column justify-center align-center"
+                      :class="{'py-0' : $vuetify.breakpoint.smAndDown}"
                     >
                     <div style="width: 150px;" class="text-center">
                       <div>
@@ -85,7 +86,7 @@
 
             <v-row class="d-none d-md-block">
               <v-col cols="12" md="4">
-                <div class="section-title" :class="{'pb-2' : !$vuetify.breakpoint.xsOnly}">
+                <div class="default--label" :class="{'pb-2' : !$vuetify.breakpoint.smAndDown}">
                   {{ $t("profile_athlete_profile_picture_title") }}
                 </div>
                 <div class="section-description">
@@ -137,43 +138,53 @@
               </v-col>
             </v-row>
 
-            <v-row class="mt-10">
-              <v-col cols="12" md="4">
-                <div class="section-title" :class="{'pb-2' : !$vuetify.breakpoint.xsOnly}">
+            <v-row >
+              <v-col cols="12" md="4" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
+                <div class="default--label pb-3" >
                   {{ $t("profile_athlete_profile_name_title") }}
                 </div>
                 <div class="section-description d-none d-md-block">
                   {{ $t("profile_athlete_profile_name_desc") }}
                 </div>
               </v-col>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="4" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
                 <v-text-field
                   v-model="profileData.profile_name"
-                  solo
+                  outlined
+                  dense
+                  class="default-text-field"
+                  color="#9FAEC2"
+                  background-color="white"
                   counter="35"
                   maxlength="35"
+                  :label="$t('profile_name_hint')"
                 ></v-text-field>
               </v-col>
             </v-row>
 
-                      <v-row class="mb-5">
-              <v-col cols="12" md="4">
-                <div class="section-title" :class="{'pb-2' : !$vuetify.breakpoint.xsOnly}">
+            <v-row >
+              <v-col cols="12" md="4" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
+                <div class="default--label pb-3">
                   {{ $t("profile_athlete_personalized_url") }}
                 </div>
                 <div class="section-description d-none d-md-block">
                   {{ $t("personalized_athlete_url_description") }}
                 </div>
               </v-col>
-              <v-col cols="12" md="8">
-                <label for class="input-social-label">
+              <v-col cols="12" md="8" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
+                <label for class="input-social-label d-none d-md-block">
                   {{ $t("profile_link_label") }}
                 </label>
                 <v-text-field
                   v-model="personalizedUrl"
                   @click="dialog.personalize.show = true"
-                  solo
+                  outlined
+                  dense
+                  class="default-text-field"
+                  color="#9FAEC2"
+                  background-color="white"
                   readonly
+                  :label="origin + '/user_name'"
                   :class="['mb-0']"
                 ></v-text-field>
                 <v-dialog
@@ -225,15 +236,15 @@
             </v-row>
 
             <v-row>
-              <v-col cols="12" md="4">
-                <div class="section-title" :class="{'pb-2' : !$vuetify.breakpoint.xsOnly}">
+              <v-col cols="12" md="4" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
+                <div class="default--label pb-3">
                   {{ $t("profile_athlete_about_you_title") }}
                 </div>
                 <div class="section-description d-none d-md-block">
                   {{ $t("profile_athlete_about_you_desc") }}
                 </div>
               </v-col>
-              <v-col cols="12" md="8">
+              <v-col cols="12" md="8" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
                 <TiptopEditor
                   :value="tipTopEditor.value"
                   @updated="handleTiptopUpdatedValue"
@@ -241,22 +252,25 @@
               </v-col>
             </v-row>
 
-            <v-row :class="{'py-10' : !$vuetify.breakpoint.xsOnly}">
-              <v-col cols="12" md="4">
-                <div class="section-title" :class="{'pb-2' : !$vuetify.breakpoint.xsOnly}">
+            <v-row :class="{'py-10' : !$vuetify.breakpoint.smAndDown}">
+              <v-col cols="12" md="4" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
+                <div class="default--label pb-3">
                   {{ $t("profile_athlete_mobile_title") }}
                 </div> 
                 <div class="section-description d-none d-md-block">
                   {{ $t("profile_athlete_mobile_description") }}
                 </div>
               </v-col>
-              <v-col cols="12" md="6">
+              <v-col cols="12" md="6" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
                 <v-row>
-                  <v-col cols="12" md="8">
+                  <v-col cols="12" md="8" >
                     <VuePhoneNumberInput
                       :default-country-code="profileData.mobile_code"
                       v-model="profileData.mobile_no"
                       @update="updateMobileInfo"
+                      color="#9FAEC2"
+                      valid-color="#9FAEC2"
+                      class="vue-phone-number-input"
                       :translations="{
                         countrySelectorLabel: $t(
                           'profile_section_mobile_label_country_code'
@@ -273,16 +287,16 @@
             </v-row>
 
             <!-- Birthday Section -->
-            <v-row :class="{'py-10' : !$vuetify.breakpoint.xsOnly}">
-              <v-col cols="12" md="4">
-                <div class="section-title" :class="{'pb-2' : !$vuetify.breakpoint.xsOnly}">
+            <v-row :class="{'py-10' : !$vuetify.breakpoint.smAndDown}">
+              <v-col cols="12" md="4" >
+                <div class="default--label pb-2">
                   {{ $t("profile_athlete_birthday_title") }}
                 </div>
                 <div class="section-description d-none d-md-block">
                   {{ $t("profile_athlete_birthday_description") }}
                 </div>
               </v-col>
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="3" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
                 <v-menu
                   ref="menu"
                   v-model="menu"
@@ -296,7 +310,13 @@
                     <v-text-field
                       v-model="date"
                       readonly
-                      solo
+                    outlined
+                    dense
+                    class="default-text-field"
+                    color="#9FAEC2"
+                    prepend-inner-icon="mdi-calendar"
+                    background-color="white"
+                    label="DD / MM / YYYY"
                       v-on="on"
                     ></v-text-field>
                   </template>
@@ -316,9 +336,9 @@
 
             <div class="d-none d-md-block">
               <!-- Language Section -->
-              <v-row :class="{'py-10' : !$vuetify.breakpoint.xsOnly}">
+              <v-row :class="{'py-10' : !$vuetify.breakpoint.smAndDown}">
                 <v-col cols="12" md="4">
-                  <div class="section-title" :class="{'pb-2' : !$vuetify.breakpoint.xsOnly}">
+                  <div class="default--label" :class="{'pb-2' : !$vuetify.breakpoint.smAndDown}">
                     {{ $t("profile_athlete_language_title") }}
                   </div>
                   <div class="section-description ">
@@ -415,9 +435,9 @@
               </v-row>
 
               <!-- Category Section -->
-              <v-row :class="{'py-10' : !$vuetify.breakpoint.xsOnly}">
+              <v-row :class="{'py-10' : !$vuetify.breakpoint.smAndDown}">
                 <v-col cols="12" md="4">
-                  <div class="section-title" :class="{'pb-2' : !$vuetify.breakpoint.xsOnly}">
+                  <div class="default--label" :class="{'pb-2' : !$vuetify.breakpoint.smAndDown}">
                     {{ $t("profile_athlete_category_title") }}
                   </div>
                   <div class="section-description">
@@ -518,9 +538,9 @@
                   <div class="line"></div>
                 </v-col>
               </v-row>
-              <v-row :class="{'py-10' : !$vuetify.breakpoint.xsOnly}">
+              <v-row :class="{'py-10' : !$vuetify.breakpoint.smAndDown}">
                 <v-col cols="12" md="4">
-                  <div class="section-title" :class="{'pb-2' : !$vuetify.breakpoint.xsOnly}">
+                  <div class="default--label" :class="{'pb-2' : !$vuetify.breakpoint.smAndDown}">
                     {{ $t("profile_athlete_sport_tag_title") }}
                   </div>
                   <div class="section-description">
@@ -613,7 +633,7 @@
               <!-- Language Section -->
               <v-row>
                 <v-col cols="12" class="section-with-button">
-                  <div class="section-title ">
+                  <div class="default--label ">
                     {{ $t("profile_athlete_language_title") }}
                   </div>
                   <div >
@@ -623,7 +643,7 @@
                       max-width="600px"
                     >
                       <template v-slot:activator="{ on }">
-                        <v-btn color="primary" dark v-on="on" text small>
+                        <v-btn dark v-on="on" text small class="add-more-button">
                           {{ $t("profile_add_more_btn_label") }}
                         </v-btn>
                       </template>
@@ -683,19 +703,25 @@
                     </v-dialog>
                   </div>
                 </v-col>
-                <v-col cols="12" class="py-0 my-0"  v-if="languagesSelected.length">
+                <v-col cols="12" class="py-0 my-0"  >
                   <div class="d-flex flex-wrap chip-section" >
-                    <v-chip
-                      v-for="lang in languagesSelected"
-                      :key="lang.id"
-                      class="mx-1 my-1"
-                      dark
-                      small
-                      close
-                      close-icon="clear"
-                      color="primary-light-2"
-                      @click:close="removeLanguage(lang)"
-                      >{{ $t(lang.t_key) }}</v-chip>
+                    <span v-if="languagesSelected.length">
+                      <v-chip
+                        v-for="lang in languagesSelected"
+                        :key="lang.id"
+                        class="mx-1 my-1"
+                        dark
+                        small
+                        close
+                        close-icon="clear"
+                        color="primary-light-2"
+                        @click:close="removeLanguage(lang)"
+                        >{{ $t(lang.t_key) }}
+                      </v-chip>
+                    </span>
+                    <div v-else class="default--placeholder">
+                      {{$t("no_language")}}
+                    </div>
                   </div>
                 </v-col>
               </v-row>
@@ -703,7 +729,7 @@
               <!-- Category Section -->
               <v-row>
                 <v-col cols="12" class="section-with-button">
-                  <div class="section-title">
+                  <div class="default--label">
                     {{ $t("profile_athlete_category_title") }}
                   </div>
                   <div >
@@ -713,7 +739,7 @@
                       max-width="600px"
                     >
                       <template v-slot:activator="{ on }">
-                        <v-btn color="primary" dark v-on="on" text small>
+                        <v-btn dark v-on="on" text small class="add-more-button">
                           {{ $t("profile_add_more_btn_label") }}
                         </v-btn>
                       </template>
@@ -775,19 +801,25 @@
                     </v-dialog>
                   </div>
                 </v-col>
-                <v-col cols="12" class="py-0 my-0" v-if="categoriesSelected.length">
+                <v-col cols="12" class="py-0 my-0" >
                   <div class="d-flex flex-wrap chip-section">
-                    <v-chip
-                      small
-                      dark
-                      v-for="category in categoriesSelected"
-                      :key="category.id"
-                      class="mx-1 my-1"
-                      close
-                      close-icon="clear"
-                      color="primary-light-2"
-                      @click:close="removeCategory(category)"
-                      >{{ $t(category.t_key) }}</v-chip>
+                    <span v-if="categoriesSelected.length">
+                     <v-chip
+                        small
+                        dark
+                        v-for="category in categoriesSelected"
+                        :key="category.id"
+                        class="mx-1 my-1"
+                        close
+                        close-icon="clear"
+                        color="primary-light-2"
+                        @click:close="removeCategory(category)"
+                        >{{ $t(category.t_key) }}
+                      </v-chip>
+                    </span>
+                    <div v-else class="default--placeholder">
+                      {{$t("no_category")}}
+                    </div>
                   </div>
                 </v-col>
               </v-row>
@@ -796,13 +828,13 @@
               
               <v-row>
                 <v-col cols="12" class="section-with-button">
-                  <div class="section-title ">
+                  <div class="default--label ">
                     {{ $t("profile_athlete_sport_tag_title") }}
                   </div>
                   <div>
                     <v-dialog v-model="dialog.tag" scrollable max-width="600px">
                       <template v-slot:activator="{ on }">
-                        <v-btn color="primary" dark v-on="on" text small>
+                        <v-btn dark v-on="on" text small class="add-more-button">
                           {{ $t("profile_add_more_btn_label") }}
                         </v-btn>
                       </template>
@@ -861,8 +893,9 @@
                     </v-dialog>
                   </div>
                 </v-col>
-                <v-col cols="12" class="py-0 my-0" v-if="tagData.tagsSelected.length">
+                <v-col cols="12" class="py-0 my-0" >
                   <div class="d-flex flex-wrap chip-section">
+                    <span v-if="tagData.tagsSelected.length">
                       <v-chip
                         small
                         dark
@@ -873,7 +906,12 @@
                         close-icon="clear"
                         color="primary-light-2"
                         @click:close="removeTag(item)"
-                        >{{ item }}</v-chip>
+                        >{{ item }}
+                      </v-chip>
+                    </span>
+                    <div v-else class="default--placeholder">
+                      {{$t("no_tag")}}
+                    </div>
                   </div>
                 </v-col>
               </v-row>
@@ -888,7 +926,7 @@
 
             <v-row>
               <v-col cols="12" md="4">
-                <div class="section-title" :class="{'pb-2' : !$vuetify.breakpoint.xsOnly}">
+                <div class="default--title" :class="{'pb-2' : !$vuetify.breakpoint.smAndDown}">
                   {{ $t("profile_social_profile_title") }}
                 </div>
                 <div class="section-description d-none d-md-block">
@@ -896,26 +934,41 @@
                 </div>
               </v-col>
               <v-col cols="12" md="8">
-                <label for class="input-social-label">
+                <label for class="default--label pb-2">
                   {{ $t("profile_facebook") }}
                 </label>
                 <v-text-field
                   v-model="profileData.social_acc_fb_link"
-                  solo
+                  outlined
+                  dense
+                  class="default-text-field"
+                  background-color="white"
+                  color="#9FAEC2"
+                  :label="$t('link_facebook')"
                 ></v-text-field>
-                <label for class="input-social-label">
-                  {{ $t("profile_twitter") }}
-                </label>
-                <v-text-field
-                  v-model="profileData.social_acc_twitter_link"
-                  solo
-                ></v-text-field>
-                <label for class="input-social-label">
+                <label for class="default--label pb-2">
                   {{ $t("profile_instagram") }}
                 </label>
                 <v-text-field
                   v-model="profileData.social_acc_instagram_link"
-                  solo
+                  outlined
+                  dense
+                  class="default-text-field"
+                  background-color="white"
+                  color="#9FAEC2"
+                  :label="$t('link_instagram')"
+                ></v-text-field>
+                <label for class="default--label pb-2">
+                  {{ $t("profile_twitter") }}
+                </label>
+                <v-text-field
+                  v-model="profileData.social_acc_twitter_link"
+                  outlined
+                  dense
+                  class="default-text-field"
+                  background-color="white"
+                  color="#9FAEC2"
+                  :label="$t('link_twitter')"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -1199,7 +1252,14 @@ export default {
   }
 };
 </script>
-
+<style scoped>
+  .v-text-field--outlined >>> fieldset {
+    border-color: #9FAEC2!important;
+  }
+  .input-tel__label, .country-selector__label{
+    color: #9FAEC2!important;
+  }
+</style>
 <style lang="scss">
 .athlete-edit-profile {
   height: 100%;
@@ -1264,8 +1324,23 @@ export default {
     }
   }
 }
+.add-more-button{
+  font-family: $font-family;
+  text-transform: none;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  text-align: right;
+  color: $grey-500!important;
+}
 .section-with-button{
   display: flex;
   justify-content: space-between;
+}
+.v-input__icon--prepend-inner{
+  .v-icon{
+    color: $grey-500!important;
+  }
 }
 </style>
