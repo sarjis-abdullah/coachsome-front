@@ -52,6 +52,7 @@
           :items="items"
           :rules="item.rules"
           :placeholder="item.placeholder"
+          :label="item.placeholder"
           hide-details
           class="form-input"
           outlined
@@ -63,6 +64,7 @@
           v-model="item.model"
           :rules="item.rules"
           :placeholder="item.placeholder"
+          :label="item.placeholder"
           class="form-input"
           outlined
           :hide-details="item.error && item.error != '' ? false : true"
