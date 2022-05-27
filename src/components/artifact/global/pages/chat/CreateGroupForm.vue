@@ -1,7 +1,7 @@
 <template>
   <div class="create-group-form">
-    <v-card color="body-bg">
-      <v-card-title class="py-2">
+    <v-card flat color="body-bg">
+      <v-card-title v-if="$vuetify.breakpoint.mdAndUp" class="py-2">
         <div class="create-group-form__title">
           {{ $t("chat_create_group_title") }}
         </div>
@@ -12,7 +12,16 @@
           </v-icon>
         </v-btn>
       </v-card-title>
-      <v-card-text class="pa-5">
+      <div v-if="!$vuetify.breakpoint.mdAndUp" class="hidden-md-and-up">
+        <MobileTopNav :headerText="$t('chat_create_group_title')">
+          <template v-slot:goBack>
+            <v-btn icon @click="$emit('close')">
+              <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+            </v-btn>
+          </template>
+        </MobileTopNav>
+      </div>
+      <v-card-text class="pa-5 mt-6">
         <v-form ref="form" v-model="valid" lazy-validation>
           <div class="field__label">
             {{ $t("chat_create_group_label_group_name") }}
@@ -22,7 +31,7 @@
             :rules="[v => !!v || 'Name is required']"
             :label="$t('chat_create_group_name_placeholder')"
             dense
-            solo
+            outlined
           ></v-text-field>
 
           <div class="field__label">
@@ -33,7 +42,7 @@
             :rules="[v => !!v || 'Description is required']"
             :label="$t('chat_create_group_description_placeholder')"
             dense
-            solo
+            outlined
           ></v-text-field>
 
           <div class="field__label">
@@ -48,7 +57,7 @@
             :items="items"
             :label="$t('chat_create_group_emails_placeholder')"
             multiple
-            solo
+            outlined
             dense
             @keyup.enter="search = ''"
             no-filter
@@ -79,7 +88,7 @@
           <v-textarea
             :rules="[v => !!v || 'Text seome message']"
             v-model="form.message"
-            solo
+            outlined
             name="input-7-1"
             :label="$t('chat_create_group_message_placeholder')"
           ></v-textarea>
@@ -89,6 +98,7 @@
             dark
             color="primary-light-1"
             class="mr-4"
+            :block="!$vuetify.breakpoint.mdAndUp"
             @click="handleCreateBtnClick"
           >
             {{ $t("chat_create_group_label_create") }}
@@ -101,8 +111,11 @@
 
 <script>
 import { endpoint } from "../../../../../api";
-
+import MobileTopNav from "@/components/layout/global/MobileTopNav";
 export default {
+  components: {
+    MobileTopNav,
+  },
   props: ["open"],
   data() {
     return {
@@ -167,7 +180,7 @@ export default {
     handleCreateBtnClick() {
       let emailData = [];
       
-      this.form.emails.map((item) => {
+      this.form?.emails?.length && this.form.emails.map((item) => {
         let data = item.email ? item.email : item;
         if(this.validateEmail(data)){
           emailData.push(data);
@@ -214,6 +227,7 @@ export default {
     font-size: 14px;
     line-height: 19px;
     color: $primary-light-1;
+    padding-bottom: 8px;
   }
   &__title {
     font-family: $font-family;
@@ -221,6 +235,9 @@ export default {
     font-size: 18px;
     line-height: 25px;
     color: $primary-light-1;
+  }
+  .mt-6{
+    margin-top: 24px;
   }
 }
 .has-chip-name{
