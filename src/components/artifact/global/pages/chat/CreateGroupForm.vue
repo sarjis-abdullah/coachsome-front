@@ -167,7 +167,7 @@ export default {
     handleCreateBtnClick() {
       let emailData = [];
       
-      this.form.emails.map((item) => {
+      this.form?.emails?.length && this.form.emails.map((item) => {
         let data = item.email ? item.email : item;
         if(this.validateEmail(data)){
           emailData.push(data);
