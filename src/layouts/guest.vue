@@ -18,7 +18,7 @@ import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import { pathData } from "@/data";
 
 export default {
-  middleware: ["auth"],
+  middleware: ["authenticated"],
   components: {
     TopNav,
     GlobalHeader,
