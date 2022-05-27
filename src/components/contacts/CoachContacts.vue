@@ -256,7 +256,7 @@
         </template>
       </span>
     </section>
-    <v-card flat v-show="mobileContactForm" style="background: #F7FAFC;" class="hidden-md-and-up">
+    <v-card flat v-show="mobileContactForm" class="hidden-md-and-up bg-1 fullscreen">
       <ContactForm
         @close-modal="
           () => {
@@ -433,7 +433,7 @@ export default {
     },
     $route: {
       handler() {
-        if (this.$route?.query?.contactForm) {
+        if (this.$route?.query?.contactForm && !this.$vuetify.breakpoint.mdAndUp) {
           this.mobileContactForm = true;
         } else {
           this.mobileContactForm = false;
@@ -557,8 +557,17 @@ export default {
     },
     toggleEditForm(item) {
       this.editMode = true;
-      this.toggleContactForm = true;
+      if (this.$vuetify.breakpoint.mdAndUp) {
+        this.toggleContactForm = true
+      }else {
+        this.mobileContactForm = true;
+      }
       this.editContactData = { ...item };
+      const query = {
+        ...this.$route.query,
+        contactForm: 1
+      }
+      this.$router.push({query})
     },
     debouncedInitData() {
       this.getAllData(this.query);
@@ -660,6 +669,17 @@ export default {
   .contacts-table__searchbox {
     border-radius: 10px;
     background: #ffffff;
+  }
+  .fullscreen {
+    border-radius: 0;
+  margin: 0;
+  height: 100%;
+  position: fixed;
+  overflow-y: auto;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
   }
 }
 </style>
