@@ -112,7 +112,7 @@
             </div>
             <div class="section-title payment-section-title pb-2 d-md-none">
               {{ $t("payment_section_title_coachsome_gift_card") }}
-              <v-btn class="text-normal" color="primary" dark text small @click="dialog = true">
+              <v-btn class="text-normal" color="primary" dark text small @click="openGiftCardDialog()">
                 {{ $t("profile_add_more_btn_label") }}
               </v-btn>
             </div>
@@ -130,22 +130,29 @@
               color="primary-light-1"
               :loading="loading"
               depressed
-              @click="dialog = true"
+              @click="openGiftCardDialog()"
             >
               <v-icon class="mr-3">mdi-plus-circle</v-icon>
               {{ $t("payments_btn_label_add_gift_card") }}
             </v-btn>
           </v-col>
         </v-row>
-        <v-dialog v-model="dialog" width="500" @click:outside="()=>{
-          $refs.reedem.close()
-          }">
-          <Reedem
+        <v-dialog v-if="$vuetify.breakpoint.mdAndUp" v-model="dialog" width="500" @click:outside="()=> {$refs.reedem.close()}">
+          <v-card flat class="bg-1">
+            <Reedem
             ref="reedem"
-            @close="dialog = false"
+            @close="closeGiftCardDialog"
             @update:balance="handleUpdatedBalance"
           />
+          </v-card>
         </v-dialog>
+        <v-card v-if="!$vuetify.breakpoint.mdAndUp && dialog" flat class="bg-1 reedem-custom-dialog">
+            <Reedem
+            ref="reedem"
+            @close="closeGiftCardDialog"
+            @update:balance="handleUpdatedBalance"
+          />
+          </v-card>
       </span>
     </v-container>
   </div>
@@ -178,6 +185,19 @@ export default {
       dialog: false,
       balance: 0.0
     };
+  },
+  watch: {
+    '$route': {
+      immediate: true,
+      deep: true,
+      handler(newValue, oldValue) {
+        if (this.$route?.query?.openGiftCardDialog) {
+          this.dialog = true
+        }else {
+          this.dialog = false
+        }
+      }
+    }
   },
   mounted() {
     this.$axios
@@ -224,7 +244,7 @@ export default {
       }
     },
     handleUpdatedBalance(amount) {
-      this.dialog = false;
+      this.closeGiftCardDialog();
       this.balance = amount;
     },
     async handlePaymentCardAddBtnClick() {
@@ -250,12 +270,37 @@ export default {
       }else if(this.$auth.hasRole(["athlete"])){
         this.$router.push(this.localePath(pathData.athlete.profileMenu));
       }
+    },
+    openGiftCardDialog(){
+      const query = {
+        ...this.$route?.query,
+        openGiftCardDialog: true
+      }
+      this.$router.push({query})
+    },
+    closeGiftCardDialog(){
+      if (this.$route?.query?.openGiftCardDialog) {
+        const query = {}
+        this.$router.push({query})
+        this.dialog = false
+      }
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.reedem-custom-dialog {
+  border-radius: 0;
+  margin: 0;
+  height: 100%;
+  position: fixed;
+  overflow-y: auto;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+}
 .payments-title{
   font-family: Open Sans;
   font-style: normal;
