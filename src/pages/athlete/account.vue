@@ -34,7 +34,7 @@
             <v-col cols="12">
 
               <!-- Email -->
-              <p class="account-label mt-2">{{$t("pwa_email")}}</p>
+              <p class="default--label mt-2">{{$t("pwa_email")}}</p>
               <v-text-field
                 outlined
                 dense
@@ -57,7 +57,7 @@
           <v-row v-if="form.contactInformation.has_password">
             <v-col cols="12">
                <!-- Password Area -->
-              <p class="account-label mt-2">{{$t("setting_label_old_password")}}</p>
+              <p class="default--label mt-2">{{$t("setting_label_old_password")}}</p>
               <v-text-field
                 outlined
                 dense
@@ -75,7 +75,7 @@
                 required
                 style="color:#15577C"
               />
-              <p class="account-label mt-2">{{$t("setting_label_new_password")}}</p>
+              <p class="default--label mt-2">{{$t("setting_label_new_password")}}</p>
               <v-text-field
                 outlined
                 dense
@@ -108,7 +108,7 @@
 
           <v-row v-else>
             <v-col cols="12" class="pb-0 mb-0">
-              <p class="account-label">{{$t("setting_label_new_password")}}</p>
+              <p class="default--label">{{$t("setting_label_new_password")}}</p>
               <v-text-field
                 outlined
                 dense
@@ -126,7 +126,7 @@
                 style="color:#15577C"
                 @keyup.enter="addNewPassBtnHandle"
               />
-              <p class="account-label">{{$t("pwa_confirm_new_password")}}</p>
+              <p class="default--label">{{$t("pwa_confirm_new_password")}}</p>
               <v-text-field
                 outlined
                 dense
@@ -154,8 +154,9 @@
               >
                 <v-btn
                   color="primary-light-1"
-                  small
                   dark
+                  class="default--button"
+                  :block="$vuetify.breakpoint.smAndDown"
                   :loading="show_loading_on_add_pass_btn"
                   @click="addNewPassBtnHandle()"
                   >{{ $t("text_add_new_pasword") }}
@@ -624,28 +625,17 @@ export default {
 }
 
 
-.account-label{
-    /* Section headline */
-
-    font-family: Open Sans;
+.default--label{
+    font-family: $font-family;
     font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 25px;
-    /* identical to box height */
-
-    text-transform: uppercase;
-
-    /* Dusty blue */
-
-    color: #15577C;
-
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 27px;
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    color: $grey-700!important;;
 }
-
-
-
-
-
 
 .tm-login-logo {
   height: 100px;
@@ -708,4 +698,9 @@ export default {
 
     color: #15577C;
 }
+</style>
+<style scoped>
+  .v-text-field--outlined >>> fieldset {
+    border-color: #9FAEC2!important;
+  }
 </style>

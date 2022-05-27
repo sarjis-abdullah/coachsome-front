@@ -28,7 +28,7 @@
         <v-row v-if="$vuetify.breakpoint.smAndDown">
           <v-col cols="12" class="d-flex flex-column justify-center align-center" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
             <v-row>
-              <v-col class="pl-0" cols="12" >
+              <v-col class="pl-0" cols="12" :class="{'pb-0' : $vuetify.breakpoint.smAndDown}">
                 <div style="width: 150px;" class="text-center">
                   <div>
                     <v-badge 
@@ -72,7 +72,7 @@
               </v-col>
             </v-row>
             <v-row :show="editImageDialog.show">
-              <v-col cols="12">
+              <v-col cols="12" >
                 <EditImageDialog
                   :show="editImageDialog.show"
                   @hide="editImageDialog.show = false"
@@ -162,8 +162,10 @@
               dense
               class="default-text-field"
               color="#9FAEC2"
+              background-color="white"
               counter="35"
               maxlength="35"
+              :label="$t('profile_name_hint')"
             ></v-text-field>
           </v-col>
          <v-col cols="12" md="12" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
@@ -175,7 +177,7 @@
             </div>
           </v-col>
           <v-col cols="12" md="8" :class="{'pb-0' : $vuetify.breakpoint.smAndDown}">
-            <label for class="input-social-label d-none d-md-block">
+            <label for class="input-social-label d-none d-md-block pb-2">
               {{ $t("profile_link_label") }}
             </label>
             <v-text-field
@@ -185,7 +187,9 @@
               dense
               class="default-text-field"
               color="#9FAEC2"
+              background-color="white"
               readonly
+              :label="origin + '/user_name'"
               :class="['mb-0']"
             ></v-text-field>
             <v-dialog
@@ -251,7 +255,7 @@
               {{ $t("profile_about_you_desc") }}
             </div>
           </v-col>
-          <v-col cols="12" md="8" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
+          <v-col cols="12" md="4" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
             <TiptopEditor
               :value="tipTopEditor.value"
               @updated="handleTiptopUpdatedValue"
@@ -276,9 +280,18 @@
                   :default-country-code="profileData.mobile_code"
                   v-model="profileData.mobile_no"
                   @update="updateMobileInfo"
-                  color="#acaeaf"
-                  valid-color="#acaeaf"
-                  
+                  color="#9FAEC2"
+                  valid-color="#9FAEC2"
+                  class="vue-phone-number-input"
+                  :translations="{
+                        countrySelectorLabel: $t(
+                          'profile_section_mobile_label_country_code'
+                        ),
+                        phoneNumberLabel: $t(
+                          'profile_section_mobile_input_label_phone_number'
+                        ),
+                        example: $t('profile_section_mobile_input_label_example')
+                      }"
                 />
               </v-col>
             </v-row>
@@ -321,6 +334,9 @@
                   dense
                   class="default-text-field"
                   color="#9FAEC2"
+                  prepend-inner-icon="mdi-calendar"
+                  background-color="white"
+                  label="DD / MM / YYYY"
                   v-on="on"
                 ></v-text-field>
               </template>
@@ -953,17 +969,9 @@
               outlined
               dense
               class="default-text-field"
+              background-color="white"
               color="#9FAEC2"
-            ></v-text-field>
-            <label class="default--label pb-2">
-              {{ $t("profile_twitter") }}
-            </label>
-            <v-text-field
-              v-model="profileData.social_acc_twitter_link"
-              outlined
-              dense
-              class="default-text-field"
-              color="#9FAEC2"
+              :label="$t('link_facebook')"
             ></v-text-field>
             <label class="default--label pb-2">
               {{ $t("profile_instagram") }}
@@ -973,7 +981,21 @@
               outlined
               dense
               class="default-text-field"
+              background-color="white"
               color="#9FAEC2"
+              :label="$t('link_instagram')"
+            ></v-text-field>
+            <label class="default--label pb-2">
+              {{ $t("profile_twitter") }}
+            </label>
+            <v-text-field
+              v-model="profileData.social_acc_twitter_link"
+              outlined
+              dense
+              class="default-text-field"
+              background-color="white"
+              color="#9FAEC2"
+              :label="$t('link_twitter')"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -1355,7 +1377,14 @@ export default {
   }
 };
 </script>
-
+<style scoped>
+.v-text-field--outlined >>> fieldset {
+  border-color: #9FAEC2!important;
+}
+.input-tel__label, .country-selector__label{
+  color: #9FAEC2!important;
+}
+</style>
 <style lang="scss">
 .coach-edit-profile-page {
   background: $body-bg;
@@ -1444,5 +1473,9 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-
+.v-input__icon--prepend-inner{
+  .v-icon{
+    color: #9FAEC2!important;
+  }
+}
 </style>

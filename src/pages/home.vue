@@ -815,7 +815,7 @@ import { frontHomeApi, marketPlaceApi } from "@/api";
 import ExploreCard from "@/components/card/ExploreCard";
 
 export default {
-  layout: "common",
+  layout: "home",
   components: {
     SportSearch,
     ExploreCard
@@ -972,7 +972,6 @@ export default {
     };
   },
   created() {
-    console.log(this.$auth.hasRole('admin'))
     this.getCoach();
   },
   mounted() {},

@@ -1,6 +1,7 @@
 <template>
   <v-app>
-    <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp" />
+    <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp && !isAdmin" />
+    <admin-top-nav v-if="isAdmin"></admin-top-nav>
     <v-main>
       <client-only>
         <GlobalHeader />
@@ -16,6 +17,7 @@
 import FrontFooter from "@/components/layout/global/FrontFooter";
 import GlobalHeader from "@/components/layout/global/GlobalHeader";
 import TopNav from "@/components/layout/global/TopNav";
+import AdminTopNav from "@/components/layout/admin/TopNav";
 import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import { pathData } from "@/data";
 
@@ -27,10 +29,20 @@ export default {
     FrontFooter,
     GlobalHeader,
     TopNav,
-    BottomNavigation
+    BottomNavigation,
+    AdminTopNav
   },
   data() {
     return {};
+  },
+  computed:{
+    isAdmin() {
+      if(this.$auth.loggedIn){
+        return this.hasRole(["superadmin", "admin", "staff"]);
+      }else{
+        return false;
+      }
+    },
   },
   created(){
     const currentRoute = this.$route.path;
@@ -61,6 +73,10 @@ export default {
     }
   },
   mounted() {},
-  methods: {}
+  methods: {
+    hasRole(roles = []) {
+      return this.$auth.hasRole(roles);
+    },
+  }
 };
 </script>

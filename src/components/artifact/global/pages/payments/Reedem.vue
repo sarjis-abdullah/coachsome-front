@@ -1,16 +1,25 @@
 <template>
   <div class="reedem">
-    <v-card class="bg-1">
-      <v-card-title class="px-5 pt-4 pb-2">
+    <v-card class="bg-1" :flat="!$vuetify.breakpoint.mdAndUp">
+      <v-card-title v-if="$vuetify.breakpoint.mdAndUp" class="px-5 pt-4 pb-2 hidden-sm-and-down">
         <v-btn icon @click="close">
           <v-icon class="font-color-1">
             mdi-close
           </v-icon>
         </v-btn>
       </v-card-title>
+      <div class="hidden-md-and-up">
+        <MobileTopNav :headerText="$t('payment_redeem_title')">
+          <template v-slot:goBack>
+            <v-btn icon @click="close">
+              <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+            </v-btn>
+          </template>
+        </MobileTopNav>
+      </div>
 
-      <v-card-text class="px-6.5">
-        <div class="redeem-title font-color-1">
+      <v-card-text class="px-6.5" :class="!$vuetify.breakpoint.mdAndUp && 'pt-8.5'">
+        <div v-if="$vuetify.breakpoint.mdAndUp" class="redeem-title font-color-1">
           {{ $t('payment_redeem_title') }}
         </div>
         <div class="field-label mt-4 mb-2 font-color-1">
@@ -24,17 +33,19 @@
             dense
             class="font-color-2"
             :placeholder="$t('payment_placeholder_insert_certificate')"
+            hide-details
           ></v-text-field>
         </v-form>
       </v-card-text>
 
-      <v-card-actions class="pb-6 px-5">
+      <v-card-actions class="pb-6 px-6.5">
         <v-btn
           :loading="loading"
           color="primary-light-1"
           @click="handleAcceptBtnClick"
           depressed
-          class="text-normal ml-2"
+          :block="!$vuetify.breakpoint.mdAndUp"
+          class="text-normal white--text"
         >
           {{ $t("payment_redeem_btn_label_redeem_accept") }}
         </v-btn>
@@ -48,7 +59,11 @@
 
 <script>
 import { endpoint } from "../../../../../api";
+import MobileTopNav from "@/components/layout/global/MobileTopNav";
 export default {
+  components: {
+    MobileTopNav,
+  },
   props: ["open"],
   data() {
     return {
@@ -111,10 +126,14 @@ export default {
     line-height: 20px;
   }
   .px-6\.5 {
-    padding: 0 26px;
+    padding-left: 26px;
+    padding-right: 26px;
   }
   .px-5 {
     padding: 0 20px;
+  }
+  .pt-8\.5{
+    padding-top: 34px;
   }
 }
 </style>

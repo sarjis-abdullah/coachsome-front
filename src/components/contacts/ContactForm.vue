@@ -9,7 +9,7 @@
     <header class="hidden-md-and-up form-title">
       <mobile-top-nav
         extraClass="body-bg-secondary"
-        :headerText="$t('coach_contacts_add_form_title')"
+        :headerText="editMode ? $t('coach_contacts_edit_form_title') : $t('coach_contacts_add_form_title')"
       >
         <template v-slot:goBack>
           <v-btn icon @click="closeForm">
@@ -35,7 +35,7 @@
         />
       </div>
       <div class="form-title">
-        {{ $t("coach_contacts_add_form_title") }}
+        {{ editMode ? $t('coach_contacts_edit_form_title') : $t('coach_contacts_add_form_title') }}
       </div>
     </header>
     <v-form ref="form" v-model="valid" lazy-validation>
@@ -52,6 +52,7 @@
           :items="items"
           :rules="item.rules"
           :placeholder="item.placeholder"
+          :label="item.placeholder"
           hide-details
           class="form-input"
           outlined
@@ -63,6 +64,7 @@
           v-model="item.model"
           :rules="item.rules"
           :placeholder="item.placeholder"
+          :label="item.placeholder"
           class="form-input"
           outlined
           :hide-details="item.error && item.error != '' ? false : true"
@@ -71,16 +73,16 @@
           :error-messages="item.error"
         ></v-text-field>
       </div>
-      <div v-if="!editMode">
+      <div v-if="!editMode || $vuetify.breakpoint.mdAndUp">
         <v-btn
           :block="$vuetify.breakpoint.mdAndUp ? false : true"
           :loading="loading"
-          @click="submitForm()"
+          @click="editMode ? updateForm() : submitForm()"
           class="add-form-btn"
           depressed
         >
           {{
-            $t("coach_contacts_save_contact")
+            editMode ? $t("coach_contacts_update_contact") : $t("coach_contacts_save_contact")
           }}
         </v-btn>
       </div>

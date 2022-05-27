@@ -8,7 +8,7 @@
     dense
   >
     <!-- Logo -->
-    <router-link text to="/">
+    <router-link text to="/home">
       <img
         class="d-none d-md-flex d-lg-flex"
         :src="require('@/assets/images/logo.svg')"

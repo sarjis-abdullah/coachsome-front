@@ -20,7 +20,7 @@ export default {
     BottomNavigation
   },
   created(){
-        const currentRoute = this.$route.path;
+    const currentRoute = this.$route.path;
     if(currentRoute == pathData.pages.home 
     || currentRoute == pathData.admin.dashboard 
     || currentRoute == pathData.coach.home 
