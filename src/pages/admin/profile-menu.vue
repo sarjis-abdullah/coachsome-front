@@ -270,6 +270,20 @@
             </v-btn>
           </v-col>
         </v-row>
+        <v-row class="justify-center pt-0 mt-0 pb-8">
+          <v-col cols="11">
+            <v-btn
+              color="#49556A"
+              class="switch-option-btn"
+              block
+              outlined
+              v-if="isSwitchedUser"
+              @click="revertUser()"
+            >
+              <img class="btn-icon"  :src="require('@/assets/img/svg-icons/switch-flip.svg')" alt="">  <span class="default--text">{{$t("pwa_switch_to_own_user")}}</span>
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -278,6 +292,7 @@
 import { pathData } from "@/data";
 import { currencyService } from "@/services";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import impersonateAdminApi from "@/api/admin/impersonate";
 
 export default ({
   layout: "admin",
@@ -306,6 +321,13 @@ export default ({
     }
   },
   computed: {
+      isSwitchedUser() {
+        if (this.authUser()) {
+          return this.authUser().is_switched;
+        } else {
+          return false;
+        }
+      },
       avatarImage() {
         if (this.authUser()) {
           return this.authUser().image;
@@ -344,6 +366,22 @@ export default ({
       },
     },
     methods: {
+      revertUser() {
+        impersonateAdminApi(this.$axios)
+          .revert()
+          .then(({ data }) => {
+            this.$auth.setUser(data.user);
+            this.$auth.setUserToken(data.accessToken);
+            if (this.$auth.hasRole(["coach"])) {
+              this.$router.push(this.localePath(pathData.coach.editProfile));
+            } else if (this.$auth.hasRole(["athlete"])) {
+              this.$router.push(this.localePath(pathData.athlete.editProfile));
+            } else {
+              this.$router.push(this.localePath(pathData.admin.dashboard));
+            }
+          })
+          .catch(() => {});
+      },
       showProfile() {
         this.$router.push(this.localePath(pathData.pages.publicProfile(this.$auth.user.user_name)));
       },
