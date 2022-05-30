@@ -186,6 +186,8 @@ export default {
     async logout() {
       this.$nuxt.$loading.start();
       await this.$auth.logout();
+      this.$socket.emit("force_disconnect");
+      this.$store.dispatch("setUser", null);
       if (!this.$auth.loggedIn) {
         this.$router.push(this.localePath(pathData.pages.home));
       }

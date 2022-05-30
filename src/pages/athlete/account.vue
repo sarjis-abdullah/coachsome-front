@@ -98,7 +98,7 @@
             <v-col cols="12" class="d-flex justify-center">
               <v-btn
                 color="primary-light-1"
-                small
+                :block="$vuetify.breakpoint.smAndDown"
                 dark
                 @click.stop="handlePasswordChangeBtn()"
                 >{{ $t("setting_btn_label_change_password") }}
@@ -454,7 +454,8 @@ export default {
         this.$axios.delete(
           endpoint.ACCOUNTS_DELETE + "?password=" + this.deleteAccount.password
         );
-        await this.$auth.logout();
+        this.$socket.emit("force_disconnect");
+        this.$store.dispatch("setUser", null);
         this.$router.push(this.localePath(pathData.pages.login));
       } catch (err) {
         this.$toast.error(err.response.data.error.message);

@@ -216,8 +216,14 @@ export const actions = {
     context.commit("LOG_OUT");
   },
   setUser(context, user) {
-    localStorage.setItem("user", JSON.stringify(user));
-    context.commit("SET_USER", user);
+    if(user != null){
+      localStorage.setItem("user", JSON.stringify(user));
+      context.commit("SET_USER", user);
+    }else{
+      localStorage.removeItem("user");
+      localStorage.removeItem("access_token");
+      context.commit("SET_USER", null);
+    }
   },
   updateUserName(context, userName) {
     context.commit("UPDATE_USER_NAME", userName);

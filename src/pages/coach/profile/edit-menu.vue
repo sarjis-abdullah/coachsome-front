@@ -254,9 +254,15 @@ export default ({
       authUser() {
         return this.$auth.user;
       },
-      async logout(){
+      async logout() {
+        this.$nuxt.$loading.start();
         await this.$auth.logout();
-        this.$router.push(this.localePath(pathData.pages.home));
+        this.$socket.emit("force_disconnect");
+        this.$store.dispatch("setUser", null);
+        if (!this.$auth.loggedIn) {
+          this.$router.push(this.localePath(pathData.pages.home));
+        }
+        this.$nuxt.$loading.finish();
       },
       handleEditProfile() {
         this.$router.push(this.localePath(pathData.coach.editProfile));
