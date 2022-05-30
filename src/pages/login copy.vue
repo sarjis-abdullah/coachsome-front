@@ -13,7 +13,7 @@
           <!-- Logo -->
           <v-row>
             <v-col cols="12" class="text-center">
-              <NuxtLink :to="localePath('/home')">
+              <NuxtLink :to="localePath('/')">
                 <img :src="require('@/assets/images/logo.svg')" alt="logo" />
               </NuxtLink>
             </v-col>
