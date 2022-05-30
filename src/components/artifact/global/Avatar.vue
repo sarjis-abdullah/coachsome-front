@@ -216,7 +216,7 @@
         </template>
       </v-list-group>
       <v-dialog v-model="inviteFriendModal" max-width="680">
-        <v-card>
+        <v-card class="bg-2">
           <InviteYourFriends :isModal="true" @close-modal="inviteFriendModal = false"/>
         </v-card>
       </v-dialog>
