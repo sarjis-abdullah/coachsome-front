@@ -20,11 +20,11 @@
             @select-package="handleSelectPackage"
           />
         </v-dialog>
-        <v-dialog v-model="createGroupDialog.value" max-width="600">
+        <v-dialog v-if="$vuetify.breakpoint.mdAndUp" v-model="createGroupDialog.value" max-width="600">
           <CreateGroupForm
             @created="handleCreatedGroup"
             :open="createGroupDialog.value"
-            @close="createGroupDialog.value = false"
+            @close="closeCreateGroupDialog"
           />
         </v-dialog>
         <v-dialog v-model="inviteGroupDialog.value" max-width="600">
@@ -781,6 +781,14 @@
           </v-col>
         </slide-x-left-transition>
       </v-row>
+      <v-card flat v-if="!$vuetify.breakpoint.mdAndUp && $route && $route.query && $route.query.createGroupDialog" class="hidden-md-and-up fullscreen">
+        <div class="create-group-form-mobile">
+          <CreateGroupForm 
+          @created="handleCreatedGroup"
+          :open="createGroupDialog.value"
+          @close="closeCreateGroupDialog"/>
+        </div>
+      </v-card>
     </v-container>
   </div>
 </template>
@@ -1057,6 +1065,17 @@ export default {
       if(!value){
         this.$refs.UploadAttachment.reset();
       }
+    },
+    "$route": {
+      immediate: true,
+      deep: true,
+      handler(newValue, oldValue) {
+        if (this.$route?.query?.createGroupDialog) {
+          this.createGroupDialog.value = true
+        }else {
+          this.createGroupDialog.value = false
+        }
+      }
     }
   },
   async mounted() {
@@ -1314,7 +1333,7 @@ export default {
       }
     },
     async handleCreatedGroup() {
-      this.createGroupDialog.value = false;
+      this.closeCreateGroupDialog()
       await this.$store.dispatch("chat/getContacts");
       let contact = this.contacts[0];
       if (contact) {
@@ -1341,6 +1360,11 @@ export default {
     },
     handleGroupBtnClick() {
       this.createGroupDialog.value = true;
+      const query = {
+        ...this.$route.query,
+        createGroupDialog: true
+      }
+      this.$router.push({query})
     },
     handleUnarchiveBtnClick() {
       if (this.selectedContact) {
@@ -1578,12 +1602,28 @@ export default {
     },
     handleClearSearch() {
       this.search = "";
+    },
+    closeCreateGroupDialog(){
+      const query = {}
+      this.$router.push({query})
+      this.createGroupDialog.value = false;
     }
   }
 };
 </script>
 
 <style lang="scss">
+.fullscreen {
+  border-radius: 0;
+  margin: 0;
+  height: 100%;
+  position: fixed;
+  overflow-y: auto;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+}
 .ant-drawer-content-wrapper{
     // height: 400px!important;
     border-top-left-radius: 20px!important;
@@ -1651,7 +1691,7 @@ $header-height: 60px;
   }
 
   .v-textarea .v-input__control {
-    border: 2px solid #15577c !important;
+    // border: 2px solid #15577c !important;
   }
 
   .group-avatar {

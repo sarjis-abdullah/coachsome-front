@@ -291,7 +291,6 @@ export default {
 }
 .contact-form-parent {
   .form-title {
-    font-weight: 600;
     font-size: 25px;
     line-height: 35px;
     margin-bottom: 32px;
