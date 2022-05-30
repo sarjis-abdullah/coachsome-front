@@ -1,5 +1,5 @@
 <template>
-  <v-container class="invite-friend-container">
+  <v-container class="invite-friend-container bg-2">
       <v-row :class="isModal && 'form-space'">
         <v-col cols="12" class="invite-friend-wrapper" :class="!isModal ? 'invite-friend-wrapper__space' : 'p-0'">
           <section>
@@ -24,7 +24,7 @@
             @addEmail="addEmail"
             />
           </div>
-          <div @click="addTextbox" class="cursor-pointer py-2">
+          <div @click="addTextbox" class="cursor-pointer py-2 add-more-btn">
             + {{$t('invite_your_friends_add_more_btn')}}
           </div>
         </v-col>
@@ -137,6 +137,7 @@ export default {
   font-size: 16px;
   line-height: 24px;
   padding-top: 30px;
+  color: #49556A;
 }
 .cursor-pointer {
   cursor: pointer;
@@ -156,11 +157,10 @@ export default {
   padding:40px 67px 0px 67px;
 }
 .form-title {
-  font-family: 'Open Sans';
   font-style: normal;
-  font-weight: 600;
   font-size: 25px;
-  line-height: 20px;
+  line-height: 35px;
+  color: #49556A;
 }
 .form-top-description {
   font-weight: 400;
@@ -177,5 +177,8 @@ export default {
 }
 .invite-friend-container {
   max-width: 680px;
+}
+.add-more-btn {
+  color: #49556A;
 }
 </style>

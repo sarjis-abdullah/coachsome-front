@@ -11,11 +11,19 @@ var Tawk_API = Tawk_API || {},
 
   //here's all you need
   Tawk_API.onLoad = function() {
-    if(this.$vuetify.breakpoint.smAndDown){
-      Tawk_API.hideWidget();
-    }else{
-      Tawk_API.showWidget();
-    }
+    //screen resize method
+    window.addEventListener(
+      "resize",
+      function(event) {
+        // do what you want
+        let w = document.documentElement.clientWidth;
+        if (w < 960) {
+          Tawk_API.hideWidget();
+        } else {
+          Tawk_API.showWidget();
+        }
+      },
+      true
+    );
   };
 })();
-
