@@ -1,15 +1,22 @@
 <template>
   <v-app>
-    <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp && !isAdmin" />
-    <admin-top-nav v-if="isAdmin"></admin-top-nav>
-    <v-main>
-      <client-only>
-        <GlobalHeader />
-      </client-only>
-      <nuxt />
-      <BottomNavigation v-if="$vuetify.breakpoint.smAndDown" />
-    </v-main>
-    <FrontFooter />
+    <div class="cs-loading-wrapper" v-if="loading && $vuetify.breakpoint.smAndDown">
+        <div class="cs-splash">
+            <div class="v-cloak"></div>
+        </div>
+    </div>
+    <div v-if="!loading">
+      <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp && !isAdmin" />
+      <admin-top-nav v-if="$vuetify.breakpoint.mdAndUp &&  isAdmin"></admin-top-nav>
+      <v-main>
+        <client-only>
+          <GlobalHeader />
+        </client-only>
+        <nuxt />
+        <BottomNavigation v-if="$vuetify.breakpoint.smAndDown" />
+      </v-main>
+      <FrontFooter />
+    </div>
   </v-app>
 </template>
 
@@ -33,7 +40,9 @@ export default {
     AdminTopNav
   },
   data() {
-    return {};
+    return {
+      loading: true,
+    };
   },
   computed:{
     isAdmin() {
@@ -72,7 +81,11 @@ export default {
       this.$store.dispatch("activeBottomNav", 4);
     }
   },
-  mounted() {},
+  mounted() {
+    setTimeout(function () { 
+      this.loading  = false;
+    }.bind(this), 300)
+  },
   methods: {
     hasRole(roles = []) {
       return this.$auth.hasRole(roles);
@@ -80,3 +93,20 @@ export default {
   }
 };
 </script>
+<style scoped>
+  .v-cloak::before {
+      content: url('~assets/images/logo-dark.svg');
+  }
+  .cs-loading-wrapper{
+      position: relative;
+      height: 100vh;
+      background-color: white;
+  }
+  .cs-splash{
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+  }
+</style>

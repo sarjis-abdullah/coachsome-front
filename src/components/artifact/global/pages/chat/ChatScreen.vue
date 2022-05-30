@@ -699,7 +699,7 @@ export default {
     }
 
     .text-message--opponent {
-      background: #F7FAFC;
+      background: #ECF2F7;
       border-radius: 5px;
       display: inline-block;
       padding: 8px 15px 12px 10px;

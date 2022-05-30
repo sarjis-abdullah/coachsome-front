@@ -17,4 +17,13 @@ export default function({ $auth }) {
 
     return flag;
   };
+
+  // $auth.roleName = givenRole => {
+  //   let name = "";
+  //   if (typeof givenRole == "string") {
+      
+  //   }
+
+  //   return name;
+  // };
 }

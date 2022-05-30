@@ -13,7 +13,7 @@
       <!-- Logo and Slogan-->
       <v-toolbar-title class="ml-0">
         <div v-if="isLight" class="d-flex justify-center align-center">
-          <NuxtLink :to="localePath('/home')">
+          <NuxtLink :to="localePath('/')">
             <img :src="require('@/assets/images/logo-dark.svg')" alt="logo" />
           </NuxtLink>
           <span class="slogan d-none d-md-flex d-lg-flex ml-2 mt-2">{{
@@ -21,7 +21,7 @@
           }}</span>
         </div>
         <div v-if="isDark" class="d-flex justify-center align-center">
-          <NuxtLink :to="localePath('/home')">
+          <NuxtLink :to="localePath('/')">
             <img
               class="d-none d-md-flex d-lg-flex"
               :src="require('@/assets/images/logo.svg')"

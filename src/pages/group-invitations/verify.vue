@@ -13,7 +13,7 @@
       </div>
     </div>
     <div v-else>
-      <v-btn color="primary-light-1" outlined :to="localePath('/home')">
+      <v-btn color="primary-light-1" outlined :to="localePath('/')">
         Go Home
       </v-btn>
     </div>

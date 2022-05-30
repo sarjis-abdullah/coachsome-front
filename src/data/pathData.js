@@ -24,7 +24,7 @@ export default {
     faq: "/faq",
     gift: "/gift",
     giftCheckout: "/gift/checkout",
-    home: "/home",
+    home: "/",
     homeOld: "/front",
     howItWork: "/how-it-works",
     login: "/login",
