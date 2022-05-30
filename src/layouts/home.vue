@@ -74,11 +74,19 @@ export default {
   },
   computed:{
     isAdmin() {
-      if(this.$auth?.loggedIn){
-        return this.hasRole(["superadmin", "admin", "staff"]);
+      if(this.hasRole(['superadmin', 'admin', 'staff'])){
+        return true;
       }else{
         return false;
       }
+      // if(this.$auth && this.$auth.loggedIn){
+      //   if(this.$auth.user && this.$auth.user.roles[0].name == "superadmin" || authUser.roles[0].name == "admin" || authUser.roles[0].name == "staff"){
+      //     return true;
+      //   }
+      //   return this.hasRole(["superadmin", "admin", "staff"]);
+      // }else{
+      //   return false;
+      // }
     },
   },
   methods: {
