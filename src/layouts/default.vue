@@ -1,11 +1,11 @@
 <template>
   <v-app>
-    <div class="cs-loading-wrapper" v-if="loading && $vuetify.breakpoint.smAndDown">
+    <div class="cs-loading-wrapper" v-if="loading">
         <div class="cs-splash">
             <div class="v-cloak"></div>
         </div>
     </div>
-    <div v-if="!loading">
+    <div v-else>
       <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp && !isAdmin" />
       <admin-top-nav v-if="$vuetify.breakpoint.mdAndUp &&  isAdmin"></admin-top-nav>
       <v-main>
@@ -41,7 +41,7 @@ export default {
   },
   data() {
     return {
-      loading: true,
+      loading: this.$vuetify.breakpoint.smAndDown ? true : false,
     };
   },
   computed:{
