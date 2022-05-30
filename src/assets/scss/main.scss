@@ -425,3 +425,14 @@
   }
 }
 
+// Global Error Message Details Space
+.v-text-field__details{
+  display: none;
+}
+.error--text .v-text-field__details{
+  display: inline;
+}
+.v-input__slot{
+  margin-bottom: 4px;
+}
+

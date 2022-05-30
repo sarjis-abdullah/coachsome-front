@@ -47,7 +47,7 @@
           append-icon="mdi-magnify"
           label="Search"
           single-line
-          solo
+          outlined
           hide-details
         ></v-text-field>
       </v-col>
@@ -84,22 +84,22 @@
           </v-data-table>
 
           <!-- Create Dialog -->
-          <v-dialog v-model="dialog" max-width="600">
+          <v-dialog v-model="dialog" max-width="600" @click:outside="closePromoCodeDialog">
             <v-card>
               <v-card-text>
                 <v-container>
                   <v-row class="pt-5">
                     <v-col
-                      class="text-center primary-light-1--text text-h6 text-uppercase"
+                      class="text-left font-color-1 text-h6 text-capitalize"
                     >
-                      {{ dialogTitle }}
+                      <FormHeader @close="closePromoCodeDialog" :title="dialogTitle"/>
                     </v-col>
                   </v-row>
                   <v-form ref="form" v-model="valid">
                     <!-- Promo name -->
                     <v-row>
                       <v-col cols="12">
-                        <div class="subtitle-2">
+                        <div class="subtitle-2 pb-2">
                           Promo name (For tracking purpose)
                         </div>
                         <v-text-field
@@ -107,7 +107,7 @@
                           dense
                           v-model="defaultForm.name"
                           label="Enter a promo name"
-                          solo
+                          outlined
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -115,7 +115,7 @@
                     <!-- Promo code -->
                     <v-row>
                       <v-col cols="12">
-                        <div class="subtitle-2">
+                        <div class="subtitle-2 pb-2">
                           Promo code (the actual code)
                         </div>
                         <v-text-field
@@ -123,7 +123,7 @@
                           dense
                           v-model="defaultForm.code"
                           label="Enter a promo code name"
-                          solo
+                          outlined
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -132,42 +132,44 @@
                     <v-row>
                       <v-col cols="12">
                         <div class="subtitle-2">Promotion type</div>
-                        <div v-for="(item, i) in types" :key="i">
-                          <v-checkbox
-                            v-model="defaultForm.type"
-                            :rules="[v => !!v || 'Promotion type is required']"
-                            :label="item.name"
-                            color="primary-light-1"
-                            :value="item.id"
-                            hide-details
-                          ></v-checkbox>
-                        </div>
+                          <v-radio-group v-model="defaultForm.type" hide-details>
+                            <v-radio
+                              v-for="item in types"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id"
+                              color="primary-light-1"
+                              :rules="[v => !!v || 'Promotion type is required']"
+                            ></v-radio>
+                          </v-radio-group>
                       </v-col>
                     </v-row>
 
                     <!-- currency & discount ammount -->
                     <v-row v-if="isFixed">
                       <v-col>
-                        <div class="subtitle-2">Currency</div>
+                        <div class="subtitle-2 pb-2">Currency</div>
                         <v-select
                           v-model="defaultForm.currency"
                           :items="currencies"
                           item-text="displayText"
                           item-value="id"
-                          solo
+                          outlined
                           dense
+                          label="Select currency"
                           :rules="[v => !!v || 'Currency is required']"
                         ></v-select>
                       </v-col>
                       <v-col>
-                        <div class="subtitle-2">
+                        <div class="subtitle-2 pb-2">
                           Discount amount
                         </div>
                         <v-text-field
                           type="number"
                           dense
                           v-model="defaultForm.discount"
-                          solo
+                          label="Select amount"
+                          outlined
                           min="0"
                           :rules="[v => !!v || 'Discount amount is required']"
                         >
@@ -183,7 +185,7 @@
                     <!-- Percentage off -->
                     <v-row v-if="!isFixed">
                       <v-col cols="12">
-                        <div class="subtitle-2">Percentage off</div>
+                        <div class="subtitle-2 pb-2">Percentage off</div>
                         <v-text-field
                           type="number"
                           :rules="[v => !!v || 'Percentage off is required']"
@@ -191,7 +193,8 @@
                           max="100"
                           dense
                           v-model="defaultForm.percentageOff"
-                          solo
+                          label="Select discount percentage"
+                          outlined
                         >
                           <template v-slot:append>
                             <div>
@@ -205,7 +208,7 @@
                     <!-- Duration -->
                     <v-row>
                       <v-col cols="12">
-                        <div class="subtitle-2">Duration</div>
+                        <div class="subtitle-2 pb-2">Duration</div>
                         <v-select
                           v-model="defaultForm.duration"
                           :rules="[v => !!v || 'Duration is required']"
@@ -214,18 +217,14 @@
                           item-text="name"
                           item-value="id"
                           label="Select duration"
-                          solo
+                          outlined
                         >
                         </v-select>
                       </v-col>
                     </v-row>
                   </v-form>
                   <v-row>
-                    <v-col class="d-flex justify-center">
-                      <v-btn depressed class="mr-5" @click="dialog = false">
-                        Cancel
-                      </v-btn>
-
+                    <v-col>
                       <v-btn
                         v-if="!editMode"
                         :loading="isLoading"
@@ -264,10 +263,11 @@ import { adminPromoCodeApi } from "@/api";
 import { currencyService } from "@/services";
 import { pathData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import FormHeader from '@/components/layout/global/FormHeader'
 
 export default {
   layout: "admin",
-  components: {MobileTopNav},
+  components: {MobileTopNav, FormHeader},
   data() {
     return {
       search: "",
@@ -314,6 +314,17 @@ export default {
     };
   },
   watch: {
+    '$route': {
+      immediate: true,
+      deep: true,
+      handler(newValue, oldValue) {
+        if (this.$route?.query?.promoCodeDialog) {
+          this.dialog = true
+        }else{
+          this.dialog = false
+        }
+      }
+    },
     "defaultForm.currency": function(val) {
       if (val) {
         this.defaultForm.symbol = this.currencies.find(
@@ -428,12 +439,14 @@ export default {
           })
           .finally(() => {
             this.isLoading = false;
+            this.closePromoCodeDialog()
           });
       }
     },
     handleNewBtnClick() {
       this.editMode = false;
       this.dialog = true;
+      this.openPromoCodeDialog()
       this.$nextTick(() => {
         // this.$refs.form.reset();
       });
@@ -470,12 +483,14 @@ export default {
           })
           .finally(() => {
             this.isLoading = false;
+            this.closePromoCodeDialog()
           });
       }
     },
     editItem(item) {
       this.editMode = true;
       this.dialog = true;
+      this.openPromoCodeDialog()
       Object.assign(this.defaultForm, item);
     },
     deleteItem(item) {
@@ -502,7 +517,17 @@ export default {
             this.isLoading = false;
           });
       }
-    }
+    },
+    closePromoCodeDialog(){
+      this.$router.push({query:{}})
+    },
+    openPromoCodeDialog(){
+      const query = {
+        ...this.$route.query,
+        promoCodeDialog: true
+      }
+      this.$router.push({query})
+    },
   }
 };
 </script>
