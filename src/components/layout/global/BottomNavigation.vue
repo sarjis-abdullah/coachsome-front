@@ -55,7 +55,8 @@
         </v-btn>
         <v-btn icon large class="menu-icon-button" v-else-if="!avatarImage && isLoggedIn" @click="goToProfile()">
           <v-avatar color="primary-light-1" size="32px" >
-            <span>{{ initialImageContent }}</span>
+            <span v-if="initialImageContent != ''">{{ initialImageContent }}</span>
+            <v-img v-else aspect-ratio="1" :src="require('@/assets/images/profile-default.jpg')" alt="Avatar"></v-img>
           </v-avatar>
         </v-btn>
         <v-btn

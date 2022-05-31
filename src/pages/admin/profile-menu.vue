@@ -9,7 +9,8 @@
           <v-img aspect-ratio="1" :src="avatarImage" alt="Avatar" />
         </v-avatar>
         <v-avatar color="primary-light-1" size="32px" v-else>
-          <span>{{ initialImageContent }}</span>
+          <span v-if="initialImageContent != ''">{{ initialImageContent }}</span>
+          <v-img v-else aspect-ratio="1" :src="require('@/assets/images/profile-default.jpg')" alt="Avatar"></v-img>
         </v-avatar>
       </template>
       <template v-slot:action>
