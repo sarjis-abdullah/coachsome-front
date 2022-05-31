@@ -290,6 +290,7 @@
 
 <script>
 import { pathData } from "@/data";
+import { avatarHelper } from "@/helper"
 import impersonateAdminApi from "@/api/admin/impersonate";
 import { currencyService } from "@/services";
 import InviteYourFriends from '@/components/profile/invite-friends/InviteYourFriends.vue';
@@ -527,14 +528,7 @@ export default {
       }
     },
     initialImageContent() {
-      if (this.authUser()) {
-        return (
-          this.authUser().first_name.substring(0, 1) +
-          this.authUser().last_name.substring(0, 1)
-        );
-      } else {
-        return "";
-      }
+      return avatarHelper.getAvatarName(this.authUser());
     }
   },
   watch: {
