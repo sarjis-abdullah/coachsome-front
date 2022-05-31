@@ -1,13 +1,26 @@
 <template>
-  <v-card>
+  <v-card :flat="!$vuetify.breakpoint.mdAndUp" class="bg-1">
     <v-card-text>
       <v-container>
-        <v-row class="pt-5">
+        <v-row v-if="$vuetify.breakpoint.mdAndUp" class="pt-5">
           <v-col class="text-left font-color-1 text-h6 text-capitalize">
             <FormHeader @close="closePromoCodeDialog" :title="dialogTitle" />
           </v-col>
         </v-row>
-        <v-form ref="form" v-model="valid">
+        <mobile-top-nav extraClass="body-bg-secondary" :headerText="dialogTitle">
+            <template v-slot:goBack>
+                <v-btn
+                icon
+                @click="closePromoCodeDialog"
+                >
+                <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+                </v-btn>
+            </template>
+            <template v-slot:action>
+                <span></span>
+            </template>
+        </mobile-top-nav>
+        <v-form ref="form" v-model="valid" :class="!$vuetify.breakpoint.mdAndUp && 'pt-7'">
           <!-- Promo name -->
           <v-row>
             <v-col cols="12">
@@ -138,24 +151,14 @@
         <v-row>
           <v-col>
             <v-btn
-              v-if="!editMode"
               :loading="isLoading"
               depressed
               color="primary-light-1"
               dark
-              @click="handleCreateBtnClick"
+              :block="!$vuetify.breakpoint.mdAndUp"
+              @click="!editMode ? handleCreateBtnClick() : handleUpdateBtnClick()"
             >
-              Create
-            </v-btn>
-            <v-btn
-              v-if="editMode"
-              :loading="isLoading"
-              depressed
-              color="primary-light-1"
-              dark
-              @click="handleUpdateBtnClick"
-            >
-              Update
+              {{editMode ? 'Update' : 'Create'}}
             </v-btn>
           </v-col>
         </v-row>
@@ -166,8 +169,6 @@
 
 <script>
 import { adminPromoCodeApi } from "@/api";
-import { currencyService } from "@/services";
-import { pathData } from "@/data";
 import FormHeader from "@/components/layout/global/FormHeader";
 import MobileTopNav from "@/components/layout/global/MobileTopNav";
 const formItem = {

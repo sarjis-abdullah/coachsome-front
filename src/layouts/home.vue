@@ -26,6 +26,7 @@ import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import { pathData } from "@/data";
 
 export default {
+  name: "HomeLayout",
   components: {
     FrontFooter,
     GlobalHeader,

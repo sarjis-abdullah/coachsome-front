@@ -3,7 +3,7 @@
     <TopNav v-if="$vuetify.breakpoint.mdAndUp" />
     <v-main class="body-bg">
       <nuxt />
-      <BottomNavigation v-if="$vuetify.breakpoint.smAndDown" />
+      <BottomNavigation v-if="$vuetify.breakpoint.smAndDown && showBottomNav" />
     </v-main>
   </v-app>
 </template>
@@ -12,12 +12,20 @@
 import TopNav from "@/components/layout/admin/TopNav";
 import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import { pathData } from "@/data";
-
 export default {
+  name: "AdminLayout",
   middleware: ["auth-admin"],
   components: {
     TopNav,
     BottomNavigation
+  },
+  computed: {
+    showBottomNav (){
+      if (this.$route?.query?.promoCodeDialog) {
+        return false
+      }
+      return true
+    }
   },
   created(){
     const currentRoute = this.$route.path;

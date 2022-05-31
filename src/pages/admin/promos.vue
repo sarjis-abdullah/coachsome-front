@@ -46,8 +46,8 @@
           v-model="search"
           append-icon="mdi-magnify"
           label="Search"
-          single-line
           outlined
+          dense
           hide-details
         ></v-text-field>
       </v-col>
@@ -84,17 +84,32 @@
           </v-data-table>
 
           <!-- Create Dialog -->
-          <v-dialog v-model="dialog" max-width="600" @click:outside="closePromoCodeDialog">
-            <PromoCodeForm 
-            :types="types" 
-            :currencies="currencies" 
-            :durations="durations" 
-            :editMode="editMode" 
-            :editableFormData="defaultForm" 
-            @updatePromoInUpdateMode="updatePromoInUpdateMode"
-            @updatePromoInCreateMode="updatePromoInCreateMode"
-            @closePromoCodeDialog="closePromoCodeDialog"/>
-          </v-dialog>
+          <template v-if="dialog">
+            <div v-if="$vuetify.breakpoint.mdAndUp">
+              <v-dialog v-model="dialog" max-width="600" @click:outside="closePromoCodeDialog">
+                <PromoCodeForm 
+                :types="types" 
+                :currencies="currencies" 
+                :durations="durations" 
+                :editMode="editMode" 
+                :editableFormData="defaultForm" 
+                @updatePromoInUpdateMode="updatePromoInUpdateMode"
+                @updatePromoInCreateMode="updatePromoInCreateMode"
+                @closePromoCodeDialog="closePromoCodeDialog"/>
+              </v-dialog>
+            </div>
+            <v-card v-else class="fullscreen bg-1">
+              <PromoCodeForm 
+              :types="types" 
+              :currencies="currencies" 
+              :durations="durations" 
+              :editMode="editMode" 
+              :editableFormData="defaultForm" 
+              @updatePromoInUpdateMode="updatePromoInUpdateMode"
+              @updatePromoInCreateMode="updatePromoInCreateMode"
+              @closePromoCodeDialog="closePromoCodeDialog"/>
+            </v-card>
+          </template>
           <!-- Create Dialog -->
         </v-card>
       </v-col>
@@ -111,6 +126,7 @@ import MobileTopNav from '@/components/layout/global/MobileTopNav'
 import PromoCodeForm from '@/components/artifact/admin/PromoCodeForm'
 
 export default {
+  name: "AdminPromos",
   layout: "admin",
   components: {MobileTopNav, PromoCodeForm},
   data() {
@@ -277,6 +293,7 @@ export default {
       }
     },
     closePromoCodeDialog(){
+      this.defaultForm = {}
       this.$router.push({query:{}})
     },
     openPromoCodeDialog(){
@@ -327,4 +344,16 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.fullscreen {
+    border-radius: 0;
+    margin: 0;
+    height: 100%;
+    position: fixed;
+    overflow-y: auto;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+  }
+</style>
