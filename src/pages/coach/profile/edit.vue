@@ -374,7 +374,7 @@
                       </v-btn>
                     </template>
                     <v-card>
-                      <v-card-title>
+                      <v-card-title class="default--label">
                         {{ $t("profile_mod_title_select_lang") }}
                         <v-spacer></v-spacer>
                         <v-card-actions>
@@ -691,7 +691,7 @@
                       </v-btn>
                     </template>
                     <v-card>
-                      <v-card-title>
+                      <v-card-title class="default--label">
                         {{ $t("profile_mod_title_select_lang") }}
                         <v-spacer></v-spacer>
                         <v-card-actions>
@@ -788,7 +788,7 @@
                       </v-btn>
                     </template>
                     <v-card>
-                      <v-card-title>
+                      <v-card-title class="default--label">
                         {{ $t("profile_modal_heading_select_category") }}
                         <v-spacer></v-spacer>
                         <v-card-actions>

@@ -7,7 +7,7 @@
         :placeholder="$t('hint_instructions')"
         counter="35"
         maxlength="150"
-        :card-props="{ flat: true, outlined: true, dense: true, color: '#9e9e9e' }"
+        :card-props="{ flat: true, outlined: true, dense: true, color: '#9FAEC2' }"
         class="mb-4"
       />
     </client-only>
@@ -41,7 +41,22 @@ export default {
   }
 };
 </script>
-
+<style>
+.v-application .grey.lighten-4 {
+    background-color: #6F8098 !important;
+    border-color: #6F8098 !important;
+}
+</style>
 <style lang="scss">
+.tiptap-vuetify-editor{
+  &__btn-icon{
+    color: white!important
+  }
+  &__content{
+    p{
+      color: #6F8098 !important;
+    }
+  }
+}
 
 </style>

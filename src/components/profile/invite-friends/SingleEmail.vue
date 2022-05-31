@@ -13,7 +13,7 @@
       ></v-text-field>
     </div>
     <div v-if="item.index > 0" class="cursor-pointer" @click="removeEmail">
-      <img class="menu-icon-image" :src="require('@/assets/img/svg-icons/cancel.svg')" alt="">
+      <img class="menu-icon-image" :src="require('@/assets/img/svg-icons/cancel.svg')" alt="cancel btn">
     </div>
     </section>
   </v-form>

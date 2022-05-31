@@ -332,8 +332,8 @@
   background: #FFFFFF;
   border: 1px solid $grey-500 !important;;
   box-sizing: border-box;
-  border-radius: 8px;
-  padding: 10px;
+  border-radius: 4px;
+  padding: 7px;
 }
 
 .v-switch-core {
@@ -355,46 +355,47 @@
     color: $grey-700!important;
   }
   &--title{
-    font-family: $font-family;
+    font-family: $font-family!important;
     font-style: normal;
     font-weight: 600;
     font-size: 20px;
     line-height: 27px;
     text-transform: capitalize;
-    color: $grey-700;
+    color: $grey-700!important;
 
   }
   &--label{
-    font-family: $font-family;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
+    font-family: $font-family!important;
+    font-style: normal!important;
+    font-weight: 600!important;
+    font-size: 16px!important;
+    line-height: 24px!important;
     display: flex;
     align-items: center;
-    text-transform: capitalize;
-    color: $grey-700;
+    text-transform: capitalize!important;
+    color: $grey-700!important;
   }
   &--placeholder{
-    font-family: $font-family;
+    font-family: $font-family!important;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 400;
     font-size: 16px;
     line-height: 24px;
     display: flex;
     align-items: center;
-    color: $grey-500;
+    color: $grey-500!important;
   }
   &--sub-title{
-    font-family: $font-family;
+    font-family: $font-family!important;
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
     line-height: 22px;
-    color: $grey-700;
+    color: $grey-700!important;
   }
   &--button{
     text-transform: capitalize;
+    text-align: center!important;
   }
 }
 
@@ -404,6 +405,9 @@
 .theme--light {
   .v-label  {
     color: $grey-500 !important;
+  }
+  .v-icon {
+    // color: $grey-500 !important;
   }
 }
 
@@ -423,5 +427,16 @@
   &__icon {
     align-self: center!important;
   }
+}
+
+// Global Error Message Details Space
+.v-text-field__details{
+  display: none;
+}
+.error--text .v-text-field__details{
+  display: inline;
+}
+.v-input__slot{
+  margin-bottom: 4px;
 }
 

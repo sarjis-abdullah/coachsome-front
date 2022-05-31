@@ -536,8 +536,16 @@ export default {
         await this.$axios.delete(
           endpoint.ACCOUNTS_DELETE + "?password=" + this.deleteAccount.password
         );
+        
+        this.$nuxt.$loading.start();
         await this.$auth.logout();
-        this.$router.push(this.localePath(pathData.pages.home));
+        this.$socket.emit("force_disconnect");
+        this.$store.dispatch("setUser", null);
+        if (!this.$auth.loggedIn) {
+          this.$router.push(this.localePath(pathData.pages.home));
+        }
+        this.$nuxt.$loading.finish();
+
       } catch (err) {
         // this.$toast.error(err.response.data.error.message);
         this.$toast.error("Something went wrong, Please try again!");
@@ -815,16 +823,6 @@ export default {
   
 }
 
-
-.default--label{
-    font-family: Open Sans;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 25px;
-    text-transform: none;
-    color: $grey-700!important;
-}
 
 .cs-forgot-password-sec{
   height: calc(100vh - 248px);

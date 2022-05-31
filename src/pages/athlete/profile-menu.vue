@@ -231,7 +231,7 @@
             <v-btn
                 solo
                 color="#15577C"
-                class="login-option-btn"
+                class="login-option-btn default--button"
                 block
                 @click="logout()"
             >
@@ -243,7 +243,7 @@
           <v-col cols="11">
             <v-btn
               color="#49556A"
-              class="switch-option-btn"
+              class="switch-option-btn default--button"
               block
               outlined
               v-if="isSwitchedUser"
@@ -352,9 +352,15 @@ export default ({
       authUser() {
         return this.$auth.user;
       },
-      async logout(){
+      async logout() {
+        this.$nuxt.$loading.start();
         await this.$auth.logout();
-        this.$router.push(this.localePath(pathData.pages.home));
+        this.$socket.emit("force_disconnect");
+        this.$store.dispatch("setUser", null);
+        if (!this.$auth.loggedIn) {
+          this.$router.push(this.localePath(pathData.pages.home));
+        }
+        this.$nuxt.$loading.finish();
       },
       handleEditProfile() {
         this.$router.push(this.localePath(pathData.athlete.editProfile));

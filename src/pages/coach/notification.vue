@@ -27,7 +27,7 @@
               <!-- Notification Section -->
           <v-row class="notification">
             <v-col cols="12" md="4">
-              <div class="default--title pb-2">
+              <div class="default--title">
                 {{$t("pwa_email_notification")}}
               </div>
             </v-col>
