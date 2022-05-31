@@ -57,7 +57,7 @@
 
       <!-- Coach Setting -->
       <span v-if="isLoggedIn && isCoach">
-        <v-list-item
+        <!-- <v-list-item
           color="primary"
           link
           @click.stop="
@@ -69,7 +69,7 @@
               {{ $t(items.coachBalanceEarnings.t_key) }}
             </v-list-item-title>
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
         <v-list-item
           color="primary"
           link

@@ -5,7 +5,7 @@
         <div></div>
       </template>
     </top-nav>
-    <admin-top-nav v-if="$vuetify.breakpoint.mdAndUp && isAdmin"></admin-top-nav>
+    <admin-top-nav :theme="theme" :color="color" v-if="$vuetify.breakpoint.mdAndUp && isAdmin"></admin-top-nav>
     <v-main class="pt-0">
       <client-only>
         <GlobalHeader />

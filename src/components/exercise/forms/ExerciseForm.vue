@@ -47,6 +47,7 @@
                                         :rules="[v => !!v || 'Exercise Name is required']"
                                         required
                                         class="create-exercise__input-field"
+                                        background-color="white"
                                     />
                                 </v-col>
                                 <v-col cols="12" class="py-0 my-0">
@@ -78,6 +79,7 @@
                                             outlined
                                             dense
                                             class="create-exercise__input-field"
+                                            background-color="white"
                                             @change="saveVideoUrl()"
                                         ></v-text-field>
                                     </v-form>
@@ -187,7 +189,7 @@
                                 </v-col>
 
                                 <v-col cols="12">
-                                    <span class="exercise-preview--breakdown">{{$t("lbl_ex_brk")}}</span>
+                                    <span class="create-exercise--breakdown">{{$t("lbl_ex_brk")}}</span>
                                 </v-col>
 
                                 <!-- Category Section -->
@@ -208,6 +210,7 @@
                                         persistent-hint
                                         autocomplete="off"
                                         class="create-exercise__input-field"
+                                        background-color="white"
                                     >
                                         <template
                                         v-slot:selection="{ attrs, item, select, selected }"
@@ -253,6 +256,7 @@
                                         persistent-hint
                                         autocomplete="off"
                                         class="create-exercise__input-field"
+                                        background-color="white"
                                     >
                                         <template
                                         v-slot:selection="{ attrs, item, select, selected }"
@@ -299,6 +303,7 @@
                                         autocomplete="off"
                                         color="#9FAEC2"
                                         class="create-exercise__input-field"
+                                        background-color="white"
                                     >
                                         <template
                                         v-slot:selection="{ attrs, item, select, selected }"
@@ -340,6 +345,7 @@
                                         append-icon
                                         color="#9FAEC2"
                                         class="create-exercise__input-field"
+                                        background-color="white"
                                     >
                                         <template
                                         v-slot:selection="{ attrs, item, select, selected }"
@@ -761,6 +767,11 @@ export default ({
     
 })
 </script>
+<style scoped>
+.v-text-field--outlined >>> fieldset {
+  border-color: #9FAEC2!important;
+}
+</style>
 <style lang="scss" scoped>
     .create-exercise{
         iframe{
@@ -884,5 +895,9 @@ export default ({
         font-size: 20px;
         text-align: center;
         color: #49556A;
+    }
+    .btn-text{
+        font-family: $font-family!important;
+        // color: $grey-500!important;
     }
 </style>

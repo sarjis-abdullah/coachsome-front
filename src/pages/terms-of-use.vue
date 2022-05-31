@@ -1,6 +1,19 @@
 <template>
   <div class="bootstrap-wrapper">
     <div class="container-fluid">
+      <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('global_url_terms_of_use')">
+        <template v-slot:goBack>
+          <v-btn
+            icon
+            @click="handleBack"
+          >
+            <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+          </v-btn>
+        </template>
+        <template v-slot:action>
+          <span></span>
+        </template>
+      </mobile-top-nav>
       <div class="row">
         <div class="col px-md-0">
           <div v-html="content"></div>
@@ -12,13 +25,18 @@
 
 <script>
 import { pageBuilderApi } from "@/api";
+import { pathData } from "@/data";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
-    head() {
+  head() {
     return {
       title: this.$i18n.t("header_title_tag_front_terms"),
       titleTemplate: "%s"
     };
+  },
+  components: {
+    MobileTopNav
   },
   async asyncData({ app, $axios }) {
     const { data } = await pageBuilderApi($axios).getPage("Terms");
@@ -47,7 +65,17 @@ export default {
       content
     };
   },
-  methods: {}
+  methods: {
+    handleBack(){
+      if(this.$auth.hasRole(["coach"])){
+        this.$router.push(this.localePath(pathData.coach.profileMenu));
+      }else if(this.$auth.hasRole(["athlete"])){
+        this.$router.push(this.localePath(pathData.athlete.profileMenu));
+      }else{
+        this.$router.push(this.localePath(pathData.pages.home));
+      }
+    },
+  }
 };
 </script>
 

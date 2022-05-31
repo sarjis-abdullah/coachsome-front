@@ -2,10 +2,10 @@
   <v-app-bar
     :clipped-left="$vuetify.breakpoint.lgAndUp"
     app
-    color="primary"
-    dark
     elevation="0"
     dense
+    dark
+    :color="color"
   >
     <!-- Logo -->
     <router-link text to="/">
@@ -66,6 +66,20 @@ export default {
   components: {
     Avatar,
     SportSearch
+  },
+  props: {
+    fixed: {
+      type: Boolean,
+      default: true
+    },
+    theme: {
+      type: String,
+      default: "dark"
+    },
+    color: {
+      type: String,
+      default: "primary"
+    }
   },
   data() {
     return {
