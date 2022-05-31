@@ -51,9 +51,8 @@
                         style="width: 100%; height: 150px;"
                         @click.stop="editImageDialog.show = true"
                       >
-                        <span class="white--text headline">
-                          {{ initialImageContent }}
-                        </span>
+                        <span class="white--text headline" v-if="initialImageContent != ''">{{ initialImageContent }}</span>
+                        <v-img v-else aspect-ratio="1" :src="require('@/assets/images/profile-default.jpg')" alt="Avatar"></v-img>
                       </v-avatar>
 
                       <v-avatar
@@ -105,9 +104,8 @@
                         tile
                         style="width: 100%; height: 150px;"
                       >
-                        <span class="white--text headline">
-                          {{ initialImageContent }}
-                        </span>
+                       <span class="white--text headline" v-if="initialImageContent != ''">{{ initialImageContent }}</span>
+                      <v-img v-else aspect-ratio="1" :src="require('@/assets/images/profile-default.jpg')" alt="Avatar"></v-img>
                       </v-avatar>
                       <v-avatar
                         style="width: 100%; height: 150px;"
