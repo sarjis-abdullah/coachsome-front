@@ -209,9 +209,9 @@ export const actions = {
         if (user) {
           contact.title = item.contactName;
           contact.avatarImage = user.profile.image;
-          contact.avatarName =
+          contact.avatarName = user.firstName && user.lastName ?  
             user.firstName.charAt(0).toUpperCase() +
-            user.lastName.charAt(0).toUpperCase();
+            user.lastName.charAt(0).toUpperCase() : "";
           contact.isOnline = user.isOnline;
         }
       }
@@ -225,7 +225,7 @@ export const actions = {
           contact.title = group.name;
           contact.description = group.description;
           contact.avatarImage = group.image;
-          contact.avatarName = group.name.charAt(0).toUpperCase();
+          contact.avatarName = group.name ? group.name.charAt(0).toUpperCase() : "";
         }
       }
       return contact;

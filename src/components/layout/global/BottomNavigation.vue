@@ -55,7 +55,8 @@
         </v-btn>
         <v-btn icon large class="menu-icon-button" v-else-if="!avatarImage && isLoggedIn" @click="goToProfile()">
           <v-avatar color="primary-light-1" size="32px" >
-            <span>{{ initialImageContent }}</span>
+            <span v-if="initialImageContent != ''">{{ initialImageContent }}</span>
+            <v-img v-else aspect-ratio="1" :src="require('@/assets/images/profile-default.jpg')" alt="Avatar"></v-img>
           </v-avatar>
         </v-btn>
         <v-btn
@@ -75,6 +76,7 @@
 <script>
 import { pathData } from "@/data";
 import LoginDialog from '@/components/loginWithPopup/LoginDialog'
+import { avatarHelper } from "@/helper"
 
 export default ({
     name: "BottomNavigation",
@@ -118,14 +120,15 @@ export default ({
         }
       },
       initialImageContent() {
-        if (this.authUser()) {
-          return (
-            this.authUser().first_name.substring(0, 1) +
-            this.authUser().last_name.substring(0, 1)
-          );
-        } else {
-          return "";
-        }
+        // if (this.authUser() && this.authUser().first_name && this.authUser().last_name) {
+        //   return (
+        //     this.authUser().first_name.substring(0, 1) +
+        //     this.authUser().last_name.substring(0, 1)
+        //   );
+        // } else {
+        //   return "";
+        // }
+        return avatarHelper.getAvatarName(this.authUser());
       },
       activeItem(){
         return this.$store.getters.activeBottomNav;

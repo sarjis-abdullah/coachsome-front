@@ -8,7 +8,8 @@
             <v-img aspect-ratio="1" :src="avatarImage" alt="Avatar" />
           </v-avatar>
           <v-avatar @click.native="showProfile()" color="primary-light-1" size="32px" v-else>
-            <span>{{ initialImageContent }}</span>
+            <span v-if="initialImageContent != ''">{{ initialImageContent }}</span>
+            <v-img v-else aspect-ratio="1" :src="require('@/assets/images/profile-default.jpg')" alt="Avatar"></v-img>
           </v-avatar>
         </v-btn>
       </template>
@@ -261,7 +262,8 @@
 import { pathData } from "@/data";
 import { currencyService } from "@/services";
 import impersonateAdminApi from "@/api/admin/impersonate";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import { avatarHelper } from "@/helper"
 
 export default ({
   layout: "common",
@@ -300,14 +302,15 @@ export default ({
         }
       },
       initialImageContent() {
-        if (this.authUser()) {
-          return (
-            this.authUser().first_name.substring(0, 1) +
-            this.authUser().last_name.substring(0, 1)
-          );
-        } else {
-          return "";
-        }
+        // if (this.authUser() && this.authUser().first_name && this.authUser().last_name) {
+        //   return (
+        //     this.authUser().first_name.substring(0, 1) +
+        //     this.authUser().last_name.substring(0, 1)
+        //   );
+        // } else {
+        //   return "";
+        // }
+        return avatarHelper.getAvatarName(this.authUser());
       },
       currencyName(){
         const currency = currencyService.selectedCurrency();

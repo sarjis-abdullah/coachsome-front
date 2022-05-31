@@ -9,7 +9,8 @@
     <template v-slot:activator="{ on }">
       <v-btn icon large v-on="on">
         <v-avatar color="primary-light-1" size="32px" v-if="!avatarImage">
-          <span>{{ initialImageContent }}</span>
+          <span v-if="initialImageContent != ''">{{ initialImageContent }}</span>
+          <v-img v-else aspect-ratio="1" :src="require('@/assets/images/profile-default.jpg')" alt="Avatar"></v-img>
         </v-avatar>
         <v-avatar size="32px" item v-if="avatarImage">
           <v-img aspect-ratio="1" :src="avatarImage" alt="Avatar" />
@@ -290,6 +291,7 @@
 
 <script>
 import { pathData } from "@/data";
+import { avatarHelper } from "@/helper"
 import impersonateAdminApi from "@/api/admin/impersonate";
 import { currencyService } from "@/services";
 import InviteYourFriends from '@/components/profile/invite-friends/InviteYourFriends.vue';
@@ -527,14 +529,7 @@ export default {
       }
     },
     initialImageContent() {
-      if (this.authUser()) {
-        return (
-          this.authUser().first_name.substring(0, 1) +
-          this.authUser().last_name.substring(0, 1)
-        );
-      } else {
-        return "";
-      }
+      return avatarHelper.getAvatarName(this.authUser());
     }
   },
   watch: {
