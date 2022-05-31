@@ -1,29 +1,13 @@
 <template>
   <div class="create-group-form">
     <v-card flat color="body-bg">
-      <v-card-title v-if="$vuetify.breakpoint.mdAndUp" class="py-2">
-        <div class="create-group-form__title">
-          {{ $t("chat_create_group_title") }}
-        </div>
-        <v-spacer></v-spacer>
-        <v-btn icon>
-          <v-icon color="primary-light-1" @click="$emit('close')">
-            mdi-close
-          </v-icon>
-        </v-btn>
-      </v-card-title>
-      <div v-if="!$vuetify.breakpoint.mdAndUp" class="hidden-md-and-up">
-        <MobileTopNav :headerText="$t('chat_create_group_title')">
-          <template v-slot:goBack>
-            <v-btn icon @click="$emit('close')">
-              <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
-            </v-btn>
-          </template>
-        </MobileTopNav>
-      </div>
-      <v-card-text class="pa-5 mt-6">
+      <FormHeader @close="$emit('close')" :title="$t('chat_create_group_title')" :parentClass="{
+        'px-8 pt-8': $vuetify.breakpoint.mdAndUp,
+        'px-3': !$vuetify.breakpoint.mdAndUp,
+      }"/>
+      <v-card-text class="pa-8" :class="!$vuetify.breakpoint.mdAndUp && 'mt-6'">
         <v-form ref="form" v-model="valid" lazy-validation>
-          <div class="field__label">
+          <div class="default--label pb-3">
             {{ $t("chat_create_group_label_group_name") }}
           </div>
           <v-text-field
@@ -32,9 +16,10 @@
             :label="$t('chat_create_group_name_placeholder')"
             dense
             outlined
+            class="pb-3"
           ></v-text-field>
 
-          <div class="field__label">
+          <div class="default--label pb-3">
             {{ $t("chat_create_group_label_descritpion") }}
           </div>
           <v-text-field
@@ -43,9 +28,10 @@
             :label="$t('chat_create_group_description_placeholder')"
             dense
             outlined
+            class="pb-3"
           ></v-text-field>
 
-          <div class="field__label">
+          <div class="default--label pb-3">
             {{ $t("chat_create_group_label_add_people") }}
           </div>
           <v-combobox
@@ -62,6 +48,7 @@
             @keyup.enter="search = ''"
             no-filter
             chips
+            class="pb-3"
           >
             <template v-slot:append>
               <div></div>
@@ -82,7 +69,7 @@
             </template>
           </v-combobox>
 
-          <div class="field__label">
+          <div class="default--label pb-3">
             {{ $t("chat_create_group_label_message") }}
           </div>
           <v-textarea
@@ -97,7 +84,7 @@
             :loading="loading"
             dark
             color="primary-light-1"
-            class="mr-4"
+            class="mr-4 mt-4"
             :block="!$vuetify.breakpoint.mdAndUp"
             @click="handleCreateBtnClick"
           >
@@ -112,9 +99,11 @@
 <script>
 import { endpoint } from "../../../../../api";
 import MobileTopNav from "@/components/layout/global/MobileTopNav";
+import FormHeader from "@/components/layout/global/FormHeader";
 export default {
   components: {
     MobileTopNav,
+    FormHeader
   },
   props: ["open"],
   data() {

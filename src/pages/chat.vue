@@ -20,7 +20,7 @@
             @select-package="handleSelectPackage"
           />
         </v-dialog>
-        <v-dialog v-if="$vuetify.breakpoint.mdAndUp" v-model="createGroupDialog.value" max-width="600">
+        <v-dialog v-if="$vuetify.breakpoint.mdAndUp" v-model="createGroupDialog.value" max-width="600" @click:outside="closeCreateGroupDialog">
           <CreateGroupForm
             @created="handleCreatedGroup"
             :open="createGroupDialog.value"
@@ -781,7 +781,7 @@
           </v-col>
         </slide-x-left-transition>
       </v-row>
-      <v-card flat v-if="!$vuetify.breakpoint.mdAndUp && $route && $route.query && $route.query.createGroupDialog" class="hidden-md-and-up fullscreen">
+      <v-card flat v-if="!$vuetify.breakpoint.mdAndUp && createGroupDialog.value" class="hidden-md-and-up fullscreen">
         <div class="create-group-form-mobile">
           <CreateGroupForm 
           @created="handleCreatedGroup"
