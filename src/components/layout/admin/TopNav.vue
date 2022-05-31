@@ -61,6 +61,7 @@ import { pathData } from "@/data";
 import { impersonateAdminApi } from "@/api";
 import Avatar from "@/components/artifact/global/Avatar";
 import SportSearch from "@/components/artifact/global/SportSearch";
+import { avatarHelper } from "@/helper"
 
 export default {
   components: {
@@ -220,10 +221,17 @@ export default {
         : null;
     },
     initialImageContent() {
-      return (
-        this.$auth.user.first_name.substring(0, 1) +
-        this.$auth.user.last_name.substring(0, 1)
-      );
+      // if(this.$auth.user.first_name && this.$auth.user.last_name){
+      //   return (
+      //     this.$auth.user.first_name.substring(0, 1) +
+      //     this.$auth.user.last_name.substring(0, 1)
+      //   );
+      // }else{
+      //   return "";
+      // }
+
+      return avatarHelper.getAvatarName(this.$auth.user);
+      
     },
     isLoggedIn() {
       return this.$auth.loggedIn;

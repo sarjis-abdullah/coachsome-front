@@ -261,7 +261,8 @@
 import { pathData } from "@/data";
 import { currencyService } from "@/services";
 import impersonateAdminApi from "@/api/admin/impersonate";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import { avatarHelper } from "@/helper"
 
 export default ({
   layout: "common",
@@ -300,14 +301,15 @@ export default ({
         }
       },
       initialImageContent() {
-        if (this.authUser()) {
-          return (
-            this.authUser().first_name.substring(0, 1) +
-            this.authUser().last_name.substring(0, 1)
-          );
-        } else {
-          return "";
-        }
+        // if (this.authUser() && this.authUser().first_name && this.authUser().last_name) {
+        //   return (
+        //     this.authUser().first_name.substring(0, 1) +
+        //     this.authUser().last_name.substring(0, 1)
+        //   );
+        // } else {
+        //   return "";
+        // }
+        return avatarHelper.getAvatarName(this.authUser());
       },
       currencyName(){
         const currency = currencyService.selectedCurrency();

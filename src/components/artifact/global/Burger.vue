@@ -72,6 +72,7 @@
 
 <script>
 import { pathData } from "@/data";
+import { avatarHelper } from "@/helper"
 
 export default {
   data() {
@@ -128,10 +129,15 @@ export default {
       return this.$auth.user.image;
     },
     initialImageContent() {
-      return (
-        this.$store.getters.auth.first_name.substring(0, 1) +
-        this.$store.getters.auth.last_name.substring(0, 1)
-      );
+      // if(this.$store.getters.auth.first_name && this.$store.getters.auth.last_name){
+      //   return (
+      //     this.$store.getters.auth.first_name.substring(0, 1) +
+      //     this.$store.getters.auth.last_name.substring(0, 1)
+      //   );
+      // }else{
+      //   return "";
+      // }
+      return avatarHelper.getAvatarName(this.$store.getters.auth);
     }
   },
   watch: {
