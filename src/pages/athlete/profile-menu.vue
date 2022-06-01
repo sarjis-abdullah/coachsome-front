@@ -266,6 +266,7 @@ import MobileTopNav from '@/components/layout/global/MobileTopNav';
 import { avatarHelper } from "@/helper"
 
 export default ({
+  name: "AthleteProfileMenu",
   layout: "common",
   components: {MobileTopNav},
   data(){
