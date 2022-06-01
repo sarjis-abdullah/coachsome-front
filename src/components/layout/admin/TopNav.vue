@@ -139,7 +139,20 @@ export default {
             path: pathData.admin.userLog,
             icon: "mdi-view-list",
             t_key: "dropdown_item_logs"
-          }
+          },
+          marketplace: {
+            text: "Find A Coach",
+            path: pathData.pages.marketplace.name,
+            icon: "mdi-view-list",
+            t_key: "nav_item_marketplace"
+          },
+          message: {
+            text: "Message",
+            icon: "folder_open",
+            t_key: "app_bar_dashboard_message",
+            path: pathData.pages.chat
+          },
+
         }
       },
       avatarMenu: {

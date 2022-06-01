@@ -100,7 +100,7 @@ export default ({
     }),
     computed: {
       isLoggedIn(){
-        return this.$auth?.loggedIn;
+        return this.$auth && this.$auth.loggedIn ? true : false;
       },
       role_name() { 
         if(this.user.roles){
@@ -170,7 +170,7 @@ export default ({
         return window.location.origin + "/" + this.$store.getters.auth.user_name;
       },
       GoToHome(){
-        this.$store.dispatch("activeBottomNav", 0);
+          this.$store.dispatch("activeBottomNav", 0);
           if(this.$auth.loggedIn && this.$auth.hasRole(["superadmin", "admin", "staff"])){
             this.$router.push(this.localePath(pathData.admin.dashboard));
           }

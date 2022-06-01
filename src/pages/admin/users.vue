@@ -730,6 +730,7 @@ export default {
           if (this.$store.getters.isAuthenticated) {
             this.$store.dispatch("setUser", data.user);
           }
+          this.$store.dispatch("activeBottomNav", 0);
           if (this.$auth.hasRole(["coach"])) {
             this.$router.push(this.localePath(pathData.coach.home));
           } else if (this.$auth.hasRole(["athlete"])) {

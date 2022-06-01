@@ -1,10 +1,11 @@
 <template>
   <v-app>
-    <TopNav color="primary" :fixed="false" v-if="$vuetify.breakpoint.mdAndUp">
+    <TopNav color="primary" :fixed="false" v-if="$vuetify.breakpoint.mdAndUp && !isAdmin">
       <template v-slot:sport-search>
         <span></span>
       </template>
     </TopNav>
+    <admin-top-nav :theme="theme" :color="color" v-if="$vuetify.breakpoint.mdAndUp && isAdmin"></admin-top-nav>
     <v-main>
       <client-only>
         <GlobalHeader />
@@ -19,12 +20,14 @@
 import GlobalHeader from "@/components/layout/global/GlobalHeader";
 import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import TopNav from "@/components/layout/global/TopNav";
+import AdminTopNav from "@/components/layout/admin/TopNav";
 import { pathData } from "@/data";
 
 export default {
   components: {
     GlobalHeader,
     TopNav,
+    AdminTopNav,
     BottomNavigation
   },
   data() {
@@ -58,8 +61,21 @@ export default {
       this.$store.dispatch("activeBottomNav", 4);
     }
   },
+  computed:{
+    isAdmin() {
+      if(this.$auth && this.$auth.loggedIn){
+        return this.hasRole(['superadmin', 'admin', 'staff']);
+      }else{
+        return false;
+      }
+    },
+  },
   mounted() {},
-  methods: {}
+  methods: {
+    hasRole(roles = []) {
+      return this.$auth.hasRole(roles);
+    },
+  }
 };
 </script>
 

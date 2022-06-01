@@ -950,6 +950,9 @@ export default {
   computed: {},
   async asyncData({ $axios, i18n }) {
     const { data } = await frontHomeApi($axios).getInitialData({});
+
+
+
     let categoryList = [];
     if (data.categoryList && data.categoryList.length > 0) {
       for (const item of data.categoryList) {
@@ -971,7 +974,13 @@ export default {
       cities: data.cities
     };
   },
-  created() {
+  async created() {
+
+    if(!this.$auth && !this.$auth.user.roles && !this.$auth.user.roles[0]){
+      await this.$auth.logout();
+      this.$socket.emit("force_disconnect");
+      this.$store.dispatch("setUser", null);
+    }
     this.getCoach();
   },
   mounted() {},

@@ -191,6 +191,8 @@ export default {
                 this.$store.dispatch("toggleDialog");
 
                 let authUser = this.$auth.user;
+                
+                this.$store.dispatch("activeBottomNav", 0);
 
                 if(authUser.roles[0].name == "superadmin" || authUser.roles[0].name == "admin" || authUser.roles[0].name == "staff"){
                   this.$router.push(this.localePath(pathData.admin.dashboard));
