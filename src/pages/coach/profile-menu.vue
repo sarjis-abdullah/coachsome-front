@@ -47,9 +47,7 @@
               </v-list-item>
 
               <!-- Coach Contacts -->
-              <v-list-item v-if="isAuthCoach && (isDevelopment || isStaging)" link @click.stop="()=>{
-                $router.push('/coach/contacts')
-                }">
+              <v-list-item v-if="isAuthCoach && (isDevelopment || isStaging)" link @click.stop="gotoContact">
                 <v-list-item-icon>
                   <v-img :src="require('@/assets/img/svg-icons/new/contact-card.svg')" alt="coach-contact" />
                 </v-list-item-icon>
@@ -323,6 +321,7 @@ import MobileTopNav from '@/components/layout/global/MobileTopNav';
 import { avatarHelper } from "@/helper"
 
 export default ({
+  name: "CoachProfileMenu",
   layout: "coach",
   components: {MobileTopNav},
   data(){
@@ -460,6 +459,9 @@ export default ({
       },
       handleInviteFriends(){
         this.$router.push(this.localePath(pathData.coach.inviteYourFriends));
+      },
+      gotoContact(){
+        this.$router.push(this.localePath(pathData.coach.coachContacts));
       },
     }
 })
