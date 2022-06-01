@@ -781,7 +781,7 @@
           </v-col>
         </slide-x-left-transition>
       </v-row>
-      <v-card flat v-if="!$vuetify.breakpoint.mdAndUp && createGroupDialog.value" class="hidden-md-and-up fullscreen">
+      <v-card flat v-if="!$vuetify.breakpoint.mdAndUp && createGroupDialog.value" class="hidden-md-and-up fullscreen bg-1">
         <div class="create-group-form-mobile">
           <CreateGroupForm 
           @created="handleCreatedGroup"

@@ -50,6 +50,7 @@
 <script>
 import MobileTopNav from "@/components/layout/global/MobileTopNav";
 import CoachContacts from "@/components/contacts/CoachContacts";
+import { pathData } from "@/data";
 export default {
   layout: "coach-no-drawer",
   components: {
@@ -58,7 +59,7 @@ export default {
   },
   methods: {
     handleBack() {
-      this.$router.replace("/coach/profile-menu");
+      this.$router.push(this.localePath(pathData.coach.profileMenu));
     }
   }
 };

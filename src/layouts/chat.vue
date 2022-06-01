@@ -1,12 +1,13 @@
 <template>
   <v-app>
-    <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp" />
+    <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp && !isAdmin" />
+    <admin-top-nav :theme="theme" :color="color" v-if="$vuetify.breakpoint.mdAndUp && isAdmin"></admin-top-nav>
     <v-main style="background: #f7fafc">
       <client-only>
         <GlobalHeader />
       </client-only>
       <nuxt />
-      <BottomNavigation v-if="$vuetify.breakpoint.smAndDown && !navStatus" />
+      <BottomNavigation v-if="conditionalBottomNav" />
     </v-main>
   </v-app>
 </template>
@@ -14,19 +15,22 @@
 <script>
 import GlobalHeader from "@/components/layout/global/GlobalHeader";
 import TopNav from "@/components/layout/global/TopNav";
+import AdminTopNav from "@/components/layout/admin/TopNav";
 import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import { pathData } from "@/data";
 
 export default {
+  name: "ChatLayout",
   middleware: ["auth"],
   components: {
     TopNav,
+    AdminTopNav,
     GlobalHeader,
     BottomNavigation
   },
   data() {
     return {
-       selectedContact : this.$store.getters["chat/selectedContact"],
+       selectedContact : null,
        showNav: true,
     };
   },
@@ -34,6 +38,40 @@ export default {
     navStatus(){
       return this.$store.getters['chat/getNavOnChatStatus'];
     },
+    isAdmin() {
+      if(this.$auth && this.$auth.loggedIn){
+        return this.hasRole(['superadmin', 'admin', 'staff']);
+      }else{
+        return false;
+      }
+    },
+    showBottomNav (){
+      if (this.$route?.query) {
+        const { createGroupDialog } = this.$route.query
+        if (createGroupDialog) {
+          return false
+        }
+        return true
+      }
+      return true
+    },
+    conditionalBottomNav(){
+      if (!this.showBottomNav) {
+        return false
+      }else if (this.$vuetify.breakpoint.smAndDown && !this.navStatus) {
+        return true
+      }
+      return false
+    }
+  },
+  watch: {
+    '$route': {
+      immediate: true,
+      deep: true,
+      handler(newValue, oldValue) {
+        this.selectedContact = this.$store.getters["chat/selectedContact"]
+      }
+    }
   },
   created(){
         const currentRoute = this.$route.path;
@@ -79,6 +117,10 @@ export default {
   //     Tawk_API.showWidget();
   //   }
   // },
-  methods: {}
+  methods: {
+    hasRole(roles = []) {
+      return this.$auth.hasRole(roles);
+    },
+  }
 };
 </script>

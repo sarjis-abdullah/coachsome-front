@@ -232,7 +232,7 @@
       </v-list-item>
 
       <!-- Admin -->
-      <!-- <span v-if="isAdmin">
+      <span v-if="isAdmin && !$vuetify.breakpoint.lgAndUp">
         <v-list-group v-model="adminGroup" link>
           <template v-slot:activator>
             <v-list-item-content>
@@ -243,12 +243,12 @@
             v-for="(item, i) in items.admin.subItems"
             :key="i"
             link
-            :to="item.path"
+            :to="localePath(item.path)"
           >
             <v-list-item-title>{{ $t(item.t_key) }}</v-list-item-title>
           </v-list-item>
         </v-list-group>
-      </span> -->
+      </span>
 
       <!-- Athelete Switched Button -->
       <v-list-item
@@ -449,7 +449,20 @@ export default {
               path: pathData.admin.userLog,
               icon: "mdi-view-list",
               t_key: "dropdown_item_logs"
-            }
+            },
+            {
+              name: "Find A Coach",
+              path: pathData.pages.marketplace.name,
+              icon: "mdi-view-list",
+              t_key: "nav_item_marketplace"
+            },
+            {
+              name: "Message",
+              path: pathData.pages.chat,
+              icon: "mdi-view-list",
+              t_key: "app_bar_dashboard_message"
+            },
+            
           ]
         },
         logout: {

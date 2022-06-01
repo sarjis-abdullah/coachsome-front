@@ -71,7 +71,9 @@ export default {
   },
   methods: {
     handleBack(){
-      if(this.$auth.hasRole(["coach"])){
+      if(this.$auth.hasRole(['superadmin', 'admin', 'staff'])){
+        this.$router.push(this.localePath(pathData.admin.profileMenu));
+      }else if(this.$auth.hasRole(["coach"])){
         this.$router.push(this.localePath(pathData.coach.profileMenu));
       }else if(this.$auth.hasRole(["athlete"])){
         this.$router.push(this.localePath(pathData.athlete.profileMenu));

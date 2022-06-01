@@ -20,22 +20,6 @@ export default {
       );
       window.close();
     } else {
-      // if (this.$route.query.access_token) {
-      //   this.$auth.setUserToken(this.$route.query.access_token);
-      //   userApi(this.$axios)
-      //     .authUserInformation()
-      //     .then(({ data }) => {
-      //       this.$auth.setUser(data.user);
-      //       if (this.$auth.hasRole(["coach"])) {
-      //         this.$router.push(this.localePath(pathData.coach.editProfile));
-      //       } else if (this.$auth.hasRole(["athlete"])) {
-      //         this.$router.push(this.localePath(pathData.athlete.editProfile));
-      //       } else {
-      //         this.$router.push(this.localePath(pathData.admin.dashboard));
-      //       }
-      //     })
-      //     .catch(() => {});
-      // }
       if (this.$route.query.access_token) {
         this.$store.dispatch("putToken", this.$route.query.access_token);
         this.$auth.setUserToken(this.$route.query.access_token);
@@ -49,6 +33,8 @@ export default {
             if(data.user.roles && data.user.roles[0]){
 
               let authUser = data.user;
+
+              this.$store.dispatch("activeBottomNav", 0);
 
               if(authUser.roles[0].name == "superadmin" || authUser.roles[0].name == "admin" || authUser.roles[0].name == "staff"){
                 this.$router.push(this.localePath(pathData.admin.dashboard));

@@ -100,7 +100,7 @@ export default ({
     }),
     computed: {
       isLoggedIn(){
-        return this.$auth?.loggedIn;
+        return this.$auth && this.$auth.loggedIn ? true : false;
       },
       role_name() { 
         if(this.user.roles){
@@ -137,21 +137,22 @@ export default ({
         return this.$auth.hasRole(['superadmin', 'admin', 'staff']) ? false : true;
       }
     },
-    mounted() {
-      // Tawk Api exist in static directory
-      // Only chat page do not effect
-      Tawk_API.onLoad = function() {
-        Tawk_API.hideWidget();
-      };
-      if (Tawk_API.hideWidget) {
-        Tawk_API.hideWidget();
-      }
-    },
-    destroyed() {
-      if (Tawk_API.hideWidget && this.$nuxt.$data.layoutName != "chat") {
-        Tawk_API.showWidget();
-      }
-    },
+    // Done by Sarjis, according to Peter, Chat Icon only visible in desktop which is done from tawk.js
+    // mounted() {
+    //   // Tawk Api exist in static directory
+    //   // Only chat page do not effect
+    //   Tawk_API.onLoad = function() {
+    //     Tawk_API.hideWidget();
+    //   };
+    //   if (Tawk_API.hideWidget) {
+    //     Tawk_API.hideWidget();
+    //   }
+    // },
+    // destroyed() {
+    //   if (Tawk_API.hideWidget && this.$nuxt.$data.layoutName != "chat") {
+    //     Tawk_API.showWidget();
+    //   }
+    // },
     methods: {
       goToProfile(){
         this.$store.dispatch("activeBottomNav", 4);
@@ -170,7 +171,7 @@ export default ({
         return window.location.origin + "/" + this.$store.getters.auth.user_name;
       },
       GoToHome(){
-        this.$store.dispatch("activeBottomNav", 0);
+          this.$store.dispatch("activeBottomNav", 0);
           if(this.$auth.loggedIn && this.$auth.hasRole(["superadmin", "admin", "staff"])){
             this.$router.push(this.localePath(pathData.admin.dashboard));
           }
