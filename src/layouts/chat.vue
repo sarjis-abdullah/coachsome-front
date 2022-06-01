@@ -6,7 +6,7 @@
         <GlobalHeader />
       </client-only>
       <nuxt />
-      <BottomNavigation v-if="$vuetify.breakpoint.smAndDown && !navStatus" />
+      <BottomNavigation v-if="conditionalBottomNav" />
     </v-main>
   </v-app>
 </template>
@@ -18,6 +18,7 @@ import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import { pathData } from "@/data";
 
 export default {
+  name: "ChatLayout",
   middleware: ["auth"],
   components: {
     TopNav,
@@ -26,7 +27,7 @@ export default {
   },
   data() {
     return {
-       selectedContact : this.$store.getters["chat/selectedContact"],
+       selectedContact : null,
        showNav: true,
     };
   },
@@ -34,6 +35,33 @@ export default {
     navStatus(){
       return this.$store.getters['chat/getNavOnChatStatus'];
     },
+    showBottomNav (){
+      if (this.$route?.query) {
+        const { createGroupDialog } = this.$route.query
+        if (createGroupDialog) {
+          return false
+        }
+        return true
+      }
+      return true
+    },
+    conditionalBottomNav(){
+      if (!this.showBottomNav) {
+        return false
+      }else if (this.$vuetify.breakpoint.smAndDown && !this.navStatus) {
+        return true
+      }
+      return false
+    }
+  },
+  watch: {
+    '$route': {
+      immediate: true,
+      deep: true,
+      handler(newValue, oldValue) {
+        this.selectedContact = this.$store.getters["chat/selectedContact"]
+      }
+    }
   },
   created(){
         const currentRoute = this.$route.path;
