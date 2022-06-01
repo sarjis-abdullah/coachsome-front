@@ -587,7 +587,7 @@ export default {
     },
     gotoChat(item) {
       item.contactAbleUserId &&
-        this.$router.replace(
+        this.$router.push(
           "/chat?contactAbleUserId=" + item.contactAbleUserId
         );
     },

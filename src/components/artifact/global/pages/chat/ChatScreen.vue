@@ -398,6 +398,7 @@
 
 <script>
 import { bookingTimeApi, bookingApi } from "@/api";
+import { pathData } from "@/data";
 import { currencyService } from "@/services";
 import TextMessage from "./messages/TextMessage";
 import Attachment from "./messages/Attachment";

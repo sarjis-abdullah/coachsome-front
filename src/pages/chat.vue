@@ -994,12 +994,11 @@ export default {
           this.onHandleContactItemSeleted(contact)
         }
       }
-      this.$store.dispatch("chat/destroyMessages");
       if (contact) {
         if( this.$route.fullPath != pathData.pages.chatScreen && this.$vuetify.breakpoint.smAndDown){
           this.$router.push(this.localePath(pathData.pages.chatScreen));
         }
-        // this.$store.dispatch("chat/destroyMessages");
+        this.$store.dispatch("chat/destroyMessages");
         this.$store.dispatch("chat/setSelectedContact", contact);
         // Fetch private message
         if (contact.categoryId == contactData.CATEGORY_ID_PRIVATE) {
@@ -1083,7 +1082,7 @@ export default {
   },
   created(){
     if(this.$route.fullPath != pathData.pages.chat.path && this.$vuetify.breakpoint.smAndDown){
-      this.$router.replace(this.localePath(pathData.pages.chat.path));
+      this.$router.push(this.localePath(pathData.pages.chat.path));
     }
   },
   async mounted() {
@@ -1111,7 +1110,7 @@ export default {
       );
       if (contact) {
         this.selectedContact = contact;
-        // this.$router.replace(this.localePath(pathData.pages.chat));
+        // this.$router.push(this.localePath(pathData.pages.chat));
       }
     } else {
       // If there has no selected contact
@@ -1448,6 +1447,7 @@ export default {
         }
         this.$router.push({query})
       }
+      this.$store.dispatch("chat/destroyMessages");
       this.selectedContact = null;
     },
     handleDesktopHideActionBtnClick() {

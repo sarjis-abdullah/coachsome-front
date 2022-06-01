@@ -154,8 +154,9 @@ export const actions = {
   },
   destroyMessages(context) {
     if(window.$nuxt.$root.$route.fullPath != pathData.pages.chat.path &&  window.$nuxt.$root.$vuetify.breakpoint.smAndDown){
-      this.$router.replace(this.localePath(pathData.pages.chat.path));
+      this.$router.push(this.localePath(pathData.pages.chat.path));
     }
+    context.commit("DESTROY_SELECTED_CONTACT_USER");
     context.commit("DESTROY_MESSAGES");
   },
   incrementTotalNewMessageCount(context) {

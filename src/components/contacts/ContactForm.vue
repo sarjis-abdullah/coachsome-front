@@ -203,7 +203,7 @@ export default {
       });
       this.reset();
       if (this.$route?.query?.contactForm) {
-        this.$router.replace("/coach/contacts");
+        this.$router.push("/coach/contacts");
       }
     },
     payloadData() {
