@@ -1,6 +1,6 @@
 <template>
   <div class="cookie-dialog">
-    <v-dialog v-model="dialog" persistent max-width="600">
+    <v-dialog v-model="dialog" persistent max-width="600" scrollable>
       <v-card class="cookie" color="#F7FAFC">
         <v-card-text>
           <div class="cookie__title">
@@ -33,24 +33,26 @@
           </div>
           <div class=" mt-10 ">
             <v-row justify="center">
-              <v-col cols="12" md="6">
+              <v-col cols="12" md="6" :order="$vuetify.breakpoint.mdAndUp ? 1 : 2">
                 <v-btn
                   color="#C44130"
                   depressed
                   dark
                   block
                   @click="handleRejectAllBtnClick"
+                  class="text-capitalize"
                 >
                   {{ $t("header_cookie_btn_label_reject_all") }}
                 </v-btn>
               </v-col>
-              <v-col cols="12" md="6">
+              <v-col cols="12" md="6" :order="$vuetify.breakpoint.mdAndUp ? 2 : 1">
                 <v-btn
                   color="#6ECB72"
                   depressed
                   dark
                   block
                   @click="handleAcceptAllBtnClick"
+                  class="text-capitalize"
                 >
                   {{ $t("header_cookie_btn_label_accept_all") }}
                 </v-btn>
@@ -117,7 +119,10 @@ export default {
 .cookie-dialog {
 }
 .cookie {
-  padding: 20px 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  padding-bottom: 70px;
   &__title {
     margin-top: 25px;
     word-wrap: break-word;
@@ -125,7 +130,7 @@ export default {
     font-weight: bold;
     font-size: 20px;
     line-height: 149.7%;
-    text-transform: uppercase;
+    // text-transform: uppercase;
     margin-bottom: 25px;
     color: $primary-light-1;
   }
@@ -134,7 +139,7 @@ export default {
     font-weight: normal;
     font-size: 14px;
     line-height: 149.7%;
-    text-transform: uppercase;
+    // text-transform: uppercase;
     color: #2c3749;
   }
 }

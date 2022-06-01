@@ -34,6 +34,16 @@ export default {
        showNav: true,
     };
   },
+watch: {
+    "$store.state.chat.getNavOnChatStatus": function(val) {
+      // if (val) {
+      //   this.active = val.id;
+      // }else{
+      //   this.$router.replace(this.localePath(pathData.pages.chat.path));
+      // }
+      alert(val);
+    }
+  },
   computed:{
     navStatus(){
       return this.$store.getters['chat/getNavOnChatStatus'];

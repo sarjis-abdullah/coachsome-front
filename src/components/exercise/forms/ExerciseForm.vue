@@ -50,7 +50,7 @@
                                         background-color="white"
                                     />
                                 </v-col>
-                                <v-col cols="12" class="py-0 my-0">
+                                <v-col cols="12" class="pb-0">
                                     <p class="create-exercise__label">{{$t("lbl_instructions")}} <v-badge color="#f7fafc"><span style="color: red">*</span></v-badge></p>
                                     <ExerciseEditor
                                         :value="exercisePropsData.instructions"
@@ -84,14 +84,14 @@
                                         ></v-text-field>
                                     </v-form>
                                 </v-col>
-                                <v-col cols="12" class="py-0 my-0">
+                                <v-col cols="12" class="pb-0">
                                     <v-btn
                                         text
                                         color="#15577C"
                                         class="px-0"
                                         @click="uploadVideoDialog = true"
                                     >
-                                        <img class="btn-icon"  :src="require('@/assets/images/icons/video-url.svg')" alt="">  <span class="btn-text"> {{$t("ex_upload_video")}}</span>
+                                        <img class="btn-icon pr-2"  :src="require('@/assets/images/icons/video-url.svg')" alt="">  <span class="btn-text"> {{$t("ex_upload_video")}}</span>
                                     </v-btn>
                                 </v-col>
 
@@ -239,7 +239,7 @@
                                 </v-col>
 
                                 <!-- Sports Section -->
-                                <v-col cols="12" class="py-0 my-0">
+                                <v-col cols="12" class="pb-0">
                                     <p class="create-exercise__label">{{$t("lbl_ex_sport")}} </p>
                                     <v-autocomplete
                                         v-model="exercisePropsData.sportsSelected"
@@ -285,7 +285,7 @@
                                 </v-col>
 
                                 <!-- lavel Section -->
-                                <v-col cols="12" class="py-0 my-0">
+                                <v-col cols="12" class="pb-0">
                                     <p class="create-exercise__label">{{$t("lbl_ex_lvl")}} </p>
                                     <v-autocomplete
                                         v-model="exercisePropsData.lavelsSelected"
@@ -332,7 +332,7 @@
                                 </v-col>
 
                                 <!-- Tags -->
-                                <v-col cols="12" class="py-0 my-0" >
+                                <v-col cols="12" class="pb-0" >
                                     <p class="create-exercise__label">{{$t("lbl_ex_tags")}} </p>
                                     <v-combobox
                                         v-model="exercisePropsData.tagsSelected"
@@ -365,7 +365,7 @@
                                         </template>
                                     </v-combobox>
                                 </v-col>
-                                <v-col cols="12" class="pt-0 mt-0 px-0">
+                                <v-col cols="12">
                                     <v-btn
                                         elevation="2"
                                         color="#15577C"

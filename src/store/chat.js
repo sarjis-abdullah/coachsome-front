@@ -1,5 +1,5 @@
 import { messageApi, contactApi, endpoint } from "@/api";
-import { contactData } from "@/data";
+import { contactData, pathData } from "@/data";
 
 export const state = () => ({
   messages: [],
@@ -144,12 +144,18 @@ export const actions = {
     context.commit("SET_CONTACTS", contacts);
   },
   setSelectedContact(context, contact) {
+    if( window.$nuxt.$root.$vuetify.breakpoint.smAndDown){
+      this.$router.replace(this.localePath(pathData.pages.chatScreen));
+    }
     context.commit("SET_SELECTED_CONTACT", contact);
   },
   destroySelectedContactUser(context) {
     context.commit("DESTROY_SELECTED_CONTACT_USER");
   },
   destroyMessages(context) {
+    if(window.$nuxt.$root.$route.fullPath != pathData.pages.chat.path &&  window.$nuxt.$root.$vuetify.breakpoint.smAndDown){
+      this.$router.replace(this.localePath(pathData.pages.chat.path));
+    }
     context.commit("DESTROY_MESSAGES");
   },
   incrementTotalNewMessageCount(context) {

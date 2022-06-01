@@ -994,10 +994,10 @@ export default {
           this.onHandleContactItemSeleted(contact)
         }
       }
+      this.$store.dispatch("chat/destroyMessages");
       if (contact) {
-        this.$store.dispatch("chat/destroyMessages");
+        // this.$store.dispatch("chat/destroyMessages");
         this.$store.dispatch("chat/setSelectedContact", contact);
-
         // Fetch private message
         if (contact.categoryId == contactData.CATEGORY_ID_PRIVATE) {
           const params = { contactId: contact.id };
@@ -1078,6 +1078,11 @@ export default {
       }
     }
   },
+  created(){
+    if(this.$route.fullPath != pathData.pages.chat.path && this.$vuetify.breakpoint.smAndDown){
+      this.$router.replace(this.localePath(pathData.pages.chat.path));
+    }
+  },
   async mounted() {
     // This is very sensitive.
     // Since the date is not updated without refresh, we should manually refresh it
@@ -1103,7 +1108,7 @@ export default {
       );
       if (contact) {
         this.selectedContact = contact;
-        this.$router.replace(this.localePath(pathData.pages.chat));
+        // this.$router.replace(this.localePath(pathData.pages.chat));
       }
     } else {
       // If there has no selected contact

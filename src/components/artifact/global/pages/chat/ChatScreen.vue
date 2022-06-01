@@ -1,6 +1,34 @@
 <template>
   <div class="chat-screen" ref="chatScreen">
-    <div class="my-10" v-for="(message, i) in messages" :key="i">
+    <div v-if="!messages.length" :class=" {'pt-10' : $vuetify.breakpoint.smAndDown}">
+      <span v-for="(item, index) in 2" :key="index">
+        <v-row>
+          <v-col cols="8">
+            <v-skeleton-loader
+              type="list-item-two-line"
+            ></v-skeleton-loader>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="4"><span></span></v-col>
+          <v-col cols="8" >
+            <v-skeleton-loader
+              type="list-item-two-line"
+            ></v-skeleton-loader>
+          </v-col>
+        </v-row>
+
+        <v-row v-if="item == 1" justify="center" align="center">
+          <v-col cols="7" >
+            <v-skeleton-loader
+              type="card-heading, table-heading,list-item-three-line"
+            ></v-skeleton-loader>
+          </v-col>
+        </v-row>
+      </span>
+    </div>
+    
+    <div v-else class="my-10" v-for="(message, i) in messages" :key="i">
       <!-- Text Message -->
       <div v-if="message.type == 'text'">
         <TextMessage :message="{ ...message }" />
@@ -408,6 +436,9 @@ export default {
       setTimeout(this.updateScroll, 0);
     },
     "$vuetify.breakpoint.smAndDown": function(){
+      if(this.$route.fullPath != pathData.pages.chatScreen){
+        this.$router.replace(this.localePath(pathData.pages.chatScreen));
+      }
       this.$store.dispatch("chat/setNavOnChat", true);
     }
   },
