@@ -9,19 +9,24 @@ var Tawk_API = Tawk_API || {},
   s1.setAttribute("crossorigin", "*");
   s0.parentNode.insertBefore(s1, s0);
 
+  const handleTawk = ()=> {
+    let w = document.documentElement.clientWidth;
+    if (w < 960) {
+      Tawk_API.hideWidget();
+    } else {
+      Tawk_API.showWidget();
+    }
+  }
+
   //here's all you need
   Tawk_API.onLoad = function() {
+    handleTawk()
     //screen resize method
     window.addEventListener(
       "resize",
       function(event) {
         // do what you want
-        let w = document.documentElement.clientWidth;
-        if (w < 960) {
-          Tawk_API.hideWidget();
-        } else {
-          Tawk_API.showWidget();
-        }
+        handleTawk()
       },
       true
     );
