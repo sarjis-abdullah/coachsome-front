@@ -511,7 +511,7 @@ export default {
             if (user) {
               this.activeChat = user.id;
               this.selectedContactUser = user;
-              this.$router.replace(this.localePath(pathData.pages.chat));
+              // this.$router.replace(this.localePath(pathData.pages.chat));
             }
           }
         }

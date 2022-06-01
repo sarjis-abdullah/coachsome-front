@@ -18,6 +18,7 @@ export default {
       name: "chat",
       path: "/chat"
     },
+    chatScreen: "/chat?mode=display",
     cookiePolicy: "/cookie-policy",
     emailVerification: "/email-verification",
     forgotPassword: "/password-forget",
