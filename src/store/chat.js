@@ -144,8 +144,8 @@ export const actions = {
     context.commit("SET_CONTACTS", contacts);
   },
   setSelectedContact(context, contact) {
-    if( window.$nuxt.$root.$vuetify.breakpoint.smAndDown){
-      this.$router.replace(this.localePath(pathData.pages.chatScreen));
+    if( window.$nuxt.$root.$route.fullPath != pathData.pages.chatScreen && window.$nuxt.$root.$vuetify.breakpoint.smAndDown){
+      this.$router.push(this.localePath(pathData.pages.chatScreen));
     }
     context.commit("SET_SELECTED_CONTACT", contact);
   },

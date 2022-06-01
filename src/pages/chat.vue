@@ -996,6 +996,9 @@ export default {
       }
       this.$store.dispatch("chat/destroyMessages");
       if (contact) {
+        if( this.$route.fullPath != pathData.pages.chatScreen && this.$vuetify.breakpoint.smAndDown){
+          this.$router.push(this.localePath(pathData.pages.chatScreen));
+        }
         // this.$store.dispatch("chat/destroyMessages");
         this.$store.dispatch("chat/setSelectedContact", contact);
         // Fetch private message
