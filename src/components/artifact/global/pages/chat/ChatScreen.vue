@@ -673,6 +673,10 @@ export default {
         );
       }
     }
+  },
+  beforeDestroy(){
+    console.log('destroyed');
+    this.$store.dispatch("chat/destroyMessages");
   }
 };
 </script>
