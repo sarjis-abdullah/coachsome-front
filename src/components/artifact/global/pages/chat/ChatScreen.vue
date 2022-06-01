@@ -437,7 +437,7 @@ export default {
     },
     "$vuetify.breakpoint.smAndDown": function(){
       if(this.$route.fullPath != pathData.pages.chatScreen){
-        this.$router.replace(this.localePath(pathData.pages.chatScreen));
+        this.$router.push(this.localePath(pathData.pages.chatScreen));
       }
       this.$store.dispatch("chat/setNavOnChat", true);
     }
