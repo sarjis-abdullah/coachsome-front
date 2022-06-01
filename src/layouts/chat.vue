@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp && !isAdmin" />
-    <admin-top-nav :theme="theme" :color="color" v-if="$vuetify.breakpoint.mdAndUp && isAdmin"></admin-top-nav>
+    <admin-top-nav v-if="$vuetify.breakpoint.mdAndUp && isAdmin"></admin-top-nav>
     <v-main style="background: #f7fafc">
       <client-only>
         <GlobalHeader />
@@ -39,7 +39,7 @@ watch: {
       // if (val) {
       //   this.active = val.id;
       // }else{
-      //   this.$router.replace(this.localePath(pathData.pages.chat.path));
+      //   this.$router.push(this.localePath(pathData.pages.chat.path));
       // }
       alert(val);
     }
