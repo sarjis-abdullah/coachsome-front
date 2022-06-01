@@ -1,25 +1,12 @@
 <template>
   <v-card :flat="!$vuetify.breakpoint.mdAndUp" class="bg-1">
+      <FormHeader @close="closePromoCodeDialog" :title="dialogTitle" :parentClass="{
+        'px-9 pt-8': $vuetify.breakpoint.mdAndUp,
+        'px-3': !$vuetify.breakpoint.mdAndUp,
+      }" />
     <v-card-text>
       <v-container>
-        <v-row v-if="$vuetify.breakpoint.mdAndUp" class="pt-5">
-          <v-col class="text-left font-color-1 text-h6 text-capitalize">
-            <FormHeader @close="closePromoCodeDialog" :title="dialogTitle" />
-          </v-col>
-        </v-row>
-        <mobile-top-nav extraClass="body-bg-secondary" :headerText="dialogTitle">
-            <template v-slot:goBack>
-                <v-btn
-                icon
-                @click="closePromoCodeDialog"
-                >
-                <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
-                </v-btn>
-            </template>
-            <template v-slot:action>
-                <span></span>
-            </template>
-        </mobile-top-nav>
+        
         <v-form ref="form" v-model="valid" :class="!$vuetify.breakpoint.mdAndUp && 'pt-7'">
           <!-- Promo name -->
           <v-row>
