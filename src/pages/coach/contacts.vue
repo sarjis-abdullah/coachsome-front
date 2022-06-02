@@ -15,8 +15,8 @@
         <template v-slot:action>
           <img
             :src="require('@/assets/img/svg-icons/add-circle.svg')"
-            alt="contacts-package cursor-pointer"
-            class="pr-2"
+            alt="contacts-package"
+            class="pr-2 cursor-pointer"
             @click="$router.push('/coach/contacts?contactForm=1')"
           />
         </template>
@@ -65,7 +65,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .page-title {
   font-weight: 600;
   font-size: 25px;
