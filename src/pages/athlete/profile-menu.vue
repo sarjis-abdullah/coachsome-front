@@ -1,5 +1,5 @@
 <template>
-
+<div>
 <v-container fluid >
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_profile_menu')">
       <template v-slot:goBack >
@@ -257,6 +257,10 @@
       </v-col>
     </v-row>
   </v-container>
+  <v-card v-if="!$vuetify.breakpoint.mdAndUp && $route.query && $route.query.language" class="fullscreen z-1000">
+    <Languages/>
+  </v-card>
+  </div>
 </template>
 <script>
 import { pathData } from "@/data";
@@ -264,11 +268,11 @@ import { currencyService } from "@/services";
 import impersonateAdminApi from "@/api/admin/impersonate";
 import MobileTopNav from '@/components/layout/global/MobileTopNav';
 import { avatarHelper } from "@/helper"
-
+import Languages from '@/components/language/Languages';
 export default ({
   name: "AthleteProfileMenu",
   layout: "common",
-  components: {MobileTopNav},
+  components: {MobileTopNav, Languages},
   data(){
     return {
       editProfile: {
@@ -333,6 +337,13 @@ export default ({
         return this.$i18n.locales.find(i => i.code == this.$i18n.locale);
       },
     },
+    watch: {
+      "$vuetify.breakpoint.mdAndUp" : function() {
+        if (this.$route?.query?.language) {
+          this.$router.push({query:{}});
+        }
+      },
+    },
     methods: {
       revertUser() {
         impersonateAdminApi(this.$axios)
@@ -376,7 +387,11 @@ export default ({
         this.$router.push(this.localePath(pathData.pages.payments));
       },
       handleLanguageBtn(){
-        this.$router.push(this.localePath(pathData.pages.language));
+        const query = {
+          ...this.$route.query,
+          language:1
+        }
+        this.$router.push({query});
       },
       handleCurrencyBtn(){
         this.$router.push(this.localePath(pathData.pages.currency));
