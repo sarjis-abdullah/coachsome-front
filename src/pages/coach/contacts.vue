@@ -15,9 +15,9 @@
         <template v-slot:action>
           <img
             :src="require('@/assets/img/svg-icons/add-circle.svg')"
-            alt="contacts-package cursor-pointer"
-            class="pr-2"
-            @click="$router.push('/coach/contacts?contactForm=1')"
+            alt="contacts-package"
+            class="pr-2 cursor-pointer"
+            @click="toggleContactForm"
           />
         </template>
       </mobile-top-nav>
@@ -60,12 +60,15 @@ export default {
   methods: {
     handleBack() {
       this.$router.push(this.localePath(pathData.coach.profileMenu));
-    }
+    },
+    toggleContactForm() {
+      this.$router.push(this.localePath(pathData.coach.coachContacts + '?contactForm=1'))
+    },
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .page-title {
   font-weight: 600;
   font-size: 25px;

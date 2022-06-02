@@ -95,6 +95,19 @@
               <v-col cols="12">
                 <v-btn
                   outlined
+                  color="#15577C"
+                  class="login-option-btn"
+                  @click="loginWithApple()"
+                  :loading="show_loading_on_apple_login_btn"
+                >
+                  <img class="btn-icon"  :src="require('@/assets/img/svg-icons/apple-icon.svg')" alt="">  <span class="social-login-btn-facebook-text btn-text">{{ $t("pwa_apple_login") }}</span>
+                </v-btn>
+              </v-col>
+            </v-row>
+            <v-row class="justify-center">
+              <v-col cols="12">
+                <v-btn
+                  outlined
                   class="login-option-btn"
                   @click="loginWithGoogle()"
                   :loading="show_loading_on_google_login_btn"
@@ -134,6 +147,7 @@ export default ({
   layout: "auth",
     data () {
       return{
+        show_loading_on_apple_login_btn: false,
         uri: {
           policy: pathData.pages.policy,
           terms: pathData.pages.terms,
@@ -180,6 +194,12 @@ export default ({
         window.location.href =
           process.env.API_SERVER_URL +
           "/auth/login/facebook";
+      },
+      loginWithApple() {
+        this.show_loading_on_apple_login_btn = true;
+        window.location.href =
+          process.env.API_SERVER_URL +
+          "/auth/login/apple";
       },
       loginWithGoogle() {
         this.show_loading_on_google_login_btn = true;
