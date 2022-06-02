@@ -44,14 +44,7 @@
                   ></v-text-field>
                 </v-col>
                 <v-col class="d-flex justify-end">
-                  <v-btn
-                    text
-                    color="primary-light-1"
-                    @click.stop="userCreate.dialog = true"
-                  >
-                    <v-icon>mdi-plus</v-icon>
-                    ADD
-                  </v-btn>
+                  <AddButton @add="userCreate.dialog = true" title="Add new user"/>
                 </v-col>
               </v-row>
             </v-card-title>
@@ -464,12 +457,14 @@ import { adminUserApi, adminImpersonateApi } from "@/api";
 import { pathData } from "@/data";
 import VuePhoneNumberInput from "vue-phone-number-input";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import AddButton from '@/components/layout/global/AddButton'
 
 export default {
   layout: "admin",
   components: {
     VuePhoneNumberInput,
-    MobileTopNav
+    MobileTopNav,
+    AddButton
   },
   data() {
     return {
