@@ -683,13 +683,13 @@ export default {
     "$vuetify.breakpoint.mdAndUp": function(){
       this.search = null;
       this.getExercises();
-      this.$router.push(this.localePath(pathData.admin.exercises));
+      this.$router.replace(this.localePath(pathData.admin.exercises));
     },
 
     "$vuetify.breakpoint.smAndDown": function(){
         this.exerciseDialog = false;
         this.exercisePreviewDialog = false;
-        this.$router.push(this.localePath(pathData.admin.exercises));
+        this.$router.replace(this.localePath(pathData.admin.exercises));
     }
     
   },
@@ -739,7 +739,7 @@ export default {
 
     handleMobileCreateBack(){
 
-      this.$router.push(this.localePath(pathData.admin.exercises));
+      this.$router.replace(this.localePath(pathData.admin.exercises));
 
       this.hideTable = false;
 
@@ -951,7 +951,7 @@ export default {
             this.$toast.success("This Exercise has been created successfully.");
             this.exerciseDialog = false;
             if(this.$vuetify.breakpoint.smAndDown){
-              this.$router.push(this.localePath(pathData.admin.exercises));
+              this.$router.replace(this.localePath(pathData.admin.exercises));
               this.hideTable = false;
               this.previewPage = false;
             }
@@ -1078,11 +1078,6 @@ export default {
                     );
 
       let exercise = this.exercises[index];
-
-      // const { data } = await ExerciseApi(this.$axios).previewExercise(
-      //   encodeURIComponent(exercise.id)
-      // );
-
       if(exercise){
         this.exerciseData = exercise;
         if(this.$vuetify.breakpoint.smAndDown){
@@ -1121,7 +1116,7 @@ export default {
             this.$toast.success("Successfully deleted");
 
             if(this.$vuetify.breakpoint.smAndDown){
-              this.$router.push(this.localePath(pathData.admin.Exercises));
+              this.$router.replace(this.localePath(pathData.admin.Exercises));
               this.hideTable = false;
               this.previewPage = false;
             }

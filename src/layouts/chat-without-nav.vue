@@ -7,7 +7,6 @@
         <GlobalHeader />
       </client-only>
       <nuxt />
-      <BottomNavigation v-if="showBottomNav" />
     </v-main>
   </v-app>
 </template>
@@ -20,7 +19,6 @@ import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import { pathData } from "@/data";
 
 export default {
-  name: "ChatLayout",
   middleware: ["auth"],
   components: {
     TopNav,
@@ -34,7 +32,6 @@ export default {
        showNav: true,
     };
   },
-
   computed:{
     navStatus(){
       return this.$store.getters['chat/getNavOnChatStatus'];

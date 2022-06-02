@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-screen" ref="chatScreen">
+  <div :class="{ 'chat-screen mt-10' : $vuetify.breakpoint.smAndDown, 'chat-screen-md' : $vuetify.breakpoint.mdAndUp }" ref="chatScreen">
     <div v-if="!messages.length" :class=" {'pt-10' : $vuetify.breakpoint.smAndDown}">
       <span v-for="(item, index) in 2" :key="index">
         <v-row>
@@ -437,11 +437,8 @@ export default {
       setTimeout(this.updateScroll, 0);
     },
     "$vuetify.breakpoint.smAndDown": function(){
-      if(this.$route.fullPath != pathData.pages.chatScreen){
-        this.$router.push(this.localePath(pathData.pages.chatScreen));
-      }
       this.$store.dispatch("chat/setNavOnChat", true);
-    }
+    },
   },
   created() {},
   methods: {
@@ -675,7 +672,7 @@ export default {
     }
   },
   beforeDestroy(){
-    console.log('destroyed');
+    // alert('destroyed');
     this.$store.dispatch("chat/destroyMessages");
   }
 };
@@ -684,7 +681,7 @@ export default {
 <style lang="scss" scoped>
 .chat-screen {
   background: #f7fafc;
-  height: calc(100vh - 10.8rem);
+  height: calc(100vh - 6.5rem);
   overflow-y: auto;
   padding: 40px 20px 0 20px;
   width: 100%;
@@ -736,6 +733,207 @@ export default {
 
     .text-message--opponent {
       background: #ECF2F7;
+      border-radius: 5px;
+      display: inline-block;
+      padding: 8px 15px 12px 10px;
+      max-width: 45%;
+      .text-message__content {
+        font-family: $font-family;
+        font-size: 14px;
+        line-height: 124%;
+        color: #49556a;
+      }
+    }
+  }
+
+  .chat-screen__structure-message {
+    .booking-time {
+      padding: 8px 8px 20px;
+      background: #edb041;
+      padding: 5px 5px;
+      box-shadow: 0px 4px 12px rgba(73, 85, 106, 0.15);
+      border-radius: 5px;
+      &__header {
+        background: transparent;
+      }
+      &__title {
+        font-family: $font-family;
+        font-size: 18px;
+        line-height: 25px;
+        text-transform: uppercase;
+        color: #fcfdfe;
+      }
+      &__content {
+        .booking-time-date {
+          background: #fcfdfe;
+          border-radius: 5px;
+          border-radius: 5px;
+          font-family: $font-family;
+          font-size: 14px;
+          line-height: 19px;
+          color: #15577c;
+          display: flex;
+          justify-content: center;
+        }
+        .time-slot-and-booking-info-wrapper {
+          margin-top: 5px;
+          background: #f7fafc;
+          border-radius: 5px;
+          padding: 0px 10px 10px 10px;
+          .time-slot {
+            background: #6f8098;
+            border-radius: 0px 0px 5px 5px;
+            font-family: $font-family;
+            font-size: 11px;
+            line-height: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fcfdfe;
+          }
+          .booking-info {
+            margin-top: 5px;
+            background: #15577c;
+            border-radius: 5px;
+            &__request-time {
+              background: #15577c;
+              font-family: $font-family;
+              font-size: 11px;
+              line-height: 15px;
+              display: flex;
+              align-items: center;
+              text-align: center;
+              color: #fcfdfe;
+            }
+            &__location {
+              font-family: $font-family;
+              font-size: 11px;
+              line-height: 15px;
+              display: flex;
+              align-items: center;
+              opacity: 0.8;
+              text-align: center;
+              color: #fcfdfe;
+            }
+          }
+        }
+      }
+    }
+
+    .big-text {
+      max-width: 50%;
+      font-family: $font-family;
+      font-size: 14px;
+      line-height: 19px;
+      text-align: center;
+      text-transform: uppercase;
+      padding: 10px 10px;
+      color: #19708b;
+      background: #90daf1;
+      box-shadow: 0px 4px 12px rgba(73, 85, 106, 0.15);
+      border-radius: 5px;
+    }
+
+    .booking-package {
+      width: 50%;
+      padding: 20px 10px;
+      background: #edb041;
+      box-shadow: 0px 4px 12px rgba(73, 85, 106, 0.15);
+      border-radius: 5px;
+      &__title {
+        font-family: $font-family;
+        font-size: 18px;
+        line-height: 25px;
+        text-transform: uppercase;
+        color: #fcfdfe;
+      }
+      &__description {
+        font-family: $font-family;
+        font-size: 14px;
+        line-height: 19px;
+        color: #19708b;
+      }
+      &__buyer-name {
+        max-width: 100%;
+        padding: 5px;
+        font-family: $font-family;
+        font-size: 14px;
+        line-height: 19px;
+        color: #15577c;
+        background: #fcfdfe;
+        border-radius: 5px;
+      }
+      &__buyer-text {
+        max-width: 100%;
+        margin-top: 5px;
+        padding: 5px;
+        background: #f7fafc;
+        border-radius: 5px;
+        font-family: $font-family;
+        font-size: 14px;
+        line-height: 19px;
+        color: #15577c;
+      }
+    }
+  }
+}
+.chat-screen-md {
+  background: #fcfdfe;
+  // height: calc(100vh - 10.8rem);
+  height: calc(100vh - 12rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 20px;
+  width: 100%;
+
+  /* width */
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background: #888;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .quick-booking-tag {
+    color: white;
+    font-weight: 300;
+    border: 1px solid white;
+    padding: 2px 3px;
+    border-radius: 5px;
+    font-size: 0.8em;
+  }
+
+  .chat-screen__text-message {
+    .text-message--me {
+      background: #49556a;
+      border-radius: 5px;
+      display: inline-block;
+      padding: 8px 15px 12px 14px;
+      max-width: 45%;
+      .text-message__content {
+        font-family: $font-family;
+        font-size: 14px;
+        line-height: 124%;
+        color: #fcfdfe;
+      }
+    }
+
+    .text-message--opponent {
+      background: #ecf2f7;
       border-radius: 5px;
       display: inline-block;
       padding: 8px 15px 12px 10px;
