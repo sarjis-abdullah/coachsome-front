@@ -148,7 +148,7 @@
       </span>
 
       <!-- Dashboard -->
-      <span v-if="hasRole(['superadmin', 'admin', 'staff'])">
+      <span v-if="false">
         <v-list-item color="primary" link @click.stop="handleAdminDashboard">
           <v-list-item-content>
             <v-list-item-title>

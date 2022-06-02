@@ -10,7 +10,7 @@
           class="contact-user-table"
           :header-props="{ sortIcon: 'mdi-chevron-down' }"
           :footer-props="{
-            'items-per-page-options': [5, 10, 15, 20, 50, 100, -1]
+            'items-per-page-options': [20, 50, 100, 200, 300 -1]
           }"
           :server-items-length="totalItems"
         >
@@ -300,6 +300,7 @@ import ContactForm from "@/components/contacts/ContactForm";
 import API from "@/api/coach/contactUser";
 const threeDotIcon = require("@/assets/img/svg-icons/three-dot-horizontal.svg");
 import {getUniqueListBy} from '@/helper/index';
+import { pathData } from "@/data";
 import moment from "moment";
 export default {
   components: {
@@ -315,7 +316,7 @@ export default {
       contactsData: [],
       options: {
         page: 1,
-        itemsPerPage: 5,
+        itemsPerPage: 100,
         sortBy: ["id"]
       },
       lastPage: null,
@@ -446,9 +447,6 @@ export default {
       immediate: true,
       deep: true,
       handler(newValue, oldValue) {
-        if (!this.$vuetify.breakpoint.mdAndUp) {
-          this.options.itemsPerPage = 15
-        }
         if (this.$route?.query?.contactForm) {
           if (this.$vuetify.breakpoint.mdAndUp) {
           this.mobileContactForm = false;
@@ -485,7 +483,7 @@ export default {
     },
     showContactForm() {
       this.toggleContactForm = true;
-      this.$router.push("/coach/contacts?contactForm=1");
+      this.$router.push(this.localePath(pathData.coach.coachContacts + '?contactForm=1'))
     },
     async getAllData(query = this.paginationQuery, refetechAllData = false) {
       this.loading = true;
