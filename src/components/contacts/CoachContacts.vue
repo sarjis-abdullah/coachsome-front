@@ -300,6 +300,7 @@ import ContactForm from "@/components/contacts/ContactForm";
 import API from "@/api/coach/contactUser";
 const threeDotIcon = require("@/assets/img/svg-icons/three-dot-horizontal.svg");
 import {getUniqueListBy} from '@/helper/index';
+import { pathData } from "@/data";
 import moment from "moment";
 export default {
   components: {
@@ -482,7 +483,7 @@ export default {
     },
     showContactForm() {
       this.toggleContactForm = true;
-      this.$router.push("/coach/contacts?contactForm=1");
+      this.$router.push(this.localePath(pathData.coach.coachContacts + '?contactForm=1'))
     },
     async getAllData(query = this.paginationQuery, refetechAllData = false) {
       this.loading = true;
