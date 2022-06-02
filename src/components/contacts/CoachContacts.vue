@@ -10,7 +10,7 @@
           class="contact-user-table"
           :header-props="{ sortIcon: 'mdi-chevron-down' }"
           :footer-props="{
-            'items-per-page-options': [5, 10, 15, 20, 50, 100, -1]
+            'items-per-page-options': [20, 50, 100, 200, 300 -1]
           }"
           :server-items-length="totalItems"
         >
@@ -315,7 +315,7 @@ export default {
       contactsData: [],
       options: {
         page: 1,
-        itemsPerPage: 5,
+        itemsPerPage: 100,
         sortBy: ["id"]
       },
       lastPage: null,
@@ -446,9 +446,6 @@ export default {
       immediate: true,
       deep: true,
       handler(newValue, oldValue) {
-        if (!this.$vuetify.breakpoint.mdAndUp) {
-          this.options.itemsPerPage = 15
-        }
         if (this.$route?.query?.contactForm) {
           if (this.$vuetify.breakpoint.mdAndUp) {
           this.mobileContactForm = false;
