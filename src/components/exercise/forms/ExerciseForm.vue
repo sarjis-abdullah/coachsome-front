@@ -761,7 +761,8 @@ export default ({
         },
     },
     beforeDestroy () {
-        console.log('exerciseNewData : ', this.exerciseNewData);
+        // console.log('exerciseNewData : ', this.exerciseNewData);
+        
     }
 
     

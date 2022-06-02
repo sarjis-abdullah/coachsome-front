@@ -1,7 +1,7 @@
 <template>
   <div class="chat-new-page">
     <v-container fluid class="pa-0">
-      <v-row no-gutters>
+      <v-row no-gutters align="center" justify="center">
         <!-- Dialog -->
         <v-dialog v-model="bookingDialog.value" max-width="400">
           <RequestBox
@@ -20,11 +20,11 @@
             @select-package="handleSelectPackage"
           />
         </v-dialog>
-        <v-dialog v-if="$vuetify.breakpoint.mdAndUp" v-model="createGroupDialog.value" max-width="600" @click:outside="closeCreateGroupDialog">
+        <v-dialog v-model="createGroupDialog.value" max-width="600">
           <CreateGroupForm
             @created="handleCreatedGroup"
             :open="createGroupDialog.value"
-            @close="closeCreateGroupDialog"
+            @close="createGroupDialog.value = false"
           />
         </v-dialog>
         <v-dialog v-model="inviteGroupDialog.value" max-width="600">
@@ -38,7 +38,7 @@
           <v-card>
             <v-card-title>
               <div>
-                {{ $t("chat_dialog_title_edit_image") }}
+                Edit Image
               </div>
               <v-spacer></v-spacer>
               <div>
@@ -79,7 +79,7 @@
                 :loading="groupEditImgLoading"
                 color="primary-light-1"
                 @click="handleGroupImageSaveBtnClick"
-                >Save</v-btn
+                >{{$t("btn_label_txt_save")}}</v-btn
               >
             </v-card-text>
           </v-card>
@@ -119,215 +119,7 @@
           </div>
         </a-drawer>
         <!-- ./Dialog -->
-
-        <!-- left-sidebar -->
-        <v-col cols="12" :md="leftSidebarMd" v-if="leftSidebarSection">
-          <div class="left-sidebar">
-            <span class="d-md-none" style="position: fixed!important; top : 0!important; width: 100%">
-              <v-list width="100%" color="transparent" class="pa-0 ma-0">
-                <v-list-item>
-                  <v-btn
-                  disabled
-                    icon
-                  >
-                  </v-btn>
-                  <v-list-item-content class="pa-0 ma-0">
-                    <v-list-item-title class="common-top-page-title"
-                      
-                    >{{ $t("pwa_chat_page_title_message") }}</v-list-item-title>
-                  </v-list-item-content>
-                  <v-list-item-action style="text-align: center!important" :class="actionClass">
-                    <v-btn
-                    icon
-                    @click="handleGroupBtnClick"
-                  >
-                    <v-icon style="font-size: 25px!important;" class="common-top-add-icon">
-                      mdi-plus-circle-outline
-                    </v-icon>
-                  </v-btn>
-                  </v-list-item-action>
-                </v-list-item>
-              </v-list>
-              <div class="line"></div>
-              <div class="left-sidebar__body">
-              <div class="pl-4 pr-4 pt-5 d-md-none">
-                <v-text-field
-                  :label="$t('chat_field_label_txt_search')"
-                  solo
-                  dense
-                  rounded
-                  hide-details
-                  prepend-inner-icon="search"
-                  v-model="search"
-                  clearable
-                  @input="handleSearch"
-                  @click="handleClearSearch"
-                ></v-text-field>
-                <v-select
-                  v-model="selectedFilterItem"
-                  class="mt-5"
-                  :items="filters"
-                  item-value="id"
-                  item-text="key"
-                  dense
-                  rounded
-                  solo
-                  @change="handleFilterChange"
-                  append-icon="expand_more"
-                >
-                  <template v-slot:selection="{ item }">
-                    <div>
-                      {{ $t(item.key) }}
-                    </div>
-                  </template>
-                  <template v-slot:item="{ item }">
-                    <div>
-                      {{ $t(item.key) }}
-                    </div>
-                  </template>
-                </v-select>
-              </div>
-              <div class="pl-4 pr-4 pt-5 d-none d-md-block">
-                <v-text-field
-                  :label="$t('chat_field_label_txt_search')"
-                  solo
-                  dense
-                  hide-details
-                  prepend-inner-icon="search"
-                  v-model="search"
-                  clearable
-                  @input="handleSearch"
-                  @click="handleClearSearch"
-                ></v-text-field>
-                <v-select
-                  v-model="selectedFilterItem"
-                  class="mt-5"
-                  :items="filters"
-                  item-value="id"
-                  item-text="key"
-                  dense
-                  solo
-                  @change="handleFilterChange"
-                  append-icon="expand_more"
-                >
-                  <template v-slot:selection="{ item }">
-                    <div>
-                      {{ $t(item.key) }}
-                    </div>
-                  </template>
-                  <template v-slot:item="{ item }">
-                    <div>
-                      {{ $t(item.key) }}
-                    </div>
-                  </template>
-                </v-select>
-              </div>
-              <div :class="{'contact' : !$vuetify.breakpoint.smAndDown, 'contact-sm' : $vuetify.breakpoint.smAndDown}">
-                <ContactList
-                  :avatar-size="avatarSize"
-                  @selected="onHandleContactItemSeleted"
-                />
-              </div>
-            </div>
-            </span>
-            <div class="left-sidebar__header " v-if="!$vuetify.breakpoint.smAndDown">
-              <div class="left-sidebar-title">
-                {{ $t("chat_page_title_message") }}
-              </div>
-              <div class="left-sidebar-action">
-                <v-btn
-                  icon
-                  @click="handleGroupBtnClick"
-                >
-                  <v-icon color="primary-light-1">
-                    mdi-plus-circle-outline
-                  </v-icon>
-                </v-btn>
-              </div>
-            </div>
-            <div class="left-sidebar__body d-none d-md-block">
-              <div class="pl-4 pr-4 pt-5 d-md-none">
-                <v-text-field
-                  :label="$t('chat_field_label_txt_search')"
-                  solo
-                  dense
-                  rounded
-                  hide-details
-                  prepend-inner-icon="search"
-                  v-model="search"
-                  clearable
-                  @input="handleSearch"
-                  @click="handleClearSearch"
-                ></v-text-field>
-                <v-select
-                  v-model="selectedFilterItem"
-                  class="mt-5"
-                  :items="filters"
-                  item-value="id"
-                  item-text="key"
-                  dense
-                  rounded
-                  solo
-                  @change="handleFilterChange"
-                  append-icon="expand_more"
-                >
-                  <template v-slot:selection="{ item }">
-                    <div>
-                      {{ $t(item.key) }}
-                    </div>
-                  </template>
-                  <template v-slot:item="{ item }">
-                    <div>
-                      {{ $t(item.key) }}
-                    </div>
-                  </template>
-                </v-select>
-              </div>
-              <div class="pl-4 pr-4 pt-5 d-none d-md-block">
-                <v-text-field
-                  :label="$t('chat_field_label_txt_search')"
-                  solo
-                  dense
-                  hide-details
-                  prepend-inner-icon="search"
-                  v-model="search"
-                  clearable
-                  @input="handleSearch"
-                  @click="handleClearSearch"
-                ></v-text-field>
-                <v-select
-                  v-model="selectedFilterItem"
-                  class="mt-5"
-                  :items="filters"
-                  item-value="id"
-                  item-text="key"
-                  dense
-                  solo
-                  @change="handleFilterChange"
-                  append-icon="expand_more"
-                >
-                  <template v-slot:selection="{ item }">
-                    <div>
-                      {{ $t(item.key) }}
-                    </div>
-                  </template>
-                  <template v-slot:item="{ item }">
-                    <div>
-                      {{ $t(item.key) }}
-                    </div>
-                  </template>
-                </v-select>
-              </div>
-              <div :class="{'contact' : !$vuetify.breakpoint.smAndDown, 'contact-sm' : $vuetify.breakpoint.smAndDown}">
-                <ContactList
-                  :avatar-size="avatarSize"
-                  @selected="onHandleContactItemSeleted"
-                />
-              </div>
-            </div>
-          </div>
-        </v-col>
-
+        
         <!-- content -->
         <slide-x-left-transition>
           <v-col cols="12" :md="contentMd" v-if="contentSection">
@@ -652,7 +444,7 @@
                 <div class="message-list">
                   <ChatScreen />
                 </div>
-                <div :class="{ 'fixed-bottom': $vuetify.breakpoint.smAndDown }">
+                <div :class="{ 'fixed-bottom': $vuetify.breakpoint.smAndDown && navStatus}">
                   <v-textarea
                     dense
                     :rows="1"
@@ -660,7 +452,7 @@
                     autocomplete="off"
                     solo
                     rounded
-                    class="mx-3"
+                    class="mx-3 pb-3 pt-1"
                     v-model="messageForm.content"
                     :label="$t('chat_chat_box_input_placeholder')"
                     type="text"
@@ -679,6 +471,7 @@
                         </v-btn>
                       </div>
                     </template>
+                    
                     <template v-slot:append>
                       <v-menu
                         v-if="$vuetify.breakpoint.mdAndUp"
@@ -710,11 +503,11 @@
                         />
                       </v-menu>
                       <v-menu
-                        v-if="$vuetify.breakpoint.mdAndUp"
                         v-model="emojiMenu"
                         :close-on-content-click="false"
                         :nudge-width="200"
                         offset-x
+                        v-if="$vuetify.breakpoint.mdAndUp"
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn icon v-bind="attrs" v-on="on" x-small>
@@ -746,49 +539,7 @@
             </div>
           </v-col>
         </slide-x-left-transition>
-
-        <!-- right-sidebar -->
-        <slide-x-left-transition>
-          <v-col
-            cols="12"
-            :md="rightSidebarMd"
-            v-if="rightSidebar"
-            class="pa-0 ma-0  d-none d-sm-none d-md-flex"
-          >
-            <div class="right-sidebar">
-              <div class="right-sidebar__header">
-                <div class="right-sidebar-title">
-                  {{ $t("chat_title_txt_actions") }}
-                </div>
-              </div>
-              <div class="right-sidebar__body">
-                <v-list nav color="transparent" class="pa-0">
-                  <v-list-item @click="handleCalenderClick" link class="pa-0">
-                    <div class="action-item">
-                      <div class="action-item__icon">
-                        <v-icon color="primary-light-1"
-                          >mdi-calendar-plus</v-icon
-                        >
-                      </div>
-                      <div class="action-item__title">
-                        {{ $t("chat_title_booing_req") }}
-                      </div>
-                    </div>
-                  </v-list-item>
-                </v-list>
-              </div>
-            </div>
-          </v-col>
-        </slide-x-left-transition>
       </v-row>
-      <v-card flat v-if="!$vuetify.breakpoint.mdAndUp && createGroupDialog.value" class="hidden-md-and-up fullscreen bg-1">
-        <div class="create-group-form-mobile">
-          <CreateGroupForm 
-          @created="handleCreatedGroup"
-          :open="createGroupDialog.value"
-          @close="closeCreateGroupDialog"/>
-        </div>
-      </v-card>
     </v-container>
   </div>
 </template>
@@ -796,6 +547,7 @@
 <script>
 import RequestBox from "@/components/artifact/global/pages/chat/RequestBox";
 import PackageChoosing from "@/components/artifact/global/pages/chat/PackageChoosing";
+import UploadAttachment from '@/components/artifact/global/pages/chat/UploadAttachment'
 import ChatScreen from "@/components/artifact/global/pages/chat/ChatScreen";
 import ChatSetting from "@/components/artifact/global/pages/chat/ChatSetting";
 import CreateGroupForm from "@/components/artifact/global/pages/chat/CreateGroupForm";
@@ -806,10 +558,10 @@ import "vue-advanced-cropper/dist/style.css";
 import { endpoint } from "../api";
 import { pathData, contactData } from "@/data";
 import { messageData } from "@/data";
-import UploadAttachment from '@/components/artifact/global/pages/chat/UploadAttachment'
+import mixpanelService from '@/services/mixpanelService'
 
 export default {
-  layout: "chat",
+  layout: "chat-without-nav",
   head() {
     return {
       title: "Chat"
@@ -826,18 +578,10 @@ export default {
     ContactList,
     UploadAttachment
   },
-  props: {
-    actionClass:{
-      type: String,
-      default: ""
-    }
-  },
   data: () => ({
-    chechContactQuery: false,
     touch_start: 0,
     touch_end: 0,
     slide_touch_start: 0,
-    addAttachmentDialog:false,
     messageData,
     contactData,
     topicEditMenu: false,
@@ -884,6 +628,7 @@ export default {
     groupImageEditDialog: {
       value: false
     },
+    addAttachmentDialog: false,
     groupEditImgSrc: null,
     groupEditImgCropper: "",
     groupEditImgLoading: false,
@@ -921,7 +666,7 @@ export default {
       type: "text",
       content: "",
       createdAt: new Date()
-    },
+    }
   }),
   computed: {
     isArchiveFilter() {
@@ -959,7 +704,10 @@ export default {
     },
     hasNetwork() {
       return true;
-    }
+    },
+    navStatus(){
+      return this.$store.getters['chat/getNavOnChatStatus']
+    },
   },
   watch: {
     groupEditImgSrc(val) {
@@ -970,43 +718,30 @@ export default {
           this.$emit("image-selected");
         };
         reader.readAsDataURL(val);
-        // console.log(val);
       } else {
         this.groupEditImgCropper = "";
       }
     },
 
+    "$vuetify.breakpoint.mdAndUp": function(){
+      if(this.$vuetify.breakpoint.mdAndUp){
+        this.$router.push(this.localePath(pathData.pages.chat.path));
+      }
+    },
+
     actionDialog(value){
-      if(value == true){
-        document.addEventListener( 'touchstart', this.startTouchListener);
-        document.addEventListener( 'touchmove', this.startTouchMoveListener);
-        document.addEventListener( 'touchend', this.touchEndListener);
-      }
-    },
-
-    "$vuetify.breakpoint.smAndDown": function(){
-      if(this.$vuetify.breakpoint.smAndDown && this.selectedContact != null){
-        this.$router.push(this.localePath(pathData.pages.chatScreen));
-      }
-    },
-
-    selectedContact(data) {
-      let contact = data
-      if (!this.chechContactQuery && this.$route?.query?.contactAbleUserId) {
-        this.chechContactQuery = true
-        const obj = this.contacts.find(item => item.connectionUserId == this.$route.query.contactAbleUserId)
-        if (obj) {
-          contact = obj
-          this.onHandleContactItemSeleted(contact)
+        if(value == true){
+          document.addEventListener( 'touchstart', this.startTouchListener);
+          document.addEventListener( 'touchmove', this.startTouchMoveListener);
+          document.addEventListener( 'touchend', this.touchEndListener);
         }
-      }
+    },
+
+    selectedContact(contact) {
       if (contact) {
         this.$store.dispatch("chat/destroyMessages");
         this.$store.dispatch("chat/setSelectedContact", contact);
-        if(this.$vuetify.breakpoint.smAndDown){
-          this.$store.dispatch("chat/setSelectedContact", contact);
-          this.$router.push(this.localePath(pathData.pages.chatScreen));
-        }
+
         // Fetch private message
         if (contact.categoryId == contactData.CATEGORY_ID_PRIVATE) {
           const params = { contactId: contact.id };
@@ -1054,7 +789,7 @@ export default {
           this.$axios
             .get(endpoint.GROUP_MESSAGES_GET, { params })
             .then(({ data }) => {
-              data && data.data.length && data.data.forEach(item => {
+              data.data.forEach(item => {
                 let newMessage = {
                   id: item.id,
                   type: item.type,
@@ -1068,28 +803,14 @@ export default {
               });
             });
         }
+      }else{
+          this.$router.push(this.localePath(pathData.pages.chat));
       }
     },
     addAttachmentDialog(value){
-      if(!value){
-        this.$refs.UploadAttachment.reset();
-      }
-    },
-    "$route": {
-      immediate: true,
-      deep: true,
-      handler(newValue, oldValue) {
-        if (this.$route?.query?.createGroupDialog) {
-          this.createGroupDialog.value = true
-        }else {
-          this.createGroupDialog.value = false
+        if(!value){
+          this.$refs.UploadAttachment.reset();
         }
-      }
-    }
-  },
-  created(){
-    if(this.$route.fullPath != pathData.pages.chat.path && this.$vuetify.breakpoint.smAndDown){
-      this.$router.replace(this.localePath(pathData.pages.chat.path));
     }
   },
   async mounted() {
@@ -1108,31 +829,16 @@ export default {
       }
     });
 
-    await this.$store.dispatch("chat/getContacts");
-
     // Set contact
-    if (this.$route.query.userId) {
-      let contact = this.contacts.find(
-        item => item.connectionUserId == this.$route.query.userId
-      );
-      if (contact) {
-        this.selectedContact = contact;
-      }
-    } else {
-      // If there has no selected contact
-      if (this.contacts && this.$vuetify.breakpoint.mdAndUp) {
-        let contact = this.contacts[0];
-        if (contact) {
-          this.selectedContact = contact;
-        }
-      }
-    }
+    this.selectedContact = this.$store.getters["chat/selectedContact"];
   },
+
   beforeDestroy(){
     document.removeEventListener( 'touchstart', this.startTouchListener);
     document.removeEventListener( 'touchmove', this.startTouchMoveListener);
     document.removeEventListener( 'touchend', this.touchEndListener);
   },
+
   methods: {
     startTouchListener(e){
       this.touch_start = e.changedTouches[0].clientY;
@@ -1186,24 +892,11 @@ export default {
         this.messageForm.content = this.messageForm.content.trim();
 
         // It has to confirm that the updated date is not changed or mixed every where
-        let messageData = {
-          me: true,
-          type: "structure",
-          file: attachment,
-          createdAt: new Date()
-        }
-        let newMessage = Object.assign(
-          { ...messageData },
-          { ...this.duration }
-        );
+        
         if (
           this.selectedContact.categoryId == contactData.CATEGORY_ID_PRIVATE
         ) {
-          newMessage.scope = this.sendPrivateMessageToChatServer({
-            senderUserId: this.$auth.user.id,
-            receiverUserId: this.selectedContact.connectionUserId,
-            message: newMessage
-          });
+          
 
         const formData = new FormData();
         formData.append('file', attachment);
@@ -1222,6 +915,12 @@ export default {
               if (contact.id != this.selectedContact.id) {
                 this.$store.dispatch("chat/getContacts");
               }
+                let newMessage = data.data.message;
+                newMessage.scope = this.sendPrivateMessageToChatServer({
+                  senderUserId: this.$auth.user.id,
+                  receiverUserId: this.selectedContact.connectionUserId,
+                  message: newMessage
+                });
               this.pushMessage(data.data.message);
               this.addAttachmentDialog = false;
             })
@@ -1236,18 +935,6 @@ export default {
             groupId: this.selectedContact.groupId,
             ...this.duration
           };
-          this.sendGroupMessageToChatServer({
-            senderUser: {
-              id: this.$auth.user.id,
-              firstName: this.$auth.user.last_name,
-              lastName: this.$auth.user.first_name,
-              email: this.$auth.user.email,
-              image: this.$auth.user.image
-            },
-            groupId: this.selectedContact.groupId,
-            message: newMessage,
-            ...this.duration
-          });
 
           const formData = new FormData();
           formData.append('file', attachment);
@@ -1265,6 +952,22 @@ export default {
               if (contact.id != this.selectedContact.id) {
                 this.$store.dispatch("chat/getContacts");
               }
+
+              let newMessage = data.data;
+
+              this.sendGroupMessageToChatServer({
+                senderUser: {
+                  id: this.$auth.user.id,
+                  firstName: this.$auth.user.last_name,
+                  lastName: this.$auth.user.first_name,
+                  email: this.$auth.user.email,
+                  image: this.$auth.user.image
+                },
+                groupId: this.selectedContact.groupId,
+                message: newMessage,
+                ...this.duration
+              });
+
               this.pushMessage(data.data);
               this.addAttachmentDialog = false;
             })
@@ -1275,13 +978,10 @@ export default {
               }
             });
         }
+        mixpanelService.init();
+        mixpanelService.trackNewMessage(this.$auth.user.id);
+        mixpanelService.addNewMessageCount(this.$auth.user.id);
       }
-    },
-    handleAttachmentUploadBtn() {
-      this.addAttachmentDialog = true;
-    },
-    handleAttachmentUploadCancel() {
-      this.addAttachmentDialog = false;
     },
     async handleGroupImageSaveBtnClick() {
       const groupCropperResult = this.$refs.groupCropper.getResult();
@@ -1346,24 +1046,18 @@ export default {
       }
     },
     async handleCreatedGroup() {
-      this.closeCreateGroupDialog()
+      this.createGroupDialog.value = false;
       await this.$store.dispatch("chat/getContacts");
       let contact = this.contacts[0];
       if (contact) {
         this.selectedContact = contact;
       }
     },
-    onHandleContactItemSeleted(contact) {
-      this.selectedContact = contact;
-    },
     getSelectedContact() {
       return this.$store.getters["chat/selectedContact"];
     },
     setSelectedContact(payload) {
       this.$store.dispatch("chat/setSelectedContact", payload);
-    },
-    getContacts() {
-      return this.$store.dispatch("chat/getContacts");
     },
     setMessages(payload) {
       this.$store.dispatch("chat/setMessages", payload);
@@ -1373,29 +1067,8 @@ export default {
     },
     handleGroupBtnClick() {
       this.createGroupDialog.value = true;
-      const query = {
-        ...this.$route.query,
-        createGroupDialog: true
-      }
-      this.$router.push({query})
     },
-    handleUnarchiveBtnClick() {
-      if (this.selectedContact) {
-        this.$axios
-          .post(endpoint.CONTACTS_UNARCHIVE_POST, {
-            contactId: this.selectedContact.id
-          })
-          .then(() => {
-            this.selectedContact = null;
-            this.$store.dispatch("chat/getContacts");
-            this.$store.dispatch("chat/setMessages", []);
-          });
-      }
-    },
-    async handleSearch() {
-      await this.$store.dispatch("chat/setSearch", this.search);
-      this.getContacts();
-    },
+
     async handleFilterChange(val) {
       let selected = this.filters.find(item => item.id == val);
       if (selected) {
@@ -1410,9 +1083,8 @@ export default {
         await this.$axios.post(endpoint.CONTACTS_ARCHIVE_POST, {
           contactId: contact.id
         });
-        this.getContacts();
         this.selectedContact = null;
-        this.setMessages([]);
+        this.$router.push(this.localePath(pathData.pages.chat))
       }
     },
     async handleUnreadBtnClick() {
@@ -1421,8 +1093,9 @@ export default {
         await this.$axios.post(endpoint.CONTACTS_UNREAD_POST, {
           contactId: contact.id
         });
-        this.getContacts();
-        this.setMessages([]);
+        // this.getContacts();
+        // this.setMessages([]);
+        this.$router.push(this.localePath(pathData.pages.chat))
       }
     },
     async handleUpdatedChatSetting(val) {
@@ -1446,31 +1119,13 @@ export default {
       this.messageForm.content += emoji.data;
     },
     handleBackBtnClick() {
-      if (this.$route?.query?.contactAbleUserId) {
-        const query = {
-          ...this.$route?.query,
-          checkContactUserQuery: true
-        }
-        this.$router.push({query})
-      }
-      this.$store.dispatch("chat/destroyMessages");
-      this.selectedContact = null;
-    },
-    handleDesktopHideActionBtnClick() {
-      this.rightSidebar = !this.rightSidebar;
-      if (this.rightSidebar) {
-        this.contentMd = 6;
-      } else {
-        this.contentMd = 9;
-      }
+        this.$store.dispatch("chat/destroyMessages");
+        this.$store.dispatch("chat/setSelectedContact", null);
+        this.$router.push(this.localePath(pathData.pages.chat))
     },
     handleMobileHideActionBtnClick() {
       this.actionDialog = !this.actionDialog;
     },
-    //duplicated method
-    // handleBackBtnClick() {
-    //   this.selectedContact = null;
-    // },
     handleRequestBoxCancelBtn() {
       this.bookingDialog.value = false;
     },
@@ -1500,7 +1155,6 @@ export default {
           receiverUserId: contact.connectionUserId,
           message: message
         });
-        this.$store.dispatch("chat/getContacts");
         this.bookingDialog.value = false;
       }
     },
@@ -1521,6 +1175,12 @@ export default {
         this.bookingDialog.value = true;
       }
     },
+    handleAttachmentUploadBtn() {
+      this.addAttachmentDialog = true;
+    },
+    handleAttachmentUploadCancel() {
+      this.addAttachmentDialog = false;
+    },
     handlePackageChoosingCancel() {
       this.packageChoosingDialog.value = false;
     },
@@ -1540,6 +1200,7 @@ export default {
     handleShiftEnterPress() {
       this.messageForm.content += "\n";
     },
+
     handleMessageInput() {
       if (
         this.selectedContact &&
@@ -1609,36 +1270,22 @@ export default {
               }
             });
         }
-
         this.pushMessage(newMessage);
         this.messageForm.content = "";
+        mixpanelService.init();
+        mixpanelService.trackNewMessage(this.$auth.user.id);
+        mixpanelService.addNewMessageCount(this.$auth.user.id);
       }
     },
     handleClearSearch() {
       this.search = "";
-    },
-    closeCreateGroupDialog(){
-      const query = {}
-      this.$router.push({query})
-      this.createGroupDialog.value = false;
     }
   }
 };
 </script>
 
 <style lang="scss">
-.fullscreen {
-  border-radius: 0;
-  margin: 0;
-  height: 100%;
-  position: fixed;
-  overflow-y: auto;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1;
-}
-.ant-drawer-content-wrapper{
+  .ant-drawer-content-wrapper{
     // height: 400px!important;
     border-top-left-radius: 20px!important;
     border-top-right-radius: 20px!important;
@@ -1672,40 +1319,52 @@ export default {
     color: #15577C;
 
   }
-  .v-application{
-  &--wrap{  
-      background: #f7fafc!important;
+  .contact__title{
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 300!important;
+    font-size: 36px!important;
+    line-height: 49px!important;
+    /* identical to box height */
+
+    text-transform: uppercase;
+
+    /* Dusty blue */
+
+    color: #15577C;
+
   }
-    
-}
 $header-height: 60px;
 .chat-new-page {
   .fixed-bottom {
     position: fixed;
     bottom: 0;
+    // bottom: 60px;
     -webkit-backface-visibility: hidden;
+    background: $body-bg;
     width: 100%;
   }
   .fixed-top {
     position: fixed;
     z-index: 100;
-    background: #f7fafc;
+    background: $body-bg;
     // top: 45px;
     top: 0;
     -webkit-backface-visibility: hidden;
     width: 100%;
   }
-  background: #f7fafc;
+  background: $body-bg;
   .v-select__selections {
     color: rgba(0, 0, 0, 0.6) !important;
   }
+
 
   .ant-drawer-body {
     padding: 0px !important;
   }
 
   .v-textarea .v-input__control {
-    // border: 2px solid #15577c !important;
+    border: 2px solid #15577c !important;
   }
 
   .group-avatar {
@@ -1758,14 +1417,14 @@ $header-height: 60px;
     &__body {
       .contact {
         overflow: auto;
-        height: 100%;
+        overflow-y: scroll;
         height: calc(100vh - 16rem);
       }
       .contact-sm {
         overflow: auto;
         overflow-y: scroll;
         // height: 100vh;
-        height: calc(100vh - 16rem);
+        height: auto;
       }
       /* width */
       .contact::-webkit-scrollbar {
@@ -1799,7 +1458,7 @@ $header-height: 60px;
           line-height: 25px;
           text-align: center;
           text-transform: capitalize;
-          color: $grey-700!important;
+          color: $primary-light-1;
           padding-top: 5px;
           padding-bottom: 5px;
         }
@@ -1809,7 +1468,7 @@ $header-height: 60px;
           line-height: 19px;
           text-align: center;
           text-transform: capitalize;
-          color: $grey-700!important;
+          color: $primary-light-1;
         }
       }
     }
@@ -1817,9 +1476,7 @@ $header-height: 60px;
   .content {
     height: 100%;
     &__header {
-      border-left: 1px solid #e1e8f1;
-      border-right: 1px solid #e1e8f1;
-      border-bottom: 1px solid #e1e8f1;
+      border-bottom: 1px solid $grey-500!important;
       height: $header-height;
       display: flex;
       justify-content: space-between;
@@ -1827,8 +1484,8 @@ $header-height: 60px;
     }
     &__body {
       background: #f7fafc;
-      border-left: 1px solid #e1e8f1;
-      border-right: 1px solid #e1e8f1;
+      border-left: 1px solid #f7fafc;
+      border-right: 1px solid #f7fafc;
       padding-bottom: 15px;
     }
   }
@@ -1877,12 +1534,4 @@ $header-height: 60px;
     }
   }
 }
-.v-list-item{
-	&__action{
-		margin: 0!important;
-	}
-}
-// .v-list-item{
-// 	padding: 0 16px 0 0!important;
-// }
 </style>
