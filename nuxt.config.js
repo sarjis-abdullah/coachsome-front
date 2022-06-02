@@ -524,8 +524,8 @@ export default {
   build: {
     transpile: ["vuetify/lib", "tiptap-vuetify"]
   },
-  // server: {
-  //   // for check in mbl device
-  //   host: '0.0.0.0', // default: localhost
-  // }
+  server: {
+    // for check in mbl device
+    host: '0.0.0.0', // default: localhost
+  }
 };
