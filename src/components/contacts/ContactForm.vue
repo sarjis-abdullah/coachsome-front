@@ -91,6 +91,7 @@
 </template>
 <script>
 import MobileTopNav from "@/components/layout/global/MobileTopNav";
+import { pathData } from "@/data";
 export default {
   components: {
     MobileTopNav
