@@ -40,13 +40,9 @@
                 
                 class="py-0 my-0"
               >
-                <template>
-                  <nuxt-link
-                    v-for="(locale, i) in availableLocales"
-                    :key="locale.code"
-                    :to="switchLocalePath(locale.code)"
-                  >
-                    <v-list-item :key="i" :value="i" class="py-0 my-0">
+                <span v-for="(locale, i) in availableLocales" :key="i + locale.code">
+                  
+                    <v-list-item :key="i" :value="i" class="py-0 my-0" @click.prevent.stop="aaaa(locale.code)">
                       <v-list-item-avatar size="20" tile>
                         <flag :iso="locale.icon" v-bind:squared="false" />
                       </v-list-item-avatar>
@@ -58,8 +54,7 @@
                     </v-list-item>
                     <!-- <v-divider></v-divider> -->
                       <div class="line"></div>
-                  </nuxt-link>
-                </template>
+                </span>
               </v-list-item-group>
             </v-list>
             </v-col>
@@ -73,7 +68,7 @@
 import Avatar from "@/components/artifact/global/Avatar";
 import { pathData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
-
+import Cookies from 'universal-cookie';
 export default ({
     layout: "common",
     components: {
@@ -125,6 +120,17 @@ export default ({
         }else if(this.$auth.hasRole(["athlete"])){
           this.$router.push(this.localePath(pathData.athlete.profileMenu));
         }
+      },
+      aaaa(code){
+        // this.$i18n.locale = code
+        // this.$i18n.defaultLocale = code
+        // this.$i18n.loadedLanguages = [code]
+        // this.$i18n.setLocale(this.$i18n.locale)
+        // 
+        const cookies = new Cookies();
+        cookies.set('i18n_redirected', code, { path: '/' });
+        this.$router.go(-1)
+        console.log(cookies.get('i18n_redirected'));
       }
     }
 

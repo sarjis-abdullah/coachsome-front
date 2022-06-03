@@ -149,7 +149,7 @@ export default {
       "nuxt-i18n",
       {
         seo: false,
-        strategy: "prefix_and_default",
+        strategy: "no_prefix",
         vueI18n: {
           fallbackLocale: "en"
         },
@@ -199,7 +199,7 @@ export default {
           }
         },
         detectBrowserLanguage: {
-          useCookie: false,
+          useCookie: true,
           cookieKey: "i18n_redirected",
           onlyOnRoot: true
         }
