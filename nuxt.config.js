@@ -149,7 +149,7 @@ export default {
       "nuxt-i18n",
       {
         seo: false,
-        strategy: "no_prefix",
+        strategy: "prefix_and_default",
         vueI18n: {
           fallbackLocale: "en"
         },
@@ -199,7 +199,7 @@ export default {
           }
         },
         detectBrowserLanguage: {
-          useCookie: true,
+          useCookie: false,
           cookieKey: "i18n_redirected",
           onlyOnRoot: true
         }
@@ -523,8 +523,8 @@ export default {
   build: {
     transpile: ["vuetify/lib", "tiptap-vuetify"]
   },
-  // server: {
-  //   // for check in mbl device
-  //   host: '0.0.0.0', // default: localhost
-  // }
+  server: {
+    // for check in mbl device
+    host: '0.0.0.0', // default: localhost
+  }
 };
