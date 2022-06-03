@@ -1,4 +1,5 @@
 <template>
+<div>
   <v-container>
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_profile_title')">
       <template v-slot:goBack >
@@ -312,18 +313,20 @@
       </v-col>
     </v-row>
   </v-container>
+  </div>
 </template>
 <script>
 import { pathData } from "@/data";
 import { currencyService } from "@/services";
 import impersonateAdminApi from "@/api/admin/impersonate";
 import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import Languages from '@/components/language/Languages';
 import { avatarHelper } from "@/helper"
 
 export default ({
   name: "CoachProfileMenu",
   layout: "coach",
-  components: {MobileTopNav},
+  components: {MobileTopNav, Languages},
   data(){
     return {
       editProfile: {
@@ -345,7 +348,7 @@ export default ({
   watch:{
     "$vuetify.breakpoint.smAndUp" : function() {
       this.$router.push(this.localePath(pathData.coach.editProfile));
-    }
+    },
   },
   computed: {
       avatarImage() {
@@ -616,5 +619,7 @@ export default ({
   text-decoration-line: underline;
   color: #49556A;
 }
-
+.z-1000 {
+  z-index: 1000;
+}
 </style>

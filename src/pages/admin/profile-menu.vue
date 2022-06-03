@@ -1,5 +1,5 @@
 <template>
-
+<div>
 <v-container fluid>
 
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_profile_menu')">
@@ -288,6 +288,7 @@
       </v-col>
     </v-row>
   </v-container>
+  </div>
 </template>
 <script>
 import { pathData } from "@/data";
@@ -295,10 +296,10 @@ import { currencyService } from "@/services";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 import impersonateAdminApi from "@/api/admin/impersonate";
 import { avatarHelper } from "@/helper"
-
+import Languages from '@/components/language/Languages';
 export default ({
   layout: "admin",
-  components: {MobileTopNav},
+  components: {MobileTopNav, Languages},
   data(){
     return {
       editProfile: {
@@ -320,7 +321,7 @@ export default ({
   watch:{
     "$vuetify.breakpoint.smAndUp" : function() {
       this.$router.push(this.localePath(pathData.admin.dashboard));
-    }
+    },
   },
   computed: {
       isSwitchedUser() {

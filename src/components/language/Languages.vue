@@ -120,7 +120,9 @@ export default ({
           deep: true,
           handler(newValue, oldValue) {
             if (this.$route?.query?.lang) {
-              this.handleBackBtnClick()
+              // this.$router.push({query:{}})
+              console.log("12345");
+              //this.handleBackBtnClick()
             }
           }
         },
