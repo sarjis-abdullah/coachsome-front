@@ -46,7 +46,7 @@
                     :key="locale.code"
                     :to="switchLocalePath(locale.code)"
                   >
-                    <v-list-item :key="i" :value="i" class="py-0 my-0">
+                    <v-list-item :key="i" :value="i" class="py-0 my-0" @click="$router.push({query:{lang:locale.code}})">
                       <v-list-item-avatar size="20" tile>
                         <flag :iso="locale.icon" v-bind:squared="false" />
                       </v-list-item-avatar>
@@ -114,7 +114,18 @@ export default ({
               i => i.code == this.$i18n.locale
               );
           }
-        }
+        },
+        '$route': {
+          immediate: true,
+          deep: true,
+          handler(newValue, oldValue) {
+            if (this.$route?.query?.lang) {
+              // this.$router.push({query:{}})
+              console.log("12345");
+              //this.handleBackBtnClick()
+            }
+          }
+        },
     },
     methods:{
       handleBackBtnClick(){

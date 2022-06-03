@@ -258,14 +258,7 @@
     </section>
     <v-card flat v-show="mobileContactForm" class="hidden-md-and-up bg-1 fullscreen">
       <ContactForm
-        @close-modal="
-          () => {
-            toggleContactForm = false;
-            mobileContactForm = false;
-            editMode = false;
-            editContactData = {};
-          }
-        "
+        @close-modal="closeModal"
         @reloadAllData="reloadAllData"
         :editMode="editMode"
         :editContactData="editContactData"
@@ -275,17 +268,11 @@
       v-model="toggleContactForm"
       max-width="680"
       :fullscreen="!$vuetify.breakpoint.mdAndUp"
+      @click:outside="closeModal"
     >
       <v-card style="background: #F7FAFC;">
         <ContactForm
-          @close-modal="
-            () => {
-              toggleContactForm = false;
-              mobileContactForm = false;
-              editMode = false;
-              editContactData = {};
-            }
-          "
+          @close-modal="closeModal"
           @reloadAllData="reloadAllData"
           :editMode="editMode"
           :editContactData="editContactData"
@@ -420,7 +407,7 @@ export default {
     },
     notFoundMsg() {
       return !this.loading && !(this.contactsData && this.contactsData.length);
-    }
+    },
   },
   watch: {
     paginationQuery: {
@@ -509,7 +496,7 @@ export default {
             }
           }
           return { ...item, name };
-        }), 'id');
+        }), 'email');
         if (response?.data?.meta) {
           this.lastPage = response.data.meta.last_page;
           this.totalItems = response.data.meta?.total;
@@ -598,6 +585,15 @@ export default {
         items = items.filter(item => item.key != "resendInvitationEmail");
       }
       return items;
+    },
+    closeModal(){
+      this.toggleContactForm = false;
+      this.mobileContactForm = false;
+      this.editMode = false;
+      this.editContactData = {};
+      if (this.$route?.query?.contactForm) {
+        this.$router.push({query:{}})
+      }
     }
   }
 };

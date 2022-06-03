@@ -53,6 +53,11 @@ import CoachContacts from "@/components/contacts/CoachContacts";
 import { pathData } from "@/data";
 export default {
   layout: "coach-no-drawer",
+  head() {
+    return {
+      title: "Contacts"
+    };
+  },
   components: {
     MobileTopNav,
     CoachContacts

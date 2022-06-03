@@ -288,9 +288,6 @@
       </v-col>
     </v-row>
   </v-container>
-  <v-card v-if="!$vuetify.breakpoint.mdAndUp && $route.query && $route.query.language" class="fullscreen z-1000">
-    <Languages/>
-  </v-card>
   </div>
 </template>
 <script>
@@ -324,11 +321,6 @@ export default ({
   watch:{
     "$vuetify.breakpoint.smAndUp" : function() {
       this.$router.push(this.localePath(pathData.admin.dashboard));
-    },
-    "$vuetify.breakpoint.mdAndUp" : function() {
-      if (this.$route?.query?.language) {
-        this.$router.push({query:{}});
-      }
     },
   },
   computed: {
@@ -424,11 +416,7 @@ export default ({
         this.$router.push(this.localePath(pathData.admin.userLog));
       },
       handleLanguageBtn(){
-        const query = {
-          ...this.$route.query,
-          language:1
-        }
-        this.$router.push({query});
+        this.$router.push(this.localePath(pathData.pages.language));
       },
       handleCurrencyBtn(){
         this.$router.push(this.localePath(pathData.pages.currency));
