@@ -1,5 +1,5 @@
 <template>
-  <v-container class="invite-friend-container bg-2">
+  <v-container class="invite-friend-container bg-1">
       <v-row :class="isModal && 'form-space'">
         <v-col cols="12" class="invite-friend-wrapper" :class="!isModal ? 'invite-friend-wrapper__space' : 'p-0'">
           <section>
