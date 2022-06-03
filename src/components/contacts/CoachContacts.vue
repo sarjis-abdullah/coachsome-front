@@ -509,7 +509,7 @@ export default {
             }
           }
           return { ...item, name };
-        }), 'id');
+        }), 'email');
         if (response?.data?.meta) {
           this.lastPage = response.data.meta.last_page;
           this.totalItems = response.data.meta?.total;
