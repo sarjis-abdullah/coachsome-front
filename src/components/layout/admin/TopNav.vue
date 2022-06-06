@@ -234,15 +234,6 @@ export default {
         : null;
     },
     initialImageContent() {
-      // if(this.$auth.user.first_name && this.$auth.user.last_name){
-      //   return (
-      //     this.$auth.user.first_name.substring(0, 1) +
-      //     this.$auth.user.last_name.substring(0, 1)
-      //   );
-      // }else{
-      //   return "";
-      // }
-
       return avatarHelper.getAvatarName(this.$auth.user);
       
     },

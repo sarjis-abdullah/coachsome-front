@@ -229,7 +229,8 @@ export default {
               property: "access_token"
             },
             user: {
-              property: "user"
+              property: "user",
+              autoFetch: true
             },
             endpoints: {
               login: {
