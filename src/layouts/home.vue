@@ -26,6 +26,7 @@ import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import { pathData } from "@/data";
 
 export default {
+  middleware: ["auth"],
   name: "HomeLayout",
   components: {
     FrontFooter,

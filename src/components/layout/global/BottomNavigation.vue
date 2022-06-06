@@ -1,5 +1,6 @@
 <template>
   <v-container >
+    <client-only>
     <v-bottom-navigation
         fixed
         app
@@ -70,6 +71,7 @@
           <img class="menu-icon-image" :src="require('@/assets/img/svg-icons/lock.svg')" alt="Avatar_not_logged_in">
         </v-btn>
     </v-bottom-navigation>
+    </client-only>
     <login-dialog v-if="!isLoggedIn"></login-dialog>
   </v-container>
 </template>
@@ -100,7 +102,8 @@ export default ({
     }),
     computed: {
       isLoggedIn(){
-        return this.$auth && this.$auth.loggedIn ? true : false;
+        
+        return this.$auth && this.$auth.loggedIn && this.$auth.strategy.token.status().valid() ? true : false;
       },
       role_name() { 
         if(this.user.roles){
