@@ -168,7 +168,7 @@ export default ({
         }
       },
       authUser() {
-        return this.$auth.user;
+        return this.$auth?.user;
       },
       profileUrl() {
         return window.location.origin + "/" + this.$store.getters.auth.user_name;
