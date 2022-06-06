@@ -91,9 +91,9 @@ export default {
   },
 
   css: [
-    '~/assets/css/global.css',
     "@mdi/font/css/materialdesignicons.css",
     "material-design-icons-iconfont/dist/material-design-icons.css",
+    '@/assets/css/global.css',
   ],
 
   // Plugins to run before rendering page
@@ -120,7 +120,7 @@ export default {
     { src: "~/plugins/vue-video-player", mode: "client" },
     { src: "~/plugins/vuelidate" },
     { src: "~/plugins/vue-debounce", mode: "client" },
-    { src: "~/plugins/globalPlugins" },
+    { src: "~/plugins/globalPlugins", mode: "client" },
   ],
 
   /**
@@ -519,12 +519,13 @@ export default {
         ],
       }
     },
+
   // Build Configuration
   build: {
     transpile: ["vuetify/lib", "tiptap-vuetify"]
   },
-  // server: {
-  //   // for check in mbl device
-  //   host: '0.0.0.0', // default: localhost
-  // },
+  server: {
+    // for check in mbl device
+    host: '0.0.0.0', // default: localhost
+  },
 };

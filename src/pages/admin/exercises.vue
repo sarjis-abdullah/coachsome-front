@@ -1,15 +1,13 @@
 <template>
   <v-container fluid class="pt-0 mt-0" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
 
-    <!-- Header start -->
-
     <!-- Mobile Header Start -->
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="headerText">
       <template v-slot:goBack>
         <v-btn
           icon
           @click="handleBack"
-          v-if="!exercisePreviewDialog && !exerciseDialog"
+          v-if="!exerciseDialog"
         >
           <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
         </v-btn>
@@ -25,13 +23,13 @@
         <v-btn
           icon
           @click.stop="handleExerciseCreateBtn"
-          v-if="!exercisePreviewDialog && !exerciseDialog"
+          v-if="!exerciseDialog"
         >
           <v-icon style="font-size: 25px!important;" class="common-top-add-icon">
             mdi-plus-circle-outline
           </v-icon>
         </v-btn>
-        <v-menu offset-y v-else-if="exercisePreviewDialog">
+        <v-menu offset-y v-else-if="previewMode">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               icon
@@ -56,11 +54,8 @@
         <span v-else></span>
       </template>
     </mobile-top-nav>
-
-    <!-- Mobile Header End -->
-
+    
     <!-- Desktop Header Start -->
-
     <v-row class="d-none d-md-block">
       <v-col cols="12" class="pb-0">
         <div class="page-title">{{$t('dropdown_item_exercises')}}</div>
@@ -70,13 +65,7 @@
       </v-col>
     </v-row>
 
-    <!-- Desktop Header End -->
-
-
-    <!-- Header end -->
-
     <!-- No exercise start -->
-
     <v-row class="d-flex justify-center" v-if="noExercise">
         <v-col cols="12" md="4" class="no-exercise">
             <h4 class="no-exercise__text">{{$t("no_exercise_title")}}</h4>
@@ -91,8 +80,6 @@
             </v-btn>
         </v-col>
     </v-row>
-
-    <!-- No Exercise end -->
 
     <!-- mobile view start -->
     <v-row class="d-md-none" justify="center" align="center" v-if="exercises.length && !exerciseDialog && !exercisePreviewDialog">
@@ -133,49 +120,6 @@
 
       <!-- Exercise Form For Mobile Start -->
     </v-row>
-    <v-row class="d-md-none" justify="center" align="center" >
-      <v-col cols="12">
-      <!-- Create Dialog -->
-        <template v-if="exerciseDialog">
-          <div v-if="$vuetify.breakpoint.mdAndUp">
-            <v-dialog v-model="exerciseDialog" max-width="600" @click:outside="closeExerciseDialog">
-              <ExerciseForm 
-                @newExerciseAdded="handleCreateExercise($event)"
-                @saveExerciseData="handleUpdateExercise($event)" 
-                @closeCreateDialog="handleCloseExercise"
-                @exerciseDataUpdated="handleModifyExercise($event)"
-                :exerciseNewData="exerciseInitialData"
-              />
-            </v-dialog>
-          </div>
-          <div v-else class="fullscreen bg-1">
-            <ExerciseForm 
-              @newExerciseAdded="handleCreateExercise($event)"
-              @saveExerciseData="handleUpdateExercise($event)" 
-              @closeCreateDialog="handleCloseExercise"
-              @exerciseDataUpdated="handleModifyExercise($event)"
-              :exerciseNewData="exerciseInitialData"
-            />
-          </div>
-        </template>
-      <!-- Create Dialog -->
-
-      <!-- Preview Dialog -->
-        <template v-if="exercisePreviewDialog">
-          <div v-if="$vuetify.breakpoint.mdAndUp">
-            <v-dialog v-model="exercisePreviewDialog" max-width="600" @click:outside="handleCloseExercisePreviewDialog">
-              <ExercisePreview  :exerciseData="exerciseData"/>
-            </v-dialog>
-          </div>
-          <div v-else class="fullscreen bg-1">
-            <ExercisePreview  :exerciseData="exerciseData"/>
-          </div>
-        </template>
-      <!-- Preview Dialog -->
-      </v-col>
-    </v-row>
-    <!-- mobile view end -->
-
 
     <!-- desktop view -->
     <v-row class="d-none d-md-block" >
@@ -590,6 +534,51 @@
       </v-col>
     </v-row>
 
+    <!-- Dialogs -->
+    <v-row justify="center" align="center" >
+      <v-col cols="12">
+      <!-- Create Dialog -->
+        <template v-if="exerciseDialog">
+          <div v-if="$vuetify.breakpoint.mdAndUp">
+            <v-dialog color="#f7fafc" v-model="exerciseDialog" :max-width="dialogWidth" @click:outside="handleCloseExercise">
+              <ExerciseForm 
+                @newExerciseAdded="handleCreateExercise($event)"
+                @saveExerciseData="handleUpdateExercise($event)" 
+                @closeCreateDialog="handleCloseExercise"
+                @exerciseDataUpdated="handleModifyExercise($event)"
+                :exerciseNewData="exerciseInitialData"
+                v-if="!previewMode"
+              />
+              <ExercisePreview v-else  :exerciseData="exerciseData"/>
+            </v-dialog>
+          </div>
+          <div v-else>
+            <ExerciseForm 
+              @newExerciseAdded="handleCreateExercise($event)"
+              @saveExerciseData="handleUpdateExercise($event)" 
+              @closeCreateDialog="handleCloseExercise"
+              @exerciseDataUpdated="handleModifyExercise($event)"
+              :exerciseNewData="exerciseInitialData"
+              v-if="!previewMode"
+            />
+             <ExercisePreview v-else  :exerciseData="exerciseData"/>
+          </div>
+        </template>
+
+      <!-- Preview Dialog -->
+        <!-- <template v-if="exercisePreviewDialog">
+          <div v-if="$vuetify.breakpoint.mdAndUp">
+            <v-dialog v-model="exercisePreviewDialog" max-width="600" @click:outside="handleCloseExercisePreviewDialog">
+              <ExercisePreview  :exerciseData="exerciseData"/>
+            </v-dialog>
+          </div>
+          <div v-else>
+            <ExercisePreview  :exerciseData="exerciseData"/>
+          </div>
+        </template> -->
+      </v-col>
+    </v-row>
+
   </v-container>
 </template>
 
@@ -612,7 +601,7 @@ export default {
   },
   data() {
     return {
-      hideTable: false,
+      previewMode: false,
       previewPage: false,
       exerciseInitialData: {
         categories : [],
@@ -670,35 +659,37 @@ export default {
       handler(newValue, oldValue) {
         if (this.$route?.query?.exerciseDialog) {
           this.exerciseDialog = true
-        }else if(this.$route?.query?.exercisePreviewDialog){
-          if(this.exerciseData == ""){
-            this.$router.push(this.localePath(pathData.admin.exercises));
-          }else{
-            this.exercisePreviewDialog = true
-          }
-          
         }else{
           this.exerciseDialog = false;
-          this.exercisePreviewDialog = false;
         }
       }
     },
-    exerciseDialog: function(val) {}
+    exerciseDialog: function(val) {
+      // console.log(val);
+    },
     
   },
   computed:{
+    dialogWidth(){
+      if(this.previewMode){
+        return "470px";
+      }else{
+        return "600px";
+      }
+      
+    },
     exerciseCount(){
       return 0; 
     },
     headerText(){
       let title = this.$i18n.t('dropdown_item_exercises');
-      if(this.exerciseDialog){
+      if(this.exerciseDialog && !this.previewMode){
         title = this.exerciseInitialData.id != null ? this.$i18n.t('ex_edit') : this.$i18n.t('ex_create');
       }
-      else if(this.exercisePreviewDialog){
+      else if(this.previewMode){
         title = this.exerciseData.name;
       }
-      else if(!this.exerciseDialog && !this.exercisePreviewDialog){
+      else if(!this.exerciseDialog && !this.previewMode){
         title = this.$i18n.t('dropdown_item_exercises');
       }
       return title;
@@ -732,31 +723,29 @@ export default {
 
     handleExerciseCreateBtn(){
       this.resetExerciseData();
+      this.previewMode = false;
       this.openExerciseDialog()
       this.$nextTick(() => {});
     },
 
     closeExerciseDialog(){
+      this.previewMode = false;
       this.$router.push({query:{}})
     },
+
     openExerciseDialog(){
-      this.exercisePreviewDialog = false;
       this.exerciseDialog =true;
       this.$router.push({query:{}});
       const query = {
         ...this.$route.query,
-        exercisePreviewDialog: false,
         exerciseDialog: true
       }
       this.$router.push({query})
     },
 
     openExercisePreviewDialog(){
-      const query = {
-        ...this.$route.query,
-        exercisePreviewDialog: true
-      }
-      this.$router.push({query})
+      this.previewMode = true;
+      this.openExerciseDialog();
     },
 
     handleCloseExercise(){
@@ -925,7 +914,7 @@ export default {
         this.exerciseInitialData.sportsSelected = exercise.sport;
         this.exerciseInitialData.lavelsSelected = exercise.lavel;
         this.exerciseInitialData.tagsSelected = exercise.tags;
-
+        this.previewMode = false;
         this.openExerciseDialog();
         
       }
@@ -948,6 +937,7 @@ export default {
             this.noExercise = false;
             this.table.rows.unshift(formattedRowList[0]);
             this.$toast.success("This Exercise has been created successfully.");
+            this.previewMode = false;
             this.handleCloseExercise();
           }
         })
@@ -976,6 +966,7 @@ export default {
             Object.assign(this.table.rows[index],this.formatExerciseItem(data.exercise));
 
             this.$toast.success('Exercise has been updated successfully!');
+            this.previewMode = false;
             this.handleCloseExercise();
           }
           
@@ -990,7 +981,7 @@ export default {
 
     editExercise(selectedExercise){
       
-      this.resetExerciseData();
+      this.exercisePreviewDialog = false;
 
       const index = this.exercises.findIndex(
                       item => item.id == selectedExercise.id
@@ -998,28 +989,22 @@ export default {
 
       let exercise = this.exercises[index];
 
+      this.resetExerciseData();
+
       if(exercise){
 
         this.exerciseInitialData.id = exercise.id;
         this.exerciseInitialData.name = exercise.name;
         this.exerciseInitialData.assets = exercise.assets[0].url_type == "default" ? [] : exercise.assets;
-
         this.exerciseInitialData.links = exercise.assets[0].url_type == "default" ? [] : exercise.assets;
-
         this.exerciseInitialData.instructions = exercise.instructions;
-
         this.exerciseInitialData.categoriesSelected = exercise.category;
-
         this.exerciseInitialData.sportsSelected = exercise.sport;
-
         this.exerciseInitialData.lavelsSelected = exercise.lavel;
-
         this.exerciseInitialData.tagsSelected = exercise.tags;
-
         this.exerciseInitialData.type = exercise.type;
-
+        this.previewMode = false;
         this.openExerciseDialog();
-
       }
     },
 
@@ -1057,7 +1042,7 @@ export default {
       let exercise = this.exercises[index];
       if(exercise){
         this.exerciseData = exercise;
-        this.exercisePreviewDialog = true;
+        this.previewMode = true;
         this.openExercisePreviewDialog();
       }
     },
@@ -1086,7 +1071,7 @@ export default {
             }
 
             this.$toast.success("Successfully deleted");
-            
+            this.previewMode = false;
             this.handleCloseExercise();
 
             if(this.table.rows.length == 0){
