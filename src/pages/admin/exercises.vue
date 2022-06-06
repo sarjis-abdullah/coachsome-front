@@ -1,21 +1,19 @@
 <template>
   <v-container fluid class="pt-0 mt-0" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
 
-    <!-- Header start -->
-
     <!-- Mobile Header Start -->
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="headerText">
       <template v-slot:goBack>
         <v-btn
           icon
           @click="handleBack"
-          v-if="!hideTable"
+          v-if="!exerciseDialog"
         >
           <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
         </v-btn>
         <v-btn
           icon
-          @click="handleMobileCreateBack"
+          @click="handleCloseExercise"
           v-else
         >
           <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
@@ -25,13 +23,13 @@
         <v-btn
           icon
           @click.stop="handleExerciseCreateBtn"
-          v-if="!hideTable"
+          v-if="!exerciseDialog"
         >
           <v-icon style="font-size: 25px!important;" class="common-top-add-icon">
             mdi-plus-circle-outline
           </v-icon>
         </v-btn>
-        <v-menu offset-y v-else-if="hideTable && previewPage">
+        <v-menu offset-y v-else-if="previewMode">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               icon
@@ -56,11 +54,8 @@
         <span v-else></span>
       </template>
     </mobile-top-nav>
-
-    <!-- Mobile Header End -->
-
+    
     <!-- Desktop Header Start -->
-
     <v-row class="d-none d-md-block">
       <v-col cols="12" class="pb-0">
         <div class="page-title">{{$t('dropdown_item_exercises')}}</div>
@@ -70,13 +65,7 @@
       </v-col>
     </v-row>
 
-    <!-- Desktop Header End -->
-
-
-    <!-- Header end -->
-
     <!-- No exercise start -->
-
     <v-row class="d-flex justify-center" v-if="noExercise">
         <v-col cols="12" md="4" class="no-exercise">
             <h4 class="no-exercise__text">{{$t("no_exercise_title")}}</h4>
@@ -92,13 +81,10 @@
         </v-col>
     </v-row>
 
-    <!-- No Exercise end -->
-
     <!-- mobile view start -->
-    <v-row class="d-md-none" justify="center" align="center" >
+    <v-row class="d-md-none" justify="center" align="center" v-if="exercises.length && !exerciseDialog && !exercisePreviewDialog">
 
-
-      <v-col cols="12" sm="8" md="6" lg="4" xs="12" class="pt-5 pb-2" v-if="!hideTable">
+      <v-col cols="12" sm="8" md="6" lg="4" xs="12" class="pt-5 pb-2" >
         <v-text-field
           v-model="search"
           prepend-inner-icon="search"
@@ -112,7 +98,7 @@
       </v-col>
 
       <!-- Exercise Table For Mobile Start -->
-      <v-col cols="12" sm="8" md="6" lg="4" xs="12"  v-if="exercises.length && !hideTable" class="pb-10">
+      <v-col cols="12" sm="8" md="6" lg="4" xs="12"  class="pb-10">
         <v-row>
           <v-col cols="12" v-for="(item, index) in table.rows" :key="index" class="py-0 my-0">
             <v-hover v-slot="{ hover }">
@@ -133,25 +119,7 @@
       <!-- Exercise Table For Mobile End -->
 
       <!-- Exercise Form For Mobile Start -->
-      <v-col cols="12" class="d-md-none" v-if="hideTable && !previewPage">
-        <ExerciseForm 
-          @newExerciseAdded="handleCreateExercise($event)"
-          @saveExerciseData="handleUpdateExercise($event)" 
-          @closeCreateDialog="handleCloseExercise"
-          @exerciseDataUpdated="handleModifyExercise($event)"
-          :exerciseNewData="exerciseInitialData"
-        />
-      </v-col>
-      <!-- Create Exercise For Mobile End -->
-
-      <!-- Preview Exercise For Mobile Start -->
-      <v-col cols="12" v-if="hideTable && previewPage">
-        <ExercisePreview  :exerciseData="exerciseData"/>
-      </v-col>
-      <!-- Preview Exercise For Mobile End -->
     </v-row>
-    <!-- mobile view end -->
-
 
     <!-- desktop view -->
     <v-row class="d-none d-md-block" >
@@ -564,45 +532,50 @@
           </v-card>
         </div>
       </v-col>
+    </v-row>
 
+    <!-- Dialogs -->
+    <v-row justify="center" align="center" >
       <v-col cols="12">
-        <!-- Exercise Form Dialog -->
-        <template>
-          <v-row justify="center">
-            <v-dialog
-              v-model="exerciseDialog"
-              max-width="800px"
-              :fullscreen="$vuetify.breakpoint.smAndDown"
-              @click:outside="handleCloseExercise"
-            >
+      <!-- Create Dialog -->
+        <template v-if="exerciseDialog">
+          <div v-if="$vuetify.breakpoint.mdAndUp">
+            <v-dialog color="#f7fafc" v-model="exerciseDialog" :max-width="dialogWidth" @click:outside="handleCloseExercise">
               <ExerciseForm 
-                v-if="exerciseDialog"
                 @newExerciseAdded="handleCreateExercise($event)"
-                @saveExerciseData="handleUpdateExercise($event)"
-                @exerciseDataUpdated="handleModifyExercise($event)"
+                @saveExerciseData="handleUpdateExercise($event)" 
                 @closeCreateDialog="handleCloseExercise"
+                @exerciseDataUpdated="handleModifyExercise($event)"
                 :exerciseNewData="exerciseInitialData"
+                v-if="!previewMode"
               />
+              <ExercisePreview v-else  :exerciseData="exerciseData"/>
             </v-dialog>
-          </v-row>
+          </div>
+          <div v-else>
+            <ExerciseForm 
+              @newExerciseAdded="handleCreateExercise($event)"
+              @saveExerciseData="handleUpdateExercise($event)" 
+              @closeCreateDialog="handleCloseExercise"
+              @exerciseDataUpdated="handleModifyExercise($event)"
+              :exerciseNewData="exerciseInitialData"
+              v-if="!previewMode"
+            />
+             <ExercisePreview v-else  :exerciseData="exerciseData"/>
+          </div>
         </template>
 
-        
-        <!-- Exercise Preview Dialog -->
-        <template>
-          <v-row justify="center">
-            <v-dialog
-              color="#f7fafc"
-              v-model="exercisePreviewDialog"
-              max-width="550px"
-              :fullscreen="$vuetify.breakpoint.smAndDown"
-              @click:outside="handleCloseExercise"
-            >
-              <ExercisePreview v-if="exercisePreviewDialog" :exerciseData="exerciseData"/>
+      <!-- Preview Dialog -->
+        <!-- <template v-if="exercisePreviewDialog">
+          <div v-if="$vuetify.breakpoint.mdAndUp">
+            <v-dialog v-model="exercisePreviewDialog" max-width="600" @click:outside="handleCloseExercisePreviewDialog">
+              <ExercisePreview  :exerciseData="exerciseData"/>
             </v-dialog>
-          </v-row>
-        </template>
-
+          </div>
+          <div v-else>
+            <ExercisePreview  :exerciseData="exerciseData"/>
+          </div>
+        </template> -->
       </v-col>
     </v-row>
 
@@ -628,7 +601,7 @@ export default {
   },
   data() {
     return {
-      hideTable: false,
+      previewMode: false,
       previewPage: false,
       exerciseInitialData: {
         categories : [],
@@ -680,32 +653,43 @@ export default {
     };
   },
   watch:{
-    "$vuetify.breakpoint.mdAndUp": function(){
-      this.search = null;
-      this.getExercises();
-      this.$router.replace(this.localePath(pathData.admin.exercises));
+    '$route': {
+      immediate: true,
+      deep: true,
+      handler(newValue, oldValue) {
+        if (this.$route?.query?.exerciseDialog) {
+          this.exerciseDialog = true
+        }else{
+          this.exerciseDialog = false;
+        }
+      }
     },
-
-    "$vuetify.breakpoint.smAndDown": function(){
-        this.exerciseDialog = false;
-        this.exercisePreviewDialog = false;
-        this.$router.replace(this.localePath(pathData.admin.exercises));
-    }
+    exerciseDialog: function(val) {
+      // console.log(val);
+    },
     
   },
   computed:{
+    dialogWidth(){
+      if(this.previewMode){
+        return "470px";
+      }else{
+        return "600px";
+      }
+      
+    },
     exerciseCount(){
       return 0; 
     },
     headerText(){
       let title = this.$i18n.t('dropdown_item_exercises');
-      if(this.hideTable && !this.previewPage){
+      if(this.exerciseDialog && !this.previewMode){
         title = this.exerciseInitialData.id != null ? this.$i18n.t('ex_edit') : this.$i18n.t('ex_create');
       }
-      else if(this.hideTable && this.previewPage){
+      else if(this.previewMode){
         title = this.exerciseData.name;
       }
-      else if(!this.hideTable && !this.previewPage){
+      else if(!this.exerciseDialog && !this.previewMode){
         title = this.$i18n.t('dropdown_item_exercises');
       }
       return title;
@@ -737,32 +721,43 @@ export default {
     },
 
 
-    handleMobileCreateBack(){
-
-      this.$router.replace(this.localePath(pathData.admin.exercises));
-
-      this.hideTable = false;
-
-      this.previewPage = false;
-
-    },
-
     handleExerciseCreateBtn(){
       this.resetExerciseData();
-      if(this.$vuetify.breakpoint.smAndDown){
-        this.$router.push(this.localePath(pathData.admin.createExercises));
-        this.hideTable = true;
-        this.previewPage = false;
-        this.exerciseDialog = false;
-      }else{
-        this.exerciseDialog = true;
+      this.previewMode = false;
+      this.openExerciseDialog()
+      this.$nextTick(() => {});
+    },
+
+    closeExerciseDialog(){
+      this.previewMode = false;
+      this.$router.push({query:{}})
+    },
+
+    openExerciseDialog(){
+      this.exerciseDialog =true;
+      this.$router.push({query:{}});
+      const query = {
+        ...this.$route.query,
+        exerciseDialog: true
       }
+      this.$router.push({query})
+    },
+
+    openExercisePreviewDialog(){
+      this.previewMode = true;
+      this.openExerciseDialog();
     },
 
     handleCloseExercise(){
       this.resetExerciseData();
       this.exerciseDialog = false;
       this.exercisePreviewDialog = false;
+      this.closeExerciseDialog();
+    },
+
+    handleCloseExercisePreviewDialog(){
+      this.exercisePreviewDialog = false;
+      this.closeExerciseDialog();
     },
       
 
@@ -919,14 +914,8 @@ export default {
         this.exerciseInitialData.sportsSelected = exercise.sport;
         this.exerciseInitialData.lavelsSelected = exercise.lavel;
         this.exerciseInitialData.tagsSelected = exercise.tags;
-
-        if(this.$vuetify.breakpoint.smAndDown){
-          this.$router.push(this.localePath(pathData.admin.createExercises));
-          this.hideTable = true;
-          this.previewPage = false;
-        }else{
-          this.exerciseDialog = true;
-        }
+        this.previewMode = false;
+        this.openExerciseDialog();
         
       }
 
@@ -947,14 +936,9 @@ export default {
             let formattedRowList = this.formatExerciseRow([{ ...data.exercise }]);
             this.noExercise = false;
             this.table.rows.unshift(formattedRowList[0]);
-            this.exercises.push(data.exercise);
             this.$toast.success("This Exercise has been created successfully.");
-            this.exerciseDialog = false;
-            if(this.$vuetify.breakpoint.smAndDown){
-              this.$router.replace(this.localePath(pathData.admin.exercises));
-              this.hideTable = false;
-              this.previewPage = false;
-            }
+            this.previewMode = false;
+            this.handleCloseExercise();
           }
         })
         .catch(({ response }) => {
@@ -982,13 +966,9 @@ export default {
             Object.assign(this.table.rows[index],this.formatExerciseItem(data.exercise));
 
             this.$toast.success('Exercise has been updated successfully!');
-            if(this.$vuetify.breakpoint.smAndDown){
-              this.$router.push(this.localePath(pathData.admin.createExercises));
-              this.hideTable = false;
-              this.previewPage = false;
-            }
+            this.previewMode = false;
+            this.handleCloseExercise();
           }
-          this.exerciseDialog = false;
           
         })
         .catch(({ response }) => {
@@ -1001,7 +981,7 @@ export default {
 
     editExercise(selectedExercise){
       
-      this.resetExerciseData();
+      this.exercisePreviewDialog = false;
 
       const index = this.exercises.findIndex(
                       item => item.id == selectedExercise.id
@@ -1009,40 +989,22 @@ export default {
 
       let exercise = this.exercises[index];
 
+      this.resetExerciseData();
 
-      // this.exercisePreviewDialog = false;
-      // const { data } = await ExerciseApi(this.$axios).editExercise(
-      //   encodeURIComponent(exercise.id)
-      // );
- 
       if(exercise){
 
         this.exerciseInitialData.id = exercise.id;
         this.exerciseInitialData.name = exercise.name;
         this.exerciseInitialData.assets = exercise.assets[0].url_type == "default" ? [] : exercise.assets;
-
         this.exerciseInitialData.links = exercise.assets[0].url_type == "default" ? [] : exercise.assets;
-
         this.exerciseInitialData.instructions = exercise.instructions;
-
         this.exerciseInitialData.categoriesSelected = exercise.category;
-
         this.exerciseInitialData.sportsSelected = exercise.sport;
-
         this.exerciseInitialData.lavelsSelected = exercise.lavel;
-
         this.exerciseInitialData.tagsSelected = exercise.tags;
-
         this.exerciseInitialData.type = exercise.type;
-
-        if(this.$vuetify.breakpoint.smAndDown){
-          this.$router.push(this.localePath(pathData.admin.editExercises));
-          this.hideTable = true;
-          this.previewPage = false;
-        }else{
-          this.exerciseDialog = true;
-        }
-        
+        this.previewMode = false;
+        this.openExerciseDialog();
       }
     },
 
@@ -1080,13 +1042,8 @@ export default {
       let exercise = this.exercises[index];
       if(exercise){
         this.exerciseData = exercise;
-        if(this.$vuetify.breakpoint.smAndDown){
-          this.$router.push(this.localePath(pathData.admin.previewExercises));
-          this.previewPage = true;
-          this.hideTable = true;
-        }else{
-          this.exercisePreviewDialog = true;
-        }
+        this.previewMode = true;
+        this.openExercisePreviewDialog();
       }
     },
 
@@ -1114,14 +1071,8 @@ export default {
             }
 
             this.$toast.success("Successfully deleted");
-
-            if(this.$vuetify.breakpoint.smAndDown){
-              this.$router.replace(this.localePath(pathData.admin.Exercises));
-              this.hideTable = false;
-              this.previewPage = false;
-            }
-
-              this.exercisePreviewDialog = false;
+            this.previewMode = false;
+            this.handleCloseExercise();
 
             if(this.table.rows.length == 0){
               this.noExercise = true;
@@ -1549,4 +1500,15 @@ export default {
       line-height: 22px!important;
     }
   }
+  // .fullscreen {
+  //   border-radius: 0;
+  //   margin: 0;
+  //   height: 100%;
+  //   position: fixed;
+  //   overflow-y: auto;
+  //   top: 0;
+  //   left: 0;
+  //   width: 100%;
+  //   z-index: 1;
+  // }
 </style>

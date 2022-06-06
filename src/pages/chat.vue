@@ -1024,6 +1024,7 @@ export default {
                     createdAt: item.createdAt,
                     scope: item.scope
                   };
+                  console.log('1');
                   this.pushMessage(newMessage);
                 });
               }
@@ -1034,7 +1035,8 @@ export default {
                     type: item.type,
                     content: item.content
                   };
-                  this.pushMessage(messageItem);
+                  console.log('2');
+                  // this.pushMessage(messageItem);
                   this.sendPrivateMessageToChatServer({
                     senderUserId: this.$auth.user.id,
                     receiverUserId: contact.id,
@@ -1064,7 +1066,8 @@ export default {
                   scope: item.scope,
                   senderUser: item.senderUser
                 };
-                this.pushMessage(newMessage);
+                console.log('3');
+                // this.pushMessage(newMessage);
               });
             });
         }
@@ -1222,6 +1225,7 @@ export default {
               if (contact.id != this.selectedContact.id) {
                 this.$store.dispatch("chat/getContacts");
               }
+              console.log('4');
               this.pushMessage(data.data.message);
               this.addAttachmentDialog = false;
             })
@@ -1265,6 +1269,7 @@ export default {
               if (contact.id != this.selectedContact.id) {
                 this.$store.dispatch("chat/getContacts");
               }
+              console.log('5');
               this.pushMessage(data.data);
               this.addAttachmentDialog = false;
             })
@@ -1494,6 +1499,7 @@ export default {
     handleRequestBoxNewMessage(message) {
       let contact = this.selectedContact;
       if (contact) {
+        console.log('6');
         this.pushMessage(message);
         this.sendPrivateMessageToChatServer({
           senderUserId: this.$auth.user.id,
@@ -1609,7 +1615,7 @@ export default {
               }
             });
         }
-
+        console.log('7');
         this.pushMessage(newMessage);
         this.messageForm.content = "";
       }
