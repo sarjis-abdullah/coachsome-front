@@ -1068,6 +1068,14 @@ export default {
     handleGroupBtnClick() {
       this.createGroupDialog.value = true;
     },
+    handleDesktopHideActionBtnClick() {
+      this.rightSidebar = !this.rightSidebar;
+      if (this.rightSidebar) {
+        this.contentMd = 6;
+      } else {
+        this.contentMd = 9;
+      }
+    },
 
     async handleFilterChange(val) {
       let selected = this.filters.find(item => item.id == val);

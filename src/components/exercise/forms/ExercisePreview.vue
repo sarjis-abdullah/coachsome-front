@@ -10,17 +10,17 @@
                     slidesPerView: 1,
                     spaceBetween: 30,
                     direction: 'horizontal',
-                    loop: exerciseData.assets.length > 1 ? true : false,
+                    loop: exerciseData.assets && exerciseData.assets.length > 1 ? true : false,
                     speed: 2450,
                     autoplay:false,
                     navigation: {
-                    nextEl: exerciseData.assets.length > 1 ? '.swiper-button-next' : '',
-                    prevEl: exerciseData.assets.length > 1 ? '.swiper-button-prev' : '',
+                    nextEl: exerciseData.assets && exerciseData.assets.length > 1 ? '.swiper-button-next' : '',
+                    prevEl: exerciseData.assets && exerciseData.assets.length > 1 ? '.swiper-button-prev' : '',
                     },
                 }"
                 >
             
-                <swiper-slide class="d-flex justify-center" v-for="(asset, index) in exerciseData.assets" :key="index">
+                <swiper-slide class="d-flex justify-center" v-for="(asset, index) in exerciseData.assets && exerciseData.assets" :key="index">
                     <div class="preview-slide">
                     <asset-preview :asset_type="asset.type" :url="asset.url"></asset-preview>
                     </div>
@@ -28,13 +28,13 @@
             
                 <div class="swiper-pagination" slot="pagination"></div>
                 <div
-                    v-if="exerciseData.assets.length > 1 "
+                    v-if="exerciseData.assets && exerciseData.assets.length > 1 "
                     class="swiper-button-prev swiper-button-white"
                     slot="button-prev"
                 >
                 </div>
                 <div
-                    v-if="exerciseData.assets.length > 1 "
+                    v-if="exerciseData.assets && exerciseData.assets.length > 1 "
                     class="swiper-button-next swiper-button-white"
                     slot="button-next"
                 ></div>
