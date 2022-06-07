@@ -120,8 +120,7 @@ export default {
     { src: "~/plugins/vue-file-agent", mode: "client" },
     { src: "~/plugins/vue-video-player", mode: "client" },
     { src: "~/plugins/vuelidate" },
-    { src: "~/plugins/vue-debounce", mode: "client" },
-    { src: "~/plugins/globalPlugins", mode: "client" },
+    { src: "~/plugins/vue-debounce", mode: "client" }
   ],
 
   /**

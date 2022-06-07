@@ -458,6 +458,18 @@ export default {
     },
     isLoggedIn() {
       return this.$auth.loggedIn;
+    },
+    isAuthCoach() {
+      return this.$auth && this.$auth.loggedIn && this.$auth.hasRole("coach");
+    },
+    isDevelopment() {
+      return process?.env?.NODE_ENV == "development" ? true : false;
+    },
+    isStaging() {
+      return process?.env?.NODE_ENV == "test" ? true : false;
+    },
+    isProd() {
+      return !this.isDevelopment && !this.isStaging;
     }
   },
   watch: {
