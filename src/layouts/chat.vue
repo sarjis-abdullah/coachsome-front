@@ -30,7 +30,7 @@ export default {
   },
   data() {
     return {
-       selectedContact : null,
+      //  selectedContact : null,
        showNav: true,
     };
   },
@@ -65,15 +65,15 @@ export default {
       return false
     }
   },
-  watch: {
-    '$route': {
-      immediate: true,
-      deep: true,
-      handler(newValue, oldValue) {
-        this.selectedContact = this.$store.getters["chat/selectedContact"]
-      }
-    }
-  },
+  // watch: {
+  //   '$route': {
+  //     immediate: true,
+  //     deep: true,
+  //     handler(newValue, oldValue) {
+  //       this.selectedContact = this.$store.getters["chat/selectedContact"]
+  //     }
+  //   }
+  // },
   created(){
         const currentRoute = this.$route.path;
     if(currentRoute == pathData.pages.home 

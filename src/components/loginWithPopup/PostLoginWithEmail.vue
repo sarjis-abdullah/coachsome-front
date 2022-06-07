@@ -3,6 +3,7 @@
     <Facebook v-if="loginMedium == 'facebook'" />
     <Google v-else-if="loginMedium == 'google'" />
     <Email v-else-if="loginMedium == 'email'" />
+    <Apple v-else-if="loginMedium == 'apple'" />
 </v-container>
 </template>
 
@@ -10,11 +11,13 @@
 import Email from '@/components/login/medium/Email'
 import Facebook from '@/components/login/medium/Facebook'
 import Google from '@/components/login/medium/Google'
+import Apple from '@/components/login/medium/Apple'
 export default ({
     components: {
       Email,
       Facebook,
-      Google
+      Google,
+      Apple
     },
     computed: {
       loginMedium() {

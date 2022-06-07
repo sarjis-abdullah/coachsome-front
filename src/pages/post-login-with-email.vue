@@ -2,6 +2,7 @@
 <v-container fluid grid-list-md text-xs-center>
     <Facebook v-if="loginMedium == 'facebook'" />
     <Google v-else-if="loginMedium == 'google'" />
+    <Apple v-else-if="loginMedium == 'apple'" />
     <v-row
       justify="center"
       v-else-if="loginMedium == 'email' || queryParamsLoginMedium == 'email'"
@@ -23,12 +24,14 @@
 import Email from '@/components/login/medium/Email'
 import Facebook from '@/components/login/medium/Facebook'
 import Google from '@/components/login/medium/Google'
+import Apple from '@/components/login/medium/Apple'
 export default ({
   layout: "auth",
     components: {
       Email,
       Facebook,
-      Google
+      Google,
+      Apple
     },
     computed: {
       loginMedium() {

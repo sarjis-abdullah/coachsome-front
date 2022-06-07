@@ -29,7 +29,6 @@ import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import { pathData } from "@/data";
 
 export default {
-  middleware: ["guest"],
   head() {
     return this.$nuxtI18nHead({ addSeoAttributes: true });
   },

@@ -440,7 +440,9 @@ export default {
       this.$store.dispatch("chat/setNavOnChat", true);
     },
   },
-  created() {},
+  created() {
+    console.log("screeen created");
+  },
   methods: {
     hasRole(roles = []) {
       return this.$auth.hasRole(roles);
