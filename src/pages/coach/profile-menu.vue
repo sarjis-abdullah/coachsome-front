@@ -395,6 +395,18 @@ export default ({
           return false;
         }
       },
+      isAuthCoach() {
+        return this.$auth && this.$auth.loggedIn && this.$auth.hasRole("coach");
+      },
+      isDevelopment() {
+        return process?.env?.NODE_ENV == "development" ? true : false;
+      },
+      isStaging() {
+        return process?.env?.NODE_ENV == "test" ? true : false;
+      },
+      isProd() {
+        return !this.isDevelopment && !this.isStaging;
+      }
     },
     methods: {
       showProfile() {
@@ -472,6 +484,7 @@ export default ({
 
 
 <style scoped>
+
 .v-application {
   line-height: 0!important;
 }
