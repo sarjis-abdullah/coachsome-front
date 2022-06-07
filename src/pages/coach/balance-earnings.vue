@@ -821,6 +821,9 @@ export default {
     }
   },
   computed: {
+    available(){
+      return this.readyToPayout.amount > 0 ? false : true;
+    },
     newSeries() {
       return this.series;
     },

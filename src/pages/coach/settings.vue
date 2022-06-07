@@ -516,9 +516,8 @@
 </template>
 
 <script>
-import { coachSettingApi, coachTimezoneApi } from "@/api";
+import { endpoint, coachSettingApi, coachTimezoneApi } from "@/api";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
-import { endpoint } from "../../api";
 import { pathData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
@@ -596,12 +595,12 @@ export default {
           this.$i18n.t("valid_at_least_one_upper_case_letter"),
         v => (v && v.length >= 6) || this.$i18n.t("valid_pass_min_character")
       ]
-    }),
-      this.fetchSettings();
+    });
   },
   mounted() {
     window.addEventListener("message", this.onMessage);
     this.securityDetails();
+    this.fetchSettings();
   },
   methods: {
     handleAccount() {
@@ -766,7 +765,10 @@ export default {
       }
     },
     async fetchSettings() {
+
+      // const { data } = await this.$axios.get(endpoint.COACH_SETTINGS_GET);
       let { data } = await coachSettingApi(this.$axios).get();
+      console.log(data.data);
 
       if (data.notificationCategoryList.length) {
         data.notificationCategoryList.forEach(item => {
@@ -788,12 +790,9 @@ export default {
         this.form.contactInformation.zipCode = data.userSetting.zipCode;
         this.form.contactInformation.city = data.userSetting.city;
         this.form.contactInformation.timezone = data.userSetting.timezone;
-        this.form.activeNotifications =
-          data.userSetting.activeNotificationCategories;
+        this.form.activeNotifications = data.userSetting.activeNotificationCategories;
         this.form.email = data.userSetting.email;
       }
-
-      // console.log(data);
     },
     async handlePhoneVerifyBtnClick() {
       try {
