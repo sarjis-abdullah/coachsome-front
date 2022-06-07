@@ -78,7 +78,7 @@
                 @click="loginWithApple()"
                 :loading="show_loading_on_apple_login_btn"
             >
-                <img class="btn-icon"  :src="require('@/assets/img/svg-icons/facebook.svg')" alt="">  <span class="social-login-btn-facebook-text btn-text"> {{$t("pwa_facebook_login")}}</span>
+                <img class="btn-icon"  :src="require('@/assets/img/svg-icons/apple-icon.svg')" alt="">  <span class="social-login-btn-facebook-text btn-text"> {{$t("pwa_apple_login")}}</span>
             </v-btn>
           </v-col>
         </v-row>

@@ -830,7 +830,12 @@ export default {
     });
 
     // Set contact
-    this.selectedContact = this.$store.getters["chat/selectedContact"];
+    let contact = this.$store.getters["chat/selectedContact"];
+    if(contact){
+      this.selectedContact = contact;
+    }else{
+      this.$router.push(this.localePath(pathData.pages.chat.path));
+    }
   },
 
   beforeDestroy(){

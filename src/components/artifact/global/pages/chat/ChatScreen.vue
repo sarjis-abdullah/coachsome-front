@@ -440,13 +440,15 @@ export default {
       this.$store.dispatch("chat/setNavOnChat", true);
     },
   },
-  created() {},
+  created() {
+    console.log("screeen created");
+  },
   methods: {
     hasRole(roles = []) {
       return this.$auth.hasRole(roles);
     },
     updateScroll() {
-      if (process.client) {
+      if (process.client && this.$refs.chatScreen) {
         this.$refs.chatScreen.scrollTop = this.$refs.chatScreen.scrollHeight;
       }
     },
