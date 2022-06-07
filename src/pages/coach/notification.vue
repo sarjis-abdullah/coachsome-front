@@ -149,7 +149,7 @@
 </template>
 <script>
 import { endpoint, coachSettingApi } from "@/api";
-import { pathData } from "@/data";
+import { pathData, settingValueData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
@@ -157,19 +157,16 @@ export default {
   components:{MobileTopNav},
   data() {
     return {
-        form: {
-            notifications: [],
-            activeNotifications: [],
-        },
+        settingValueData,
         notificationType: {
-            id: null,
-            inboxMessage: null,
-            orderMessage: null,
-            orderUpdate: null,
-            buyerRequest: null,
-            bookingRequest: null,
-            account: null,
-            todo: null
+          id: null,
+          inboxMessage: false,
+          orderMessage: false,
+          orderUpdate: false,
+          bookingRequest: false,
+          bookingChange: false,
+          account: false,
+          marketting: false
         },
     };
   },
@@ -190,44 +187,12 @@ export default {
     handleBack(){
         this.$router.push(this.localePath(pathData.coach.settings));
     },
-
-    async handleSaveBtnClick() {
-      try {
-        let payload = {
-          notificatonCategories: this.form.activeNotifications.map(
-            item => item.id
-          )
-        };
-        let { data } = await coachSettingApi(this.$axios).updateSetting(
-          payload
-        );
-        // console.log(data);
-        if (data.message) {
-          this.$toast.success(data.message);
-        }
-      } catch (error) {
-        let { data } = error.response;
-        if (data.message) {
-          this.$toast.error(data.message);
-        }
-      }
-    },
-
+    
     async fetchSettings() {
-      // let { data } = await coachSettingApi(this.$axios).get();
-      const { data } = await this.$axios.get(endpoint.COACH_SETTINGS_GET);
-        console.log(data.notificationCategoryList);
-      if (data.notificationCategoryList.length) {
-        data.notificationCategoryList.forEach(item => {
-          this.form.notifications.push(item);
-        });
-      }
-      // if (data.userSetting) {
-      //   this.form.activeNotifications =
-      //     data.userSetting.activeNotificationCategories;
-      // }
 
+      const { data } = await this.$axios.get(endpoint.COACH_NOTIFICATIONS_SETTINGS_GET);
        if (data.data) {
+
           this.notificationType.id = data.data.id;
           this.notificationType.inboxMessage = data.data.inboxMessage == 1 ? true : false;
           this.notificationType.orderMessage = data.data.orderMessage  == 1 ? true : false;
@@ -238,8 +203,8 @@ export default {
           this.notificationType.marketting = data.data.marketting  == 1 ? true : false;
         }
 
-      console.log(data);
     },
+    
     async changeNotification() {
       let payload = {
           id: this.notificationType.id,
@@ -253,7 +218,7 @@ export default {
         };
 
       try {
-        let response = await coachSettingApi(this.$axios).updateSetting(
+        let response = await coachSettingApi(this.$axios).updateNotification(
           payload
         );
         if (response.status == 200) {
