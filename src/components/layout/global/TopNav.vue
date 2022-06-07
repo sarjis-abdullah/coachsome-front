@@ -462,6 +462,9 @@ export default {
     isAuthCoach() {
       return this.$auth && this.$auth.loggedIn && this.$auth.hasRole("coach");
     },
+    isAuthAthlete() {
+      return this.$auth && this.$auth.loggedIn && this.$auth.hasRole("athlete");
+    },
     isDevelopment() {
       return process?.env?.NODE_ENV == "development" ? true : false;
     },
