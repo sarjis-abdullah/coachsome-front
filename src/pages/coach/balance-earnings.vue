@@ -751,6 +751,7 @@ export default {
   },
   data() {
     return {
+      available: false,
       currencyService,
       datacollection: {},
       options: {
