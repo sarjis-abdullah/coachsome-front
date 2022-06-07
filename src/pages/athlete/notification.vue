@@ -150,7 +150,7 @@ export default {
       settingValueData,
       notificationType: {
         id: null,
-        inboxMessage: 1,
+        inboxMessage: false,
         orderMessage: false,
         orderUpdate: false,
         bookingRequest: false,

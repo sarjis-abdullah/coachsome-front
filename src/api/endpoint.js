@@ -55,6 +55,7 @@ export default {
 
   // Coach
   COACH_SETTINGS_GET: "/coach/settings",
+  COACH_NOTIFICATIONS_SETTINGS_GET: "/coach/settings/notifications",
 
   // accounts
   ACCOUNTS_DELETE: "/accounts/delete",
