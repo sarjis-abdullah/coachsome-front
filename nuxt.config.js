@@ -86,6 +86,10 @@ export default {
       {
         src: `/tawk.js`,
         body: true
+      },
+      {
+        src: `/clarity.js`,
+        body: true
       }
     ]
   },
