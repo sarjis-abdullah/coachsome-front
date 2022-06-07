@@ -448,7 +448,7 @@ export default {
       return this.$auth.hasRole(roles);
     },
     updateScroll() {
-      if (process.client) {
+      if (process.client && this.$refs.chatScreen) {
         this.$refs.chatScreen.scrollTop = this.$refs.chatScreen.scrollHeight;
       }
     },
