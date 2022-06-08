@@ -1,6 +1,20 @@
 <template>
   <v-container >
-    <client-only>
+    <v-bottom-navigation
+      v-if="!isLoaded"
+      fixed
+      app
+      horizontal
+      class="bottom_background hidden-md-and-up"
+      background-color="#15577C"
+      width="90%"
+    >
+      <v-progress-circular
+        indeterminate
+        color="white"
+      ></v-progress-circular>
+    </v-bottom-navigation>
+    <client-only v-else>
     <v-bottom-navigation
         fixed
         app
@@ -101,6 +115,9 @@ export default ({
       active: true
     }),
     computed: {
+      isLoaded(){
+       return process.client ? true : false;
+      },
       isLoggedIn(){
         
         return this.$auth && this.$auth.loggedIn && this.$auth.strategy.token.status().valid() ? true : false;
