@@ -8,18 +8,18 @@
     :color="color"
   >
     <!-- Logo -->
-    <router-link text to="/">
       <img
-        class="d-none d-md-flex d-lg-flex"
+        class="d-none d-md-flex d-lg-flex cursor-pointer"
         :src="require('@/assets/images/logo.svg')"
         alt="logo"
+        @click="goToHome"
       />
       <img
-        class="d-sm-flex d-xs-flex d-md-none"
+        class="d-sm-flex d-xs-flex d-md-none cursor-pointer"
         :src="require('@/assets/images/logo-icon-light.svg')"
         alt="logo"
+        @click="goToHome"
       />
-    </router-link>
 
     <!-- Search -->
     <sport-search
@@ -178,6 +178,9 @@ export default {
     };
   },
   methods: {
+    goToHome(){
+      this.$router.push(this.localePath(pathData.pages.home));
+    },
     revertUser() {
       impersonateAdminApi(this.$axios)
         .revert()
