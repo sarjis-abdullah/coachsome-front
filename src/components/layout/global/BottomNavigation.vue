@@ -116,7 +116,8 @@ export default ({
     }),
     computed: {
       isLoaded(){
-       return process.client ? true : false;
+        console.log(process.client);
+       return process?.client ? true : false;
       },
       isLoggedIn(){
         
