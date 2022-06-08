@@ -440,7 +440,7 @@
                   </template>
                 </v-list>
               </div>
-              <div class="content__body">
+              <div class="content__body" v-if="!$vuetify.breakpoint.mdAndUp">
                 <div class="message-list">
                   <ChatScreen />
                 </div>

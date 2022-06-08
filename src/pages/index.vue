@@ -974,6 +974,13 @@ export default {
       cities: data.cities
     };
   },
+  // beforeRouteEnter(to, from, next) {
+  //   next( vm => {
+  //     if(vm.$auth.hasRole(["coach"])){
+  //       vm.$router.push(vm.localePath(pathData.coach.home));
+  //     }
+  //   } )
+  // },
   async created() {
 
     if(!this.$auth && !this.$auth.user.roles && !this.$auth.user.roles[0]){

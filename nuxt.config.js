@@ -3,7 +3,11 @@ require("dotenv").config();
 export default {
   telemetry: false,
   srcDir: "src/",
-  loading: '~/components/loader/Loading.vue',
+  // loading: '~/components/loader/Loading.vue',
+  loading: {
+    color: "#6EB5CB",
+    height: "4px"
+  },
 
   // Global page headers
   head: {
