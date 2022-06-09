@@ -737,76 +737,97 @@ export default {
         }
     },
 
-    selectedContact(contact) {
-      if (contact) {
-        this.$store.dispatch("chat/destroyMessages");
-        this.$store.dispatch("chat/setSelectedContact", contact);
+    async selectedContact(contact){
+      if(!contact && !contact.id ){
+        this.$router.push(this.localePath(pathData.pages.chat.path));
+      }else{
 
-        // Fetch private message
-        if (contact.categoryId == contactData.CATEGORY_ID_PRIVATE) {
-          const params = { contactId: contact.id };
-          this.$axios
-            .get(endpoint.MESSAGES_GET, { params })
-            .then(({ data }) => {
-              // Old messages
-              if (data.messages) {
-                data.messages.forEach(item => {
+        let messages = await this.$store.getters["chat/messages"];
+
+        if(messages.length == 0){
+          // Fetch private message
+          if (contact.categoryId == contactData.CATEGORY_ID_PRIVATE) {
+            const params = { contactId: contact.id };
+            this.$axios
+              .get(endpoint.MESSAGES_GET, { params })
+              .then(({ data }) => {
+                // Old messages
+                if (data.messages) {
+                  data.messages.forEach(item => {
+                    let newMessage = {
+                      id: item.id,
+                      type: item.type,
+                      me: item.me,
+                      content: item.content,
+                      createdAt: item.createdAt,
+                      scope: item.scope
+                    };
+                    console.log("s6");
+                    this.pushMessage(newMessage);
+                  });
+                }
+                // New messages
+                if (data.newMessages) {
+                  data.newMessages.forEach(item => {
+                    let messageItem = {
+                      type: item.type,
+                      content: item.content
+                    };
+                    console.log("s7");
+                    this.pushMessage(messageItem);
+                    this.sendPrivateMessageToChatServer({
+                      senderUserId: this.$auth.user.id,
+                      receiverUserId: contact.id,
+                      message: messageItem
+                    });
+                  });
+                }
+              });
+          }
+
+          // Fetch group message
+          if (contact.categoryId == contactData.CATEGORY_ID_GROUP) {
+            this.topicEditValue = contact.description;
+            const params = {
+              groupId: contact.groupId
+            };
+            this.$axios
+              .get(endpoint.GROUP_MESSAGES_GET, { params })
+              .then(({ data }) => {
+                data.data.forEach(item => {
                   let newMessage = {
                     id: item.id,
                     type: item.type,
                     me: item.me,
                     content: item.content,
                     createdAt: item.createdAt,
-                    scope: item.scope
+                    scope: item.scope,
+                    senderUser: item.senderUser
                   };
+                  console.log("s2");
                   this.pushMessage(newMessage);
                 });
-              }
-              // New messages
-              if (data.newMessages) {
-                data.newMessages.forEach(item => {
-                  let messageItem = {
-                    type: item.type,
-                    content: item.content
-                  };
-                  this.pushMessage(messageItem);
-                  this.sendPrivateMessageToChatServer({
-                    senderUserId: this.$auth.user.id,
-                    receiverUserId: contact.id,
-                    message: messageItem
-                  });
-                });
-              }
-            });
-        }
-
-        // Fetch group message
-        if (contact.categoryId == contactData.CATEGORY_ID_GROUP) {
-          this.topicEditValue = contact.description;
-          const params = {
-            groupId: contact.groupId
-          };
-          this.$axios
-            .get(endpoint.GROUP_MESSAGES_GET, { params })
-            .then(({ data }) => {
-              data.data.forEach(item => {
-                let newMessage = {
-                  id: item.id,
-                  type: item.type,
-                  me: item.me,
-                  content: item.content,
-                  createdAt: item.createdAt,
-                  scope: item.scope,
-                  senderUser: item.senderUser
-                };
-                this.pushMessage(newMessage);
               });
-            });
+          }
+        }else if(messages.length > 0 ){
+
+          messages.forEach(item => {
+            let newMessage = {
+              id: item.id,
+              type: item.type,
+              me: item.me,
+              content: item.content,
+              createdAt: item.createdAt,
+              scope: item.scope
+            };
+            this.pushMessage(newMessage);
+          });
+
         }
-      }else{
-          this.$router.push(this.localePath(pathData.pages.chat));
       }
+      
     },
+
     addAttachmentDialog(value){
         if(!value){
           this.$refs.UploadAttachment.reset();
@@ -926,6 +947,7 @@ export default {
                   receiverUserId: this.selectedContact.connectionUserId,
                   message: newMessage
                 });
+              console.log("s1");
               this.pushMessage(data.data.message);
               this.addAttachmentDialog = false;
             })
@@ -972,7 +994,7 @@ export default {
                 message: newMessage,
                 ...this.duration
               });
-
+              console.log("s3");
               this.pushMessage(data.data);
               this.addAttachmentDialog = false;
             })
@@ -1068,6 +1090,7 @@ export default {
       this.$store.dispatch("chat/setMessages", payload);
     },
     pushMessage(message) {
+      console.log("call-screen");
       this.$store.dispatch("chat/pushMessage", message);
     },
     handleGroupBtnClick() {
@@ -1162,6 +1185,7 @@ export default {
     handleRequestBoxNewMessage(message) {
       let contact = this.selectedContact;
       if (contact) {
+        console.log("s4");
         this.pushMessage(message);
         this.sendPrivateMessageToChatServer({
           senderUserId: this.$auth.user.id,
@@ -1283,6 +1307,7 @@ export default {
               }
             });
         }
+        console.log("s5");
         this.pushMessage(newMessage);
         this.messageForm.content = "";
         mixpanelService.init();
