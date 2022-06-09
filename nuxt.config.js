@@ -145,6 +145,10 @@ export default {
     ]
   ],
 
+  // router: {
+  //   middleware: ['home']
+  // },
+
   /**
    * Modules
    */
@@ -243,7 +247,8 @@ export default {
               },
               logout: { url: "/auth/logout", method: "post" },
               user: { url: "/authUserInformation", method: "get" }
-            }
+            },
+            autoLogout: true
           }
         }
       }

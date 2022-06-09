@@ -815,7 +815,6 @@ import { frontHomeApi, marketPlaceApi } from "@/api";
 import ExploreCard from "@/components/card/ExploreCard";
 
 export default {
-  middleware: 'home',
   layout: "home",
   components: {
     SportSearch,
