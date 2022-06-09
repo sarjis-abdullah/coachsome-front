@@ -981,7 +981,32 @@ export default {
   //     }
   //   } )
   // },
+  beforeCreate(){
+
+    if(this.$vuetify.breakpoint.smAndDown && this.$auth && this.$auth.loggedIn){
+      if(this.$auth.user && this.$auth.user.roles && this.$auth.user.roles[0].name == "superadmin" || this.$auth.user.roles[0].name == "admin" || this.$auth.user.roles[0].name == "staff"){
+        this.$router.push(this.localePath(pathData.admin.dashboard));
+      }
+      else if(this.$auth.user && this.$auth.user.roles && this.$auth.user.roles[0].name == "coach"){
+        this.$router.push(this.localePath(pathData.coach.home));
+      }else if(this.$auth.user && this.$auth.user.roles && this.$auth.user.roles[0].name == "athlete"){
+        this.$router.push(this.localePath(pathData.athlete.home));
+      }
+    };
+
+  },
   async created() {
+
+    if(this.$vuetify.breakpoint.smAndDown && this.$auth && this.$auth.loggedIn){
+      if(this.$auth.user && this.$auth.user.roles && this.$auth.user.roles[0].name == "superadmin" || this.$auth.user.roles[0].name == "admin" || this.$auth.user.roles[0].name == "staff"){
+        this.$router.push(this.localePath(pathData.admin.dashboard));
+      }
+      else if(this.$auth.user && this.$auth.user.roles && this.$auth.user.roles[0].name == "coach"){
+        this.$router.push(this.localePath(pathData.coach.home));
+      }else if(this.$auth.user && this.$auth.user.roles && this.$auth.user.roles[0].name == "athlete"){
+        this.$router.push(this.localePath(pathData.athlete.home));
+      }
+    };
 
     if(!this.$auth && !this.$auth.user.roles && !this.$auth.user.roles[0]){
       await this.$auth.logout();
