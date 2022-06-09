@@ -1003,74 +1003,76 @@ export default {
       if (contact) {
         this.$store.dispatch("chat/destroyMessages");
         this.$store.dispatch("chat/setSelectedContact", contact);
+
         if(this.$vuetify.breakpoint.smAndDown){
-          this.$store.dispatch("chat/setSelectedContact", contact);
           this.$router.push(this.localePath(pathData.pages.chatScreen));
-        }
-        // Fetch private message
-        if (contact.categoryId == contactData.CATEGORY_ID_PRIVATE) {
-          const params = { contactId: contact.id };
-          this.$axios
-            .get(endpoint.MESSAGES_GET, { params })
-            .then(({ data }) => {
-              // Old messages
-              if (data.messages) {
-                data.messages.forEach(item => {
+        }else{
+           // Fetch private message
+          if (contact.categoryId == contactData.CATEGORY_ID_PRIVATE) {
+            const params = { contactId: contact.id };
+            this.$axios
+              .get(endpoint.MESSAGES_GET, { params })
+              .then(({ data }) => {
+                // Old messages
+                if (data.messages) {
+                  data.messages.forEach(item => {
+                    let newMessage = {
+                      id: item.id,
+                      type: item.type,
+                      me: item.me,
+                      content: item.content,
+                      createdAt: item.createdAt,
+                      scope: item.scope
+                    };
+                    console.log('1');
+                    this.pushMessage(newMessage);
+                  });
+                }
+                // New messages
+                if (data.newMessages) {
+                  data.newMessages.forEach(item => {
+                    let messageItem = {
+                      type: item.type,
+                      content: item.content
+                    };
+                    console.log('2');
+                    // this.pushMessage(messageItem);
+                    this.sendPrivateMessageToChatServer({
+                      senderUserId: this.$auth.user.id,
+                      receiverUserId: contact.id,
+                      message: messageItem
+                    });
+                  });
+                }
+              });
+          }
+
+          // Fetch group message
+          if (contact.categoryId == contactData.CATEGORY_ID_GROUP) {
+            this.topicEditValue = contact.description;
+            const params = {
+              groupId: contact.groupId
+            };
+            this.$axios
+              .get(endpoint.GROUP_MESSAGES_GET, { params })
+              .then(({ data }) => {
+                data && data.data.length && data.data.forEach(item => {
                   let newMessage = {
                     id: item.id,
                     type: item.type,
                     me: item.me,
                     content: item.content,
                     createdAt: item.createdAt,
-                    scope: item.scope
+                    scope: item.scope,
+                    senderUser: item.senderUser
                   };
-                  console.log('1');
-                  this.pushMessage(newMessage);
+                  console.log('3');
+                  // this.pushMessage(newMessage);
                 });
-              }
-              // New messages
-              if (data.newMessages) {
-                data.newMessages.forEach(item => {
-                  let messageItem = {
-                    type: item.type,
-                    content: item.content
-                  };
-                  console.log('2');
-                  // this.pushMessage(messageItem);
-                  this.sendPrivateMessageToChatServer({
-                    senderUserId: this.$auth.user.id,
-                    receiverUserId: contact.id,
-                    message: messageItem
-                  });
-                });
-              }
-            });
-        }
-
-        // Fetch group message
-        if (contact.categoryId == contactData.CATEGORY_ID_GROUP) {
-          this.topicEditValue = contact.description;
-          const params = {
-            groupId: contact.groupId
-          };
-          this.$axios
-            .get(endpoint.GROUP_MESSAGES_GET, { params })
-            .then(({ data }) => {
-              data && data.data.length && data.data.forEach(item => {
-                let newMessage = {
-                  id: item.id,
-                  type: item.type,
-                  me: item.me,
-                  content: item.content,
-                  createdAt: item.createdAt,
-                  scope: item.scope,
-                  senderUser: item.senderUser
-                };
-                console.log('3');
-                // this.pushMessage(newMessage);
               });
-            });
+          }
         }
+       
       }
     },
     addAttachmentDialog(value){
@@ -1374,6 +1376,7 @@ export default {
       this.$store.dispatch("chat/setMessages", payload);
     },
     pushMessage(message) {
+      console.log("call");
       this.$store.dispatch("chat/pushMessage", message);
     },
     handleGroupBtnClick() {
