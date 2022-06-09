@@ -986,7 +986,7 @@ export default {
 
     "$vuetify.breakpoint.smAndDown": function(){
       if(this.$vuetify.breakpoint.smAndDown && this.selectedContact != null){
-        this.$router.push(this.localePath(pathData.pages.chatScreen));
+        this.$router.push(this.localePath(pathData.pages.chatScreen.path));
       }
     },
 
@@ -1005,7 +1005,7 @@ export default {
         this.$store.dispatch("chat/setSelectedContact", contact);
 
         if(this.$vuetify.breakpoint.smAndDown){
-          this.$router.push(this.localePath(pathData.pages.chatScreen));
+          this.$router.push(this.localePath(pathData.pages.chatScreen.path));
         }else{
            // Fetch private message
           if (contact.categoryId == contactData.CATEGORY_ID_PRIVATE) {
@@ -1036,7 +1036,7 @@ export default {
                       content: item.content
                     };
                     console.log('2');
-                    // this.pushMessage(messageItem);
+                    this.pushMessage(messageItem);
                     this.sendPrivateMessageToChatServer({
                       senderUserId: this.$auth.user.id,
                       receiverUserId: contact.id,
@@ -1067,7 +1067,7 @@ export default {
                     senderUser: item.senderUser
                   };
                   console.log('3');
-                  // this.pushMessage(newMessage);
+                  this.pushMessage(newMessage);
                 });
               });
           }
