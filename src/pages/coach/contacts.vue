@@ -31,7 +31,7 @@
       >
         <v-row class="d-none d-md-block">
           <v-col cols="12" class="pb-0">
-            <div class="page-title">
+            <div class="page-title font-color-1">
               {{ $t("app_bar_coach_contacts_page") }}
             </div>
           </v-col>
@@ -75,8 +75,8 @@ export default {
 
 <style lang="scss" scoped>
 .page-title {
-  font-weight: 600;
-  font-size: 25px;
+  font-weight: 400;
+  font-size: 20px;
   line-height: 34px;
 }
 </style>
