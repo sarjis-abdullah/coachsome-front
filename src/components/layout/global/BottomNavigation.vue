@@ -112,13 +112,10 @@ export default ({
       ],
       offset: true,
       display_name: '',
-      active: true
+      active: true,
+      isLoaded: false
     }),
     computed: {
-      isLoaded(){
-        console.log(process.client);
-       return process?.client ? true : false;
-      },
       isLoggedIn(){
         
         return this.$auth && this.$auth.loggedIn && this.$auth.strategy.token.status().valid() ? true : false;
@@ -157,6 +154,14 @@ export default ({
       showBooking(){
         return this.$auth.hasRole(['superadmin', 'admin', 'staff']) ? false : true;
       }
+    },
+    mounted () {
+      if (process && process.client) {
+        this.isLoaded = true
+      };
+      setTimeout(() => {
+        this.isLoaded = true
+      }, 80000);
     },
     // Done by Sarjis, according to Peter, Chat Icon only visible in desktop which is done from tawk.js
     // mounted() {
