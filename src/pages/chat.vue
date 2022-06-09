@@ -1036,7 +1036,7 @@ export default {
                       content: item.content
                     };
                     console.log('2');
-                    // this.pushMessage(messageItem);
+                    this.pushMessage(messageItem);
                     this.sendPrivateMessageToChatServer({
                       senderUserId: this.$auth.user.id,
                       receiverUserId: contact.id,
