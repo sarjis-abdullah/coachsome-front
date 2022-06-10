@@ -11,7 +11,7 @@
       </mobile-top-nav>
       <v-row justify="center">
         <v-col cols="12" md="8">
-          <v-row align="center d-none d-md-block">
+          <v-row align="center" class="d-none d-md-block">
             <v-col cols="12" md="9">
               <span class="section-title">
                 {{ $t("coach_booking_package_active_package_titile") }}

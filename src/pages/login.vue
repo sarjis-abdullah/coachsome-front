@@ -27,55 +27,22 @@
         </v-row>
         <v-row class="justify-center">
           <v-col cols="12">
-              <v-btn
-                elevation="2"
-                outlined
-                color="#15577C"
-                class="login-option-btn"
-                @click="loginWithFacebook()"
-                :loading="show_loading_on_facebook_login_btn"
-              >
-                <img class="btn-icon"  :src="require('@/assets/img/svg-icons/facebook.svg')" alt="">  <span class="social-login-btn-facebook-text btn-text"> {{ $t("pwa_facebook_login") }}</span>
-              </v-btn>
+              <FacebookButton/>
           </v-col>
         </v-row>
         <v-row class="justify-center">
           <v-col cols="12">
-              <v-btn
-                elevation="2"
-                outlined
-                color="#15577C"
-                class="login-option-btn"
-                @click="loginWithApple()"
-                :loading="show_loading_on_apple_login_btn"
-              >
-                <img class="btn-icon"  :src="require('@/assets/img/svg-icons/apple-icon.svg')" alt="">  <span class="social-login-btn-facebook-text btn-text"> {{ $t("pwa_apple_login") }}</span>
-              </v-btn>
+              <AppleButton/>
           </v-col>
         </v-row>
         <v-row class="justify-center">
           <v-col cols="12">
-              <v-btn
-                outlined
-                color="#15577C"
-                class="login-option-btn"
-                @click="loginWithGoogle()"
-                :loading="show_loading_on_google_login_btn"
-              >
-                <img class="btn-icon"  :src="require('@/assets/img/svg-icons/google.svg')" alt="">  <span class="social-login-btn-goog;e-text btn-text"> {{ $t("pwa_google_login") }}</span>
-              </v-btn>
+              <GoogleButton/>
           </v-col>
         </v-row>
         <v-row class="justify-center">
           <v-col cols="12">
-              <v-btn
-                elevation="2"
-                outlined
-                class="login-option-btn"
-                @click="loginWithEmail()"
-              >
-                <img class="btn-icon" :src="require('@/assets/img/svg-icons/mail.svg')" alt="">  <span class="login-btn-email-text btn-text"> {{ $t("pwa_email_login") }}</span>
-              </v-btn>
+              <EmailButton/>
           </v-col>
         </v-row>
         <v-row class=" justify-center pt-5">
@@ -103,8 +70,19 @@
 
 <script>
 import { pathData } from "@/data";
+import FacebookButton from '@/components/button/FacebookButton'
+import AppleButton from '@/components/button/AppleButton'
+import GoogleButton from '@/components/button/GoogleButton'
+import EmailButton from '@/components/button/EmailButton'
+
 export default ({
     layout: "auth",
+    components:{
+      FacebookButton,
+      AppleButton,
+      GoogleButton,
+      EmailButton
+    },
     data () {
       return{
         show_loading_on_apple_login_btn: false,

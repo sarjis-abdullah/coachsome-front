@@ -397,6 +397,17 @@
     text-transform: capitalize;
     text-align: center!important;
   }
+  &--login-button{
+    font-family: $font-family!important;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    letter-spacing: 1px;
+    color: $grey-700!important;
+    text-transform: none;
+  }
 }
 
 .no-transform{

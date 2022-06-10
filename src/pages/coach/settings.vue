@@ -766,9 +766,7 @@ export default {
     },
     async fetchSettings() {
 
-      // const { data } = await this.$axios.get(endpoint.COACH_SETTINGS_GET);
       let { data } = await coachSettingApi(this.$axios).get();
-      console.log(data.data);
 
       if (data.notificationCategoryList.length) {
         data.notificationCategoryList.forEach(item => {

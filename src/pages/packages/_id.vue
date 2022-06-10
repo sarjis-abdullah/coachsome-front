@@ -10,12 +10,10 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-skeleton-loader
-                v-bind="attrs"
                 type="article"
               ></v-skeleton-loader>
 
               <v-skeleton-loader
-                v-bind="attrs"
                 type="divider, article, actions"
               ></v-skeleton-loader>
             </v-col>
