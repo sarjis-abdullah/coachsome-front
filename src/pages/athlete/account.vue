@@ -139,7 +139,7 @@
                 @click:append="show2 = !show2"
                 id="rePassword"
                 class="cs-input-text-field-login"
-                :rules="[passwordConfirmationRule]"
+                :rules="passwordConfirmationRule"
                 required
                 style="color:#15577C"
                 @keyup.enter="addNewPassBtnHandle"
@@ -277,7 +277,7 @@
                     </template>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content class="danger-bg">
-                    <v-row justify="center" align="center mt-2">
+                    <v-row justify="center" align="center" class="mt-2">
                       <v-col cols="12" class="d-flex justify-center">
                         <span class="danger-body-title">{{$t("athlete_settings_card_title_delete_acc")}}</span>
                       </v-col>
@@ -405,7 +405,14 @@ export default {
         v => /^(?=.*[A-Z]).*$/.test(v) || "At least one upper case letter.",
         v => (v && v.length >= 6) || "Password must be minimum 6 characters",
         v => (v && v.length >= 6) || "Password must be minimum 6 characters"
-      ]
+      ],
+      passwordConfirmationRule: [
+        v => !!v || this.$i18n.t("valid_pass_required"),
+        v =>
+          /^(?=.*[A-Z]).*$/.test(v) ||
+          this.$i18n.t("valid_at_least_one_upper_case_letter"),
+        v => (v && v.length >= 6) || this.$i18n.t("valid_pass_min_character")
+      ],
     };
   },
   watch: {

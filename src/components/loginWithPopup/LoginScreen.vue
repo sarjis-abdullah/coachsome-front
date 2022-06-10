@@ -20,66 +20,32 @@
         <!-- <div class="cs-login-sec">
             <div class="cs-login-middle"> -->
                 <v-row
-                align="center"
-                justify="center"
+                  align="center"
+                  justify="center"
                 >
-                <v-col cols="12">
-                    <p class="login-sub-title">{{$t("pwa_login_subtitle")}}</p>
-                </v-col>
-                </v-row>
-                <v-row class="justify-center">
                   <v-col cols="12">
-                      <v-btn
-                          elevation="2"
-                          outlined
-                          color="#15577C"
-                          class="login-option-btn"
-                          @click="loginWithFacebook()"
-                          :loading="show_loading_on_facebook_login_btn"
-                      >
-                          <img class="btn-icon"  :src="require('@/assets/img/svg-icons/facebook.svg')" alt="">  <span class="social-login-btn-facebook-text btn-text"> {{$t("pwa_facebook_login")}}</span>
-                      </v-btn>
+                      <p class="login-sub-title">{{$t("pwa_login_subtitle")}}</p>
                   </v-col>
                 </v-row>
                 <v-row class="justify-center">
                   <v-col cols="12">
-                      <v-btn
-                          elevation="2"
-                          outlined
-                          color="#15577C"
-                          class="login-option-btn"
-                          @click="loginWithApple()"
-                          :loading="show_loading_on_apple_login_btn"
-                      >
-                          <img class="btn-icon"  :src="require('@/assets/img/svg-icons/apple-icon.svg')" alt="">  <span class="social-login-btn-facebook-text btn-text"> {{$t("pwa_apple_login")}}</span>
-                      </v-btn>
+                      <FacebookButton/>
                   </v-col>
                 </v-row>
                 <v-row class="justify-center">
-                <v-col cols="12">
-                    <v-btn
-                        outlined
-                        color="#15577C"
-                        class="login-option-btn"
-                        @click="loginWithGoogle()"
-                        :loading="show_loading_on_google_login_btn"
-                    >
-                        <img class="btn-icon"  :src="require('@/assets/img/svg-icons/google.svg')" alt="">  <span class="social-login-btn-goog;e-text btn-text"> {{$t("pwa_google_login")}}</span>
-                    </v-btn>
-                </v-col>
+                  <v-col cols="12">
+                      <AppleButton/>
+                  </v-col>
                 </v-row>
                 <v-row class="justify-center">
-                <v-col cols="12">
-                    <v-btn
-                        elevation="2"
-                        outlined
-                        :loading="show_loading_on_login_btn"
-                        class="login-option-btn"
-                        @click="loginWithEmail()"
-                    >
-                        <img class="btn-icon" :src="require('@/assets/img/svg-icons/mail.svg')" alt="">  <span class="login-btn-email-text btn-text"> {{$t("pwa_email_login")}}</span>
-                    </v-btn>
-                </v-col>
+                  <v-col cols="12">
+                      <GoogleButton/>
+                  </v-col>
+                </v-row>
+                <v-row class="justify-center">
+                  <v-col cols="12">
+                      <EmailButton/>
+                  </v-col>
                 </v-row>
                 <v-row class=" justify-center pt-5">
                 <v-col cols="12">
@@ -106,7 +72,18 @@
 
 <script>
 import { pathData } from "@/data";
+import FacebookButton from '@/components/button/FacebookButton'
+import AppleButton from '@/components/button/AppleButton'
+import GoogleButton from '@/components/button/GoogleButton'
+import EmailButton from '@/components/button/EmailButton'
+
 export default({
+    components:{
+      FacebookButton,
+      AppleButton,
+      GoogleButton,
+      EmailButton
+    },
     data () {
       return{
         show_loading_on_apple_login_btn : false,

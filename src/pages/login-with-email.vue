@@ -80,40 +80,17 @@
             </v-row>
             <v-row class="justify-center">
               <v-col cols="12">
-                <v-btn
-                  outlined
-                  color="#15577C"
-                  class="login-option-btn"
-                  @click="loginWithFacebook()"
-                  :loading="show_loading_on_facebook_login_btn"
-                >
-                  <img class="btn-icon"  :src="require('@/assets/img/svg-icons/facebook.svg')" alt="">  <span class="social-login-btn-facebook-text btn-text">{{ $t("pwa_facebook_login") }}</span>
-                </v-btn>
+                  <FacebookButton/>
               </v-col>
             </v-row>
             <v-row class="justify-center">
               <v-col cols="12">
-                <v-btn
-                  outlined
-                  color="#15577C"
-                  class="login-option-btn"
-                  @click="loginWithApple()"
-                  :loading="show_loading_on_apple_login_btn"
-                >
-                  <img class="btn-icon"  :src="require('@/assets/img/svg-icons/apple-icon.svg')" alt="">  <span class="social-login-btn-facebook-text btn-text">{{ $t("pwa_apple_login") }}</span>
-                </v-btn>
+                  <AppleButton/>
               </v-col>
             </v-row>
             <v-row class="justify-center">
               <v-col cols="12">
-                <v-btn
-                  outlined
-                  class="login-option-btn"
-                  @click="loginWithGoogle()"
-                  :loading="show_loading_on_google_login_btn"
-                >
-                  <img class="btn-icon" :src="require('@/assets/img/svg-icons/google.svg')" alt="">  <span class="social-login-btn-google-text btn-text">{{ $t("pwa_google_login") }}</span>
-                </v-btn>
+                  <GoogleButton/>
               </v-col>
             </v-row>
           <!-- </div>
@@ -143,9 +120,18 @@
 <script>
 import { authApi } from "@/api";
 import { pathData } from "@/data";
+import FacebookButton from '@/components/button/FacebookButton'
+import AppleButton from '@/components/button/AppleButton'
+import GoogleButton from '@/components/button/GoogleButton'
+
 export default ({
   layout: "auth",
-    data () {
+  components:{
+      FacebookButton,
+      AppleButton,
+      GoogleButton
+  },
+  data () {
       return{
         show_loading_on_apple_login_btn: false,
         uri: {
