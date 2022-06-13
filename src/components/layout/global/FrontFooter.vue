@@ -1,6 +1,6 @@
 <template>
-  <v-footer class="footer" color="primary" :fixed="fixed">
-    <v-card class="footer-card" flat color="primary">
+  <v-footer class="footer pb-15" color="primary" :fixed="fixed">
+    <v-card class="footer-card pb-15" flat color="primary">
       <v-row>
         <v-col cols="12" md="5" class="pl-10">
           <v-row>
