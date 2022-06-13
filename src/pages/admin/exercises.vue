@@ -941,9 +941,14 @@ export default {
         .createExercise(payload)
         .then(({ data }) => {
           if (data.exercise) {
-            let formattedRowList = this.formatExerciseRow([{ ...data.exercise }]);
             this.noExercise = false;
-            this.table.rows.unshift(formattedRowList[0]);
+            if(this.exercises && this.exercises.length){
+              let formattedRowList = this.formatExerciseRow([{ ...data.exercise }]);
+              this.table.rows.unshift(formattedRowList[0]);
+              this.exercises.push(data.exercise);
+            }else{
+              this.getExercises();
+            }
             this.$toast.success("This Exercise has been created successfully.");
             this.previewMode = false;
             this.handleCloseExercise();
@@ -962,7 +967,6 @@ export default {
         .updateExercise(payload)
         .then(({ data }) => {
           if (data.exercise) {
-            // this.exercises.push(data.exercise);
             const index = this.table.rows.findIndex(
               item => item.id == data.exercise.id
             );
