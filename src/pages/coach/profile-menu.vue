@@ -48,7 +48,7 @@
               </v-list-item>
 
               <!-- Coach Contacts -->
-              <v-list-item v-if="isAuthCoach && (isDevelopment || isStaging)" link @click.stop="gotoContact">
+              <v-list-item v-if="isAuthCoach" link @click.stop="gotoContact">
                 <v-list-item-icon>
                   <v-img :src="require('@/assets/img/svg-icons/new/contact-card.svg')" alt="coach-contact" />
                 </v-list-item-icon>
