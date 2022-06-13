@@ -2,7 +2,7 @@
   <div>
     <client-only>
       <tiptap-vuetify
-        v-model="value"
+        v-model="description"
         :extensions="extensions"
         :placeholder="$t('hint_instructions')"
         counter="35"
@@ -23,6 +23,7 @@ export default {
   },
   data() {
     return {
+      description: "",
       extensions: [
         Bold,
         Italic,
@@ -34,8 +35,20 @@ export default {
 
     };
   },
+  // watch: {
+  //   value: {
+  //     immediate: true,
+  //     deep: true,
+  //     handler(newValue, oldValue) {
+        
+  //     }
+  //   }
+  // },
+  created(){
+    this.description = this.value;
+  },
   watch: {
-    value(val) {
+    description(val) {
       this.$emit("updated", val);
     }
   }

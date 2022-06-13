@@ -66,7 +66,7 @@
     </v-row>
 
     <!-- No exercise start -->
-    <v-row class="d-flex justify-center" v-if="noExercise">
+    <v-row class="d-flex justify-center py-10" v-if="noExercise">
         <v-col cols="12" md="4" class="no-exercise">
             <h4 class="no-exercise__text">{{$t("no_exercise_title")}}</h4>
             <p class="no-exercise__sub-text">{{$t("no_execise_sub_title")}}</p>
@@ -730,11 +730,19 @@ export default {
 
     closeExerciseDialog(){
       this.previewMode = false;
+      if(this.exercises && this.exercises.length){
+          this.noExercise = false;
+      }else{
+        this.noExercise = true;
+      }
       this.$router.push({query:{}})
     },
 
     openExerciseDialog(){
       this.exerciseDialog =true;
+      if(this.$vuetify.breakpoint.smAndDown){
+        this.noExercise = false;
+      }
       this.$router.push({query:{}});
       const query = {
         ...this.$route.query,
@@ -933,9 +941,14 @@ export default {
         .createExercise(payload)
         .then(({ data }) => {
           if (data.exercise) {
-            let formattedRowList = this.formatExerciseRow([{ ...data.exercise }]);
             this.noExercise = false;
-            this.table.rows.unshift(formattedRowList[0]);
+            if(this.exercises && this.exercises.length){
+              let formattedRowList = this.formatExerciseRow([{ ...data.exercise }]);
+              this.table.rows.unshift(formattedRowList[0]);
+              this.exercises.push(data.exercise);
+            }else{
+              this.getExercises();
+            }
             this.$toast.success("This Exercise has been created successfully.");
             this.previewMode = false;
             this.handleCloseExercise();
@@ -954,7 +967,6 @@ export default {
         .updateExercise(payload)
         .then(({ data }) => {
           if (data.exercise) {
-            // this.exercises.push(data.exercise);
             const index = this.table.rows.findIndex(
               item => item.id == data.exercise.id
             );
