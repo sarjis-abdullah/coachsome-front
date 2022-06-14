@@ -1,6 +1,6 @@
 <template>
-  <div class="blog-page">
-    <v-container class="py-10">
+  <div class="blog-page px-5">
+    <v-container fluid class="py-10">
       <v-row justify="center">
         <v-col cols="12" md="9">
           <v-row>
@@ -14,7 +14,7 @@
                   ></v-progress-linear>
                 </template>
                 <v-img :src="post.featured_image" height="538"></v-img>
-                <div class="px-5 pt-10 pb-10">
+                <div class="px-10 pt-10 pb-10">
                   <div
                     :class="[
                       'post__title',
@@ -34,7 +34,7 @@
                   </div>
                 </div>
                 <v-divider></v-divider>
-                <div class="pa-5">
+                <div class="pa-10">
                   <div class="bootstrap-wrapper">
                     <div v-html="post.published_content"></div>
                   </div>
@@ -113,11 +113,13 @@ export default {
       font-weight: bold;
       &--md {
         font-size: 56.9141px;
+        line-height: 78px;
       }
       &--sm {
         font-size: 30px;
+        line-height: 43px;
       }
-      line-height: 78px;
+      
       color: #2d3748;
     }
     &__subtitle {
