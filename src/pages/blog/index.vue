@@ -58,7 +58,7 @@
               {{ item.title }}
             </v-card-title>
 
-            <v-card-subtitle>
+            <v-card-subtitle style="min-height: 200px!important;">
               {{ item.short_description }}
             </v-card-subtitle>
 
