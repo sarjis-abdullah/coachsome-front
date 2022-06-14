@@ -1,9 +1,37 @@
 <template>
   <div class="blog-page">
     <v-container fluid>
-      <v-row>
-        <v-col cols="12" class="pa-0">
-          <v-card
+      <v-row class="feature-card">
+        <v-col cols="12" class="pb-0 feature-card__body d-flex justify-center">
+          <div
+            :class="[
+              'feature-card__title',
+              { 'feature-card__title--sm': $vuetify.breakpoint.smAndDown },
+              { 'feature-card__title--md': $vuetify.breakpoint.mdAndUp }
+            ]"
+          >
+            {{ $t("blog_feature_title") }}
+          </div>
+        </v-col>
+        <v-col class="cols-12 feature-card__body d-flex justify-center pt-0">
+          <div
+            :class="[
+              'feature-card__description',
+              {
+                'feature-card__description--sm':
+                  $vuetify.breakpoint.smAndDown
+              },
+              {
+                'feature-card__description--md': $vuetify.breakpoint.mdAndUp
+              }
+            ]"
+          >
+            {{ $t("blog_feature_description") }}
+          </div>
+        </v-col>
+
+          
+          <!-- <v-card
             min-height="422"
             class="feature-card ma-0"
             color="#F7FAFC"
@@ -41,7 +69,7 @@
               </div>
             </div>
           </v-card>
-        </v-col>
+        </v-col> -->
       </v-row>
     </v-container>
     <v-container style="max-width: 1110px;">
