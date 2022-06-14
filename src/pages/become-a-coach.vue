@@ -1,6 +1,17 @@
 <template>
   <div class="bootstrap-wrapper">
     <div class="container-fluid">
+      <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('title_become_a_coach')">
+        <template v-slot:goBack>
+          <v-btn
+            icon
+          >
+          </v-btn>
+        </template>
+        <template v-slot:action>
+          <span></span>
+        </template>
+      </mobile-top-nav>
       <div class="row">
         <div class="col px-md-0">
         <div v-html="content"></div>
@@ -347,6 +358,8 @@
 
 <script>
 import { pageBuilderApi } from "@/api";
+import { pathData } from "@/data";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 
 export default {
@@ -355,6 +368,9 @@ export default {
       title: this.$i18n.t("header_title_tag_become_a_coach"),
       titleTemplate: "%s"
     };
+  },
+  components: {
+    MobileTopNav
   },
   async asyncData({ app, $axios }) {
     const { data } = await pageBuilderApi($axios).getPage("BecomeACoach");
