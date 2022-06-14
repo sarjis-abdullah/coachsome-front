@@ -1,7 +1,18 @@
 <template>
   <div class="blog-page">
+    <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('blog_feature_title')">
+      <template v-slot:goBack>
+        <v-btn
+          icon
+        >
+        </v-btn>
+      </template>
+      <template v-slot:action>
+        <span></span>
+      </template>
+    </mobile-top-nav>
     <v-container fluid>
-      <v-row class="feature-card">
+      <v-row class="feature-card pt-5">
         <v-col cols="12" class="pb-0 feature-card__body d-flex justify-center">
           <div
             :class="[
@@ -113,8 +124,12 @@
 
 <script>
 import moment from "moment";
+import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
+  components: {
+    MobileTopNav
+  },
   head() {
     return {
       title: "Blog",
