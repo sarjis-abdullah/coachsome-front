@@ -267,12 +267,12 @@ export default ({
   }
   @media screen and (min-width: 376px) and (max-width: 780px) {
     [class*="bottom_background"] {
-      margin-bottom: 2%;
+      margin-bottom: 2.4%;
     }
   }
   @media only screen and (min-width: 781px) {
     [class*="bottom_background"] {
-      margin-bottom: 0.80%;
+      margin-bottom: 0.90%;
     }
   }
  

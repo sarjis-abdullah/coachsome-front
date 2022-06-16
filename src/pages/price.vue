@@ -86,7 +86,6 @@
           -webkit-box-shadow: 0 10px 20px rgb(159 174 194 / 15%);
           box-shadow: 0 10px 20px rgb(159 174 194 / 15%);
           border-radius: 16px;
-          max-width: 400px;       
         }
         .price-card-monthly{
           background: white;    
@@ -97,13 +96,14 @@
 
         @media only screen and (min-width: 901px) {
           .price-card {
-            margin-top: -400px;     
+            margin-top: -400px;  
+            max-width: 400px;   
           }
         }
 
         @media screen and (max-width: 900px) and (min-width: 600px) {
           .price-card {
-            margin-top: -300px;     
+            margin-top: -350px;     
           }
         }
 
@@ -290,7 +290,7 @@
           outline: none;       
           }
         .faq{
-          background-image:url(http://localhost:8000/assets/images/cms/eclipse.png);
+          background-image:url(https://api.test.coachsome.com/assets/images/cms/eclipse.png);
           background-repeat: no-repeat;
           background-position: center top;
           padding-top: 50px;
@@ -306,57 +306,45 @@
           color: #49556A;
           margin-bottom: 20px;
         }       
-
-        #accordion .card{
-          background: none!important;
-          border: none!important;
-          border-radius: none!important;
-        }
-
-        #accordion .card .card-header{
+        .faq-list-card{
+          padding: 22px 22px 0 22px!important;
           background: #FFFFFF!important;
           border: 1px solid #CAD5E1!important;
           border-radius: 10px!important;
-          margin-top: 10px;
+          margin-top: 12px!important;
         }
-         #accordion .card .collapse .card-body{
-           background: #FFFFFF!important;
-            border: 1px solid #CAD5E1!important;
-            border-radius: 10px!important;
-            margin-top: 10px;
-         }
 
-         .btn-link{
-          font-family: Open Sans, sans-serif !important; 
-          width: 100%!important;
-          text-align: left!important;
-          font-style: normal;
-          font-weight: 400;
-          font-size: 16px;
-          line-height: 22px;
+        .faq-list-card .faq-list-title{
+          font-family: Open Sans, sans-serif !important;
+          font-style: normal!important;
+          font-weight: 700!important;
+          font-size: 16px!important;
+          line-height: 22px!important;
+          color: #49556A!important;
+        }
+
+        .faq-list-card .faq-list-description{
+          font-family: Open Sans, sans-serif !important;
+          font-style: normal!important;
+          font-weight: 400!important;
+          font-size: 16px!important;
+          line-height: 22px!important;
           color: #000000!important;
-          text-decoration: none!important
-         }
-
-        .btn-link.collapsed:after {
-            font-family: 'FontAwesome';  
-            content: "\f054";
-            float: right; 
-            font-size: 15px;
-            color: #858C94!important;
-        }
-         .btn-link:after {
-            font-family: 'FontAwesome';  
-            content: "\f078";
-            float: right; 
-            font-size: 15px;
-            color: #858C94!important;
+          margin-bottom: 0!important;
         }
 
+        .first-price-box{
+          margin-left: auto!important;
+          margin-right: 0!important;
 
+        }
 
+        .second-price-box{
+          margin-right: auto!important;
+          margin-left: 0!important;
 
-       
+        }
+
 
       </style>     
       <div class="container-fluid price-page" style="background-color: #F7FAFC">       
@@ -385,7 +373,7 @@
               </div>
               <div class="page-bottom">
                 <div class="row justify-content-center" style="display: flex; align-items: flex-start;">
-                  <div class="d-flex justify-content-center col-md-5 col-lg-3 col-12">
+                  <div class="d-flex justify-content-end col-lg-4 col-sm-5 col-12 first-price-box" style="">
                     <div class="price-card price-card-monthly price-card--md">
                       <div class="price-card-header">
                         <div class="price-card-header__title_monthly" style="Open Sans, sans-serif !important;">Starter</div>
@@ -414,7 +402,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="d-flex justify-content-center col-md-5 col-lg-3 col-12">
+                  <div class="d-flex justify-content-start col-lg-4 col-sm-5 col-12 second-price-box">
                     <div class="price-card price-card-annual price-card--md">
                       <div class="price-card-header">
                         <div class="price-card-header__title_annual" style="Open Sans, sans-serif !important;">Pro</div>
@@ -447,108 +435,30 @@
                     </div>
                   </div>
                 </div>
-                <div class="row px-5">
-                  <div class="col">
+                <div class="row">
+                  <div class="col-12">
                     <div class="faq">
                       <div class="faq__header">
                         <div class="title--faq" style="Open Sans, sans-serif !important;">Frequently asked questions</div>
                       </div>
                       <div class="row justify-content-center">
-                          <div class="col-lg-7 col-md-10 col-sm-12 col-12" style="margin-bottom: 50px!important">
-                            <div id="accordion">
-                              <div class="card">
-                                <div class="card-header" id="headingOne">
-                                  <h5 class="mb-0">
-                                    <button class="btn btn-link" data-toggle="collapse" data-target=".collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                      How do I pay?
-                                    </button>
-                                  </h5>
-                                </div>
-
-                                <div class="collapse show collapseOne" aria-labelledby="headingOne" data-parent="#accordion">
-                                  <div class="card-body">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas purus amet morbi sed nisl blandit. Non elit id congue mauris cursus sed id. Bibendum at lorem consequat amet. Velit lacus turpis sapien, elementum odio viverra aliquam ante maecenas.</div>
-                                </div>
+                          <div class="col-lg-6 col-md-10 col-sm-12 col-12" style="margin-bottom: 50px!important">
+                              <div class="card faq-list-card">
+                                <p class="faq-list-title">How do I pay?</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas purus amet morbi sed nisl blandit. Non elit id congue mauris cursus sed id. Bibendum at lorem consequat amet. Velit lacus turpis sapien, elementum odio viverra aliquam ante maecenas.</p>
                               </div>
-                              <div class="card">
-                                <div class="card-header" id="headingTwo">
-                                  <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target=".collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                      How do I pay?
-                                    </button>
-                                  </h5>
-                                </div>
-                                <div class="collapse collapseTwo" aria-labelledby="headingTwo" data-parent="#accordion">
-                                  <div class="card-body">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas purus amet morbi sed nisl blandit. Non elit id congue mauris cursus sed id. Bibendum at lorem consequat amet. Velit lacus turpis sapien, elementum odio viverra aliquam ante maecenas.</div>
-                                </div>
+                              <div class="card faq-list-card">
+                                <p class="faq-list-title">How do I pay?</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas purus amet morbi sed nisl blandit. Non elit id congue mauris cursus sed id. Bibendum at lorem consequat amet. Velit lacus turpis sapien, elementum odio viverra aliquam ante maecenas.</p>
                               </div>
-                              <div class="card">
-                                <div class="card-header" id="headingThree">
-                                  <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target=".collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                      How do I pay?
-                                    </button>
-                                  </h5>
-                                </div>
-                                <div class="collapse collapseThree" aria-labelledby="headingThree" data-parent="#accordion">
-                                  <div class="card-body">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas purus amet morbi sed nisl blandit. Non elit id congue mauris cursus sed id. Bibendum at lorem consequat amet. Velit lacus turpis sapien, elementum odio viverra aliquam ante maecenas.</div>
-                                </div>
+                              <div class="card faq-list-card">
+                                <p class="faq-list-title">How do I pay?</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas purus amet morbi sed nisl blandit. Non elit id congue mauris cursus sed id. Bibendum at lorem consequat amet. Velit lacus turpis sapien, elementum odio viverra aliquam ante maecenas.</p>
                               </div>
-                              <div class="card">
-                                <div class="card-header" id="headingSeven">
-                                  <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target=".collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-                                      How do I pay?
-                                    </button>
-                                  </h5>
-                                </div>
-                                <div class="collapse collapseSeven" aria-labelledby="headingSeven" data-parent="#accordion">
-                                  <div class="card-body">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas purus amet morbi sed nisl blandit. Non elit id congue mauris cursus sed id. Bibendum at lorem consequat amet. Velit lacus turpis sapien, elementum odio viverra aliquam ante maecenas.</div>
-                                </div>
+                              <div class="card faq-list-card">
+                                <p class="faq-list-title">How do I pay?</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas purus amet morbi sed nisl blandit. Non elit id congue mauris cursus sed id. Bibendum at lorem consequat amet. Velit lacus turpis sapien, elementum odio viverra aliquam ante maecenas.</p>
                               </div>
-                              <div class="card">
-                                <div class="card-header" id="headingFour">
-                                  <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target=".collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                      How do I pay?
-                                    </button>
-                                  </h5>
-                                </div>
-                                <div class="collapse collapseFour" aria-labelledby="headingFour" data-parent="#accordion">
-                                  <div class="card-body">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas purus amet morbi sed nisl blandit. Non elit id congue mauris cursus sed id. Bibendum at lorem consequat amet. Velit lacus turpis sapien, elementum odio viverra aliquam ante maecenas.</div>
-                                </div>
-                              </div>
-                              <div class="card">
-                                <div class="card-header" id="headingFive">
-                                  <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target=".collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                      How do I pay?
-                                    </button>
-                                  </h5>
-                                </div>
-                                <div class="collapse collapseFive" aria-labelledby="headingFive" data-parent="#accordion">
-                                  <div class="card-body">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas purus amet morbi sed nisl blandit. Non elit id congue mauris cursus sed id. Bibendum at lorem consequat amet. Velit lacus turpis sapien, elementum odio viverra aliquam ante maecenas.</div>
-                                </div>
-                              </div>
-                              <div class="card">
-                                <div class="card-header" id="headingSix">
-                                  <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target=".collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                                      How do I pay?
-                                    </button>
-                                  </h5>
-                                </div>
-                                <div class="collapse collapseSix" aria-labelledby="headingSix" data-parent="#accordion">
-                                  <div class="card-body">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas purus amet morbi sed nisl blandit. Non elit id congue mauris cursus sed id. Bibendum at lorem consequat amet. Velit lacus turpis sapien, elementum odio viverra aliquam ante maecenas.</div>
-                                </div>
-                              </div>
-                            </div>
                           </div>
                       </div>
                     </div>
