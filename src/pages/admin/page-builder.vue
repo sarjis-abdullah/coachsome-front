@@ -35,7 +35,7 @@ export default {
     pageBuilderApi(this.$axios)
       .getPage("Terms")
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
       });
   },
   methods: {
