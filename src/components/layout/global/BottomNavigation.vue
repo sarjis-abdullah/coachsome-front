@@ -267,13 +267,13 @@ export default ({
   /* large mobile and tab */
   @media screen and (min-width: 376px) and (max-width: 780px) {
     [class*="bottom_background"] {
-      margin-bottom: 2.8%!important;
+      margin-bottom: 2.9%!important;
     }
   }
    /* mobile */
   @media only screen and (max-width: 375px) {
     [class*="bottom_background"] {
-      margin-bottom: 2.5%!important;
+      margin-bottom: 2.9%!important;
     }
   }
  

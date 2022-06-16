@@ -8,6 +8,7 @@
       </div>
     </div>
   </div>
+
   <!-- <div>
     <head>
       <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -471,6 +472,7 @@
       </div>
     </body> 
   </div> -->
+
 </template>
 
 <script>
@@ -525,8 +527,8 @@ export default {
             this.$router.push(this.localePath(pathData.admin.dashboard))
         }else if(this.$auth.loggedIn && this.$auth.hasRole(["coach"])){
             this.$router.push(this.localePath(pathData.coach.home))
-        }else if(this.$auth.loggedIn && this.$auth.hasRole(["coach"])){
-            this.$router.push(this.localePath(pathData.coach.home))
+        }else if(this.$auth.loggedIn && this.$auth.hasRole(["athlete"])){
+            this.$router.push(this.localePath(pathData.athlete.home))
         }else{
             this.$router.push(this.localePath(pathData.pages.home))
         }
