@@ -103,7 +103,7 @@
 
             <v-card-actions>
               <div class="caption font-weight-light ml-2">
-                {{ moment(item.created_at).format("MMM Do YY") }}
+                {{ moment(item.created_at).locale(localeData).format("MMM Do YY") }}
               </div>
               <v-spacer></v-spacer>
               <v-btn
@@ -151,6 +151,11 @@ export default {
     return {
       allPost: allPost
     };
+  },
+  computed: {
+    localeData(){
+      return this.$i18n.locale;
+    }
   },
   methods: {
     moment,
