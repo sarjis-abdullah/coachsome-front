@@ -103,7 +103,7 @@
 
             <v-card-actions>
               <div class="caption font-weight-light ml-2">
-                {{ moment(item.created_at).locale(localeData).format("MMM Do YY") }}
+                {{ moment(item.published_date).locale(localeData).format("MMM Do YY") }}
               </div>
               <v-spacer></v-spacer>
               <v-btn
