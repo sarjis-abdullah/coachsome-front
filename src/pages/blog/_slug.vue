@@ -27,7 +27,7 @@
                     {{ post.title }}
                   </div>
                   <div class="post__subtitle pt-5">
-                    {{ moment(post.created_at).locale(localeData).format("MMM Do YY") }}
+                    {{ moment(post.published_date).locale(localeData).format("MMM Do YY") }}
                   </div>
                   <div class="post__subsubtitle pt-5">
                     Written by -  {{ authorName }}
