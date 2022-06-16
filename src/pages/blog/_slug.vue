@@ -27,10 +27,10 @@
                     {{ post.title }}
                   </div>
                   <div class="post__subtitle pt-5">
-                    {{ moment(post.created_at).format("MMM Do YY") }}
+                    {{ moment(post.published_date).locale(localeData).format("MMM Do YY") }}
                   </div>
                   <div class="post__subsubtitle pt-5">
-                    Written by {{ post.author_name }}
+                    Written by -  {{ authorName }}
                   </div>
                 </div>
                 <v-divider></v-divider>
@@ -73,7 +73,14 @@ export default {
     };
   },
   data() {
-    return {};
+    return {
+      authorName: "",
+    };
+  },
+  computed: {
+    localeData(){
+      return this.$i18n.locale;
+    }
   },
   async asyncData({ params, app, $axios }) {
     let post = {};
@@ -85,6 +92,7 @@ export default {
           const userResponse = await $axios.get(`/users/${post.author}`);
           if (userResponse.data.data) {
             post.authorName = userResponse.data.data.fullName;
+            this.authorName = userResponse.data.data.fullName;
           }
         }
       }

@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12 px-md-0">
-          <div v-html="content"></div>
+          <div v-html="content" @click="handleClick"></div>
         </div>
       </div>
     </div>
@@ -518,31 +518,31 @@ export default {
     };
   },
   methods: {
-    // handleClick(e) {
-    //   const elt = e.target.closest(".btn-pricing");
-    //   if(this.$auth.loggedIn){
-    //     if(this.$auth.loggedIn && this.$auth.hasRole(["superadmin", "admin", "staff"])){
-    //         this.$router.push(this.localePath(pathData.admin.dashboard))
-    //     }else if(this.$auth.loggedIn && this.$auth.hasRole(["coach"])){
-    //         this.$router.push(this.localePath(pathData.coach.home))
-    //     }else if(this.$auth.loggedIn && this.$auth.hasRole(["coach"])){
-    //         this.$router.push(this.localePath(pathData.coach.home))
-    //     }else{
-    //         this.$router.push(this.localePath(pathData.pages.home))
-    //     }
-    //   }else{
-    //     if (elt) {
-    //       this.$store.dispatch("activeBottomNav", 4);
-    //       if(!this.$vuetify.breakpoint.xsOnly){
-    //           this.$store.dispatch("toggleDialog");
-    //       }else{
-    //         if(this.$route.path != pathData.pages.login){
-    //           this.$router.push(this.localePath(pathData.pages.login))
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
+    handleClick(e) {
+      const elt = e.target.closest(".btn-pricing");
+      if(this.$auth.loggedIn){
+        if(this.$auth.loggedIn && this.$auth.hasRole(["superadmin", "admin", "staff"])){
+            this.$router.push(this.localePath(pathData.admin.dashboard))
+        }else if(this.$auth.loggedIn && this.$auth.hasRole(["coach"])){
+            this.$router.push(this.localePath(pathData.coach.home))
+        }else if(this.$auth.loggedIn && this.$auth.hasRole(["coach"])){
+            this.$router.push(this.localePath(pathData.coach.home))
+        }else{
+            this.$router.push(this.localePath(pathData.pages.home))
+        }
+      }else{
+        if (elt) {
+          this.$store.dispatch("activeBottomNav", 4);
+          if(!this.$vuetify.breakpoint.xsOnly){
+              this.$store.dispatch("toggleDialog");
+          }else{
+            if(this.$route.path != pathData.pages.login){
+              this.$router.push(this.localePath(pathData.pages.login))
+            }
+          }
+        }
+      }
+    }
   }
 };
 </script>
