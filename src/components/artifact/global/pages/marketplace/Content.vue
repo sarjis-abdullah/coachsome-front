@@ -14,7 +14,7 @@
             color="transparent"
             flat
           >
-            <v-card-text class="px-0">
+            <v-card-text class="px-0 pt-md-15">
               <!-- Filter Box -->
               <div
                 :class="{ 'fixed-box py-1': isFilterBoxFixed }"
@@ -589,7 +589,7 @@ export default {
         this.footer.toggleButton = false;
       }
 
-      if (window.scrollY > 200) {
+      if (window.scrollY > 80) {
         this.isFilterBoxFixed = true;
       }
 
