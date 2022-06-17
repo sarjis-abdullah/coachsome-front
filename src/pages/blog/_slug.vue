@@ -91,7 +91,6 @@ export default {
         if (post) {
           const userResponse = await $axios.get(`blog/author/${post.author}`);
           if (userResponse.data.author) {
-            alert('aljdfh');
             post.authorName = userResponse.data.author.fullName;
             this.authorName = userResponse.data.author.fullName;
           }
