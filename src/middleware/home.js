@@ -1,6 +1,5 @@
 import { pathData } from "@/data";
 export default function(context) {
-  console.log("middleware",context.route.path == "/");
   if(context.app.vuetify.framework.breakpoint.smAndDown && context.route.path == "/"){
 
     if(context.$auth && context.$auth.loggedIn){
@@ -13,7 +12,7 @@ export default function(context) {
         context.redirect(context.localePath(pathData.athlete.home));
       }
     }else{
-      console.log("Hi");
+      // console.log("Hi");
       // context.redirect(context.localePath(pathData.pages.login));
     }
   }

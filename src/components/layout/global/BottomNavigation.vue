@@ -259,20 +259,21 @@ export default ({
     transform: translate(-50%)!important;
   }
 
-
-  @media only screen and (max-width: 375px) {
-    [class*="bottom_background"] {
-      margin-bottom: 2.5%;
-    }
-  }
-  @media screen and (min-width: 376px) and (max-width: 780px) {
-    [class*="bottom_background"] {
-      margin-bottom: 2%;
-    }
-  }
   @media only screen and (min-width: 781px) {
     [class*="bottom_background"] {
-      margin-bottom: 0.80%;
+      margin-bottom: 0.90%!important;
+    }
+  }
+  /* large mobile and tab */
+  @media screen and (min-width: 376px) and (max-width: 780px) {
+    [class*="bottom_background"] {
+      margin-bottom: 2.9%!important;
+    }
+  }
+   /* mobile */
+  @media only screen and (max-width: 375px) {
+    [class*="bottom_background"] {
+      margin-bottom: 2.9%!important;
     }
   }
  
