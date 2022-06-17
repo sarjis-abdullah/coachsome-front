@@ -7,7 +7,7 @@
       @click.stop="clickedOnContainerSpace"
     >
       <v-row>
-        <v-col class="py-0 mt-12" cols="12" md="9">
+        <v-col class="py-0" cols="12" md="9" :class="$vuetify.breakpoint.mdAndUp ? 'mt-1' : 'mt-12'">
           <v-card
             class="overflow-y"
             :height="$vuetify.breakpoint.mdAndUp ? '91vh' : '90vh'"
@@ -17,7 +17,7 @@
             <v-card-text class="px-0">
               <!-- Filter Box -->
               <div
-                :class="{ 'fixed-box': isFilterBoxFixed }"
+                :class="{ 'fixed-box py-1': isFilterBoxFixed }"
                 v-if="$vuetify.breakpoint.mdAndUp"
               >
                 <CoachFilter
@@ -148,7 +148,7 @@
               </v-dialog>
 
               <!-- coach-list -->
-              <v-row class="card-container">
+              <v-row class="card-container pt-2">
                 <v-col cols="12" sm="6" md="4" v-for="(item, i) in coaches" :key="i">
                   <explore-card v-bind="item"></explore-card>
                 </v-col>
