@@ -30,7 +30,7 @@
                     {{ moment(post.published_date).locale(localeData).format("MMM Do YY") }}
                   </div>
                   <div class="post__subsubtitle pt-5">
-                    Written by -  {{ authorName }}
+                    Written by -  {{ post.authorName }}
                   </div>
                 </div>
                 <v-divider></v-divider>
@@ -89,10 +89,10 @@ export default {
       if (blogRes.data.blog) {
         post = blogRes.data.blog.find(item => item.slug_url == params.slug);
         if (post) {
-          const userResponse = await $axios.get(`/users/${post.author}`);
-          if (userResponse.data.data) {
-            post.authorName = userResponse.data.data.fullName;
-            this.authorName = userResponse.data.data.fullName;
+          const userResponse = await $axios.get(`blog/author/${post.author}`);
+          if (userResponse.data.author) {
+            post.authorName = userResponse.data.author.fullName;
+            this.authorName = userResponse.data.author.fullName;
           }
         }
       }
@@ -120,8 +120,8 @@ export default {
       font-style: normal;
       font-weight: bold;
       &--md {
-        font-size: 56.9141px;
-        line-height: 78px;
+        font-size: 40px;
+        line-height: 58px;
       }
       &--sm {
         font-size: 30px;
