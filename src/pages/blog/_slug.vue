@@ -1,50 +1,66 @@
 <template>
-  <div class="blog-page px-5">
-    <v-container fluid class="py-10">
-      <v-row justify="center">
-        <v-col cols="12" md="9">
-          <v-row>
-            <v-col cols="12" md="12">
-              <v-card class="post">
-                <template slot="progress">
-                  <v-progress-linear
-                    color="deep-purple"
-                    height="10"
-                    indeterminate
-                  ></v-progress-linear>
-                </template>
-                <v-img :src="post.featured_image" height="538"></v-img>
-                <div class="px-10 pt-10 pb-10">
-                  <div
-                    :class="[
-                      'post__title',
-                      {
-                        'post__title--md': $vuetify.breakpoint.mdAndUp,
-                        'post__title--sm': $vuetify.breakpoint.smAndDown
-                      }
-                    ]"
-                  >
-                    {{ post.title }}
+  <div>
+    <mobile-top-nav extraClass="body-bg-secondary" :headerText="post.title">
+      <template v-slot:goBack>
+        <v-btn
+          icon
+          @click="handleBack"
+        >
+          <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+        </v-btn>
+      </template>
+      <template v-slot:action>
+        <span></span>
+      </template>
+    </mobile-top-nav>
+
+    <div class="blog-page" :class="{'px-5' : !$vuetify.breakpoint.smAndDown}">
+      <v-container fluid :class="{'py-10' : !$vuetify.breakpoint.smAndDown}">
+        <v-row justify="center">
+          <v-col cols="12" md="9" sm="12">
+            <v-row>
+              <v-col cols="12" md="12" sm="12" :class="{'pa-0' : $vuetify.breakpoint.smAndDown}">
+                <v-card class="post">
+                  <template slot="progress">
+                    <v-progress-linear
+                      color="deep-purple"
+                      height="10"
+                      indeterminate
+                    ></v-progress-linear>
+                  </template>
+                  <v-img :src="post.featured_image" height="538"></v-img>
+                  <div :class="{'pa-5' : $vuetify.breakpoint.smAndDown, 'pa-10' : !$vuetify.breakpoint.smAndDown}">
+                    <div
+                      :class="[
+                        'post__title',
+                        {
+                          'post__title--md': $vuetify.breakpoint.mdAndUp,
+                          'post__title--sm': $vuetify.breakpoint.smAndDown
+                        }
+                      ]"
+                    >
+                      {{ post.title }}
+                    </div>
+                    <div class="post__subtitle pt-5">
+                      {{ moment(post.published_date).locale(localeData).format("MMM Do YY") }}
+                    </div>
+                    <div class="post__subsubtitle pt-5">
+                      Written by -  {{ post.authorName }}
+                    </div>
                   </div>
-                  <div class="post__subtitle pt-5">
-                    {{ moment(post.published_date).locale(localeData).format("MMM Do YY") }}
+                  <v-divider></v-divider>
+                  <div :class="{'pa-5' : $vuetify.breakpoint.smAndDown, 'pa-10' : !$vuetify.breakpoint.smAndDown}">
+                    <div class="bootstrap-wrapper">
+                      <div v-html="post.published_content"></div>
+                    </div>
                   </div>
-                  <div class="post__subsubtitle pt-5">
-                    Written by -  {{ post.authorName }}
-                  </div>
-                </div>
-                <v-divider></v-divider>
-                <div class="pa-10">
-                  <div class="bootstrap-wrapper">
-                    <div v-html="post.published_content"></div>
-                  </div>
-                </div>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-container>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
   </div>
 </template>
 
@@ -52,8 +68,11 @@
 import { pageBuilderApi } from "@/api";
 import moment from "moment";
 import { seoHelper } from "@/helper";
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import { pathData } from "@/data";
 
 export default {
+  components: {MobileTopNav},
   head() {
     return {
       title: this.post ? this.post.title : "",
@@ -105,7 +124,10 @@ export default {
     };
   },
   methods: {
-    moment
+    moment,
+    handleBack(){
+      this.$router.push(this.localePath(pathData.pages.blog));
+    }
   }
 };
 </script>
