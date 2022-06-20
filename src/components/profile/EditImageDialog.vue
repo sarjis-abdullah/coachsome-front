@@ -164,7 +164,7 @@
             tile
             @click="handleCroppedBtnClick"
           >
-            {{ $t("Cropped") }}
+            {{ $t("crop") }}
           </v-btn>
           <v-btn
             dark
@@ -410,19 +410,19 @@ export default {
       }
       const file = e.target.files[0];
       if (file.type.indexOf("image/") === -1) {
-        alert("Please select an image file");
+        this.$toast.error("Please select an image file");
         return;
       }
       let size = parseFloat(file.size / (1024 * 1024)).toFixed(2);
 
       if (size > 6) {
-        alert("Please select image size less than 5 MB");
+        this.$toast.error("Please select image size less than 5 MB");
         this.dragging = false;
         return;
       }
 
       if (!file.type.match("image/jpeg|image/jpg|image/png|image/gif")) {
-        alert("File type should be jpg, jpeg or png");
+        this.$toast.error("File type should be jpg, jpeg or png");
         this.dragging = false;
         return;
       }
@@ -447,7 +447,7 @@ export default {
 <style lang="scss">
 .edit-image-dialog {
   &__wrapper {
-    max-height: 100px;
+    height: 650px!important;
     .dropZone {
       width: 100%;
       height: 200px;
