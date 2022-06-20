@@ -72,7 +72,7 @@
                         <v-list-item  class="px-1 py-0 ma-0">
                           <v-list-item-content @click="showCategoryWised(item.parent_id)">
                             <v-list-item-title class="category-card--list-text">
-                              {{ $t(item.translation) }}
+                              {{ item.translation }}
                             </v-list-item-title>
                           </v-list-item-content>
                         </v-list-item>
@@ -87,7 +87,7 @@
                   v-model="selectedCategory"
                   :items="categoryData"
                   item-value="parent_id"
-                  :item-text="$t('translation')"
+                  item-text="translation"
                   :menu-props="{closeOnContentClick: true}"
                   @change="showCategoryWisedSm"
                   outlined
