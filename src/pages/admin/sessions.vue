@@ -118,6 +118,7 @@ export default {
                 ...item,
                 sessionId: element.id,
                 location: element?.location?.address,
+                length: item.bookingTimes.length
               };
               let st,
                 et = "";
@@ -137,11 +138,13 @@ export default {
               }
               array.push(object);
             }
-          } else {
-            array.push(item);
           }
         }
-        this.table.rows = array;
+        this.table.rows = array.filter(item=> {
+            if (item.dateAndTime) {
+                return item
+            }
+        });
       } catch (error) {
         console.error(error);
       } finally {
