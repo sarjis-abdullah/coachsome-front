@@ -152,7 +152,12 @@ export default {
             t_key: "app_bar_dashboard_message",
             path: pathData.pages.chat
           },
-
+          bookingSessions: {
+            text: "Sessions",
+            icon: "folder_open",
+            t_key: "app_bar_booking_sessions",
+            path: pathData.admin.bookingSessions
+          },
         }
       },
       avatarMenu: {
