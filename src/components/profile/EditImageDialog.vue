@@ -447,7 +447,7 @@ export default {
 <style lang="scss">
 .edit-image-dialog {
   &__wrapper {
-    height: 650px!important;
+    height: 550px!important;
     .dropZone {
       width: 100%;
       height: 200px;
