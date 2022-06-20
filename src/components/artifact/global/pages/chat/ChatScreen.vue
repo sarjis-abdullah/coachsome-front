@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 'chat-screen mt-10' : $vuetify.breakpoint.smAndDown, 'chat-screen-md' : $vuetify.breakpoint.mdAndUp }" ref="chatScreen">
-    <div v-if="!messages.length" :class=" {'pt-10' : $vuetify.breakpoint.smAndDown}">
+    <div v-if="!messages.length && selectedContact != null" :class=" {'pt-10' : $vuetify.breakpoint.smAndDown}">
       <span v-for="(item, index) in 2" :key="index">
         <v-row>
           <v-col cols="8">
