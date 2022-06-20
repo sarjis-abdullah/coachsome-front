@@ -102,8 +102,8 @@
           <template v-slot:item.assets="{ item }">
             <v-avatar>
               <img
-                v-if="!item && item.profileUrl && item.profileUrl.square"
-                :src="item.profileUrl.square"
+                v-if="getProfile(item)"
+                :src="getProfile(item)"
                 :alt="item.name"
                 width="40"
                 height="40"
@@ -195,8 +195,8 @@
                   <v-list-item @click="gotoChat(item)">
                     <v-list-item-avatar height="40" width="40">
                       <v-img
-                        v-if="item && item.profileUrl && item.profileUrl.square"
-                        :src="item.profileUrl.square"
+                        v-if="getProfile(item)"
+                        :src="getProfile(item)"
                         :alt="item.name"
                       ></v-img>
                       <v-btn icon v-else>
@@ -555,6 +555,7 @@ export default {
       this.$router.push({query})
     },
     debouncedInitData() {
+      this.contactsData = []
       this.getAllData(this.query);
     },
     handleClick(item, data) {
@@ -594,6 +595,18 @@ export default {
       if (this.$route?.query?.contactForm) {
         this.$router.push({query:{}})
       }
+    },
+    getProfile(item){
+      if (item && item.profileUrl) {
+        if (item.profileUrl.square) {
+          return item.profileUrl.square
+        }else if (item.profileUrl.portrait) {
+          return item.profileUrl.portrait
+        }else if (item.profileUrl.original) {
+          return item.profileUrl.original
+        }
+      }
+      return ""
     }
   }
 };
