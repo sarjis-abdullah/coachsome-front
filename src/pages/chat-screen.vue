@@ -440,9 +440,9 @@
                   </template>
                 </v-list>
               </div>
-              <div class="content__body" v-if="!$vuetify.breakpoint.mdAndUp">
+              <div class="content__body" v-if="$vuetify.breakpoint.smAndDown">
                 <div class="message-list">
-                  <ChatScreen />
+                  <ChatScreen v-if="$vuetify.breakpoint.smAndDown" />
                 </div>
                 <div :class="{ 'fixed-bottom': $vuetify.breakpoint.smAndDown && navStatus}">
                   <v-textarea
@@ -738,7 +738,7 @@ export default {
     },
 
     async selectedContact(contact){
-      if(!contact && !contact.id ){
+      if(!contact && !contact.id){
         this.$router.push(this.localePath(pathData.pages.chat.path));
       }else{
 
@@ -834,6 +834,9 @@ export default {
         }
     }
   },
+  async asyncData(context) {
+    console.log("test");
+  },
   async mounted() {
     // This is very sensitive.
     // Since the date is not updated without refresh, we should manually refresh it
@@ -849,7 +852,7 @@ export default {
         this.chatSetting.enterPress = data.data.enterPress;
       }
     });
-
+    console.log("mounted");
     // Set contact
     let contact = this.$store.getters["chat/selectedContact"];
     if(contact){

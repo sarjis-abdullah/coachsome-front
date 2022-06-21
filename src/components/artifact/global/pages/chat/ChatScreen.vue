@@ -441,6 +441,7 @@ export default {
     },
   },
   created() {
+    this.$store.dispatch("chat/destroyMessages");
     console.log("screeen created");
   },
   methods: {

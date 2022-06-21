@@ -648,8 +648,8 @@
                   </template>
                 </v-list>
               </div>
-              <div class="content__body" v-if="$vuetify.breakpoint.mdAndUp">
-                <div class="message-list">
+              <div class="content__body" v-if="!$vuetify.breakpoint.smAndDown">
+                <div class="message-list" v-if="!$vuetify.breakpoint.smAndDown">
                   <ChatScreen />
                 </div>
                 <div :class="{ 'fixed-bottom': $vuetify.breakpoint.smAndDown }">
@@ -1093,8 +1093,13 @@ export default {
     }
   },
   beforeRouteLeave (to, from, next) {
-    this.$store.dispatch("chat/setSelectedContact", null);
-    next();
+    console.log(to.fullPath);
+    if(to.fullPath == "/chat-screen"){
+      next();
+    }else{
+      this.$store.dispatch("chat/setSelectedContact", null);
+      next();
+    }
   },
   created(){
     if(this.$route.fullPath != pathData.pages.chat.path && this.$vuetify.breakpoint.smAndDown){
