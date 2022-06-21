@@ -807,7 +807,7 @@ import { endpoint } from "../api";
 import { pathData, contactData } from "@/data";
 import { messageData } from "@/data";
 import UploadAttachment from '@/components/artifact/global/pages/chat/UploadAttachment'
-
+import {getMessaging, getToken} from "@/plugins/firebase"
 export default {
   layout: "chat",
   head() {
@@ -1093,6 +1093,7 @@ export default {
     }
   },
   created(){
+    this.handleFirebase()
     if(this.$route.fullPath != pathData.pages.chat.path && this.$vuetify.breakpoint.smAndDown){
       this.$router.replace(this.localePath(pathData.pages.chat.path));
     }
@@ -1630,6 +1631,22 @@ export default {
       const query = {}
       this.$router.push({query})
       this.createGroupDialog.value = false;
+    },
+    handleFirebase(){
+      if (process.client) {
+        const messaging = getMessaging();
+        getToken(messaging, { vapidKey: 'BCNk4KVRK5Z8_wGbQy0B_9pLVvGmJlf1Qx6N_odSpRUMj_f9_juZdNVqzCDzWcfM_Z-n4iQ_GMMiE8mXBmimQUQ' })
+        .then((currentToken) => {
+          if (currentToken) {
+            console.log(currentToken, "currentToken");
+            // Send the token to your server and update the UI if necessary
+          } else {
+            console.log('No registration token available. Request permission to generate one.');
+          }
+        }).catch((err) => {
+          console.log('An error occurred while retrieving token. ', err);
+        });
+      }
     }
   }
 };

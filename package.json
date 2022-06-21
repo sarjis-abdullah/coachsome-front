@@ -24,6 +24,7 @@
     "currency.js": "^2.0.3",
     "dawa-autocomplete2": "^1.0.2",
     "dragselect": "^2.1.1",
+    "firebase": "^9.8.3",
     "mixpanel-browser": "^2.41.0",
     "moment": "^2.29.1",
     "nuxt": "^2.15.3",
