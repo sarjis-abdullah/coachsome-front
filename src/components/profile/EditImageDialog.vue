@@ -314,6 +314,9 @@ export default {
       return this.file ? this.file.name.split(".").pop() : "";
     }
   },
+  created(){
+    this.getImages();
+  },
   methods: {
     async handleProfileImageDelete() {
       try {
