@@ -1226,26 +1226,26 @@
         </div>
       </span>
 
-    <v-row >
-      <v-col cols="12" >
-        <template v-if="profilePictureDialog">
-          <div v-if="$vuetify.breakpoint.mdAndUp">
-            <v-dialog color="#f7fafc" v-model="profilePictureDialog" max-width="1300px" persistent>
+      <v-row >
+        <v-col cols="12" >
+          <template v-if="profilePictureDialog">
+            <div v-if="$vuetify.breakpoint.mdAndUp">
+              <v-dialog color="#f7fafc" v-model="profilePictureDialog" max-width="1300px" persistent>
+                <EditImageDialog
+                  @hide="handleCloseProfilePicture"
+                  @uploaded="handleCloseProfilePicture"
+                />
+              </v-dialog>
+            </div>
+            <div v-else>
               <EditImageDialog
-                @hide="handleCloseProfilePicture"
-                @uploaded="handleCloseProfilePicture"
-              />
-            </v-dialog>
-          </div>
-          <div v-else>
-            <EditImageDialog
-                @hide="handleCloseProfilePicture"
-                @uploaded="handleCloseProfilePicture"
-              />
-          </div>
-        </template>
-      </v-col>
-    </v-row>
+                  @hide="handleCloseProfilePicture"
+                  @uploaded="handleCloseProfilePicture"
+                />
+            </div>
+          </template>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -1377,7 +1377,21 @@ export default {
     },
     "profilePicture.file": function(val) {
       this.profilePicture.img = URL.createObjectURL(val);
-    }
+    },
+    '$route': {
+      immediate: true,
+      deep: true,
+      handler(newValue, oldValue) {
+        if (this.$route?.query?.profilePictureDialog) {
+          this.profilePictureDialog = true
+        }else{
+          this.profilePictureDialog = false;
+        }
+      }
+    },
+    profilePictureDialog: function(val) {
+      // console.log(val);
+    },
   },
   created() {
     this.langCode = this.$i18n.locale;
