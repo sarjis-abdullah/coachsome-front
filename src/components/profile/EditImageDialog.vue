@@ -1,7 +1,7 @@
 <template>
   <div class="edit-image-dialog">
     <v-dialog v-model="dialog" max-width="1300px" scrollable persistent>
-      <v-card class="edit-image-dialog__wrapper">
+      <v-card class="edit-image-dialog__wrapper" height="400px!important">
         <v-card-title class="title">
           <div class="subtitle">
             {{ $t("profile_edit_image_title_profile_image") }}
@@ -393,6 +393,8 @@ export default {
         this.cropped.landscape = values[2];
         this.cropped.portrait = values[3];
       });
+
+      this.handleSaveBtnClick();
     },
     handleCloseBtnClick() {
       this.$emit("hide");
@@ -437,7 +439,7 @@ export default {
         };
         reader.readAsDataURL(file);
       } else {
-        alert("Sorry, FileReader API not supported");
+        this.$toast.error("Sorry, FileReader API not supported");
       }
     }
   }

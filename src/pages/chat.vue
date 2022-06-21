@@ -1092,6 +1092,10 @@ export default {
       }
     }
   },
+  beforeRouteLeave (to, from, next) {
+    this.$store.dispatch("chat/setSelectedContact", null);
+    next();
+  },
   created(){
     if(this.$route.fullPath != pathData.pages.chat.path && this.$vuetify.breakpoint.smAndDown){
       this.$router.replace(this.localePath(pathData.pages.chat.path));
