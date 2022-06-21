@@ -1232,6 +1232,7 @@
             <div v-if="$vuetify.breakpoint.mdAndUp">
               <v-dialog color="#f7fafc" v-model="profilePictureDialog" max-width="1300px" persistent>
                 <EditImageDialog
+                  :show="true"
                   @hide="handleCloseProfilePicture"
                   @uploaded="handleCloseProfilePicture"
                 />
@@ -1239,6 +1240,7 @@
             </div>
             <div v-else>
               <EditImageDialog
+                  :show="true"
                   @hide="handleCloseProfilePicture"
                   @uploaded="handleCloseProfilePicture"
                 />
