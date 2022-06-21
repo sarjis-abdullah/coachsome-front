@@ -670,9 +670,9 @@
         <div class="d-md-none" v-if="!profilePictureDialog">
           <!-- Avatar for mobile -->
           <v-row class="mt-5">
-            <v-col cols="12" class="d-flex flex-column justify-center align-center" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
+            <v-col cols="12" class="d-flex flex-column justify-center align-center 'py-0" >
               <v-row>
-                <v-col class="pl-0" cols="12" :class="{'pb-0' : $vuetify.breakpoint.smAndDown}">
+                <v-col class="pl-0 pb-0" cols="12" >
                   <div style="width: 150px;" class="text-center">
                     <div>
                       <v-badge 

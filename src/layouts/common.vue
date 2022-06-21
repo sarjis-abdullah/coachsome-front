@@ -5,7 +5,7 @@
       <client-only>
         <GlobalHeader />
       </client-only>
-      <nuxt />
+      <nuxt keep-alive />
       <BottomNavigation v-if="$vuetify.breakpoint.smAndDown" />
     </v-main>
   </v-app>
