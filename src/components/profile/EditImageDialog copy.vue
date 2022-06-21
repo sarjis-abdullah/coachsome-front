@@ -1,32 +1,22 @@
 <template>
   <div class="edit-image-dialog">
-      <v-card class="edit-image-dialog__wrapper body-bg" elevation="0" >
-        <v-card-title class="d-none d-md-block">
-          <v-row>
-              <v-col cols="12" class="py-0 px-0">
-              <v-btn
-                  color="#49556A"
-                  icon
-                  large
-                  @click="handleCloseBtnClick"
-                  class="exercise__close-button"
-              >
-                  <v-icon>mdi-close</v-icon>
-              </v-btn>
-              </v-col>
-              <v-col cols="12" class="pt-0">
-              <span class="subtitle">{{$t("profile_edit_image_title_profile_image")}}</span>
-              </v-col>
-          </v-row>
+    <v-dialog v-model="dialog" max-width="1300px" scrollable persistent>
+      <v-card class="edit-image-dialog__wrapper" height="400px!important">
+        <v-card-title class="title">
+          <div class="subtitle">
+            {{ $t("profile_edit_image_title_profile_image") }}
+          </div>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="handleCloseBtnClick">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-card-title>
-
-
-        <v-divider class="d-none d-md-block"></v-divider>
+        <v-divider></v-divider>
 
         <v-card-text class="pt-5">
           <v-row>
             <v-col v-show="isOriginalCropperShowing" cols="12" md="3" sm="12">
-              <v-card class="mx-auto body-bg" elevation="0" tile>
+              <v-card class="mx-auto" elevation="0" tile>
                 <div class="subtitle">
                   {{ $t("profile_edit_image_title_original_image") }}
                 </div>
@@ -161,56 +151,18 @@
                 class="crop-placeholder"
               />
             </v-col>
-            <v-col cols="12">
-                <v-footer class="px-7 pb-5 d-md-none" color="#f7fafc" inset app bottom fixed > 
-                  <v-row>
-                      <v-col cols="12" >
-                        <v-btn
-                          v-if="isShowingCroppedBtn"
-                          :loading="isLoadingCroppedBtn"
-                          color="success"
-                          depressed
-                          :disabled="imgSrc == null"
-                          tile
-                          @click="handleCroppedBtnClick"
-                          style="width: 200px; border-radius: 5px"
-                          :block="$vuetify.breakpoint.smAndDown"
-                        >
-                          {{ $t("crop") }}
-                        </v-btn>
-                        <v-btn
-                          dark
-                          v-if="isShowingSaveBtn"
-                          :loading="isLoadingSaveBtn"
-                          color="primary-light-1"
-                          depressed
-                          tile
-                          @click="handleSaveBtnClick"
-                          style="width: 200px; border-radius: 5px"
-                          :block="$vuetify.breakpoint.smAndDown"
-                        >
-                          {{ $t("profile_edit_image_btn_label_save") }}
-                        </v-btn>
-                      </v-col>
-                  </v-row>
-                </v-footer>
-            </v-col>
           </v-row>
-          
         </v-card-text>
         <v-divider></v-divider>
 
-        <v-card-actions class="px-5 d-none d-md-block">
+        <v-card-actions>
           <v-btn
             v-if="isShowingCroppedBtn"
             :loading="isLoadingCroppedBtn"
             color="success"
             depressed
-            :disabled="imgSrc == null"
             tile
             @click="handleCroppedBtnClick"
-            style="width: 200px; border-radius: 5px"
-            :block="$vuetify.breakpoint.smAndDown"
           >
             {{ $t("crop") }}
           </v-btn>
@@ -222,14 +174,13 @@
             depressed
             tile
             @click="handleSaveBtnClick"
-            style="width: 200px; border-radius: 5px"
-            :block="$vuetify.breakpoint.smAndDown"
           >
             {{ $t("profile_edit_image_btn_label_save") }}
           </v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -496,24 +447,12 @@ export default {
 <style lang="scss">
 .edit-image-dialog {
   &__wrapper {
-    height: auto;
-    .subtitle{
-      font-family: $font-family!important;
-      font-style: normal !important;
-      font-weight: 600 !important;
-      font-size: 16px !important;
-      line-height: 24px !important;
-      padding-bottom: 5px!important;
-      display: flex;
-      align-items: center;
-      text-transform: capitalize !important;
-      color: #49556A !important;
-    }
+    height: 550px!important;
     .dropZone {
       width: 100%;
       height: 200px;
       position: relative;
-      border: 2px dashed #becce1;
+      border: 2px dashed #eee;
       &-info {
         color: #a8a8a8;
         position: absolute;
@@ -554,7 +493,7 @@ export default {
     }
 
     .crop-placeholder {
-      width: 100%;
+      width: 200px;
       height: 200px;
       background: #ccc;
     }

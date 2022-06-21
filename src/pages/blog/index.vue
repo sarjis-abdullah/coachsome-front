@@ -1,5 +1,5 @@
 <template>
-  <div class="blog-page">
+  <v-container fluid class="blog-page">
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('blog_feature_title')">
       <template v-slot:goBack>
         <v-btn
@@ -138,7 +138,7 @@
         </v-col>
       </v-row>
     </v-container>
-  </div>
+  </v-container>
 </template>
 
 <script>

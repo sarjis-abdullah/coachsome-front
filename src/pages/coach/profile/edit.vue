@@ -1,655 +1,300 @@
 <template>
   <div class="coach-edit-profile-page">
     <v-container fluid >
-      <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_profile_menu')">
+      <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t(profilePictureDialog ? 'profile_edit_image_title_profile_image' : 'pwa_profile_menu')">
         <template v-slot:goBack>
           <v-btn
             icon
             @click="handleBackBtnClick"
+            v-if="!profilePictureDialog"
+          >
+            <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+          </v-btn>
+          <v-btn
+            icon
+            @click="handleCloseProfilePicture"
+            v-else
           >
             <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
           </v-btn>
         </template>
         <template v-slot:action>
-          <router-link class="common-top-save-button" to="" @click.native="saveProfile()">{{$t("btn_label_txt_save")}}</router-link>
+          <router-link v-if="!profilePictureDialog" class="common-top-save-button" to="" @click.native="saveProfile()">{{$t("btn_label_txt_save")}}</router-link>
+          <span v-else></span>
         </template>
       </mobile-top-nav>
       <span class="page-container view-profile__wrapper" :class="{'px-2' : $vuetify.breakpoint.smAndDown}">
-        <v-row class="d-none d-md-block">
-          <v-col cols="12" class="pb-0">
-            <div class="page-title">{{ $t("profile") }}</div>
-          </v-col>
-          <v-col cols="12">
-            <div class="line"></div>
-          </v-col>
-        </v-row>
-        
-        <!-- Avatar for mobile -->
-        <v-row v-if="$vuetify.breakpoint.smAndDown">
-          <v-col cols="12" class="d-flex flex-column justify-center align-center" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
-            <v-row>
-              <v-col class="pl-0" cols="12" :class="{'pb-0' : $vuetify.breakpoint.smAndDown}">
-                <div style="width: 150px;" class="text-center">
-                  <div>
-                    <v-badge 
-                      bottom
-                      avatar
-                      color="rgb(0 0 0 / 0%) !important"
-                      offset-x="100"
-                      offset-y="40" 
-                      style="width: 100%; height: 150px;"
-                      @click.native="editImageDialog.show = true"
-                    >
-                      <template v-slot:badge>
-                        <!-- <v-icon size="25" >mdi-pencil-outline</v-icon> -->
-                        <p class="edit-profile">Change</p>
-                      </template>
 
-                      <v-avatar
-                        color="teal"
-                        v-if="!userProfileImage"
-                        style="width: 100%; height: 150px;"
-                        @click.stop="editImageDialog.show = true"
-                      >
+
+        <!--------------- Desktop View ---------------->
+
+        <div class="d-none d-md-block">
+          <v-row>
+            <v-col cols="12" class="pb-0">
+              <div class="page-title">{{ $t("profile") }}</div>
+            </v-col>
+            <v-col cols="12">
+              <div class="line"></div>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="4">
+              <div class="default--label pb-2">
+                {{ $t("profile_picture_title") }}
+                <span class="required">*</span>
+              </div>
+              <div class="section-description">
+                {{ $t("profile_picture_desc") }}
+              </div>
+            </v-col>
+            <v-col cols="12" md="8">
+              <v-col cols="12" md="12">
+                <v-row>
+                  <v-col class="pl-0" cols="12" md="3">
+                    <div style="width: 150px;" class="text-center">
+                      <div>
+                        <v-avatar
+                          color="teal"
+                          v-if="!userProfileImage"
+                          tile
+                          style="width: 100%; height: 150px;"
+                        >
                         <span class="white--text headline" v-if="initialImageContent != ''">{{ initialImageContent }}</span>
                         <v-img v-else aspect-ratio="1" :src="require('@/assets/images/profile-default.jpg')" alt="Avatar"></v-img>
-                      </v-avatar>
-
-                      <v-avatar
-                        style="width: 100%; height: 150px;"
-                        color="primary"
-                        v-if="userProfileImage"
-                        @click.stop="editImageDialog.show = true"
-                      >
-                        <img :src="userProfileImage" alt="Profile Image" />
-                      </v-avatar>
-
-                    </v-badge>
-                    
-                  </div>
+                        </v-avatar>
+                        <v-avatar
+                          style="width: 100%; height: 150px;"
+                          color="primary"
+                          v-if="userProfileImage"
+                          tile
+                        >
+                          <img :src="userProfileImage" alt="Profile Image" />
+                        </v-avatar>
+                      </div>
+                      <div>
+                        <v-btn
+                          class="px-0"
+                          color="primary-light-1"
+                          dark
+                          tile
+                          block
+                          depressed
+                          @click.stop="openProfilePictureDialog"
+                        >
+                          {{ $t("profile_button_label_change_image") }}
+                        </v-btn>
+                      </div>
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-col>
+          </v-row>
+          <v-row class="mt-10">
+            <v-col cols="12" md="4">
+              <div class="default--label pb-2">
+                {{ $t("profile_name") }}
+                <span class="required">*</span>
+              </div>
+              <div class="section-description" >{{ $t("profile_name_desc") }}</div>
+            </v-col>
+            <v-col cols="12" md="4">
+              <v-text-field
+                v-model="profileData.profile_name"
+                outlined
+                dense
+                class="default-text-field"
+                color="#9FAEC2"
+                background-color="white"
+                counter="35"
+                maxlength="35"
+                :label="$t('profile_name_hint')"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="12">
+                <div class="default--label pb-2">
+                  {{ $t("profile_personalized_url") }}
+                </div>
+                <div class="section-description">
+                  {{ $t("personalized_url_description") }}
                 </div>
               </v-col>
-            </v-row>
-            <v-row :show="editImageDialog.show">
-              <v-col cols="12" >
-                <EditImageDialog
-                  :show="editImageDialog.show"
-                  @hide="editImageDialog.show = false"
-                  @uploaded="editImageDialog.show = false"
-                />
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-
-        <v-row v-else>
-          <v-col cols="12" md="4">
-            <div class="default--label pb-2">
-              {{ $t("profile_picture_title") }}
-              <span class="required">*</span>
-            </div>
-            <div class="section-description">
-              {{ $t("profile_picture_desc") }}
-            </div>
-          </v-col>
-          <v-col cols="12" md="8">
-            <v-col cols="12" md="12">
+            <v-col cols="12" md="8">
+              <label for class="input-social-label pb-2">
+                {{ $t("profile_link_label") }}
+              </label>
+              <v-text-field
+                v-model="personalizedUrl"
+                @click="dialog.personalize.show = true"
+                outlined
+                dense
+                class="default-text-field"
+                color="#9FAEC2"
+                background-color="white"
+                readonly
+                :label="origin + '/user_name'"
+                :class="['mb-0']"
+              ></v-text-field>
+              <v-dialog
+                v-model="dialog.personalize.show"
+                persistent
+                max-width="600px"
+              >
+                <v-card>
+                  <v-card-title>
+                    <span class="title">{{ $t("profile_personalized_url") }}</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12">
+                          <v-form
+                            ref="personalizeForm"
+                            v-model="personalizeForm.valid"
+                            lazy-validation
+                          >
+                            <v-text-field
+                              solo
+                              :prefix="origin + '/'"
+                              placeholder="yourname"
+                              :rules="personalizeForm.rules"
+                              v-model="dialog.personalize.userName"
+                            ></v-text-field>
+                          </v-form>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="primary-light-1"
+                      text
+                      @click="dialog.personalize.show = false"
+                      >{{ $t("text_close") }}</v-btn
+                    >
+                    <v-btn color="primary-light-1" text @click="updateUserName">
+                      {{ $t("profile_save_btn") }}
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-col>
+          </v-row>
+          <v-row >
+            <v-col cols="12">
+              <div class="line"></div>
+            </v-col>
+          </v-row>
+          <v-row >
+            <v-col cols="12" md="4">
+              <div class="default--label pb-2">
+                {{ $t("profile_about_you") }}
+                <span class="required">*</span>
+              </div>
+              <div class="section-description ">
+                {{ $t("profile_about_you_desc") }}
+              </div>
+            </v-col>
+            <v-col cols="12" md="4">
+              <TiptopEditor
+                :value="tipTopEditor.value"
+                @updated="handleTiptopUpdatedValue"
+              />
+            </v-col>
+          </v-row>
+          <v-row >
+            <v-col cols="12" md="4">
+              <div class="default--label pb-2">
+                {{ $t("profile_mobile_title") }}
+                <span class="required">*</span>
+              </div>
+              <div class="section-description">
+                {{ $t("profile_mobile_description") }}
+              </div>
+            </v-col>
+            <v-col cols="12" md="6">
               <v-row>
-                <v-col class="pl-0" cols="12" md="3">
-                  <div style="width: 150px;" class="text-center">
-                    <div>
-                      <v-avatar
-                        color="teal"
-                        v-if="!userProfileImage"
-                        tile
-                        style="width: 100%; height: 150px;"
-                      >
-                       <span class="white--text headline" v-if="initialImageContent != ''">{{ initialImageContent }}</span>
-                      <v-img v-else aspect-ratio="1" :src="require('@/assets/images/profile-default.jpg')" alt="Avatar"></v-img>
-                      </v-avatar>
-                      <v-avatar
-                        style="width: 100%; height: 150px;"
-                        color="primary"
-                        v-if="userProfileImage"
-                        tile
-                      >
-                        <img :src="userProfileImage" alt="Profile Image" />
-                      </v-avatar>
-                    </div>
-                    <div>
-                      <v-btn
-                        class="px-0"
-                        color="primary-light-1"
-                        dark
-                        tile
-                        block
-                        depressed
-                        @click.stop="editImageDialog.show = true"
-                      >
-                        {{ $t("profile_button_label_change_image") }}
-                      </v-btn>
-                    </div>
-                  </div>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12">
-                  <EditImageDialog
-                    :show="editImageDialog.show"
-                    @hide="editImageDialog.show = false"
-                    @uploaded="editImageDialog.show = false"
+                <v-col cols="12" md="8">
+                  <VuePhoneNumberInput
+                    :default-country-code="profileData.mobile_code"
+                    v-model="profileData.mobile_no"
+                    @update="updateMobileInfo"
+                    color="#9FAEC2"
+                    valid-color="#9FAEC2"
+                    class="vue-phone-number-input"
+                    :translations="{
+                          countrySelectorLabel: $t(
+                            'profile_section_mobile_label_country_code'
+                          ),
+                          phoneNumberLabel: $t(
+                            'profile_section_mobile_input_label_phone_number'
+                          ),
+                          example: $t('profile_section_mobile_input_label_example')
+                        }"
                   />
                 </v-col>
               </v-row>
             </v-col>
-          </v-col>
-        </v-row>
-
-        <v-row class="mt-10">
-          <v-col cols="12" md="4" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
-            <div class="default--label pb-2">
-              {{ $t("profile_name") }}
-              <span class="required">*</span>
-            </div>
-            <div class="section-description d-none d-md-block " >{{ $t("profile_name_desc") }}</div>
-          </v-col>
-          <v-col cols="12" md="4" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
-            <v-text-field
-              v-model="profileData.profile_name"
-              outlined
-              dense
-              class="default-text-field"
-              color="#9FAEC2"
-              background-color="white"
-              counter="35"
-              maxlength="35"
-              :label="$t('profile_name_hint')"
-            ></v-text-field>
-          </v-col>
-         <v-col cols="12" md="12" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
-            <div class="default--label pb-2">
-              {{ $t("profile_personalized_url") }}
-            </div>
-            <div class="section-description d-none d-md-block">
-              {{ $t("personalized_url_description") }}
-            </div>
-          </v-col>
-          <v-col cols="12" md="8" :class="{'pb-0' : $vuetify.breakpoint.smAndDown}">
-            <label for class="input-social-label d-none d-md-block pb-2">
-              {{ $t("profile_link_label") }}
-            </label>
-            <v-text-field
-              v-model="personalizedUrl"
-              @click="dialog.personalize.show = true"
-              outlined
-              dense
-              class="default-text-field"
-              color="#9FAEC2"
-              background-color="white"
-              readonly
-              :label="origin + '/user_name'"
-              :class="['mb-0']"
-            ></v-text-field>
-            <v-dialog
-              v-model="dialog.personalize.show"
-              persistent
-              max-width="600px"
-            >
-              <v-card>
-                <v-card-title>
-                  <span class="title">{{ $t("profile_personalized_url") }}</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12">
-                        <v-form
-                          ref="personalizeForm"
-                          v-model="personalizeForm.valid"
-                          lazy-validation
-                        >
-                          <v-text-field
-                            solo
-                            :prefix="origin + '/'"
-                            placeholder="yourname"
-                            :rules="personalizeForm.rules"
-                            v-model="dialog.personalize.userName"
-                          ></v-text-field>
-                        </v-form>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="primary-light-1"
-                    text
-                    @click="dialog.personalize.show = false"
-                    >{{ $t("text_close") }}</v-btn
-                  >
-                  <v-btn color="primary-light-1" text @click="updateUserName">
-                    {{ $t("profile_save_btn") }}
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-col>
-        </v-row>
-
-        <v-row class="d-none d-md-block">
-          <v-col cols="12">
-            <div class="line"></div>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col cols="12" md="4" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
-            <div class="default--label pb-2">
-              {{ $t("profile_about_you") }}
-              <span class="required">*</span>
-            </div>
-            <div class="section-description d-none d-md-block">
-              {{ $t("profile_about_you_desc") }}
-            </div>
-          </v-col>
-          <v-col cols="12" md="4" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
-            <TiptopEditor
-              :value="tipTopEditor.value"
-              @updated="handleTiptopUpdatedValue"
-            />
-          </v-col>
-        </v-row>
-
-        <v-row :class="{'py-10' : !$vuetify.breakpoint.smAndDown }">
-          <v-col cols="12" md="4">
-            <div class="default--label pb-2">
-              {{ $t("profile_mobile_title") }}
-              <span class="required">*</span>
-            </div>
-            <div class="section-description d-none d-md-block">
-              {{ $t("profile_mobile_description") }}
-            </div>
-          </v-col>
-          <v-col cols="12" md="6" :class="{'pt-0' : $vuetify.breakpoint.smAndDown}">
-            <v-row>
-              <v-col cols="12" md="8" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
-                <VuePhoneNumberInput
-                  :default-country-code="profileData.mobile_code"
-                  v-model="profileData.mobile_no"
-                  @update="updateMobileInfo"
-                  color="#9FAEC2"
-                  valid-color="#9FAEC2"
-                  class="vue-phone-number-input"
-                  :translations="{
-                        countrySelectorLabel: $t(
-                          'profile_section_mobile_label_country_code'
-                        ),
-                        phoneNumberLabel: $t(
-                          'profile_section_mobile_input_label_phone_number'
-                        ),
-                        example: $t('profile_section_mobile_input_label_example')
-                      }"
-                />
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-
-         <v-row class="d-none d-md-block">
-          <v-col cols="12">
-            <div class="line"></div>
-          </v-col>
-        </v-row>
-
-        <!-- Birthday Section -->
-        <v-row :class="{'py-10' : !$vuetify.breakpoint.smAndDown }">
-          <v-col cols="12" md="4" :class="{'pb-0' : $vuetify.breakpoint.smAndDown}">
-            <div class="default--label pb-2">
-              {{ $t("profile_birthday_title") }}
-            </div>
-            <div class="section-description d-none d-md-block">
-              {{ $t("profile_birthday_description") }}
-            </div>
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-menu
-              ref="menu"
-              v-model="menu"
-              :close-on-content-click="false"
-              :return-value.sync="date"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  :first-day-of-week="1"
-                  :locale="langCode"
-                  v-model="formttedDate"
-                  readonly
-                  outlined
-                  dense
-                  class="default-text-field"
-                  color="#9FAEC2"
-                  prepend-inner-icon="mdi-calendar"
-                  background-color="white"
-                  label="DD / MM / YYYY"
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker :first-day-of-week="1" v-model="date">
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="menu = false">
-                  {{ $t("btn_label_cancel") }}
-                </v-btn>
-                <v-btn text color="primary" @click="$refs.menu.save(date)">
-                  {{ $t("text_ok") }}
-                </v-btn>
-              </v-date-picker>
-            </v-menu>
-          </v-col>
-        </v-row>
-        <v-row class="d-none d-md-block">
-          <v-col cols="12">
-            <div class="line"></div>
-          </v-col>
-        </v-row>
-
-        <div v-if="$vuetify.breakpoint.smAndDown">
-          <!-- Language Section -->
+          </v-row>
           <v-row >
-            <v-col cols="12" class="section-with-button">
-              <div class="default--label">
-                {{ $t("profile_language_title") }}
-                <span class="required">*</span>
-              </div>
-              <div >
-                  <v-dialog v-model="dialog.language" scrollable max-width="600px">
-                    <template v-slot:activator="{ on }">
-                      <v-btn color="#9FAEC2"  v-on="on" text small class="add-more-button">
-                        {{ $t("profile_add_more_btn_label") }}
-                      </v-btn>
-                    </template>
-                    <v-card>
-                      <v-card-title class="default--label">
-                        {{ $t("profile_mod_title_select_lang") }}
-                        <v-spacer></v-spacer>
-                        <v-card-actions>
-                          <v-btn
-                            color="primary-light-1"
-                            text
-                            @click="dialog.language = false"
-                            >{{ $t("btn_label_ok") }}</v-btn
-                          >
-                        </v-card-actions>
-                      </v-card-title>
-                      <v-card-text class="pt-5">
-                        <v-autocomplete
-                          v-model="languagesSelected"
-                          :items="languages"
-                          clearable
-                          chips
-                          small-chips
-                          :label="$t('profile_mod_title_select_lang')"
-                          multiple
-                          :menu-props="{closeOnContentClick: true}"
-                          solo
-                          dense
-                        >
-                          <template
-                            v-slot:selection="{ attrs, item, select, selected }"
-                          >
-                            <v-chip
-                              v-bind="attrs"
-                              :input-value="selected"
-                              close
-                              small
-                              label
-                              @click="select"
-                              @click:close="removeLanguage(item)"
-                            >
-                              <strong>{{ item.text }}</strong
-                              >&nbsp;
-                            </v-chip>
-                          </template>
-                          <template v-slot:item="data">
-                            <v-list-item-content>
-                              <v-list-item-title>
-                                {{ data.item.text }}
-                              </v-list-item-title>
-                            </v-list-item-content>
-                          </template>
-                        </v-autocomplete>
-                      </v-card-text>
-                    </v-card>
-                  </v-dialog>
-              </div>
-            </v-col>
-            <v-col cols="12" class="py-0 my-0" >
-              <div class="d-flex flex-wrap chip-section">
-                <draggable v-if="languagesSelected.length" class="d-flex flex-wrap" v-model="languagesSelected">
-                  <v-chip
-                    v-for="lang in languagesSelected"
-                    :key="lang.id"
-                    class="mx-1 my-1"
-                    dark
-                    small
-                    close
-                    close-icon="clear"
-                    color="primary-light-2"
-                    @click:close="removeLanguage(lang)"
-                  >
-                    <v-icon left>
-                      mdi-drag
-                    </v-icon>
-                    {{ $t(lang.t_key) }}</v-chip
-                  >
-                </draggable>
-                <div v-else class="default--placeholder">
-                  {{$t("no_language")}}
-                </div>
-              </div>
+            <v-col cols="12">
+              <div class="line"></div>
             </v-col>
           </v-row>
-
-          <!-- Category Section -->
-          <v-row >
-            <v-col cols="12" class="section-with-button">
+          <!-- Birthday Section -->
+          <v-row class="py-10">
+            <v-col cols="12" md="4">
               <div class="default--label pb-2">
-                {{ $t("profile_category_title") }}
-                <span class="required">*</span>
+                {{ $t("profile_birthday_title") }}
               </div>
-              <div>
-                <v-dialog v-model="dialog.category" scrollable max-width="600px">
-                  <template v-slot:activator="{ on }">
-                    <v-btn color="#9FAEC2"  v-on="on" text small class="add-more-button">
-                      {{ $t("profile_add_more_btn_label") }}
-                    </v-btn>
-                  </template>
-                  <v-card>
-                    <v-card-title>
-                      {{ $t("profile_modal_heading_select_category") }}
-                      <v-spacer></v-spacer>
-                      <v-card-actions>
-                        <v-btn
-                          color="primary-light-1"
-                          text
-                          @click="dialog.category = false"
-                          >{{ $t("btn_label_ok") }}</v-btn
-                        >
-                      </v-card-actions>
-                    </v-card-title>
-                    <v-card-text class="pt-5">
-                      <v-autocomplete
-                        v-model="categoriesSelected"
-                        :items="categories"
-                        item-text="name"
-                        return-object
-                        chips
-                        clearable
-                        :label="$t('profile_modal_heading_select_category')"
-                        multiple
-                        :menu-props="{closeOnContentClick: true}"
-                        solo
-                        dense
-                        persistent-hint
-                        autocomplete="off"
-                      >
-                        <template
-                          v-slot:selection="{ attrs, item, select, selected }"
-                        >
-                          <v-chip
-                            v-bind="attrs"
-                            :input-value="selected"
-                            small
-                            label
-                            close
-                            @click="select"
-                            @click:close="removeCategory(item)"
-                          >
-                            <strong>{{ item.name }}</strong
-                            >&nbsp;
-                          </v-chip>
-                        </template>
-                        <template v-slot:item="data">
-                          <v-list-item-content>
-                            <v-list-item-title>
-                              {{ data.item.name }}
-                            </v-list-item-title>
-                          </v-list-item-content>
-                        </template>
-                      </v-autocomplete>
-                    </v-card-text>
-                  </v-card>
-                </v-dialog>
+              <div class="section-description">
+                {{ $t("profile_birthday_description") }}
               </div>
             </v-col>
-              <v-col cols="12" class="py-0 my-0" >
-              <div class="d-flex flex-wrap chip-section">
-                <draggable v-if="categoriesSelected.length" class="d-flex flex-wrap" v-model="categoriesSelected">
-                    <v-chip
-                      small
-                      dark
-                      close
-                      class="mx-1 my-1"
-                      v-for="category in categoriesSelected"
-                      :key="category.id"
-                      close-icon="clear"
-                      color="primary-light-2"
-                      @click:close="removeCategory(category)"
-                    >
-                      <v-icon left>
-                        mdi-drag
-                      </v-icon>
-                      {{ $t(category.t_key) }}</v-chip
-                    >
-                </draggable>
-                <div v-else class="default--placeholder">
-                  {{$t("no_category")}}
-                </div>
-              </div>
+            <v-col cols="12" md="3">
+              <v-menu
+                ref="menu"
+                v-model="menu"
+                :close-on-content-click="false"
+                :return-value.sync="date"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    :first-day-of-week="1"
+                    :locale="langCode"
+                    v-model="formttedDate"
+                    readonly
+                    outlined
+                    dense
+                    class="default-text-field"
+                    color="#9FAEC2"
+                    prepend-inner-icon="mdi-calendar"
+                    background-color="white"
+                    label="DD / MM / YYYY"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker :first-day-of-week="1" v-model="date">
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="menu = false">
+                    {{ $t("btn_label_cancel") }}
+                  </v-btn>
+                  <v-btn text color="primary" @click="$refs.menu.save(date)">
+                    {{ $t("text_ok") }}
+                  </v-btn>
+                </v-date-picker>
+              </v-menu>
             </v-col>
           </v-row>
-
-          <!-- Tags -->
           <v-row>
-            <v-col cols="12" class="section-with-button">
-              <div class="default--label">
-                {{ $t("profile_sport_tag_title") }}
-                <span class="required">*</span>
-              </div>
-              <div >
-                <v-dialog v-model="dialog.tag" scrollable max-width="600px">
-                  <template v-slot:activator="{ on }">
-                    <v-btn color="#9FAEC2"  v-on="on" text small class="add-more-button">
-                      {{ $t("profile_add_more_btn_label") }}
-                    </v-btn>
-                  </template>
-                  <v-card>
-                    <v-card-title>
-                      {{ $t("profile_modal_heading_select_tag") }}
-                      <v-spacer></v-spacer>
-                      <v-card-actions>
-                        <v-btn
-                          color="primary-light-1"
-                          text
-                          @click="dialog.tag = false"
-                          small
-                          >{{ $t("text_ok") }}</v-btn
-                        >
-                      </v-card-actions>
-                    </v-card-title>
-                    <v-card-text class="pt-5">
-                      <v-row justify="center" align="center">
-                        <v-col cols="12">
-                          <v-combobox
-                            v-model="tagData.tagsSelected"
-                            :items="tagData.tags"
-                            clearable
-                            :label="$t('profile_modal_heading_select_tag')"
-                            multiple
-                            solo
-                            append-icon
-                          >
-                            <template
-                              v-slot:selection="{ attrs, item, select, selected }"
-                            >
-                              <v-chip
-                                v-bind="attrs"
-                                :input-value="selected"
-                                close
-                                @click="select"
-                                @click:close="removeTag(item)"
-                                label
-                                small
-                              >
-                                <strong>{{ item }}</strong
-                                >&nbsp;
-                              </v-chip>
-                            </template>
-                          </v-combobox>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                </v-dialog>
-              </div>
-            </v-col>
-              <v-col cols="12" class="py-0 my-0" >
-              <div class="d-flex flex-wrap chip-section">
-                <draggable v-if="tagData.tagsSelected.length" class="d-flex flex-wrap" v-model="tagData.tagsSelected">
-                    <v-chip
-                      small
-                      dark
-                      close
-                      v-for="(item, i) in tagData.tagsSelected"
-                      :key="i"
-                      class="mx-1 my-1"
-                      close-icon="clear"
-                      color="primary-light-2"
-                      @click:close="removeTag(item)"
-                    >
-                      <v-icon left>
-                        mdi-drag
-                      </v-icon>
-                      {{ item }}</v-chip
-                    >
-                </draggable>
-                <div v-else class="default--placeholder">
-                  {{$t("no_tag")}}
-                </div>
-              </div>
+            <v-col cols="12">
+              <div class="line"></div>
             </v-col>
           </v-row>
-          <v-row class="d-md-none pb-0 pt-5">
-          <v-col cols="12">
-            <div class="line"></div>
-          </v-col>
-        </v-row>
-        </div>
-
-        <div v-else>
           <!-- Language Section -->
           <v-row class="py-10">
             <v-col cols="12" md="4">
@@ -743,7 +388,11 @@
               </div>
             </v-col>
           </v-row>
-
+          <v-row >
+            <v-col cols="12">
+              <div class="line"></div>
+            </v-col>
+          </v-row>
           <!-- Category Section -->
           <v-row class="py-10">
             <v-col cols="12" md="4">
@@ -844,7 +493,6 @@
               </div>
             </v-col>
           </v-row>
-
           <!-- Tags -->
           <v-row>
             <v-col cols="12">
@@ -941,85 +589,663 @@
               </div>
             </v-col>
           </v-row>
+          <v-row >
+            <v-col cols="12">
+              <div class="line"></div>
+            </v-col>
+          </v-row>
+          <v-row class="pt -0 pb-5">
+            <v-col cols="12" md="4">
+              <div class="default--title pb-2">
+                {{ $t("profile_social_profile_title") }}
+              </div>
+              <div class="section-description">
+                {{ $t("profile_social_profile_description") }}
+              </div>
+            </v-col>
+            <v-col cols="12" md="8">
+              <label class="default--label pb-2">
+                {{ $t("profile_facebook") }}
+              </label>
+              <v-text-field
+                v-model="profileData.social_acc_fb_link"
+                outlined
+                dense
+                class="default-text-field"
+                background-color="white"
+                color="#9FAEC2"
+                :label="$t('link_facebook')"
+              ></v-text-field>
+              <label class="default--label pb-2">
+                {{ $t("profile_instagram") }}
+              </label>
+              <v-text-field
+                v-model="profileData.social_acc_instagram_link"
+                outlined
+                dense
+                class="default-text-field"
+                background-color="white"
+                color="#9FAEC2"
+                :label="$t('link_instagram')"
+              ></v-text-field>
+              <label class="default--label pb-2">
+                {{ $t("profile_twitter") }}
+              </label>
+              <v-text-field
+                v-model="profileData.social_acc_twitter_link"
+                outlined
+                dense
+                class="default-text-field"
+                background-color="white"
+                color="#9FAEC2"
+                :label="$t('link_twitter')"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" class="mx-0 px-0">
+              <client-back-footer>
+                <template v-slot:left>
+                  <v-btn
+                    class="ml-5"
+                    color="primary-light-1"
+                    dark
+                    small
+                    @click="saveProfile()"
+                    >{{ $t("profile_save_btn") }}</v-btn
+                  >
+                </template>
+                <template v-slot:right>
+                  <span class="d-sm-flex d-xs-flex d-lg-none justify-end mr-5">
+                    <drawer-toggle-btn />
+                  </span>
+                </template>
+              </client-back-footer>
+            </v-col>
+          </v-row>
         </div>
 
-        <v-row class="d-none d-md-block">
-          <v-col cols="12">
-            <div class="line"></div>
-          </v-col>
-        </v-row>
+        <!-- ------------ Mobile View ------------------>
 
-        <v-row class="pt -0 pb-5">
-          <v-col cols="12" md="4">
-            <div class="default--title pb-2">
-              {{ $t("profile_social_profile_title") }}
-            </div>
-            <div class="section-description d-none d-md-block">
-              {{ $t("profile_social_profile_description") }}
-            </div>
-          </v-col>
-          <v-col cols="12" md="8">
-            <label class="default--label pb-2">
-              {{ $t("profile_facebook") }}
-            </label>
-            <v-text-field
-              v-model="profileData.social_acc_fb_link"
-              outlined
-              dense
-              class="default-text-field"
-              background-color="white"
-              color="#9FAEC2"
-              :label="$t('link_facebook')"
-            ></v-text-field>
-            <label class="default--label pb-2">
-              {{ $t("profile_instagram") }}
-            </label>
-            <v-text-field
-              v-model="profileData.social_acc_instagram_link"
-              outlined
-              dense
-              class="default-text-field"
-              background-color="white"
-              color="#9FAEC2"
-              :label="$t('link_instagram')"
-            ></v-text-field>
-            <label class="default--label pb-2">
-              {{ $t("profile_twitter") }}
-            </label>
-            <v-text-field
-              v-model="profileData.social_acc_twitter_link"
-              outlined
-              dense
-              class="default-text-field"
-              background-color="white"
-              color="#9FAEC2"
-              :label="$t('link_twitter')"
-            ></v-text-field>
-          </v-col>
-        </v-row>
+        <div class="d-md-none" v-if="!profilePictureDialog">
+          <!-- Avatar for mobile -->
+          <v-row class="mt-5">
+            <v-col cols="12" class="d-flex flex-column justify-center align-center" :class="{'py-0' : $vuetify.breakpoint.smAndDown}">
+              <v-row>
+                <v-col class="pl-0" cols="12" :class="{'pb-0' : $vuetify.breakpoint.smAndDown}">
+                  <div style="width: 150px;" class="text-center">
+                    <div>
+                      <v-badge 
+                        bottom
+                        avatar
+                        color="rgb(0 0 0 / 0%) !important"
+                        offset-x="100"
+                        offset-y="40" 
+                        style="width: 100%; height: 150px;"
+                        @click.native="openProfilePictureDialog"
+                      >
+                        <template v-slot:badge>
+                          <!-- <v-icon size="25" >mdi-pencil-outline</v-icon> -->
+                          <p class="edit-profile">Change</p>
+                        </template>
 
-        <v-row class="d-none d-md-block">
-          <v-col cols="12" class="mx-0 px-0">
-            <client-back-footer>
-              <template v-slot:left>
-                <v-btn
-                  class="ml-5"
-                  color="primary-light-1"
-                  dark
-                  small
-                  @click="saveProfile()"
-                  >{{ $t("profile_save_btn") }}</v-btn
-                >
-              </template>
-              <template v-slot:right>
-                <span class="d-sm-flex d-xs-flex d-lg-none justify-end mr-5">
-                  <drawer-toggle-btn />
-                </span>
-              </template>
-            </client-back-footer>
-          </v-col>
-        </v-row>
+                        <v-avatar
+                          color="teal"
+                          v-if="!userProfileImage"
+                          style="width: 100%; height: 150px;"
+                          @click.stop="openProfilePictureDialog"
+                        >
+                          <span class="white--text headline" v-if="initialImageContent != ''">{{ initialImageContent }}</span>
+                          <v-img v-else aspect-ratio="1" :src="require('@/assets/images/profile-default.jpg')" alt="Avatar"></v-img>
+                        </v-avatar>
+
+                        <v-avatar
+                          style="width: 100%; height: 150px;"
+                          color="primary"
+                          v-if="userProfileImage"
+                          @click.stop="openProfilePictureDialog"
+                        >
+                          <img :src="userProfileImage" alt="Profile Image" />
+                        </v-avatar>
+
+                      </v-badge>
+                      
+                    </div>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+          <v-row class="mt-10">
+            <v-col cols="12" md="4" class="py-0">
+              <div class="default--label pb-2">
+                {{ $t("profile_name") }}
+                <span class="required">*</span>
+              </div>
+            </v-col>
+            <v-col cols="12" md="4" class="py-0">
+              <v-text-field
+                v-model="profileData.profile_name"
+                outlined
+                dense
+                class="default-text-field"
+                color="#9FAEC2"
+                background-color="white"
+                counter="35"
+                maxlength="35"
+                :label="$t('profile_name_hint')"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="12" class="py-0">
+                <div class="default--label py-1">
+                  {{ $t("profile_personalized_url") }}
+                </div>
+              </v-col>
+            <v-col cols="12" md="8" class="pb-0">
+              <v-text-field
+                v-model="personalizedUrl"
+                @click="dialog.personalize.show = true"
+                outlined
+                dense
+                class="default-text-field"
+                color="#9FAEC2"
+                background-color="white"
+                readonly
+                :label="origin + '/user_name'"
+                :class="['mb-0']"
+              ></v-text-field>
+              <v-dialog
+                v-model="dialog.personalize.show"
+                persistent
+                max-width="600px"
+              >
+                <v-card>
+                  <v-card-title>
+                    <span class="title">{{ $t("profile_personalized_url") }}</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12">
+                          <v-form
+                            ref="personalizeForm"
+                            v-model="personalizeForm.valid"
+                            lazy-validation
+                          >
+                            <v-text-field
+                              solo
+                              :prefix="origin + '/'"
+                              placeholder="yourname"
+                              :rules="personalizeForm.rules"
+                              v-model="dialog.personalize.userName"
+                            ></v-text-field>
+                          </v-form>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="primary-light-1"
+                      text
+                      @click="dialog.personalize.show = false"
+                      >{{ $t("text_close") }}</v-btn
+                    >
+                    <v-btn color="primary-light-1" text @click="updateUserName">
+                      {{ $t("profile_save_btn") }}
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-col>
+          </v-row>
+          <v-row class="pt-2">
+            <v-col cols="12" md="4" class="py-0">
+              <div class="default--label pb-2">
+                {{ $t("profile_about_you") }}
+                <span class="required">*</span>
+              </div>
+            </v-col>
+            <v-col cols="12" md="4" class="py-0">
+              <TiptopEditor
+                :value="tipTopEditor.value"
+                @updated="handleTiptopUpdatedValue"
+              />
+            </v-col>
+          </v-row>
+          <v-row class="pb-2 pt-0">
+            <v-col cols="12" md="4">
+              <div class="default--label pb-2">
+                {{ $t("profile_mobile_title") }}
+                <span class="required">*</span>
+              </div>
+            </v-col>
+            <v-col cols="12" md="6" class="pt-0">
+              <v-row>
+                <v-col cols="12" md="8" class="py-0">
+                  <VuePhoneNumberInput
+                    :default-country-code="profileData.mobile_code"
+                    v-model="profileData.mobile_no"
+                    @update="updateMobileInfo"
+                    color="#9FAEC2"
+                    valid-color="#9FAEC2"
+                    class="vue-phone-number-input"
+                    :translations="{
+                          countrySelectorLabel: $t(
+                            'profile_section_mobile_label_country_code'
+                          ),
+                          phoneNumberLabel: $t(
+                            'profile_section_mobile_input_label_phone_number'
+                          ),
+                          example: $t('profile_section_mobile_input_label_example')
+                        }"
+                  />
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+          <!-- Birthday Section -->
+          <v-row>
+            <v-col cols="12" md="4" class="pb-0">
+              <div class="default--label pb-2">
+                {{ $t("profile_birthday_title") }}
+              </div>
+            </v-col>
+            <v-col cols="12" md="3">
+              <v-menu
+                ref="menu"
+                v-model="menu"
+                :close-on-content-click="false"
+                :return-value.sync="date"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    :first-day-of-week="1"
+                    :locale="langCode"
+                    v-model="formttedDate"
+                    readonly
+                    outlined
+                    dense
+                    class="default-text-field"
+                    color="#9FAEC2"
+                    prepend-inner-icon="mdi-calendar"
+                    background-color="white"
+                    label="DD / MM / YYYY"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker :first-day-of-week="1" v-model="date">
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="menu = false">
+                    {{ $t("btn_label_cancel") }}
+                  </v-btn>
+                  <v-btn text color="primary" @click="$refs.menu.save(date)">
+                    {{ $t("text_ok") }}
+                  </v-btn>
+                </v-date-picker>
+              </v-menu>
+            </v-col>
+          </v-row>
+          <!-- Language Section -->
+          <v-row >
+            <v-col cols="12" class="section-with-button">
+              <div class="default--label">
+                {{ $t("profile_language_title") }}
+                <span class="required">*</span>
+              </div>
+              <div >
+                  <v-dialog v-model="dialog.language" scrollable max-width="600px">
+                    <template v-slot:activator="{ on }">
+                      <v-btn color="#9FAEC2"  v-on="on" text small class="add-more-button">
+                        {{ $t("profile_add_more_btn_label") }}
+                      </v-btn>
+                    </template>
+                    <v-card>
+                      <v-card-title class="default--label">
+                        {{ $t("profile_mod_title_select_lang") }}
+                        <v-spacer></v-spacer>
+                        <v-card-actions>
+                          <v-btn
+                            color="primary-light-1"
+                            text
+                            @click="dialog.language = false"
+                            >{{ $t("btn_label_ok") }}</v-btn
+                          >
+                        </v-card-actions>
+                      </v-card-title>
+                      <v-card-text class="pt-5">
+                        <v-autocomplete
+                          v-model="languagesSelected"
+                          :items="languages"
+                          clearable
+                          chips
+                          small-chips
+                          :label="$t('profile_mod_title_select_lang')"
+                          multiple
+                          :menu-props="{closeOnContentClick: true}"
+                          solo
+                          dense
+                        >
+                          <template
+                            v-slot:selection="{ attrs, item, select, selected }"
+                          >
+                            <v-chip
+                              v-bind="attrs"
+                              :input-value="selected"
+                              close
+                              small
+                              label
+                              @click="select"
+                              @click:close="removeLanguage(item)"
+                            >
+                              <strong>{{ item.text }}</strong
+                              >&nbsp;
+                            </v-chip>
+                          </template>
+                          <template v-slot:item="data">
+                            <v-list-item-content>
+                              <v-list-item-title>
+                                {{ data.item.text }}
+                              </v-list-item-title>
+                            </v-list-item-content>
+                          </template>
+                        </v-autocomplete>
+                      </v-card-text>
+                    </v-card>
+                  </v-dialog>
+              </div>
+            </v-col>
+            <v-col cols="12" class="py-0 my-0" >
+              <div class="d-flex flex-wrap chip-section">
+                <draggable v-if="languagesSelected.length" class="d-flex flex-wrap" v-model="languagesSelected">
+                  <v-chip
+                    v-for="lang in languagesSelected"
+                    :key="lang.id"
+                    class="mx-1 my-1"
+                    dark
+                    small
+                    close
+                    close-icon="clear"
+                    color="primary-light-2"
+                    @click:close="removeLanguage(lang)"
+                  >
+                    <v-icon left>
+                      mdi-drag
+                    </v-icon>
+                    {{ $t(lang.t_key) }}</v-chip
+                  >
+                </draggable>
+                <div v-else class="default--placeholder">
+                  {{$t("no_language")}}
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+          <!-- Category Section -->
+          <v-row >
+            <v-col cols="12" class="section-with-button">
+              <div class="default--label pb-2">
+                {{ $t("profile_category_title") }}
+                <span class="required">*</span>
+              </div>
+              <div>
+                <v-dialog v-model="dialog.category" scrollable max-width="600px">
+                  <template v-slot:activator="{ on }">
+                    <v-btn color="#9FAEC2"  v-on="on" text small class="add-more-button">
+                      {{ $t("profile_add_more_btn_label") }}
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-title>
+                      {{ $t("profile_modal_heading_select_category") }}
+                      <v-spacer></v-spacer>
+                      <v-card-actions>
+                        <v-btn
+                          color="primary-light-1"
+                          text
+                          @click="dialog.category = false"
+                          >{{ $t("btn_label_ok") }}</v-btn
+                        >
+                      </v-card-actions>
+                    </v-card-title>
+                    <v-card-text class="pt-5">
+                      <v-autocomplete
+                        v-model="categoriesSelected"
+                        :items="categories"
+                        item-text="name"
+                        return-object
+                        chips
+                        clearable
+                        :label="$t('profile_modal_heading_select_category')"
+                        multiple
+                        :menu-props="{closeOnContentClick: true}"
+                        solo
+                        dense
+                        persistent-hint
+                        autocomplete="off"
+                      >
+                        <template
+                          v-slot:selection="{ attrs, item, select, selected }"
+                        >
+                          <v-chip
+                            v-bind="attrs"
+                            :input-value="selected"
+                            small
+                            label
+                            close
+                            @click="select"
+                            @click:close="removeCategory(item)"
+                          >
+                            <strong>{{ item.name }}</strong
+                            >&nbsp;
+                          </v-chip>
+                        </template>
+                        <template v-slot:item="data">
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              {{ data.item.name }}
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </template>
+                      </v-autocomplete>
+                    </v-card-text>
+                  </v-card>
+                </v-dialog>
+              </div>
+            </v-col>
+              <v-col cols="12" class="py-0 my-0" >
+              <div class="d-flex flex-wrap chip-section">
+                <draggable v-if="categoriesSelected.length" class="d-flex flex-wrap" v-model="categoriesSelected">
+                    <v-chip
+                      small
+                      dark
+                      close
+                      class="mx-1 my-1"
+                      v-for="category in categoriesSelected"
+                      :key="category.id"
+                      close-icon="clear"
+                      color="primary-light-2"
+                      @click:close="removeCategory(category)"
+                    >
+                      <v-icon left>
+                        mdi-drag
+                      </v-icon>
+                      {{ $t(category.t_key) }}</v-chip
+                    >
+                </draggable>
+                <div v-else class="default--placeholder">
+                  {{$t("no_category")}}
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+          <!-- Tags -->
+          <v-row>
+            <v-col cols="12" class="section-with-button">
+              <div class="default--label">
+                {{ $t("profile_sport_tag_title") }}
+                <span class="required">*</span>
+              </div>
+              <div >
+                <v-dialog v-model="dialog.tag" scrollable max-width="600px">
+                  <template v-slot:activator="{ on }">
+                    <v-btn color="#9FAEC2"  v-on="on" text small class="add-more-button">
+                      {{ $t("profile_add_more_btn_label") }}
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-title>
+                      {{ $t("profile_modal_heading_select_tag") }}
+                      <v-spacer></v-spacer>
+                      <v-card-actions>
+                        <v-btn
+                          color="primary-light-1"
+                          text
+                          @click="dialog.tag = false"
+                          small
+                          >{{ $t("text_ok") }}</v-btn
+                        >
+                      </v-card-actions>
+                    </v-card-title>
+                    <v-card-text class="pt-5">
+                      <v-row justify="center" align="center">
+                        <v-col cols="12">
+                          <v-combobox
+                            v-model="tagData.tagsSelected"
+                            :items="tagData.tags"
+                            clearable
+                            :label="$t('profile_modal_heading_select_tag')"
+                            multiple
+                            solo
+                            append-icon
+                          >
+                            <template
+                              v-slot:selection="{ attrs, item, select, selected }"
+                            >
+                              <v-chip
+                                v-bind="attrs"
+                                :input-value="selected"
+                                close
+                                @click="select"
+                                @click:close="removeTag(item)"
+                                label
+                                small
+                              >
+                                <strong>{{ item }}</strong
+                                >&nbsp;
+                              </v-chip>
+                            </template>
+                          </v-combobox>
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                </v-dialog>
+              </div>
+            </v-col>
+              <v-col cols="12" class="py-0 my-0" >
+              <div class="d-flex flex-wrap chip-section">
+                <draggable v-if="tagData.tagsSelected.length" class="d-flex flex-wrap" v-model="tagData.tagsSelected">
+                    <v-chip
+                      small
+                      dark
+                      close
+                      v-for="(item, i) in tagData.tagsSelected"
+                      :key="i"
+                      class="mx-1 my-1"
+                      close-icon="clear"
+                      color="primary-light-2"
+                      @click:close="removeTag(item)"
+                    >
+                      <v-icon left>
+                        mdi-drag
+                      </v-icon>
+                      {{ item }}</v-chip
+                    >
+                </draggable>
+                <div v-else class="default--placeholder">
+                  {{$t("no_tag")}}
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+          <v-row class="d-md-none pb-0 pt-5">
+            <v-col cols="12">
+              <div class="line"></div>
+            </v-col>
+          </v-row>
+            <v-row class="pt -0 pb-5">
+            <v-col cols="12" md="4">
+              <div class="default--title pb-2">
+                {{ $t("profile_social_profile_title") }}
+              </div>
+            </v-col>
+            <v-col cols="12" md="8">
+              <label class="default--label pb-2">
+                {{ $t("profile_facebook") }}
+              </label>
+              <v-text-field
+                v-model="profileData.social_acc_fb_link"
+                outlined
+                dense
+                class="default-text-field"
+                background-color="white"
+                color="#9FAEC2"
+                :label="$t('link_facebook')"
+              ></v-text-field>
+              <label class="default--label pb-2">
+                {{ $t("profile_instagram") }}
+              </label>
+              <v-text-field
+                v-model="profileData.social_acc_instagram_link"
+                outlined
+                dense
+                class="default-text-field"
+                background-color="white"
+                color="#9FAEC2"
+                :label="$t('link_instagram')"
+              ></v-text-field>
+              <label class="default--label pb-2">
+                {{ $t("profile_twitter") }}
+              </label>
+              <v-text-field
+                v-model="profileData.social_acc_twitter_link"
+                outlined
+                dense
+                class="default-text-field"
+                background-color="white"
+                color="#9FAEC2"
+                :label="$t('link_twitter')"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </div>
       </span>
+
+    <v-row >
+      <v-col cols="12" >
+        <template v-if="profilePictureDialog">
+          <div v-if="$vuetify.breakpoint.mdAndUp">
+            <v-dialog color="#f7fafc" v-model="profilePictureDialog" max-width="1300px" persistent>
+              <EditImageDialog
+                @hide="handleCloseProfilePicture"
+                @uploaded="handleCloseProfilePicture"
+              />
+            </v-dialog>
+          </div>
+          <div v-else>
+            <EditImageDialog
+                @hide="handleCloseProfilePicture"
+                @uploaded="handleCloseProfilePicture"
+              />
+          </div>
+        </template>
+      </v-col>
+    </v-row>
     </v-container>
   </div>
 </template>
@@ -1060,6 +1286,7 @@ export default {
         show: false
       },
       langCode: "",
+      profilePictureDialog: false,
       profilePicture: {
         img: "",
         file: null,
@@ -1168,6 +1395,19 @@ export default {
     moment,
     handleTiptopUpdatedValue(value) {
       this.profileData.about_me = value;
+    },
+    openProfilePictureDialog(){
+      this.profilePictureDialog = true;
+      this.$router.push({query:{}});
+      const query = {
+        ...this.$route.query,
+        profilePictureDialog: true
+      }
+      this.$router.push({query})
+    },
+    handleCloseProfilePicture(){
+      this.profilePictureDialog = false;
+      this.$router.push({query:{}})
     },
     init() {
       // If any question found in local storage
