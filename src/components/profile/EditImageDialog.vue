@@ -380,7 +380,7 @@ export default {
               };
             },
             "image/jpeg",
-            0.2
+            0.02
           );
         }
       });
@@ -398,7 +398,7 @@ export default {
               };
             },
             "image/jpeg",
-            0.2
+            0.02
           );
         }
       });
@@ -415,7 +415,7 @@ export default {
               };
             },
             "image/jpeg",
-            0.2
+            0.02
           );
         }
       });
@@ -432,7 +432,7 @@ export default {
               };
             },
             "image/jpeg",
-            0.2
+            0.02
           );
         }
       });
@@ -440,6 +440,10 @@ export default {
       Promise.all([p1, p2, p3, p4]).then(values => {
         this.isLoadingCroppedBtn = false;
         this.isCropped = true;
+        console.log(values[0]);
+        console.log(values[1]);
+        console.log(values[2]);
+        console.log(values[3]);
         this.cropped.original = values[0];
         this.cropped.square = values[1];
         this.cropped.landscape = values[2];

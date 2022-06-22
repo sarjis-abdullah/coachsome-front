@@ -15,7 +15,7 @@
         </template>
       </mobile-top-nav>
       <span class="page-container gallery-page">
-              <v-row class="d-none d-md-block">
+      <v-row class="d-none d-md-block">
         <v-col cols="12" class="pb-0" >
           <div class="page-title">{{ $t("page_title_image_and_video") }}</div>
         </v-col>
