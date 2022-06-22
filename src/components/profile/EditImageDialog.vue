@@ -367,7 +367,8 @@ export default {
     },
     handleCroppedBtnClick() {
       this.isLoadingCroppedBtn = true;
-      let p1 = new Promise(resolve => {
+
+      // let p1 = new Promise(resolve => {
         const originalCropperResult = this.$refs.originalCropper.getResult();
         if (originalCropperResult.canvas) {
           originalCropperResult.canvas.toBlob(
@@ -376,16 +377,16 @@ export default {
               reader.readAsDataURL(blob);
               reader.onloadend = () => {
                 this.cropper.original.cropper = reader.result;
-                resolve(reader.result);
+                // this.cropped.original = reader.result;
               };
             },
             "image/jpeg",
-            0.02
+            0.0008
           );
         }
-      });
+      // });
 
-      let p2 = new Promise(resolve => {
+      // let p2 = new Promise(resolve => {
         const squareCropperResult = this.$refs.squareCropper.getResult();
         if (squareCropperResult.canvas) {
           squareCropperResult.canvas.toBlob(
@@ -394,15 +395,15 @@ export default {
               reader.readAsDataURL(blob);
               reader.onloadend = () => {
                 this.cropper.square.cropper = reader.result;
-                resolve(reader.result);
+                this.cropped.square = reader.result;
               };
             },
             "image/jpeg",
-            0.02
+            0.2
           );
         }
-      });
-      let p3 = new Promise(resolve => {
+      // });
+      // let p3 = new Promise(resolve => {
         const landscapeCropperResult = this.$refs.landscapeCropper.getResult();
         if (landscapeCropperResult.canvas) {
           landscapeCropperResult.canvas.toBlob(
@@ -411,15 +412,15 @@ export default {
               reader.readAsDataURL(blob);
               reader.onloadend = () => {
                 this.cropper.landscape.cropper = reader.result;
-                resolve(reader.result);
+                this.cropped.landscape = reader.result;
               };
             },
             "image/jpeg",
-            0.02
+            0.0008
           );
         }
-      });
-      let p4 = new Promise(resolve => {
+      // });
+      // let p4 = new Promise(resolve => {
         const portraitCropperResult = this.$refs.portraitCropper.getResult();
         if (portraitCropperResult.canvas) {
           portraitCropperResult.canvas.toBlob(
@@ -428,27 +429,30 @@ export default {
               reader.readAsDataURL(blob);
               reader.onloadend = () => {
                 this.cropper.portrait.cropper = reader.result;
-                resolve(reader.result);
+                this.cropped.portrait = reader.result;
               };
             },
             "image/jpeg",
-            0.02
+            0.0008
           );
         }
-      });
-
-      Promise.all([p1, p2, p3, p4]).then(values => {
         this.isLoadingCroppedBtn = false;
         this.isCropped = true;
-        console.log(values[0]);
-        console.log(values[1]);
-        console.log(values[2]);
-        console.log(values[3]);
-        this.cropped.original = values[0];
-        this.cropped.square = values[1];
-        this.cropped.landscape = values[2];
-        this.cropped.portrait = values[3];
-      });
+        console.log( this.cropped);
+      // });
+
+      // Promise.all([p1, p2, p3, p4]).then(values => {
+      //   this.isLoadingCroppedBtn = false;
+      //   this.isCropped = true;
+      //   console.log(values[0]);
+      //   console.log(values[1]);
+      //   console.log(values[2]);
+      //   console.log(values[3]);
+      //   this.cropped.original = values[0];
+      //   this.cropped.square = values[1];
+      //   this.cropped.landscape = values[2];
+      //   this.cropped.portrait = values[3];
+      // });
     },
     handleCloseBtnClick() {
       this.$emit("hide");

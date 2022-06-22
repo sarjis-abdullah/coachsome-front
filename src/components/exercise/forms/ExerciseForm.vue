@@ -550,7 +550,7 @@ export default ({
         this.uploadFiles();
         },
         handleImageUploadBtnClick() {
-        const imageCropperResult = this.$refs.imageCropper.getResult();
+            const imageCropperResult = this.$refs.imageCropper.getResult();
             if (imageCropperResult.canvas) {
                 imageCropperResult.canvas.toBlob(blob => {
                 let reader = new FileReader();
@@ -558,7 +558,7 @@ export default ({
                 reader.onloadend = () => {
                     this.uploadImage(reader.result);
                 };
-                }, "image/png", 0.2);
+                }, "image/jpeg", 0.2);
             }
         },
         uploadImage(croppedImage) {
