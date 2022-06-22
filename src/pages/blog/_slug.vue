@@ -44,7 +44,7 @@
                       {{ moment(post.published_date).locale(localeData).format("MMM Do YY") }}
                     </div>
                     <div class="post__subsubtitle pt-5">
-                      Written by -  {{ post.authorName }}
+                      Written by -  {{ post.author_name }}
                     </div>
                   </div>
                   <v-divider></v-divider>
@@ -102,16 +102,9 @@ export default {
   async asyncData({ params, app, $axios }) {
     let post = {};
     try {
-      const blogRes = await pageBuilderApi($axios).getBlogPost();
+      const blogRes = await $axios.get("/tikcms/blog/all/published/show");
       if (blogRes.data.blog) {
         post = blogRes.data.blog.find(item => item.slug_url == params.slug);
-        if (post) {
-          const userResponse = await $axios.get(`blog/author/${post.author}`);
-          if (userResponse.data.author) {
-            post.authorName = userResponse.data.author.fullName;
-            this.authorName = userResponse.data.author.fullName;
-          }
-        }
       }
     } catch (error) {
       console.log(error)
