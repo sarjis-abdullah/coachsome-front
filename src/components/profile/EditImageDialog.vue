@@ -399,7 +399,7 @@ export default {
               };
             },
             "image/jpeg",
-            0.2
+            0.1
           );
         }
       // });
@@ -438,7 +438,6 @@ export default {
         }
         this.isLoadingCroppedBtn = false;
         this.isCropped = true;
-        console.log( this.cropped);
       // });
 
       // Promise.all([p1, p2, p3, p4]).then(values => {

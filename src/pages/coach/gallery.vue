@@ -256,7 +256,7 @@ export default {
           reader.onloadend = () => {
             this.uploadImage(reader.result);
           };
-        }, "image/jpeg", 0.008);
+        }, "image/jpeg", 0.2);
       }
     },
     showFileChooser() {
