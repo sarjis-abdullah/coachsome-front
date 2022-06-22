@@ -242,7 +242,10 @@ export default {
       this.$router.push(this.localePath(pathData.coach.editMenu));
     },
     handleCancelBtnClick() {
-      this.imgSrc = null;
+      if (this.imgSrc) {
+        URL.revokeObjectURL(this.imgSrc);
+        this.imgSrc = null;
+      }
     },
     handleImageUploadBtnClick() {
       const imageCropperResult = this.$refs.imageCropper.getResult();
@@ -253,7 +256,7 @@ export default {
           reader.onloadend = () => {
             this.uploadImage(reader.result);
           };
-        }, "image/png");
+        }, "image/jpeg", 0.008);
       }
     },
     showFileChooser() {
