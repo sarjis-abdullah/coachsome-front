@@ -380,15 +380,14 @@ export default {
       if (data.data.pages.length) {
         data.data.pages.forEach(item => {
   
-  if (item.locale == app.i18n.locale) {
-  //
-    content = item.content;
-  //
-  }
+          if (item.locale == app.i18n.locale) {
+          //
+            content = item.content;
+          //
+          }
         });
       }
     }
-
     // Fallback
     if (!content) {
       data.data.pages.forEach(item => {
