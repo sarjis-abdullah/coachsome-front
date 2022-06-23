@@ -807,7 +807,7 @@ import { endpoint } from "../api";
 import { pathData, contactData } from "@/data";
 import { messageData } from "@/data";
 import UploadAttachment from '@/components/artifact/global/pages/chat/UploadAttachment'
-import {getMessaging, getToken} from "@/plugins/firebase"
+import { addDoc, collection, db, doc, onSnapshot, query } from "@/plugins/firebase";
 export default {
   layout: "chat",
   head() {
@@ -833,6 +833,7 @@ export default {
     }
   },
   data: () => ({
+    unsubSnapshot: null,
     chechContactQuery: false,
     touch_start: 0,
     touch_end: 0,
@@ -1093,7 +1094,7 @@ export default {
     }
   },
   created(){
-    this.handleFirebase()
+    this.subscribeToFirebase()
     if(this.$route.fullPath != pathData.pages.chat.path && this.$vuetify.breakpoint.smAndDown){
       this.$router.replace(this.localePath(pathData.pages.chat.path));
     }
@@ -1135,6 +1136,7 @@ export default {
     }
   },
   beforeDestroy(){
+    this.unsubSnapshot();
     document.removeEventListener( 'touchstart', this.startTouchListener);
     document.removeEventListener( 'touchmove', this.startTouchMoveListener);
     document.removeEventListener( 'touchend', this.touchEndListener);
@@ -1573,17 +1575,25 @@ export default {
             receiverUserId: this.selectedContact.connectionUserId,
             message: newMessage
           });
-
+          const msgObj = {
+            ...newMessage,
+            receiverUserId: this.selectedContact.connectionUserId
+          }
           this.$axios
             .post(endpoint.MESSAGES_POST, {
               ...newMessage,
               receiverUserId: this.selectedContact.connectionUserId
             })
-            .then(() => {
+            .then((res) => {
               let contact = this.contacts[0];
               if (contact.id != this.selectedContact.id) {
                 this.$store.dispatch("chat/getContacts");
               }
+              return res
+            })
+            .then((res) => {
+              msgObj.id = res?.data?.data?.id
+              this.sentMessageToFirebaseDB(msgObj)
             })
             .catch(() => {});
         } else {
@@ -1632,22 +1642,42 @@ export default {
       this.$router.push({query})
       this.createGroupDialog.value = false;
     },
-    handleFirebase(){
-      if (process.client) {
-        const messaging = getMessaging();
-        getToken(messaging, { vapidKey: 'BCNk4KVRK5Z8_wGbQy0B_9pLVvGmJlf1Qx6N_odSpRUMj_f9_juZdNVqzCDzWcfM_Z-n4iQ_GMMiE8mXBmimQUQ' })
-        .then((currentToken) => {
-          if (currentToken) {
-            console.log(currentToken, "currentToken");
-            // Send the token to your server and update the UI if necessary
-          } else {
-            console.log('No registration token available. Request permission to generate one.');
+    // sentMessageToFirebaseDB(){
+    //   if (process.client) {
+    //     const messaging = getMessaging();
+    //     getToken(messaging, { vapidKey: 'BCNk4KVRK5Z8_wGbQy0B_9pLVvGmJlf1Qx6N_odSpRUMj_f9_juZdNVqzCDzWcfM_Z-n4iQ_GMMiE8mXBmimQUQ' })
+    //     .then((currentToken) => {
+    //       if (currentToken) {
+    //         console.log(currentToken, "currentToken");
+    //         // Send the token to your server and update the UI if necessary
+    //       } else {
+    //         console.log('No registration token available. Request permission to generate one.');
+    //       }
+    //     }).catch((err) => {
+    //       console.log('An error occurred while retrieving token. ', err);
+    //     });
+    //   }
+    // },
+    subscribeToFirebase(){
+      const q = query(collection(db, "messages"));
+      this.unsubSnapshot = onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "added") {
+              console.log("New message from Firebase DB: ", change.doc.data());
           }
-        }).catch((err) => {
-          console.log('An error occurred while retrieving token. ', err);
         });
+      });
+    },
+    async sentMessageToFirebaseDB(msgObj = {}){
+      const ob = msgObj;
+      delete ob.scope
+      ob.senderUserId = this.$auth.user.id
+      try {
+        const docRef = await addDoc(collection(db, "messages"), ob);
+      } catch (e) {
+        console.error("Error adding document: ", e);
       }
-    }
+    },
   }
 };
 </script>
