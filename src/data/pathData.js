@@ -53,7 +53,8 @@ export default {
         getStarted: "/select-role",
         language: "/language",
         currency: "/currency",
-        security: "/security"
+        security: "/security",
+        becomeACoach: "/become-a-coach"
     },
     coach: {
         dashboard: "/coach/dashboard",

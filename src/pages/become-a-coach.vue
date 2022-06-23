@@ -14,7 +14,7 @@
       </mobile-top-nav>
       <div class="row">
         <div class="col px-md-0">
-        <div v-html="content"></div>
+        <div v-html="content" @click="handleClick"></div>
           <!-- <html>
             <head>
             <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -357,7 +357,7 @@
 </template>
 
 <script>
-import { pageBuilderApi } from "@/api";
+import { authApi, pageBuilderApi } from "@/api";
 import { pathData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
@@ -380,21 +380,19 @@ export default {
       if (data.data.pages.length) {
         data.data.pages.forEach(item => {
   
-  if (item.locale == app.i18n.locale) {
-  //
-    content = item.content;
-  //
-  }
+          if (item.locale == app.i18n.locale) {
+          //
+            content = item.content;
+          //
+          }
         });
       }
     }
-
     // Fallback
     if (!content) {
       data.data.pages.forEach(item => {
         if (app.i18n.locale == item.locale) {
-  
-  content = item.content;
+          content = item.content;
         }
       });
     }
@@ -403,7 +401,47 @@ export default {
       content
     };
   },
-  methods: {}
+  methods: {
+    handleClick(e) {
+      const elt = e.target.closest(".btn-coach");
+      if(this.$auth.loggedIn){
+
+        const payload = {
+          role: 'coach',
+          is_admin_switched: this.isSwitchedUser
+        };
+
+        authApi(this.$axios).switchProfile(payload)
+        .then(({ data }) => {
+          this.$auth.setUser(data.user);
+          this.$store.dispatch("setUser", data.user);
+          this.$store.dispatch("activeBottomNav", 0);
+          if(this.$auth.loggedIn && this.$auth.hasRole(["superadmin", "admin", "staff"])){
+            this.$router.push(this.localePath(pathData.admin.dashboard))
+          }else if(this.$auth.loggedIn && this.$auth.hasRole(["coach"])){
+              this.$router.push(this.localePath(pathData.coach.home))
+          }else if(this.$auth.loggedIn && this.$auth.hasRole(["athlete"])){
+              this.$router.push(this.localePath(pathData.athlete.home))
+          }else{
+              this.$router.push(this.localePath(pathData.pages.home))
+          }
+        })
+        .catch((error) => {this.$toast.error(error.response.data.message);});
+        
+      }else{
+        if (elt) {
+          this.$store.dispatch("activeBottomNav", 4);
+          if(!this.$vuetify.breakpoint.xsOnly){
+              this.$store.dispatch("toggleDialog");
+          }else{
+            if(this.$route.path != pathData.pages.login){
+              this.$router.push(this.localePath(pathData.pages.login))
+            }
+          }
+        }
+      }
+    }
+  }
 };
 </script>
 
