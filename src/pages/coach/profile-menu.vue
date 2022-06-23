@@ -284,6 +284,20 @@
           </v-col>
         </v-row>
         <v-row class="justify-center">
+          <v-col cols="11">
+            <v-btn
+              color="#49556A"
+              class="switch-option-btn default--button"
+              block
+              outlined
+              v-if="isProfileSwitched"
+              @click="handleSwitchProfile()"
+            >
+              <img class="btn-icon"  :src="require('@/assets/img/svg-icons/switch-flip.svg')" alt="">  <span class="default--text">{{$t("pwa_switch_to_athlete")}}</span>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row class="justify-center pt-0 mt-0">
           <v-col cols="11" >
             <v-btn
               solo
@@ -322,6 +336,7 @@ import impersonateAdminApi from "@/api/admin/impersonate";
 import MobileTopNav from '@/components/layout/global/MobileTopNav';
 import Languages from '@/components/language/Languages';
 import { avatarHelper } from "@/helper"
+import { authApi } from "@/api";
 
 export default ({
   name: "CoachProfileMenu",
@@ -391,6 +406,13 @@ export default ({
       isSwitchedUser() {
         if (this.authUser()) {
           return this.authUser().is_switched;
+        } else {
+          return false;
+        }
+      },
+      isProfileSwitched() {
+        if (this.authUser()) {
+          return this.authUser().is_profile_switched && this.authUser().profile_switched_to == "coach" ? true : false;
         } else {
           return false;
         }
@@ -478,6 +500,29 @@ export default ({
       gotoContact(){
         this.$router.push(this.localePath(pathData.coach.coachContacts));
       },
+      handleSwitchProfile(){
+        const payload = {
+          role: 'athlete',
+          is_admin_switched: this.isSwitchedUser
+        };
+
+        authApi(this.$axios).switchProfile(payload)
+        .then(({ data }) => {
+          this.$auth.setUser(data.user);
+          this.$store.dispatch("setUser", data.user);
+          this.$store.dispatch("activeBottomNav", 0);
+
+          if (this.$auth.hasRole(["coach"])) {
+            this.$router.push(this.localePath(pathData.coach.home));
+          } else if (this.$auth.hasRole(["athlete"])) {
+            this.$router.push(this.localePath(pathData.athlete.home));
+          } else {
+            this.$router.push(this.localePath(pathData.admin.dashboard));
+          }
+          
+        })
+        .catch((error) => {this.$toast.error(error.response.data.message);});
+      }
     }
 })
 </script>

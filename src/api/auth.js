@@ -37,5 +37,8 @@ export default axios => ({
   },
   passwordReset: (payload) => {
     return axios.post("pwa/password/reset",payload)
+  },
+  switchProfile: payload => {
+    return axios.post("auth/switch", payload);
   }
 });
