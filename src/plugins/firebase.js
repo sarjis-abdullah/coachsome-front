@@ -1,7 +1,8 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { addDoc, collection, doc, onSnapshot, query } from "firebase/firestore";
+import { getMessaging, getToken } from "firebase/messaging";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBGUQbN8qrBYnBoU0H5g3PPmHMjR8TBcWo",
@@ -15,7 +16,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const apps = getApps()
+const app = !getApps().length ? initializeApp(firebaseConfig) : apps[0];
 const db = getFirestore(app);
 export {
     addDoc,
@@ -23,5 +25,7 @@ export {
     db,
     doc,
     onSnapshot,
-    query
+    query,
+    getMessaging,
+    getToken
 }
