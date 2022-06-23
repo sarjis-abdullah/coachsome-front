@@ -654,8 +654,7 @@
                   <v-row>
                     <v-col
                       cols="12"
-                      class="d-flex flex-column justify-center align-center"
-                      :class="py-0"
+                      class="d-flex flex-column justify-center align-center py-0"
                     >
                       <div style="width: 150px;" class="text-center">
                         <div>
@@ -780,7 +779,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col cols="12" md="4" class="py-0'">
+                <v-col cols="12" md="4" class="py-0">
                   <div class="default--label pb-3">
                     {{ $t("profile_athlete_about_you_title") }}
                   </div>
