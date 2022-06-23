@@ -453,12 +453,14 @@ export default ({
           this.$store.dispatch("setUser", data.user);
           this.$store.dispatch("activeBottomNav", 0);
 
-          if (this.$auth.hasRole(["coach"])) {
-            this.$router.push(this.localePath(pathData.coach.home));
-          } else if (this.$auth.hasRole(["athlete"])) {
-            this.$router.push(this.localePath(pathData.athlete.home));
-          } else {
-            this.$router.push(this.localePath(pathData.admin.dashboard));
+          if(this.$auth.loggedIn && this.$auth.hasRole(["superadmin", "admin", "staff"])){
+            this.$router.push(this.localePath(pathData.admin.dashboard))
+          }else if(this.$auth.loggedIn && this.$auth.hasRole(["coach"])){
+              this.$router.push(this.localePath(pathData.coach.home))
+          }else if(this.$auth.loggedIn && this.$auth.hasRole(["athlete"])){
+              this.$router.push(this.localePath(pathData.athlete.home))
+          }else{
+              this.$router.push(this.localePath(pathData.pages.home))
           }
           
         })
