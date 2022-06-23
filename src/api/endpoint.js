@@ -82,4 +82,7 @@ export default {
   PAYMENT_CARDS_GET: "/payment-cards",
   PAYMENT_CARDS_POST: "/payment-cards",
   PAYMENT_CARDS_CANCEL_POST: "/payment-cards/cancel",
+
+  //Profile-switching
+  SWITCH_INFO: "/auth/switchInfo",
 };
