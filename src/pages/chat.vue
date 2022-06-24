@@ -1904,3 +1904,10 @@ $header-height: 60px;
 // 	padding: 0 16px 0 0!important;
 // }
 </style>
+<style lang="scss">
+  .v-application{
+    a .link-text{
+      color: red!important;
+    }
+  }
+</style>
