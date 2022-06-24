@@ -21,17 +21,6 @@
             v-html="getLink"
           ></div>
 
-            <link-preview :url="getLink" @click="handleClick">
-              <template v-slot:default="preview">
-                <div>
-                  <p>Domain: {{ preview.domain }}</p>
-                  <p>Title: {{ preview.title }}</p>
-                  <p>Description: {{ preview.description }}</p>
-                  <img height="100px" width="100px" :src="preview.img" :alt="preview.title ">
-                </div>
-              </template>
-            </link-preview>
-
           <div class="text-message-time" v-if="message.createdAt">
             {{ time }}
           </div>
@@ -44,8 +33,6 @@
 <script>
 import moment from "moment";
 import { messageData } from "@/data";
-import LinkPreview from '@ashwamegh/vue-link-preview'
-
 
 export default {
   props: ["message"],
@@ -53,9 +40,6 @@ export default {
     return {
       messageData
     };
-  },
-  components: {
-    LinkPreview
   },
   computed: {
     time() {
@@ -73,9 +57,6 @@ export default {
       const Rexp = /(\b(https?|ftp|file):\/\/([-A-Z0-9+&@#%?=~_|!:,.;]*)([-A-Z0-9+&@#%?\/=~_|!:,.;]*)[-A-Z0-9+&@#\/%=~_|])/ig;
       return text.replace(Rexp, "<a class='link-text' style='color:#1890ff!important;text-decoration: underline;' href='$1' target='_blank'>$1</a> ");
     },
-    handleClick(preview) {
-      console.log('click', preview.domain, preview.title, preview.description, preview.img)
-    }
 
   }
 };
