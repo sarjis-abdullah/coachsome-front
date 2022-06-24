@@ -1104,13 +1104,12 @@ export default {
   },
   created(){
     this.subscribeToFirebase()
-    // this.handleFirebase()
     if(this.$route.fullPath != pathData.pages.chat.path && this.$vuetify.breakpoint.smAndDown){
       this.$router.replace(this.localePath(pathData.pages.chat.path));
     }
   },
   async mounted() {
-    this.handleFirebase()
+    // this.getFirebaseToken()
     // This is very sensitive.
     // Since the date is not updated without refresh, we should manually refresh it
     // Now this createdAt is updated after 1 second
@@ -1653,22 +1652,22 @@ export default {
       this.$router.push({query})
       this.createGroupDialog.value = false;
     },
-    handleFirebase(){
-      if (process.client) {
-        const messaging = getMessaging();
-        getToken(messaging, { vapidKey: 'BCNk4KVRK5Z8_wGbQy0B_9pLVvGmJlf1Qx6N_odSpRUMj_f9_juZdNVqzCDzWcfM_Z-n4iQ_GMMiE8mXBmimQUQ' })
-        .then((currentToken) => {
-          if (currentToken) {
-            console.log(currentToken, "currentToken");
-            // Send the token to your server and update the UI if necessary
-          } else {
-            console.log('No registration token available. Request permission to generate one.');
-          }
-        }).catch((err) => {
-          console.log('An error occurred while retrieving token. ', err);
-        });
-      }
-    },
+    // getFirebaseToken(){
+    //   if (process.client) {
+    //     const messaging = getMessaging();
+    //     getToken(messaging, { vapidKey: 'BCNk4KVRK5Z8_wGbQy0B_9pLVvGmJlf1Qx6N_odSpRUMj_f9_juZdNVqzCDzWcfM_Z-n4iQ_GMMiE8mXBmimQUQ' })
+    //     .then((currentToken) => {
+    //       if (currentToken) {
+    //         console.log(currentToken, "currentToken");
+    //         // Send the token to your server and update the UI if necessary
+    //       } else {
+    //         console.log('No registration token available. Request permission to generate one.');
+    //       }
+    //     }).catch((err) => {
+    //       console.log('An error occurred while retrieving token. ', err);
+    //     });
+    //   }
+    // },
     subscribeToFirebase(){
       const q = query(collection(db, "messages"));
       this.unsubSnapshot = onSnapshot(q, (snapshot) => {
