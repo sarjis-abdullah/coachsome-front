@@ -18,8 +18,9 @@
           </div>
           <div
             style="word-wrap: break-word;white-space: pre-line;"
-            v-html="getLink"
+            v-html="message.content"
           ></div>
+           <!-- v-html="getLink" -->
 
           <div class="text-message-time" v-if="message.createdAt">
             {{ time }}
