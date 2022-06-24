@@ -40,7 +40,8 @@
     >
     <div v-if="$vuetify.breakpoint.lgAndUp">
       <v-btn
-        small
+        :x-small="isSmallButton"
+        :small="!isSmallButton"
         class="text-capitalize"
         text
         v-for="(item, i) in mainMenu.items"
@@ -191,6 +192,7 @@ export default {
         .revert()
         .then(({ data }) => {
           this.$auth.setUser(data.user);
+          this.$store.dispatch("setUser", data.user);
           this.$auth.setUserToken(data.accessToken);
           if (this.$auth.hasRole(["coach"])) {
             this.$router.push(this.localePath(pathData.coach.editProfile));
@@ -247,6 +249,16 @@ export default {
     },
     isLoggedIn() {
       return this.$auth.loggedIn;
+    },
+    isSmallButton(){
+      if (this.mainMenu?.items) {
+        const len = Object.keys(this.mainMenu.items).length
+        if (len > 11) {
+          return true
+        }
+        return false
+      }
+      return false
     }
   },
   watch: {

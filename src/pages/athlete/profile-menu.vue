@@ -1,6 +1,6 @@
 <template>
 <div>
-<v-container fluid >
+  <v-container fluid >
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_profile_menu')">
       <template v-slot:goBack >
         <v-btn icon large >
@@ -131,6 +131,20 @@
                   <v-icon>mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
+              <!-- Become a Coach -->
+              <v-list-item v-if="!is_profile_switched_ever" link @click.stop="handleBecomeCoach">
+                <v-list-item-icon>
+                  <v-img  :src="require('@/assets/img/svg-icons/whistle.svg')" alt="setting" />
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title class="list-text">{{$t("dropdown_item_become_coach")}}</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-icon>
+                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
 
               <v-list-item link @click.stop="handleSetting">
                 <v-list-item-icon>
@@ -226,8 +240,21 @@
             <div class="line"></div>
           </v-col>
         </v-row>
-
         <v-row class="justify-center">
+          <v-col cols="11">
+            <v-btn
+              color="#49556A"
+              class="switch-option-btn default--button"
+              block
+              outlined
+              v-if="is_profile_switched_ever"
+              @click="handleSwitchProfile()"
+            >
+              <img class="btn-icon"  :src="require('@/assets/img/svg-icons/switch-flip.svg')" alt="">  <span class="default--text">{{$t("pwa_switch_to_coach")}}</span>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row class="justify-center pt-0 mt-0">
           <v-col cols="11">
             <v-btn
                 solo
@@ -263,15 +290,19 @@
 import { pathData } from "@/data";
 import { currencyService } from "@/services";
 import impersonateAdminApi from "@/api/admin/impersonate";
+import { endpoint, authApi } from "@/api";
 import MobileTopNav from '@/components/layout/global/MobileTopNav';
 import { avatarHelper } from "@/helper"
 import Languages from '@/components/language/Languages';
+
+
 export default ({
   name: "AthleteProfileMenu",
   layout: "common",
   components: {MobileTopNav, Languages},
   data(){
     return {
+      is_profile_switched_ever: false,
       editProfile: {
           name: "Edit Profile",
           path: pathData.coach.editProfile,
@@ -292,6 +323,13 @@ export default ({
       isSwitchedUser() {
         if (this.authUser()) {
           return this.authUser().is_switched;
+        } else {
+          return false;
+        }
+      },
+      isProfileSwitched() {
+        if (this.authUser()) {
+          return this.authUser().is_profile_switched && this.authUser().profile_switched_to == "athlete" ? true : false;
         } else {
           return false;
         }
@@ -334,12 +372,17 @@ export default ({
         return this.$i18n.locales.find(i => i.code == this.$i18n.locale);
       },
     },
+    async created(){
+      const { data } = await this.$axios.get(endpoint.SWITCH_INFO);
+      this.is_profile_switched_ever = data.is_profile_switched;
+    },
     methods: {
       revertUser() {
         impersonateAdminApi(this.$axios)
           .revert()
           .then(({ data }) => {
             this.$auth.setUser(data.user);
+            this.$store.dispatch("setUser", data.user);
             this.$auth.setUserToken(data.accessToken);
             if (this.$auth.hasRole(["coach"])) {
               this.$router.push(this.localePath(pathData.coach.editProfile));
@@ -374,7 +417,7 @@ export default ({
         this.$router.push(this.localePath(pathData.athlete.settings));
       },
       handlePaymentBtn(){
-        this.$router.push(this.localePath(pathData.pages.payments));
+        this.$router.push(this.localePath(pathData.athlete.payments));
       },
       handleLanguageBtn(){
         this.$router.push(this.localePath(pathData.pages.language));
@@ -397,6 +440,35 @@ export default ({
       handleInviteFriends(){
         this.$router.push(this.localePath(pathData.athlete.inviteYourFriends));
       },
+      handleBecomeCoach(){
+        this.$router.push(this.localePath(pathData.pages.becomeACoach));
+      },
+      handleSwitchProfile(){
+        const payload = {
+          role: 'coach',
+          is_admin_switched: this.isSwitchedUser
+        };
+
+        authApi(this.$axios).switchProfile(payload)
+        .then(({ data }) => {
+          this.$auth.setUser(data.user);
+          this.$store.dispatch("setUser", data.user);
+          this.$store.dispatch("activeBottomNav", 0);
+
+          if(this.$auth.loggedIn && this.$auth.hasRole(["superadmin", "admin", "staff"])){
+            this.$router.push(this.localePath(pathData.admin.dashboard))
+          }else if(this.$auth.loggedIn && this.$auth.hasRole(["coach"])){
+              this.$router.push(this.localePath(pathData.coach.home))
+          }else if(this.$auth.loggedIn && this.$auth.hasRole(["athlete"])){
+              this.$router.push(this.localePath(pathData.athlete.home))
+          }else{
+              this.$router.push(this.localePath(pathData.pages.home))
+          }
+          
+        })
+        .catch((error) => {this.$toast.error(error.response.data.message);});
+
+      }
     }
 })
 </script>

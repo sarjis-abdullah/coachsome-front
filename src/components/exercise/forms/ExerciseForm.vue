@@ -550,36 +550,35 @@ export default ({
         this.uploadFiles();
         },
         handleImageUploadBtnClick() {
-        const imageCropperResult = this.$refs.imageCropper.getResult();
-        if (imageCropperResult.canvas) {
-            imageCropperResult.canvas.toBlob(blob => {
-            let reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => {
-                this.uploadImage(reader.result);
-            };
-            }, "image/png");
-        }
+            const imageCropperResult = this.$refs.imageCropper.getResult();
+            if (imageCropperResult.canvas) {
+                imageCropperResult.canvas.toBlob(blob => {
+                let reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = () => {
+                    this.uploadImage(reader.result);
+                };
+                }, "image/jpeg", 0.2);
+            }
         },
         uploadImage(croppedImage) {
-        let payload = {
-            type: "image",
-            image: croppedImage
-        };
-        console.log(payload);
-        this.isLoading = true;
-        ExerciseApi(this.$axios)
-            .saveImageUrl(payload)
+            let payload = {
+                type: "image",
+                image: croppedImage
+            };
+            this.isLoading = true;
+            ExerciseApi(this.$axios)
+                .saveImageUrl(payload)
             .then(({ data }) => {
-            this.exercisePropsData.links.push(Object.assign(data.item, { src: data.item.url }));
-            this.$toast.success(data.message);
-            this.setImageAndVideoProgress(data.progress);
-            this.imgSrc = null;
-            this.$refs.fileInput.value = null;
+                this.exercisePropsData.links.push(Object.assign(data.item, { src: data.item.url }));
+                this.$toast.success(data.message);
+                this.setImageAndVideoProgress(data.progress);
+                this.imgSrc = null;
+                this.$refs.fileInput.value = null;
             })
             .catch(() => {})
             .finally(() => {
-            this.isLoading = false;
+                this.isLoading = false;
             });
         },
         saveVideoUrl() {

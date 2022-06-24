@@ -91,7 +91,7 @@
               </v-list-item>
 
               <!-- Payment -->
-               <v-list-item link @click.stop="handlePaymentBtn">
+              <!-- <v-list-item link @click.stop="handlePaymentBtn">
                 <v-list-item-icon>
                   <v-img  :src="require('@/assets/img/svg-icons/new/credit-card.svg')" alt="payment" />
                 </v-list-item-icon>
@@ -103,7 +103,7 @@
                 <v-list-item-icon>
                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
-              </v-list-item>
+              </v-list-item> -->
             </v-list>
           </v-col>
         </v-row>
@@ -284,6 +284,20 @@
           </v-col>
         </v-row>
         <v-row class="justify-center">
+          <v-col cols="11">
+            <v-btn
+              color="#49556A"
+              class="switch-option-btn default--button"
+              block
+              outlined
+              v-if="isProfileSwitched"
+              @click="handleSwitchProfile()"
+            >
+              <img class="btn-icon"  :src="require('@/assets/img/svg-icons/switch-flip.svg')" alt="">  <span class="default--text">{{$t("pwa_switch_to_athlete")}}</span>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row class="justify-center pt-0 mt-0">
           <v-col cols="11" >
             <v-btn
               solo
@@ -322,6 +336,7 @@ import impersonateAdminApi from "@/api/admin/impersonate";
 import MobileTopNav from '@/components/layout/global/MobileTopNav';
 import Languages from '@/components/language/Languages';
 import { avatarHelper } from "@/helper"
+import { authApi } from "@/api";
 
 export default ({
   name: "CoachProfileMenu",
@@ -395,6 +410,13 @@ export default ({
           return false;
         }
       },
+      isProfileSwitched() {
+        if (this.authUser()) {
+          return this.authUser().is_profile_switched && this.authUser().profile_switched_to == "coach" ? true : false;
+        } else {
+          return false;
+        }
+      },
       isAuthCoach() {
         return this.$auth && this.$auth.loggedIn && this.$auth.hasRole("coach");
       },
@@ -435,9 +457,9 @@ export default ({
       handlePayoutBtn(){
         this.$router.push(this.localePath(pathData.coach.payoutInformation));
       },
-      handlePaymentBtn(){
-        this.$router.push(this.localePath(pathData.pages.payments));
-      },
+      // handlePaymentBtn(){
+      //   this.$router.push(this.localePath(pathData.pages.payments));
+      // },
       handleLanguageBtn(){
         this.$router.push(this.localePath(pathData.pages.language));
       },
@@ -449,6 +471,7 @@ export default ({
           .revert()
           .then(({ data }) => {
             this.$auth.setUser(data.user);
+            this.$store.dispatch("setUser", data.user);
             this.$auth.setUserToken(data.accessToken);
             if (this.$auth.hasRole(["coach"])) {
               this.$router.push(this.localePath(pathData.coach.editProfile));
@@ -478,6 +501,30 @@ export default ({
       gotoContact(){
         this.$router.push(this.localePath(pathData.coach.coachContacts));
       },
+      handleSwitchProfile(){
+        const payload = {
+          role: 'athlete',
+          is_admin_switched: this.isSwitchedUser
+        };
+
+        authApi(this.$axios).switchProfile(payload)
+        .then(({ data }) => {
+          this.$auth.setUser(data.user);
+          this.$store.dispatch("setUser", data.user);
+          this.$store.dispatch("activeBottomNav", 0);
+          if(this.$auth.loggedIn && this.$auth.hasRole(["superadmin", "admin", "staff"])){
+            this.$router.push(this.localePath(pathData.admin.dashboard))
+          }else if(this.$auth.loggedIn && this.$auth.hasRole(["coach"])){
+              this.$router.push(this.localePath(pathData.coach.home))
+          }else if(this.$auth.loggedIn && this.$auth.hasRole(["athlete"])){
+              this.$router.push(this.localePath(pathData.athlete.home))
+          }else{
+              this.$router.push(this.localePath(pathData.pages.home))
+          }
+          
+        })
+        .catch((error) => {this.$toast.error(error.response.data.message);});
+      }
     }
 })
 </script>

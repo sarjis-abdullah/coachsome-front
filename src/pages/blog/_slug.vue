@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container fluid class="blog-page">
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="post.title">
       <template v-slot:goBack>
         <v-btn
@@ -14,13 +14,12 @@
       </template>
     </mobile-top-nav>
 
-    <div class="blog-page" :class="{'px-5' : !$vuetify.breakpoint.smAndDown}">
-      <v-container fluid :class="{'py-10' : !$vuetify.breakpoint.smAndDown}">
+    <div :class="{'px-5' : !$vuetify.breakpoint.smAndDown}">
         <v-row justify="center">
           <v-col cols="12" md="9" sm="12">
             <v-row>
               <v-col cols="12" md="12" sm="12" :class="{'pa-0' : $vuetify.breakpoint.smAndDown}">
-                <v-card class="post">
+                <v-card class="post body-bg" :class="{'post__box-shadow' : !$vuetify.breakpoint.smAndDown}" elevation="0">
                   <template slot="progress">
                     <v-progress-linear
                       color="deep-purple"
@@ -45,7 +44,7 @@
                       {{ moment(post.published_date).locale(localeData).format("MMM Do YY") }}
                     </div>
                     <div class="post__subsubtitle pt-5">
-                      Written by -  {{ post.authorName }}
+                      {{$t("blog_written_by")}} -  {{ post.author_name }}
                     </div>
                   </div>
                   <v-divider></v-divider>
@@ -59,9 +58,8 @@
             </v-row>
           </v-col>
         </v-row>
-      </v-container>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -104,16 +102,9 @@ export default {
   async asyncData({ params, app, $axios }) {
     let post = {};
     try {
-      const blogRes = await pageBuilderApi($axios).getBlogPost();
+      const blogRes = await $axios.get("/tikcms/blog/all/published/show");
       if (blogRes.data.blog) {
         post = blogRes.data.blog.find(item => item.slug_url == params.slug);
-        if (post) {
-          const userResponse = await $axios.get(`blog/author/${post.author}`);
-          if (userResponse.data.author) {
-            post.authorName = userResponse.data.author.fullName;
-            this.authorName = userResponse.data.author.fullName;
-          }
-        }
       }
     } catch (error) {
       console.log(error)
@@ -137,6 +128,9 @@ export default {
   height: 100%;
   background: $body-bg;
   .post {
+    &__box-shadow{
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)!important;
+    }
     &__title {
       font-family: $font-family;
       font-style: normal;
@@ -163,7 +157,7 @@ export default {
     &__subsubtitle {
       font-family: $font-family;
       font-weight: bold;
-      font-size: 22.7656px;
+      font-size: 18px;
       line-height: 31px;
       color: #2d3748;
     }

@@ -93,7 +93,6 @@
               </v-btn>
             </v-form>
           </v-flex>
-          {{this.hasContactUserQueryParams}}
           <v-flex xs12 class="align-items-to-center mt-2" >
               <p class="register-footer-text">{{ $t("pwa_login_footer_1") }} 
                   <router-link :to="uri.terms" target="_blank" class="link-text"><u>{{ $t("global_url_terms_of_use") }}</u></router-link>
@@ -189,7 +188,11 @@ export default ({
         }
       }
     },
-  
+    created(){
+      if(this.email == " "){
+        this.$router.push(this.localePath(pathData.pages.login));
+      }
+    },
     methods: {
         backToLogin(){
           this.$store.dispatch("setActivePopupItem", "loginUsingEmail")

@@ -8,6 +8,11 @@ export default {
     color: "#6EB5CB",
     height: "4px"
   },
+  loadingIndicator: {
+    name: 'circle',
+    color: '#15577C',
+    background: 'white'
+  },
 
   // Global page headers
   head: {
@@ -427,6 +432,11 @@ export default {
 
     // PWA module configuration: https://go.nuxtjs.dev/pwa
     pwa: {
+      meta:{
+        title : 'Coachsome',
+        mobileAppIOS : true
+
+      },
       manifest: {
         "name":"Coachsome",
         icon:{

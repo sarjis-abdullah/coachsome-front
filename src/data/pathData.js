@@ -37,7 +37,6 @@ export default {
             path: "/marketplace"
         },
         price: "/price",
-        payments: "/payments",
         resetOTPValidation: "/password-reset-otp-validation",
         passwordReset: "/password-reset",
         publicProfile: username => "/" + username,
@@ -53,7 +52,8 @@ export default {
         getStarted: "/select-role",
         language: "/language",
         currency: "/currency",
-        security: "/security"
+        security: "/security",
+        becomeACoach: "/become-a-coach"
     },
     coach: {
         dashboard: "/coach/dashboard",
@@ -96,9 +96,6 @@ export default {
         trackingCodes: code => `/admin/tracking-codes/${code}`,
         profileMenu: "/admin/profile-menu",
         exercises: "/admin/exercises",
-        createExercises: "/admin/exercises?mode=create",
-        editExercises: "/admin/exercises?mode=edit",
-        previewExercises: "/admin/exercises?mode=preview",
         bookingSessions: "/admin/sessions",
     },
     athlete: {
@@ -108,6 +105,7 @@ export default {
         bookings: "/athlete/bookings",
         settings: "/athlete/settings",
         account: "/athlete/account",
+        payments: "/athlete/payments",
         profileMenu: "/athlete/profile-menu",
         notification: "/athlete/notification",
         home: "/athlete/home",

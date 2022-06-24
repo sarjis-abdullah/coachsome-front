@@ -159,7 +159,7 @@
       </span>
 
       <!-- Payments -->
-      <span v-if="hasRole(['coach', 'athlete'])">
+      <span v-if="hasRole(['athlete'])">
         <v-list-item color="primary" link @click.stop="handlePayments">
           <v-list-item-content>
             <v-list-item-title>
@@ -250,6 +250,36 @@
         </v-list-group>
       </span>
 
+      <!-- Becoma a Coach -->
+
+      <v-list-item v-if="!is_profile_switched_ever && !isAdmin" color="primary" link @click.stop="handleBecomeCoach">
+        <v-list-item-content>
+          <v-list-item-title>
+            {{$t("dropdown_item_become_coach")}}
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <!-- Switch Profile to Coach -->
+
+      <v-list-item v-if="is_profile_switched_ever && isProfileSwitchedToAthlete" color="primary" link @click.stop="handleSwitchProfile('coach')">
+        <v-list-item-content>
+          <v-list-item-title>
+            {{$t("pwa_switch_to_coach")}}
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <!-- Switch Profile to Athlete -->
+
+      <v-list-item v-if="is_profile_switched_ever && isProfileSwitchedToCoach" color="primary" link @click.stop="handleSwitchProfile('athlete')">
+        <v-list-item-content>
+          <v-list-item-title>
+            {{$t("pwa_switch_to_athlete")}}
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
       <!-- Athelete Switched Button -->
       <v-list-item
         color="blue"
@@ -293,6 +323,7 @@
 import { pathData } from "@/data";
 import { avatarHelper } from "@/helper"
 import impersonateAdminApi from "@/api/admin/impersonate";
+import { endpoint, authApi } from "@/api";
 import { currencyService } from "@/services";
 import InviteYourFriends from '@/components/profile/invite-friends/InviteYourFriends.vue';
 export default {
@@ -301,6 +332,7 @@ export default {
   },
   data() {
     return {
+      is_profile_switched_ever: false,
       menu: false,
       languageGroup: false,
       currencyGroup: false,
@@ -351,7 +383,7 @@ export default {
         },
         payments: {
           name: "Payments",
-          path: pathData.pages.payments,
+          path: pathData.athlete.payments,
           key: "payments",
           icon: "mdi-menu-down",
           t_key: "nav_item_payments"
@@ -522,6 +554,20 @@ export default {
         return false;
       }
     },
+    isProfileSwitchedToAthlete() {
+      if (this.authUser()) {
+        return this.authUser().is_profile_switched && this.authUser().profile_switched_to == "athlete" ? true : false;
+      } else {
+        return false;
+      }
+    },
+    isProfileSwitchedToCoach() {
+      if (this.authUser()) {
+        return this.authUser().is_profile_switched && this.authUser().profile_switched_to == "coach" ? true : false;
+      } else {
+        return false;
+      }
+    },
     isLoggedIn() {
       return this.$auth.loggedIn;
     },
@@ -552,10 +598,51 @@ export default {
         this.adminGroup = false;
         this.currencyGroup = false;
       }
+    },
+    isProfileSwitchedToCoach(){
+      this.checkSwitchInfo();
+    },
+    isProfileSwitchedToAthlete(){
+      this.checkSwitchInfo();
     }
   },
-  created() {},
+  created(){
+    this.checkSwitchInfo();
+  },
   methods: {
+
+    async checkSwitchInfo(){
+      const { data } = await this.$axios.get(endpoint.SWITCH_INFO);
+      this.is_profile_switched_ever = data.is_profile_switched;
+    },
+    handleSwitchProfile(roleData){
+
+      const payload = {
+        role: roleData,
+        is_admin_switched: this.isSwitchedUser
+      };
+
+      authApi(this.$axios).switchProfile(payload)
+      .then(({ data }) => {
+        this.$auth.setUser(data.user);
+        this.$store.dispatch("setUser", data.user);
+        this.$store.dispatch("activeBottomNav", 0);
+
+        if(this.$auth.loggedIn && this.$auth.hasRole(["superadmin", "admin", "staff"])){
+          this.$router.push(this.localePath(pathData.admin.dashboard))
+        }else if(this.$auth.loggedIn && this.$auth.hasRole(["coach"])){
+            this.$router.push(this.localePath(pathData.coach.home))
+        }else if(this.$auth.loggedIn && this.$auth.hasRole(["athlete"])){
+            this.$router.push(this.localePath(pathData.athlete.home))
+        }else{
+            this.$router.push(this.localePath(pathData.pages.home))
+        }
+        
+      })
+      .catch((error) => {this.$toast.error(error.response.data.message);});
+
+    },
+
     handleCurrencyChnage(item) {
       currencyService.setCurrencyCode(item.code);
       location.reload();
@@ -571,6 +658,7 @@ export default {
         .revert()
         .then(({ data }) => {
           this.$auth.setUser(data.user);
+          this.$store.dispatch("setUser", data.user);
           this.$auth.setUserToken(data.accessToken);
           if (this.$auth.hasRole(["coach"])) {
             this.$router.push(this.localePath(pathData.coach.editProfile));
@@ -602,6 +690,9 @@ export default {
     },
     handlePayments() {
       this.$router.push(this.localePath(this.items.payments.path));
+    },
+    handleBecomeCoach(){
+      this.$router.push(this.localePath(pathData.pages.becomeACoach));
     },
     async handleLogout() {
       this.$nuxt.$loading.start();

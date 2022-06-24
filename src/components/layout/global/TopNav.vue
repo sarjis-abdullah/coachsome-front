@@ -180,15 +180,15 @@
           {{ $t(navItems.message.t_key) }}
         </message-btn>
 
-        <!-- About -->
+        <!-- Become A Coach -->
         <v-btn
           small
           class="text-normal"
           :color="colorOfTheTextBtn"
-          :to="localePath(navItems.about.path)"
+          :to="localePath(navItems.becomeACoach.path)"
           text
           v-if="!isLoggedIn"
-          >{{ $t(navItems.about.t_key) }}</v-btn
+          >{{ $t(navItems.becomeACoach.t_key) }}</v-btn
         >
 
         <!-- Login -->
@@ -357,6 +357,12 @@ export default {
           icon: "folder_open",
           t_key: "nav_item_about",
           path: pathData.pages.about
+        },
+        becomeACoach: {
+          key: "become a coach",
+          icon: "folder_open",
+          t_key: "dropdown_item_become_coach",
+          path: pathData.pages.becomeACoach
         },
         login: {
           key: "login",

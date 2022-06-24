@@ -15,7 +15,7 @@
         </template>
       </mobile-top-nav>
       <span class="page-container gallery-page">
-              <v-row class="d-none d-md-block">
+      <v-row class="d-none d-md-block">
         <v-col cols="12" class="pb-0" >
           <div class="page-title">{{ $t("page_title_image_and_video") }}</div>
         </v-col>
@@ -242,7 +242,10 @@ export default {
       this.$router.push(this.localePath(pathData.coach.editMenu));
     },
     handleCancelBtnClick() {
-      this.imgSrc = null;
+      if (this.imgSrc) {
+        URL.revokeObjectURL(this.imgSrc);
+        this.imgSrc = null;
+      }
     },
     handleImageUploadBtnClick() {
       const imageCropperResult = this.$refs.imageCropper.getResult();
@@ -253,7 +256,7 @@ export default {
           reader.onloadend = () => {
             this.uploadImage(reader.result);
           };
-        }, "image/png");
+        }, "image/jpeg", 0.2);
       }
     },
     showFileChooser() {
