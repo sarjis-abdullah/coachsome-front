@@ -40,7 +40,8 @@
     >
     <div v-if="$vuetify.breakpoint.lgAndUp">
       <v-btn
-        small
+        :x-small="isSmallButton"
+        :small="!isSmallButton"
         class="text-capitalize"
         text
         v-for="(item, i) in mainMenu.items"
@@ -248,6 +249,16 @@ export default {
     },
     isLoggedIn() {
       return this.$auth.loggedIn;
+    },
+    isSmallButton(){
+      if (this.mainMenu?.items) {
+        const len = Object.keys(this.mainMenu.items).length
+        if (len > 11) {
+          return true
+        }
+        return false
+      }
+      return false
     }
   },
   watch: {

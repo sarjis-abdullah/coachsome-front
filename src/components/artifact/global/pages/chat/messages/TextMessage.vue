@@ -17,7 +17,7 @@
             </div>
           </div>
           <div
-            style="word-break: break-all;white-space: pre-wrap;"
+            style="word-wrap: break-word;white-space: pre-line;"
             v-html="message.content"
           ></div>
 
