@@ -18,7 +18,7 @@
           </div>
           <div
             style="word-wrap: break-word;white-space: pre-line;"
-            v-html="message.content"
+            v-html="getLink"
           ></div>
 
           <div class="text-message-time" v-if="message.createdAt">
@@ -33,6 +33,7 @@
 <script>
 import moment from "moment";
 import { messageData } from "@/data";
+
 export default {
   props: ["message"],
   data() {
@@ -45,10 +46,18 @@ export default {
       return this.moment(this.message.createdAt)
         .locale(this.$i18n.locale)
         .format("DD MMM HH:mm");
+    },
+    getLink() {
+      return this.setLinks(this.message.content)
     }
   },
   methods: {
-    moment
+    moment,
+    setLinks(text) {
+      const Rexp = /(\b(https?|ftp|file):\/\/([-A-Z0-9+&@#%?=~_|!:,.;]*)([-A-Z0-9+&@#%?\/=~_|!:,.;]*)[-A-Z0-9+&@#\/%=~_|])/ig;
+      return text.replace(Rexp, "<a class='link-text' style='color:#1890ff!important;text-decoration: underline;' href='$1' target='_blank'>$1</a> ");
+    },
+
   }
 };
 </script>
