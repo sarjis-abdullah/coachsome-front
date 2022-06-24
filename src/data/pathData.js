@@ -37,7 +37,6 @@ export default {
             path: "/marketplace"
         },
         price: "/price",
-        payments: "/payments",
         resetOTPValidation: "/password-reset-otp-validation",
         passwordReset: "/password-reset",
         publicProfile: username => "/" + username,
@@ -106,6 +105,7 @@ export default {
         bookings: "/athlete/bookings",
         settings: "/athlete/settings",
         account: "/athlete/account",
+        payments: "/athlete/payments",
         profileMenu: "/athlete/profile-menu",
         notification: "/athlete/notification",
         home: "/athlete/home",

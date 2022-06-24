@@ -248,7 +248,7 @@
               block
               outlined
               v-if="is_profile_switched_ever"
-              @click="handleBecomeCoach()"
+              @click="handleSwitchProfile()"
             >
               <img class="btn-icon"  :src="require('@/assets/img/svg-icons/switch-flip.svg')" alt="">  <span class="default--text">{{$t("pwa_switch_to_coach")}}</span>
             </v-btn>
@@ -417,7 +417,7 @@ export default ({
         this.$router.push(this.localePath(pathData.athlete.settings));
       },
       handlePaymentBtn(){
-        this.$router.push(this.localePath(pathData.pages.payments));
+        this.$router.push(this.localePath(pathData.athlete.payments));
       },
       handleLanguageBtn(){
         this.$router.push(this.localePath(pathData.pages.language));
@@ -440,9 +440,10 @@ export default ({
       handleInviteFriends(){
         this.$router.push(this.localePath(pathData.athlete.inviteYourFriends));
       },
-
       handleBecomeCoach(){
-
+        this.$router.push(this.localePath(pathData.pages.becomeACoach));
+      },
+      handleSwitchProfile(){
         const payload = {
           role: 'coach',
           is_admin_switched: this.isSwitchedUser

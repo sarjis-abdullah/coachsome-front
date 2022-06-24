@@ -180,7 +180,7 @@
           {{ $t(navItems.message.t_key) }}
         </message-btn>
 
-        <!-- About -->
+        <!-- Become A Coach -->
         <v-btn
           small
           class="text-normal"

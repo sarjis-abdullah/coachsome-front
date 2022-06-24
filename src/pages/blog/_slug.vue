@@ -44,7 +44,7 @@
                       {{ moment(post.published_date).locale(localeData).format("MMM Do YY") }}
                     </div>
                     <div class="post__subsubtitle pt-5">
-                      Written by -  {{ post.author_name }}
+                      {{$t("blog_written_by")}} -  {{ post.author_name }}
                     </div>
                   </div>
                   <v-divider></v-divider>
@@ -157,7 +157,7 @@ export default {
     &__subsubtitle {
       font-family: $font-family;
       font-weight: bold;
-      font-size: 22.7656px;
+      font-size: 18px;
       line-height: 31px;
       color: #2d3748;
     }

@@ -91,7 +91,7 @@
               </v-list-item>
 
               <!-- Payment -->
-               <v-list-item link @click.stop="handlePaymentBtn">
+              <!-- <v-list-item link @click.stop="handlePaymentBtn">
                 <v-list-item-icon>
                   <v-img  :src="require('@/assets/img/svg-icons/new/credit-card.svg')" alt="payment" />
                 </v-list-item-icon>
@@ -103,7 +103,7 @@
                 <v-list-item-icon>
                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
-              </v-list-item>
+              </v-list-item> -->
             </v-list>
           </v-col>
         </v-row>
@@ -457,9 +457,9 @@ export default ({
       handlePayoutBtn(){
         this.$router.push(this.localePath(pathData.coach.payoutInformation));
       },
-      handlePaymentBtn(){
-        this.$router.push(this.localePath(pathData.pages.payments));
-      },
+      // handlePaymentBtn(){
+      //   this.$router.push(this.localePath(pathData.pages.payments));
+      // },
       handleLanguageBtn(){
         this.$router.push(this.localePath(pathData.pages.language));
       },
