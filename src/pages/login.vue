@@ -112,7 +112,7 @@ export default ({
       }
     },
     watch:{
-      "$vuetify.breakpoint.smAndUp" : function() {
+      "$vuetify.breakpoint.mdAndUp" : function() {
         this.$store.dispatch("setActivePopupItem", "loginScreen");
         this.$store.dispatch("toggleDialog");
       }
@@ -130,22 +130,22 @@ export default ({
         }
     },
     methods: {
-      loginWithEmail() {
+      loginWithEmail() {      
         this.show_loading_on_login_btn = true;
         this.$router.push(this.localePath(pathData.pages.emailLogin))
       },
-      loginWithFacebook() {
+      loginWithFacebook() {      
         this.show_loading_on_facebook_login_btn = true;
         window.location.href =
           process.env.API_SERVER_URL + "/auth/login/facebook?user_type=coach";
       },
-      loginWithApple() {
+      loginWithApple() {      
         this.show_loading_on_apple_login_btn = true;
         window.location.href =
           process.env.API_SERVER_URL +
           "/auth/login/apple?user_type=coach";
       },
-      loginWithGoogle() {
+      loginWithGoogle() {      
         this.show_loading_on_google_login_btn = true;
         window.location.href =
           process.env.API_SERVER_URL + "/auth/login/google?user_type=coach";

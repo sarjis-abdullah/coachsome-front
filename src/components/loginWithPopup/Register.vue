@@ -59,6 +59,7 @@
                     name="last_name"
                     :label="$t('pwa_last_name')"
                     :rules="last_name_rules"
+                    autocomplete="off"
                   />
         </v-flex>
           <v-flex xs10 class="align-items-to-center ">
@@ -77,6 +78,7 @@
                     required
                     style=""
                     @keyup.enter="login"
+                    autocomplete="off"
                   />
                  </v-flex>
         <v-flex xs10 class="align-items-to-center">
@@ -110,8 +112,8 @@
 
 <script>
 import { authApi } from "@/api";
-import axios from "@/plugins/axios";
-import { pathData } from "@/data";
+import {  constantData, pathData } from "@/data";
+import { redirectPathService } from "@/services";
 
 export default ({
     data () {
@@ -135,7 +137,7 @@ export default ({
         loading: false,
         name: false,
         valid: true,
-        user_type: "coach",
+        user_type: this.$store.getters.getUserType || "athlete",
         agree_to_terms: true,
         first_name: '',
         first_name_rules: [
@@ -181,6 +183,7 @@ export default ({
           this.$store.dispatch("setActivePopupItem", "loginUsingEmail")
         },
         async register() {
+          this.show_loading_on_login_btn = true;
           try {
             let payload = {
               first_name: this.first_name,
@@ -201,9 +204,17 @@ export default ({
                 .then(response => {
                   if (response.status == 200) {
                     this.$toast.success(
-                      "Congrats! You have registered successfully."
+                      "Congrats! You have registered successfully.You can login now"
                     );
-                    this.$store.dispatch("setActivePopupItem", "GetStarted")
+                    this.$store.dispatch("setUserType", "athlete");
+                    // this.$store.dispatch("setActivePopupItem", "postLoginUsingEmail");
+                    const credentials = {
+                      email: this.email || this.$route?.query?.email,
+                      password: this.password,
+                      is_remember: true
+                    };
+
+                    this.login(credentials)
                   }
                 })
                 .catch(error => {
@@ -218,10 +229,70 @@ export default ({
             console.log(error);
             this.$toast.error("Something went wrong!");
           } finally {
-            //
+            this.show_loading_on_login_btn = false;
           }
           
-        }
+        },
+        async login(credentials) {
+          if (this.$refs.form.validate()) {
+            authApi(this.$axios)
+              .login(credentials)
+              .then((res) => {
+                this.$store.dispatch("putToken", res.data.access_token);
+                if (this.$store.getters.isAuthenticated) {
+                  this.$store.dispatch("setUser", res.data.user);
+                }
+              })
+              .catch((error) => {
+                if (
+                  error.response &&
+                  error.response.status == constantData.HTTP_UNPROCESSABLE_ENTITY
+                ) {
+                  if (error.response.data.t_key) {
+                    this.snackbar.text = this.$i18n.t(error.response.data.t_key);
+                    this.snackbar.show = true;
+                  } else {
+                    this.snackbar.text = error.response.data.message;
+                    this.snackbar.show = true;
+                  }
+                }else{
+                  this.$toast.error(this.$i18n.t(error.response.data.t_key));
+                }
+              });
+              await this.$auth.loginWith("local", {
+                data: credentials
+              });
+              if (this.$auth.loggedIn) {
+                this.$store.dispatch("toggleDialog");
+                this.$socket.emit("connected", this.$auth.user.id);
+                if (redirectPathService.has()) {
+                  this.$router.push(this.localePath(redirectPathService.get()));
+                } else {
+                
+                  if(this.$auth.user.roles && this.$auth.user.roles[0]){
+
+                    let authUser = this.$auth.user;
+                    
+                    this.$store.dispatch("activeBottomNav", 0);
+
+                    if(authUser.roles[0].name == "superadmin" || authUser.roles[0].name == "admin" || authUser.roles[0].name == "staff"){
+                      this.$router.push(this.localePath(pathData.admin.dashboard));
+                    }
+                    else if(authUser.roles[0].name == "coach" && this.$vuetify.breakpoint.smAndDown){
+                      this.$router.push(this.localePath(pathData.coach.home));
+                    }else if(authUser.roles[0].name == "athlete" && this.$vuetify.breakpoint.smAndDown){
+                      this.$router.push(this.localePath(pathData.athlete.home));
+                    }
+                    else{
+                      this.$router.push(this.localePath(pathData.pages.home));
+                    }
+                  }else{
+                    this.$store.dispatch("setActivePopupItem", "GetStarted");
+                  }
+                }
+              }
+          }
+        },
 
     }
 })

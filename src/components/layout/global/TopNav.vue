@@ -514,6 +514,7 @@ export default {
       return this.$router.push(this.localePath(pathData.pages.login));
     },
     goToLogin(){
+      this.$store.dispatch("setUserType", "athlete");
       this.$store.dispatch("toggleDialog");
     }
   }

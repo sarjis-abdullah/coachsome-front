@@ -252,7 +252,7 @@
 
       <!-- Becoma a Coach -->
 
-      <v-list-item v-if="!is_profile_switched_ever && !isAdmin" color="primary" link @click.stop="handleBecomeCoach">
+      <v-list-item v-if="!is_profile_switched_ever && !isAdmin && !isCoach" color="primary" link @click.stop="handleBecomeCoach">
         <v-list-item-content>
           <v-list-item-title>
             {{$t("dropdown_item_become_coach")}}
@@ -272,7 +272,7 @@
 
       <!-- Switch Profile to Athlete -->
 
-      <v-list-item v-if="is_profile_switched_ever && isProfileSwitchedToCoach" color="primary" link @click.stop="handleSwitchProfile('athlete')">
+      <v-list-item v-if="!is_profile_switched_ever || isProfileSwitchedToCoach" color="primary" link @click.stop="handleSwitchProfile('athlete')">
         <v-list-item-content>
           <v-list-item-title>
             {{$t("pwa_switch_to_athlete")}}

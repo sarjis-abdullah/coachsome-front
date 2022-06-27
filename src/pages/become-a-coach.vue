@@ -431,7 +431,8 @@ export default {
       }else{
         if (elt) {
           this.$store.dispatch("activeBottomNav", 4);
-          if(!this.$vuetify.breakpoint.xsOnly){
+          this.$store.dispatch("setUserType", "coach");
+          if(!this.$vuetify.breakpoint.smAndDown){
               this.$store.dispatch("toggleDialog");
           }else{
             if(this.$route.path != pathData.pages.login){

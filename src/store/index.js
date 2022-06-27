@@ -35,6 +35,7 @@ export const state = () => ({
   bookingCoachInfo: process.browser && localStorage.getItem("booking_coach_info") || {},
   bookingPackageInfo: process.browser && localStorage.getItem("booking_package_info") || {},
   has_password : process.browser && localStorage.getItem("has_password") || false,
+  userType: process.browser && localStorage.getItem("user_type") || "athlete",
 });
 
 export const getters = {
@@ -100,6 +101,9 @@ export const getters = {
   },
   getHasPassword(state){
     return state.has_password;
+  },
+  getUserType(state){
+    return state.userType;
   }
 };
 
@@ -184,7 +188,11 @@ export const mutations = {
   SET_HAS_PASSWORD(state, status){
     state.has_password = status;
     localStorage.setItem("has_password", status);
-  }
+  },
+  SET_USER_TYPE(state, item){
+    state.userType = item;
+    localStorage.setItem("user_type", item);
+  },
 
 };
 
@@ -257,5 +265,8 @@ export const actions = {
   },
   setHasPassword(context, flag){
     context.commit("SET_HAS_PASSWORD", flag)
+  },
+  setUserType(context, item){
+    context.commit("SET_USER_TYPE", item);
   }
 };
