@@ -112,8 +112,8 @@
 
 <script>
 import { authApi } from "@/api";
-import axios from "@/plugins/axios";
-import { pathData } from "@/data";
+import {  constantData, pathData } from "@/data";
+import { redirectPathService } from "@/services";
 
 export default ({
     data () {
@@ -207,7 +207,14 @@ export default ({
                       "Congrats! You have registered successfully.You can login now"
                     );
                     this.$store.dispatch("setUserType", "athlete");
-                    this.$store.dispatch("setActivePopupItem", "postLoginUsingEmail")
+                    // this.$store.dispatch("setActivePopupItem", "postLoginUsingEmail");
+                    const credentials = {
+                      email: this.email || this.$route?.query?.email,
+                      password: this.password,
+                      is_remember: true
+                    };
+
+                    this.login(credentials)
                   }
                 })
                 .catch(error => {
@@ -225,7 +232,67 @@ export default ({
             this.show_loading_on_login_btn = false;
           }
           
-        }
+        },
+        async login(credentials) {
+          if (this.$refs.form.validate()) {
+            authApi(this.$axios)
+              .login(credentials)
+              .then((res) => {
+                this.$store.dispatch("putToken", res.data.access_token);
+                if (this.$store.getters.isAuthenticated) {
+                  this.$store.dispatch("setUser", res.data.user);
+                }
+              })
+              .catch((error) => {
+                if (
+                  error.response &&
+                  error.response.status == constantData.HTTP_UNPROCESSABLE_ENTITY
+                ) {
+                  if (error.response.data.t_key) {
+                    this.snackbar.text = this.$i18n.t(error.response.data.t_key);
+                    this.snackbar.show = true;
+                  } else {
+                    this.snackbar.text = error.response.data.message;
+                    this.snackbar.show = true;
+                  }
+                }else{
+                  this.$toast.error(this.$i18n.t(error.response.data.t_key));
+                }
+              });
+              await this.$auth.loginWith("local", {
+                data: credentials
+              });
+              if (this.$auth.loggedIn) {
+                this.$store.dispatch("toggleDialog");
+                this.$socket.emit("connected", this.$auth.user.id);
+                if (redirectPathService.has()) {
+                  this.$router.push(this.localePath(redirectPathService.get()));
+                } else {
+                
+                  if(this.$auth.user.roles && this.$auth.user.roles[0]){
+
+                    let authUser = this.$auth.user;
+                    
+                    this.$store.dispatch("activeBottomNav", 0);
+
+                    if(authUser.roles[0].name == "superadmin" || authUser.roles[0].name == "admin" || authUser.roles[0].name == "staff"){
+                      this.$router.push(this.localePath(pathData.admin.dashboard));
+                    }
+                    else if(authUser.roles[0].name == "coach" && this.$vuetify.breakpoint.smAndDown){
+                      this.$router.push(this.localePath(pathData.coach.home));
+                    }else if(authUser.roles[0].name == "athlete" && this.$vuetify.breakpoint.smAndDown){
+                      this.$router.push(this.localePath(pathData.athlete.home));
+                    }
+                    else{
+                      this.$router.push(this.localePath(pathData.pages.home));
+                    }
+                  }else{
+                    this.$store.dispatch("setActivePopupItem", "GetStarted");
+                  }
+                }
+              }
+          }
+        },
 
     }
 })
