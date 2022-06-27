@@ -305,7 +305,7 @@ import Avatar from "@/components/artifact/global/Avatar";
 import Burger from "@/components/artifact/global/Burger";
 import MessageBtn from "@/components/artifact/global/MessageBtn";
 import SportSearch from "@/components/artifact/global/SportSearch";
-import LoginDialog from '@/components/loginWithPopup/LoginDialog'
+import LoginDialog from '@/components/loginWithPopup/LoginDialog';
 
 export default {
   props: {
