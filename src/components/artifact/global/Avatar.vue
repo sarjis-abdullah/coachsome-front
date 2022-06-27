@@ -262,7 +262,7 @@
 
       <!-- Switch Profile to Coach -->
 
-      <v-list-item v-if="is_profile_switched_ever && isProfileSwitchedToAthlete" color="primary" link @click.stop="handleSwitchProfile('coach')">
+      <v-list-item v-if="is_profile_switched_ever && isProfileSwitchedToAthlete && isAthlete" color="primary" link @click.stop="handleSwitchProfile('coach')">
         <v-list-item-content>
           <v-list-item-title>
             {{$t("pwa_switch_to_coach")}}
@@ -272,7 +272,7 @@
 
       <!-- Switch Profile to Athlete -->
 
-      <v-list-item v-if="!is_profile_switched_ever || isProfileSwitchedToCoach" color="primary" link @click.stop="handleSwitchProfile('athlete')">
+      <v-list-item v-if="isCoach" color="primary" link @click.stop="handleSwitchProfile('athlete')">
         <v-list-item-content>
           <v-list-item-title>
             {{$t("pwa_switch_to_athlete")}}
