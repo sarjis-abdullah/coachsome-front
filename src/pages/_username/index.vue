@@ -439,8 +439,8 @@ import { storageHelper, seoHelper } from "@/helper";
 import { profileData, pathData } from "@/data";
 import { profileApi, messageApi } from "@/api";
 import { bookingService } from "@/services";
-
 import DarkboxGallery from "@/components/darkbox/Gallery";
+
 export default {
   nuxtI18n: false,
   head() {
@@ -733,7 +733,12 @@ export default {
           )
         );
       } else {
-        this.$router.push(this.localePath(pathData.pages.login));
+        if(this.$vuetify.breakpoint.smAndDown){
+          this.$router.push(this.localePath(pathData.pages.login));
+        }else{
+          this.$store.dispatch("setUserType", "athlete");
+          this.$store.dispatch("toggleDialog");
+        }
       }
     },
     questionSendBtnHandle() {
@@ -757,13 +762,18 @@ export default {
     },
     contactBtnHandle() {
       if (!this.$auth.loggedIn) {
-        this.$router.push(this.localePath(pathData.pages.login));
         let questionBox = {
           userId: this.userInfo.id,
           userName: this.userInfo.userName,
           isUserAuthenticatedAtTheTimeOfCreating: false
         };
         storageHelper.set("question_box", questionBox);
+        if(this.$vuetify.breakpoint.smAndDown){
+          this.$router.push(this.localePath(pathData.pages.login));
+        }else{
+          this.$store.dispatch("setUserType", "athlete");
+          this.$store.dispatch("toggleDialog");
+        }
       } else {
         this.questionBox.dialog = true;
       }
@@ -776,7 +786,12 @@ export default {
     handleBooking(service = null) {
       bookingService.destroyBookingInfo();
       if (!this.$auth.loggedIn) {
-        this.$router.push(this.localePath(pathData.pages.login));
+        if(this.$vuetify.breakpoint.smAndDown){
+          this.$router.push(this.localePath(pathData.pages.login));
+        }else{
+          this.$store.dispatch("setUserType", "athlete");
+          this.$store.dispatch("toggleDialog");
+        }
       } else {
         this.$store.dispatch("setBookingCoachInfo", this.profileCard);
         this.$store.dispatch("setBookingPackageInfo", service);
