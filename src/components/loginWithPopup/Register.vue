@@ -59,6 +59,7 @@
                     name="last_name"
                     :label="$t('pwa_last_name')"
                     :rules="last_name_rules"
+                    autocomplete="off"
                   />
         </v-flex>
           <v-flex xs10 class="align-items-to-center ">
@@ -77,6 +78,7 @@
                     required
                     style=""
                     @keyup.enter="login"
+                    autocomplete="off"
                   />
                  </v-flex>
         <v-flex xs10 class="align-items-to-center">
@@ -135,7 +137,7 @@ export default ({
         loading: false,
         name: false,
         valid: true,
-        user_type: "coach",
+        user_type: this.$store.getters.getUserType || "athlete",
         agree_to_terms: true,
         first_name: '',
         first_name_rules: [
@@ -181,6 +183,7 @@ export default ({
           this.$store.dispatch("setActivePopupItem", "loginUsingEmail")
         },
         async register() {
+          this.show_loading_on_login_btn = true;
           try {
             let payload = {
               first_name: this.first_name,
@@ -201,9 +204,10 @@ export default ({
                 .then(response => {
                   if (response.status == 200) {
                     this.$toast.success(
-                      "Congrats! You have registered successfully."
+                      "Congrats! You have registered successfully.You can login now"
                     );
-                    this.$store.dispatch("setActivePopupItem", "GetStarted")
+                    this.$store.dispatch("setUserType", "athlete");
+                    this.$store.dispatch("setActivePopupItem", "postLoginUsingEmail")
                   }
                 })
                 .catch(error => {
@@ -218,7 +222,7 @@ export default ({
             console.log(error);
             this.$toast.error("Something went wrong!");
           } finally {
-            //
+            this.show_loading_on_login_btn = false;
           }
           
         }

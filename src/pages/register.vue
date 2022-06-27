@@ -134,7 +134,7 @@ export default ({
         loading: false,
         name: false,
         valid: true,
-        user_type: "coach",
+        user_type: this.$store.getters.getUserType || "athlete",
         agree_to_terms: true,
         first_name: '',
         first_name_rules: [
@@ -218,19 +218,21 @@ export default ({
                 .then(response => {
                   if (response.status == 200) {
                     this.$toast.success(
-                      "Congrats! You have registered successfully."
+                      "Congrats! You have registered successfully. You can login now"
                     );
-                    if (!this.hasContactUserQueryParams) {
-                      this.$router.push(this.localePath(pathData.pages.getStarted));
-                    }
+                    this.$store.dispatch("setUserType", "athlete");
+                    // if (!this.hasContactUserQueryParams) {
+                      // this.$router.push(this.localePath(pathData.pages.getStarted));
+                      this.$router.push(this.localePath(pathData.pages.postEmailLogin))
+                    // }
                   }
                 })
-                return Promise.resolve(response)
-                .then(res=> {
-                  if (this.hasContactUserQueryParams) {
-                      this.assignRole()
-                    }
-                })
+                // return Promise.resolve(response)
+                // .then(res=> {
+                //   if (this.hasContactUserQueryParams) {
+                //       this.assignRole()
+                //     }
+                // })
                 .catch(error => {
                   this.$toast.error(error.response.data.message);
                 });
@@ -268,16 +270,16 @@ export default ({
               }
             }
         },
-        async assignRole(){
-          await this.$axios
-          .post("pwa/attach-user-role", { email: this.email,
-          user_type: this.user_type })
-          this.$router.push("/post-login-with-email?email=" + this.email)
-          await ContactUserAPI(this.$axios).activateContactUser({
-            id: this.$route.query.id,
-            email: this.email
-          })
-        }
+        // async assignRole(){
+        //   await this.$axios
+        //   .post("pwa/attach-user-role", { email: this.email,
+        //   user_type: this.user_type })
+        //   this.$router.push("/post-login-with-email?email=" + this.email)
+        //   await ContactUserAPI(this.$axios).activateContactUser({
+        //     id: this.$route.query.id,
+        //     email: this.email
+        //   })
+        // }
     }
 })
 </script>

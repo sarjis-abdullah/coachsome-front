@@ -290,7 +290,6 @@
               class="switch-option-btn default--button"
               block
               outlined
-              v-if="isProfileSwitched"
               @click="handleSwitchProfile()"
             >
               <img class="btn-icon"  :src="require('@/assets/img/svg-icons/switch-flip.svg')" alt="">  <span class="default--text">{{$t("pwa_switch_to_athlete")}}</span>

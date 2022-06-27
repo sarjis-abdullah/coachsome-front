@@ -233,6 +233,7 @@ export default ({
       },
       goToLogin(){
         this.$store.dispatch("activeBottomNav", 4);
+        this.$store.dispatch("setUserType", "athlete");
         if(this.$vuetify.breakpoint.smAndUp){
             this.$store.dispatch("toggleDialog");
         }else{
