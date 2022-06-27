@@ -100,6 +100,7 @@ import { redirectPathService } from "@/services";
 export default {
   data() {
     return {
+      user_type: this.$store.getters.getUserType || "athlete",
       snackbar: {
         multiLine: true,
         show: false,
@@ -126,9 +127,8 @@ export default {
   methods: {
     loginWithApple() {
       this.show_loading_on_apple_login_btn = true;
-      window.location.href =
-        process.env.API_SERVER_URL +
-        "/auth/login/apple?user_type=coach";
+      window.location.href = process.env.API_SERVER_URL + "/auth/login/apple?user_type="+this.user_type;
+      this.$store.dispatch("setUserType", "athlete");
     },
     backToLogin(){
       this.$store.dispatch("setActivePopupItem", "loginUsingEmail")

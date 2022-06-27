@@ -11,6 +11,7 @@ export default {
     loading: true
   }),
   mounted() {
+    this.$store.dispatch("setUserType", "athlete");
     // Request from params indicate the request comes from
     // may be it is login page or setting page of athlete or coach
     if (this.$route.query.action == "security_identify") {
