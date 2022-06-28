@@ -64,10 +64,10 @@
                 </v-list-item-icon>
               </v-list-item>
 
-              <!-- Exercise List -->
+              <!-- Exercises -->
               <v-list-item link @click.stop="handleExercise">
                 <v-list-item-icon>
-                  <v-img :src="require('@/assets/img/svg-icons/new/exercise.svg')" alt="order_list" />
+                  <v-img :src="require('@/assets/img/svg-icons/new/exercise.svg')" alt="exercises" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -319,7 +319,7 @@ export default ({
     }
   },
   watch:{
-    "$vuetify.breakpoint.smAndUp" : function() {
+    "$vuetify.breakpoint.mdAndUp" : function() {
       this.$router.push(this.localePath(pathData.admin.dashboard));
     },
   },
@@ -402,7 +402,7 @@ export default ({
         this.$router.push(this.localePath(pathData.admin.orderList));
       },
       handleExercise(){
-        this.$router.push(this.localePath(pathData.admin.exercises));
+        this.$router.push(this.localePath(pathData.pages.exercises));
       },
       handlePromoCodes(){
         this.$router.push(this.localePath(pathData.admin.promos));

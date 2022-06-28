@@ -448,7 +448,7 @@ export default {
           subItems: [
             {
               name: "Exercises",
-              path: pathData.admin.exercises,
+              path: pathData.pages.exercises,
               icon: "mdi-view-list",
               t_key: "dropdown_item_exercises"
             },

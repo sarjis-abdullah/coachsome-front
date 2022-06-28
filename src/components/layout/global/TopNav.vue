@@ -168,6 +168,18 @@
           >{{ $t(navItems.marketplace.t_key) }}</v-btn
         >
 
+        <!-- Exercises -->
+        <v-btn
+          small
+          class="text-normal"
+          :color="colorOfTheTextBtn"
+          :to="localePath(navItems.exercises.path)"
+          v-if="isAuthCoach"
+          text
+          nuxt
+          >{{ $t(navItems.exercises.t_key) }}</v-btn
+        >
+
         <!-- Chat -->
         <message-btn
           class="text-normal"
@@ -351,6 +363,12 @@ export default {
           t_key: "nav_item_marketplace",
           path: pathData.pages.marketplace.path,
           name: pathData.pages.marketplace.name
+        },
+        exercises: {
+          key: "Exercises",
+          icon: "folder_open",
+          t_key: "dropdown_item_exercises",
+          path: pathData.pages.exercises,
         },
         about: {
           key: "about",

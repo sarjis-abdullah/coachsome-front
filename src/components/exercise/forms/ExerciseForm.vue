@@ -670,7 +670,7 @@ export default ({
 
 
         handleBack(){
-        this.$router.push(this.localePath(pathData.admin.exercises));
+        this.$router.push(this.localePath(pathData.pages.exercises));
         },
         showFileChooser() {
         this.$refs.fileInput.click();

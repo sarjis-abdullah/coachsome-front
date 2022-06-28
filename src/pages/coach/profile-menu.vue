@@ -61,6 +61,22 @@
                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
+
+              <!-- Exercises -->
+              <v-list-item link @click.stop="handleExercise">
+                <v-list-item-icon>
+                  <v-img :src="require('@/assets/img/svg-icons/new/exercise.svg')" alt="exercises" />
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title class="list-text">{{$t("dropdown_item_exercises")}}</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+
               <!-- Earnings -->
               <v-list-item link @click.stop="handleEarningBtn">
                 <v-list-item-icon>
@@ -360,8 +376,8 @@ export default ({
     }
   },
   watch:{
-    "$vuetify.breakpoint.smAndUp" : function() {
-      this.$router.push(this.localePath(pathData.coach.editProfile));
+    "$vuetify.breakpoint.mdAndUp" : function() {
+      this.$router.push(this.localePath(pathData.coach.home));
     },
   },
   computed: {
@@ -499,6 +515,9 @@ export default ({
       },
       gotoContact(){
         this.$router.push(this.localePath(pathData.coach.coachContacts));
+      },
+      handleExercise(){
+        this.$router.push(this.localePath(pathData.pages.exercises));
       },
       handleSwitchProfile(){
         const payload = {
