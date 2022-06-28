@@ -1093,8 +1093,7 @@ export default {
     }
   },
   beforeRouteLeave (to, from, next) {
-    console.log(to.fullPath);
-    if(to.fullPath == "/chat-screen"){
+    if(to.fullPath.includes("/chat-screen")){
       next();
     }else{
       this.$store.dispatch("chat/setSelectedContact", null);
