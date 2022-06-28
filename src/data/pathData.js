@@ -53,7 +53,8 @@ export default {
         language: "/language",
         currency: "/currency",
         security: "/security",
-        becomeACoach: "/become-a-coach"
+        becomeACoach: "/become-a-coach",
+        exercises: "/exercises",
     },
     coach: {
         dashboard: "/coach/dashboard",
@@ -95,7 +96,6 @@ export default {
         promos: "/admin/promos",
         trackingCodes: code => `/admin/tracking-codes/${code}`,
         profileMenu: "/admin/profile-menu",
-        exercises: "/admin/exercises",
         bookingSessions: "/admin/sessions",
     },
     athlete: {

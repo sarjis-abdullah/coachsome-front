@@ -319,6 +319,11 @@ export default ({
         },
     }
   },
+  watch:{
+    "$vuetify.breakpoint.mdAndUp" : function() {
+      this.$router.push(this.localePath(pathData.athlete.home));
+    },
+  },
   computed: {
       isSwitchedUser() {
         if (this.authUser()) {
