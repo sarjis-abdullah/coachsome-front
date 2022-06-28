@@ -150,7 +150,7 @@ export default {
       font-family: $font-family;
       font-style: normal;
       font-weight: normal;
-      font-size: 22.7656px;
+      font-size: 18px;
       line-height: 31px;
       color: #718096;
     }

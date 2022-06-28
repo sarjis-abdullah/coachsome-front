@@ -734,7 +734,7 @@
 </template>
 
 <script>
-import { coachBalanceEarningApi, coachPayoutRequestApi } from "@/api";
+import { coachBalanceEarningApi, coachPayoutRequestApi, coachPayoutInformationApi } from "@/api";
 import { currencyService } from "@/services";
 import { pathData } from "@/data";
 import moment from "moment";
@@ -751,6 +751,7 @@ export default {
   },
   data() {
     return {
+      isEmptyPayoutDetails: false,
       currencyService,
       datacollection: {},
       options: {
@@ -832,6 +833,7 @@ export default {
   },
   created() {
     this.fetchData();
+    this.fetchPayoutInfo();
   },
   mounted() {
     this.fillData();
@@ -929,19 +931,25 @@ export default {
       }
     },
     async handlePayoutRequest() {
-      try {
-        this.payoutRequest.loading = true;
-        let { data } = await coachPayoutRequestApi(this.$axios).doRequest({});
-        this.payoutRequest.loading = false;
-        if (data.requestTime) {
-          this.payoutRequest.lastRequestTime = data.requestTime;
-          this.$toast.success(
-            this.$t("balance_earning_payout_request_success_message")
-          );
+      if(!this.isEmptyPayoutDetails){
+        try {
+          this.payoutRequest.loading = true;
+          let { data } = await coachPayoutRequestApi(this.$axios).doRequest({});
+          this.payoutRequest.loading = false;
+          if (data.requestTime) {
+            this.payoutRequest.lastRequestTime = data.requestTime;
+            this.$toast.success(
+              this.$t("balance_earning_payout_request_success_message")
+            );
+          }
+        } catch (error) {
+          this.payoutRequest.loading = false;
+          this.$toast.error(error.response.data.message);
         }
-      } catch (error) {
-        this.payoutRequest.loading = false;
-        this.$toast.error(error.response.data.message);
+      }else{
+        this.$toast.error(this.$i18n.t("payout_alert_text"));
+        this.$router.push(this.localePath(pathData.coach.payoutInformation));
+        // setTimeout( () => this.localePath(pathData.coach.payoutInformation)), 5000);
       }
     },
     async fetchData() {
@@ -1003,6 +1011,19 @@ export default {
         }
       } catch (error) {
         console.log(error);
+      }
+    },
+    async fetchPayoutInfo() {
+      try {
+        const { data } = await coachPayoutInformationApi(this.$axios).get();
+        if(data.data && data.data.accHolderName == null){
+          this.isEmptyPayoutDetails = true;
+        }else{
+          this.isEmptyPayoutDetails = false;
+        }
+      } catch (error) {
+        this.$toast.error(error.response.data.errors[0]);
+      } finally {
       }
     },
     handleBack(){
