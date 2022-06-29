@@ -210,10 +210,7 @@
                     >
                       <template v-slot:label>
                         <img
-                          :src="
-                            require('@/assets/images/booking/' +
-                              paymentMethod.logo)
-                          "
+                          :src="require('@/assets/images/booking/' +paymentMethod.logo)"
                         />
                       </template>
                     </v-radio>
@@ -492,10 +489,7 @@
                               >
                                 <template v-slot:label>
                                   <img
-                                    :src="
-                                      require('@/assets/images/booking/' +
-                                        paymentMethod.logo)
-                                    "
+                                    :src="require('@/assets/images/booking/' +paymentMethod.logo)"
                                   />
                                 </template>
                               </v-radio>
@@ -616,7 +610,7 @@ export default {
           id: 5,
           name: "Master Card",
           value: "master_card",
-          logo: "visa-circle.svg"
+          logo: "mastercard.svg"
         }
       ]
     };

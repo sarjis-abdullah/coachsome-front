@@ -995,7 +995,7 @@ export default {
     };
 
   },
-  async created() {
+  created() {
 
     if(this.$vuetify.breakpoint.smAndDown && this.$auth && this.$auth.loggedIn){
       if(this.$auth.user && this.$auth.user.roles && this.$auth.user.roles[0].name == "superadmin" || this.$auth.user.roles[0].name == "admin" || this.$auth.user.roles[0].name == "staff"){
@@ -1009,7 +1009,7 @@ export default {
     };
 
     if(!this.$auth && !this.$auth.user.roles && !this.$auth.user.roles[0]){
-      await this.$auth.logout();
+      this.$auth.logout();
       this.$socket.emit("force_disconnect");
       this.$store.dispatch("setUser", null);
     }

@@ -834,9 +834,6 @@ export default {
         }
     }
   },
-  async asyncData(context) {
-    console.log("test");
-  },
   async mounted() {
     // This is very sensitive.
     // Since the date is not updated without refresh, we should manually refresh it
@@ -854,7 +851,7 @@ export default {
     });
     console.log("mounted");
     // Set contact
-    let contact = this.$store.getters["chat/selectedContact"];
+    let contact = await this.$store.getters["chat/selectedContact"];
     if(contact){
       this.selectedContact = contact;
     }else{

@@ -29,7 +29,7 @@
 
             <!--------------- Desktop View ---------------->
 
-            <div class="d-none d-md-block">
+            <div class="d-none d-md-block" v-if="!this.$vuetify.breakpoint.smAndDown">
               <v-row>
                 <v-col cols="12" class="pb-0">
                   <div class="page-title">{{ $t("profile") }}</div>
@@ -239,19 +239,21 @@
                   </div>
                 </v-col>
                 <v-col cols="12" md="3">
-                  <v-menu
-                    ref="menu"
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    :return-value.sync="date"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        v-model="date"
-                        readonly
+                <v-menu
+                  ref="menu"
+                  v-model="menu"
+                  :close-on-content-click="false"
+                  :return-value.sync="date"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      :first-day-of-week="1"
+                      :locale="langCode"
+                      v-model="formatedDate"
+                      readonly
                       outlined
                       dense
                       class="default-text-field"
@@ -259,19 +261,19 @@
                       prepend-inner-icon="mdi-calendar"
                       background-color="white"
                       label="DD / MM / YYYY"
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker :first-day-of-week="1" v-model="date">
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="menu = false">
-                        {{ $t("btn_label_cancel") }}
-                      </v-btn>
-                      <v-btn text color="primary" @click="$refs.menu.save(date)">
-                        {{ $t("text_ok") }}
-                      </v-btn>
-                    </v-date-picker>
-                  </v-menu>
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker :locale="langCode" @input="$refs.menu.save(date)" :first-day-of-week="1" v-model="date">
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="menu = false">
+                      {{ $t("btn_label_cancel") }}
+                    </v-btn>
+                    <v-btn text color="primary" @click="$refs.menu.save(date)">
+                      {{ $t("text_ok") }}
+                    </v-btn>
+                  </v-date-picker>
+                </v-menu>
                 </v-col>
               </v-row>
               <!-- Birthday Section -->
@@ -647,7 +649,7 @@
 
             <!-- ------------ Mobile View ------------------>
 
-            <div class="d-md-none" v-if="!profilePictureDialog">
+            <div class="d-md-none" v-if="!profilePictureDialog && this.$vuetify.breakpoint.smAndDown">
 
               <v-row class="mt-5">
                 <v-col cols="12">
@@ -830,8 +832,8 @@
                 </v-col>
                 <v-col cols="12" md="3" class="py-0">
                   <v-menu
-                    ref="menu"
-                    v-model="menu"
+                    ref="menu2"
+                    v-model="menu2"
                     :close-on-content-click="false"
                     :return-value.sync="date"
                     transition="scale-transition"
@@ -840,24 +842,26 @@
                   >
                     <template v-slot:activator="{ on }">
                       <v-text-field
-                        v-model="date"
+                        :first-day-of-week="1"
+                        :locale="langCode"
+                        v-model="formatedDate"
                         readonly
-                      outlined
-                      dense
-                      class="default-text-field"
-                      color="#9FAEC2"
-                      prepend-inner-icon="mdi-calendar"
-                      background-color="white"
-                      label="DD / MM / YYYY"
+                        outlined
+                        dense
+                        class="default-text-field"
+                        color="#9FAEC2"
+                        prepend-inner-icon="mdi-calendar"
+                        background-color="white"
+                        label="DD / MM / YYYY"
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-date-picker :first-day-of-week="1" v-model="date">
+                    <v-date-picker :locale="langCode" @input="$refs.menu2.save(date)" :first-day-of-week="1" v-model="date">
                       <v-spacer></v-spacer>
                       <v-btn text color="primary" @click="menu = false">
                         {{ $t("btn_label_cancel") }}
                       </v-btn>
-                      <v-btn text color="primary" @click="$refs.menu.save(date)">
+                      <v-btn text color="primary" @click="$refs.menu2.save(date)">
                         {{ $t("text_ok") }}
                       </v-btn>
                     </v-date-picker>
@@ -1325,7 +1329,10 @@ export default {
     },
     personalizedUrl() {
       return this.origin + "/" + this.profileData.user_name;
-    }
+    },
+    formatedDate() {
+      return this.formatDate(this.date);
+    },
   },
   watch: {
     date(val) {
@@ -1362,6 +1369,11 @@ export default {
     }
   },
   methods: {
+    formatDate(date) {
+      if (!date) return null;
+      const [year, month, day] = date.split("-");
+      return `${day}/${month}/${year}`;
+    },
     handleTiptopUpdatedValue(value) {
       this.profileData.about_me = value;
     },
