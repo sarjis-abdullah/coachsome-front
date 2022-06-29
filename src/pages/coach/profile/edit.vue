@@ -111,7 +111,8 @@
                 :label="$t('profile_name_hint')"
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="12">
+            <v-col cols="12" md="4"></v-col>
+            <v-col cols="12" md="4">
                 <div class="default--label pb-2">
                   {{ $t("profile_personalized_url") }}
                 </div>
@@ -119,7 +120,7 @@
                   {{ $t("personalized_url_description") }}
                 </div>
               </v-col>
-            <v-col cols="12" md="8">
+            <v-col cols="12" md="4">
               <label for class="input-social-label pb-2">
                 {{ $t("profile_link_label") }}
               </label>
