@@ -95,7 +95,7 @@
           </v-row>
 
           <!-- Percentage off -->
-          <v-row v-if="!isFixed">
+          <v-row v-if="isPercentage">
             <v-col cols="12">
               <div class="subtitle-2 pb-2">Percentage off</div>
               <v-text-field
@@ -210,6 +210,12 @@ export default {
   computed: {
     isFixed() {
       return this.defaultForm.type == 2;
+    },
+    isGift() {
+      return this.defaultForm.type == 3;
+    },
+    isPercentage() {
+      return this.defaultForm.type == 1;
     },
     dialogTitle() {
       return this.editMode ? "Edit Promo Code" : "Create Promo Code";
