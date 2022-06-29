@@ -1284,6 +1284,7 @@ export default {
         }
       },
       value: "",
+      langCode: "",
       uploadImageData: null,
       profileImage: null,
       languages: [],
@@ -1360,7 +1361,8 @@ export default {
     },
   },
   created() {
-    },
+    this.langCode = this.$i18n.locale;
+  },
   mounted() {
     this.init();
     this.origin = window.location.origin;
