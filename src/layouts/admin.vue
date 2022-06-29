@@ -30,8 +30,8 @@ export default {
   created(){
     const currentRoute = this.$route.path;
     if(currentRoute == pathData.pages.home 
-    || currentRoute == pathData.admin.dashboard 
-    || currentRoute == pathData.coach.home 
+    || currentRoute == pathData.admin.dashboard
+    || currentRoute == pathData.coach.home
     || currentRoute == pathData.athlete.home
     ){
       this.$store.dispatch("activeBottomNav", 0);

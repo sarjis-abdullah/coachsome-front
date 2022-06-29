@@ -40,14 +40,14 @@
             </v-btn>
           </template>
           <v-list>
-            <v-list-item @click.stop="editExercise(exerciseData)">
+            <v-list-item :disabled="isAuthCoach && exerciseData.type == 'System'" @click.stop="editExercise(exerciseData)">
               <v-list-item-title>{{$t("btn_edit_ex")}}</v-list-item-title>
             </v-list-item>
             <v-list-item @click.stop="duplicateExercise(exerciseData)">
               <v-list-item-title>{{$t("btn_duplicate")}}</v-list-item-title>
             </v-list-item>
-            <v-list-item @click.stop="deleteExercise(exerciseData)">
-              <v-list-item-title style="color: #FF3A0D">{{$t("btn_remove")}}</v-list-item-title>
+            <v-list-item :disabled="isAuthCoach && exerciseData.type == 'System'" @click.stop="deleteExercise(exerciseData)">
+              <v-list-item-title :style="[isAuthCoach && exerciseData.type == 'System' ? {'color': 'rgba(0, 0, 0, 0.38)'} : {'color': '#FF3A0D'}]">{{$t("btn_remove")}}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -514,14 +514,14 @@
                     </v-btn>
                   </template>
                   <v-list>
-                    <v-list-item @click.stop="editExercise(item)">
+                    <v-list-item :disabled="isAuthCoach && item.type == 'System'"  @click.stop="editExercise(item)">
                       <v-list-item-title>{{$t("btn_edit_ex")}}</v-list-item-title>
                     </v-list-item>
                     <v-list-item @click.stop="duplicateExercise(item)">
                       <v-list-item-title>{{$t("btn_duplicate")}}</v-list-item-title>
                     </v-list-item>
-                    <v-list-item @click.stop="deleteExercise(item)">
-                      <v-list-item-title style="color: #FF3A0D">{{$t("btn_remove")}}</v-list-item-title>
+                    <v-list-item :disabled="isAuthCoach && item.type == 'System'"  @click.stop="deleteExercise(item)">
+                      <v-list-item-title :style="[isAuthCoach && item.type == 'System' ? {'color': 'rgba(0, 0, 0, 0.38)'} : {'color': '#FF3A0D'}]">{{$t("btn_remove")}}</v-list-item-title>
                     </v-list-item>
                   </v-list>
                 </v-menu>
@@ -693,7 +693,10 @@ export default {
         title = this.$i18n.t('dropdown_item_exercises');
       }
       return title;
-    }
+    },
+    isAuthCoach() {
+      return this.$auth && this.$auth.loggedIn && this.$auth.hasRole("coach");
+    },
   },
   created() {
     this.langCode = this.$i18n.locale;
@@ -703,6 +706,13 @@ export default {
     this.fetchLavels();
   },
   methods: {
+    // isDisabled(item){
+    //   if(this.isAuthCoach && item.type == "System"){
+    //     return true;
+    //   }else{
+    //     return false;
+    //   }
+    // },
 
     filteredList() {
       let filteredData = [];

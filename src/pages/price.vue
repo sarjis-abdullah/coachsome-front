@@ -538,7 +538,7 @@ export default {
           if(!this.$vuetify.breakpoint.xsOnly){
               this.$store.dispatch("toggleDialog");
           }else{
-            if(this.$route.path != pathData.pages.login){
+            if(this.$route.path != this.localePath(pathData.pages.login)){
               this.$router.push(this.localePath(pathData.pages.login))
             }
           }

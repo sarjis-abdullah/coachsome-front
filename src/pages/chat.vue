@@ -1101,7 +1101,7 @@ export default {
     }
   },
   created(){
-    if(this.$route.fullPath != pathData.pages.chat.path && this.$vuetify.breakpoint.smAndDown){
+    if(this.$route.fullPath != this.localePath(pathData.pages.chat.path) && this.$vuetify.breakpoint.smAndDown){
       this.$router.replace(this.localePath(pathData.pages.chat.path));
     }
   },
