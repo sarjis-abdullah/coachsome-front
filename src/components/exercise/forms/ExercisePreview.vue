@@ -7,6 +7,8 @@
                 <swiper
                 class="swiper"
                 :options="{
+                    lazyLoading: true,
+                    watchSlidesVisibility: true,
                     slidesPerView: 1,
                     spaceBetween: 30,
                     direction: 'horizontal',
@@ -22,7 +24,8 @@
             
                 <swiper-slide class="d-flex justify-center" v-for="(asset, index) in exerciseData.assets && exerciseData.assets" :key="index">
                     <div class="preview-slide">
-                    <asset-preview :asset_type="asset.type" :url="asset.url"></asset-preview>
+                        <asset-preview :asset_type="asset.type" :url="asset.url"></asset-preview>
+                        <div v-if="asset.type !='image'" class="swiper-lazy-preloader"></div>
                     </div>
                 </swiper-slide>
             

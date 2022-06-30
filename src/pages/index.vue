@@ -983,7 +983,7 @@ export default {
   // },
   created() {
 
-    if(this.$vuetify.breakpoint.smAndDown && this.$auth && this.$auth.loggedIn){
+    if(this.$vuetify.breakpoint.smAndDown && this.$auth && this.$auth.loggedIn && process.browser){
       if(this.$auth.user && this.$auth.user.roles && this.$auth.user.roles[0].name == "superadmin" || this.$auth.user.roles[0].name == "admin" || this.$auth.user.roles[0].name == "staff"){
         this.$router.push(this.localePath(pathData.admin.dashboard));
       }

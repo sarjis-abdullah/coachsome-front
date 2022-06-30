@@ -73,6 +73,7 @@ import Media from "@dongido/vue-viaudio";
         z-index:999;
         left: 0;
         right: 0;
+        border: none!important;
       }
       video{ 
         height:400px!important; 
@@ -102,7 +103,7 @@ import Media from "@dongido/vue-viaudio";
     }
     .swiper-slide {
       display: inline-flex;
-      width: auto;
+      width: 100%!important;
     }
     .swiper-button-prev:after, .swiper-button-next:after {
       font-size: 40px!important;
@@ -130,6 +131,7 @@ import Media from "@dongido/vue-viaudio";
         z-index:999;
         left: 0;
         right: 0;
+        border: none!important;
       }
       video{ 
         height:300px!important; 
@@ -167,7 +169,7 @@ import Media from "@dongido/vue-viaudio";
     }
     .swiper-slide {
       display: inline-flex;
-      width: auto;
+      width: 100%!important;
     }
     .swiper-button-prev:after, .swiper-button-next:after {
       font-size: 40px!important;

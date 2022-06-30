@@ -485,14 +485,6 @@
                 <div class="exercise-table--text">
                   {{$t(item.category)}}
                 </div>
-                
-                <!-- <span class="exercise-table--text" v-if="exerciseData.category.length" >
-                  <template v-for="(category, index) in exerciseData.category" >
-                    {{$t(category.t_key)}}  
-                    <span v-if="index == ( exerciseData.category.length-1)" :key="index"></span>
-                    <span v-else :key="index">,</span>
-                  </template>
-                </span> -->
 
               </template>
               <template v-slot:item.type="{ item }">
@@ -564,18 +556,6 @@
              <ExercisePreview v-else  :exerciseData="exerciseData"/>
           </div>
         </template>
-
-      <!-- Preview Dialog -->
-        <!-- <template v-if="exercisePreviewDialog">
-          <div v-if="$vuetify.breakpoint.mdAndUp">
-            <v-dialog v-model="exercisePreviewDialog" max-width="600" @click:outside="handleCloseExercisePreviewDialog">
-              <ExercisePreview  :exerciseData="exerciseData"/>
-            </v-dialog>
-          </div>
-          <div v-else>
-            <ExercisePreview  :exerciseData="exerciseData"/>
-          </div>
-        </template> -->
       </v-col>
     </v-row>
 
@@ -706,13 +686,6 @@ export default {
     this.fetchLavels();
   },
   methods: {
-    // isDisabled(item){
-    //   if(this.isAuthCoach && item.type == "System"){
-    //     return true;
-    //   }else{
-    //     return false;
-    //   }
-    // },
 
     filteredList() {
       let filteredData = [];

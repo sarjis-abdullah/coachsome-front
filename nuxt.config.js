@@ -3,17 +3,10 @@ require("dotenv").config();
 export default {
   telemetry: false,
   srcDir: "src/",
-  // loading: '~/components/loader/Loading.vue',
   loading: {
     color: "#6EB5CB",
     height: "4px"
   },
-  loadingIndicator: {
-    name: 'circle',
-    color: '#15577C',
-    background: 'white'
-  },
-
   // Global page headers
   head: {
     title: "Coachsome",
@@ -323,7 +316,6 @@ export default {
       {
         meta: {
           title: 'Coachsome',
-          author: 'Coachsome',
         },
         manifest: {
           "name":"Coachsome",
@@ -434,8 +426,6 @@ export default {
     pwa: {
       meta:{
         title : 'Coachsome',
-        mobileAppIOS : true
-
       },
       manifest: {
         "name":"Coachsome",
