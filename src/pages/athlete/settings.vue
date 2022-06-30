@@ -604,10 +604,10 @@ export default {
   },
   methods: {
     handleAccount() {
-      this.$router.push(this.localePath(pathData.coach.account));
+      this.$router.push(this.localePath(pathData.athlete.account));
     },
     handleNotifications(){
-      this.$router.push(this.localePath(pathData.coach.notification));
+      this.$router.push(this.localePath(pathData.athlete.notification));
     },
     handleSecurity(){
       this.$router.push(this.localePath(pathData.pages.security));
@@ -863,7 +863,7 @@ export default {
       }
     },
     handleBack(){
-      this.$router.push(this.localePath(pathData.coach.profileMenu));
+      this.$router.push(this.localePath(pathData.athlete.profileMenu));
     },
   }
 };
