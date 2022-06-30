@@ -44,7 +44,7 @@
     </v-container>
     <v-container fluid style="background: white">
       <v-row>
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="3" v-if="blogData.length">
           <v-row>
             <v-col cols="12" md="3" class="d-none d-md-block"></v-col>
             <v-col cols="12" md="9"  class="d-none d-md-block">

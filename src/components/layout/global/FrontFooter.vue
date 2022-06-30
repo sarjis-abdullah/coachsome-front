@@ -106,6 +106,11 @@
                     {{ $t("Gift") }}
                   </span>
                 </div>
+                <div class="list__item">
+                  <span style="cursor:pointer;" @click="handleBecomeCoach">
+                    {{$t("dropdown_item_become_coach")}}
+                  </span>
+                </div>
               </div>
             </v-col>
           </v-row>
@@ -275,7 +280,10 @@ export default {
       // let win = window.open("https://blog.coachsome.com", "_blank");
       // win.focus();
       this.$router.push(this.localePath(this.uri.blog));
-    }
+    },
+    handleBecomeCoach(){
+      this.$router.push(this.localePath(pathData.pages.becomeACoach));
+    },
   }
 };
 </script>

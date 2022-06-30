@@ -219,7 +219,7 @@ export default ({
                 .then(response => {
                   if (response.status == 200) {
                     this.$toast.success(
-                      "Congrats! You have registered successfully"
+                      this.$i18n.t("registration_success_message")
                     );
                     this.$store.dispatch("setUserType", "athlete");
                     // if (!this.hasContactUserQueryParams) {

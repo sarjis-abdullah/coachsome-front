@@ -58,7 +58,7 @@
           </v-row>
 
           <!-- currency & discount ammount -->
-          <v-row v-if="isFixed">
+          <v-row v-if="isFixed || isGift">
             <v-col>
               <div class="subtitle-2 pb-2">Currency</div>
               <v-select
@@ -118,7 +118,7 @@
           </v-row>
 
           <!-- Duration -->
-          <v-row>
+          <v-row v-if="!isGift">
             <v-col cols="12">
               <div class="subtitle-2 pb-2">Duration</div>
               <v-select
@@ -246,6 +246,9 @@ export default {
     handleUpdateBtnClick() {
       if (this.$refs.form.validate()) {
         this.isLoading = true;
+        if (this.isGift) {
+          this.defaultForm.duration = 1
+        }
         adminPromoCodeApi(this.$axios)
           .update(this.defaultForm.id, { ...this.defaultForm })
           .then(({ data }) => {
@@ -268,6 +271,9 @@ export default {
     handleCreateBtnClick() {
       if (this.$refs.form.validate()) {
         this.isLoading = true;
+        if (this.isGift) {
+          this.defaultForm.duration = 1
+        }
         adminPromoCodeApi(this.$axios)
           .store({ ...this.defaultForm })
           .then(({ data }) => {
