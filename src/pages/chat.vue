@@ -808,6 +808,7 @@ import { pathData, contactData } from "@/data";
 import { messageData } from "@/data";
 import UploadAttachment from '@/components/artifact/global/pages/chat/UploadAttachment'
 import { addDoc, collection, db, doc, onSnapshot, query, getMessaging, getToken } from "@/plugins/firebase";
+import axios from "axios"
 export default {
   layout: "chat",
   head() {
@@ -1103,7 +1104,7 @@ export default {
     }
   },
   created(){
-    this.subscribeToFirebase()
+    // this.subscribeToFirebase()
     if(this.$route.fullPath != pathData.pages.chat.path && this.$vuetify.breakpoint.smAndDown){
       this.$router.replace(this.localePath(pathData.pages.chat.path));
     }
@@ -1146,7 +1147,7 @@ export default {
     }
   },
   beforeDestroy(){
-    this.unsubSnapshot();
+    this.unsubSnapshot && this.unsubSnapshot();
     document.removeEventListener( 'touchstart', this.startTouchListener);
     document.removeEventListener( 'touchmove', this.startTouchMoveListener);
     document.removeEventListener( 'touchend', this.touchEndListener);
@@ -1589,6 +1590,7 @@ export default {
             ...newMessage,
             receiverUserId: this.selectedContact.connectionUserId
           }
+          this.pushNotification()
           this.$axios
             .post(endpoint.MESSAGES_POST, {
               ...newMessage,
@@ -1652,28 +1654,30 @@ export default {
       this.$router.push({query})
       this.createGroupDialog.value = false;
     },
-    // getFirebaseToken(){
-    //   if (process.client) {
-    //     const messaging = getMessaging();
-    //     getToken(messaging, { vapidKey: 'BCNk4KVRK5Z8_wGbQy0B_9pLVvGmJlf1Qx6N_odSpRUMj_f9_juZdNVqzCDzWcfM_Z-n4iQ_GMMiE8mXBmimQUQ' })
-    //     .then((currentToken) => {
-    //       if (currentToken) {
-    //         console.log(currentToken, "currentToken");
-    //         // Send the token to your server and update the UI if necessary
-    //       } else {
-    //         console.log('No registration token available. Request permission to generate one.');
-    //       }
-    //     }).catch((err) => {
-    //       console.log('An error occurred while retrieving token. ', err);
-    //     });
-    //   }
-    // },
+    getFirebaseToken(){
+      if (process.client) {
+        const messaging = getMessaging();
+        getToken(messaging, { vapidKey: 'BCNk4KVRK5Z8_wGbQy0B_9pLVvGmJlf1Qx6N_odSpRUMj_f9_juZdNVqzCDzWcfM_Z-n4iQ_GMMiE8mXBmimQUQ' })
+        .then((currentToken) => {
+          if (currentToken) {
+            console.log(currentToken, "currentToken");
+            // Send the token to your server and update the UI if necessary
+          } else {
+            console.log('No registration token available. Request permission to generate one.');
+          }
+        }).catch((err) => {
+          console.log('An error occurred while retrieving token. ', err);
+        });
+      }
+    },
     subscribeToFirebase(){
       const q = query(collection(db, "messages"));
       this.unsubSnapshot = onSnapshot(q, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === "added") {
-              console.log("New message from Firebase DB: ", change.doc.data());
+            // this.isSentNotification = true
+            this.pushNotification()
+            console.log("New message from Firebase DB: ", change.doc.data());
           }
         });
       });
@@ -1688,6 +1692,26 @@ export default {
         console.error("Error adding document: ", e);
       }
     },
+    async pushNotification(){
+      console.log(axios);
+      const token = "dKoRfvUPKB_bady2hI2y65:APA91bGvcnU63D3D3vKqqC3t6ZG01M_4TTopYYkkeEzdrkqeAG9GwPCIH2IfgflCgrdHsklX9yoG7V5WjDgISIO4bJeZdDnrrCFIesyxHi2F01Sm8O8aNQq9a19H2Tc8SKFamPIEWNJz"
+      const obj = {
+        "to": token,
+        "notification": {
+          title: "Firebasewwww",
+          body: "Firebase is awesome",
+          click_action: "http://localhost:3000/aaa",
+          icon: "http://url-to-an-icon/icon.png"
+        },
+      }
+      const url = "https://fcm.googleapis.com/fcm/send"
+      await axios.post(url, obj, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'key=AAAAiovAKOo:APA91bFeNTlO58qK45NHZafoZryfUYlpRu-IXYSeaxX5-B6pp5Om1-XoGJ4A2lKtQUsryuwhm9glIRI8LrkCf_VFb9Kw1TCENAIPh2FV0wZoFZ-1jzAGDjB19eePVSew7-13RZD-Adzn',
+        }
+      })
+    }
   }
 };
 </script>
