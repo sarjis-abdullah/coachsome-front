@@ -1367,7 +1367,10 @@ export default {
     this.init();
     this.origin = window.location.origin;
     if(process.browser){
-      document.querySelector(".input-tel__label").innerHTML = "Phone Number";
+      const label = document.querySelector(".input-tel__label")
+      if(label){
+        label.innerHTML = "Phone Number";
+      }
     }
   },
   methods: {
