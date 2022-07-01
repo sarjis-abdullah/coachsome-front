@@ -147,6 +147,13 @@ export default {
             this.items = data.data;
           }
         });
+    },
+    'form.emails': {
+      immediate: false,
+      deep: true,
+      handler(newValue, oldValue) {
+        this.$emit("catchEmailUserForNotification", this.form.emails)
+      }
     }
   },
   methods: {

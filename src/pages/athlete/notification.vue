@@ -25,12 +25,12 @@
       >
         <!-- Notification Section -->
         <v-row class="notification">
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="4" class="pb-0">
             <div class="default--title" style="text-transform: uppercase">
               {{$t("pwa_email_notification")}}
             </div>
           </v-col>
-          <v-col cols="12" class="px-0" >
+          <v-col cols="12" class="px-0 py-0" >
               <v-list class="body-bg">
                 <!-- Profile Status -->
                 <v-list-item text >
@@ -132,6 +132,38 @@
                   <template #label >{{$t("athlete_settings_item_todo")}}</template>
               </v-switch> -->
           </v-col>
+          <v-col cols="12" md="4" class="pb-0">
+            <div class="default--title" style="text-transform: uppercase">
+              Push Notification
+            </div>
+          </v-col>
+          <v-col cols="12" class="px-0 py-0" >
+              <v-list class="body-bg">
+                <!-- Profile Status -->
+                <v-list-item text >
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <v-list-item-title class="default--sub-title">
+                      Chat message
+                    </v-list-item-title>
+                  </v-list-item-title>
+                </v-list-item-content>
+                  <v-list-item-icon>
+                    <client-only>
+                      <toggle-button
+                        :value="notificationStatus"
+                        @input="handlePushNotification"
+                        :color="{ checked: '#5CC866', unchecked: '#EFEFEF' }"
+                        :sync="true"
+                        :font-size="12"
+                        :width="60"
+                        :height="30"
+                      />
+                    </client-only>
+                  </v-list-item-icon>
+              </v-list-item>
+              </v-list>
+          </v-col>
         </v-row>
       </v-col>
     </v-row>
@@ -147,6 +179,8 @@ export default {
   components: {MobileTopNav},
   data() {
     return {
+      notificationStatus:null,
+      notificationId:null,
       settingValueData,
       notificationType: {
         id: null,
@@ -170,7 +204,9 @@ export default {
       return this.localePath(pathData.athlete.settings);
     },
   },
-  created() {},
+  created() {
+    this.getPushNotificationStatus()
+  },
   mounted() {
     this.getAthleteSetting();
   },
@@ -223,6 +259,26 @@ export default {
         }
       } catch (err) {
         this.$toast.error(err.response.data.error.message);
+      }
+    },
+    handlePushNotification(){
+      this.notificationStatus = !this.notificationStatus
+      this.$axios.put("notification-user/" + this.notificationId, {})
+    },
+    async getPushNotificationStatus(){
+      try {
+        const res = await this.$axios.get("notification-user")
+        if(res?.data?.data){
+          const {status, id} = res.data.data
+          this.notificationId = id
+          if (status == 'on') {
+            this.notificationStatus = true
+          }else{
+            this.notificationStatus = false
+          }
+        }
+      } catch (error) {
+        
       }
     },
   }

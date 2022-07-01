@@ -22,6 +22,7 @@
         </v-dialog>
         <v-dialog v-if="$vuetify.breakpoint.mdAndUp" v-model="createGroupDialog.value" max-width="600" @click:outside="closeCreateGroupDialog">
           <CreateGroupForm
+            @catchEmailUserForNotification="catchEmailUserForNotification"
             @created="handleCreatedGroup"
             :open="createGroupDialog.value"
             @close="closeCreateGroupDialog"
@@ -785,6 +786,7 @@
         <div class="create-group-form-mobile">
           <CreateGroupForm 
           @created="handleCreatedGroup"
+          @catchEmailUserForNotification="catchEmailUserForNotification"
           :open="createGroupDialog.value"
           @close="closeCreateGroupDialog"/>
         </div>
@@ -807,7 +809,8 @@ import { endpoint } from "../api";
 import { pathData, contactData } from "@/data";
 import { messageData } from "@/data";
 import UploadAttachment from '@/components/artifact/global/pages/chat/UploadAttachment'
-
+import { addDoc, collection, db, doc, onSnapshot, query, getMessaging, getToken } from "@/plugins/firebase";
+import axios from "axios"
 export default {
   layout: "chat",
   head() {
@@ -833,6 +836,8 @@ export default {
     }
   },
   data: () => ({
+    notificationUsers: [],
+    unsubSnapshot: null,
     chechContactQuery: false,
     touch_start: 0,
     touch_end: 0,
@@ -1106,6 +1111,7 @@ export default {
     }
   },
   async mounted() {
+    // this.getFirebaseToken()
     // This is very sensitive.
     // Since the date is not updated without refresh, we should manually refresh it
     // Now this createdAt is updated after 1 second
@@ -1142,6 +1148,7 @@ export default {
     }
   },
   beforeDestroy(){
+    this.unsubSnapshot && this.unsubSnapshot();
     document.removeEventListener( 'touchstart', this.startTouchListener);
     document.removeEventListener( 'touchmove', this.startTouchMoveListener);
     document.removeEventListener( 'touchend', this.touchEndListener);
@@ -1580,18 +1587,33 @@ export default {
             receiverUserId: this.selectedContact.connectionUserId,
             message: newMessage
           });
-
+          const msgObj = {
+            ...newMessage,
+            receiverUserId: this.selectedContact.connectionUserId
+          }
+          
           this.$axios
             .post(endpoint.MESSAGES_POST, {
               ...newMessage,
               receiverUserId: this.selectedContact.connectionUserId
             })
-            .then(() => {
+            .then((res) => {
               let contact = this.contacts[0];
               if (contact.id != this.selectedContact.id) {
                 this.$store.dispatch("chat/getContacts");
               }
+              return res
             })
+            .then(result => {
+              this.pushNotification(msgObj)
+              return result
+            })
+
+            //todo if needed
+            // .then((res) => {
+            //   msgObj.id = res?.data?.data?.id
+            //   this.sentMessageToFirebaseDB(msgObj)
+            // })
             .catch(() => {});
         } else {
           const payload = {
@@ -1619,6 +1641,11 @@ export default {
               if (contact.id != this.selectedContact.id) {
                 this.$store.dispatch("chat/getContacts");
               }
+              return data
+            })
+            .then(res=> {
+              this.pushNotification(payload, true)
+              return res
             })
             .catch(err => {
               if (err.response.data.error) {
@@ -1638,6 +1665,94 @@ export default {
       const query = {}
       this.$router.push({query})
       this.createGroupDialog.value = false;
+    },
+    getFirebaseToken(){
+      //function is keeping for test purpose, it is not used in anywhere, will remove it
+      if (process.client) {
+        const messaging = getMessaging();
+        getToken(messaging, { vapidKey: 'BCNk4KVRK5Z8_wGbQy0B_9pLVvGmJlf1Qx6N_odSpRUMj_f9_juZdNVqzCDzWcfM_Z-n4iQ_GMMiE8mXBmimQUQ' })
+        .then((currentToken) => {
+          if (currentToken) {
+            console.log(currentToken, "currentToken");
+            // Send the token to your server and update the UI if necessary
+          } else {
+            console.log('No registration token available. Request permission to generate one.');
+          }
+        }).catch((err) => {
+          console.log('An error occurred while retrieving token. ', err);
+        });
+      }
+    },
+    subscribeToFirebase(){
+      //function is keeping for test purpose, it is not used in anywhere, will remove it
+      const q = query(collection(db, "messages"));
+      this.unsubSnapshot = onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "added") {
+            // this.isSentNotification = true
+            console.log("New message from Firebase DB: ", change.doc.data());
+          }
+        });
+      });
+    },
+    async sentMessageToFirebaseDB(msgObj = {}){
+      //function is commented, if needed then will un-comment it
+      const ob = msgObj;
+      delete ob.scope
+      ob.senderUserId = this.$auth.user.id
+      try {
+        const docRef = await addDoc(collection(db, "messages"), ob);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    },
+    async pushNotification(data, groupChat = false){
+      if (groupChat) {
+        return this.handleGroupNotification()
+      }
+      let user = this.$auth.user
+      let name = ""
+      if(user?.full_name){
+        name = user.full_name
+      }else if(user?.first_name && user?.last_name){
+        name = user.first_name + " " + user?.last_name
+      }else {
+        name = user.email
+      }
+      const response = await this.$axios.get("notification-user?userId=" + data.receiverUserId)
+      let token = ""
+      let status = "off"
+      if (response?.data?.data?.token) {
+        token = response.data.data.token
+        status = response.data.data.status
+      }
+      if (!token || status == "off") {
+        return
+      }
+      const obj = {
+        "to": token,
+        "notification": {
+          title: "New message from " + name,
+          body: data.content ? data.content : "Please check!",
+          click_action: process.env.CLIENT_BASE_URL + "/chat?userId=" + data.receiverUserId,
+          icon: "http://coachsome.com/apple-touch-icon-76x76.png"
+        },
+      }
+      const url = "https://fcm.googleapis.com/fcm/send"
+      await axios.post(url, obj, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'key=' + process.env.FIREBASE_CLOUD_MSG_SERVER_KEY,
+        }
+      })
+    },
+    catchEmailUserForNotification(emailUsers){
+      this.notificationUsers = emailUsers
+    },
+    handleGroupNotification(){
+      console.log("group");
+      // const response = await this.$axios.get("notification-user?userIds=" + this.notificationUsers)
+      // console.log(response);
     }
   }
 };
