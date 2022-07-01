@@ -98,7 +98,7 @@
               </div>
               <div class="section-description" >{{ $t("profile_name_desc") }}</div>
             </v-col>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6">
               <v-text-field
                 v-model="profileData.profile_name"
                 outlined
@@ -111,7 +111,7 @@
                 :label="$t('profile_name_hint')"
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="4"></v-col>
+            <!-- <v-col cols="12" md="4"></v-col> -->
             <v-col cols="12" md="4">
                 <div class="default--label pb-2">
                   {{ $t("profile_personalized_url") }}
@@ -120,7 +120,7 @@
                   {{ $t("personalized_url_description") }}
                 </div>
               </v-col>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6">
               <label for class="input-social-label pb-2">
                 {{ $t("profile_link_label") }}
               </label>
@@ -197,7 +197,7 @@
                 {{ $t("profile_about_you_desc") }}
               </div>
             </v-col>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6">
               <TiptopEditor
                 :value="tipTopEditor.value"
                 @updated="handleTiptopUpdatedValue"
@@ -216,7 +216,7 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-row>
-                <v-col cols="12" md="8">
+                <v-col cols="12" md="12">
                   <VuePhoneNumberInput
                     :default-country-code="profileData.mobile_code"
                     v-model="profileData.mobile_no"
@@ -253,7 +253,7 @@
                 {{ $t("profile_birthday_description") }}
               </div>
             </v-col>
-            <v-col cols="12" md="3">
+            <v-col cols="12" md="6">
               <v-menu
                 ref="menu"
                 v-model="menu"
@@ -604,7 +604,7 @@
                 {{ $t("profile_social_profile_description") }}
               </div>
             </v-col>
-            <v-col cols="12" md="8">
+            <v-col cols="12" md="6">
               <label class="default--label pb-2">
                 {{ $t("profile_facebook") }}
               </label>
