@@ -216,7 +216,7 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-row>
-                <v-col cols="12" md="8">
+                <v-col cols="12" md="12">
                   <VuePhoneNumberInput
                     :default-country-code="profileData.mobile_code"
                     v-model="profileData.mobile_no"
@@ -253,7 +253,7 @@
                 {{ $t("profile_birthday_description") }}
               </div>
             </v-col>
-            <v-col cols="12" md="3">
+            <v-col cols="12" md="6">
               <v-menu
                 ref="menu"
                 v-model="menu"
@@ -604,7 +604,7 @@
                 {{ $t("profile_social_profile_description") }}
               </div>
             </v-col>
-            <v-col cols="12" md="8">
+            <v-col cols="12" md="6">
               <label class="default--label pb-2">
                 {{ $t("profile_facebook") }}
               </label>

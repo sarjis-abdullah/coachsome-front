@@ -94,7 +94,7 @@
                     {{ $t("profile_athlete_profile_name_desc") }}
                   </div>
                 </v-col>
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="8">
                   <v-text-field
                     v-model="profileData.profile_name"
                     outlined
@@ -204,9 +204,9 @@
                     {{ $t("profile_athlete_mobile_description") }}
                   </div>
                 </v-col>
-                <v-col cols="12" md="6">
+                <v-col cols="12" md="8">
                   <v-row>
-                    <v-col cols="12" md="8" >
+                    <v-col cols="12" md="12" >
                       <VuePhoneNumberInput
                         :default-country-code="profileData.mobile_code"
                         v-model="profileData.mobile_no"
@@ -238,7 +238,7 @@
                     {{ $t("profile_athlete_birthday_description") }}
                   </div>
                 </v-col>
-                <v-col cols="12" md="3">
+                <v-col cols="12" md="8">
                 <v-menu
                   ref="menu"
                   v-model="menu"
