@@ -22,6 +22,7 @@
         </v-dialog>
         <v-dialog v-if="$vuetify.breakpoint.mdAndUp" v-model="createGroupDialog.value" max-width="600" @click:outside="closeCreateGroupDialog">
           <CreateGroupForm
+            @catchEmailUserForNotification="catchEmailUserForNotification"
             @created="handleCreatedGroup"
             :open="createGroupDialog.value"
             @close="closeCreateGroupDialog"
@@ -785,6 +786,7 @@
         <div class="create-group-form-mobile">
           <CreateGroupForm 
           @created="handleCreatedGroup"
+          @catchEmailUserForNotification="catchEmailUserForNotification"
           :open="createGroupDialog.value"
           @close="closeCreateGroupDialog"/>
         </div>
@@ -834,6 +836,7 @@ export default {
     }
   },
   data: () => ({
+    notificationUsers: [],
     unsubSnapshot: null,
     chechContactQuery: false,
     touch_start: 0,
@@ -1639,6 +1642,11 @@ export default {
               if (contact.id != this.selectedContact.id) {
                 this.$store.dispatch("chat/getContacts");
               }
+              return data
+            })
+            .then(res=> {
+              this.pushNotification(payload, true)
+              return res
             })
             .catch(err => {
               if (err.response.data.error) {
@@ -1699,7 +1707,10 @@ export default {
         console.error("Error adding document: ", e);
       }
     },
-    async pushNotification(data, groupChat=null){
+    async pushNotification(data, groupChat = false){
+      if (groupChat) {
+        return this.handleGroupNotification()
+      }
       let user = this.$auth.user
       let name = ""
       if(user?.full_name){
@@ -1711,10 +1722,12 @@ export default {
       }
       const response = await this.$axios.get("notification-user?userId=" + data.receiverUserId)
       let token = ""
+      let status = "off"
       if (response?.data?.data?.token) {
         token = response.data.data.token
+        status = response.data.data.status
       }
-      if (!token) {
+      if (!token || status == "off") {
         return
       }
       const obj = {
@@ -1733,6 +1746,14 @@ export default {
           'Authorization': 'key=' + process.env.FIREBASE_CLOUD_MSG_SERVER_KEY,
         }
       })
+    },
+    catchEmailUserForNotification(emailUsers){
+      this.notificationUsers = emailUsers
+    },
+    handleGroupNotification(){
+      console.log("group");
+      // const response = await this.$axios.get("notification-user?userIds=" + this.notificationUsers)
+      // console.log(response);
     }
   }
 };
