@@ -1104,7 +1104,6 @@ export default {
     }
   },
   created(){
-    // this.subscribeToFirebase()
     if(this.$route.fullPath != pathData.pages.chat.path && this.$vuetify.breakpoint.smAndDown){
       this.$router.replace(this.localePath(pathData.pages.chat.path));
     }
@@ -1590,7 +1589,7 @@ export default {
             ...newMessage,
             receiverUserId: this.selectedContact.connectionUserId
           }
-          this.pushNotification()
+          
           this.$axios
             .post(endpoint.MESSAGES_POST, {
               ...newMessage,
@@ -1603,10 +1602,16 @@ export default {
               }
               return res
             })
-            .then((res) => {
-              msgObj.id = res?.data?.data?.id
-              this.sentMessageToFirebaseDB(msgObj)
+            .then(result => {
+              this.pushNotification(msgObj)
+              return result
             })
+
+            //todo if needed
+            // .then((res) => {
+            //   msgObj.id = res?.data?.data?.id
+            //   this.sentMessageToFirebaseDB(msgObj)
+            // })
             .catch(() => {});
         } else {
           const payload = {
@@ -1655,6 +1660,7 @@ export default {
       this.createGroupDialog.value = false;
     },
     getFirebaseToken(){
+      //function is keeping for test purpose, it is not used in anywhere, will remove it
       if (process.client) {
         const messaging = getMessaging();
         getToken(messaging, { vapidKey: 'BCNk4KVRK5Z8_wGbQy0B_9pLVvGmJlf1Qx6N_odSpRUMj_f9_juZdNVqzCDzWcfM_Z-n4iQ_GMMiE8mXBmimQUQ' })
@@ -1671,18 +1677,19 @@ export default {
       }
     },
     subscribeToFirebase(){
+      //function is keeping for test purpose, it is not used in anywhere, will remove it
       const q = query(collection(db, "messages"));
       this.unsubSnapshot = onSnapshot(q, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === "added") {
             // this.isSentNotification = true
-            this.pushNotification()
             console.log("New message from Firebase DB: ", change.doc.data());
           }
         });
       });
     },
     async sentMessageToFirebaseDB(msgObj = {}){
+      //function is commented, if needed then will un-comment it
       const ob = msgObj;
       delete ob.scope
       ob.senderUserId = this.$auth.user.id
@@ -1692,23 +1699,38 @@ export default {
         console.error("Error adding document: ", e);
       }
     },
-    async pushNotification(){
-      console.log(axios);
-      const token = "dKoRfvUPKB_bady2hI2y65:APA91bGvcnU63D3D3vKqqC3t6ZG01M_4TTopYYkkeEzdrkqeAG9GwPCIH2IfgflCgrdHsklX9yoG7V5WjDgISIO4bJeZdDnrrCFIesyxHi2F01Sm8O8aNQq9a19H2Tc8SKFamPIEWNJz"
+    async pushNotification(data, groupChat=null){
+      let user = this.$auth.user
+      let name = ""
+      if(user?.full_name){
+        name = user.full_name
+      }else if(user?.first_name && user?.last_name){
+        name = user.first_name + " " + user?.last_name
+      }else {
+        name = user.email
+      }
+      const response = await this.$axios.get("notification-user?userId=" + data.receiverUserId)
+      let token = ""
+      if (response?.data?.data?.token) {
+        token = response.data.data.token
+      }
+      if (!token) {
+        return
+      }
       const obj = {
         "to": token,
         "notification": {
-          title: "Firebasewwww",
-          body: "Firebase is awesome",
-          click_action: "http://localhost:3000/aaa",
-          icon: "http://url-to-an-icon/icon.png"
+          title: "New message from " + name,
+          body: data.content ? data.content : "Please check!",
+          click_action: process.env.CLIENT_BASE_URL + "/chat?userId=" + data.receiverUserId,
+          icon: "http://coachsome.com/apple-touch-icon-76x76.png"
         },
       }
       const url = "https://fcm.googleapis.com/fcm/send"
       await axios.post(url, obj, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'key=AAAAiovAKOo:APA91bFeNTlO58qK45NHZafoZryfUYlpRu-IXYSeaxX5-B6pp5Om1-XoGJ4A2lKtQUsryuwhm9glIRI8LrkCf_VFb9Kw1TCENAIPh2FV0wZoFZ-1jzAGDjB19eePVSew7-13RZD-Adzn',
+          'Authorization': 'key=' + process.env.FIREBASE_CLOUD_MSG_SERVER_KEY,
         }
       })
     }
