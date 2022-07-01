@@ -559,7 +559,7 @@ import { endpoint } from "../api";
 import { pathData, contactData } from "@/data";
 import { messageData } from "@/data";
 import mixpanelService from '@/services/mixpanelService'
-
+import axios from "axios"
 export default {
   layout: "chat-without-nav",
   head() {
@@ -1262,16 +1262,25 @@ export default {
             message: newMessage
           });
 
+          const msgObj = {
+            ...newMessage,
+            receiverUserId: this.selectedContact.connectionUserId
+          }
           this.$axios
             .post(endpoint.MESSAGES_POST, {
               ...newMessage,
               receiverUserId: this.selectedContact.connectionUserId
             })
-            .then(() => {
+            .then((res) => {
               let contact = this.contacts[0];
               if (contact.id != this.selectedContact.id) {
                 this.$store.dispatch("chat/getContacts");
               }
+              return res
+            })
+            .then(result => {
+              this.pushNotification(msgObj)
+              return result
             })
             .catch(() => {});
         } else {
@@ -1317,7 +1326,47 @@ export default {
     },
     handleClearSearch() {
       this.search = "";
-    }
+    },
+    async pushNotification(data, groupChat = false){
+      if (groupChat) {
+        return this.handleGroupNotification()
+      }
+      let user = this.$auth.user
+      let name = ""
+      if(user?.full_name){
+        name = user.full_name
+      }else if(user?.first_name && user?.last_name){
+        name = user.first_name + " " + user?.last_name
+      }else {
+        name = user.email
+      }
+      const response = await this.$axios.get("notification-user?userId=" + data.receiverUserId)
+      let token = ""
+      let status = "off"
+      if (response?.data?.data?.token) {
+        token = response.data.data.token
+        status = response.data.data.status
+      }
+      if (!token || status == "off") {
+        return
+      }
+      const obj = {
+        "to": token,
+        "notification": {
+          title: "New message from " + name,
+          body: data.content ? data.content : "Please check!",
+          click_action: process.env.CLIENT_BASE_URL + "/chat?userId=" + data.receiverUserId,
+          icon: "http://coachsome.com/apple-touch-icon-76x76.png"
+        },
+      }
+      const url = "https://fcm.googleapis.com/fcm/send"
+      await axios.post(url, obj, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'key=' + process.env.FIREBASE_CLOUD_MSG_SERVER_KEY,
+        }
+      })
+    },
   }
 };
 </script>
