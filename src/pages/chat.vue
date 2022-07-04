@@ -89,6 +89,7 @@
         <v-dialog v-model="addAttachmentDialog" max-width="400" style="z-index: 999!important; background: white">
           <upload-attachment ref="UploadAttachment" @cancel="handleAttachmentUploadCancel" @sendAttachment="uploadAttachmentFile($event)" ></upload-attachment>
         </v-dialog>
+
         <a-drawer
           class="d-none d-sm-flex d-md-none pa-0"
           title="Actions"
@@ -670,14 +671,54 @@
                   >
                     <template v-slot:prepend>
                       <div>
-                        <v-btn icon @click="handleAttachmentUploadBtn()">
-                          <img
-                            :src="
-                              require(`@/assets/images/icons/attachment.svg`)
-                            "
-                            alt="attachment-icon"
-                          />
-                        </v-btn>
+                        <v-menu
+                          top
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+
+                            <v-btn icon v-bind="attrs"
+                              v-on="on">
+                              <img
+                                :src="
+                                  require(`@/assets/images/icons/attachment.svg`)
+                                "
+                                alt="attachment-icon"
+                              />
+                            </v-btn>
+                          </template>
+
+                          <v-list style="padding: 0!important">
+                            <v-list-item style="padding: 0 8px!important">
+                              <v-list-item-content style="padding: 2px 0!important">
+                                <div class="d-flex justify-space-between">
+                                      <v-btn
+                                        fab
+                                        text
+                                        small
+                                        color="#49556A"
+                                        @click="handleAttachmentUploadBtn()"
+                                      >
+                                        <v-icon dark>
+                                          mdi-file-image
+                                        </v-icon>
+                                      </v-btn>
+                                      <v-btn
+                                        fab
+                                        text
+                                        small
+                                        color="#49556A"
+                                        @click="uploadVideo"
+                                      >
+                                        <v-icon dark>
+                                          mdi-video
+                                        </v-icon>
+                                      </v-btn>
+                              </div>
+                                
+                              </v-list-item-content>
+                            </v-list-item>
+                          </v-list>
+                        </v-menu>
                       </div>
                     </template>
                     <template v-slot:append>
@@ -810,7 +851,9 @@ import { pathData, contactData } from "@/data";
 import { messageData } from "@/data";
 import UploadAttachment from '@/components/artifact/global/pages/chat/UploadAttachment'
 import { addDoc, collection, db, doc, onSnapshot, query, getMessaging, getToken } from "@/plugins/firebase";
+import VideoUpload from '@/components/exercise/forms/VideoUpload'
 import axios from "axios"
+
 export default {
   layout: "chat",
   head() {
@@ -827,7 +870,8 @@ export default {
     ChatScreen,
     ChatSetting,
     ContactList,
-    UploadAttachment
+    UploadAttachment,
+    VideoUpload
   },
   props: {
     actionClass:{
@@ -836,6 +880,7 @@ export default {
     }
   },
   data: () => ({
+    isVideo: false,
     notificationUsers: [],
     unsubSnapshot: null,
     chechContactQuery: false,
@@ -996,6 +1041,7 @@ export default {
     },
 
     selectedContact(data) {
+      this.$store.dispatch("chat/destroyMessages");
       let contact = data
       if (!this.chechContactQuery && this.$route?.query?.contactAbleUserId) {
         this.chechContactQuery = true
@@ -1006,7 +1052,6 @@ export default {
         }
       }
       if (contact) {
-        this.$store.dispatch("chat/destroyMessages");
         this.$store.dispatch("chat/setSelectedContact", contact);
 
         if(this.$vuetify.breakpoint.smAndDown){
@@ -1209,6 +1254,7 @@ export default {
         let messageData = {
           me: true,
           type: "structure",
+          fileType: this.isVideo ? 'video' : 'image',
           file: attachment,
           createdAt: new Date()
         }
@@ -1230,6 +1276,7 @@ export default {
         formData.append('receiverUserId', this.selectedContact.connectionUserId);
         formData.append('me',true);
         formData.append('type', 'structure');
+        formData.append('fileType', this.isVideo ? 'video' : 'image');
         formData.append('createdAt', new Date());
         const headers = { 'Content-Type': 'multipart/form-data' };
 
@@ -1243,6 +1290,7 @@ export default {
                 this.$store.dispatch("chat/getContacts");
               }
               console.log('4');
+              this.isVideo = false;
               this.pushMessage(data.data.message);
               this.addAttachmentDialog = false;
             })
@@ -1300,6 +1348,10 @@ export default {
       }
     },
     handleAttachmentUploadBtn() {
+      this.addAttachmentDialog = true;
+    },
+    uploadVideo(){
+      this.isVideo = true;
       this.addAttachmentDialog = true;
     },
     handleAttachmentUploadCancel() {

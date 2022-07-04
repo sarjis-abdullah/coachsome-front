@@ -16,7 +16,22 @@
               {{ message.senderUser.firstName }}
             </div>
           </div>
-           <img class="attachment-img" height="185" :src="message.content.url" alt="">
+            <Media
+              v-if="message.content.key == 'video'"
+              :kind="'video'"
+              :isMuted="false"
+              :src="message.content.url"
+              :autoplay="false"
+              :controls="true"
+              :loop="false"
+              :ref="'video_player'"
+              width="100%"
+              @play="showPlayerIcon = false"
+              @pause="showPlayerIcon = true"
+            >
+            </Media>
+            
+            <img v-else class="attachment-img" height="185" :src="message.content.url" alt="">
 
           <div class="attachment-message-time" v-if="message.createdAt">
             {{ time }}
@@ -32,22 +47,23 @@
 <script>
 import moment from "moment";
 import { messageData } from "@/data";
+import Media from "@dongido/vue-viaudio";
+
 export default {
-  props: ["message"],
+  props: ["message", "key"],
+  components: { Media },
   data() {
     return {
-      messageData
+      messageData,
+      showPlayerIcon: true
     };
   },
-  computed: {
-    time() {
-      return this.moment(this.message.createdAt)
-        .locale(this.$i18n.locale)
-        .format("DD MMM HH:mm");
-    }
-  },
   methods: {
-    moment
+    moment,
+    handleVideoPlay(){
+      this.showPlayerIcon = false;
+      this.$refs.video_player.play();
+    }
   }
 };
 </script>
@@ -66,6 +82,10 @@ export default {
       font-size: 14px;
       line-height: 124%;
       color: #fcfdfe;
+      &video{
+        width:40%; 
+        background: black;
+      }
     }
   }
   &--opponent {
