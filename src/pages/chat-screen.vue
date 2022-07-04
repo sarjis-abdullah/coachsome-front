@@ -461,14 +461,54 @@
                   >
                     <template v-slot:prepend>
                       <div>
-                        <v-btn icon @click="handleAttachmentUploadBtn()">
-                          <img
-                            :src="
-                              require(`@/assets/images/icons/attachment.svg`)
-                            "
-                            alt="attachment-icon"
-                          />
-                        </v-btn>
+                        <v-menu
+                          top
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+
+                            <v-btn icon v-bind="attrs"
+                              v-on="on">
+                              <img
+                                :src="
+                                  require(`@/assets/images/icons/attachment.svg`)
+                                "
+                                alt="attachment-icon"
+                              />
+                            </v-btn>
+                          </template>
+
+                          <v-list style="padding: 0!important">
+                            <v-list-item style="padding: 0 8px!important">
+                              <v-list-item-content style="padding: 2px 0!important">
+                                <div class="d-flex justify-space-between">
+                                      <v-btn
+                                        fab
+                                        text
+                                        small
+                                        color="#49556A"
+                                        @click="handleAttachmentUploadBtn()"
+                                      >
+                                        <v-icon dark>
+                                          mdi-file-image
+                                        </v-icon>
+                                      </v-btn>
+                                      <v-btn
+                                        fab
+                                        text
+                                        small
+                                        color="#49556A"
+                                        @click="uploadVideo"
+                                      >
+                                        <v-icon dark>
+                                          mdi-video
+                                        </v-icon>
+                                      </v-btn>
+                              </div>
+                                
+                              </v-list-item-content>
+                            </v-list-item>
+                          </v-list>
+                        </v-menu>
                       </div>
                     </template>
                     
@@ -579,6 +619,7 @@ export default {
     UploadAttachment
   },
   data: () => ({
+    isVideo: false,
     touch_start: 0,
     touch_end: 0,
     slide_touch_start: 0,
@@ -929,6 +970,7 @@ export default {
         formData.append('receiverUserId', this.selectedContact.connectionUserId);
         formData.append('me',true);
         formData.append('type', 'structure');
+        formData.append('fileType', this.isVideo ? 'video' : 'image');
         formData.append('createdAt', new Date());
         const headers = { 'Content-Type': 'multipart/form-data' };
 
@@ -937,6 +979,7 @@ export default {
               headers,
             })
             .then((data) => {
+              this.isVideo = false;
               let contact = this.contacts[0];
               if (contact.id != this.selectedContact.id) {
                 this.$store.dispatch("chat/getContacts");
@@ -1213,6 +1256,10 @@ export default {
       }
     },
     handleAttachmentUploadBtn() {
+      this.addAttachmentDialog = true;
+    },
+    uploadVideo(){
+      this.isVideo = true;
       this.addAttachmentDialog = true;
     },
     handleAttachmentUploadCancel() {

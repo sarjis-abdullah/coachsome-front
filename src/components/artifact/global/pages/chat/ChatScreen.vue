@@ -35,8 +35,8 @@
       </div>
 
       <!-- Attachment Message -->
-      <div v-if="message.type == 'structure' && message.content && message.content.key == 'attachment'">
-        <Attachment :message="{ ...message }" />
+      <div v-if="message.type == 'structure' && message.content && message.content.key == 'attachment' || message.content.key == 'video'">
+        <Attachment :message="{ ...message }" :key="message.content.key"/>
       </div>
 
       <!-- Structure message -->
@@ -1082,4 +1082,22 @@ export default {
     }
   }
 }
+
+  @media only screen and (min-width: 400px ) {
+    .attachment-message-content{
+      video{ 
+        width:40%; 
+        background: black;
+      }
+    }
+  }
+  @media only screen and (max-width: 399px) {
+    .attachment-message-content{
+
+      video{ 
+        width:40%; 
+        background: black;
+      }
+    }
+  }
 </style>
