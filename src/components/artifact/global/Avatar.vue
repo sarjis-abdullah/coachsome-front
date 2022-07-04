@@ -42,11 +42,11 @@
       </span>
 
       <!-- Coach Setting -->
-      <span v-if="isLoggedIn && isCoach">
+      <span v-if="isLoggedIn && isCoach || isAthlete">
         <v-list-item
           color="primary"
           link
-          @click.stop="$router.push(localePath(items.coachSetting.path))"
+          @click.stop="gotoSettings"
         >
           <v-list-item-content>
             <v-list-item-title>
@@ -720,6 +720,10 @@ export default {
     },
     handleInviteFriends(){
       this.inviteFriendModal = true
+    },
+    gotoSettings () {
+      const path = this.isCoach ? this.items.coachSetting.path : this.items.athleteSettings.path
+      this.$router.push(this.localePath(path))
     }
   }
 };
