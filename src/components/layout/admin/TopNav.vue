@@ -48,7 +48,7 @@
         :key="i"
         @click="gotoPage(item)"
 
-        >{{ $t(item.t_key) }}www</v-btn
+        >{{ $t(item.t_key) }}</v-btn
       >
     </div>
 
