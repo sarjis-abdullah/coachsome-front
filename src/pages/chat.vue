@@ -87,7 +87,7 @@
         </v-dialog>
         <!-- Attachment -->
         <v-dialog v-model="addAttachmentDialog" max-width="400" style="z-index: 999!important; background: white">
-          <upload-attachment ref="UploadAttachment" @cancel="handleAttachmentUploadCancel" @sendAttachment="uploadAttachmentFile($event)" ></upload-attachment>
+          <upload-attachment ref="UploadAttachment" :video="isVideo" @cancel="handleAttachmentUploadCancel" @sendAttachment="uploadAttachmentFile($event)" ></upload-attachment>
         </v-dialog>
 
         <a-drawer
