@@ -26,6 +26,7 @@
               :loop="false"
               :ref="'video_player'"
               width="100%"
+              class="attachment-video"
               @play="showPlayerIcon = false"
               @pause="showPlayerIcon = true"
             >
@@ -58,6 +59,13 @@ export default {
       showPlayerIcon: true
     };
   },
+  computed: {
+    time() {
+      return this.moment(this.message.createdAt)
+        .locale(this.$i18n.locale)
+        .format("DD MMM HH:mm");
+    }
+  },
   methods: {
     moment,
     handleVideoPlay(){
@@ -69,6 +77,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.attachment-video{
+  width: 100%!important;
+  height:150px!important; 
+  background: black;
+}
 .attachment-message {
   width: 100%;
   &--me {
@@ -82,10 +95,6 @@ export default {
       font-size: 14px;
       line-height: 124%;
       color: #fcfdfe;
-      &video{
-        width:40%; 
-        background: black;
-      }
     }
   }
   &--opponent {

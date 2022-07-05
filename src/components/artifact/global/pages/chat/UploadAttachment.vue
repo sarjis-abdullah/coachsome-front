@@ -13,6 +13,7 @@
               color="deep-purple accent-4"
               counter
               label="Upload file.."
+              :accept="mimeType"
               placeholder="Select your files"
               prepend-icon="mdi-paperclip"
               outlined
@@ -82,6 +83,7 @@
 <script>
 
 export default {
+  props:["video"],
   data: () => ({
     fileName: "",
     loadingData: false,
@@ -89,6 +91,15 @@ export default {
     imageUrl: null,
 
   }),
+  computed: {
+    mimeType(){
+      if(this.video){
+        return "video/*"
+      }else{
+        return "image/*"
+      }
+    }
+  },
   methods: {
     createImage(file) {
       const reader = new FileReader();
