@@ -208,7 +208,7 @@ export const actions = {
         let user = item.users.length ? item.users[0] : null;
         if (user) {
           contact.title = item.contactName;
-          contact.avatarImage = user.profile.image;
+          contact.avatarImage = user && user.profile ? user.profile.image: null;
           contact.avatarName = user.firstName && user.lastName ?  
             user.firstName.charAt(0).toUpperCase() +
             user.lastName.charAt(0).toUpperCase() : "";

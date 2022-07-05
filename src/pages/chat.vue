@@ -87,7 +87,7 @@
         </v-dialog>
         <!-- Attachment -->
         <v-dialog v-model="addAttachmentDialog" max-width="400" style="z-index: 999!important; background: white">
-          <upload-attachment ref="UploadAttachment" :video="isVideo" @cancel="handleAttachmentUploadCancel" @sendAttachment="uploadAttachmentFile($event)" ></upload-attachment>
+          <upload-attachment ref="UploadAttachment" :video="isVideo" :file="isFile" @cancel="handleAttachmentUploadCancel" @sendAttachment="uploadAttachmentFile($event)" ></upload-attachment>
         </v-dialog>
 
         <a-drawer
@@ -713,6 +713,17 @@
                                           mdi-video
                                         </v-icon>
                                       </v-btn>
+                                      <v-btn
+                                        fab
+                                        text
+                                        small
+                                        color="#49556A"
+                                        @click="uploadFile"
+                                      >
+                                        <v-icon dark>
+                                          mdi-file-document
+                                        </v-icon>
+                                      </v-btn>
                               </div>
                                 
                               </v-list-item-content>
@@ -881,6 +892,7 @@ export default {
   },
   data: () => ({
     isVideo: false,
+    isFile: false,
     notificationUsers: [],
     unsubSnapshot: null,
     chechContactQuery: false,
@@ -974,6 +986,15 @@ export default {
     },
   }),
   computed: {
+    attachmentType(){
+      if(this.isVideo){
+        return 'video';
+      }else if(this.isFile){
+        return 'file';
+      }else{
+        return 'image';
+      }
+    },
     isArchiveFilter() {
       return this.selectedFilterItem == 4;
     },
@@ -1254,7 +1275,7 @@ export default {
         let messageData = {
           me: true,
           type: "structure",
-          fileType: this.isVideo ? 'video' : 'image',
+          fileType: this.attachmentType,
           file: attachment,
           createdAt: new Date()
         }
@@ -1276,7 +1297,7 @@ export default {
         formData.append('receiverUserId', this.selectedContact.connectionUserId);
         formData.append('me',true);
         formData.append('type', 'structure');
-        formData.append('fileType', this.isVideo ? 'video' : 'image');
+        formData.append('fileType', this.attachmentType);
         formData.append('createdAt', new Date());
         const headers = { 'Content-Type': 'multipart/form-data' };
 
@@ -1291,6 +1312,7 @@ export default {
               }
               console.log('4');
               this.isVideo = false;
+              this.isFile = false;
               this.pushMessage(data.data.message);
               this.addAttachmentDialog = false;
             })
@@ -1322,7 +1344,7 @@ export default {
           formData.append('file', attachment);
           formData.append('groupId', this.selectedContact.groupId);
           formData.append('type', 'structure');
-          formData.append('fileType', this.isVideo ? 'video' : 'image');
+          formData.append('fileType', this.attachmentType);
           formData.append('createdAt', new Date());
           const headers = { 'Content-Type': 'multipart/form-data' };
 
@@ -1350,10 +1372,17 @@ export default {
     },
     handleAttachmentUploadBtn() {
       this.isVideo = false;
+      this.isFile = false;
       this.addAttachmentDialog = true;
     },
     uploadVideo(){
       this.isVideo = true;
+      this.isFile = false;
+      this.addAttachmentDialog = true;
+    },
+    uploadFile(){
+      this.isVideo = false;
+      this.isFile = true;
       this.addAttachmentDialog = true;
     },
     handleAttachmentUploadCancel() {

@@ -86,7 +86,7 @@
         </v-dialog>
         <!-- Attachment -->
         <v-dialog v-model="addAttachmentDialog" max-width="400" style="z-index: 999!important; background: white">
-          <upload-attachment ref="UploadAttachment" :video="isVideo" @cancel="handleAttachmentUploadCancel" @sendAttachment="uploadAttachmentFile($event)" ></upload-attachment>
+          <upload-attachment ref="UploadAttachment" :video="isVideo" :file="isFile" @cancel="handleAttachmentUploadCancel" @sendAttachment="uploadAttachmentFile($event)" ></upload-attachment>
         </v-dialog>
         <a-drawer
           class="d-none d-sm-flex d-md-none pa-0"
@@ -620,6 +620,7 @@ export default {
   },
   data: () => ({
     isVideo: false,
+    isFile: false,
     touch_start: 0,
     touch_end: 0,
     slide_touch_start: 0,
@@ -748,6 +749,15 @@ export default {
     },
     navStatus(){
       return this.$store.getters['chat/getNavOnChatStatus']
+    },
+    attachmentType(){
+      if(this.isVideo){
+        return 'video';
+      }else if(this.isFile){
+        return 'file';
+      }else{
+        return 'image';
+      }
     },
   },
   watch: {
@@ -970,7 +980,7 @@ export default {
         formData.append('receiverUserId', this.selectedContact.connectionUserId);
         formData.append('me',true);
         formData.append('type', 'structure');
-        formData.append('fileType', this.isVideo ? 'video' : 'image');
+        formData.append('fileType', this.attachmentType);
         formData.append('createdAt', new Date());
         const headers = { 'Content-Type': 'multipart/form-data' };
 
@@ -980,6 +990,7 @@ export default {
             })
             .then((data) => {
               this.isVideo = false;
+              this.isFile = false;
               let contact = this.contacts[0];
               if (contact.id != this.selectedContact.id) {
                 this.$store.dispatch("chat/getContacts");
@@ -1010,7 +1021,7 @@ export default {
           formData.append('file', attachment);
           formData.append('groupId', this.selectedContact.groupId);
           formData.append('type', 'structure');
-          formData.append('fileType', this.isVideo ? 'video' : 'image');
+          formData.append('fileType', this.attachmentType);
           formData.append('createdAt', new Date());
           const headers = { 'Content-Type': 'multipart/form-data' };
 
@@ -1258,10 +1269,17 @@ export default {
     },
     handleAttachmentUploadBtn() {
       this.isVideo = false;
+      this.isFile = false;
       this.addAttachmentDialog = true;
     },
     uploadVideo(){
       this.isVideo = true;
+      this.isFile = false;
+      this.addAttachmentDialog = true;
+    },
+    uploadFile(){
+      this.isVideo = false;
+      this.isFile = true;
       this.addAttachmentDialog = true;
     },
     handleAttachmentUploadCancel() {
