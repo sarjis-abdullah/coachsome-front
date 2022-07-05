@@ -46,8 +46,9 @@
         text
         v-for="(item, i) in mainMenu.items"
         :key="i"
-        :to="localePath(item.path)"
-        >{{ $t(item.t_key) }}</v-btn
+        @click="gotoPage(item)"
+
+        >{{ $t(item.t_key) }}www</v-btn
       >
     </div>
 
@@ -230,6 +231,12 @@ export default {
         this.$router.push(this.localePath(pathData.pages.home));
       }
       this.$nuxt.$loading.finish();
+    },
+    gotoPage({path, t_key}){
+      if (t_key == 'nav_item_marketplace') {
+        window.open(this.localePath(path), '_blank');
+      }
+      this.$router.push(this.localePath(path))
     }
   },
   created() {
