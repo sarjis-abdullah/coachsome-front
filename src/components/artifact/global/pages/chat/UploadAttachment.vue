@@ -83,7 +83,7 @@
 <script>
 
 export default {
-  props:["video"],
+  props:["video","file"],
   data: () => ({
     fileName: "",
     loadingData: false,
@@ -95,7 +95,10 @@ export default {
     mimeType(){
       if(this.video){
         return "video/*"
-      }else{
+      }else if(this.file){
+        return "application/pdf,text/*"
+      }
+      else{
         return "image/*"
       }
     }
