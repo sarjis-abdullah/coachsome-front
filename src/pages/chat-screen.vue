@@ -1010,6 +1010,7 @@ export default {
           formData.append('file', attachment);
           formData.append('groupId', this.selectedContact.groupId);
           formData.append('type', 'structure');
+          formData.append('fileType', this.isVideo ? 'video' : 'image');
           formData.append('createdAt', new Date());
           const headers = { 'Content-Type': 'multipart/form-data' };
 
