@@ -1348,6 +1348,7 @@ export default {
       }
     },
     handleAttachmentUploadBtn() {
+      this.isVideo = false;
       this.addAttachmentDialog = true;
     },
     uploadVideo(){
