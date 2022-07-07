@@ -162,7 +162,7 @@
           small
           class="text-normal"
           :color="colorOfTheTextBtn"
-          :to="localePath({ name: navItems.marketplace.name })"
+          @click="gotoMarketplace(navItems)"
           text
           nuxt
           >{{ $t(navItems.marketplace.t_key) }}</v-btn
@@ -510,6 +510,9 @@ export default {
     }
   },
   methods: {
+    gotoMarketplace(navItems){
+      window.open(this.localePath(navItems.marketplace.name), '_blank');
+    },
     handleMessageBtnClick() {
       this.$store.dispatch("chat/refreshTotalNewMessageCount");
       this.$router.push(this.localePath(this.navItems.message.path));
