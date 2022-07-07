@@ -184,6 +184,9 @@ export default {
 
 
         const category  = await $axios.get("/tikcms/category/translations/by/all/language/show");
+        
+        console.log(category);
+
         // const blog = await $axios.get("/tikcms/blog/list");
         const publishedBlogs = await $axios.get("/tikcms/blog/all/published/show");
 
@@ -210,6 +213,8 @@ export default {
                                 }
 
           categoryData.push(defaultCategory);
+
+          console.log(category.data.data);
          
           category.data.data.map( categoryList => {
 
