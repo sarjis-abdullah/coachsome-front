@@ -184,6 +184,7 @@ export default {
 
 
         const category  = await $axios.get("/tikcms/category/translations/by/all/language/show");
+
         // const blog = await $axios.get("/tikcms/blog/list");
         const publishedBlogs = await $axios.get("/tikcms/blog/all/published/show");
 

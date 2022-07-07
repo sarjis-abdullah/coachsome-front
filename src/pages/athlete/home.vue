@@ -16,9 +16,9 @@
       >
         <v-col
           cols="12"
-          sm="8"
+          sm="11"
           md="6"
-          lg="4"
+          lg="6"
           xs="12"
           class="mb-10"
         >
