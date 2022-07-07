@@ -26,10 +26,28 @@
               :loop="false"
               :ref="'video_player'"
               width="100%"
+              class="attachment-video"
               @play="showPlayerIcon = false"
               @pause="showPlayerIcon = true"
             >
             </Media>
+            <v-tooltip top v-else-if="message.content.key == 'file'">
+              <template v-slot:activator="{ on }" >
+                <v-btn
+                  v-on="on"
+                  @click="downloadAttachment(message.content.url, message.content.label)"
+                  text
+                  color="#1890ff"
+                >
+                  <v-icon left small color="red" class="pr-2">
+                    mdi-file-cloud
+                  </v-icon>
+                  {{message.content.label}}
+                </v-btn>
+              </template>
+              <span>{{$t("click_download")}}</span>
+            </v-tooltip>
+              
             
             <img v-else class="attachment-img" height="185" :src="message.content.url" alt="">
 
@@ -50,7 +68,7 @@ import { messageData } from "@/data";
 import Media from "@dongido/vue-viaudio";
 
 export default {
-  props: ["message", "key"],
+  props: ["message"],
   components: { Media },
   data() {
     return {
@@ -58,17 +76,40 @@ export default {
       showPlayerIcon: true
     };
   },
+  computed: {
+    time() {
+      return this.moment(this.message.createdAt)
+        .locale(this.$i18n.locale)
+        .format("DD MMM HH:mm");
+    }
+  },
   methods: {
     moment,
     handleVideoPlay(){
       this.showPlayerIcon = false;
       this.$refs.video_player.play();
+    },
+    downloadAttachment(url, filename){
+      fetch(url).then(function(t) {
+          return t.blob().then((b)=>{
+              var a = document.createElement("a");
+              a.href = URL.createObjectURL(b);
+              a.setAttribute("download", filename);
+              a.click();
+          }
+          );
+      });
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.attachment-video{
+  width: 100%!important;
+  height:150px!important; 
+  background: none!important;
+}
 .attachment-message {
   width: 100%;
   &--me {
@@ -82,10 +123,6 @@ export default {
       font-size: 14px;
       line-height: 124%;
       color: #fcfdfe;
-      &video{
-        width:40%; 
-        background: black;
-      }
     }
   }
   &--opponent {

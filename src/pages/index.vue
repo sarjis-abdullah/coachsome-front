@@ -618,7 +618,7 @@
                     color="accent"
                     x-large
                     depressed
-                    @click.stop="goToRegister"
+                    @click.stop="goToBecomeCoach"
                     >{{ $t("front_btn_label_start_coaching") }}</v-btn
                   >
                 </v-col>
@@ -1095,8 +1095,8 @@ export default {
         this.localePath({ name: pathData.pages.marketplace.name })
       );
     },
-    goToRegister() {
-      this.$router.push(this.localePath(pathData.pages.login));
+    goToBecomeCoach() {
+      this.$router.push(this.localePath(pathData.pages.becomeACoach));
     }
   }
 };
