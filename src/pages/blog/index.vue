@@ -211,8 +211,6 @@ export default {
                                 }
 
           categoryData.push(defaultCategory);
-
-          console.log(category.data.data);
          
           category.data.data.map( categoryList => {
 
