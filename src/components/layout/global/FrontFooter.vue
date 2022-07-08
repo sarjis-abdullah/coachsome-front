@@ -145,6 +145,27 @@
               </nuxt-link>
             </div>
           </div>
+          <!-- Download Button -->
+            <div class="d-flex mt-4">
+              <div>
+                <a href="https://apps.apple.com/tt/app/coachsome/id1614645366" download target="_blank">
+                  <img
+                    style="width: 100%;"
+                    :src="require('@/assets/img/svg-icons/apple-store-logo.png')"
+                    alt="logo"
+                  />
+                </a>
+              </div>
+              <div>
+                <a href="https://play.google.com/store/apps/details?id=com.coachsome.coach" download target="_blank">
+                  <img
+                    style="width: 100%;"
+                    :src="require('@/assets/img/svg-icons/google-play-logo.png')"
+                    alt="logo"
+                  />
+                </a>
+              </div>
+            </div>
         </v-col>
         <v-col cols="12" md="5">
           <v-row>
