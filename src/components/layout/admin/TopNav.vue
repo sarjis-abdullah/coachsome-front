@@ -233,9 +233,6 @@ export default {
       this.$nuxt.$loading.finish();
     },
     gotoPage({path, t_key}){
-      if (t_key == 'nav_item_marketplace') {
-        window.open(this.localePath(path), '_blank');
-      }
       this.$router.push(this.localePath(path))
     }
   },

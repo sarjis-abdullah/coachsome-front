@@ -511,7 +511,7 @@ export default {
   },
   methods: {
     gotoMarketplace(navItems){
-      window.open(this.localePath(navItems.marketplace.name), '_blank');
+      this.$router.push(this.localePath(navItems.marketplace.name))
     },
     handleMessageBtnClick() {
       this.$store.dispatch("chat/refreshTotalNewMessageCount");
