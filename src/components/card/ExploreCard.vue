@@ -129,7 +129,7 @@ export default {
   },
   methods: {
     gotTo(username) {
-      if(this.$route.path.includes("/coaches")){
+      if(this.$route.name.split("marketplace") && this.$route.name.split("marketplace").length){
         window.open(
         this.localePath(pathData.pages.publicProfile(username)),
         "_blank"
