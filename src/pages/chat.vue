@@ -1175,6 +1175,7 @@ export default {
     if(this.$route.fullPath != this.localePath(pathData.pages.chat.path) && this.$vuetify.breakpoint.smAndDown){
       this.$router.replace(this.localePath(pathData.pages.chat.path));
     }
+    this.$store.dispatch("chat/setContacts", []);
   },
   async mounted() {
     // this.getFirebaseToken()
