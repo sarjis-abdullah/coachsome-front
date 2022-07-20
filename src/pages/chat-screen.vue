@@ -1413,6 +1413,8 @@ export default {
       if (response?.data?.data?.token) {
         token = response.data.data.token
         status = response.data.data.status
+      }else {
+        return;
       }
       if (!token || status == "off") {
         return

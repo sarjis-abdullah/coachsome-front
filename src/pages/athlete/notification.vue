@@ -205,7 +205,7 @@ export default {
     },
   },
   created() {
-    this.getPushNotificationStatus()
+    this.$auth?.user?.id && this.getPushNotificationStatus()
   },
   mounted() {
     this.getAthleteSetting();
@@ -262,12 +262,15 @@ export default {
       }
     },
     handlePushNotification(){
+      if (!this.notificationId) {
+        return;
+      }
       this.notificationStatus = !this.notificationStatus
       this.$axios.put("notification-user/" + this.notificationId, {})
     },
     async getPushNotificationStatus(){
       try {
-        const res = await this.$axios.get("notification-user")
+        const res = await this.$axios.get("notification-user?userId=" + this.$auth.user.id)
         if(res?.data?.data){
           const {status, id} = res.data.data
           this.notificationId = id
