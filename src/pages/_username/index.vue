@@ -164,10 +164,22 @@
             <v-col cols="12" md="6" v-for="(service, i) in services" :key="i">
               <service-card v-bind="service">
                 <template v-slot:book-now-btn>
-                  <v-btn color="accent" @click.stop="handleBooking(service)">
+                  <v-btn color="accent" @click.stop="handleBooking(service)" v-if="!isCoach">
                     {{ $t("btn_label_book_now") }}
                   </v-btn>
+                  <v-tooltip top v-else>
+                    <template v-slot:activator="{ on }">
+                      <div v-on="on">
+                        <v-btn disabled>
+                          {{ $t("btn_label_book_now") }}
+                        </v-btn>
+                      </div>
+                    </template>
+                    <span>Switch to athlete to continue</span>
+                  </v-tooltip>
                 </template>
+
+                
                 <template v-slot:description="{ text }">
                   <client-only>
                     <read-more
@@ -510,6 +522,9 @@ export default {
     };
   },
   computed: {
+    isCoach() {
+      return this.hasRole(["coach"]);
+    },
     showLoadMoreBtn() {
       return (
         this.gallery.links.length > 0 &&
@@ -685,6 +700,9 @@ export default {
     this.getData();
   },
   methods: {
+    hasRole(roles = []) {
+      return this.$auth.hasRole(roles);
+    },
     copyUrl() {
       var Url = this.$refs.myUrl;
       navigator.clipboard.writeText(Url);
