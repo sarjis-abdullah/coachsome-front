@@ -1816,10 +1816,13 @@ export default {
       }
       const obj = {
         "to": token,
+        data: {
+          click_action: process.env.CLIENT_BASE_URL + "/chat?userId=" + data.receiverUserId,
+        },
         "notification": {
           title: "New message from " + name,
           body: data.content ? data.content : "Please check!",
-          click_action: process.env.CLIENT_BASE_URL + "/chat?userId=" + data.receiverUserId,
+          content_available: true,
           icon: "http://coachsome.com/apple-touch-icon-76x76.png"
         },
       }
