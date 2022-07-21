@@ -1172,9 +1172,10 @@ export default {
     }
   },
   created(){
-    if(this.$route.fullPath != this.localePath(pathData.pages.chat.path) && this.$vuetify.breakpoint.smAndDown){
+    if(this.$route.fullPath != this.localePath(pathData.pages.chat.path) && this.$vuetify.breakpoint.smAndDown && !this.$route.query.userId){
       this.$router.replace(this.localePath(pathData.pages.chat.path));
     }
+    this.$store.dispatch("chat/setContacts", []);
   },
   async mounted() {
     // this.getFirebaseToken()

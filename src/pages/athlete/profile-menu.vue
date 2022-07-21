@@ -347,14 +347,6 @@ export default ({
         }
       },
       initialImageContent() {
-        // if (this.authUser() && this.authUser().first_name && this.authUser().last_name) {
-        //   return (
-        //     this.authUser().first_name.substring(0, 1) +
-        //     this.authUser().last_name.substring(0, 1)
-        //   );
-        // } else {
-        //   return "";
-        // }
         return avatarHelper.getAvatarName(this.authUser());
       },
       currencyName(){
