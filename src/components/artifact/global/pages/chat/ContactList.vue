@@ -154,7 +154,10 @@ export default {
     contacts() {
       this.$store.dispatch("chat/setNavOnChat", false);
       return this.$store.getters["chat/contacts"];
-    }
+    },
+    selectedContact() {
+      return this.$store.getters["chat/selectedContact"];
+    },
   },
   watch: {
     "$store.state.chat.selectedContact": function(val) {
