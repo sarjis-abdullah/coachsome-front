@@ -35,7 +35,7 @@
       </div>
 
       <!-- Attachment Message -->
-      <div v-if="message.type == 'structure' && message.content && message.content.key == 'attachment' || message.content.key == 'video' || message.content.key == 'file'">
+      <div v-if="message.type == 'structure' && message.content && message.content.key && message.content.key == 'attachment' || message.content.key == 'video' || message.content.key == 'file'">
         <Attachment :message="{ ...message }" :key="message.content.key"/>
       </div>
 
