@@ -31,7 +31,7 @@
                 {{$t("pwa_email_notification")}}
               </div>
             </v-col>
-            <v-col cols="12" class="px-0">
+            <v-col cols="12" class="px-0 py-0">
               <v-list class="body-bg">
                
                 <v-list-item text >
@@ -143,6 +143,40 @@
               </v-row>
             </v-col> -->
           </v-row>
+          <v-row class="notification">
+            <v-col cols="12" md="4">
+              <div class="default--title">
+                {{ $t('push_notification_title') }}
+              </div>
+            </v-col>
+            <v-col cols="12" class="px-0 py-0">
+              <v-list class="body-bg">
+               
+                <v-list-item text >
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <v-list-item-title class="default--sub-title">
+                      {{ $t('push_notification_subtitle') }}
+                    </v-list-item-title>
+                  </v-list-item-title>
+                </v-list-item-content>
+                  <v-list-item-icon>
+                    <client-only>
+                      <toggle-button
+                        :value="notificationStatus"
+                        @input="handlePushNotification"
+                        :color="{ checked: '#5CC866', unchecked: '#EFEFEF' }"
+                        :sync="true"
+                        :font-size="12"
+                        :width="60"
+                        :height="30"
+                      />
+                    </client-only>
+                  </v-list-item-icon>
+                </v-list-item>
+              </v-list>
+            </v-col>
+          </v-row>
       </v-col>
     </v-row>
 </v-container>
@@ -157,6 +191,7 @@ export default {
   components:{MobileTopNav},
   data() {
     return {
+        notificationStatus:null,
         settingValueData,
         notificationType: {
           id: null,
@@ -177,6 +212,7 @@ export default {
   },
   created() {
     this.fetchSettings();
+    this.$auth?.user?.id && this.getPushNotificationStatus()
   },
   mounted() {},
   methods: {
@@ -229,6 +265,29 @@ export default {
         if (response.message) {
           this.$toast.error(response.message);
         }
+      }
+    },
+    handlePushNotification(){
+      if (!this.notificationId) {
+        return;
+      }
+      this.notificationStatus = !this.notificationStatus
+      this.$axios.put("notification-user/" + this.notificationId, {})
+    },
+    async getPushNotificationStatus(){
+      try {
+        const res = await this.$axios.get("notification-user?userId=" + this.$auth.user.id)
+        if(res?.data?.data){
+          const {status, id} = res.data.data
+          this.notificationId = id
+          if (status == 'on') {
+            this.notificationStatus = true
+          }else{
+            this.notificationStatus = false
+          }
+        }
+      } catch (error) {
+        
       }
     },
   }
