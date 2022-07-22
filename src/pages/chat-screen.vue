@@ -144,6 +144,7 @@
                         <v-icon x-large>mdi-chevron-left</v-icon>
                       </v-btn>
                       <v-badge
+                        overlap
                         bordered
                         bottom
                         :color="selectedContact.isOnline ? 'green' : 'grey'"
@@ -501,6 +502,17 @@
                                       >
                                         <v-icon dark>
                                           mdi-video
+                                        </v-icon>
+                                      </v-btn>
+                                      <v-btn
+                                        fab
+                                        text
+                                        small
+                                        color="#49556A"
+                                        @click="uploadFile"
+                                      >
+                                        <v-icon dark>
+                                          mdi-file-document
                                         </v-icon>
                                       </v-btn>
                               </div>
