@@ -1076,6 +1076,9 @@ export default {
       }
       if (contact) {
         this.$store.dispatch("chat/setSelectedContact", contact);
+        this.$store.dispatch("chat/refreshContactUserNewMessageCount", {
+          id: contact.id
+        });
         if(this.$vuetify.breakpoint.smAndDown){
           this.$router.push(this.localePath(pathData.pages.chatScreen.path));
         }else{
