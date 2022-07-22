@@ -1276,6 +1276,7 @@ export default {
         let messageData = {
           me: true,
           type: "structure",
+          key: this.attachmentType,
           fileType: this.attachmentType,
           file: attachment,
           createdAt: new Date()
