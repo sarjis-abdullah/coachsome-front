@@ -134,7 +134,7 @@
           </v-col>
           <v-col cols="12" md="4" class="pb-0">
             <div class="default--title" style="text-transform: uppercase">
-              Push Notification
+              {{ $t('push_notification_title') }}
             </div>
           </v-col>
           <v-col cols="12" class="px-0 py-0" >
@@ -144,7 +144,7 @@
                 <v-list-item-content>
                   <v-list-item-title>
                     <v-list-item-title class="default--sub-title">
-                      Chat message
+                      {{ $t('push_notification_subtitle') }}
                     </v-list-item-title>
                   </v-list-item-title>
                 </v-list-item-content>
