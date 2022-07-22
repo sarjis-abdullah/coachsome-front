@@ -1818,10 +1818,12 @@ export default {
       if (!token || status == "off") {
         return
       }
+      let path = !this.$vuetify.breakpoint.mdAndUp ? pathData.pages.chatScreen.path : pathData.pages.chat.path
+      path = this.localePath(path)
       const obj = {
         "to": token,
         data: {
-          click_action: process.env.CLIENT_BASE_URL + "/chat?userId=" + data.receiverUserId,
+          click_action: process.env.CLIENT_BASE_URL + path + "?userId=" + data.receiverUserId,
         },
         "notification": {
           title: "New message from " + name,
