@@ -35,10 +35,13 @@
                   offset-x="1"
                   offset-y="3"
                 >
+
+                <v-avatar :size="avatarSize">
                   <v-img v-if="item.avatarImage" :src="item.avatarImage"></v-img>
                   <div v-else v-html="item.avatarName">
                     {{ item.avatarName }}
                   </div>
+                </v-avatar>
               
                 </v-badge>
             </v-list-item-avatar>
