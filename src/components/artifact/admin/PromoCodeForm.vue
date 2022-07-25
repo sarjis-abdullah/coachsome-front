@@ -3,7 +3,7 @@
       <FormHeader @close="closePromoCodeDialog" :title="dialogTitle" :parentClass="{
         'px-9 pt-8': $vuetify.breakpoint.mdAndUp,
         'px-3': !$vuetify.breakpoint.mdAndUp,
-      }" />
+      }" /> 
     <v-card-text>
       <v-container>
         
