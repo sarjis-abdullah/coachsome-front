@@ -38,7 +38,6 @@ export default ({ app }, inject) => {
         }
       });
       socket.on("group_message_receive", async payload => {
-        // console.log(payload);
         await app.store.dispatch("chat/getContacts");
         await app.store.getters["chat/contacts"];
         let selectedContact = app.store.getters["chat/selectedContact"];
