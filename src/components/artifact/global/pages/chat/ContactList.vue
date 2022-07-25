@@ -18,16 +18,43 @@
             :value="item.id"
             @click.stop="handleSelectedContact(item)"
           >
+            
             <v-list-item-avatar
+              v-if="item.newMessageCount > 0"
               color="primary-light-1"
               class="d-flex justify-center"
               :size="avatarSize"
+              style="overflow: inherit!important;"
             >
+                <v-badge
+                  color="red"
+                  :content="item.newMessageCount"
+                  bordered
+                  overlap
+                  top
+                  offset-x="1"
+                  offset-y="3"
+                >
+                  <v-img v-if="item.avatarImage" :src="item.avatarImage"></v-img>
+                  <div v-else v-html="item.avatarName">
+                    {{ item.avatarName }}
+                  </div>
+              
+                </v-badge>
+            </v-list-item-avatar>
+
+            <v-list-item-avatar
+              v-else
+              color="primary-light-1"
+              class="d-flex justify-center"
+              :size="avatarSize">
               <v-img v-if="item.avatarImage" :src="item.avatarImage"></v-img>
               <div v-else v-html="item.avatarName">
                 {{ item.avatarName }}
               </div>
             </v-list-item-avatar>
+              
+            
 
             <v-list-item-content>
               <v-list-item-title v-html="item.title"></v-list-item-title>
@@ -127,7 +154,10 @@ export default {
     contacts() {
       this.$store.dispatch("chat/setNavOnChat", false);
       return this.$store.getters["chat/contacts"];
-    }
+    },
+    selectedContact() {
+      return this.$store.getters["chat/selectedContact"];
+    },
   },
   watch: {
     "$store.state.chat.selectedContact": function(val) {

@@ -891,6 +891,7 @@ export default {
     }
   },
   data: () => ({
+    fileName: "",
     isVideo: false,
     isFile: false,
     notificationUsers: [],
@@ -1062,6 +1063,7 @@ export default {
     },
 
     selectedContact(data) {
+
       this.$store.dispatch("chat/destroyMessages");
       let contact = data
       if (!this.chechContactQuery && this.$route?.query?.contactAbleUserId) {
@@ -1074,7 +1076,9 @@ export default {
       }
       if (contact) {
         this.$store.dispatch("chat/setSelectedContact", contact);
-
+        this.$store.dispatch("chat/refreshContactUserNewMessageCount", {
+          id: contact.id
+        });
         if(this.$vuetify.breakpoint.smAndDown){
           this.$router.push(this.localePath(pathData.pages.chatScreen.path));
         }else{
@@ -1172,9 +1176,10 @@ export default {
     }
   },
   created(){
-    if(this.$route.fullPath != this.localePath(pathData.pages.chat.path) && this.$vuetify.breakpoint.smAndDown){
+    if(this.$route.fullPath != this.localePath(pathData.pages.chat.path) && this.$vuetify.breakpoint.smAndDown && !this.$route.query.userId){
       this.$router.replace(this.localePath(pathData.pages.chat.path));
     }
+    this.$store.dispatch("chat/setContacts", []);
   },
   async mounted() {
     // this.getFirebaseToken()
@@ -1275,8 +1280,10 @@ export default {
         let messageData = {
           me: true,
           type: "structure",
+          key: this.attachmentType,
           fileType: this.attachmentType,
           file: attachment,
+          label: attachment.name,
           createdAt: new Date()
         }
         let newMessage = Object.assign(
@@ -1286,11 +1293,7 @@ export default {
         if (
           this.selectedContact.categoryId == contactData.CATEGORY_ID_PRIVATE
         ) {
-          newMessage.scope = this.sendPrivateMessageToChatServer({
-            senderUserId: this.$auth.user.id,
-            receiverUserId: this.selectedContact.connectionUserId,
-            message: newMessage
-          });
+          
 
         const formData = new FormData();
         formData.append('file', attachment);
@@ -1313,6 +1316,11 @@ export default {
               console.log('4');
               this.isVideo = false;
               this.isFile = false;
+              newMessage.scope = this.sendPrivateMessageToChatServer({
+              senderUserId: this.$auth.user.id,
+              receiverUserId: this.selectedContact.connectionUserId,
+              message: data.data.message
+          });
               this.pushMessage(data.data.message);
               this.addAttachmentDialog = false;
             })
@@ -1756,7 +1764,6 @@ export default {
         getToken(messaging, { vapidKey: 'BCNk4KVRK5Z8_wGbQy0B_9pLVvGmJlf1Qx6N_odSpRUMj_f9_juZdNVqzCDzWcfM_Z-n4iQ_GMMiE8mXBmimQUQ' })
         .then((currentToken) => {
           if (currentToken) {
-            console.log(currentToken, "currentToken");
             // Send the token to your server and update the UI if necessary
           } else {
             console.log('No registration token available. Request permission to generate one.');
