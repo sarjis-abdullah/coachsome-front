@@ -637,7 +637,7 @@ export default {
       immediate: true,
       deep: true,
       handler(newValue, oldValue) {
-        if (this.$route?.query?.exerciseDialog) {
+        if (this.$route?.query?.exerciseDialog || this.previewMode) {
           this.exerciseDialog = true
         }else{
           this.exerciseDialog = false;
@@ -1112,7 +1112,7 @@ export default {
       this.filter.withVideo = false;
       this.filterRequest = false;
       this.exerciseDialog = false;
-      this.exerciseDialog = false;
+      this.previewMode = false;
     },
 
     makeExerciseTableRow(exercises) {
