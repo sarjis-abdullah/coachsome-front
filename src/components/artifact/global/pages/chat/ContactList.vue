@@ -32,8 +32,8 @@
                   bordered
                   overlap
                   top
-                  offset-x="1"
-                  offset-y="3"
+                  offset-x="10"
+                  offset-y="15"
                 >
 
                 <v-avatar :size="avatarSize">
