@@ -16,7 +16,7 @@
             <!-- Purchased package -->
             <div
               class="package-list--purchased"
-              v-if="purchasedPackageList.length"
+              v-if="purchasedPackageList.length && isAthlete"
             >
               <div class="package-list__title">
                 Purchased package
@@ -74,7 +74,7 @@
             </div>
 
             <!-- Sold package -->
-            <div class="package-list--sold" v-if="soldPackageList.length">
+            <div class="package-list--sold" v-if="soldPackageList.length && isCoach">
               <div class="package-list__title">
                 Sold package
               </div>
@@ -186,12 +186,21 @@ export default {
     },
     hasSoldPackage() {
       return this.soldPackageList.length > 0 ? true : false;
-    }
+    },
+    isCoach() {
+      return this.hasRole(["coach"]);
+    },
+    isAthlete() {
+      return this.hasRole(["athlete"]);
+    },
   },
   mounted() {
     this.fetchPackageInformation();
   },
   methods: {
+    hasRole(roles = []) {
+      return this.$auth.hasRole(roles);
+    },
     reset() {
       this.selectedSoldPackage = null;
       this.selectedPurchasedPackage = null;

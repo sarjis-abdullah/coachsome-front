@@ -106,7 +106,7 @@
                     {{ $t("Gift") }}
                   </span>
                 </div>
-                <div class="list__item">
+                <div class="list__item" v-if="!is_profile_switched_ever && !isAdmin && !isCoach">
                   <span style="cursor:pointer;" @click="handleBecomeCoach">
                     {{$t("dropdown_item_become_coach")}}
                   </span>
@@ -266,11 +266,14 @@
 
 <script>
 import { pathData } from "@/data";
+import { endpoint } from "@/api";
+
 export default {
   props: ["fixed"],
   components: {},
   data() {
     return {
+      is_profile_switched_ever: false,
       footer: {
         show: true
       },
@@ -292,8 +295,25 @@ export default {
       currentYear: new Date().getFullYear()
     };
   },
-  computed: {},
+  created(){
+    this.checkSwitchInfo();
+  },
+  computed: {
+    isCoach() {
+      return this.hasRole(["coach"]);
+    },
+    isAdmin() {
+      return this.hasRole(["superadmin", "admin", "staff"]);
+    },
+  },
   methods: {
+    async checkSwitchInfo(){
+      const { data } = await this.$axios.get(endpoint.SWITCH_INFO);
+      this.is_profile_switched_ever = data.is_profile_switched;
+    },
+    hasRole(roles = []) {
+      return this.$auth.hasRole(roles);
+    },
     handleGiftBtnClick() {
       this.$router.push(this.localePath(this.uri.gift));
     },

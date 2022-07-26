@@ -14,9 +14,9 @@
           <!-- Profile and Travel -->
           <v-row justify="center">
             <v-col cols="12" md="6" class="mt-10">
-              <profile-card v-bind="profileCard"></profile-card>
+              <common-profile-card v-bind="profileCard"></common-profile-card>
             </v-col>
-            <v-col cols="12" md="6" :class="{'mt-10' : !$vuetify.breakpoint.smAndDown }">
+            <v-col cols="12" md="6" :class="{'mt-10' : !$vuetify.breakpoint.smAndDown }" v-show="!isAthlete">
               <div class="social-share-section-sm" v-if="$vuetify.breakpoint.smAndDown">
                 <p class="social-share-section-sm__text">{{$t('pwa_social_share_title')}}</p>
                 <div class=" d-flex justify-center">
@@ -133,10 +133,23 @@
                           small
                           depressed
                           color="#E1E8F1"
+                          v-if="!isAuthCoach"
+                          :disabled="!isContactable"
                           @click.stop="contactBtnHandle"
                           >{{ $t("text_message") }}
                           {{ profileCard.name }}</v-btn
                         >
+                        <v-tooltip top v-else>
+                          <template v-slot:activator="{ on }">
+                            <div v-on="on">
+                              <v-btn disabled>
+                               {{ $t("text_message") }}
+                                {{ profileCard.name }}
+                              </v-btn>
+                            </div>
+                          </template>
+                          <span>{{ $t("switch_to_athlete_tooltip") }}</span>
+                        </v-tooltip>
                       </div>
                     </div>
                   </v-card-actions>
@@ -146,7 +159,7 @@
           </v-row>
 
           <!-- Service -->
-          <v-row>
+          <v-row v-if="!isAthlete">
             <v-col cols="12" md="6" v-for="item in 4" :key="item">
               <v-skeleton-loader
                 v-if="isServiceLoading"
@@ -155,7 +168,7 @@
             </v-col>
           </v-row>
 
-          <v-row v-if="services.length > 0">
+          <v-row v-if="services.length > 0 && !isAthlete">
             <v-col cols="12">
               <div class="section-title">
                 {{ $t("public_profile_section_services") }}
@@ -164,7 +177,7 @@
             <v-col cols="12" md="6" v-for="(service, i) in services" :key="i">
               <service-card v-bind="service">
                 <template v-slot:book-now-btn>
-                  <v-btn color="accent" @click.stop="handleBooking(service)" v-if="!isCoach">
+                  <v-btn color="accent" @click.stop="handleBooking(service)" v-if="!isAuthCoach">
                     {{ $t("btn_label_book_now") }}
                   </v-btn>
                   <v-tooltip top v-else>
@@ -175,7 +188,7 @@
                         </v-btn>
                       </div>
                     </template>
-                    <span>Switch to athlete to continue</span>
+                    <span>{{ $t("switch_to_athlete_tooltip") }}</span>
                   </v-tooltip>
                 </template>
 
@@ -324,7 +337,7 @@
           </v-row>
 
           <!-- Images -->
-          <v-row justify="center" v-if="gallery.links.length > 0">
+          <v-row justify="center" v-if="gallery.links.length > 0 && !isAthlete">
             <v-col cols="12" md="12" class="mt-10" :gutter="0">
               <v-row>
                 <v-col cols="12">
@@ -349,7 +362,7 @@
           </v-row>
 
           <!-- Reviews -->
-          <v-row>
+          <v-row v-if="!isAthlete">
             <v-col>
               <v-row v-if="reviewers.length > 0">
                 <v-col
@@ -394,7 +407,7 @@
           </v-row>
 
           <!-- Question Box Dialog -->
-          <v-dialog v-model="questionBox.dialog" max-width="500px" attach>
+          <v-dialog v-model="questionBox.dialog" max-width="500px" attach v-if="!isAthlete">
             <v-card>
               <v-card-text>
                 <div class="question-box">
@@ -443,7 +456,7 @@
 </template>
 
 <script>
-import ProfileCard from "@/components/card/ProfileCard";
+import CommonProfileCard from "@/components/card/CommonProfileCard";
 import ServiceCard from "@/components/card/ServiceCard";
 import ReviewCard from "@/components/card/ReviewCard";
 import BookingRequest from "@/components/artifact/global/BookingRequest";
@@ -487,7 +500,7 @@ export default {
   },
   components: {
     DarkboxGallery,
-    ProfileCard,
+    CommonProfileCard,
     ServiceCard,
     ReviewCard,
     BookingRequest
@@ -513,7 +526,8 @@ export default {
         categories: [],
         fb_link: "",
         twitter_link: "",
-        instagram_link: ""
+        instagram_link: "",
+        role:null
       },
       isServiceLoading: true,
       services: [],
@@ -522,8 +536,21 @@ export default {
     };
   },
   computed: {
+    isContactable(){
+      if(this.$auth.loggedIn && this.$auth.user && this.$auth.user.id == this.userInfo.id){
+        return false;
+      }else{
+        return true;
+      }
+    },
     isCoach() {
+      return this.userInfo.role == "coach";
+    },
+    isAuthCoach(){
       return this.hasRole(["coach"]);
+    },
+    isAthlete() {
+      return this.userInfo.role == "athlete";
     },
     showLoadMoreBtn() {
       return (
@@ -585,7 +612,8 @@ export default {
         categories: [],
         fb_link: "",
         twitter_link: "",
-        instagram_link: ""
+        instagram_link: "",
+        role:null
       };
 
       let userInfo = {
@@ -593,7 +621,8 @@ export default {
         email: null,
         userName: null,
         firstName: "",
-        lastName: ""
+        lastName: "",
+        role:null
       };
 
       let gallery = {
@@ -654,7 +683,9 @@ export default {
         userInfo.userName = data.user_info.userName;
         userInfo.firstName = data.user_info.firstName;
         userInfo.lastName = data.user_info.lastName;
+        userInfo.role = data.user_info.role;
         profileCard.badgeKey = data.user_info.badgeKey;
+        profileCard.role = data.user_info.role;
       }
 
       // Masonry links
@@ -699,6 +730,7 @@ export default {
     this.initMap();
     this.getData();
   },
+  
   methods: {
     hasRole(roles = []) {
       return this.$auth.hasRole(roles);

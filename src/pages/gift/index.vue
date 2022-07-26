@@ -108,10 +108,25 @@
             class="px-15"
             block
             color="#EDB041"
+            v-if="!isCoach"
             @click="handleBuyNowBtnClick"
           >
             {{ $t("gift_label_buy_now") }}
           </v-btn>
+
+          <v-tooltip top v-else>
+            <template v-slot:activator="{ on }">
+              <div v-on="on">
+                <v-btn disabled class="px-15" block color="#EDB041">
+                  {{ $t("gift_label_buy_now") }}
+                </v-btn>
+              </div>
+            </template>
+            <span>{{ $t("switch_to_athlete_tooltip") }}</span>
+          </v-tooltip>
+
+
+
         </v-col>
       </v-row>
     </v-container>
@@ -153,7 +168,15 @@ export default {
     this.ammountCurrency = this.currencyService.currentCurrencyCode()
     giftService.destroyGift();
   },
+  computed:{
+    isCoach() {
+      return this.hasRole(["coach"]);
+    },
+  },
   methods: {
+    hasRole(roles = []) {
+      return this.$auth.hasRole(roles);
+    },
     handleGiftAmmountSelect() {
       this.customAmmount = null;
     },
