@@ -392,7 +392,7 @@ export default ({
           .catch(() => {});
       },
       showProfile() {
-        this.$router.push(this.localePath(pathData.pages.publicProfile(this.$auth.user.user_name)));
+        this.$router.push(this.localePath(pathData.pages.publicProfile('athlete/'+this.$auth.user.user_name)));
       },
       authUser() {
         return this.$auth.user;

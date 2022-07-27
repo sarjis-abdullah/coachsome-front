@@ -1329,7 +1329,7 @@ export default {
       return this.$auth.user.image;
     },
     personalizedUrl() {
-      return this.origin + "/" + this.profileData.user_name;
+      return this.origin + "/athlete/" + this.profileData.user_name;
     },
     formatedDate() {
       return this.formatDate(this.date);
@@ -1340,7 +1340,7 @@ export default {
       this.profileData.birth_day = val;
     },
     "profileData.user_name": function(val) {
-      this.dialog.personalize.userName = val;
+      this.dialog.personalize.userName = "athlete/" +val;
     },
     "profilePicture.file": function(val) {
       this.profilePicture.img = URL.createObjectURL(val);
