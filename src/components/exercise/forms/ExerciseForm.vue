@@ -373,7 +373,7 @@
                                         <v-list-item text >
                                         <v-list-item-content>
                                         <v-list-item-title>
-                                            <v-list-item-title class="default--sub-title">{{$t('share_with_coach')}}</v-list-item-title>
+                                            <v-list-item-title class="default--label">{{ $t("share_with_coach") }}</v-list-item-title>
                                         </v-list-item-title>
                                         </v-list-item-content>
                                         <v-list-item-icon>
