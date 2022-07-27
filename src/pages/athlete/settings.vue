@@ -326,7 +326,7 @@
                   </v-row>
                 </v-form>
 
-                <v-row>
+                <v-row v-if="false">
                   <v-col cols="12" md="4">
                     <div class="section-title pb-2">
                       {{ $t("setting_sec_timezone_title") }}
@@ -680,11 +680,13 @@ export default {
           long: this.form.contactInformation.long,
           city: this.form.contactInformation.city,
           address: this.form.contactInformation.address,
-          timezone: this.form.contactInformation.timezone,
           notificatonCategories: this.form.activeNotifications.map(
             item => item.id
           )
         };
+        if(this.form.contactInformation.timezone){
+          payload.timezone = this.form.contactInformation.timezone
+        }
         let { data } = await coachSettingApi(this.$axios).updateSetting(
           payload
         );
@@ -787,7 +789,9 @@ export default {
         this.form.contactInformation.address = data.userSetting.address;
         this.form.contactInformation.zipCode = data.userSetting.zipCode;
         this.form.contactInformation.city = data.userSetting.city;
-        this.form.contactInformation.timezone = data.userSetting.timezone;
+        if(data.userSetting.timezone){
+          this.form.contactInformation.timezone = data.userSetting.timezone;
+        }
         this.form.activeNotifications = data.userSetting.activeNotificationCategories;
         this.form.email = data.userSetting.email;
       }
