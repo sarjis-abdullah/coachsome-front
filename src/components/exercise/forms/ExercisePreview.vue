@@ -53,12 +53,12 @@
                 <span class="exercise-preview--title">{{$t("lbl_ex_desc")}}</span>
                 <span class="exercise-preview--description" v-html="exerciseData.instructions"></span>
             </v-col>
-            <v-col cols="12">
+            <v-col cols="12" v-if="exerciseData.category.length || exerciseData.sport.length || exerciseData.lavel.length || exerciseData.tags.length">
                 <span class="exercise-preview--breakdown">{{$t("lbl_ex_brk")}}</span>
             </v-col>
-            <v-col cols="12">
+            <v-col cols="12" v-if="exerciseData.category.length">
                 <span class="exercise-preview--title">{{$t("lbl_ex_cat")}}</span>
-                <span class="exercise-preview--description" v-if="exerciseData.category.length" >
+                <span class="exercise-preview--description" >
                 <template v-for="(category, index) in exerciseData.category" >
                     {{$t(category.t_key)}}  
                     <span v-if="index == ( exerciseData.category.length-1)" :key="index"></span>
@@ -66,9 +66,9 @@
                 </template>
                 </span>
             </v-col>
-            <v-col cols="12">
+            <v-col cols="12" v-if="exerciseData.sport.length">
                 <span class="exercise-preview--title">{{$t("lbl_ex_sport")}}</span>
-                <span class="exercise-preview--description" v-if="exerciseData.sport.length">
+                <span class="exercise-preview--description" >
                 <template v-for="(sport, index) in exerciseData.sport" >
                     {{$t(sport.t_key)}}  
                     <span v-if="index == ( exerciseData.sport.length-1)" :key="index"></span>
@@ -76,9 +76,9 @@
                 </template>
                 </span>
             </v-col>
-            <v-col cols="12">
+            <v-col cols="12" v-if="exerciseData.lavel.length">
                 <span class="exercise-preview--title">{{$t("lbl_ex_lvl")}}</span>
-                <span class="exercise-preview--description" v-if="exerciseData.lavel.length">
+                <span class="exercise-preview--description" >
                 <template v-for="(lavel, index) in exerciseData.lavel" >
                     {{$t(lavel.t_key)}}  
                     <span v-if="index == ( exerciseData.lavel.length-1)" :key="index"></span>
@@ -86,9 +86,9 @@
                 </template>
                 </span>
             </v-col>
-            <v-col cols="12" class="mb-5">
+            <v-col cols="12" class="mb-5" v-if="exerciseData.tags.length">
                 <span class="exercise-preview--title">{{$t("lbl_ex_tags")}}</span>
-                <span v-if="exerciseData.tags.length">
+                <span >
                 <v-chip
                     v-for="(tag, index) in exerciseData.tags" :key="index"
                     class="exercise-preview--tag mt-2"

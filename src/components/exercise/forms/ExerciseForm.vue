@@ -365,6 +365,35 @@
                                         </template>
                                     </v-combobox>
                                 </v-col>
+
+                                <!-- Share with Coach -->
+
+                                <v-col cols="12" class="px-0 py-0" v-show="isAdmin">
+                                    <v-list class="body-bg">
+                                        <v-list-item text >
+                                        <v-list-item-content>
+                                        <v-list-item-title>
+                                            <v-list-item-title class="default--sub-title">{{$t('share_with_coach')}}</v-list-item-title>
+                                        </v-list-item-title>
+                                        </v-list-item-content>
+                                        <v-list-item-icon>
+                                            <client-only>
+                                            <toggle-button
+                                                :value="exercisePropsData.shareWithCoach"
+                                                @input="handleShareWithCoach"
+                                                :color="{ checked: '#5CC866', unchecked: '#EFEFEF' }"
+                                                :sync="true"
+                                                :font-size="12"
+                                                :width="60"
+                                                :height="30"
+                                            />
+                                            </client-only>
+                                        </v-list-item-icon>
+                                    </v-list-item>
+                                    </v-list>
+                                </v-col>
+
+
                                 <v-col cols="12">
                                     <v-btn
                                         elevation="2"
@@ -470,11 +499,21 @@ export default ({
             this.handleTiptopUpdatedValue(value)
         },
     },
-
+    computed:{
+        isAdmin() {
+            return this.hasRole(["superadmin", "admin", "staff"]);
+        },
+    },
     created () {
         this.exercisePropsDataevent()
     },
     methods:{
+        hasRole(roles = []) {
+            return this.$auth.hasRole(roles);
+        },
+        handleShareWithCoach(value){
+            this.exercisePropsData.shareWithCoach = value;
+        },
         exercisePropsDataevent () {
             this.exercisePropsData = JSON.parse(JSON.stringify(this.exerciseNewData));
         },
@@ -649,6 +688,7 @@ export default ({
             payload.sport = this.exercisePropsData.sportsSelected;
             payload.lavel = this.exercisePropsData.lavelsSelected;
             payload.tags = this.exercisePropsData.tagsSelected;
+            payload.shareWithCoach = this.exercisePropsData.shareWithCoach;
             payload.type = role;
 
             if(this.exercisePropsData.id != null){

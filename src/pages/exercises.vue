@@ -596,6 +596,7 @@ export default {
         lavelsSelected : [],
         tagsSelected : [],
         type : null,
+        shareWithCoach: false,
         assets : [],
       },
       exerciseDialog: false,
@@ -909,6 +910,7 @@ export default {
         this.exerciseInitialData.sportsSelected = exercise.sport;
         this.exerciseInitialData.lavelsSelected = exercise.lavel;
         this.exerciseInitialData.tagsSelected = exercise.tags;
+        this.exerciseInitialData.shareWithCoach = exercise.shareWithCoach,
         this.previewMode = false;
         this.openExerciseDialog();
         
@@ -928,6 +930,7 @@ export default {
         .createExercise(payload)
         .then(({ data }) => {
           if (data.exercise) {
+            console.log(data.exercise);
             this.noExercise = false;
             if(this.exercises && this.exercises.length){
               let formattedRowList = this.formatExerciseRow([{ ...data.exercise }]);
@@ -1001,6 +1004,7 @@ export default {
         this.exerciseInitialData.sportsSelected = exercise.sport;
         this.exerciseInitialData.lavelsSelected = exercise.lavel;
         this.exerciseInitialData.tagsSelected = exercise.tags;
+        this.exerciseInitialData.shareWithCoach = exercise.shareWithCoach;
         this.exerciseInitialData.type = exercise.type;
         this.previewMode = false;
         this.openExerciseDialog();
@@ -1107,6 +1111,7 @@ export default {
       this.exerciseInitialData.tagsSelected = [];
       this.exerciseInitialData.type = null;
       this.exerciseInitialData.assets = [];
+      this.exerciseInitialData.shareWithCoach = false;
       this.filter.typeSytem = false;
       this.filter.typeCustom = false;
       this.filter.withVideo = false;
