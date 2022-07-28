@@ -26,7 +26,7 @@
 
       <v-row>
         <v-col cols="12" md="4">
-          <div class="section-title pb-2">
+          <div class="default--label pb-2">
             {{ $t("geography_section_title_location") }}
           </div>
           <div class="section-description">
@@ -99,7 +99,7 @@
       <!-- Distance -->
       <v-row>
         <v-col cols="12" md="4">
-          <div class="section-title pb-2">
+          <div class="default--label pb-2">
             {{ $t("geography_section_distance") }}
           </div>
           <div class="section-description">
@@ -167,7 +167,7 @@
       </v-row>
       <v-row>
         <v-col cols="12" md="3">
-          <div class="section-title pb-2">
+          <div class="default--label pb-2">
             {{ $t("geography_sec_view_locations") }}
           </div>
         </v-col>

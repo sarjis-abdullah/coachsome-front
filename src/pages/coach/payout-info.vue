@@ -32,14 +32,14 @@
             </v-row>
             <v-row class="invoice-identity">
               <v-col cols="12" md="4">
-                <div class="section-title d-none d-md-block">
+                <div class="default--label d-none d-md-block">
                   {{ $t("payout_info_section_title_invoice_identity") }}
                 </div>
                 <div class="section-description d-none d-md-block">
                   {{ $t("payout_info_section_desc_invoice_identity") }}
                 </div>
 
-                <div class="section-title pb-2 text-uppercase d-md-none">
+                <div class="default--label pb-2  d-md-none">
                     {{ $t("payout_acc_text") }}
                 </div>
                 <div class="section-description text-justify d-md-none">
@@ -88,7 +88,7 @@
 
 
               <v-col cols="12" class="d-md-none">
-                  <div class="section-title text-uppercase pb-2">
+                  <div class="default--label  pb-2">
                       {{ $t("invoicing_details_text") }}
                   </div>
                   <div class="section-description text-justify">
@@ -317,7 +317,7 @@
 
             <v-row>
               <v-col cols="12" md="4" class="d-none d-md-block">
-                <div class="section-title pb-2">
+                <div class="default--label pb-2">
                   {{ $t("payout_info_section_title_acc_for_payouts") }}
                 </div>
                 <div class="section-description">

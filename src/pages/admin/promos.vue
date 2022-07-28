@@ -10,49 +10,55 @@
         </v-btn>
       </template>
       <template v-slot:action>
-        <span></span>
+        <v-btn
+          icon
+          @click.stop="handleNewBtnClick"
+        >
+          <v-icon style="font-size: 25px!important;" class="common-top-add-icon">
+            mdi-plus-circle-outline
+          </v-icon>
+        </v-btn>
       </template>
     </mobile-top-nav>
-
-    <v-row>
-      <v-col cols="12" class="pb-0 d-flex justify-space-between align-center d-md-none">
-        <v-btn block dark color="primary-light-1" @click="handleNewBtnClick()">
-          {{$t("chat_create_group_label_create")}} {{$t("package_booking_promo_code_title")}}
-        </v-btn>
-      </v-col>
-    </v-row>
 
 
 
     <v-row class="d-none d-md-block">
       <v-col cols="12" class="pb-0 d-flex justify-space-between align-center">
         <div class="page-title">{{$t('pwa_promo_codes')}}</div>
-        <div>
-          <v-btn dark color="primary-light-1" @click="handleNewBtnClick()">
-          {{$t("chat_create_group_label_create")}} {{$t("package_booking_promo_code_title")}}
-          </v-btn>
-        </div>
       </v-col>
     </v-row>
-
     <v-row class="d-none d-md-block">
       <v-col cols="12">
         <div class="line"></div>
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" md="4">
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          outlined
-          dense
-          hide-details
-        ></v-text-field>
-      </v-col>
       <v-col cols="12">
         <v-card>
+
+            <v-card-title>
+              <v-row align="center" justify="space-between">
+                <v-col cols="12" md="4">
+                  <v-text-field
+                    v-model="search"
+                    prepend-inner-icon="search"
+                    label="Search"
+                    single-line
+                    solo
+                    hide-details
+                  ></v-text-field>
+                </v-col>
+                <v-col class="d-flex justify-end" v-if="$vuetify.breakpoint.mdAndUp">
+                  <v-btn @click="handleNewBtnClick" :block="$vuetify.breakpoint.smAndDown" class="white--text" depressed color="#15577C">
+                    {{$t("chat_create_group_label_create")}} {{$t("package_booking_promo_code_title")}}
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card-title>
+
+
+
           <v-data-table :headers="headers" :items="promoCodes" :search="search">
             <template v-slot:item.type="{ item }">
               <div>

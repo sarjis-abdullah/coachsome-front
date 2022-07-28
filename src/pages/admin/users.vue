@@ -10,7 +10,14 @@
         </v-btn>
       </template>
       <template v-slot:action>
-        <span></span>
+        <v-btn
+          icon
+          @click.stop="userCreate.dialog = true"
+        >
+          <v-icon style="font-size: 25px!important;" class="common-top-add-icon">
+            mdi-plus-circle-outline
+          </v-icon>
+        </v-btn>
       </template>
     </mobile-top-nav>
 
@@ -43,8 +50,11 @@
                     hide-details
                   ></v-text-field>
                 </v-col>
-                <v-col class="d-flex justify-end">
-                  <AddButton @add="userCreate.dialog = true" title="Add new user"/>
+                <v-col class="d-flex justify-end" v-if="$vuetify.breakpoint.mdAndUp">
+                  <!-- <AddButton @add="userCreate.dialog = true" title="Add new user"/> -->
+                  <v-btn @click="userCreate.dialog = true" :block="$vuetify.breakpoint.smAndDown" class="white--text" depressed color="#15577C">
+                    {{$t("add_new_user")}}
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-card-title>

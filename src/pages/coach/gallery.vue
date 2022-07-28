@@ -23,9 +23,9 @@
           <div class="line"></div>
         </v-col>
       </v-row>
-      <v-row class="pt-5">
+      <v-row :class="{'pt-5' : $vuetify.breakpoint.mdAndUp}">
         <v-col cols="12" md="4">
-          <div class="section-title pb-2">{{ $t("text_video") }}</div>
+          <div class="default--label pb-2">{{ $t("text_video") }}</div>
           <div class="section-description">
             {{ $t("image_and_video_vidoe_desc") }}
           </div>
@@ -68,7 +68,7 @@
 
       <v-row>
         <v-col cols="12" md="4">
-          <div class="section-title pb-2">{{ $t("text_image") }}</div>
+          <div class="default--label pb-2">{{ $t("text_image") }}</div>
           <div class="section-description">
             {{ $t("image_and_video_img_desc") }}
           </div>
@@ -155,7 +155,7 @@
 
       <v-row>
         <v-col cols="12" md="4">
-          <div class="section-title pb-2">{{ $t("text_gallery") }}</div>
+          <div class="default--label pb-2">{{ $t("text_gallery") }}</div>
           <div class="section-description">
             {{ $t("image_and_video_gallery_desc") }}
           </div>

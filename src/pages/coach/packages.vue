@@ -29,7 +29,7 @@
 
         <v-row align="center" class="d-none d-md-block">
           <v-col cols="12" class="pb-0">
-            <div class="section-title pb-2">{{ $t("text_rate") }}</div>
+            <div class="default--label pb-2">{{ $t("text_rate") }}</div>
           </v-col>
           <v-col cols="12" md="4" class="pt-0">
             <div class="section-description">{{ $t("package_rate_desc") }}</div>
@@ -58,7 +58,7 @@
                     <v-col cols="12" md="7">
                       <v-row>
                         <v-col cols="12" class="pb-0">
-                          <div class="section-title pb-2">
+                          <div class="default--label pb-2">
                             {{ $t("text_rate") }}
                           </div>
                         </v-col>
@@ -107,7 +107,7 @@
 
           <!-- Quick booking -->
           <v-col cols="12" class="pb-0">
-            <div class="section-title pb-2">
+            <div class="default--label pb-2">
               {{ $t("package_section_title_quick_booking") }}
             </div>
           </v-col>
@@ -138,7 +138,7 @@
         </v-row>
         <v-row align="center" class="d-md-none">
           <v-col cols="12" class="pb-0">
-            <div class="section-title pb-2">
+            <div class="default--label pb-2">
               {{$t("text_hourly_rate")}} 
               <v-tooltip right max-width="350">
                 <template v-slot:activator="{ on , attrs }">
@@ -179,7 +179,7 @@
           </v-col>
 
           <v-col cols="12" class="pb-0">
-            <div class="section-title pb-2">
+            <div class="default--label pb-2">
               {{ $t("pwa_packages_quick_booking") }}
               <v-tooltip right max-width="350">
                 <template v-slot:activator="{ on , attrs }">

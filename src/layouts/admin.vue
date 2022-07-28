@@ -3,7 +3,9 @@
     <TopNav v-if="$vuetify.breakpoint.mdAndUp" />
     <v-main class="body-bg">
       <nuxt />
-      <BottomNavigation v-if="$vuetify.breakpoint.smAndDown && showBottomNav" />
+      <!-- to hide from promo code create -->
+      <!-- <BottomNavigation v-if="$vuetify.breakpoint.smAndDown && showBottomNav" /> --> 
+      <BottomNavigation v-if="$vuetify.breakpoint.smAndDown" />
     </v-main>
   </v-app>
 </template>

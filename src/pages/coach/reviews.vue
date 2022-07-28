@@ -27,7 +27,7 @@
 
           <v-row>
             <v-col cols="12" md="4">
-              <div class="section-title pb-2">
+              <div class="default--label pb-2">
                 {{ $t("coach_review_title_review_score") }}
               </div>
               <div class="section-description text-justify">
@@ -164,7 +164,7 @@
 
           <v-row class="mt-10">
             <v-col cols="12" md="4">
-              <div class="section-title pb-2">
+              <div class="default--label pb-2">
                 {{ $t("coach_review_section_title_request_review") }}
               </div>
               <div class="section-description text-justify">
@@ -208,7 +208,7 @@
               <v-card-text>
                 <v-row>
                   <v-col class="pt-0" cols="12" md="4">
-                    <div class="section-title pb-2">
+                    <div class="default--label pb-2">
                       {{ $t("coach_review_dialog_title_request_reviews") }}
                     </div>
                     <div class="section-description text-justify">
@@ -273,7 +273,7 @@
 
           <v-row class="mt-10">
             <v-col cols="12" md="4">
-              <div class="section-title pb-2">
+              <div class="default--label pb-2">
                 {{ $t("review_section_title_fa_review") }}
               </div>
               <div class="section-description text-justify">

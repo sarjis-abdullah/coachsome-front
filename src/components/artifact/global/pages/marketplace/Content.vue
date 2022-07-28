@@ -14,7 +14,8 @@
             color="transparent"
             flat
           >
-            <v-card-text class="px-0 pt-md-15">
+            <!-- <v-card-text class="px-0 pt-md-15"> -->
+            <v-card-text class="px-0">
               <!-- Filter Box -->
               <div
                 :class="{ 'fixed-box py-1': isFilterBoxFixed }"
