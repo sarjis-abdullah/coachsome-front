@@ -130,7 +130,7 @@
                     color="#9FAEC2"
                     background-color="white"
                     readonly
-                    :label="origin + '/user_name'"
+                    :label="origin + '/athlete' + '/user_name'"
                     :class="['mb-0']"
                   ></v-text-field>
                   <v-dialog
@@ -150,7 +150,7 @@
                             <v-col cols="12">
                               <v-text-field
                                 solo
-                                :prefix="origin + '/'"
+                                :prefix="origin + '/athlete' + '/'"
                                 placeholder="yourname"
                                 v-model="dialog.personalize.userName"
                               ></v-text-field>
@@ -1340,7 +1340,7 @@ export default {
       this.profileData.birth_day = val;
     },
     "profileData.user_name": function(val) {
-      this.dialog.personalize.userName = "athlete/" +val;
+      this.dialog.personalize.userName = val;
     },
     "profilePicture.file": function(val) {
       this.profilePicture.img = URL.createObjectURL(val);
