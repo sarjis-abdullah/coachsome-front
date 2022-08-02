@@ -123,15 +123,12 @@
             <v-dialog
               v-model="userEdit.dialog"
               persistent
-              max-width="70%"
+              max-width="50%"
               scrollable
             >
               <v-card>
-                <v-card-title>
-                  <span class="title black--text">User Profile</span>
-                  <span class="ml-5 primary-light-1--text">{{
-                    userEdit.data.name
-                  }}</span>
+                <v-card-title class="pt-8 pl-9">
+                  <FormHeader :title="userEdit.data.name" @close="userEdit.dialog = false" />
                 </v-card-title>
                 <v-divider></v-divider>
                 <v-card-text>
@@ -139,57 +136,40 @@
                     <!-- General Group -->
                     <v-row>
                       <v-col cols="12">
-                        <span class="subtitle-2">General</span>
+                        <span class="custom-subtitle-2">General</span>
                       </v-col>
                     </v-row>
                     <!-- Email -->
                     <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">EMAIL</div>
+                      <!-- <v-col cols="12" md="12">
+                        <div class="custom-label">EMAIL</div>
                         <div class="section-description">
                           Create a catchy title for your package
                         </div>
-                      </v-col>
-                      <v-col cols="12" md="6">
+                      </v-col> -->
+                      <v-col cols="12" md="12">
+                        <div class="custom-label">Email</div>
                         <v-text-field
                           v-model="userEdit.data.email"
-                          label="Email"
+                          placeholder="Enter email"
                           required
-                          solo
+                          outlined
+                          dense
                         ></v-text-field>
-                      </v-col>
-                    </v-row>
-
-                    <!-- Role -->
-                    <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">Role</div>
-                        <div class="section-description">
-                          Role is the part of the system.
-                        </div>
-                      </v-col>
-                      <v-col cols="12" md="6">
-                        <v-select
-                          solo
-                          v-model="userEdit.data.roleId"
-                          :items="roleList"
-                          item-text="name"
-                          item-value="id"
-                          label="Select badge"
-                        ></v-select>
                       </v-col>
                     </v-row>
 
                     <!-- Mobile -->
                     <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">MOBILE</div>
+                      <!-- <v-col cols="12" md="12">
+                        <div class="custom-label">MOBILE</div>
                         <div class="section-description">
                           This number will be used to notify you of changes in
                           you bookings or other time critical information
                         </div>
-                      </v-col>
-                      <v-col cols="12" md="6">
+                      </v-col> -->
+                      <v-col cols="12" md="12">
+                        <div class="custom-label">Mobile</div>
                         <VuePhoneNumberInput
                           :default-country-code="userEdit.data.phone.code"
                           :only-countries="['DK', 'US']"
@@ -209,25 +189,58 @@
                         />
                       </v-col>
                     </v-row>
-
+                    <!-- Reset email -->
+                    <v-row>
+                      <v-col cols="12" md="12">
+                        <div class="custom-label">Password</div>
+                        <v-btn
+                        color="#ECF2F7"
+                        style="color: #9FAEC2;"
+                        :loading="loading"
+                        @click="resetPassword(userEdit.data.email)"
+                        >Send reset password email</v-btn>
+                      </v-col>
+                    </v-row>
+                    <!-- Role -->
+                    <v-row>
+                      <!-- <v-col cols="12" md="12">
+                        <div class="custome-label">Role</div>
+                        <div class="section-description">
+                          Role is the part of the system.
+                        </div>
+                      </v-col> -->
+                      <v-col cols="12" md="12">
+                        <div class="custom-label">Role</div>
+                        <v-select
+                          outlined
+                          dense
+                          v-model="userEdit.data.roleId"
+                          :items="roleList"
+                          item-text="name"
+                          item-value="id"
+                          placeholder="Coach/athlete/admin/superadmin etc"
+                        ></v-select>
+                      </v-col>
+                    </v-row>
+                    <v-divider></v-divider>
+                    <v-row>
+                      <v-col cols="12">
+                        <span class="custom-subtitle-2">Coach Settings</span>
+                      </v-col>
+                    </v-row>
                     <!-- User Status -->
                     <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">USER STATUS</div>
-                        <div class="section-description">
-                          This status show a coachsome select status of a
-                          specific user in relation to the world
-                        </div>
-                      </v-col>
-                      <v-col cols="12" md="6">
+                      <v-col cols="12" md="12">
+                        <div class="custom-label">User status</div>
                         <v-select
                           @change="userEdit.reasonDialog = true"
-                          solo
+                          outlined
+                          dense
                           v-model="userEdit.data.activityStatusId"
                           :items="activityStatusList"
                           item-text="display_text"
                           item-value="id"
-                          label="Select status"
+                          placeholder="User status"
                         ></v-select>
                         <div v-if="userEdit.data.reason">
                           <div class="caption warning--text">Reason</div>
@@ -237,21 +250,15 @@
                     </v-row>
 
                     <!-- Ranking Group -->
-                    <v-row>
+                    <!-- <v-row>
                       <v-col cols="12">
-                        <span class="subtitle-2">Ranking</span>
+                        <span class="custom-subtitle-2">Ranking</span>
                       </v-col>
-                    </v-row>
+                    </v-row> -->
                     <!-- Ranking -->
                     <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">RANKING</div>
-                        <div class="section-description">
-                          Internal ranking points to promote a coach. Calculated
-                          from the system
-                        </div>
-                      </v-col>
-                      <v-col cols="12" md="6">
+                      <v-col cols="12" md="12" class="pb-0">
+                        <div class="custom-label">Ranking</div>
                         <v-slider
                           color="primary-light-1"
                           v-model="userEdit.data.ranking"
@@ -259,50 +266,51 @@
                           class="align-center"
                         >
                           <template v-slot:append>
-                            <v-text-field
+                            <input
                               v-model="userEdit.data.ranking"
-                              class="mt-0 pt-0"
+                              class="rank-input-box"
                               type="number"
-                              style="width: 60px"
-                            ></v-text-field>
+                              solo
+                              style="width: 60px;"
+                            />
                           </template>
                         </v-slider>
                       </v-col>
                     </v-row>
 
                     <!-- Star Status -->
-                    <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">STAR STATUS</div>
+                    <!-- <v-row>
+                      <v-col cols="12" md="12">
+                        <div class="custom-label">STAR STATUS</div>
                         <div class="section-description">
                           This status show a coachsome select status of a
                           specific user in relation to the world
                         </div>
                       </v-col>
-                      <v-col cols="12" md="6">
+                      <v-col cols="12" md="12">
                         <v-select
-                          solo
+                          outlined
+                          dense
                           v-model="userEdit.data.starStatusId"
                           :items="starStatusList"
                           item-text="display_text"
                           item-value="id"
-                          label="Select status"
+                          placeholder="Select status"
                           persistent-hint
-                          single-line
                         ></v-select>
                       </v-col>
-                    </v-row>
+                    </v-row> -->
 
                     <!-- Skill Level -->
-                    <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">SKILL LEVEL</div>
+                    <!-- <v-row>
+                      <v-col cols="12" md="12">
+                        <div class="custom-label">SKILL LEVEL</div>
                         <div class="section-description">
                           This is a Coachsome chosen skill level on the coach
                           and it is an estimation from our limited experience
                         </div>
                       </v-col>
-                      <v-col cols="12" md="6">
+                      <v-col cols="12" md="12">
                         <span>
                           <v-slider
                             v-model="userEdit.data.skillLevelSlider.value"
@@ -311,41 +319,35 @@
                           ></v-slider>
                         </span>
                       </v-col>
-                    </v-row>
+                    </v-row> -->
 
                     <!-- Coach badge -->
                     <v-row>
-                      <v-col cols="12" md="6">
-                        <div class="section-title pb-2">Coach badge</div>
-                        <div class="section-description">
-                          Select the badge the coach should have. There are four
-                          levels total.
-                        </div>
-                      </v-col>
-                      <v-col cols="12" md="6">
+                      <v-col cols="12" md="12" class="pt-0">
+                        <div class="custom-label">Coach badge</div>
                         <v-select
-                          solo
+                          outlined
+                          dense
                           v-model="userEdit.data.badgeId"
                           :items="badges"
                           item-text="name"
                           item-value="id"
-                          label="Select badge"
+                          placeholder="Select coach badge"
                         ></v-select>
                       </v-col>
                     </v-row>
                   </v-container>
                 </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
+                <v-card-actions class="pl-9 pb-8">
+                  <!-- <v-spacer></v-spacer>
                   <v-btn
                     color="primary-light-1"
                     text
                     @click="userEdit.dialog = false"
                     >Close</v-btn
-                  >
-                  <v-btn color="primary-light-1" text @click="updateUser"
-                    >Save</v-btn
+                  > -->
+                  <v-btn :loading="loading" color="primary-light-1" @click="updateUser"
+                    >Save changes</v-btn
                   >
                 </v-card-actions>
               </v-card>
@@ -359,10 +361,11 @@
                   persistent
                   max-width="600px"
                 >
-                  <v-card>
-                    <v-card-title>
-                      <span class="text-h5">Create User</span>
+                  <v-card  class="body-bg">
+                    <v-card-title class="pl-8 pt-8">
+                      <FormHeader title="Add new user" @close="userCreate.dialog = false" />
                     </v-card-title>
+                    
                     <v-card-text>
                       <v-container>
                         <v-form
@@ -371,26 +374,47 @@
                           lazy-validation
                         >
                           <v-row>
-                            <v-col cols="12" sm="6" md="6">
+                            <v-col cols="12" sm="12">
+                              <header class="d-flex">
+                                <div class="custom-label">First name</div>
+                                <div class="pl-1 red--text">*</div>
+                              </header>
                               <v-text-field
-                                label="First name*"
+                                outlined
+                                dense
+                                background-color="white"
+                                placeholder="Enter first name"
                                 v-model="userCreate.initialValue.firstName"
                                 :rules="[v => !!v || 'First name is required']"
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="6" md="6">
+                            <v-col cols="12" sm="12">
+                              <header class="d-flex">
+                                <div class="custom-label">Last name</div>
+                                <div class="pl-1 red--text">*</div>
+                              </header>
                               <v-text-field
-                                label="Last name*"
+                                outlined
+                                dense
+                                background-color="white"
+                                placeholder="Enter last name"
                                 v-model="userCreate.initialValue.lastName"
                                 :rules="[v => !!v || 'Last name is required']"
                                 persistent-hint
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="12">
+                              <header class="d-flex">
+                                <div class="custom-label">Email</div>
+                                <div class="pl-1 red--text">*</div>
+                              </header>
                               <v-text-field
-                                label="Email*"
+                                outlined
+                                dense
+                                background-color="white"
+                                placeholder="Enter email address"
                                 v-model="userCreate.initialValue.email"
                                 :rules="[
                                   v => !!v || 'E-mail is required',
@@ -401,21 +425,35 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="6">
+                            <v-col cols="12" sm="12">
+                              <header class="d-flex">
+                                <div class="custom-label">Role</div>
+                                <div class="pl-1 red--text">*</div>
+                              </header>
                               <v-select
+                                outlined
+                                dense
+                                background-color="white"
                                 :items="roleList"
                                 v-model="userCreate.initialValue.role"
                                 item-text="displayName"
                                 item-value="id"
                                 :rules="[v => !!v || 'Role is required']"
-                                label="Role*"
+                                placeholder="Select role"
                                 required
                               ></v-select>
                             </v-col>
                             <v-col cols="12">
+                              <header class="d-flex">
+                                <div class="custom-label">Password</div>
+                                <div class="pl-1 red--text">*</div>
+                              </header>
                               <v-text-field
+                                outlined
+                                dense
+                                background-color="white"
                                 v-model="userCreate.initialValue.password"
-                                label="Password*"
+                                placeholder="Enter password"
                                 :rules="[
                                   v => !!v || 'Password is required',
                                   v =>
@@ -433,21 +471,14 @@
                         </v-form>
                       </v-container>
                     </v-card-text>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
+                    <v-card-actions class="pl-9 pb-8">
                       <v-btn
                         color="primary-light-1"
-                        text
-                        @click="userCreate.dialog = false"
-                      >
-                        Close
-                      </v-btn>
-                      <v-btn
-                        color="primary-light-1"
-                        text
+                        elevation="2"
+                        :loading="loading"
                         @click="handleUserCreateSaveBtn"
                       >
-                        Save
+                        Create new user
                       </v-btn>
                     </v-card-actions>
                   </v-card>
@@ -468,16 +499,19 @@ import { pathData } from "@/data";
 import VuePhoneNumberInput from "vue-phone-number-input";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 import AddButton from '@/components/layout/global/AddButton'
+import FormHeader from '@/components/layout/global/FormHeader'
 
 export default {
   layout: "admin",
   components: {
     VuePhoneNumberInput,
     MobileTopNav,
-    AddButton
+    AddButton,
+    FormHeader
   },
   data() {
     return {
+      loading: false,
       search: "",
       badges: [],
       activityStatusList: [],
@@ -555,14 +589,25 @@ export default {
     this.getUser();
   },
   methods: {
+    async resetPassword(email){
+      this.loading = true
+      try {
+        await this.$axios.post("pwa/recovery", {email})
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
+    },
     handleBack(){
       this.$router.push(this.localePath(pathData.admin.profileMenu));
     },
     handleUserCreateSaveBtn() {
       if (this.$refs.form.validate()) {
+        this.loading = true
         adminUserApi(this.$axios)
           .storeUser(this.userCreate.initialValue)
           .then(({ data }) => {
+            this.loading = false
             if (data.user) {
               let formattedRowList = this.formatUserRow([{ ...data.user }]);
               this.table.rows.unshift(formattedRowList[0]);
@@ -572,6 +617,7 @@ export default {
             console.log(data);
           })
           .catch(({ response }) => {
+            this.loading = false
             const { data } = response;
             if (data.message) {
               this.$toast.error(data.message);
@@ -617,6 +663,7 @@ export default {
       payload.ranking = this.userEdit.data.ranking;
       payload.badgeId = this.userEdit.data.badgeId;
       payload.roleId = this.userEdit.data.roleId;
+      this.loading = true
       adminUserApi(this.$axios)
         .updateUser(payload)
         .then(({ data }) => {
@@ -645,8 +692,10 @@ export default {
             );
             // console.log(this.table.rows[index]);
           }
+          this.loading = false
         })
         .catch(({ response }) => {
+          this.loading = false
           if (response.data.status == "error") {
             this.$toast.error(response.data.message);
           }
@@ -765,5 +814,21 @@ export default {
   .v-btn:before {
     display: none;
   }
+}
+.custom-label {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: #49556A;
+  padding-bottom: 8px;
+}
+.custom-subtitle-2 {
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 33px;
+  color: #49556A;
+}
+.rank-input-box {
+  margin-top: -30px;
 }
 </style>
