@@ -359,10 +359,11 @@
                   persistent
                   max-width="600px"
                 >
-                  <v-card>
-                    <v-card-title>
-                      <span class="text-h5">Create User</span>
+                  <v-card  class="body-bg">
+                    <v-card-title class="pl-8 pt-8">
+                      <FormHeader title="Add new user" @close="userCreate.dialog = false" />
                     </v-card-title>
+                    
                     <v-card-text>
                       <v-container>
                         <v-form
@@ -371,26 +372,47 @@
                           lazy-validation
                         >
                           <v-row>
-                            <v-col cols="12" sm="6" md="6">
+                            <v-col cols="12" sm="12">
+                              <header class="d-flex">
+                                <div class="custom-label">First name</div>
+                                <div class="pl-1 red--text">*</div>
+                              </header>
                               <v-text-field
-                                label="First name*"
+                                outlined
+                                dense
+                                background-color="white"
+                                placeholder="Enter first name"
                                 v-model="userCreate.initialValue.firstName"
                                 :rules="[v => !!v || 'First name is required']"
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="6" md="6">
+                            <v-col cols="12" sm="12">
+                              <header class="d-flex">
+                                <div class="custom-label">Last name</div>
+                                <div class="pl-1 red--text">*</div>
+                              </header>
                               <v-text-field
-                                label="Last name*"
+                                outlined
+                                dense
+                                background-color="white"
+                                placeholder="Enter last name"
                                 v-model="userCreate.initialValue.lastName"
                                 :rules="[v => !!v || 'Last name is required']"
                                 persistent-hint
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="12">
+                              <header class="d-flex">
+                                <div class="custom-label">Email</div>
+                                <div class="pl-1 red--text">*</div>
+                              </header>
                               <v-text-field
-                                label="Email*"
+                                outlined
+                                dense
+                                background-color="white"
+                                placeholder="Enter email address"
                                 v-model="userCreate.initialValue.email"
                                 :rules="[
                                   v => !!v || 'E-mail is required',
@@ -401,21 +423,35 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="6">
+                            <v-col cols="12" sm="12">
+                              <header class="d-flex">
+                                <div class="custom-label">Role</div>
+                                <div class="pl-1 red--text">*</div>
+                              </header>
                               <v-select
+                                outlined
+                                dense
+                                background-color="white"
                                 :items="roleList"
                                 v-model="userCreate.initialValue.role"
                                 item-text="displayName"
                                 item-value="id"
                                 :rules="[v => !!v || 'Role is required']"
-                                label="Role*"
+                                placeholder="Select role"
                                 required
                               ></v-select>
                             </v-col>
                             <v-col cols="12">
+                              <header class="d-flex">
+                                <div class="custom-label">Password</div>
+                                <div class="pl-1 red--text">*</div>
+                              </header>
                               <v-text-field
+                                outlined
+                                dense
+                                background-color="white"
                                 v-model="userCreate.initialValue.password"
-                                label="Password*"
+                                placeholder="Enter password"
                                 :rules="[
                                   v => !!v || 'Password is required',
                                   v =>
@@ -433,21 +469,13 @@
                         </v-form>
                       </v-container>
                     </v-card-text>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
+                    <v-card-actions class="pl-9 pb-8">
                       <v-btn
                         color="primary-light-1"
-                        text
-                        @click="userCreate.dialog = false"
-                      >
-                        Close
-                      </v-btn>
-                      <v-btn
-                        color="primary-light-1"
-                        text
+                        elevation="2"
                         @click="handleUserCreateSaveBtn"
                       >
-                        Save
+                        Create new user
                       </v-btn>
                     </v-card-actions>
                   </v-card>
@@ -468,13 +496,15 @@ import { pathData } from "@/data";
 import VuePhoneNumberInput from "vue-phone-number-input";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 import AddButton from '@/components/layout/global/AddButton'
+import FormHeader from '@/components/layout/global/FormHeader'
 
 export default {
   layout: "admin",
   components: {
     VuePhoneNumberInput,
     MobileTopNav,
-    AddButton
+    AddButton,
+    FormHeader
   },
   data() {
     return {
@@ -765,5 +795,12 @@ export default {
   .v-btn:before {
     display: none;
   }
+}
+.custom-label {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: #49556A;
+  padding-bottom: 8px;
 }
 </style>
