@@ -81,6 +81,10 @@ export default {
         home: "/coach/home",
         inviteYourFriends: "/coach/invite-your-friends",
         coachContacts: "/coach/contacts",
+        onboarding: {
+            start: "/coach/onboarding/start",
+            step1: "/coach/onboarding/step-1",
+        }
     },
     admin: {
         login: "/admin/login",
