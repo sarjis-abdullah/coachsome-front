@@ -12,6 +12,13 @@
             <span></span>
             </template>
         </mobile-top-nav>
+         <!-- Package Create Dialog -->
+        <PackageCreateDialog
+            v-model="dialogPackageCreate"
+            :rate="hourlyRate.inputValue"
+            @close="dialogPackageCreate = false"
+            @created="hideTabs"
+        />
         <div class="onboarding--body">
             <div class= "onboarding--body--left-banner d-flex" :class="{'onboarding--body--left-banner--md' : !$vuetify.breakpoint.smAndDown,'onboarding--body--left-banner--sm': $vuetify.breakpoint.smAndDown}">
                 <v-row :class="{'py-10' : $vuetify.breakpoint.smAndDown}">
@@ -21,14 +28,14 @@
                             rounded
                             x-small
                             color="#FFFFFF"
-                            class="onboarding--body--button--cancel mr-2 d-md-none"
+                            class="onboarding--body--button--cancel mr-2 "
                             @click="handleCancelBtnClick"
                         >
                             Skip this step
                         </v-btn>
                     </v-col>
                     <v-col cols="12" class="onboarding--body--left-banner-text pt-0">
-                        <p :class="{'onboarding--body--left-banner-text--md' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--left-banner-text--sm' : $vuetify.breakpoint.smAndDown}">Add your basic information</p>
+                        <p :class="{'onboarding--body--left-banner-text--md px-15' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--left-banner-text--sm' : $vuetify.breakpoint.smAndDown}">What packages do you offer your customers?</p>
                     </v-col>
                 </v-row>
             </div>
@@ -36,18 +43,17 @@
                 <v-row>
                     <v-col cols="12" md="9" sm="12" class="onboarding--body--right-content--body-top">
                         <div class="default--label pb-2">
-                            {{ $t("profile_picture_title") }}
-                            <span class="required">*</span>
+                            {{ $t("text_rate") }}
                         </div>
                         <div class="section-description">
-                            {{ $t("profile_picture_desc") }}
+                            {{ $t("package_dialog_hourly_rate_desc") }}
                         </div>
                     </v-col>
                     <v-col cols="3" class="text-right d-none d-md-block">
                         <v-btn
                             outlined
                             rounded
-                            color="#49556A"
+                            color="$grey-700"
                             class="onboarding--body--button--cancel mr-2"
                             @click="handleCancelBtnClick"
                         >
@@ -55,110 +61,73 @@
                         </v-btn>
                     </v-col>
                     <v-col cols="12">
-                        <v-row :class="{'onboarding--body--right--sm--avatar-section' :$vuetify.breakpoint.smAndDown }">
-                            <v-col cols="6" md="3" :class="{'d-flex justify-center' :$vuetify.breakpoint.smAndDown }">
-                                <div style="width: 150px;" class="text-center" >
-                                    <div>
-                                        <v-avatar
-                                        color="teal"
-                                        v-if="!userProfileImage"
-                                        tile
-                                        style="width: 100%; height: 150px;"
-                                        >
-                                        <span class="white--text headline" v-if="initialImageContent != ''">{{ initialImageContent }}</span>
-                                        <v-img v-else aspect-ratio="1" :src="require('@/assets/images/profile-default.jpg')" alt="Avatar"></v-img>
-                                        </v-avatar>
-                                        <v-avatar
-                                        style="width: 100%; height: 150px;"
-                                        color="primary"
-                                        v-if="userProfileImage"
-                                        tile
-                                        >
-                                        <img :src="userProfileImage" alt="Profile Image" />
-                                        </v-avatar>
-                                    </div>
-                                    <div>
-                                        <v-btn
-                                        class="px-0"
-                                        color="primary-light-1"
-                                        dark
-                                        tile
-                                        block
-                                        depressed
-                                        @click.stop="openProfilePictureDialog"
-                                        >
-                                        {{ $t("profile_button_label_change_image") }}
-                                        </v-btn>
-                                    </div>
-                                </div>
-                            </v-col>
-                        </v-row>
-                    </v-col>
-                    <v-col cols="12">
-                        <div class="default--label pb-2">
-                            {{ $t("profile_name") }}
-                            <span class="required">*</span>
-                        </div>
-                        <div class="section-description" >{{ $t("profile_name_desc") }}</div>
-                    </v-col>
-                    <v-col cols="12">
                         <v-text-field
-                            v-model="profileData.profile_name"
+                            :error-messages="hourlyRateErrors"
+                            required
                             outlined
                             dense
-                            class="default-text-field"
-                            color="#9FAEC2"
-                            background-color="white"
-                            counter="35"
-                            maxlength="35"
-                            :label="$t('profile_name_hint')"
-                        ></v-text-field>
+                            v-model="hourlyRate.dialogInputVal"
+                         ></v-text-field>
                     </v-col>
+                    <!-- <v-col cols="12" md="3">
+                        <v-btn
+                            block
+                            class="white--text"
+                            color="primary-light-1"
+                            :disabled="isDisabled"
+                            depressed
+                            light
+                            @click="addLocation()"
+                        >
+                            {{ $t("btn_label_add_location") }}
+                        </v-btn>
+                    </v-col> -->
                     <v-col cols="12">
                         <div class="default--label pb-2">
-                            {{ $t("profile_mobile_title") }}
-                            <span class="required">*</span>
+                            {{ $t("text_rate") }}
                         </div>
                         <div class="section-description">
-                            {{ $t("profile_mobile_description") }}
+                            {{ $t("package_dialog_hourly_rate_desc") }}
                         </div>
                     </v-col>
-                    <v-col cols="12" class="py-0">
-                        <VuePhoneNumberInput
-                            :default-country-code="profileData.mobile_code"
-                            v-model="profileData.mobile_no"
-                            @update="updateMobileInfo"
-                            color="#9FAEC2"
-                            valid-color="#9FAEC2"
-                            class="vue-phone-number-input"
-                            :translations="{
-                                countrySelectorLabel: $t(
-                                    'profile_section_mobile_label_country_code'
-                                ),
-                                phoneNumberLabel: $t(
-                                    'profile_section_mobile_input_label_phone_number'
-                                ),
-                                example: $t('profile_section_mobile_input_label_example')
-                                }"
-                        />
-                    </v-col>
-                    <v-col cols="12">
-                        <div class="default--label pb-2">
-                            {{ $t("profile_about_you") }}
-                            <span class="required">*</span>
-                        </div>
-                        <div class="section-description ">
-                            {{ $t("profile_about_you_desc") }}
+                    <v-col cols="12" md="6">
+                        <div @click="handleAddBtnClick" class="onboarding--body--right--add-btn">
+                            <v-icon class="onboarding--body--right--add-btn__icon" color="primary-light-1">
+                            mdi-plus-circle-outline
+                            </v-icon>
+                            <div class="onboarding--body--right--add-btn__text">
+                            {{ $t("btn_label_add_package") }}
+                            </div>
                         </div>
                     </v-col>
-                    <v-col cols="12">
-                        <TiptopEditor
-                            :value="tipTopEditor.value"
-                            @updated="handleTiptopUpdatedValue"
-                        />
+                    <v-col
+                        cols="12"
+                        md="6"
+                        v-for="item in packageList"
+                        :key="item.id"
+                        class="d-md-none"
+                    >
+                        <package-card
+                        class="all-scroll"
+                        v-bind="item"
+                        :rate="hourlyRate.inputValue"
+                        :max-chars="descriptionMaxChar"
+                        >
+                            <template v-slot:original-price="{ price, discount }">
+                                <div v-if="discount && discount > 0">
+                                {{ currencyService.toCurrencyByBase(price) }}
+                                </div>
+                                <div else></div>
+                            </template>
+                            <template v-slot:sale-price="{ price }">
+                                <span>{{ currencyService.toCurrencyByBase(price) }}</span>
+                            </template>
+                        </package-card>
                     </v-col>
                 </v-row>
+                
             </div>
+
             <div :class="{ 'onboarding--body--footer' : !$vuetify.breakpoint.smAndDown, 'd-none' : $vuetify.breakpoint.smAndDown}">
                 <v-btn
                     text
@@ -185,8 +154,8 @@
                         depressed
                         color="#15577C"
                         class="white--text mb-2"
-                        @click="handleSaveBtnClick"
                         block
+                        @click="handleSaveBtnClick"
                       >
                         <span
                           v-html="$t('Continue')"
@@ -211,45 +180,118 @@
   </div>
 </template>
 <script>
-import { authApi, pageBuilderApi } from "@/api";
-import { pathData } from "@/data";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
-import VuePhoneNumberInput from "vue-phone-number-input";
-import TiptopEditor from "@/components/editor/TiptopEditor";
+import { coachGeographyApi, coachPackageApi } from "@/api";
+import { required, decimal } from "vuelidate/lib/validators";
+import { currencyService } from "@/services";
+import { constantData, pathData } from "@/data";
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import PackageCreateDialog from "@/components/artifact/coach/package/PackageCreateDialog";
+import PackageCard from "@/components/card/PackageCard";
 
 
 export default {
     layout: "athlete",
     head() {
         return {
-        title: this.$i18n.t("coach_onboarding--body"),
-        titleTemplate: "%s"
+            title: this.$i18n.t("coach_onboarding--body"),
+            titleTemplate: "%s"
         };
     },
     components: {
         MobileTopNav,
-        VuePhoneNumberInput,
-        TiptopEditor
+        PackageCreateDialog,
+        PackageCard
     },
     data() {
         return {
-            tipTopEditor: { value: "" },
-            profileData: {
-                profile_name: "",
-                mobile_code: "DK",
-                mobile_no: "",
+            hourlyRate: {
+                dialog: false,
+                inputValue: null,
+                dialogInputVal: null
             },
+            packageCurrency: currencyService.defaultCurrency(),
+            currencyService,
+            dialogPackageCreate: false,
+            packageList: [],
+            highestLimit: 8,
+        };
+    },
+    computed: {
+        currencyCode() {
+            return this.packageCurrency.code;
+        },
+         hasPermitToCreateNewPackage() {
+            return this.highestLimit >= this.packageList.length + 1;
+        },
+        hourlyRateErrors() {
+            const errors = [];
+            if (!this.$v.hourlyRate.dialogInputVal.$dirty) return errors;
+            !this.$v.hourlyRate.dialogInputVal.required &&
+                errors.push("Hourly rate is required.");
+            !this.$v.hourlyRate.dialogInputVal.decimal &&
+                errors.push("Only number is allowed");
+            return errors;
+        }
+    },
+    validations: {
+        hourlyRate: {
+            dialogInputVal: {
+                required,
+                decimal
+            }
+        }
+    },
+    created() {
+        this.locationDataTable = {
+        headers: [
+            {
+                text: this.$i18n.t("geography_table_header_text_address"),
+                value: "address",
+                class: "location-table--header",
+            },
+            {
+                text: this.$i18n.t("geography_table_header_text_actions"),
+                value: "action",
+                sortable: false,
+                class: "location-table--header",
+            }
+        ]
         };
     },
     methods:{
+        handleAddBtnClick() {
+            this.dialogPackageCreate = true;
+        },
+        saveHourlyRate() {
+            if (!this.$v.$invalid) {
+                    this.loading = true
+                    let payload = {
+                    hourly_rate: this.hourlyRate.dialogInputVal
+                    };
+                    coachPackageApi(this.$axios)
+                    .saveHourlyRate(payload)
+                    .then(response => {
+                        if (response.data.status == "success") {
+                        this.hourlyRate.inputValue = response.data.hourly_rate;
+                        this.refreshPageProgress();
+                        this.packageList = response.data.packages.data;
+                        }
+                        this.hourlyRate.dialog = false;
+                    })
+                    .catch(() => {})
+                    .finally(()=> {
+                        this.loading = false
+                })
+                }
+        },
         handleCancelBtnClick(){
             this.$router.push(this.localePath(pathData.pages.becomeACoach));
         },
         handleBackBtnClick(){
-            this.$router.push(this.localePath(pathData.coach.onboarding.start));
+            this.$router.push(this.localePath(pathData.coach.onboarding.step6));
         },
         handleSaveBtnClick(){
-            this.$router.push(this.localePath(pathData.coach.onboarding.step2));
+            this.$router.push(this.localePath(pathData.coach.onboarding.readyToGo));
         }
     }
 };
@@ -299,7 +341,7 @@ export default {
             }
             &--right{
                 &--md{
-                    height: 80%;
+                    height: 88vh!important;
                     width: 65%;
                     margin: 0px;
                     float: right!important;
@@ -308,8 +350,23 @@ export default {
                 &--sm{
                     padding: 15px!important;
                     margin-bottom: 80px!important;
-                    &--avatar-section{
-                        justify-content: center!important;
+                }
+                &--add-btn {
+                    border-radius: 5px;
+                    background: white;
+                    border: 2px solid $primary-light-1;
+                    width: 100%;
+                    height: 200px;
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                    &__text {
+                        font-family: $font-family;
+                        font-size: 18px;
+                        line-height: 28px;
+                        color: $primary-light-1;
                     }
                 }
                 

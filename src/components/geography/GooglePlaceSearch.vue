@@ -119,16 +119,27 @@ export default {
 .place-search {
   .search-input {
     width: 100%;
-    padding: 12px 15px 12px 15px;
+    padding: 8px 15px 8px 15px;
     background: white;
+    border: 1px solid $grey-500!important;
     border-radius: 4px;
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-      0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     font-size: 16px;
     letter-spacing: normal;
     max-width: 100%;
     text-align: left;
 
+  }
+  ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: $grey-500!important;
+    opacity: 1; /* Firefox */
+  }
+
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: $grey-500!important;
+  }
+
+  ::-ms-input-placeholder { /* Microsoft Edge */
+    color: $grey-500!important;
   }
   .search-input:focus {
     outline: none;

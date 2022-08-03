@@ -58,7 +58,7 @@
             
              <v-footer class="d-md-none" color="white" inset app bottom fixed > 
                 <v-row>
-                  <v-col cols="12" class="mb-0 mt-2">
+                  <v-col cols="12" class="mb-0 mt-2 px-5">
                     <div class="mb-6">
                       <v-btn
                         depressed
