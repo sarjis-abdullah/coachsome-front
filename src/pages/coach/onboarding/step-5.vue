@@ -177,12 +177,14 @@ export default {
     },
     data() {
         return {
+            googlePlaceSearch: {
+                value: ""
+            },
+            cca2: null,
+            countryList: [],
             isDisabled: true,
             locationDataTable: {
                 headers: []
-            },
-            googlePlaceSearch: {
-                value: ""
             },
             locationList: [],
             location: {
@@ -194,24 +196,47 @@ export default {
                 cca2: "",
                 googleMapApiResponse: null
             },
+            distance: {
+                isOfferOnlyOnline: false,
+                unit: "",
+                farAway: ""
+            },
+            map: null
         };
     },
     created() {
         this.locationDataTable = {
-        headers: [
-            {
-                text: this.$i18n.t("geography_table_header_text_address"),
-                value: "address",
-                class: "location-table--header",
-            },
-            {
-                text: this.$i18n.t("geography_table_header_text_actions"),
-                value: "action",
-                sortable: false,
-                class: "location-table--header",
-            }
-        ]
+            headers: [
+                {
+                    text: this.$i18n.t("geography_table_header_text_address"),
+                    value: "address",
+                    class: "location-table--header",
+                },
+                {
+                    text: this.$i18n.t("geography_table_header_text_actions"),
+                    value: "action",
+                    sortable: false,
+                    class: "location-table--header",
+                }
+            ]
         };
+        this.fetchCountryList();
+        coachGeographyApi(this.$axios)
+        .geographyPageInitialData()
+        .then(response => {
+            if (response.data.status == "success") {
+            if (response.data.locations.length > 0) {
+                this.locationList = response.data.locations;
+            }
+            if (response.data.distance) {
+                this.distance.isOfferOnlyOnline =
+                response.data.distance.is_offer_only_online;
+                this.distance.farAway = response.data.distance.far_away;
+            }
+            }
+            this.initMap();
+        })
+        .catch(() => {});
     },
     methods:{
         handleGoogleLocation(item) {
@@ -233,6 +258,18 @@ export default {
             this.location.cca2 = cca2;
             this.location.googleMapApiResponse = googleMapApiResponse;
         },
+        async fetchCountryList() {
+            try {
+                let { data } = await countryApi(this.$axios).get();
+                if (data.data.length) {
+                data.data.forEach(item => {
+                    this.countryList.push(item);
+                });
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
         addLocation() {
             let payload = {
                 lat: this.location.lat,
@@ -241,7 +278,9 @@ export default {
                 zip: this.location.zipCode,
                 city: this.location.city,
                 cca2: this.location.cca2,
-                googleMapApiResponse: this.location.googleMapApiResponse
+                googleMapApiResponse: this.location.googleMapApiResponse,
+                is_onboarding : true,
+
             };
 
             coachGeographyApi(this.$axios)
@@ -282,7 +321,7 @@ export default {
             this.$router.push(this.localePath(pathData.pages.becomeACoach));
         },
         handleBackBtnClick(){
-            this.$router.push(this.localePath(pathData.coach.onboarding.step4));
+            this.$router.push(this.localePath(pathData.coach.onboarding.step5));
         },
         handleSaveBtnClick(){
             this.$router.push(this.localePath(pathData.coach.onboarding.step6));

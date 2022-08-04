@@ -55,8 +55,8 @@
                     </v-col>
                     <v-col cols="12">
                        <v-combobox
-                            v-model="tagData.tagsSelected"
-                            :items="tagData.tags"
+                            v-model="profileData.sport_tag_list_id"
+                            :items="tags"
                             clearable
                             multiple
                             outlined
@@ -137,7 +137,7 @@
   </div>
 </template>
 <script>
-import { sportCategoryApi } from "@/api";
+import { coachProfileApi } from "@/api";
 import { pathData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 import VuePhoneNumberInput from "vue-phone-number-input";
@@ -159,16 +159,46 @@ export default {
     },
     data() {
         return {
-            tagData: {
-                tags: [],
-                tagsSelected: []
+            tags: [],
+            initialImageContent: "",
+            profileData: {
+                image: null,
+                profile_name: "",
+                about_me: "",
+                mobile_no: "",
+                mobile_code: "DK",
+                category_tag_list_id: [],
+                category_tag_list_id: [],
+                sport_tag_list_id: [],
+                language_tag_list_id: [],
+                is_onboarding: true,
             },
         };
     },
     created() {
         this.langCode = this.$i18n.locale;
+        this.init();
     },
     methods:{
+        init() {
+            let is_onboarding = true;
+            coachProfileApi(this.$axios)
+                .onBoardingUserProfileInfo(is_onboarding)
+                .then(response => {
+                    this.initialImageContent = response.data.initial_image_content;
+                    this.profileData.profile_name = response.data.profile_name;
+                    this.profileData.image =response.data.image.square ;
+                    this.profileData.about_me = response.data.about_me;
+                    this.profileData.mobile_no = response.data.mobile_no;
+                    this.profileData.mobile_code = response.data.mobile_code;
+                    this.profileData.category_tag_list_id = response.data.selectedCategories;
+                    this.profileData.sport_tag_list_id = response.data.selectedSportTags.map(
+                        item => item.name
+                    );
+                    this.profileData.language_tag_list_id = response.data.selectedLanguages;
+                })
+                .catch(() => {});
+        },
         removeTag(item) {
             this.tagData.tagsSelected.splice(
                 this.tagData.tagsSelected.indexOf(item),
@@ -182,8 +212,31 @@ export default {
             this.$router.push(this.localePath(pathData.coach.onboarding.step2));
         },
         handleSaveBtnClick(){
-            this.$router.push(this.localePath(pathData.coach.onboarding.step4));
-        }
+            let payload = this.profileData;
+            payload.category_tag_list_id = this.profileData.category_tag_list_id.map(
+                item => item.id
+            );
+            payload.language_tag_list_id = this.profileData.language_tag_list_id.map(
+                item => item.id
+            );
+            payload.sport_tag_list_name = this.profileData.sport_tag_list_id;
+            coachProfileApi(this.$axios)
+                .profileSave(payload)
+                .then(response => {
+                if (response.data.status == "success") {
+                    // this.$toast.success(this.$i18n.t(response.data.t_key));
+                    this.init();
+                    this.$router.push(this.localePath(pathData.coach.onboarding.step4));
+                }
+                })
+                .catch(error => {
+                if (
+                    error.response.status == statusCodeData.HTTP_UNPROCESSABLE_ENTITY
+                ) {
+                    this.$toast.error(this.$i18n.t(error.response.data.t_key));
+                }
+            });
+        },
     }
 };
 </script>

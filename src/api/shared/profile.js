@@ -20,6 +20,9 @@ export default axios => ({
   uploadImage: image => {
     return axios.post("profiles/images", { profile_image: image });
   },
+  uploadOnboardingImage: payload => {
+    return axios.post("profiles/images", payload);
+  },
   authUserProfileInfo: () => {
     return axios.get("profiles");
   },

@@ -242,23 +242,30 @@ export default {
         }
     },
     created() {
-        this.locationDataTable = {
-        headers: [
-            {
-                text: this.$i18n.t("geography_table_header_text_address"),
-                value: "address",
-                class: "location-table--header",
-            },
-            {
-                text: this.$i18n.t("geography_table_header_text_actions"),
-                value: "action",
-                sortable: false,
-                class: "location-table--header",
+        coachPackageApi(this.$axios)
+        .packageInfo()
+        .then(response => {
+            this.hourlyRate.inputValue = response.data.hourly_rate;
+            this.quickBooking.value =
+            response.data.quickBooking == 1 ? true : false;
+            this.packageList = response.data.packages.data;
+            if (!this.hourlyRate.inputValue) {
+            this.hourlyRate.dialog = true;
             }
-        ]
-        };
+            if (response.data.currency_code) {
+            this.packageCurrency = currencyService.getByCode(
+                response.data.currency_code
+            );
+            }
+        })
+        .catch(() => {});
     },
     methods:{
+        hideTabs(newPackage) {
+            this.packageList.push(newPackage);
+            this.dialogPackageCreate = false;
+            this.updateOrderList();
+        },
         handleAddBtnClick() {
             this.dialogPackageCreate = true;
         },
