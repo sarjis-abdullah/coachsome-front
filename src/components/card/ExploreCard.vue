@@ -45,22 +45,12 @@
           >
             {{ $t(badge.tKey) }}
           </v-btn>
-          <!-- <v-btn
-            style="margin-bottom: 246px;
-                   margin-left: 78px;"
-            class="white--text text-normal"
-            depressed
-            small
-            fab
-          >
-            <img :src="require(`@/assets/img/svg-icons/chat.svg`)" alt="Gray Heart" />
-          </v-btn> -->
           <v-btn
-          @click.stop="hello"
+              @click.stop="toggleFavourite"
               icon
               style="position: absolute;
-    top: 6px;
-    right: 10px;"
+              top: 6px;
+              right: 10px;"
               :color="isFavourite ? '#FF3A0D': '#49556A'"
             >
               <v-icon>mdi-heart</v-icon>
@@ -162,7 +152,7 @@ export default {
     imageLoadError() {
       console.log("Image failed to load");
     },
-    hello(){
+    toggleFavourite(){
       this.isFavourite = !this.isFavourite
     }
   },
