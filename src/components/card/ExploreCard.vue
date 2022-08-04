@@ -1,5 +1,5 @@
 <template>
-  <div class="explore-card">
+  <div class="explore-card" style="position: relative;">
     <v-card
       @click="gotTo(userName)"
       elevation="1"
@@ -45,6 +45,26 @@
           >
             {{ $t(badge.tKey) }}
           </v-btn>
+          <!-- <v-btn
+            style="margin-bottom: 246px;
+                   margin-left: 78px;"
+            class="white--text text-normal"
+            depressed
+            small
+            fab
+          >
+            <img :src="require(`@/assets/img/svg-icons/chat.svg`)" alt="Gray Heart" />
+          </v-btn> -->
+          <v-btn
+          @click.stop="hello"
+              icon
+              style="position: absolute;
+    top: 6px;
+    right: 10px;"
+              :color="isFavourite ? '#FF3A0D': '#49556A'"
+            >
+              <v-icon>mdi-heart</v-icon>
+            </v-btn>
         </v-card-title>
       </v-img>
       <v-card-text>
@@ -124,7 +144,8 @@ export default {
   data() {
     return {
       currencyService,
-      badgeData: { ...badgeData }
+      badgeData: { ...badgeData },
+      isFavourite: false
     };
   },
   methods: {
@@ -140,6 +161,9 @@ export default {
     },
     imageLoadError() {
       console.log("Image failed to load");
+    },
+    hello(){
+      this.isFavourite = !this.isFavourite
     }
   },
   computed: {
