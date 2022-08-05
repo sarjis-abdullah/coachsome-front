@@ -1286,7 +1286,7 @@ export default {
             this.promoCode.amount = promoCode.amount;
             if (withPromoCode) {
               if (!promoCode.valid) {
-                this.$toast.error(promoCode.message);
+                this.$toast.error(this.$i18n.t(promoCode.message));
               } else {
                 this.promoCode.dialog = false;
               }
