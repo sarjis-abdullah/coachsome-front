@@ -22,13 +22,13 @@
                             x-small
                             color="#FFFFFF"
                             class="onboarding--body--button--cancel mr-2 "
-                            @click="handleCancelBtnClick"
+                            @click="handleSkipButtonClick"
                         >
-                            Skip this step
+                            {{$t('skip_step')}}
                         </v-btn>
                     </v-col>
                     <v-col cols="12" class="onboarding--body--left-banner-text pt-0">
-                        <p :class="{'onboarding--body--left-banner-text--md px-15' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--left-banner-text--sm' : $vuetify.breakpoint.smAndDown}">What sport(s) do you coach in?</p>
+                        <p :class="{'onboarding--body--left-banner-text--md px-15' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--left-banner-text--sm' : $vuetify.breakpoint.smAndDown}">{{$t('sport_banner')}}</p>
                     </v-col>
                 </v-row>
             </div>
@@ -48,9 +48,9 @@
                             rounded
                             color="#49556A"
                             class="onboarding--body--button--cancel mr-2"
-                            @click="handleCancelBtnClick"
+                            @click="handleSkipButtonClick"
                         >
-                            Skip this step
+                            {{$t('skip_step')}}
                         </v-btn>
                     </v-col>
                     <v-col cols="12">
@@ -59,6 +59,7 @@
                             :items="categories"
                             item-text="name"
                             return-object
+                            :label="$t('select_onboarding_sport')"
                             chips
                             clearable
                             multiple
@@ -101,14 +102,15 @@
                     class="onboarding--body--footer--button-left"
                     @click="handleBackBtnClick"
                 >
-                    <u>Go back</u>
+                    <u>{{$t('go_back')}}</u>
                 </v-btn>
                 <v-btn
                     color="#15577C"
                     class="onboarding--body--footer--button-right px-15 py-3"
                     @click="handleSaveBtnClick"
+                    :disabled="!validContinue"
                 >
-                    Continue
+                    {{$t('pwa_continue_btn')}}
                 </v-btn>
             </div>
             
@@ -122,9 +124,10 @@
                         class="white--text mb-2"
                         block
                         @click="handleSaveBtnClick"
+                        :disabled="!validContinue"
                       >
                         <span
-                          v-html="$t('Continue')"
+                          v-html="$t('pwa_continue_btn')"
                         ></span>
                       </v-btn>
                       <v-btn
@@ -134,7 +137,7 @@
                         @click="handleBackBtnClick"
                       >
                         <u
-                          v-html="$t('Go_back')"
+                          v-html="$t('go_back')"
                         ></u>
                       </v-btn>
                     </div>
@@ -188,6 +191,15 @@ export default {
         this.langCode = this.$i18n.locale;
         this.init();
         this.fetchSportCategory();
+    },
+    computed: {
+        validContinue(){
+            if(this.profileData.category_tag_list_id.length > 0){
+                return true;
+            }else{
+                return false;
+            }
+        },
     },
     methods:{
         init() {
@@ -243,9 +255,9 @@ export default {
         handleBackBtnClick(){
             this.$router.push(this.localePath(pathData.coach.onboarding.step1));
         },
-        // handleSaveBtnClick(){
-        //     this.$router.push(this.localePath(pathData.coach.onboarding.step3));
-        // }
+        handleSkipButtonClick(){
+            this.$router.push(this.localePath(pathData.coach.onboarding.step3));
+        },
         handleSaveBtnClick(){
             let payload = this.profileData;
             payload.category_tag_list_id = this.profileData.category_tag_list_id.map(
@@ -320,7 +332,8 @@ export default {
             }
             &--right{
                 &--md{
-                    height: 88vh!important;
+                    min-height: 88vh!important;
+                    height: 100%!important;
                     width: 65%;
                     margin: 0px;
                     float: right!important;

@@ -30,19 +30,9 @@
             </div>
             <div class= "onboarding--body--right d-flex" :class="{'onboarding--body--right--md' : !$vuetify.breakpoint.smAndDown,'onboarding--body--right--sm mb-15': $vuetify.breakpoint.smAndDown}">
                 <v-row>
-                    <v-col cols="12" class="text-right onboarding--body--right--top d-none">
-                        <v-btn
-                            outlined
-                            rounded
-                            color="#49556A"
-                            class="onboarding--button--cancel px-10 mr-10"
-                            @click="handleCancelBtnClick"
-                        >
-                            Cancel
-                        </v-btn>
-                    </v-col>
+                    
                     <v-col cols="12"  :class="{'px-15' : !$vuetify.breakpoint.smAndDown}">
-                        <span class="onboarding--body--right--center-text" :class="{'onboarding--body--right--center-text--md' : !$vuetify.breakpoint.smAndDown,'onboarding--body--right--center-text--sm mb-15': $vuetify.breakpoint.smAndDown}">Ready to become a coach on Coachsome?</span>
+                        <span class="onboarding--body--right--center-text" :class="{'onboarding--body--right--center-text--md' : !$vuetify.breakpoint.smAndDown,'onboarding--body--right--center-text--sm mb-15': $vuetify.breakpoint.smAndDown}">{{$t('start_text')}}</span>
                     </v-col>
                 </v-row>
             </div>
@@ -52,7 +42,7 @@
                     class="onboarding--body--footer--button-right px-15 py-3"
                     @click="handleSaveBtnClick"
                 >
-                    Continue
+                    {{$t('pwa_continue_btn')}}
                 </v-btn>
             </div>
             
@@ -68,7 +58,7 @@
                         @click="handleSaveBtnClick"
                       >
                         <span
-                          v-html="$t('Continue')"
+                          v-html="$t('pwa_continue_btn')"
                         ></span>
                       </v-btn>
                     </div>

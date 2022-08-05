@@ -16,6 +16,6 @@ export default {
       } else {
         price = rate;
       }
-      return price.toFixed(2)
+      return Number(price).toFixed(2)
     }
   };

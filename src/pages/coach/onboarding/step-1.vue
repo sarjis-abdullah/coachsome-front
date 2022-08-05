@@ -13,197 +13,193 @@
             </template>
         </mobile-top-nav>
         <div class="onboarding--body">
-            <v-form v-model="isFormValid">
-                <div class= "onboarding--body--left-banner d-flex" :class="{'onboarding--body--left-banner--md' : !$vuetify.breakpoint.smAndDown,'onboarding--body--left-banner--sm': $vuetify.breakpoint.smAndDown}">
-                    <v-row :class="{'py-10' : $vuetify.breakpoint.smAndDown}">
-                        <v-col cols="12" class="text-right d-md-none pb-0"  style="height: 0!important;">
-                            <v-btn
-                                outlined
-                                rounded
-                                x-small
-                                color="#FFFFFF"
-                                class="onboarding--body--button--cancel mr-2 d-md-none"
-                                @click="handleCancelBtnClick"
-                            >
-                                Skip this step
-                            </v-btn>
-                        </v-col>
-                        <v-col cols="12" class="onboarding--body--left-banner-text pt-0">
-                            <p :class="{'onboarding--body--left-banner-text--md' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--left-banner-text--sm' : $vuetify.breakpoint.smAndDown}">Add your basic information</p>
-                        </v-col>
-                    </v-row>
-                </div>
-                <div class= "onboarding--body--right" :class="{'onboarding--body--right--md' : !$vuetify.breakpoint.smAndDown,'onboarding--body--right--sm mb-15': $vuetify.breakpoint.smAndDown}">
-                    <v-row>
-                        <v-col cols="12" md="9" sm="12" class="onboarding--body--right-content--body-top">
-                            <div class="default--label pb-2">
-                                {{ $t("profile_picture_title") }}
-                                <span class="required">*</span>
-                            </div>
-                            <div class="section-description">
-                                {{ $t("profile_picture_desc") }}
-                            </div>
-                        </v-col>
-                        <v-col cols="3" class="text-right d-none d-md-block">
-                            <v-btn
-                                outlined
-                                rounded
-                                color="#49556A"
-                                class="onboarding--body--button--cancel mr-2"
-                                @click="handleCancelBtnClick"
-                            >
-                                Skip this step
-                            </v-btn>
-                        </v-col>
-                        <v-col cols="12">
-                            <v-row :class="{'onboarding--body--right--sm--avatar-section' :$vuetify.breakpoint.smAndDown }">
-                                <v-col cols="6" md="3" :class="{'d-flex justify-center' :$vuetify.breakpoint.smAndDown }">
-                                    <div style="width: 150px;" class="text-center" >
-                                        <div>
-                                            <v-avatar
-                                            color="teal"
-                                            v-if="!userProfileImage"
-                                            tile
-                                            style="width: 100%; height: 150px;"
-                                            >
-                                            <span class="white--text headline" v-if="initialImageContent != ''">{{ initialImageContent }}</span>
-                                            <v-img v-else aspect-ratio="1" :src="require('@/assets/images/profile-default.jpg')" alt="Avatar"></v-img>
-                                            </v-avatar>
-                                            <v-avatar
-                                            style="width: 100%; height: 150px;"
-                                            color="primary"
-                                            v-if="userProfileImage"
-                                            tile
-                                            >
-                                            <img :src="userProfileImage" alt="Profile Image" />
-                                            </v-avatar>
-                                        </div>
-                                        <div>
-                                            <v-btn
-                                            class="px-0"
-                                            color="primary-light-1"
-                                            dark
-                                            tile
-                                            block
-                                            depressed
-                                            @click.stop="openProfilePictureDialog"
-                                            >
-                                            {{ $t("profile_button_label_change_image") }}
-                                            </v-btn>
-                                        </div>
+            <div class= "onboarding--body--left-banner d-flex" :class="{'onboarding--body--left-banner--md' : !$vuetify.breakpoint.smAndDown,'onboarding--body--left-banner--sm': $vuetify.breakpoint.smAndDown}">
+                <v-row :class="{'py-10' : $vuetify.breakpoint.smAndDown}">
+                    <v-col cols="12" class="text-right d-md-none pb-2"  style="height: 0!important;">
+                        <v-btn
+                            outlined
+                            rounded
+                            x-small
+                            color="#FFFFFF"
+                            class="onboarding--body--button--cancel mr-2 d-md-none"
+                            @click="handleSkipButtonClick"
+                        >
+                            {{$t('skip_step')}}
+                        </v-btn>
+                    </v-col>
+                    <v-col cols="12" class="onboarding--body--left-banner-text pt-2">
+                        <p :class="{'onboarding--body--left-banner-text--md' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--left-banner-text--sm' : $vuetify.breakpoint.smAndDown}">{{$t('basic_info_text')}}</p>
+                    </v-col>
+                </v-row>
+            </div>
+            <div class= "onboarding--body--right" :class="{'onboarding--body--right--md' : !$vuetify.breakpoint.smAndDown,'onboarding--body--right--sm mb-15': $vuetify.breakpoint.smAndDown}">
+                <v-row>
+                    <v-col cols="12" md="8" sm="12" class="onboarding--body--right-content--body-top">
+                        <div class="default--label pb-2">
+                            {{ $t("profile_picture_title") }}
+                        </div>
+                        <div class="section-description">
+                            {{ $t("profile_picture_desc") }}
+                        </div>
+                    </v-col>
+                    <v-col cols="4" class="text-right d-none d-md-block">
+                        <v-btn
+                            outlined
+                            rounded
+                            color="#49556A"
+                            class="onboarding--body--button--cancel mr-2"
+                            @click="handleSkipButtonClick"
+                        >
+                            {{$t('skip_step')}}
+                        </v-btn>
+                    </v-col>
+                    <v-col cols="12">
+                        <v-row :class="{'onboarding--body--right--sm--avatar-section' :$vuetify.breakpoint.smAndDown }">
+                            <v-col cols="6" md="3" :class="{'d-flex justify-center' :$vuetify.breakpoint.smAndDown }">
+                                <div style="width: 150px;" class="text-center" >
+                                    <div>
+                                        <v-avatar
+                                        color="teal"
+                                        v-if="!userProfileImage"
+                                        tile
+                                        style="width: 100%; height: 150px;"
+                                        >
+                                        <span class="white--text headline" v-if="initialImageContent != ''">{{ initialImageContent }}</span>
+                                        <v-img v-else aspect-ratio="1" :src="require('@/assets/images/profile-default.jpg')" alt="Avatar"></v-img>
+                                        </v-avatar>
+                                        <v-avatar
+                                        style="width: 100%; height: 150px;"
+                                        color="primary"
+                                        v-if="userProfileImage"
+                                        tile
+                                        >
+                                        <img :src="userProfileImage" alt="Profile Image" />
+                                        </v-avatar>
                                     </div>
-                                </v-col>
-                            </v-row>
-                        </v-col>
-                        <v-col cols="12">
-                            <div class="default--label pb-2">
-                                {{ $t("profile_name") }}
-                                <span class="required">*</span>
-                            </div>
-                            <div class="section-description" >{{ $t("profile_name_desc") }}</div>
-                        </v-col>
-                        <v-col cols="12">
-                            <v-text-field
-                                v-model="profileData.profile_name"
-                                outlined
-                                dense
-                                class="default-text-field"
-                                color="#9FAEC2"
-                                background-color="white"
-                                counter="35"
-                                maxlength="35"
-                                :label="$t('profile_name_hint')"
-                                :rules="rules.profile_name_rules"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12">
-                            <div class="default--label pb-2">
-                                {{ $t("profile_mobile_title") }}
-                                <span class="required">*</span>
-                            </div>
-                            <div class="section-description">
-                                {{ $t("profile_mobile_description") }}
-                            </div>
-                        </v-col>
-                        <v-col cols="12" class="py-0">
-                            <VuePhoneNumberInput
-                                :default-country-code="profileData.mobile_code"
-                                v-model="profileData.mobile_no"
-                                @update="updateMobileInfo"
-                                color="#9FAEC2"
-                                valid-color="#9FAEC2"
-                                class="vue-phone-number-input"
-                                :translations="{
-                                    countrySelectorLabel: $t(
-                                        'profile_section_mobile_label_country_code'
-                                    ),
-                                    phoneNumberLabel: $t(
-                                        'profile_section_mobile_input_label_phone_number'
-                                    ),
-                                    example: $t('profile_section_mobile_input_label_example')
-                                    }"
-                            />
-                        </v-col>
-                        <v-col cols="12">
-                            <div class="default--label pb-2">
-                                {{ $t("profile_about_you") }}
-                                <span class="required">*</span>
-                            </div>
-                            <div class="section-description ">
-                                {{ $t("profile_about_you_desc") }}
-                            </div>
-                        </v-col>
-                        <v-col cols="12">
-                            <TiptopEditor
-                                :value="tipTopEditor.value"
-                                @updated="handleTiptopUpdatedValue"
-                            />
-                        </v-col>
-                    </v-row>
-                    <v-row >
-                        <v-col cols="12" >
-                        <template v-if="profilePictureDialog">
-                            <div v-if="$vuetify.breakpoint.mdAndUp">
-                            <v-dialog color="#f7fafc" v-model="profilePictureDialog" max-width="1300px" persistent>
-                                <EditImageDialog
-                                :show="true"
-                                :isOnboarding="true"
-                                @hide="handleCloseProfilePicture"
-                                @uploaded="handleCloseProfilePicture"
-                                @onboardingImageUploaded="setProfileImage($event)"
-                                />
-                            </v-dialog>
-                            </div>
-                            <div v-else>
+                                    <div>
+                                        <v-btn
+                                        class="px-0"
+                                        color="primary-light-1"
+                                        dark
+                                        tile
+                                        block
+                                        depressed
+                                        @click.stop="openProfilePictureDialog"
+                                        >
+                                        {{ $t("profile_button_label_change_image") }}
+                                        </v-btn>
+                                    </div>
+                                </div>
+                            </v-col>
+                        </v-row>
+                    </v-col>
+                    <v-col cols="12">
+                        <div class="default--label pb-2">
+                            {{ $t("profile_name") }}
+                        </div>
+                        <div class="section-description" >{{ $t("profile_name_desc") }}</div>
+                    </v-col>
+                    <v-col cols="12">
+                        <v-text-field
+                            v-model="profileData.profile_name"
+                            outlined
+                            dense
+                            class="default-text-field"
+                            color="#9FAEC2"
+                            background-color="white"
+                            counter="35"
+                            maxlength="35"
+                            :label="$t('profile_name_hint')"
+                            :rules="rules.profile_name_rules"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                        <div class="default--label pb-2">
+                            {{ $t("profile_mobile_title") }}
+                        </div>
+                        <div class="section-description">
+                            {{ $t("profile_mobile_description") }}
+                        </div>
+                    </v-col>
+                    <v-col cols="12" class="py-0">
+                        <VuePhoneNumberInput
+                            :default-country-code="profileData.mobile_code"
+                            v-model="profileData.mobile_no"
+                            @update="updateMobileInfo"
+                            color="#9FAEC2"
+                            valid-color="#9FAEC2"
+                            class="vue-phone-number-input"
+                            :rules="rules.phone"
+                            :translations="{
+                                countrySelectorLabel: $t(
+                                    'profile_section_mobile_label_country_code'
+                                ),
+                                phoneNumberLabel: $t(
+                                    'profile_section_mobile_input_label_phone_number'
+                                ),
+                                example: $t('profile_section_mobile_input_label_example')
+                                }"
+                        />
+                    </v-col>
+                    <v-col cols="12">
+                        <div class="default--label pb-2">
+                            {{ $t("profile_about_you") }}
+                            <span class="required">*</span>
+                        </div>
+                        <div class="section-description ">
+                            {{ $t("profile_about_you_desc") }}
+                        </div>
+                    </v-col>
+                    <v-col cols="12">
+                        <TiptopEditor
+                            :value="tipTopEditor.value"
+                            @updated="handleTiptopUpdatedValue"
+                        />
+                    </v-col>
+                </v-row>
+                <v-row >
+                    <v-col cols="12" >
+                    <template v-if="profilePictureDialog">
+                        <div v-if="$vuetify.breakpoint.mdAndUp">
+                        <v-dialog color="#f7fafc" v-model="profilePictureDialog" max-width="1300px" persistent>
                             <EditImageDialog
-                                :show="true"
-                                :isOnboarding="true"
-                                @hide="handleCloseProfilePicture"
-                                @uploaded="handleCloseProfilePicture"
-                                @onboardingImageUploaded="setProfileImage($event)"
-                                />
-                            </div>
-                        </template>
-                        </v-col>
-                    </v-row>
-                </div>
-            </v-form>
+                            :show="true"
+                            :isOnboarding="true"
+                            @hide="handleCloseProfilePicture"
+                            @uploaded="handleCloseProfilePicture"
+                            @onboardingImageUploaded="setProfileImage($event)"
+                            />
+                        </v-dialog>
+                        </div>
+                        <div v-else>
+                        <EditImageDialog
+                            :show="true"
+                            :isOnboarding="true"
+                            @hide="handleCloseProfilePicture"
+                            @uploaded="handleCloseProfilePicture"
+                            @onboardingImageUploaded="setProfileImage($event)"
+                            />
+                        </div>
+                    </template>
+                    </v-col>
+                </v-row>
+            </div>
             <div :class="{ 'onboarding--body--footer' : !$vuetify.breakpoint.smAndDown, 'd-none' : $vuetify.breakpoint.smAndDown}">
                 <v-btn
                     text
                     color="#000000"
                     class="onboarding--body--footer--button-left"
                     @click="handleBackBtnClick"
-                    :disabled="!isFormValid"
                 >
-                    <u>Go back</u>
+                    <u>{{$t('go_back')}}</u>
                 </v-btn>
                 <v-btn
                     color="#15577C"
                     class="onboarding--body--footer--button-right px-15 py-3"
                     @click="handleSaveBtnClick"
+                    :disabled="!validContinue"
                 >
-                    Continue
+                    {{$t('pwa_continue_btn')}}
                 </v-btn>
             </div>
             
@@ -216,11 +212,11 @@
                         color="#15577C"
                         class="white--text mb-2"
                         @click="handleSaveBtnClick"
-                        :disabled="!isFormValid"
+                        :disabled="!validContinue"
                         block
                       >
                         <span
-                          v-html="$t('Continue')"
+                          v-html="$t('pwa_continue_btn')"
                         ></span>
                       </v-btn>
                       <v-btn
@@ -230,7 +226,7 @@
                         @click="handleBackBtnClick"
                       >
                         <u
-                          v-html="$t('Go_back')"
+                          v-html="$t('go_back')"
                         ></u>
                       </v-btn>
                     </div>
@@ -266,7 +262,6 @@ export default {
     },
     data() {
         return {
-            isFormValid: false,
             tipTopEditor: { value: "" },
             profilePictureDialog: false,
             initialImageContent: "",
@@ -283,8 +278,11 @@ export default {
             },
             rules: {
                 profile_name_rules: [
-                    (v) => !!v || this.$i18n.t("valid_required_first_name"),
+                    (v) => !!v || this.$i18n.t("valid_required_profile_name"),
                     (v) => /^([A-Za-zæøåÆØÅ]\s*)+$/.test(v) || this.$i18n.t("valid_profile_name"),
+                ],
+                phone: [
+                    (v) => !!v || this.$i18n.t("valid_required_profile_name")
                 ],
                 // categories: [v => v.length != 0 || "At least one category is needed"],
                 // site: [
@@ -302,6 +300,13 @@ export default {
         }
     },
     computed: {
+        validContinue(){
+            if(this.profileData.image != null &&  this.profileData.profile_name != "" && this.profileData.mobile_no != "" && this.profileData.about_me != ""){
+                return true;
+            }else{
+                return false;
+            }
+        },
         userProfileImage() {
             return this.profileData.image;
         },
@@ -388,6 +393,9 @@ export default {
         },
         handleBackBtnClick(){
             this.$router.push(this.localePath(pathData.coach.onboarding.start));
+        },
+        handleSkipButtonClick(){
+            this.$router.push(this.localePath(pathData.coach.onboarding.step2));
         },
         handleSaveBtnClick(){
             let payload = this.profileData;

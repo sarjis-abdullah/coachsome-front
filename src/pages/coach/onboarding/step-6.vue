@@ -15,7 +15,7 @@
          <!-- Package Create Dialog -->
         <PackageCreateDialog
             v-model="dialogPackageCreate"
-            :rate="hourlyRate.inputValue"
+            :rate="hourlyRate.inputVal"
             @close="dialogPackageCreate = false"
             @created="hideTabs"
         />
@@ -29,13 +29,13 @@
                             x-small
                             color="#FFFFFF"
                             class="onboarding--body--button--cancel mr-2 "
-                            @click="handleCancelBtnClick"
+                            @click="handleSkipButtonClick"
                         >
-                            Skip this step
+                            {{$t('skip_step')}}
                         </v-btn>
                     </v-col>
                     <v-col cols="12" class="onboarding--body--left-banner-text pt-0">
-                        <p :class="{'onboarding--body--left-banner-text--md px-15' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--left-banner-text--sm' : $vuetify.breakpoint.smAndDown}">What packages do you offer your customers?</p>
+                        <p :class="{'onboarding--body--left-banner-text--md px-15' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--left-banner-text--sm' : $vuetify.breakpoint.smAndDown}">{{$t('package_banner')}}</p>
                     </v-col>
                 </v-row>
             </div>
@@ -55,9 +55,9 @@
                             rounded
                             color="$grey-700"
                             class="onboarding--body--button--cancel mr-2"
-                            @click="handleCancelBtnClick"
+                            @click="handleSkipButtonClick"
                         >
-                            Skip this step
+                            {{$t('skip_step')}}
                         </v-btn>
                     </v-col>
                     <v-col cols="12">
@@ -66,7 +66,8 @@
                             required
                             outlined
                             dense
-                            v-model="hourlyRate.dialogInputVal"
+                            v-model="hourlyRate.inputVal"
+                            @input="saveHourlyRate()"
                          ></v-text-field>
                     </v-col>
                     <!-- <v-col cols="12" md="3">
@@ -93,7 +94,7 @@
                     <v-col cols="12" md="6">
                         <div @click="handleAddBtnClick" class="onboarding--body--right--add-btn">
                             <v-icon class="onboarding--body--right--add-btn__icon" color="primary-light-1">
-                            mdi-plus-circle-outline
+                                mdi-plus-circle-outline
                             </v-icon>
                             <div class="onboarding--body--right--add-btn__text">
                             {{ $t("btn_label_add_package") }}
@@ -105,13 +106,12 @@
                         md="6"
                         v-for="item in packageList"
                         :key="item.id"
-                        class="d-md-none"
                     >
-                        <package-card
-                        class="all-scroll"
-                        v-bind="item"
-                        :rate="hourlyRate.inputValue"
-                        :max-chars="descriptionMaxChar"
+                        <on-boarding-package-card
+                            class="all-scroll"
+                            v-bind="item"
+                            :rate="hourlyRate.inputVal"
+                            :max-chars="descriptionMaxChar"
                         >
                             <template v-slot:original-price="{ price, discount }">
                                 <div v-if="discount && discount > 0">
@@ -122,7 +122,7 @@
                             <template v-slot:sale-price="{ price }">
                                 <span>{{ currencyService.toCurrencyByBase(price) }}</span>
                             </template>
-                        </package-card>
+                        </on-boarding-package-card>
                     </v-col>
                 </v-row>
                 
@@ -135,14 +135,15 @@
                     class="onboarding--body--footer--button-left"
                     @click="handleBackBtnClick"
                 >
-                    <u>Go back</u>
+                    <u>{{$t('go_back')}}</u>
                 </v-btn>
                 <v-btn
                     color="#15577C"
                     class="onboarding--body--footer--button-right px-15 py-3"
                     @click="handleSaveBtnClick"
+                    :disabled="!validContinue"
                 >
-                    Continue
+                    {{$t('pwa_continue_btn')}}
                 </v-btn>
             </div>
             
@@ -156,9 +157,10 @@
                         class="white--text mb-2"
                         block
                         @click="handleSaveBtnClick"
+                        :disabled="!validContinue"
                       >
                         <span
-                          v-html="$t('Continue')"
+                          v-html="$t('pwa_continue_btn')"
                         ></span>
                       </v-btn>
                       <v-btn
@@ -168,7 +170,7 @@
                         @click="handleBackBtnClick"
                       >
                         <u
-                          v-html="$t('Go_back')"
+                          v-html="$t('go_back')"
                         ></u>
                       </v-btn>
                     </div>
@@ -182,11 +184,11 @@
 <script>
 import { coachGeographyApi, coachPackageApi } from "@/api";
 import { required, decimal } from "vuelidate/lib/validators";
-import { currencyService } from "@/services";
 import { constantData, pathData } from "@/data";
+import { currencyService } from "@/services";
 import MobileTopNav from '@/components/layout/global/MobileTopNav';
 import PackageCreateDialog from "@/components/artifact/coach/package/PackageCreateDialog";
-import PackageCard from "@/components/card/PackageCard";
+import OnBoardingPackageCard from "@/components/card/OnBoardingPackageCard";
 
 
 export default {
@@ -200,42 +202,59 @@ export default {
     components: {
         MobileTopNav,
         PackageCreateDialog,
-        PackageCard
+        OnBoardingPackageCard
     },
     data() {
         return {
-            hourlyRate: {
-                dialog: false,
-                inputValue: null,
-                dialogInputVal: null
-            },
-            packageCurrency: currencyService.defaultCurrency(),
             currencyService,
             dialogPackageCreate: false,
+            quickBooking: {
+                value: false
+            },
+            descriptionMaxChar: 500,
+            editDialog: false,
+            editAblePackage: null,
+            packageCurrency: currencyService.defaultCurrency(),
+            hourlyRate: {
+                dialog: false,
+                inputVal: null
+            },
+            showTabs: false,
+            isEdit: false,
+            tabs: ["default", "camp"],
             packageList: [],
             highestLimit: 8,
+            drag: false,
+            loading: false,
         };
     },
     computed: {
         currencyCode() {
             return this.packageCurrency.code;
         },
-         hasPermitToCreateNewPackage() {
+        hasPermitToCreateNewPackage() {
             return this.highestLimit >= this.packageList.length + 1;
         },
         hourlyRateErrors() {
             const errors = [];
-            if (!this.$v.hourlyRate.dialogInputVal.$dirty) return errors;
-            !this.$v.hourlyRate.dialogInputVal.required &&
+            if (!this.$v.hourlyRate.inputVal.$dirty) return errors;
+            !this.$v.hourlyRate.inputVal.required &&
                 errors.push("Hourly rate is required.");
-            !this.$v.hourlyRate.dialogInputVal.decimal &&
+            !this.$v.hourlyRate.inputVal.decimal &&
                 errors.push("Only number is allowed");
             return errors;
-        }
+        },
+        validContinue(){
+            if(this.hourlyRate.inputVal != null && this.packageList.length > 0){
+                return true;
+            }else{
+                return false;
+            }
+        },
     },
     validations: {
         hourlyRate: {
-            dialogInputVal: {
+            inputVal: {
                 required,
                 decimal
             }
@@ -245,11 +264,11 @@ export default {
         coachPackageApi(this.$axios)
         .packageInfo()
         .then(response => {
-            this.hourlyRate.inputValue = response.data.hourly_rate;
+            this.hourlyRate.inputVal = response.data.hourly_rate;
             this.quickBooking.value =
             response.data.quickBooking == 1 ? true : false;
             this.packageList = response.data.packages.data;
-            if (!this.hourlyRate.inputValue) {
+            if (!this.hourlyRate.inputVal) {
             this.hourlyRate.dialog = true;
             }
             if (response.data.currency_code) {
@@ -271,31 +290,109 @@ export default {
         },
         saveHourlyRate() {
             if (!this.$v.$invalid) {
-                    this.loading = true
-                    let payload = {
-                    hourly_rate: this.hourlyRate.dialogInputVal
-                    };
-                    coachPackageApi(this.$axios)
-                    .saveHourlyRate(payload)
-                    .then(response => {
-                        if (response.data.status == "success") {
-                        this.hourlyRate.inputValue = response.data.hourly_rate;
-                        this.refreshPageProgress();
+                let payload = {
+                    hourly_rate: this.hourlyRate.inputVal
+                };
+                coachPackageApi(this.$axios)
+                .saveHourlyRate(payload)
+                .then(response => {
+                    if (response.data.status == "success") {
+                        this.hourlyRate.inputVal = response.data.hourly_rate;
                         this.packageList = response.data.packages.data;
-                        }
-                        this.hourlyRate.dialog = false;
-                    })
-                    .catch(() => {})
-                    .finally(()=> {
-                        this.loading = false
+                    }
                 })
+                .catch(() => {});
+            }
+        },
+        updateOrderList() {
+            let payload = this.packageList.map(item => item.id);
+            coachPackageApi(this.$axios)
+            .updateOrder(payload)
+            .then(({ data }) => {
+            });
+        },
+        handleQuickBooking() {
+            coachPackageApi(this.$axios)
+                .quickBooking()
+                .then(({ data }) => {
+                this.quickBooking.value = data.changedValue == 1 ? true : false;
+                if (data.message) {
+                    this.$toast.success(
+                    this.$i18n.t("package_quick_booking_success_toggle_mesg")
+                    );
                 }
+                })
+                .catch(error => {
+                this.$toast.error(error.response.data.message);
+                });
+        },
+        updateDefaultPackage(item) {
+        let payload = item;
+        coachPackageApi(this.$axios)
+            .updatePackage(payload)
+            .then(response => {
+            if (response.data.status == "success") {
+                this.packageList.forEach((item, index) => {
+                if (item.id == response.data.package.id) {
+                    this.packageList[index] = response.data.package;
+                } else {
+                    this.packageList[index] = item;
+                }
+                });
+                this.$toast.success(
+                this.$i18n.t("package_success_msg_package_updated")
+                );
+                this.editDialog = false;
+                this.editAblePackage = null;
+            }
+            })
+            .catch(() => {});
+        },
+        editPackage(item) {
+        item.price = item.originalPrice;
+        this.editAblePackage = item;
+        },
+        removePackage(item) {
+        if (confirm(this.$i18n.t("alert_confirm_short_text"))) {
+            let payload = item;
+            coachPackageApi(this.$axios)
+            .removePackage(payload)
+            .then(({ data }) => {
+                if (data.status == "success") {
+                let i = this.packageList
+                    .map(packageItem => packageItem.id)
+                    .indexOf(item.id);
+                this.packageList.splice(i, 1);
+                this.$toast.success(data.message);
+                }
+            })
+            .catch(() => {});
+        }
+        },
+        changeStatus(item, $event) {
+        let payload = {
+            id: item.id,
+            changed_status: $event
+        };
+        coachPackageApi(this.$axios)
+            .changePackageStatus(payload)
+            .then(response => {
+            if (response.data.status == "success") {
+                this.$toast.success(response.data.message);
+            }
+            })
+            .catch(error => {
+            console.log(error);
+            });
         },
         handleCancelBtnClick(){
             this.$router.push(this.localePath(pathData.pages.becomeACoach));
         },
         handleBackBtnClick(){
-            this.$router.push(this.localePath(pathData.coach.onboarding.step6));
+            this.$router.push(this.localePath(pathData.coach.onboarding.step5));
+        },
+        handleSkipButtonClick(){
+            this.$router.push(this.localePath(pathData.coach.onboarding.readyToGo));
         },
         handleSaveBtnClick(){
             this.$router.push(this.localePath(pathData.coach.onboarding.readyToGo));
@@ -348,7 +445,8 @@ export default {
             }
             &--right{
                 &--md{
-                    height: 88vh!important;
+                    min-height: 88vh!important;
+                    height: 100%!important;
                     width: 65%;
                     margin: 0px;
                     float: right!important;

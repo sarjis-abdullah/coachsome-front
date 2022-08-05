@@ -22,13 +22,13 @@
                             x-small
                             color="#FFFFFF"
                             class="onboarding--body--button--cancel mr-2 "
-                            @click="handleCancelBtnClick"
+                            @click="handleSkipButtonClick"
                         >
-                            Skip this step
+                            {{$t('skip_step')}}
                         </v-btn>
                     </v-col>
                     <v-col cols="12" class="onboarding--body--left-banner-text pt-0">
-                        <p :class="{'onboarding--body--left-banner-text--md px-15' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--left-banner-text--sm' : $vuetify.breakpoint.smAndDown}">Qualifications</p>
+                        <p :class="{'onboarding--body--left-banner-text--md px-15' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--left-banner-text--sm' : $vuetify.breakpoint.smAndDown}">{{$t('qualification_banner_text')}}</p>
                     </v-col>
                 </v-row>
             </div>
@@ -36,10 +36,10 @@
                 <v-row>
                     <v-col cols="12" md="9" sm="12" class="onboarding--body--right-content--body-top">
                         <div class="default--label pb-2">
-                            {{ $t("profile_category_title") }}
+                            {{ $t("profile_qualification_title") }}
                         </div>
                         <div class="section-description">
-                            {{ $t("profile_category_description") }}
+                            {{ $t("profile_qualification_description") }}
                         </div>
                     </v-col>
                     <v-col cols="3" class="text-right d-none d-md-block">
@@ -48,9 +48,9 @@
                             rounded
                             color="#49556A"
                             class="onboarding--body--button--cancel mr-2"
-                            @click="handleCancelBtnClick"
+                            @click="handleSkipButtonClick"
                         >
-                            Skip this step
+                            {{$t('skip_step')}}
                         </v-btn>
                     </v-col>
                     <v-col cols="12">
@@ -61,6 +61,7 @@
                             multiple
                             outlined
                             dense
+                            :label="$t('add_onboarding_qualification_tag')"
                             append-icon
                           >
                             <template
@@ -92,14 +93,15 @@
                     class="onboarding--body--footer--button-left"
                     @click="handleBackBtnClick"
                 >
-                    <u>Go back</u>
+                    <u>{{$t('go_back')}}</u>
                 </v-btn>
                 <v-btn
                     color="#15577C"
                     class="onboarding--body--footer--button-right px-15 py-3"
                     @click="handleSaveBtnClick"
+                    :disabled="!validContinue"
                 >
-                    Continue
+                    {{$t('pwa_continue_btn')}}
                 </v-btn>
             </div>
             
@@ -113,9 +115,10 @@
                         class="white--text mb-2"
                         block
                         @click="handleSaveBtnClick"
+                        :disabled="!validContinue"
                       >
                         <span
-                          v-html="$t('Continue')"
+                          v-html="$t('pwa_continue_btn')"
                         ></span>
                       </v-btn>
                       <v-btn
@@ -125,7 +128,7 @@
                         @click="handleBackBtnClick"
                       >
                         <u
-                          v-html="$t('Go_back')"
+                          v-html="$t('go_back')"
                         ></u>
                       </v-btn>
                     </div>
@@ -179,6 +182,15 @@ export default {
         this.langCode = this.$i18n.locale;
         this.init();
     },
+    computed: {
+        validContinue(){
+            if(this.profileData.sport_tag_list_id.length > 0){
+                return true;
+            }else{
+                return false;
+            }
+        },
+    },
     methods:{
         init() {
             let is_onboarding = true;
@@ -210,6 +222,9 @@ export default {
         },
         handleBackBtnClick(){
             this.$router.push(this.localePath(pathData.coach.onboarding.step2));
+        },
+        handleSkipButtonClick(){
+            this.$router.push(this.localePath(pathData.coach.onboarding.step4));
         },
         handleSaveBtnClick(){
             let payload = this.profileData;
@@ -285,7 +300,8 @@ export default {
             }
             &--right{
                 &--md{
-                    height: 88vh!important;
+                    min-height: 88vh!important;
+                    height: 100%!important;
                     width: 65%;
                     margin: 0px;
                     float: right!important;

@@ -22,13 +22,13 @@
                             x-small
                             color="#FFFFFF"
                             class="onboarding--body--button--cancel mr-2 "
-                            @click="handleCancelBtnClick"
+                            @click="handleSkipButtonClick"
                         >
-                            Skip this step
+                            {{$t('skip_step')}}
                         </v-btn>
                     </v-col>
                     <v-col cols="12" class="onboarding--body--left-banner-text pt-0">
-                        <p :class="{'onboarding--body--left-banner-text--md px-15' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--left-banner-text--sm' : $vuetify.breakpoint.smAndDown}">What language(s) do you speak?</p>
+                        <p :class="{'onboarding--body--left-banner-text--md px-15' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--left-banner-text--sm' : $vuetify.breakpoint.smAndDown}">{{$t('language_banner')}}</p>
                     </v-col>
                 </v-row>
             </div>
@@ -37,7 +37,6 @@
                     <v-col cols="12" md="9" sm="12" class="onboarding--body--right-content--body-top">
                         <div class="default--label pb-2">
                             {{ $t("profile_language_title") }}
-                            <span class="required">*</span>
                         </div>
                         <div class="section-description d-none d-md-block">
                             {{ $t("profile_language_description") }}
@@ -49,9 +48,9 @@
                             rounded
                             color="#49556A"
                             class="onboarding--body--button--cancel mr-2"
-                            @click="handleCancelBtnClick"
+                            @click="handleSkipButtonClick"
                         >
-                            Skip this step
+                            {{$t('skip_step')}}
                         </v-btn>
                     </v-col>
                     <v-col cols="12">
@@ -62,6 +61,7 @@
                             chips
                             multiple
                             outlined
+                            :label="$t('profile_mod_title_select_lang')"
                             dense
                             autocomplete="off"
                         >
@@ -101,14 +101,15 @@
                     class="onboarding--body--footer--button-left"
                     @click="handleBackBtnClick"
                 >
-                    <u>Go back</u>
+                    <u>{{$t('go_back')}}</u>
                 </v-btn>
                 <v-btn
                     color="#15577C"
                     class="onboarding--body--footer--button-right px-15 py-3"
                     @click="handleSaveBtnClick"
+                    :disabled="!validContinue"
                 >
-                    Continue
+                    {{$t('pwa_continue_btn')}}
                 </v-btn>
             </div>
             
@@ -122,9 +123,10 @@
                         class="white--text mb-2"
                         block
                         @click="handleSaveBtnClick"
+                        :disabled="!validContinue"
                       >
                         <span
-                          v-html="$t('Continue')"
+                          v-html="$t('pwa_continue_btn')"
                         ></span>
                       </v-btn>
                       <v-btn
@@ -134,7 +136,7 @@
                         @click="handleBackBtnClick"
                       >
                         <u
-                          v-html="$t('Go_back')"
+                          v-html="$t('go_back')"
                         ></u>
                       </v-btn>
                     </div>
@@ -181,7 +183,16 @@ export default {
             },
         };
     },
-      created() {
+    computed: {
+        validContinue(){
+            if(this.profileData.language_tag_list_id.length > 0){
+                return true;
+            }else{
+                return false;
+            }
+        },
+    },
+    created() {
         this.langCode = this.$i18n.locale;
         this.init();
         this.fetchLanguage();
@@ -231,6 +242,9 @@ export default {
         },
         handleBackBtnClick(){
             this.$router.push(this.localePath(pathData.coach.onboarding.step3));
+        },
+        handleSkipButtonClick(){
+            this.$router.push(this.localePath(pathData.coach.onboarding.step5));
         },
         handleSaveBtnClick(){
             let payload = this.profileData;
@@ -306,7 +320,8 @@ export default {
             }
             &--right{
                 &--md{
-                    height: 88vh!important;
+                    min-height: 88vh!important;
+                    height: 100%!important;
                     width: 65%;
                     margin: 0px;
                     float: right!important;

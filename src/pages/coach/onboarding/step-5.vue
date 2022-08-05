@@ -22,13 +22,13 @@
                             x-small
                             color="#FFFFFF"
                             class="onboarding--body--button--cancel mr-2 "
-                            @click="handleCancelBtnClick"
+                            @click="handleSkipButtonClick"
                         >
-                            Skip this step
+                             {{$t('skip_step')}}
                         </v-btn>
                     </v-col>
                     <v-col cols="12" class="onboarding--body--left-banner-text pt-0">
-                        <p :class="{'onboarding--body--left-banner-text--md px-15' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--left-banner-text--sm' : $vuetify.breakpoint.smAndDown}">Where do you offer training?</p>
+                        <p :class="{'onboarding--body--left-banner-text--md px-15' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--left-banner-text--sm' : $vuetify.breakpoint.smAndDown}">{{$t('location_banner')}}</p>
                     </v-col>
                 </v-row>
             </div>
@@ -48,9 +48,9 @@
                             rounded
                             color="$grey-700"
                             class="onboarding--body--button--cancel mr-2"
-                            @click="handleCancelBtnClick"
+                            @click="handleSkipButtonClick"
                         >
-                            Skip this step
+                             {{$t('skip_step')}}
                         </v-btn>
                     </v-col>
                     <v-col cols="12">
@@ -95,7 +95,7 @@
                             <v-card :color="hover ? '#eef1f3' : '#FFFFFF'" class="location-table--mobile-view " @click.native="showExercise(item)" exact >
                                 <v-card-text class="pa-2 ma-2">
                                     <v-row>
-                                        <v-col cols="9" class="location-table--mobile-view--header pb-0">Address</v-col>
+                                        <v-col cols="9" class="location-table--mobile-view--header pb-0">{{$t('adress_header')}}</v-col>
                                         <v-col cols="3" class="location-table--mobile-view--header pb-0"><v-icon color="$grey-700" @click="deleteLocationItem(item)">mdi-delete</v-icon></v-col>
                                         <v-col cols="12" class="location-table--mobile-view--text">{{item.address}}</v-col>
                                     </v-row>
@@ -112,14 +112,15 @@
                     class="onboarding--body--footer--button-left"
                     @click="handleBackBtnClick"
                 >
-                    <u>Go back</u>
+                    <u>{{$t('go_back')}}</u>
                 </v-btn>
                 <v-btn
                     color="#15577C"
                     class="onboarding--body--footer--button-right px-15 py-3"
                     @click="handleSaveBtnClick"
+                    :disabled="!validContinue"
                 >
-                    Continue
+                    {{$t('pwa_continue_btn')}}
                 </v-btn>
             </div>
             
@@ -133,9 +134,10 @@
                         class="white--text mb-2"
                         block
                         @click="handleSaveBtnClick"
+                        :disabled="!validContinue"
                       >
                         <span
-                          v-html="$t('Continue')"
+                          v-html="$t('pwa_continue_btn')"
                         ></span>
                       </v-btn>
                       <v-btn
@@ -145,7 +147,7 @@
                         @click="handleBackBtnClick"
                       >
                         <u
-                          v-html="$t('Go_back')"
+                          v-html="$t('go_back')"
                         ></u>
                       </v-btn>
                     </div>
@@ -203,6 +205,15 @@ export default {
             },
             map: null
         };
+    },
+    computed: {
+        validContinue(){
+            if(this.locationList.length > 0){
+                return true;
+            }else{
+                return false;
+            }
+        },
     },
     created() {
         this.locationDataTable = {
@@ -287,7 +298,6 @@ export default {
                 .storeLocation(payload)
                 .then(response => {
                 if (response.data.status == "success") {
-                    console.log(response.data.location);
                     this.locationList.push(response.data.location);
                     this.location.address = "";
                     this.location.zipCode = "";
@@ -322,6 +332,9 @@ export default {
         },
         handleBackBtnClick(){
             this.$router.push(this.localePath(pathData.coach.onboarding.step5));
+        },
+        handleSkipButtonClick(){
+            this.$router.push(this.localePath(pathData.coach.onboarding.step6));
         },
         handleSaveBtnClick(){
             this.$router.push(this.localePath(pathData.coach.onboarding.step6));
@@ -446,7 +459,8 @@ export default {
             }
             &--right{
                 &--md{
-                    height: 88vh!important;
+                    min-height: 88vh!important;
+                    height: 100%!important;
                     width: 65%;
                     margin: 0px;
                     float: right!important;

@@ -21,9 +21,9 @@
                     />
                 </v-col>
                 <v-col cols="12">
-                    <span class="onboarding--body--row--title" :class="{ 'onboarding--body--row--title--md' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--row--title--sm' : $vuetify.breakpoint.smAndDown}">You are ready to go!</span>
+                    <span class="onboarding--body--row--title" :class="{ 'onboarding--body--row--title--md' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--row--title--sm' : $vuetify.breakpoint.smAndDown}">{{$t('reday_to_go')}}</span>
                 </v-col>
-                <v-col cols="12" md="8"><span class="onboarding--body--row--description" :class="{ 'onboarding--body--row--description--md' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--row--description--sm' : $vuetify.breakpoint.smAndDown}">You have completed all steps and your profile can now be published. Publish your profile or continue to edit it before you make it public. </span></v-col>
+                <v-col cols="12" md="8"><span class="onboarding--body--row--description" :class="{ 'onboarding--body--row--description--md' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--row--description--sm' : $vuetify.breakpoint.smAndDown}">{{$t('ready_description')}}</span></v-col>
                 <v-col cols="12"></v-col>
                 <v-col cols="12" md="3" class="px-5">
                     <v-btn
@@ -34,17 +34,17 @@
                         @click="handleSaveBtnClick"
                       >
                         <span
-                          v-html="$t('Publish profile')"
+                          v-html="$t('publish_profile')"
                         ></span>
                     </v-btn>
                     <v-btn
                         outlined
                         color="#000000"
                         block
-                        @click="handleBackBtnClick"
+                        @click="handleEditBtnClick"
                       >
                         <u
-                          v-html="$t('Continue to edit profile')"
+                          v-html="$t('continue_to_edit_profile')"
                         ></u>
                     </v-btn>
                 </v-col>
@@ -55,6 +55,7 @@
 </template>
 <script>
 import { pathData } from "@/data";
+import { authApi, coachSettingApi } from "@/api";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 
@@ -75,11 +76,43 @@ export default {
         };
     },
     methods:{
-      handleCancelBtnClick(){
-        this.$router.push(this.localePath(pathData.pages.becomeACoach));
+      handleEditBtnClick(){
+            const payloadData = {
+                user_id : this.$auth.user.id
+            };
+            const {data} = coachSettingApi(this.$axios).onBoardCoach(payloadData);
+            const payload = {
+                role: 'coach',
+                is_admin_switched: this.isSwitchedUser
+            };
+
+            authApi(this.$axios).switchProfile(payload)
+            .then(({ data }) => {
+                this.$auth.setUser(data.user);
+                this.$store.dispatch("setUser", data.user);
+                this.$toast.success("You have successfully switched into coach.");
+                this.$router.push(this.localePath(pathData.coach.editProfile));
+            
+            })
+            .catch((error) => {this.$toast.error(error.response.data.message);});
       },
       handleSaveBtnClick(){
-        this.$router.push(this.localePath(pathData.coach.onboarding.step1));
+            const payloadData = {
+                user_id : this.$auth.user.id
+            };
+            const {data} = coachSettingApi(this.$axios).onBoardCoach(payloadData);
+            const payload = {
+                role: 'coach',
+                is_admin_switched: this.isSwitchedUser
+            };
+            authApi(this.$axios).switchProfile(payload)
+            .then(({ data }) => {
+                this.$auth.setUser(data.user);
+                this.$store.dispatch("setUser", data.user);
+                this.$toast.success("You have successfully switched into coach.");
+                this.$router.push(this.localePath(pathData.pages.publicProfile(data.user.user_name)));
+            })
+            .catch((error) => {this.$toast.error(error.response.data.message);});
       }
     }
 };
