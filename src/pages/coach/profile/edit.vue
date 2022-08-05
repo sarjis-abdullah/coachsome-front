@@ -1456,16 +1456,7 @@ export default {
             response.data.social_acc_instagram_link;
           this.profileData.user_name = response.data.user.user_name;
 
-          // this.categories = response.data.sport_category;
-          // response.data.languages.forEach((item) => {
-          //   this.languages.push({
-          //     text: item.t_key,
-          //     value: item,
-          //   });
-          // });
-
           this.languagesSelected = response.data.selectedLanguages;
-          // console.log(response.data.selectedCategories);
           this.categoriesSelected = response.data.selectedCategories;
           this.tagData.tagsSelected = response.data.selectedSportTags.map(
             item => item.name

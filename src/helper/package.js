@@ -25,7 +25,7 @@ export default {
     } else {
       price = rate;
     }
-    return price.toFixed(2);
+    return Number(price).toFixed(2);
   },
   calculateSalePrice: (session, minutePerSession, rate, discount) => {
     let salePrice = 0.0;
@@ -40,7 +40,7 @@ export default {
     } else {
       salePrice = this.calculateOriginalPrice(session, minutePerSession, rate);
     }
-    return salePrice.toFixed(2);
+    return Number(salePrice).toFixed(2);
   },
   calculatePackagePrice: function(session, minutePerSession, rate) {
     let price = 0.0;
@@ -57,6 +57,6 @@ export default {
     } else {
       price = rate;
     }
-    return price.toFixed(2);
+    return Number(price).toFixed(2);
   }
 };

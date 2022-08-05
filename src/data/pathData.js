@@ -81,6 +81,16 @@ export default {
         home: "/coach/home",
         inviteYourFriends: "/coach/invite-your-friends",
         coachContacts: "/coach/contacts",
+        onboarding: {
+            start: "/coach/onboarding/start",
+            step1: "/coach/onboarding/step-1",
+            step2: "/coach/onboarding/step-2",
+            step3: "/coach/onboarding/step-3",
+            step4: "/coach/onboarding/step-4",
+            step5: "/coach/onboarding/step-5",
+            step6: "/coach/onboarding/step-6",
+            readyToGo: "/coach/onboarding/ready-to-go",
+        }
     },
     admin: {
         login: "/admin/login",

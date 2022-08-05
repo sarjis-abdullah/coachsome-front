@@ -239,7 +239,20 @@ import "vue-advanced-cropper/dist/style.css";
 import { sharedProfileApi } from "@/api";
 
 export default {
-  props: ["show", "isDeleted"],
+  props: {
+      show : {
+        type: Boolean,
+        default: false
+      },
+      isDeleted : {
+        type: Boolean,
+        default: false
+      },
+      isOnboarding : {
+        type: Boolean,
+        default: false
+      },
+  },
   components: {
     Cropper
   },
@@ -334,11 +347,13 @@ export default {
       try {
         this.isLoadingSaveBtn = true;
         const { data } = await sharedProfileApi(this.$axios).uploadImages({
-          ...this.cropped
+          ...this.cropped,
+          isOnboarding: this.isOnboarding,
         });
         if (data.image) {
           this.$auth.fetchUser();
           this.$emit("uploaded");
+          this.$emit("onboardingImageUploaded", data.image);
           this.$toast.success("Successfully saved your profile image.");
         }
       } catch (error) {

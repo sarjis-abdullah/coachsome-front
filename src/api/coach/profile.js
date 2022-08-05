@@ -20,6 +20,9 @@ export default axios => ({
   authUserProfileInfo: () => {
     return axios.get("profiles");
   },
+  onBoardingUserProfileInfo: payload => {
+    return axios.get(`profiles/${payload}`);
+  },
   profileSave: payload => {
     return axios.post("profiles", payload);
   },

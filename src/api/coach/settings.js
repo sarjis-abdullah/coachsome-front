@@ -24,5 +24,11 @@ export default axios => ({
   },
   updateNotification: payload => {
     return axios.post("coach/settings/notifications/"+payload.id, payload);
+  },
+
+  onBoardCoach: payload => {
+    return axios.post("profile/onboard-coach/", payload);
   }
+
+
 });
