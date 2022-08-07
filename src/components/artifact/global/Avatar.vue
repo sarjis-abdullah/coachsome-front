@@ -169,6 +169,17 @@
         </v-list-item>
       </span>
 
+      <!-- Wishlist -->
+      <span v-if="hasRole(['athlete'])">
+        <v-list-item color="primary" link @click.stop="gotoWishlist">
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ 'Wishlist' }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </span>
+
       <!-- Langugae -->
       <v-list-group v-model="languageGroup" link>
         <template v-slot:activator>
@@ -610,7 +621,9 @@ export default {
     this.checkSwitchInfo();
   },
   methods: {
-
+    gotoWishlist(){
+      this.$router.push("/athlete/wishlist")
+    },
     async checkSwitchInfo(){
       const { data } = await this.$axios.get(endpoint.SWITCH_INFO);
       this.is_profile_switched_ever = data.is_profile_switched;

@@ -46,6 +46,7 @@
             {{ $t(badge.tKey) }}
           </v-btn>
           <v-btn
+              v-if="this.$auth.user"
               @click.stop="toggleFavourite"
               icon
               style="position: absolute;
@@ -129,6 +130,9 @@ export default {
     },
     badge: {
       type: Object
+    },
+    id: {
+      type: null
     }
   },
   data() {
@@ -154,6 +158,10 @@ export default {
     },
     toggleFavourite(){
       this.isFavourite = !this.isFavourite
+      this.$axios.post("favourite-coach", {
+        coachId: this.id,
+        isFavourite: this.isFavourite
+      })
     }
   },
   computed: {

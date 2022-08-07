@@ -647,6 +647,7 @@ export default {
                 });
                 return {
                   name: item.name,
+                  id: item.id,
                   image: item.image ? item.image : null,
                   countReview: item.countReview,
                   rating: item.rating,
