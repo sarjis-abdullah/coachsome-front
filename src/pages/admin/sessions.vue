@@ -128,12 +128,12 @@ export default {
                 calender_date = calender_date.split(" ")[0];
                 st = moment(
                   calender_date + " " + start_time,
-                  "DD-MMM-YYYY, hh:mm A"
-                ).format("hh:mm a");
+                  "DD-MMM-YYYY, HH.mm A"
+                ).format("HH.mm A");
                 et = moment(
                   calender_date + " " + end_time,
-                  "DD-MMM-YYYY, hh:mm A"
-                ).format("hh:mm a");
+                  "DD-MMM-YYYY, HH.mm A"
+                ).format("HH.mm A");
                 object.dateAndTime = `<b>${calender_date}</b> ${st} to ${et}`;
               }
               array.push(object);
