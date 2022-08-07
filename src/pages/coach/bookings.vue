@@ -1,6 +1,6 @@
 <template>
   <div class="coach-booking-page">
-    <v-container>
+    <v-container fluid class="pt-0 mt-0" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
       <mobile-top-nav extraClass="body-bg-secondary" actionClass="d-none" :headerText="$t('app_bar_dashboard_booking')">
         <template v-slot:goBack>
           <span></span>
@@ -11,13 +11,7 @@
       </mobile-top-nav>
       <v-row justify="center">
         <v-col cols="12" md="8">
-          <v-row align="center" class="d-none d-md-block">
-            <v-col cols="12" md="9">
-              <span class="section-title">
-                {{ $t("coach_booking_package_active_package_titile") }}
-              </span>
-            </v-col>
-          </v-row>
+          <DesktopHeader :title="$t('coach_booking_package_active_package_titile')"/>
 
           <v-row align="center">
             <v-col cols="12" md="3">
@@ -157,6 +151,7 @@
 import PurchasedCard from "@/components/card/PurchasedCard";
 import { coachBookingTimeApi, coachBookingApi } from "@/api";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import DesktopHeader from '@/components/artifact/global/DesktopHeader'
 import PurchasedCardMobile from '@/components/card/PurchasedCardMobile.vue';
 
 export default {
@@ -164,7 +159,8 @@ export default {
   components: {
     PurchasedCard,
     MobileTopNav,
-    PurchasedCardMobile
+    PurchasedCardMobile,
+    DesktopHeader
   },
   data() {
     return {
