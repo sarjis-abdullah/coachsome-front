@@ -1,6 +1,6 @@
 <template>
   <div class="athlete-bookings">
-    <v-container>
+    <v-container fluid class="pt-0 mt-0" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
       <mobile-top-nav extraClass="body-bg-secondary" actionClass="d-none" :headerText="$t('app_bar_dashboard_booking')">
         <template v-slot:goBack>
           <span></span>
@@ -12,13 +12,7 @@
       <v-row justify="center">
         <v-col cols="12" md="7">
           <v-row>
-            <v-col cols="5" md="9">
-              <div class="section-title">
-                {{
-                  $t("athlete_booking_search_value_txt_purchased_package_title")
-                }}
-              </div>
-            </v-col>
+            <DesktopHeader :title="$t('athlete_booking_search_value_txt_purchased_package_title')"/>
             <v-col cols="12" md="3">
               <v-select
                 v-model="filterValue"
@@ -87,7 +81,7 @@
                 depressed
                 outlined
                 :loading="showMoreLoading"
-                v-if="showMoreBtn"
+                v-if="false"
                 color="primary-light-1"
                 @click="showMoreBtnHandle"
               >
@@ -190,6 +184,7 @@ import NewsCard from "@/components/card/NewsCard";
 import { pathData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 import PurchasedCardMobile from '@/components/card/PurchasedCardMobile.vue';
+import DesktopHeader from '@/components/artifact/global/DesktopHeader'
 
 import {
   athleteBookingApi,
@@ -203,7 +198,8 @@ export default {
     PurchasedCard,
     NewsCard,
     MobileTopNav,
-    PurchasedCardMobile
+    PurchasedCardMobile,
+    DesktopHeader
   },
   data() {
     return {

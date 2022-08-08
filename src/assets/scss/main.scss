@@ -453,4 +453,13 @@
 .v-input__slot{
   margin-bottom: 4px;
 }
-
+.v-data-table-header th span {
+  font-family: "Open Sans" !important;
+  font-style: normal !important;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #49556a;
+}
