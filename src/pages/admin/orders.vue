@@ -25,7 +25,36 @@
         <div class="line"></div>
       </v-col>
     </v-row>
-
+    <v-dialog content-class="session-dialog" v-model="sessionDialog" max-width="600" @click:outside="closeSessionDialog">
+          <div class="pa-5">
+            <v-card
+              v-for="session in sessions"
+              :key="session.id"
+              style="background: white;"
+              class="mt-3 pa-5"
+            >
+              <v-card-body>
+                <div><span class="default--sub-title pl-2">ID : </span>  <span class="section-description">{{session.id}}</span></div>
+                <div><span class="default--sub-title pl-2">Requested By : </span>  <span class="section-description">{{session.requested_by}}</span></div>
+                <div><span class="default--sub-title pl-2">Requested To : </span> <span class="section-description">{{session.requested_to}}</span></div>
+                <div><span class="default--sub-title pl-2">Requested Date : </span> <span class="section-description">{{session.requested_date}}</span></div>
+                <div><span class="default--sub-title pl-2">Start Time : </span> <span class="section-description">{{session.start_time}}</span></div>
+                <div><span class="default--sub-title pl-2">End Time : </span>  <span class="section-description">{{session.end_time}}</span></div>
+                <div><span class="default--sub-title pl-2">Status : </span>  <span class="section-description">{{session.status}}</span></div>
+                <div><span class="default--sub-title pl-2">Created At : </span>  <span class="section-description">{{session.created_at}}</span></div>
+              </v-card-body>
+              <v-card-actions class="px-0">
+                <v-btn
+                  text
+                  color="red accent-4"
+                  @click="removeSession(session.id)"
+                >
+                  Remove this session
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </div>
+    </v-dialog>
     <v-row>
       <v-col cols="12">
         <div>
@@ -226,7 +255,7 @@
                 </div>
               </template>
               <template v-slot:item.actions="{ item }">
-                <div>
+                <div class="d-flex justify-space-between">
                   <v-btn
                     target="_blank"
                     color="primary-light-1"
@@ -234,6 +263,13 @@
                     outlined
                     :href="item.paymentUrl"
                     >Gateway</v-btn
+                  >
+                  <v-btn
+                    color="red"
+                    x-small
+                    outlined
+                    @click="getItemWiseSession(item.id)"
+                    >Remove A Session</v-btn
                   >
                 </div>
               </template>
@@ -257,6 +293,8 @@ export default {
   components: {MobileTopNav},
   data() {
     return {
+      sessionDialog: false,
+      sessions: [],
       currencyConfig: currencyService.selectedCurrency(),
       search: "",
       searchField: {
@@ -364,8 +402,48 @@ export default {
     //   });
   },
   methods: {
+    closeSessionDialog(){
+      this.sessionDialog= false;
+    },
     handleBack(){
       this.$router.push(this.localePath(pathData.admin.profileMenu));
+    },
+    async removeSession(item_id){
+      let payload = {
+        session_id: item_id
+      };
+      const { data } = await adminOrderListApi(this.$axios).removeSession(payload);
+      if(data.message){
+        this.fetchOrderList();
+        this.$toast.success("Session has been removed successfully");
+        this.sessionDialog= false;
+      }
+    },
+    async getItemWiseSession(item_id){
+        let payload = {
+          booking_id: item_id
+        };
+        const { data } = await adminOrderListApi(this.$axios).getSessions(payload);
+        if(data && data.sessions.length >= 1){
+          this.sessions = [];
+          data.sessions.forEach(item => {
+            this.sessions.push({
+              id : item.id,
+              booking_id : item.booking_id,
+              created_at : item.created_at,
+              requested_by : item.requested_by,
+              requested_to : item.requested_to,
+              requested_date : item.requested_date,
+              start_time : item.start_time,
+              end_time : item.end_time,
+              status : item.status,
+              created_at : item.created_at,
+            });
+          });
+          this.sessionDialog =true;
+        }else{
+          this.$toast.error("sorry! No session(s) found.")
+        }
     },
     async fetchOrderList() {
       this.table.loading = true;
@@ -546,4 +624,9 @@ export default {
     display: none;
   }
 }
+</style>
+<style>
+  .session-dialog{
+    background: #F7FAFC!important;
+  }
 </style>

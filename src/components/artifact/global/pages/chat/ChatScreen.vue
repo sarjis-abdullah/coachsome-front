@@ -279,6 +279,7 @@
                     dark
                     x-small
                     @click.stop="bookingTimeRequestAcceptBtnHandle(message)"
+                    :disabled="clickedAccept"
                     color="primary-light-1"
                     >{{ $t("chat_chat_screen_btn_label_accept") }}</v-btn
                   >
@@ -406,6 +407,7 @@ import Attachment from "./messages/Attachment";
 export default {
   components: { TextMessage, Attachment },
   data: () => ({
+    clickedAccept: false,
     currencyService,
     trackingPixel: {
       status: false,
@@ -499,6 +501,7 @@ export default {
         });
     },
     bookingTimeRequestAcceptBtnHandle(message) {
+      this.clickedAccept = true;
       let payload = {
         userId: this.selectedContact.connectionUserId,
         messageId: message.id,
@@ -529,6 +532,7 @@ export default {
               receiverUserId: this.selectedContact.connectionUserId,
               message: messageItem
             });
+            this.clickedAccept = false;
           }
 
           if (data.messages) {
