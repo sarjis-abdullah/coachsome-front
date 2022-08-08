@@ -169,7 +169,7 @@ export default {
     layout: "athlete",
     head() {
         return {
-            title: this.$i18n.t("coach_onboarding--body"),
+            title: this.$i18n.t("location_banner"),
             titleTemplate: "%s"
         };
     },
@@ -331,7 +331,7 @@ export default {
             this.$router.push(this.localePath(pathData.pages.becomeACoach));
         },
         handleBackBtnClick(){
-            this.$router.push(this.localePath(pathData.coach.onboarding.step5));
+            this.$router.push(this.localePath(pathData.coach.onboarding.step4));
         },
         handleSkipButtonClick(){
             this.$router.push(this.localePath(pathData.coach.onboarding.step6));

@@ -151,7 +151,7 @@ export default {
     layout: "athlete",
     head() {
         return {
-        title: this.$i18n.t("coach_onboarding--body"),
+        title: this.$i18n.t("qualification_banner_text"),
         titleTemplate: "%s"
         };
     },

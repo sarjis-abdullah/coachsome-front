@@ -1,18 +1,26 @@
 <template>
   <div class="onboarding">
     <v-container fluid class="pa-0 ma-0">
-        <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('title_become_a_coach')">
+        <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t(!profilePictureDialog ?  'title_become_a_coach' : 'profile_edit_image_title_profile_image')">
             <template v-slot:goBack>
             <v-btn
                 icon
+                v-if="!profilePictureDialog"
             >
             </v-btn>
+            <v-btn
+                icon
+                @click="handleCloseProfilePicture"
+                v-else
+            >
+            <v-icon class="common-top-back-icon">mdi-chevron-left</v-icon>
+          </v-btn>
             </template>
             <template v-slot:action>
             <span></span>
             </template>
         </mobile-top-nav>
-        <div class="onboarding--body">
+        <div class="onboarding--body"  v-if="!profilePictureDialog">
             <div class= "onboarding--body--left-banner d-flex" :class="{'onboarding--body--left-banner--md' : !$vuetify.breakpoint.smAndDown,'onboarding--body--left-banner--sm': $vuetify.breakpoint.smAndDown}">
                 <v-row :class="{'py-10' : $vuetify.breakpoint.smAndDown}">
                     <v-col cols="12" class="text-right d-md-none pb-2"  style="height: 0!important;">
@@ -32,7 +40,7 @@
                     </v-col>
                 </v-row>
             </div>
-            <div class= "onboarding--body--right" :class="{'onboarding--body--right--md' : !$vuetify.breakpoint.smAndDown,'onboarding--body--right--sm mb-15': $vuetify.breakpoint.smAndDown}">
+            <div class= "onboarding--body--right"  :class="{'onboarding--body--right--md' : !$vuetify.breakpoint.smAndDown,'onboarding--body--right--sm mb-15': $vuetify.breakpoint.smAndDown}">
                 <v-row>
                     <v-col cols="12" md="8" sm="12" class="onboarding--body--right-content--body-top">
                         <div class="default--label pb-2">
@@ -157,32 +165,7 @@
                         />
                     </v-col>
                 </v-row>
-                <v-row >
-                    <v-col cols="12" >
-                    <template v-if="profilePictureDialog">
-                        <div v-if="$vuetify.breakpoint.mdAndUp">
-                        <v-dialog color="#f7fafc" v-model="profilePictureDialog" max-width="1300px" persistent>
-                            <EditImageDialog
-                            :show="true"
-                            :isOnboarding="true"
-                            @hide="handleCloseProfilePicture"
-                            @uploaded="handleCloseProfilePicture"
-                            @onboardingImageUploaded="setProfileImage($event)"
-                            />
-                        </v-dialog>
-                        </div>
-                        <div v-else>
-                        <EditImageDialog
-                            :show="true"
-                            :isOnboarding="true"
-                            @hide="handleCloseProfilePicture"
-                            @uploaded="handleCloseProfilePicture"
-                            @onboardingImageUploaded="setProfileImage($event)"
-                            />
-                        </div>
-                    </template>
-                    </v-col>
-                </v-row>
+                
             </div>
             <div :class="{ 'onboarding--body--footer' : !$vuetify.breakpoint.smAndDown, 'd-none' : $vuetify.breakpoint.smAndDown}">
                 <v-btn
@@ -234,6 +217,32 @@
                 </v-row>
               </v-footer>
         </div>
+        <v-row >
+                    <v-col cols="12" >
+                    <template v-if="profilePictureDialog">
+                        <div v-if="$vuetify.breakpoint.mdAndUp">
+                        <v-dialog color="#f7fafc" v-model="profilePictureDialog" max-width="1300px" persistent>
+                            <EditImageDialog
+                            :show="true"
+                            :isOnboarding="true"
+                            @hide="handleCloseProfilePicture"
+                            @uploaded="handleCloseProfilePicture"
+                            @onboardingImageUploaded="setProfileImage($event)"
+                            />
+                        </v-dialog>
+                        </div>
+                        <div v-else>
+                        <EditImageDialog
+                            :show="true"
+                            :isOnboarding="true"
+                            @hide="handleCloseProfilePicture"
+                            @uploaded="handleCloseProfilePicture"
+                            @onboardingImageUploaded="setProfileImage($event)"
+                            />
+                        </div>
+                    </template>
+                    </v-col>
+                </v-row>
     </v-container>
   </div>
 </template>
@@ -250,7 +259,7 @@ export default {
     layout: "athlete",
     head() {
         return {
-        title: this.$i18n.t("coach_onboarding--body"),
+        title: this.$i18n.t("basic_info_text"),
         titleTemplate: "%s"
         };
     },

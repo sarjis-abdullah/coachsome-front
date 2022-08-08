@@ -81,7 +81,7 @@ export default {
     layout: "athlete",
     head() {
         return {
-        title: this.$i18n.t("coach_onboarding--body"),
+        title: this.$i18n.t("start_header"),
         titleTemplate: "%s"
         };
     },
@@ -125,7 +125,7 @@ export default {
                     height: 100vh!important;
                     background: url('@/assets/images/onboarding/start.png');
                     height: 100%;
-                    width:34%;
+                    width:35%;
                     margin: 0px;
                     float: left;
                     position: fixed;
@@ -139,8 +139,9 @@ export default {
            
             &--right{
                 &--md{
-                    height: 80%!important;
-                    width: 66%;
+                    height: 80%;
+                    width: 65%;
+                    width: 65%;
                     margin: 0px;
                     float: right!important;
                     padding: 30px!important;
@@ -182,8 +183,8 @@ export default {
                 
             }
             &--footer{
-                height: 7vh;
-                width: 66%;
+                height: 20%;
+                width: 65%;
                 margin: 0px;
                 float: right!important;
                 position: sticky;

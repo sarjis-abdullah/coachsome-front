@@ -157,7 +157,7 @@ export default {
     layout: "athlete",
     head() {
         return {
-        title: this.$i18n.t("coach_onboarding--body"),
+        title: this.$i18n.t("language_banner"),
         titleTemplate: "%s"
         };
     },

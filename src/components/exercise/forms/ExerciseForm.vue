@@ -44,7 +44,7 @@
                                         dense
                                         :label="$t('hint_name')"
                                         v-model="exercisePropsData.name"
-                                        :rules="[v => !!v || 'Exercise Name is required']"
+                                        :rules="[v => !!v || this.$i18n.t('exercise_name_required')]"
                                         required
                                         class="create-exercise__input-field"
                                         background-color="white"
@@ -64,7 +64,7 @@
                                         <v-text-field
                                             :label="$t('hint_video')"
                                             :rules="[
-                                                v => !!v || 'Youtube or vimoe url is required',
+                                                v => !!v || this.$i18n.t('exercise_video_required'),
                                                 v =>
                                                 /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/.test(
                                                     v

@@ -25,7 +25,7 @@
                 </v-col>
                 <v-col cols="12" md="8"><span class="onboarding--body--row--description" :class="{ 'onboarding--body--row--description--md' : !$vuetify.breakpoint.smAndDown, 'onboarding--body--row--description--sm' : $vuetify.breakpoint.smAndDown}">{{$t('ready_description')}}</span></v-col>
                 <v-col cols="12"></v-col>
-                <v-col cols="12" md="3" class="px-5">
+                <v-col cols="12" md="4" lg="3" class="px-5">
                     <v-btn
                         depressed
                         color="#15577C"
@@ -63,7 +63,7 @@ export default {
     layout: "athlete",
     head() {
         return {
-        title: this.$i18n.t("coach_onboarding--body"),
+        title: this.$i18n.t("finish_as_coach"),
         titleTemplate: "%s"
         };
     },
