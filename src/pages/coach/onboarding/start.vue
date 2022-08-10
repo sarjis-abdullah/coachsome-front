@@ -1,6 +1,6 @@
 <template>
   <div class="onboarding">
-    <v-container fluid class="pa-0 ma-0">
+    <v-container fluid class="pa-0 ">
         <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('title_become_a_coach')">
             <template v-slot:goBack>
             <v-btn
@@ -30,7 +30,6 @@
             </div>
             <div class= "onboarding--body--right d-flex" :class="{'onboarding--body--right--md' : !$vuetify.breakpoint.smAndDown,'onboarding--body--right--sm mb-15': $vuetify.breakpoint.smAndDown}">
                 <v-row>
-                    
                     <v-col cols="12"  :class="{'px-15' : !$vuetify.breakpoint.smAndDown}">
                         <span class="onboarding--body--right--center-text" :class="{'onboarding--body--right--center-text--md' : !$vuetify.breakpoint.smAndDown,'onboarding--body--right--center-text--sm mb-15': $vuetify.breakpoint.smAndDown}">{{$t('start_text')}}</span>
                     </v-col>
@@ -78,7 +77,7 @@ import TiptopEditor from "@/components/editor/TiptopEditor";
 
 
 export default {
-    layout: "athlete",
+    layout: "common",
     head() {
         return {
         title: this.$i18n.t("start_header"),
@@ -139,7 +138,7 @@ export default {
            
             &--right{
                 &--md{
-                    height: 80%;
+                    height: 80%!important;
                     width: 65%;
                     width: 65%;
                     margin: 0px;
@@ -165,7 +164,7 @@ export default {
                     font-family: $font-family!important;
                     font-style: normal;
                     &--md{
-                        height: 81vh!important;
+                        height: 82vh!important;
                         font-weight: 700;
                         font-size: 64px;
                         line-height: 87px;
@@ -183,11 +182,12 @@ export default {
                 
             }
             &--footer{
+                min-height: 7vh!important;;
                 height: 20%;
                 width: 65%;
                 margin: 0px;
                 float: right!important;
-                position: sticky;
+                position: sticky!important;
                 bottom: 0!important;
                 background: $grey-200!important;
                 border-top: 1px solid $grey-500!important;

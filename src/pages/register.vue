@@ -325,8 +325,9 @@ export default ({
                       this.$router.push(this.localePath(pathData.admin.dashboard));
                     }
                     else if(authUser.roles[0].name == "coach" && this.$vuetify.breakpoint.smAndDown){
-                      this.$router.push(this.localePath(pathData.coach.home));
-                    }else if(authUser.roles[0].name == "athlete" && this.$vuetify.breakpoint.smAndDown){
+                      this.$router.push(this.localePath(pathData.coach.onboarding.start));
+                    }
+                    else if(authUser.roles[0].name == "athlete" && this.$vuetify.breakpoint.smAndDown){
                       this.$router.push(this.localePath(pathData.athlete.home));
                     }
                     else{
