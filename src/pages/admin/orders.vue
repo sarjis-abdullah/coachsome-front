@@ -33,7 +33,7 @@
               style="background: white;"
               class="mt-3 pa-5"
             >
-              <v-card-body>
+              <v-card-text>
                 <div><span class="default--sub-title pl-2">ID : </span>  <span class="section-description">{{session.id}}</span></div>
                 <div><span class="default--sub-title pl-2">Requested By : </span>  <span class="section-description">{{session.requested_by}}</span></div>
                 <div><span class="default--sub-title pl-2">Requested To : </span> <span class="section-description">{{session.requested_to}}</span></div>
@@ -42,7 +42,7 @@
                 <div><span class="default--sub-title pl-2">End Time : </span>  <span class="section-description">{{session.end_time}}</span></div>
                 <div><span class="default--sub-title pl-2">Status : </span>  <span class="section-description">{{session.status}}</span></div>
                 <div><span class="default--sub-title pl-2">Created At : </span>  <span class="section-description">{{session.created_at}}</span></div>
-              </v-card-body>
+              </v-card-text>
               <v-card-actions class="px-0">
                 <v-btn
                   text
