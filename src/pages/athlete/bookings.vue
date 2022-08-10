@@ -11,9 +11,10 @@
       </mobile-top-nav>
       <v-row justify="center">
         <v-col cols="12" md="7">
+          <DesktopHeader :title="$t('app_bar_dashboard_booking')"/>
           <v-row>
-            <DesktopHeader :title="$t('athlete_booking_search_value_txt_purchased_package_title')"/>
-            <v-col cols="12" md="3">
+            
+            <v-col cols="12" md="3" :class="{'pt-8' : !$vuetify.breakpoint.mdAndUp}">
               <v-select
                 v-model="filterValue"
                 color="primary-light-1"
