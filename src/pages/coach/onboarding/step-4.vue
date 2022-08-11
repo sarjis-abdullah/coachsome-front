@@ -54,7 +54,12 @@
                         </v-btn>
                     </v-col>
                     <v-col cols="12">
+                        <v-skeleton-loader
+                            v-if="!completed"
+                            type="list-item"
+                        ></v-skeleton-loader>
                         <v-autocomplete
+                            v-else
                             v-model="profileData.language_tag_list_id"
                             :items="languages"
                             clearable
@@ -154,7 +159,7 @@ import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 
 export default {
-    layout: "athlete",
+    layout: "common",
     head() {
         return {
         title: this.$i18n.t("language_banner"),
@@ -166,6 +171,7 @@ export default {
     },
     data() {
         return {
+            completed : false,
             languages: [],
             tags: [],
             initialImageContent: "",
@@ -185,7 +191,7 @@ export default {
     },
     computed: {
         validContinue(){
-            if(this.profileData.language_tag_list_id.length > 0){
+            if(this.profileData.language_tag_list_id.length > 0 && this.completed){
                 return true;
             }else{
                 return false;
@@ -203,6 +209,7 @@ export default {
             coachProfileApi(this.$axios)
                 .onBoardingUserProfileInfo(is_onboarding)
                 .then(response => {
+                    this.completed = true;
                     this.initialImageContent = response.data.initial_image_content;
                     this.profileData.profile_name = response.data.profile_name;
                     this.profileData.image =response.data.image.square ;

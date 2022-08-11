@@ -192,7 +192,7 @@ import OnBoardingPackageCard from "@/components/card/OnBoardingPackageCard";
 
 
 export default {
-    layout: "athlete",
+    layout: "common",
     head() {
         return {
             title: this.$i18n.t("package_banner"),

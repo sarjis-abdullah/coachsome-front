@@ -70,33 +70,7 @@ export default {
     handleClick(e) {
       const elt = e.target.closest(".btn-coach");
       if(this.$auth.loggedIn){
-
-        // const payload = {
-        //   role: 'coach',
-        //   is_admin_switched: this.isSwitchedUser
-        // };
-
-        // authApi(this.$axios).switchProfile(payload)
-        // .then(({ data }) => {
-        //   this.$auth.setUser(data.user);
-        //   this.$store.dispatch("setUser", data.user);
-        //   this.$store.dispatch("activeBottomNav", 0);
-        //   if(this.$auth.loggedIn && this.$auth.hasRole(["superadmin", "admin", "staff"])){
-        //     this.$router.push(this.localePath(pathData.admin.dashboard))
-        //   }else if(this.$auth.loggedIn && this.$auth.hasRole(["coach"])){
-        //       this.$router.push(this.localePath(pathData.coach.home))
-        //   }else if(this.$auth.loggedIn && this.$auth.hasRole(["athlete"])){
-        //       this.$router.push(this.localePath(pathData.athlete.home))
-        //   }else{
-        //       this.$router.push(this.localePath(pathData.pages.home))
-        //   }
-        // })
-        // .catch((error) => {this.$toast.error(error.response.data.message);});
-
-
         this.$router.push(this.localePath(pathData.coach.onboarding.start));
-
-        
       }else{
         if (elt) {
           this.$store.dispatch("activeBottomNav", 4);

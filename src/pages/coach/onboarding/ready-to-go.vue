@@ -60,7 +60,7 @@ import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 
 export default {
-    layout: "athlete",
+    layout: "common",
     head() {
         return {
         title: this.$i18n.t("finish_as_coach"),
@@ -83,7 +83,8 @@ export default {
             const {data} = coachSettingApi(this.$axios).onBoardCoach(payloadData);
             const payload = {
                 role: 'coach',
-                is_admin_switched: this.isSwitchedUser
+                is_admin_switched: this.isSwitchedUser,
+                from_onboarding: this.$auth.user.roles[0].name == "coach" ? true : false,
             };
 
             authApi(this.$axios).switchProfile(payload)
@@ -101,9 +102,11 @@ export default {
                 user_id : this.$auth.user.id
             };
             const {data} = coachSettingApi(this.$axios).onBoardCoach(payloadData);
+
             const payload = {
                 role: 'coach',
-                is_admin_switched: this.isSwitchedUser
+                is_admin_switched: this.isSwitchedUser,
+                from_onboarding: this.$auth.user.roles[0].name == "coach" ? true : false,
             };
             authApi(this.$axios).switchProfile(payload)
             .then(({ data }) => {

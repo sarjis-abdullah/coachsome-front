@@ -431,7 +431,7 @@
                 <div class="mt-5">
                   <v-dialog v-model="dialog.category" scrollable max-width="600px">
                     <template v-slot:activator="{ on }">
-                      <v-btn color="primary" dark v-on="on" text small>
+                      <v-btn color="#9FAEC2"  v-on="on" text small class="add-more-button">
                         {{ $t("profile_add_more_btn_label") }}
                       </v-btn>
                     </template>
@@ -535,8 +535,8 @@
               <div class="mt-5">
                 <v-dialog v-model="dialog.tag" scrollable max-width="600px">
                   <template v-slot:activator="{ on }">
-                    <v-btn color="primary" dark v-on="on" text small>
-                      {{ $t("profile_add_more_btn_label") }}
+                    <v-btn color="#9FAEC2"  v-on="on" text small class="add-more-button">
+                        {{ $t("profile_add_more_btn_label") }}
                     </v-btn>
                   </template>
                   <v-card>

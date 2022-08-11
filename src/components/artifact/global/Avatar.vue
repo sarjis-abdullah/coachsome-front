@@ -612,7 +612,7 @@ export default {
   methods: {
 
     async checkSwitchInfo(){
-      if(this.$auth.user != null){
+      if(this.$auth.user && this.$auth.user.id){
         const { data } = await this.$axios.get(endpoint.SWITCH_INFO);
         this.is_profile_switched_ever = data.is_profile_switched;
       }

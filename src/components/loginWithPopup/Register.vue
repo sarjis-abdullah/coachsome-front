@@ -278,11 +278,14 @@ export default ({
                     if(authUser.roles[0].name == "superadmin" || authUser.roles[0].name == "admin" || authUser.roles[0].name == "staff"){
                       this.$router.push(this.localePath(pathData.admin.dashboard));
                     }
-                    else if(authUser.roles[0].name == "coach" && this.$vuetify.breakpoint.smAndDown){
+                    else if(authUser.roles[0].name == "coach" && this.$vuetify.breakpoint.smAndDown && authUser.is_onboarding == 0){
                       this.$router.push(this.localePath(pathData.coach.onboarding.start));
                     }
                     else if(authUser.roles[0].name == "athlete" && this.$vuetify.breakpoint.smAndDown){
                       this.$router.push(this.localePath(pathData.athlete.home));
+                    }
+                    else if(authUser.roles[0].name == "coach" && authUser.is_onboarding == 1){
+                      this.$router.push(this.localePath(pathData.coach.onboarding.start));
                     }
                     else{
                       this.$router.push(this.localePath(pathData.pages.home));

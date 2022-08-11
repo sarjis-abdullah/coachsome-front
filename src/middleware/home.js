@@ -6,10 +6,16 @@ export default function(context) {
         context.redirect(context.localePath(pathData.admin.dashboard));
       }
       else if(context.$auth.user && context.$auth.user.roles && context.$auth.user.roles[0].name == "coach"){
-        context.redirect(context.localePath(pathData.coach.home));
+        if(context.$auth.user.is_onboarding == 1){
+          context.redirect(context.localePath(pathData.coach.onboarding.start));
+        }else{
+          context.redirect(context.localePath(pathData.coach.home));
+        }
       }else if(context.$auth.user && context.$auth.user.roles && context.$auth.user.roles[0].name == "athlete"){
         context.redirect(context.localePath(pathData.athlete.home));
       }
     }
+  }else if( context.$auth && context.$auth.loggedIn && context.$auth.user && context.$auth.user.roles && context.$auth.user.roles[0].name == "coach" && context.$auth.user.is_onboarding == 1){
+    context.redirect(context.localePath(pathData.coach.onboarding.start));
   }
 }

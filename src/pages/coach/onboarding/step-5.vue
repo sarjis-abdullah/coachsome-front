@@ -166,7 +166,7 @@ import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 
 export default {
-    layout: "athlete",
+    layout: "common",
     head() {
         return {
             title: this.$i18n.t("location_banner"),

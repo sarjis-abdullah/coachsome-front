@@ -54,7 +54,12 @@
                         </v-btn>
                     </v-col>
                     <v-col cols="12">
+                        <v-skeleton-loader
+                            v-if="!completed"
+                            type="list-item"
+                        ></v-skeleton-loader>
                        <v-combobox
+                            v-else
                             v-model="profileData.sport_tag_list_id"
                             :items="tags"
                             clearable
@@ -148,7 +153,7 @@ import TiptopEditor from "@/components/editor/TiptopEditor";
 
 
 export default {
-    layout: "athlete",
+    layout: "common",
     head() {
         return {
         title: this.$i18n.t("qualification_banner_text"),
@@ -162,6 +167,7 @@ export default {
     },
     data() {
         return {
+            completed: false,
             tags: [],
             initialImageContent: "",
             profileData: {
@@ -184,7 +190,7 @@ export default {
     },
     computed: {
         validContinue(){
-            if(this.profileData.sport_tag_list_id.length > 0){
+            if(this.profileData.sport_tag_list_id.length > 0 && this.completed){
                 return true;
             }else{
                 return false;
@@ -197,6 +203,7 @@ export default {
             coachProfileApi(this.$axios)
                 .onBoardingUserProfileInfo(is_onboarding)
                 .then(response => {
+                    this.completed = true;
                     this.initialImageContent = response.data.initial_image_content;
                     this.profileData.profile_name = response.data.profile_name;
                     this.profileData.image =response.data.image.square ;

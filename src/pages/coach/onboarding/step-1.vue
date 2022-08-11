@@ -64,7 +64,11 @@
                     <v-col cols="12">
                         <v-row :class="{'onboarding--body--right--sm--avatar-section' :$vuetify.breakpoint.smAndDown }">
                             <v-col cols="6" md="3" :class="{'d-flex justify-center' :$vuetify.breakpoint.smAndDown }">
-                                <div style="width: 150px;" class="text-center" >
+                                <v-skeleton-loader
+                                    v-if="!completed"
+                                    type="image"
+                                ></v-skeleton-loader>
+                                <div v-else style="width: 150px;" class="text-center" >
                                     <div>
                                         <v-avatar
                                         color="teal"
@@ -108,7 +112,12 @@
                         <div class="section-description" >{{ $t("profile_name_desc") }}</div>
                     </v-col>
                     <v-col cols="12">
+                        <v-skeleton-loader
+                            v-if="!completed"
+                            type="list-item"
+                        ></v-skeleton-loader>
                         <v-text-field
+                            v-else
                             v-model="profileData.profile_name"
                             outlined
                             dense
@@ -130,7 +139,12 @@
                         </div>
                     </v-col>
                     <v-col cols="12" class="py-0">
+                        <v-skeleton-loader
+                            v-if="!completed"
+                            type="list-item"
+                        ></v-skeleton-loader>
                         <VuePhoneNumberInput
+                            v-show="completed"
                             :default-country-code="profileData.mobile_code"
                             v-model="profileData.mobile_no"
                             @update="updateMobileInfo"
@@ -159,7 +173,12 @@
                         </div>
                     </v-col>
                     <v-col cols="12">
+                        <v-skeleton-loader
+                            v-if="!completed"
+                            type="heading"
+                        ></v-skeleton-loader>
                         <TiptopEditor
+                            v-show="completed"
                             :value="tipTopEditor.value"
                             @updated="handleTiptopUpdatedValue"
                         />
@@ -218,31 +237,31 @@
               </v-footer>
         </div>
         <v-row >
-                    <v-col cols="12" >
-                    <template v-if="profilePictureDialog">
-                        <div v-if="$vuetify.breakpoint.mdAndUp">
-                        <v-dialog color="#f7fafc" v-model="profilePictureDialog" max-width="1300px" persistent>
-                            <EditImageDialog
-                            :show="true"
-                            :isOnboarding="true"
-                            @hide="handleCloseProfilePicture"
-                            @uploaded="handleCloseProfilePicture"
-                            @onboardingImageUploaded="setProfileImage($event)"
-                            />
-                        </v-dialog>
-                        </div>
-                        <div v-else>
-                        <EditImageDialog
-                            :show="true"
-                            :isOnboarding="true"
-                            @hide="handleCloseProfilePicture"
-                            @uploaded="handleCloseProfilePicture"
-                            @onboardingImageUploaded="setProfileImage($event)"
-                            />
-                        </div>
-                    </template>
-                    </v-col>
-                </v-row>
+            <v-col cols="12" >
+            <template v-if="profilePictureDialog">
+                <div v-if="$vuetify.breakpoint.mdAndUp">
+                <v-dialog color="#f7fafc" v-model="profilePictureDialog" max-width="1300px" persistent>
+                    <EditImageDialog
+                    :show="true"
+                    :isOnboarding="true"
+                    @hide="handleCloseProfilePicture"
+                    @uploaded="handleCloseProfilePicture"
+                    @onboardingImageUploaded="setProfileImage($event)"
+                    />
+                </v-dialog>
+                </div>
+                <div v-else>
+                <EditImageDialog
+                    :show="true"
+                    :isOnboarding="true"
+                    @hide="handleCloseProfilePicture"
+                    @uploaded="handleCloseProfilePicture"
+                    @onboardingImageUploaded="setProfileImage($event)"
+                    />
+                </div>
+            </template>
+            </v-col>
+        </v-row>
     </v-container>
   </div>
 </template>
@@ -256,7 +275,7 @@ import EditImageDialog from "@/components/profile/EditImageDialog";
 
 
 export default {
-    layout: "athlete",
+    layout: "common",
     head() {
         return {
         title: this.$i18n.t("basic_info_text"),
@@ -271,6 +290,7 @@ export default {
     },
     data() {
         return {
+            completed : false,
             tipTopEditor: { value: "" },
             profilePictureDialog: false,
             initialImageContent: "",
@@ -292,25 +312,13 @@ export default {
                 ],
                 phone: [
                     (v) => !!v || this.$i18n.t("valid_required_profile_name")
-                ],
-                // categories: [v => v.length != 0 || "At least one category is needed"],
-                // site: [
-                // v => !!v || "Required.",
-                // v =>
-                //     new RegExp(
-                //     "^(?:(?:https?|ftp)://)(?:S+(?::S*)?@)?(?:(?!(?:10|127)(?:.d{1,3}){3})(?!(?:169.254|192.168)(?:.d{1,3}){2})(?!172.(?:1[6-9]|2d|3[0-1])(?:.d{1,3}){2})(?:[1-9]d?|1dd|2[01]d|22[0-3])(?:.(?:1?d{1,2}|2[0-4]d|25[0-5])){2}(?:.(?:[1-9]d?|1dd|2[0-4]d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:.(?:[a-z\u00a1-\uffff]{2,})).?)(?::d{2,5})?(?:[/?#]S*)?$",
-                //     "ig"
-                //     ).test(v) || "Not a valid URL",
-                // v =>
-                //     !this.toolsData.map(u => u.site).includes(v) ||
-                //     "This tool already exists"
-                // ]
+                ]
             }
         }
     },
     computed: {
         validContinue(){
-            if(this.profileData.image != null &&  this.profileData.profile_name != "" && this.profileData.mobile_no != "" && this.profileData.about_me != ""){
+            if(this.profileData.image != null &&  this.profileData.profile_name != "" && this.profileData.mobile_no != "" && this.profileData.about_me != "" && this.completed){
                 return true;
             }else{
                 return false;
@@ -319,17 +327,6 @@ export default {
         userProfileImage() {
             return this.profileData.image;
         },
-        enableSaveButton(){
-            // if()
-            // this.profileData
-            // profileData: {
-            //     image: null,
-            //     profile_name: "",
-            //     about_me: "",
-            //     mobile_no: "",
-            //     mobile_code: "DK",
-            // },
-        }
     },
     watch: {
         "profilePicture.file": function(val) {
@@ -362,6 +359,7 @@ export default {
             coachProfileApi(this.$axios)
                 .onBoardingUserProfileInfo(is_onboarding)
                 .then(response => {
+                    this.completed = true;
                     this.initialImageContent = response.data.initial_image_content;
                     this.profileData.profile_name = response.data.profile_name;
                     this.profileData.image =response.data.image.square ;
@@ -436,6 +434,16 @@ export default {
     }
 };
 </script>
+<style>
+.v-skeleton-loader__image {
+    height: 180px!important;
+    width: 150px!important;
+}
+.v-skeleton-loader__heading {
+    height: 100px!important;
+    width: 100%!important;
+}
+</style>
 
 <style scoped lang="scss">
     .onboarding{
