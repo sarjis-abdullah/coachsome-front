@@ -1,7 +1,13 @@
 <template>
   <v-app>
-    <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp" />
-    <AppDrawer v-if="$vuetify.breakpoint.mdAndUp" :drawerItems="items" :isActive="statusActive" @toggleActiveStatus="updateActiveStatus" />
+    <TopNav color="#15577C" v-if="$vuetify.breakpoint.mdAndUp" />
+    <AppDrawer
+      v-if="$vuetify.breakpoint.mdAndUp" 
+      :drawerItems="items" 
+      :isActive="statusActive" 
+      @toggleActiveStatus="updateActiveStatus"
+      @logOut="handleLogOut"
+    />
     <!-- <CoachDrawer /> -->
     <v-main class="body-bg">
       <client-only>
@@ -280,6 +286,15 @@ export default {
           }
         });
       // alert(data);
+    },
+    async handleLogOut(){
+      alert('hi');
+        await this.$auth.logout();
+        this.$socket.emit("force_disconnect");
+        this.$store.dispatch("setUser", null);
+        if (!this.$auth.loggedIn) {
+          this.$router.push(this.localePath(pathData.pages.home));
+        }
     }
   }
 };

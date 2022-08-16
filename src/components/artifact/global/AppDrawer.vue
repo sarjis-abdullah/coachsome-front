@@ -8,7 +8,7 @@
       fixed
     >
       <client-only>
-        <v-list class="pt-10" >  <!-- add 'flat' to remove the gray selection -->
+        <v-list class="pt-7" >  <!-- add 'flat' to remove the gray selection -->
           <template v-for="(item, i) in drawerItems">
             <v-list-item v-if="item.item && !item.hasSubItem && !item.line && !item.checker" :key="i" :to="localePath(item.url)" link>
                 <v-list-item-icon>
@@ -70,7 +70,7 @@
       <!-- bottom Button  -->
       <template v-slot:append>
        <v-list > 
-            <v-list-item link>
+            <v-list-item @click="logOut" link>
                 <v-list-item-icon>
                     <v-img class="list-image" :src="require('@/assets/img/svg-icons/new/send-out.svg')" alt="log-out" />
                 </v-list-item-icon>
@@ -118,6 +118,9 @@ export default {
         // this.isActive
        this.$emit("toggleActiveStatus", !this.isActive)
     },
+    logOut(){
+        this.$emit("logOut")
+    }
   }
 };
 </script>

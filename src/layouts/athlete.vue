@@ -1,7 +1,13 @@
 <template>
   <v-app>
-    <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp" />
-    <AppDrawer v-if="$vuetify.breakpoint.mdAndUp" :drawerItems="items" :isActive="statusActive" @toggleActiveStatus="updateActiveStatus" />
+    <TopNav color="#15577C" v-if="$vuetify.breakpoint.mdAndUp" />
+    <AppDrawer
+      v-if="$vuetify.breakpoint.mdAndUp" 
+      :drawerItems="items" 
+      :isActive="statusActive" 
+      @toggleActiveStatus="updateActiveStatus"
+      @logOut="handleLogOut"
+    />
     <v-main>
       <client-only>
         <GlobalHeader />
@@ -232,7 +238,14 @@ export default {
             this.$toast.error(error.response.data.message);
           }
         });
-      // alert(data);
+    },
+    async handleLogOut(){
+        await this.$auth.logout();
+        this.$socket.emit("force_disconnect");
+        this.$store.dispatch("setUser", null);
+        if (!this.$auth.loggedIn) {
+          this.$router.push(this.localePath(pathData.pages.home));
+        }
     }
   }
 };
