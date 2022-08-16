@@ -46,12 +46,13 @@
             {{ $t(badge.tKey) }}
           </v-btn>
           <v-btn
+              v-if="this.isAthlete"
               @click.stop="toggleFavourite"
               icon
               style="position: absolute;
               top: 6px;
               right: 10px;"
-              :color="isFavourite ? '#FF3A0D': '#49556A'"
+              :color="isFav ? '#FF3A0D': '#49556A'"
             >
               <v-icon>mdi-heart</v-icon>
             </v-btn>
@@ -129,14 +130,30 @@ export default {
     },
     badge: {
       type: Object
+    },
+    id: {
+      type: null
+    },
+    isFavourite : {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       currencyService,
       badgeData: { ...badgeData },
-      isFavourite: false
+      isFav: false
     };
+  },
+  watch: {
+    isFavourite: {
+      immediate: true,
+      deep: true,
+      handler(newValue, oldValue) {
+        this.isFav = this.isFavourite
+      }
+    }
   },
   methods: {
     gotTo(username) {
@@ -153,12 +170,29 @@ export default {
       console.log("Image failed to load");
     },
     toggleFavourite(){
-      this.isFavourite = !this.isFavourite
+      this.isFav = !this.isFav
+      if(!this.isFav){
+        this.$axios.post("favourite-coach", {
+        coachId: this.id,
+        isFavourite: this.isFav
+      })
+      }else {
+        this.$axios.post("favourite-coach", {
+        coachId: this.id,
+        isFavourite: this.isFav
+      })
+      }
     }
   },
   computed: {
     profileImage() {
       return this.image ? this.image : profileData.PROFILE_DEFAULT_IMAGE;
+    },
+    isAthlete(){
+      if (this.$auth && this.$auth.hasRole(["athlete"])) {
+        return true
+      }
+      return false
     }
   }
 };
