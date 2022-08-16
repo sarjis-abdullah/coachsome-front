@@ -1,6 +1,6 @@
 <template>
   <div class="coach-package-page">
-    <v-container fluid>
+    <v-container fluid c>
 
       <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('coach_booking_package_active_package_titile')">
         <template v-slot:goBack>
@@ -16,7 +16,7 @@
         </template>
       </mobile-top-nav>
 
-      <span  class="page-container page-package">
+      <span  class="page-container page-package px-2">
 
         <v-row justify="space-between" align="center" class="d-none d-md-block">
           <v-col cols="12" md="6" class="pb-0">

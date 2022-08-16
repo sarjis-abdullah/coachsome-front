@@ -10,7 +10,7 @@
         </template>
       </mobile-top-nav>
       <v-row justify="center">
-        <v-col cols="12" md="7">
+        <v-col cols="12" md="8">
           <DesktopHeader :title="$t('app_bar_dashboard_booking')"/>
           <v-row>
             

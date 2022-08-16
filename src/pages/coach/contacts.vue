@@ -52,7 +52,7 @@ import MobileTopNav from "@/components/layout/global/MobileTopNav";
 import CoachContacts from "@/components/contacts/CoachContacts";
 import { pathData } from "@/data";
 export default {
-  layout: "coach-no-drawer",
+  layout: "coach",
   head() {
     return {
       title: "Contacts"

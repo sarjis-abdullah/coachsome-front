@@ -8,9 +8,9 @@
       fixed
     >
       <client-only>
-        <v-list>
+        <v-list class="pt-10" >  <!-- add 'flat' to remove the gray selection -->
           <template v-for="(item, i) in drawerItems">
-            <v-list-item v-if="item.item && !item.hasSubItem && !line && !checker" :key="i" :to="localePath(item.url)" link>
+            <v-list-item v-if="item.item && !item.hasSubItem && !item.line && !item.checker" :key="i" :to="localePath(item.url)" link>
                 <v-list-item-icon>
                     <v-img class="list-image" :src="item.icon" alt="edit" />
                 </v-list-item-icon>
@@ -21,7 +21,7 @@
             <v-list-group
                 :value="false"
                 :key="i"
-                v-else-if="item.item && item.hasSubItem && !line && !checker"
+                v-else-if="item.item && item.hasSubItem && !item.line && !item.checker"
             >
                 <template v-slot:activator >
                     <v-list-item-icon>
@@ -51,6 +51,7 @@
                   <client-only>
                     <toggle-button
                       :value="isActive"
+                      @input="handleActivityStatus"
                       :color="{ checked: '#5CC866', unchecked: '#EFEFEF' }"
                       :sync="true"
                       :font-size="12"
@@ -60,10 +61,25 @@
                   </client-only>
                 </v-list-item-icon>
             </v-list-item>
-            <div v-else class="line" :key="i"></div>
+            <div v-else class="py-5" :key="i">
+                <div class="line"></div>
+            </div>
           </template>
         </v-list>
       </client-only>
+      <!-- bottom Button  -->
+      <template v-slot:append>
+       <v-list > 
+            <v-list-item link>
+                <v-list-item-icon>
+                    <v-img class="list-image" :src="require('@/assets/img/svg-icons/new/send-out.svg')" alt="log-out" />
+                </v-list-item-icon>
+                <v-list-item-content>
+                    <v-list-item-title class="list-text">{{ $t("dropdown_item_log_out") }}</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+        </v-list>
+      </template>
     </v-navigation-drawer>
   </div>
 </template>
@@ -73,167 +89,20 @@ import { pathData } from "@/data";
 
 export default {
   components: {},
+    props: {
+        drawerItems: {
+            type: Object,
+            default: [],
+        },
+        isActive: {
+            type: Boolean,
+            default: false,
+        },
+        
+  },
   data: () => ({
     drawer: null,
-    isActive: false,
-    drawerItems: [
-    {
-        key: "home",
-        t_key: "pwa_home",
-        icon: require('@/assets/img/svg-icons/new/home.svg'),
-        text: "home",
-        url: pathData.athlete.home,
-        hasSubItem: false,
-        line: false,
-        checker:false,
-        item: true
-    },
-    {
-        key: "package",
-        t_key: "pwa_edit_profile",
-        icon: require('@/assets/img/svg-icons/new/edit.svg'),
-        text: "Packages",
-        url: null,
-        hasSubItem: true,
-        item: true,
-        line: false,
-        checker:false,
-        subItems: [
-            {
-                key: "home",
-                t_key: "profile_info",
-                text: "home",
-                url: pathData.athlete.editProfile,
-                hasSubItem: false,
-                line: false,
-                checker:false,
-                item: true
-            },
-            {
-                key: "packages",
-                t_key: "packages",
-                text: "packages",
-                url: null,
-                hasSubItem: false,
-                line: false,
-                checker:false,
-                item: true
-            },
-            {
-                key: "gallery",
-                t_key: "gallery",
-                text: "gallery",
-                url: null,
-                hasSubItem: false,
-                line: false,
-                checker:false,
-                item: true
-            },
-            {
-                key: "geography",
-                t_key: "geography",
-                text: "geography",
-                url: null,
-                hasSubItem: false,
-                line: false,
-                checker:false,
-                item: true
-            },
-            {
-                key: "calendar",
-                t_key: "calendar",
-                text: "calendar",
-                url: null,
-                hasSubItem: false,
-                line: false,
-                checker:false,
-                item: true
-            },
-            {
-                key: "reviews",
-                t_key: "reviews",
-                text: "reviews",
-                url: null,
-                hasSubItem: false,
-                line: false,
-                checker:false,
-                item: true
-            }
-        ],
-    },
-    {
-        key: "profile_status",
-        t_key: "profile_status",
-        url: pathData.coach.imageAndVideo,
-        hasSubItem: false,
-        line: false,
-        checker:true,
-        item: false
-    },
-    {
-        key: "bookings",
-        t_key: "bookings",
-        icon: require('@/assets/img/svg-icons/new/calendar-alt.svg'),
-        text: "bookings",
-        url: pathData.coach.imageAndVideo,
-        hasSubItem: false,
-        line: false,
-        checker:false,
-        item: true
-    },
-    {
-        key: "line",
-        t_key: "line",
-        text: "line",
-        hasSubItem: false,
-        line: true,
-        checker:false,
-        item: false
-    },
-    {
-        key: "settings",
-        t_key: "settings",
-        icon: require('@/assets/img/svg-icons/new/setting.svg'),
-        text: "settings",
-        url: null,
-        hasSubItem: true,
-        item: true,
-        line: false,
-        checker:false,
-        subItems: [
-            {
-                key: "home",
-                t_key: "profile_info",
-                text: "home",
-                url: pathData.athlete.editProfile,
-                hasSubItem: false,
-                line: false,
-                checker:false,
-                item: true
-            },
-            {
-                key: "packages",
-                t_key: "packages",
-                text: "packages",
-                url: null,
-                hasSubItem: false,
-                line: false,
-                checker:false,
-                item: true
-            },
-            {
-                key: "gallery",
-                t_key: "gallery",
-                text: "gallery",
-                url: null,
-                hasSubItem: false,
-                line: false,
-                checker:false,
-                item: true
-            },
-        ],
-    },
-    ],
+
   }),
   computed: {
 
@@ -245,13 +114,16 @@ export default {
     currentPath() {
       return this.$route.path;
     },
+    handleActivityStatus() {
+        // this.isActive
+       this.$emit("toggleActiveStatus", !this.isActive)
+    },
   }
 };
 </script>
 
 <style lang="scss" >
 .global-drawer {
-    
     .v-list-item--active {
         border-left: 8px solid #67b16a !important;
         font-family: $font-family!important;

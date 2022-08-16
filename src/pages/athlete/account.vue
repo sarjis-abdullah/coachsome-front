@@ -21,8 +21,8 @@
       <v-col
         cols="12"
         sm="8"
-        md="6"
-        lg="4"
+        md="9"
+        lg="9"
         xs="12"
       >
 
@@ -33,7 +33,7 @@
           <v-col cols="12 " class="py-0 my-0">
              <p class="default--label mt-2">{{$t("coach_contacts_first_name_label")}}</p>
           </v-col>
-          <v-col cols="12" md="6" lg="6" sm="12" xs="12" class="py-0 my-0">
+          <v-col cols="12" sm="12" xs="12" class="py-0 my-0">
             <!-- First name -->
             <v-text-field
               outlined
@@ -48,7 +48,7 @@
           <v-col cols="12 " class="py-0 my-0">
              <p class="default--label mt-2">{{$t("coach_contacts_last_name_label")}}</p>
           </v-col>
-          <v-col cols="12" md="6" lg="6" sm="12" xs="12" class="py-0 my-0">
+          <v-col cols="12" sm="12" xs="12" class="py-0 my-0">
             <!-- Last Name -->
             <v-text-field
               outlined
@@ -405,7 +405,7 @@ import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
-  layout: "common",
+  layout: "athlete",
   components: {
     ClientBackFooter,
     MobileTopNav

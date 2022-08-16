@@ -522,7 +522,7 @@ import { pathData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
-  layout: "athlete-no-drawer",
+  layout: "athlete",
   components: {
     ClientBackFooter,
     MobileTopNav

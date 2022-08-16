@@ -155,7 +155,7 @@ import DesktopHeader from '@/components/artifact/global/DesktopHeader'
 import PurchasedCardMobile from '@/components/card/PurchasedCardMobile.vue';
 
 export default {
-  layout: "coach-no-drawer",
+  layout: "coach",
   components: {
     PurchasedCard,
     MobileTopNav,

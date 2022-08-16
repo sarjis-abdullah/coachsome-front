@@ -25,7 +25,7 @@
       </mobile-top-nav>
       <span class="page-container view-profile__wrapper">
         <v-row justify="center">
-          <v-col cols="12" md="9">
+          <v-col cols="12" md="11">
 
             <!--------------- Desktop View ---------------->
 
@@ -56,7 +56,7 @@
                       >
                         <v-avatar
                           color="teal"
-                          size="125"
+                          size="150"
                           v-if="!userProfileImage"
                           tile
                         >
@@ -64,7 +64,7 @@
                           <v-img v-else aspect-ratio="1" :src="require('@/assets/images/profile-default.jpg')" alt="Avatar"></v-img>
                         </v-avatar>
                         <v-avatar
-                          size="125"
+                          size="150"
                           color="primary"
                           v-if="userProfileImage"
                           tile

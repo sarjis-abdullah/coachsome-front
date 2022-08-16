@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp" />
-    <AppDrawer />
+    <AppDrawer v-if="$vuetify.breakpoint.mdAndUp" :drawerItems="items" :isActive="statusActive" @toggleActiveStatus="updateActiveStatus" />
     <v-main>
       <client-only>
         <GlobalHeader />
@@ -18,6 +18,7 @@ import TopNav from "@/components/layout/global/TopNav";
 import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import { pathData } from "@/data";
 import AppDrawer from '@/components/artifact/global/AppDrawer.vue';
+import { clientBackDrawerApi } from "@/api";
 
 export default {
   middleware: ["auth-athlete"],
@@ -28,7 +29,167 @@ export default {
     AppDrawer
   },
   data() {
-    return {};
+    return {
+      statusActive: false,
+      items: [
+        {
+            key: "home",
+            t_key: "pwa_home",
+            icon: require('@/assets/img/svg-icons/new/home.svg'),
+            text: "home",
+            url: pathData.athlete.home,
+            hasSubItem: false,
+            line: false,
+            checker:false,
+            item: true
+        },
+        {
+            key: "package",
+            t_key: "pwa_edit_profile",
+            icon: require('@/assets/img/svg-icons/new/edit.svg'),
+            text: "Packages",
+            url: null,
+            hasSubItem: true,
+            item: true,
+            line: false,
+            checker:false,
+            subItems: [
+                {
+                    key: "home",
+                    t_key: "profile_info",
+                    text: "home",
+                    url: pathData.athlete.editProfile,
+                    hasSubItem: false,
+                    line: false,
+                    checker:false,
+                    item: true
+                },
+                {
+                    key: "packages",
+                    t_key: "pwa_package_menu",
+                    text: "packages",
+                    url: null,
+                    hasSubItem: false,
+                    line: false,
+                    checker:false,
+                    item: true
+                },
+                {
+                    key: "gallery",
+                    t_key: "pwa_gallery_menu",
+                    text: "gallery",
+                    url: null,
+                    hasSubItem: false,
+                    line: false,
+                    checker:false,
+                    item: true
+                },
+                {
+                    key: "geography",
+                    t_key: "pwa_geography_menu",
+                    text: "geography",
+                    url: null,
+                    hasSubItem: false,
+                    line: false,
+                    checker:false,
+                    item: true
+                },
+                {
+                    key: "calendar",
+                    t_key: "dashboard_sidebar_availability_btn_label",
+                    text: "calendar",
+                    url: null,
+                    hasSubItem: false,
+                    line: false,
+                    checker:false,
+                    item: true
+                },
+                {
+                    key: "reviews",
+                    t_key: "pwa_reviews_menu",
+                    text: "reviews",
+                    url: null,
+                    hasSubItem: false,
+                    line: false,
+                    checker:false,
+                    item: true
+                }
+            ],
+        },
+        {
+            key: "profile_status",
+            t_key: "profile_status",
+            url: null,
+            hasSubItem: false,
+            line: false,
+            checker:true,
+            item: false
+        },
+        {
+            key: "bookings",
+            t_key: "app_bar_dashboard_booking",
+            icon: require('@/assets/img/svg-icons/new/calendar-alt.svg'),
+            text: "bookings",
+            url: pathData.athlete.bookings,
+            hasSubItem: false,
+            line: false,
+            checker:false,
+            item: true
+        },
+        {
+            key: "line",
+            t_key: "line",
+            text: "line",
+            hasSubItem: false,
+            line: true,
+            checker:false,
+            item: false
+        },
+        {
+            key: "settings",
+            t_key: "dropdown_item_settings",
+            icon: require('@/assets/img/svg-icons/new/setting.svg'),
+            text: "settings",
+            url: null,
+            hasSubItem: true,
+            item: true,
+            line: false,
+            checker:false,
+            subItems: [
+                {
+                    key: "account",
+                    t_key: "setting_label_acc",
+                    text: "account",
+                    url: pathData.athlete.account,
+                    hasSubItem: false,
+                    line: false,
+                    checker:false,
+                    item: true
+                },
+                {
+                    key: "notifications",
+                    t_key: "setting_sec_notification_title",
+                    text: "notifications",
+                    url: pathData.athlete.notification,
+                    hasSubItem: false,
+                    line: false,
+                    checker:false,
+                    item: true
+                },
+                {
+                    key: "security",
+                    t_key: "athlete_settings_tab_security",
+                    text: "security",
+                    url: pathData.pages.security,
+                    hasSubItem: false,
+                    line: false,
+                    checker:false,
+                    item: true
+                },
+            ],
+        },
+      ],
+    };
   },
   created(){
         const currentRoute = this.$route.path;
@@ -59,6 +220,20 @@ export default {
     }
   },
   mounted() {},
-  methods: {}
+  methods: {
+    updateActiveStatus(data){
+      clientBackDrawerApi(this.$axios)
+        .changeActiveStatus()
+        .then(() => {
+          this.statusActive = data;
+        })
+        .catch(error => {
+          if (error.response.data.status == "error") {
+            this.$toast.error(error.response.data.message);
+          }
+        });
+      // alert(data);
+    }
+  }
 };
 </script>

@@ -28,7 +28,7 @@
 
         <!--------------- Desktop View ---------------->
 
-        <div class="d-none d-md-block" v-if="!this.$vuetify.breakpoint.smAndDown">
+        <div class="d-none d-md-block px-2" v-if="!this.$vuetify.breakpoint.smAndDown">
           <v-row>
             <v-col cols="12" class="pb-0">
               <div class="page-title">{{ $t("profile") }}</div>

@@ -16,7 +16,7 @@
       </mobile-top-nav>
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-row>
-          <v-col offset-md="2">
+          <v-col cols="12 pl-5">
             <v-row class="d-none d-md-block">
               <v-col cols="12" class="pb-0">
                 <div class="page-title">
@@ -410,7 +410,7 @@ import { pathData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
-  layout: "coach-no-drawer",
+  layout: "coach",
   components: {MobileTopNav},
   data() {
     return {

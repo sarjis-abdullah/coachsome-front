@@ -20,8 +20,8 @@
       <v-col
         cols="12"
         sm="8"
-        md="6"
-        lg="4"
+        md="9"
+        lg="9"
         xs="12"
       >
               <!-- Notification Section -->
@@ -187,7 +187,7 @@ import { pathData, settingValueData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
-  layout: "coach-no-drawer",
+  layout: "coach",
   components:{MobileTopNav},
   data() {
     return {

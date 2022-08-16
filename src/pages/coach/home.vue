@@ -62,7 +62,7 @@ import { coachBookingTimeApi } from "@/api";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
-  layout: "coach-no-drawer",
+  layout: "coach",
   components: {
     SessionCard,
     MobileTopNav
