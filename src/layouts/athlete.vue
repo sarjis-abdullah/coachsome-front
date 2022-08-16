@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp" />
+    <AppDrawer />
     <v-main>
       <client-only>
         <GlobalHeader />
@@ -16,13 +17,15 @@ import GlobalHeader from "@/components/layout/global/GlobalHeader";
 import TopNav from "@/components/layout/global/TopNav";
 import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import { pathData } from "@/data";
+import AppDrawer from '@/components/artifact/global/AppDrawer.vue';
 
 export default {
   middleware: ["auth-athlete"],
   components: {
     TopNav,
     GlobalHeader,
-    BottomNavigation
+    BottomNavigation,
+    AppDrawer
   },
   data() {
     return {};

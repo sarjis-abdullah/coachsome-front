@@ -134,7 +134,7 @@
               <!-- Become a Coach -->
               <v-list-item v-if="!is_profile_switched_ever" link @click.stop="handleBecomeCoach">
                 <v-list-item-icon>
-                  <v-img  :src="require('@/assets/img/svg-icons/whistle.svg')" alt="setting" />
+                  <v-img  :src="require('@/assets/img/svg-icons/whistle.svg')" alt="become_coach" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
