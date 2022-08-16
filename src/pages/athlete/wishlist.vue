@@ -22,73 +22,35 @@
         <div class="line"></div>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col v-if="!progress && coaches && coaches.length" 
+        cols="12" sm="6" md="3" v-for="(item, i) in coaches" 
+        :key="i">
+        <explore-card v-bind="item.coach"></explore-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
-import {  ExerciseApi } from "@/api";
 import { pathData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
-
+import ExploreCard from "@/components/card/ExploreCard";
 
 export default {
   layout: "athlete",
   components: {
     MobileTopNav,
+    ExploreCard
   },
   data() {
     return {
-      previewMode: false,
-      previewPage: false,
-      exerciseInitialData: {
-        categories : [],
-        sports : [],
-        lavels : [],
-        tags : [],
-        name : null,
-        instructions : null,
-        links : [],
-        categoriesSelected : [],
-        sportsSelected : [],
-        lavelsSelected : [],
-        tagsSelected : [],
-        type : null,
-        shareWithCoach: false,
-        assets : [],
-      },
-      exerciseDialog: false,
-      formValid: true,
-      noExercise: false,
-      exercisePreviewDialog: false,
-      filterRequest: false,
-      filter : {
-        typeSytem: false,
-        typeCustom: false,
-        categoriesSelected: [],
-        lavelsSelected: [],
-        sportsSelected: [],
-        withVideo: false,
-      },
-      exerciseData: null,
-      exercises: [],
-      isLoading: false,
-      loadingLimit: 8,
-      search: "",
-      table: {
-        headers: [
-          {
-            text: this.$i18n.t("thead_exercises"),
-            align: "start",
-            value: "assets",
-            class: "exercise-table--header",
-          },
-          { text: this.$i18n.t("thead_category"), value: "category", class: "exercise-table--header" },
-          { text: this.$i18n.t("thead_type"), value: "type", class: "exercise-table--header" },
-          { text: this.$i18n.t("thead_action"), value: 'actions', sortable: false, filterable: false, class: "exercise-table--header" },
-        ],
-        rows: []
-      },
+      progress: false,
+      coaches: []
     };
+  },
+  created () {
+    this.getFavouriteCoaches();
   },
   methods: {
     handleBack(){
@@ -98,6 +60,21 @@ export default {
         this.$router.push(this.localePath(pathData.coach.profileMenu));
       }
     },
+    getFavouriteCoaches(){
+      this.progress = true
+      this.$axios.get("favourite-coach?include=f.c").then(res=> {
+        this.coaches = res?.data?.data.map(item=> {
+          if(item.coach)
+            item.coach.isFavourite = true
+          return item
+        })
+        return res
+      }).catch(err=> {
+        return Promise.reject(err)
+      }).finally(()=> {
+        this.progress = false
+      })
+    }
   }
 };
 </script>

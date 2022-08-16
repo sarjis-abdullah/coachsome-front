@@ -648,6 +648,7 @@ export default {
                 return {
                   name: item.name,
                   id: item.id,
+                  isFavourite: item.isFavourite,
                   image: item.image ? item.image : null,
                   countReview: item.countReview,
                   rating: item.rating,

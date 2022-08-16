@@ -1017,6 +1017,7 @@ export default {
           this.exploreCoach.coaches = data.coaches.map(item => {
             return {
               id: item.id,
+              isFavourite: item.isFavourite,
               name: item.name,
               image: item.image ? item.image : null,
               countReview: item.countReview,
