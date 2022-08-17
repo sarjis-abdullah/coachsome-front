@@ -60,6 +60,20 @@
                    <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
                 </v-list-item-icon>
               </v-list-item>
+              <!-- Wishlist -->
+               <v-list-item link @click.stop="handleWishlistBtn">
+                <v-list-item-icon>
+                  <v-img  :src="require('@/assets/img/svg-icons/new/credit-card.svg')" alt="payment" />
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title class="list-text">{{$t("wishlist_page_title")}}</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-icon>
+                   <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
             </v-list>
           </v-col>
         </v-row>
@@ -415,6 +429,9 @@ export default ({
       },
       handlePaymentBtn(){
         this.$router.push(this.localePath(pathData.athlete.payments));
+      },
+      handleWishlistBtn(){
+        this.$router.push(this.localePath("/athlete/wishlist"));
       },
       handleLanguageBtn(){
         this.$router.push(this.localePath(pathData.pages.language));

@@ -2,7 +2,7 @@
   <v-container fluid class="pt-0 mt-0" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
 
     <!-- Mobile Header Start -->
-    <mobile-top-nav extraClass="body-bg-secondary" :headerText="'Wishlist'">
+    <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('wishlist_page_title')">
       <template v-slot:goBack>
         <v-btn
           icon
@@ -16,13 +16,13 @@
     <!-- Desktop Header Start -->
     <v-row class="d-none d-md-block">
       <v-col cols="12" class="pb-0">
-        <div class="page-title">{{ 'Wishlist' }}</div>
+        <div class="page-title">{{ $t('wishlist_page_title') }}</div>
       </v-col>
       <v-col cols="12">
         <div class="line"></div>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row class="pt-md-0 pt-4">
       <v-col v-if="!progress && coaches && coaches.length" 
         cols="12" sm="6" md="3" v-for="(item, i) in coaches" 
         :key="i">
