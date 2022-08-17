@@ -122,7 +122,6 @@
             <!-- User Edit Dialog -->
             <v-dialog
               v-model="userEdit.dialog"
-              persistent
               max-width="50%"
               scrollable
             >
@@ -222,7 +221,7 @@
                         ></v-select>
                       </v-col>
                     </v-row>
-                    <v-divider></v-divider>
+                    <v-divider class="my-4"></v-divider>
                     <v-row>
                       <v-col cols="12">
                         <span class="custom-subtitle-2">Coach Settings</span>
@@ -358,7 +357,6 @@
               <v-row justify="center">
                 <v-dialog
                   v-model="userCreate.dialog"
-                  persistent
                   max-width="600px"
                 >
                   <v-card  class="body-bg">
