@@ -7,7 +7,6 @@
             <div class="d-flex justify-center mb-4">
               <v-icon size="80">mdi-emoticon-sad-outline</v-icon>
             </div>
-
             <p class="title text-center my-0 py-0 grey--text text--darken-3">
               Oops! Something totally went wrong
             </p>

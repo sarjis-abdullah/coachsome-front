@@ -9,7 +9,7 @@
       <TopNav color="#15577C" v-if="$vuetify.breakpoint.mdAndUp && !isAdmin" />
       <admin-top-nav color="#15577C" v-if="$vuetify.breakpoint.mdAndUp &&  isAdmin"></admin-top-nav>
       <AppDrawer
-        v-if="$vuetify.breakpoint.mdAndUp" 
+        v-if="$vuetify.breakpoint.mdAndUp && isLoggedIn" 
         :drawerItems="commonDrawerItems" 
         :isActive="statusActive" 
         @toggleActiveStatus="updateActiveStatus"
@@ -541,6 +541,9 @@ export default {
     },
     statusActive() {
       return this.$auth.user.is_active;
+    },
+    isLoggedIn() {
+      return this.$auth.loggedIn;
     },
   },
   created(){
