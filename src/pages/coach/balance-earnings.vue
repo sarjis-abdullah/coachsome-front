@@ -743,7 +743,7 @@ import RadarChart from "@/components/charts/RadarChart";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
-  layout: "coach-no-drawer",
+  layout: "coach",
   components: {
     LineChart,
     RadarChart,

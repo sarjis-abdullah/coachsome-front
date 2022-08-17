@@ -15,7 +15,7 @@
         </template>
       </mobile-top-nav>
       <v-row>
-        <v-col offset-md="2">
+        <v-col md="12">
           <v-row class="d-none d-md-block">
             <v-col cols="12" class="pb-0">
               <div class="page-title">{{ $t("setting_page_title") }}</div>
@@ -522,7 +522,7 @@ import { pathData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 export default {
-  layout: "coach-no-drawer",
+  layout: "coach",
   components: {
     ClientBackFooter,
     MobileTopNav

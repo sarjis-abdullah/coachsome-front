@@ -41,49 +41,6 @@
         </v-list-item>
       </span>
 
-      <!-- Coach Setting -->
-      <span v-if="isLoggedIn && isCoach || isAthlete">
-        <v-list-item
-          color="primary"
-          link
-          @click.stop="gotoSettings"
-        >
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ $t(items.coachSetting.t_key) }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </span>
-
-      <!-- Coach Setting -->
-      <span v-if="isLoggedIn && isCoach">
-        <!-- <v-list-item
-          color="primary"
-          link
-          @click.stop="
-            $router.push(localePath(items.coachBalanceEarnings.path))
-          "
-        >
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ $t(items.coachBalanceEarnings.t_key) }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item> -->
-        <v-list-item
-          color="primary"
-          link
-          @click.stop="$router.push(localePath(items.payoutInformation.path))"
-        >
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ $t(items.payoutInformation.t_key) }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </span>
-
       <!-- Athlete Edit Profile -->
       <span v-if="isAthlete" class="d-sm-flex d-xs-flex d-md-none">
         <v-list-item
@@ -168,6 +125,7 @@
           </v-list-item-content>
         </v-list-item>
       </span>
+      <v-divider v-if="hasRole(['athlete'])"></v-divider>
 
       <!-- Wishlist -->
       <span v-if="hasRole(['athlete'])">
@@ -179,6 +137,7 @@
           </v-list-item-content>
         </v-list-item>
       </span>
+      <v-divider v-if="hasRole(['athlete'])"></v-divider>
 
       <!-- Langugae -->
       <v-list-group v-model="languageGroup" link>
@@ -199,6 +158,8 @@
           </v-list-item>
         </nuxt-link>
       </v-list-group>
+      
+      <v-divider></v-divider>
 
       <!-- Currency -->
       <v-list-group v-model="currencyGroup" link>
@@ -227,6 +188,9 @@
           </v-list-item>
         </template>
       </v-list-group>
+
+      <v-divider></v-divider>
+
       <v-dialog v-model="inviteFriendModal" max-width="680">
         <v-card class="bg-2">
           <InviteYourFriends :isModal="true" @close-modal="inviteFriendModal = false"/>
@@ -241,6 +205,8 @@
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+
+      <v-divider v-if="isAthlete || isCoach"></v-divider>
 
       <!-- Admin -->
       <span v-if="isAdmin && !$vuetify.breakpoint.lgAndUp">
@@ -257,11 +223,14 @@
             :to="localePath(item.path)"
           >
             <v-list-item-title>{{ $t(item.t_key) }}</v-list-item-title>
+            <v-divider></v-divider>
           </v-list-item>
         </v-list-group>
       </span>
 
       <!-- Becoma a Coach -->
+
+      <v-divider v-if="!is_profile_switched_ever && !isAdmin && !isCoach" ></v-divider>
 
       <v-list-item v-if="!is_profile_switched_ever && !isAdmin && !isCoach" color="primary" link @click.stop="handleBecomeCoach">
         <v-list-item-content>
@@ -281,6 +250,8 @@
         </v-list-item-content>
       </v-list-item>
 
+      <v-divider v-if="is_profile_switched_ever && isProfileSwitchedToAthlete && isAthlete"></v-divider>
+
       <!-- Switch Profile to Athlete -->
 
       <v-list-item v-if="isCoach" color="primary" link @click.stop="handleSwitchProfile('athlete')">
@@ -291,6 +262,8 @@
         </v-list-item-content>
       </v-list-item>
 
+      <v-divider v-if="isCoach"></v-divider>
+
       <!-- Athelete Switched Button -->
       <v-list-item
         color="blue"
@@ -300,9 +273,11 @@
         @click.stop="revertUser"
       >
         <v-list-item-content>
-          <v-list-item-title> Switch to own user </v-list-item-title>
+          <v-list-item-title> {{$t("pwa_switch_to_own_user")}} </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+
+      <v-divider v-if="isSwitchedUser"></v-divider>
 
       <!-- Athlete settings -->
       <div v-if="false">

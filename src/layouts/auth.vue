@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp" />
+    <TopNav color="#15577C" v-if="$vuetify.breakpoint.mdAndUp" />
     <v-main>
       <client-only>
         <GlobalHeader />

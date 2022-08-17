@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <TopNav color="primary" :fixed="false" v-if="$vuetify.breakpoint.mdAndUp && !isAdmin">
+    <TopNav color="#15577C" :fixed="false" v-if="$vuetify.breakpoint.mdAndUp && !isAdmin">
       <template v-slot:sport-search>
         <span></span>
       </template>

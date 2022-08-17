@@ -172,7 +172,7 @@ export default {
             t_key: "pwa_profile_earnings",
             icon: require('@/assets/img/svg-icons/new/bag-euro.svg'),
             text: "earnings",
-            url: pathData.coach.earnings,
+            url: pathData.coach.balanceEarnings,
             hasSubItem: false,
             line: false,
             checker:false,
@@ -288,7 +288,6 @@ export default {
       // alert(data);
     },
     async handleLogOut(){
-      alert('hi');
         await this.$auth.logout();
         this.$socket.emit("force_disconnect");
         this.$store.dispatch("setUser", null);

@@ -145,18 +145,6 @@
           </v-list>
         </v-menu>
 
-        <!-- coachContacts -->
-        <v-btn
-          v-if="isAuthCoach"
-          small
-          class="text-normal"
-          :color="colorOfTheTextBtn"
-          :to="localePath(navItems.coachContacts.path)"
-          text
-          nuxt
-          >{{ $t(navItems.coachContacts.t_key) }}</v-btn
-        >
-
         <!-- Marketplace -->
         <v-btn
           small
@@ -166,18 +154,6 @@
           text
           nuxt
           >{{ $t(navItems.marketplace.t_key) }}</v-btn
-        >
-
-        <!-- Exercises -->
-        <v-btn
-          small
-          class="text-normal"
-          :color="colorOfTheTextBtn"
-          :to="localePath(navItems.exercises.path)"
-          v-if="isAuthCoach"
-          text
-          nuxt
-          >{{ $t(navItems.exercises.t_key) }}</v-btn
         >
 
         <!-- Chat -->
@@ -234,40 +210,6 @@
           text
           :color="colorOfTheTextBtn"
           >{{ $t(navItems.athleteBooking.t_key) }}</v-btn
-        >
-
-        <!-- Earnings -->
-        <v-btn
-          v-if="isAuthCoach"
-          small
-          class="text-normal"
-          :color="colorOfTheTextBtn"
-          :to="localePath(navItems.coachEarnings.path)"
-          text
-          nuxt
-          >{{ $t(navItems.coachEarnings.t_key) }}</v-btn
-        >
-
-        <!-- Coach-Edit-Profile -->
-        <v-btn
-          small
-          class="text-normal"
-          v-if="isAuthCoach"
-          :to="localePath(navItems.coachEditProfile.path)"
-          text
-          :color="colorOfTheTextBtn"
-          >{{ $t(navItems.coachEditProfile.t_key) }}</v-btn
-        >
-
-        <!-- Athlete-Edit-Profile -->
-        <v-btn
-          small
-          class="text-normal"
-          v-if="isAuthAthlete"
-          @click="athleteProfileHandle"
-          text
-          :color="colorOfTheTextBtn"
-          >{{ $t(navItems.athleteEditProfile.t_key) }}</v-btn
         >
       </span>
 
@@ -364,12 +306,6 @@ export default {
           path: pathData.pages.marketplace.path,
           name: pathData.pages.marketplace.name
         },
-        exercises: {
-          key: "Exercises",
-          icon: "folder_open",
-          t_key: "dropdown_item_exercises",
-          path: pathData.pages.exercises,
-        },
         about: {
           key: "about",
           icon: "folder_open",
@@ -394,18 +330,6 @@ export default {
           t_key: "nav_item_signup",
           path: pathData.pages.login
         },
-        coachEditProfile: {
-          key: "coachEditProfile",
-          icon: "folder_open",
-          t_key: "app_bar_dashboard_item_my_service",
-          path: pathData.coach.editProfile
-        },
-        athleteEditProfile: {
-          key: "athleteEditProfile",
-          icon: "folder_open",
-          t_key: "app_bar_dashboard_item_my_service",
-          path: pathData.athlete.editProfile
-        },
         message: {
           key: "message",
           icon: "folder_open",
@@ -423,18 +347,6 @@ export default {
           icon: "folder_open",
           t_key: "app_bar_dashboard_booking",
           path: pathData.athlete.bookings
-        },
-        coachContacts: {
-          key: "coach_contacts",
-          icon: "folder_open",
-          t_key: "app_bar_coach_contacts_page",
-          path: pathData.coach.coachContacts
-        },
-        coachEarnings: {
-          key: "coach_earnings",
-          icon: "folder_open",
-          t_key: "pwa_profile_earnings",
-          path: pathData.coach.balanceEarnings
         }
       }
     };

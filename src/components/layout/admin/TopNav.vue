@@ -88,17 +88,23 @@ export default {
     return {
       mainMenu: {
         items: {
-          dashboard: {
-            text: "Dashboard",
-            path: pathData.admin.dashboard,
+          // dashboard: {
+          //   text: "Dashboard",
+          //   path: pathData.admin.dashboard,
+          //   icon: "mdi-view-list",
+          //   t_key: "text_dashboard"
+          // },
+          // exercises: {
+          //   text: "Exercises",
+          //   path: pathData.pages.exercises,
+          //   icon: "mdi-view-list",
+          //   t_key: "dropdown_item_exercises"
+          // },
+          marketplace: {
+            text: "Find A Coach",
+            path: pathData.pages.marketplace.name,
             icon: "mdi-view-list",
-            t_key: "text_dashboard"
-          },
-          exercises: {
-            text: "Exercises",
-            path: pathData.pages.exercises,
-            icon: "mdi-view-list",
-            t_key: "dropdown_item_exercises"
+            t_key: "nav_item_marketplace"
           },
           pageBuilder: {
             text: "CMS",
@@ -106,60 +112,54 @@ export default {
             icon: "mdi-view-list",
             t_key: "dropdown_item_cms"
           },
-          orderList: {
-            text: "Order List",
-            path: pathData.admin.orderList,
-            icon: "mdi-view-list",
-            t_key: "dropdown_item_order_list"
-          },
-          translation: {
-            text: "Translation",
-            path: pathData.admin.translation,
-            icon: "mdi-view-list",
-            t_key: "dropdown_item_translation"
-          },
-          users: {
-            text: "Users",
-            path: pathData.admin.userList,
-            icon: "mdi-view-list",
-            t_key: "dropdown_item_users"
-          },
-          promos: {
-            text: "Promo Codes",
-            path: pathData.admin.promos,
-            icon: "mdi-view-list",
-            t_key: "pwa_promo_codes"
-          },
-          payoutRequest: {
-            text: "Payout Request",
-            path: pathData.admin.payoutRequest,
-            icon: "mdi-view-list",
-            t_key: "pwa_payout_request"
-          },
-          logs: {
-            text: "Logs",
-            path: pathData.admin.userLog,
-            icon: "mdi-view-list",
-            t_key: "dropdown_item_logs"
-          },
-          marketplace: {
-            text: "Find A Coach",
-            path: pathData.pages.marketplace.name,
-            icon: "mdi-view-list",
-            t_key: "nav_item_marketplace"
-          },
           message: {
             text: "Message",
             icon: "folder_open",
             t_key: "app_bar_dashboard_message",
             path: pathData.pages.chat
           },
-          bookingSessions: {
-            text: "Sessions",
-            icon: "folder_open",
-            t_key: "app_bar_booking_sessions",
-            path: pathData.admin.bookingSessions
-          },
+          // orderList: {
+          //   text: "Order List",
+          //   path: pathData.admin.orderList,
+          //   icon: "mdi-view-list",
+          //   t_key: "dropdown_item_order_list"
+          // },
+          // translation: {
+          //   text: "Translation",
+          //   path: pathData.admin.translation,
+          //   icon: "mdi-view-list",
+          //   t_key: "dropdown_item_translation"
+          // },
+          // users: {
+          //   text: "Users",
+          //   path: pathData.admin.userList,
+          //   icon: "mdi-view-list",
+          //   t_key: "dropdown_item_users"
+          // },
+          // promos: {
+          //   text: "Promo Codes",
+          //   path: pathData.admin.promos,
+          //   icon: "mdi-view-list",
+          //   t_key: "pwa_promo_codes"
+          // },
+          // payoutRequest: {
+          //   text: "Payout Request",
+          //   path: pathData.admin.payoutRequest,
+          //   icon: "mdi-view-list",
+          //   t_key: "pwa_payout_request"
+          // },
+          // logs: {
+          //   text: "Logs",
+          //   path: pathData.admin.userLog,
+          //   icon: "mdi-view-list",
+          //   t_key: "dropdown_item_logs"
+          // },
+          // bookingSessions: {
+          //   text: "Sessions",
+          //   icon: "folder_open",
+          //   t_key: "app_bar_booking_sessions",
+          //   path: pathData.admin.bookingSessions
+          // },
         }
       },
       avatarMenu: {

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <TopNav color="primary" v-if="$vuetify.breakpoint.mdAndUp && !isAdmin" />
+    <TopNav color="#15577C" v-if="$vuetify.breakpoint.mdAndUp && !isAdmin" />
     <admin-top-nav v-if="$vuetify.breakpoint.mdAndUp && isAdmin"></admin-top-nav>
     <v-main style="background: #f7fafc">
       <client-only>

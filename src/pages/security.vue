@@ -1,5 +1,4 @@
 <template>
-
     <v-container fluid >
         <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('athlete_settings_tab_security')">
             <template v-slot:goBack>
