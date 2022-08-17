@@ -90,7 +90,7 @@ export default {
     changeColor() {
       if (document.documentElement.scrollTop > 100) {
         this.theme = "dark";
-        this.color = "primary";
+        this.color = "#15577C";
       } else {
         this.theme = "dark";
         this.color = "transparent";
