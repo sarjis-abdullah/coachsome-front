@@ -128,7 +128,8 @@ export default {
 <style lang="scss" >
 .global-drawer {
     .v-list-item--active {
-        border-left: 8px solid #67b16a !important;
+        border-left: 8px solid #15577C !important;
+        color: #15577C !important;
         font-family: $font-family!important;
     }
     .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled){
