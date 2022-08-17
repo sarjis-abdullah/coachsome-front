@@ -39,7 +39,6 @@ export default {
   },
   data() {
     return {
-      statusActive: false,
       items: [
         {
             key: "home",
@@ -243,6 +242,11 @@ export default {
         },
       ],
     };
+  },
+  computed:{
+    statusActive() {
+      return this.$auth.user.is_active;
+    },
   },
   created(){
         const currentRoute = this.$route.path;

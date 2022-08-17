@@ -34,7 +34,6 @@ export default {
   },
   data() {
     return {
-      statusActive: false,
       items: [
         {
           key: "dashboard",
@@ -144,7 +143,10 @@ export default {
         return false
       }
       return true
-    }
+    },
+    statusActive() {
+      return this.$auth.user.is_active;
+    },
   },
   created(){
     const currentRoute = this.$route.path;

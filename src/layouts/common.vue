@@ -36,7 +36,6 @@ export default {
   },
   data() {
     return {
-      statusActive: false,
       coachItems: [
         {
             key: "home",
@@ -515,7 +514,10 @@ export default {
       }else{
         return [];
       }
-    }
+    },
+    statusActive() {
+      return this.$auth.user.is_active;
+    },
   },
   created(){
     const currentRoute = this.$route.path;
