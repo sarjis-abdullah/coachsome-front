@@ -278,18 +278,18 @@ export default {
   },
   mounted() {},
   methods: {
-    updateActiveStatus(data){
+    updateActiveStatus(value){
       clientBackDrawerApi(this.$axios)
         .changeActiveStatus()
-        .then(() => {
-          this.statusActive = data;
+        .then(({ data }) => {
+          this.statusActive = data.isActive;
+          this.$store.dispatch("changeActiveStatus", data.isActive);
         })
         .catch(error => {
           if (error.response.data.status == "error") {
             this.$toast.error(error.response.data.message);
           }
         });
-      // alert(data);
     },
     async handleLogOut(){
         await this.$auth.logout();

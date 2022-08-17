@@ -177,11 +177,12 @@ export default {
     }
   },
   methods: {
-    updateActiveStatus(data){
+    updateActiveStatus(value){
       clientBackDrawerApi(this.$axios)
         .changeActiveStatus()
-        .then(() => {
-          this.statusActive = data;
+        .then(({ data }) => {
+          this.statusActive = data.isActive;
+          this.$store.dispatch("changeActiveStatus", data.isActive);
         })
         .catch(error => {
           if (error.response.data.status == "error") {
