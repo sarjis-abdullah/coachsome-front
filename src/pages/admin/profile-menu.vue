@@ -64,6 +64,21 @@
                 </v-list-item-icon>
               </v-list-item>
 
+              <!-- Order List -->
+              <v-list-item link @click.stop="handleSession">
+                <v-list-item-icon>
+                  <v-img :src="require('@/assets/img/svg-icons/new/basket-plus.svg')" alt="order_list" />
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title class="list-text">{{$t("app_bar_booking_sessions")}}</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-icon>
+                  <v-icon class="common-top-back-icon">mdi-chevron-right</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+
               <!-- Exercises -->
               <v-list-item link @click.stop="handleExercise">
                 <v-list-item-icon>
@@ -400,6 +415,9 @@ export default ({
 
       handleOrders(){
         this.$router.push(this.localePath(pathData.admin.orderList));
+      },
+      handleSession(){
+        this.$router.push(this.localePath("/admin/sessions"));
       },
       handleExercise(){
         this.$router.push(this.localePath(pathData.pages.exercises));
