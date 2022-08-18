@@ -52,6 +52,9 @@
                 </v-col>
                 <v-col class="d-flex justify-end" v-if="$vuetify.breakpoint.mdAndUp">
                   <!-- <AddButton @add="userCreate.dialog = true" title="Add new user"/> -->
+                  <v-btn @click="csvExport" :block="$vuetify.breakpoint.smAndDown" class="white--text mr-4" depressed color="#9FAEC2">
+                    {{$t("export_to_excel_or_csv")}}
+                  </v-btn>
                   <v-btn @click="userCreate.dialog = true" :block="$vuetify.breakpoint.smAndDown" class="white--text" depressed color="#15577C">
                     {{$t("add_new_user")}}
                   </v-btn>
@@ -557,22 +560,29 @@ export default {
             text: "id",
             align: "start",
             filterable: false,
-            value: "id"
+            value: "id",
           },
-          { text: "switch", value: "image" },
-          { text: "name", value: "name" },
-          { text: "Email", value: "email" },
-          { text: "type", value: "type" },
-          { text: "Status", value: "status" },
-          { text: "Ranking", value: "ranking" },
-          { text: "Booking", value: "booking" },
-          { text: "Declinded", value: "decline" },
-          { text: "Packages", value: "package" },
-          { text: "Media", value: "media" }
+          { text: "switch", value: "image", sortable: false},
+          { text: "name", value: "name", align: "center", },
+          { text: "type", value: "type", sortable: false },
+          { text: "Status", value: "status", sortable: false },
+          { text: "Created Date", value: "createdDate" },
+          // { text: "Last Login", value: "lastLogin" },
+          { text: "Email", value: "email", sortable: false },
+          { text: "Phone Number", value: "phoneNumber", sortable: false },
         ],
         rows: []
       }
     };
+  },
+  computed: {
+    csvData() {
+      return this.table.rows.map(item => ({
+        ...item,
+        // address: 'адрес', //item.address.city,
+        // company: 'компания'//item.company.name
+      }));
+    }
   },
   watch: {
     "userCreate.dialog": function() {
@@ -587,6 +597,38 @@ export default {
     this.getUser();
   },
   methods: {
+    csvExport() {
+      const mapData = this.table.rows;
+
+const headers = this.table.headers.filter(item=> item.value !== 'image')
+      const fields = [
+        ...headers.map((el) => {
+          return el.value
+        }),
+      ];
+
+      const csvString = [
+        fields,
+        ...mapData.map((item) => [
+          ...fields.map(
+            (el) => {
+              return item[el]
+            }
+          ),
+        ]),
+      ]
+        .map((e) => e.join(","))
+        .join("\n");
+
+      const blob = new Blob([csvString], { type: "text/csv" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      const fileName = `users-data.csv`;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+    },
     async resetPassword(email){
       this.loading = true
       try {
@@ -726,6 +768,8 @@ export default {
         id: item.id,
         image: item.image ? item.image : null,
         email: item.email,
+        createdDate: item.date,
+        lastLogin: item.lastLogin,
         phoneCode: item.phoneCode,
         phoneNumber: item.phoneNumber,
         phoneText: item.phoneText,
