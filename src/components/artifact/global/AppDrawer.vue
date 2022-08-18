@@ -161,6 +161,11 @@ export default {
         font-family: $font-family!important;
         }
     }
+    .v-list-item{
+      &__icon {
+        color: #49556A!important;
+      }
+    }
     .list-text{
         font-family: $font-family!important;
         font-style: normal;
