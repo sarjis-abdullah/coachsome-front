@@ -121,17 +121,18 @@ export default {
                     line: false,
                     checker:false,
                     item: true
+                },
+                {
+                  key: "profile status",
+                  t_key: "edit_profile_status",
+                  text: "profile status",
+                  url: null,
+                  hasSubItem: false,
+                  line: false,
+                  checker:true,
+                  item: true
                 }
             ],
-        },
-        {
-            key: "profile_status",
-            t_key: "profile_status",
-            url: null,
-            hasSubItem: false,
-            line: false,
-            checker:true,
-            item: false
         },
         {
             key: "bookings",

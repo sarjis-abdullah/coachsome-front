@@ -37,28 +37,22 @@
                     <v-list-item-content>
                         <v-list-item-title class="list-sub-text">{{ $t(subItem.t_key) }}</v-list-item-title>
                     </v-list-item-content>
+                    <v-list-item-icon v-if="subItem.checker">
+                      <client-only>
+                        <toggle-button
+                          :value="isActive"
+                          @input="handleActivityStatus"
+                          :color="{ checked: '#5CC866', unchecked: '#EFEFEF' }"
+                          :sync="true"
+                          :font-size="12"
+                          :width="40"
+                          :height="21"
+                        />
+                      </client-only>
+                    </v-list-item-icon>
                 </v-list-item>
             </v-list-group>
-            <v-list-item v-else-if="!item.item && !item.hasSubItem && !item.line && item.checker" text :key="i">
-              <v-list-item-content>
-                <v-list-item-title>
-                  <v-list-item-title class="list-text">{{$t('edit_profile_status')}}</v-list-item-title>
-                </v-list-item-title>
-              </v-list-item-content>
-                <v-list-item-icon>
-                  <client-only>
-                    <toggle-button
-                      :value="isActive"
-                      @input="handleActivityStatus"
-                      :color="{ checked: '#5CC866', unchecked: '#EFEFEF' }"
-                      :sync="true"
-                      :font-size="12"
-                      :width="40"
-                      :height="21"
-                    />
-                  </client-only>
-                </v-list-item-icon>
-            </v-list-item>
+
             <div v-else class="py-5" :key="i">
                 <div class="line"></div>
             </div>
