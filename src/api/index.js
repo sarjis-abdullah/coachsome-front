@@ -1,3 +1,4 @@
+
 export { default as clientBackDrawerApi } from "./client/backDrawer";
 export { default as clientPendingBookingApi } from "./client/pendingBooking";
 export { default as clientBookingApi } from "./client/booking";
@@ -69,3 +70,6 @@ export { default as pageBuilderApi } from "./tikCms/pageBuilder";
 // Endpoint
 // This is the future api path feature
 export { default as endpoint } from "./endpoint";
+
+export { default as drawerItems } from "./drawerItems";
+

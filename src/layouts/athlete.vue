@@ -24,7 +24,7 @@ import TopNav from "@/components/layout/global/TopNav";
 import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import { pathData } from "@/data";
 import AppDrawer from '@/components/artifact/global/AppDrawer.vue';
-import { clientBackDrawerApi } from "@/api";
+import { drawerItems, clientBackDrawerApi } from "@/api";
 
 export default {
   middleware: ["auth-athlete"],
@@ -36,127 +36,7 @@ export default {
   },
   data() {
     return {
-      items: [
-        {
-            key: "home",
-            t_key: "pwa_home",
-            icon: require('@/assets/img/svg-icons/new/home.svg'),
-            text: "home",
-            url: pathData.athlete.home,
-            hasSubItem: false,
-            line: false,
-            checker:false,
-            item: true
-        },
-        {
-            key: "package",
-            t_key: "pwa_edit_profile",
-            icon: require('@/assets/img/svg-icons/new/edit.svg'),
-            text: "Packages",
-            url: null,
-            hasSubItem: true,
-            item: true,
-            line: false,
-            checker:false,
-            subItems: [
-                {
-                    key: "home",
-                    t_key: "profile_info",
-                    text: "home",
-                    url: pathData.athlete.editProfile,
-                    hasSubItem: false,
-                    line: false,
-                    checker:false,
-                    item: true
-                }
-            ],
-        },
-        {
-            key: "bookings",
-            t_key: "app_bar_dashboard_booking",
-            icon: require('@/assets/img/svg-icons/new/calendar-alt.svg'),
-            text: "bookings",
-            url: pathData.athlete.bookings,
-            hasSubItem: false,
-            line: false,
-            checker:false,
-            item: true
-        },
-        {
-            key: "wishlist",
-            t_key: "wishlist_page_title",
-            icon: require('@/assets/img/svg-icons/new/gift.svg'),
-            text: "wishlist",
-            url: pathData.athlete.wishList,
-            hasSubItem: false,
-            line: false,
-            checker:false,
-            item: true
-        },
-        {
-            key: "payment",
-            t_key: "pwa_payment_menu",
-            icon: require('@/assets/img/svg-icons/new/credit-card.svg'),
-            text: "payment",
-            url: pathData.athlete.payments,
-            hasSubItem: false,
-            line: false,
-            checker:false,
-            item: true
-        },
-        {
-            key: "line",
-            t_key: "line",
-            text: "line",
-            hasSubItem: false,
-            line: true,
-            checker:false,
-            item: false
-        },
-        {
-            key: "settings",
-            t_key: "dropdown_item_settings",
-            icon: require('@/assets/img/svg-icons/new/setting.svg'),
-            text: "settings",
-            url: null,
-            hasSubItem: true,
-            item: true,
-            line: false,
-            checker:false,
-            subItems: [
-                {
-                    key: "account",
-                    t_key: "setting_label_acc",
-                    text: "account",
-                    url: pathData.athlete.account,
-                    hasSubItem: false,
-                    line: false,
-                    checker:false,
-                    item: true
-                },
-                {
-                    key: "notifications",
-                    t_key: "setting_sec_notification_title",
-                    text: "notifications",
-                    url: pathData.athlete.notification,
-                    hasSubItem: false,
-                    line: false,
-                    checker:false,
-                    item: true
-                },
-                {
-                    key: "security",
-                    t_key: "athlete_settings_tab_security",
-                    text: "security",
-                    url: pathData.pages.security,
-                    hasSubItem: false,
-                    line: false,
-                    checker:false,
-                    item: true
-                },
-            ],
-        },
-      ],
+      items: drawerItems.athleteItems,
     };
   },
   computed:{

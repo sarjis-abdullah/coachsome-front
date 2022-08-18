@@ -83,7 +83,7 @@ export default {
   components: {},
     props: {
         drawerItems: {
-            type: Object,
+            type: Array,
             default: [],
         },
         isActive: {

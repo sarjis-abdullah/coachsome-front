@@ -2,7 +2,7 @@
   <v-app>
     <TopNav color="#15577C" v-if="$vuetify.breakpoint.mdAndUp" />
     <AppDrawer
-      v-if="$vuetify.breakpoint.mdAndUp" 
+      v-if="$vuetify.breakpoint.mdAndUp && !hideNav" 
       :drawerItems="items" 
       :isActive="statusActive" 
       @toggleActiveStatus="updateActiveStatus"
@@ -22,7 +22,7 @@ import TopNav from "@/components/layout/admin/TopNav";
 import BottomNavigation from "@/components/layout/global/BottomNavigation";
 import { pathData } from "@/data";
 import AppDrawer from '@/components/artifact/global/AppDrawer.vue';
-import { clientBackDrawerApi } from "@/api";
+import { drawerItems, clientBackDrawerApi } from "@/api";
 
 export default {
   name: "AdminLayout",
@@ -34,107 +34,7 @@ export default {
   },
   data() {
     return {
-      items: [
-        {
-          key: "dashboard",
-          t_key: "text_dashboard",
-          icon: require('@/assets/img/svg-icons/new/home.svg'),
-          text: "dashboard",
-          url: pathData.admin.dashboard,
-          hasSubItem: false,
-          line: false,
-          checker:false,
-          item: true
-        },
-        {
-          key: "user",
-          t_key: "pwa_user_list",
-          icon: require('@/assets/img/svg-icons/new/user-icon.svg'),
-          text: "user",
-          url: pathData.admin.userList,
-          hasSubItem: false,
-          line: false,
-          checker:false,
-          item: true
-        },
-        {
-          key: "orders",
-          t_key: "pwa_order_list",
-          icon: require('@/assets/img/svg-icons/new/basket-plus.svg'),
-          text: "orders",
-          url: pathData.admin.orderList,
-          hasSubItem: false,
-          line: false,
-          checker:false,
-          item: true
-        },
-        {
-          key: "sessions",
-          t_key: "app_bar_booking_sessions",
-          icon: require('@/assets/img/svg-icons/new/sessions.svg'),
-          text: "sessions",
-          url: pathData.admin.bookingSessions,
-          hasSubItem: false,
-          line: false,
-          checker:false,
-          item: true
-        },
-        {
-            key: "exercises",
-            t_key: "dropdown_item_exercises",
-            icon: require('@/assets/img/svg-icons/new/exercise.svg'),
-            text: "exercises",
-            url: pathData.pages.exercises,
-            hasSubItem: false,
-            line: false,
-            checker:false,
-            item: true
-        },
-        {
-          key: "promo codes",
-          t_key: "pwa_promo_codes",
-          icon: require('@/assets/img/svg-icons/new/special-discount.svg'),
-          text: "promo codes",
-          url: pathData.admin.promos,
-          hasSubItem: false,
-          line: false,
-          checker:false,
-          item: true
-        },
-        {
-          key: "payout",
-          t_key: "pwa_payout_request",
-          icon: require('@/assets/img/svg-icons/new/bank.svg'),
-          text: "payout",
-          url: pathData.admin.payoutRequest,
-          hasSubItem: false,
-          line: false,
-          checker:false,
-          item: true
-        },
-        {
-          key: "translation",
-          t_key: "dropdown_item_translation",
-          icon: require('@/assets/img/svg-icons/new/type-square.svg'),
-          text: "translation",
-          url: pathData.admin.translation,
-          hasSubItem: false,
-          line: false,
-          checker:false,
-          item: true
-        },
-        {
-          key: "logs",
-          t_key: "dropdown_item_logs",
-          icon: require('@/assets/img/svg-icons/new/books-pencil.svg'),
-          text: "logs",
-          url: pathData.admin.userLog,
-          hasSubItem: false,
-          line: false,
-          checker:false,
-          item: true
-        },
-      ],
+      items : drawerItems.adminItems
     };
   },
   computed: {
@@ -143,6 +43,13 @@ export default {
         return false
       }
       return true
+    },
+    hideNav(){
+      if(this.$route.path == pathData.admin.pageBuilder){
+        return true;
+      }else{
+        return false;
+      }
     },
     statusActive() {
       return this.$auth.user.is_active;
