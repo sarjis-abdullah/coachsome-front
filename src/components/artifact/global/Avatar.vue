@@ -132,7 +132,7 @@
         <v-list-item color="primary" link @click.stop="gotoWishlist">
           <v-list-item-content>
             <v-list-item-title>
-              {{ 'Wishlist' }}
+              {{$t("wishlist_page_title")}}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -597,7 +597,7 @@ export default {
   },
   methods: {
     gotoWishlist(){
-      this.$router.push("/athlete/wishlist")
+      this.$router.push(this.localePath(pathData.athlete.wishList));
     },
     async checkSwitchInfo(){
       if(this.$auth.user && this.$auth.user.id){

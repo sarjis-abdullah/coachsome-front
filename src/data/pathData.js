@@ -120,5 +120,6 @@ export default {
         notification: "/athlete/notification",
         home: "/athlete/home",
         inviteYourFriends: "/athlete/invite-your-friends",
+        wishList: "/athlete/wishlist"
     }
 };

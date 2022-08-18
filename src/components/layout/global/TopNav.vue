@@ -13,15 +13,18 @@
       <!-- Logo and Slogan-->
       <v-toolbar-title class="ml-0">
         <div v-if="isLight" class="d-flex justify-center align-center">
-          <NuxtLink :to="localePath('/')">
+          <!-- <NuxtLink :to="localePath('/')"> -->
+          <div @click.stop="handleLogoClick" class="logo--div">
             <img :src="require('@/assets/images/logo-dark.svg')" alt="logo" />
-          </NuxtLink>
+          </div>
+          <!-- </NuxtLink> -->
           <span class="slogan d-none d-md-flex d-lg-flex ml-2 mt-2">{{
             $t("front_slogan_text")
           }}</span>
         </div>
         <div v-if="isDark" class="d-flex justify-center align-center">
-          <NuxtLink :to="localePath('/')">
+          <!-- <NuxtLink :to="localePath('/')"> -->
+          <div @click.stop="handleLogoClick"  class="logo--div">
             <img
               class="d-none d-md-flex d-lg-flex"
               :src="require('@/assets/images/logo.svg')"
@@ -32,7 +35,8 @@
               :src="require('@/assets/images/logo-icon-light.svg')"
               alt="logo"
             />
-          </NuxtLink>
+          </div>
+          <!-- </NuxtLink> -->
         </div>
       </v-toolbar-title>
 
@@ -449,12 +453,35 @@ export default {
     goToLogin(){
       this.$store.dispatch("setUserType", "athlete");
       this.$store.dispatch("toggleDialog");
+    },
+    handleLogoClick(){
+      if (this.$auth.loggedIn) {
+        let authUser = this.$auth.user;
+        if(authUser.roles[0].name == "superadmin" || authUser.roles[0].name == "admin" || authUser.roles[0].name == "staff"){
+          this.$router.push(this.localePath(pathData.admin.dashboard));
+        }
+        else if(authUser.roles[0].name == "coach"){
+          this.$router.push(this.localePath(pathData.coach.home));
+        }else if(authUser.roles[0].name == "athlete"){
+          this.$router.push(this.localePath(pathData.athlete.home));
+        }
+        else{
+          this.$router.push(this.localePath(pathData.pages.home));
+        }
+      }else{
+        this.$router.push(this.localePath(pathData.pages.home));
+      }
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.logo{
+  &--div{
+    cursor: pointer;
+  }
+}
 // .top-nav {
   // .slogan {
   //   font-family: $font-family;

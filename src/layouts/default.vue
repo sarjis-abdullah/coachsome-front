@@ -8,13 +8,13 @@
     <div v-else>
       <TopNav color="#15577C" v-if="$vuetify.breakpoint.mdAndUp && !isAdmin" />
       <admin-top-nav color="#15577C" v-if="$vuetify.breakpoint.mdAndUp &&  isAdmin"></admin-top-nav>
-      <AppDrawer
+      <!-- <AppDrawer
         v-if="$vuetify.breakpoint.mdAndUp && isLoggedIn" 
         :drawerItems="commonDrawerItems" 
         :isActive="statusActive" 
         @toggleActiveStatus="updateActiveStatus"
         @logOut="handleLogOut"
-      />
+      /> -->
       <v-main>
         <client-only>
           <GlobalHeader />
@@ -388,56 +388,6 @@ export default {
                     line: false,
                     checker:false,
                     item: true
-                },
-                {
-                    key: "packages",
-                    t_key: "pwa_package_menu",
-                    text: "packages",
-                    url: null,
-                    hasSubItem: false,
-                    line: false,
-                    checker:false,
-                    item: true
-                },
-                {
-                    key: "gallery",
-                    t_key: "pwa_gallery_menu",
-                    text: "gallery",
-                    url: null,
-                    hasSubItem: false,
-                    line: false,
-                    checker:false,
-                    item: true
-                },
-                {
-                    key: "geography",
-                    t_key: "pwa_geography_menu",
-                    text: "geography",
-                    url: null,
-                    hasSubItem: false,
-                    line: false,
-                    checker:false,
-                    item: true
-                },
-                {
-                    key: "calendar",
-                    t_key: "dashboard_sidebar_availability_btn_label",
-                    text: "calendar",
-                    url: null,
-                    hasSubItem: false,
-                    line: false,
-                    checker:false,
-                    item: true
-                },
-                {
-                    key: "reviews",
-                    t_key: "pwa_reviews_menu",
-                    text: "reviews",
-                    url: null,
-                    hasSubItem: false,
-                    line: false,
-                    checker:false,
-                    item: true
                 }
             ],
         },
@@ -456,6 +406,28 @@ export default {
             icon: require('@/assets/img/svg-icons/new/calendar-alt.svg'),
             text: "bookings",
             url: pathData.athlete.bookings,
+            hasSubItem: false,
+            line: false,
+            checker:false,
+            item: true
+        },
+        {
+            key: "wishlist",
+            t_key: "wishlist_page_title",
+            icon: require('@/assets/img/svg-icons/new/gift.svg'),
+            text: "wishlist",
+            url: pathData.athlete.wishList,
+            hasSubItem: false,
+            line: false,
+            checker:false,
+            item: true
+        },
+        {
+            key: "payment",
+            t_key: "pwa_payment_menu",
+            icon: require('@/assets/img/svg-icons/new/credit-card.svg'),
+            text: "payment",
+            url: pathData.athlete.payments,
             hasSubItem: false,
             line: false,
             checker:false,
