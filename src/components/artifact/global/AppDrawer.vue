@@ -25,6 +25,7 @@
       app
       color="#F7FAFC"
       fixed
+      :width="280"
     >
       <client-only>
         <v-list class="pt-7" >  <!-- add 'flat' to remove the gray selection -->
