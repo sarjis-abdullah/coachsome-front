@@ -153,7 +153,7 @@ import TiptopEditor from "@/components/editor/TiptopEditor";
 
 
 export default {
-    layout: "common",
+    layout: "common-without-drawer",
     head() {
         return {
         title: this.$i18n.t("qualification_banner_text"),

@@ -159,7 +159,7 @@ import MobileTopNav from '@/components/layout/global/MobileTopNav'
 
 
 export default {
-    layout: "common",
+    layout: "common-without-drawer",
     head() {
         return {
         title: this.$i18n.t("language_banner"),

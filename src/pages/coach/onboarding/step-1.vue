@@ -275,7 +275,7 @@ import EditImageDialog from "@/components/profile/EditImageDialog";
 
 
 export default {
-    layout: "common",
+    layout: "common-without-drawer",
     head() {
         return {
         title: this.$i18n.t("basic_info_text"),

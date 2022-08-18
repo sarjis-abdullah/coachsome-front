@@ -38,8 +38,6 @@
                         <v-list-item-title class="list-sub-text">{{ $t(subItem.t_key) }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                
-
             </v-list-group>
             <v-list-item v-else-if="!item.item && !item.hasSubItem && !item.line && item.checker" text :key="i">
               <v-list-item-content>

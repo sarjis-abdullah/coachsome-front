@@ -182,9 +182,9 @@
   </div>
 </template>
 <script>
-import { coachGeographyApi, coachPackageApi } from "@/api";
+import { coachPackageApi } from "@/api";
 import { required, decimal } from "vuelidate/lib/validators";
-import { constantData, pathData } from "@/data";
+import { pathData } from "@/data";
 import { currencyService } from "@/services";
 import MobileTopNav from '@/components/layout/global/MobileTopNav';
 import PackageCreateDialog from "@/components/artifact/coach/package/PackageCreateDialog";
@@ -192,7 +192,7 @@ import OnBoardingPackageCard from "@/components/card/OnBoardingPackageCard";
 
 
 export default {
-    layout: "common",
+    layout: "common-without-drawer",
     head() {
         return {
             title: this.$i18n.t("package_banner"),
