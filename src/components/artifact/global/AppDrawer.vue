@@ -1,5 +1,24 @@
 <template>
   <div class="global-drawer">
+    <!-- Dialog -->
+    <v-dialog v-model="dialog" max-width="500" @click:outside="handlCloseDialog">
+      <v-card>
+        <v-card-title class="headline">{{
+          $t("attention_headline_text")
+        }}</v-card-title>
+        <v-card-text v-html="$t('attention_content_list')"></v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="primary-light-1"
+            text
+            @click="handlCloseDialog"
+            >{{$t('btn_label_ok')}}</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-navigation-drawer
       v-model="drawer"
       :clipped="$vuetify.breakpoint.mdAndUp"
@@ -90,6 +109,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        dialog: {
+            type: Boolean,
+            default: false,
+        },
         
   },
   data: () => ({
@@ -108,10 +131,13 @@ export default {
     },
     handleActivityStatus() {
         // this.isActive
-       this.$emit("toggleActiveStatus", !this.isActive)
+       this.$emit("toggleActiveStatus", !this.isActive);
     },
     logOut(){
-        this.$emit("logOut")
+        this.$emit("logOut");
+    },
+    handlCloseDialog(){
+       this.$emit("closeStatusDialog");
     }
   }
 };

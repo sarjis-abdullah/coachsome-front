@@ -181,7 +181,7 @@
                     color="primary-light-1"
                     text
                     @click="activityStatus.dialog = false"
-                    >Ok</v-btn
+                    >{{$t('btn_label_ok')}}</v-btn
                   >
                 </v-card-actions>
               </v-card>

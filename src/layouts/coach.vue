@@ -4,7 +4,9 @@
     <AppDrawer
       v-if="$vuetify.breakpoint.mdAndUp" 
       :drawerItems="items" 
-      :isActive="statusActive" 
+      :isActive="statusActive"
+      :dialog="activityStatusDialog"
+      @closeStatusDialog="handleCloseStatusDialog"
       @toggleActiveStatus="updateActiveStatus"
       @logOut="handleLogOut"
     />
@@ -39,6 +41,7 @@ export default {
   },
   data() {
     return {
+      activityStatusDialog: false,
       items: drawerItems.coachItems,
     };
   },
@@ -81,12 +84,12 @@ export default {
       clientBackDrawerApi(this.$axios)
         .changeActiveStatus()
         .then(({ data }) => {
-          this.statusActive = data.isActive;
-          this.$store.dispatch("changeActiveStatus", data.isActive);
+          this.refreshPageProgress();
         })
         .catch(error => {
           if (error.response.data.status == "error") {
             this.$toast.error(error.response.data.message);
+            this.activityStatusDialog = true;
           }
         });
     },
@@ -97,7 +100,13 @@ export default {
         if (!this.$auth.loggedIn) {
           this.$router.push(this.localePath(pathData.pages.home));
         }
-    }
+    },
+    handleCloseStatusDialog(){
+      this.activityStatusDialog = false;
+    },
+    refreshPageProgress() {
+      this.$store.dispatch("pageProgress/refresh");
+    },
   }
 };
 </script>

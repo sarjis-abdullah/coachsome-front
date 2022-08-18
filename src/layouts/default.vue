@@ -135,6 +135,8 @@ export default {
         .catch(error => {
           if (error.response.data.status == "error") {
             this.$toast.error(error.response.data.message);
+            this.statusActive = false;
+            this.activityStatusDialog = true;
           }
         });
     },

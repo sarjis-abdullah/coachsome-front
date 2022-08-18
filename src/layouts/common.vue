@@ -4,7 +4,9 @@
     <AppDrawer
       v-if="$vuetify.breakpoint.mdAndUp" 
       :drawerItems="commonDrawerItems" 
-      :isActive="statusActive" 
+      :isActive="statusActive"
+      :dialog="activityStatusDialog"
+      @closeStatusDialog="handleCloseStatusDialog"
       @toggleActiveStatus="updateActiveStatus"
       @logOut="handleLogOut"
     />
@@ -36,6 +38,7 @@ export default {
   },
   data() {
     return {
+      activityStatusDialog: false,
       coachItems: drawerItems.coachItems,
       adminItems: drawerItems.adminItems,
       athleteItems: drawerItems.athleteItems,
@@ -104,6 +107,8 @@ export default {
         .catch(error => {
           if (error.response.data.status == "error") {
             this.$toast.error(error.response.data.message);
+            this.statusActive = false;
+            this.activityStatusDialog = true;
           }
         });
     },
@@ -114,6 +119,9 @@ export default {
         if (!this.$auth.loggedIn) {
           this.$router.push(this.localePath(pathData.pages.home));
         }
+    },
+    handleCloseStatusDialog(){
+      this.activityStatusDialog = false;
     }
   }
 };
