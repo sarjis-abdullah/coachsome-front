@@ -115,30 +115,6 @@
         </v-list-item>
       </span>
 
-      <!-- Payments -->
-      <span v-if="hasRole(['athlete'])">
-        <v-list-item color="primary" link @click.stop="handlePayments">
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ $t(items.payments.t_key) }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </span>
-      <v-divider v-if="hasRole(['athlete'])"></v-divider>
-
-      <!-- Wishlist -->
-      <span v-if="hasRole(['athlete'])">
-        <v-list-item color="primary" link @click.stop="gotoWishlist">
-          <v-list-item-content>
-            <v-list-item-title>
-              {{$t("wishlist_page_title")}}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </span>
-      <v-divider v-if="hasRole(['athlete'])"></v-divider>
-
       <!-- Langugae -->
       <v-list-group v-model="languageGroup" link>
         <template v-slot:activator>
@@ -209,7 +185,7 @@
       <v-divider v-if="isAthlete || isCoach"></v-divider>
 
       <!-- Admin -->
-      <span v-if="isAdmin && !$vuetify.breakpoint.lgAndUp">
+      <span v-if="isAdmin && !$vuetify.breakpoint.mdAndUp">
         <v-list-group v-model="adminGroup" link>
           <template v-slot:activator>
             <v-list-item-content>
@@ -230,8 +206,6 @@
 
       <!-- Becoma a Coach -->
 
-      <v-divider v-if="!is_profile_switched_ever && !isAdmin && !isCoach" ></v-divider>
-
       <v-list-item v-if="!is_profile_switched_ever && !isAdmin && !isCoach" color="primary" link @click.stop="handleBecomeCoach">
         <v-list-item-content>
           <v-list-item-title>
@@ -239,6 +213,8 @@
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+      
+      <v-divider v-if="!is_profile_switched_ever && !isAdmin && !isCoach" ></v-divider>
 
       <!-- Switch Profile to Coach -->
 

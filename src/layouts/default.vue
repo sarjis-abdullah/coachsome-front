@@ -392,15 +392,6 @@ export default {
             ],
         },
         {
-            key: "profile_status",
-            t_key: "profile_status",
-            url: null,
-            hasSubItem: false,
-            line: false,
-            checker:true,
-            item: false
-        },
-        {
             key: "bookings",
             t_key: "app_bar_dashboard_booking",
             icon: require('@/assets/img/svg-icons/new/calendar-alt.svg'),
@@ -408,7 +399,7 @@ export default {
             url: pathData.athlete.bookings,
             hasSubItem: false,
             line: false,
-            checker:false,
+            checker:false, 
             item: true
         },
         {
