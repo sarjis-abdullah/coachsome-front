@@ -51,7 +51,7 @@
                     </v-list-item-content>
                 </template>
 
-                 <v-list-item v-for="subItem in item.subItems" :key="subItem.url" :to="localePath(subItem.url)" link>
+                 <v-list-item v-for="subItem in item.subItems" :key="subItem.url" :to="localePath(subItem.url)" :link="!subItem.checker">
                     <v-list-item-icon></v-list-item-icon>
                     <v-list-item-content>
                         <v-list-item-title class="list-sub-text">{{ $t(subItem.t_key) }}</v-list-item-title>
