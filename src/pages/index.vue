@@ -1491,7 +1491,7 @@ export default {
     object-fit: cover;
     padding-left: 50px;
     &__title {
-      font-family: Roboto;
+      font-family: $font-family!important;
       font-style: normal;
       font-weight: 900;
       font-size: 48px;
@@ -1500,7 +1500,7 @@ export default {
     }
     &__btn {
       button {
-        font-family: Roboto;
+        font-family: $font-family!important;
         font-style: normal;
         font-weight: 900;
         font-size: 2em;
