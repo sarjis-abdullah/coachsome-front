@@ -1,6 +1,6 @@
 <template>
   <div class="coach-availability-page">
-    <v-container >
+    <v-container fluid>
       <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('avaiiability_page_title')">
         <template v-slot:goBack>
           <v-btn
@@ -14,15 +14,16 @@
           <span></span>
         </template>
       </mobile-top-nav>
-        <div class="d-none d-md-block container-page">
-          <v-row>
+      <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('avaiiability_page_title')"></desktop-top-nav>
+        <div class="d-none d-md-block container-page mt-5">
+          <!-- <v-row>
             <v-col cols="12" class="pb-0">
               <div class="page-title">{{ $t("avaiiability_page_title") }}</div>
             </v-col>
             <v-col cols="12">
               <div class="line"></div>
             </v-col>
-          </v-row>
+          </v-row> -->
           <v-row>
             <v-col cols="12" md="3">
               <div class="section-title pb-2">{{ $t("text_times") }}</div>
@@ -503,13 +504,15 @@ import { coachAvailabilityApi } from "@/api";
 import { pathData } from "@/data";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import DragSelect from "dragselect";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "coach",
   components: {
     ClientBackFooter,
-    MobileTopNav
+    MobileTopNav,
+    DesktopTopNav
   },
   data() {
     return {

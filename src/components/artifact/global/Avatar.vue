@@ -74,7 +74,7 @@
         </v-list-item>
 
         <!-- Coach Booking -->
-        <span v-if="isLoggedIn && isCoach">
+        <!-- <span v-if="isLoggedIn && isCoach">
           <v-list-item
             color="primary"
             link
@@ -86,10 +86,10 @@
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        </span>
+        </span> -->
 
         <!-- Athlete Booking -->
-        <span v-if="isLoggedIn && isAthlete">
+        <!-- <span v-if="isLoggedIn && isAthlete">
           <v-list-item
             color="primary"
             link
@@ -101,7 +101,7 @@
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        </span>
+        </span> -->
       </span>
 
       <!-- Dashboard -->

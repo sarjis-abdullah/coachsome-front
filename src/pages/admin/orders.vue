@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
+  <v-container fluid>
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_order_list')">
       <template v-slot:goBack>
         <v-btn
@@ -14,17 +14,8 @@
       </template>
     </mobile-top-nav>
 
-    <v-row class="d-none d-md-block">
-      <v-col cols="12" class="pb-0">
-        <div class="page-title">{{$t('pwa_order_list')}}</div>
-      </v-col>
-    </v-row>
+    <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_order_list')"></desktop-top-nav>
 
-    <v-row class="d-none d-md-block">
-      <v-col cols="12">
-        <div class="line"></div>
-      </v-col>
-    </v-row>
     <v-dialog content-class="session-dialog" v-model="sessionDialog" max-width="600" @click:outside="closeSessionDialog">
           <div class="pa-5">
             <v-card
@@ -55,7 +46,7 @@
             </v-card>
           </div>
     </v-dialog>
-    <v-row>
+    <v-row :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
       <v-col cols="12">
         <div>
           <v-card>
@@ -286,11 +277,12 @@ import { adminOrderListApi, adminUserApi, adminImpersonateApi } from "@/api";
 import { currencyService, imageService } from "@/services";
 import "vue-phone-number-input/dist/vue-phone-number-input.css";
 import { pathData } from "@/data";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "admin",
-  components: {MobileTopNav},
+  components: {MobileTopNav, DesktopTopNav},
   data() {
     return {
       sessionDialog: false,

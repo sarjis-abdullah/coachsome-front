@@ -285,7 +285,7 @@ export default {
     &__title {
       display: flex;
       justify-content: center;
-      font-family: Roboto;
+      font-family: $font-family!important;
       font-style: normal;
       font-weight: bold;
       font-size: 18px;
@@ -299,7 +299,7 @@ export default {
     &__sub-title {
       display: flex;
       justify-content: center;
-      font-family: Roboto;
+      font-family: $font-family!important;
       font-style: normal;
       font-weight: 500;
       font-size: 14px;

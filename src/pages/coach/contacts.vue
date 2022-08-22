@@ -1,5 +1,6 @@
 <template>
-  <v-container fluid style="background: #F7FAFC;">
+<div class="coach-contact-page">
+  <v-container fluid>
     <!-- Mobile Nav -->
     <template v-if="$route && $route.query && !$route.query.contactForm">
       <span class="hidden-md-and-up">
@@ -23,8 +24,9 @@
       </mobile-top-nav>
       </span>
     </template>
+     <desktop-top-nav extraClass="body-bg-secondary pt-5" :headerText="$t('app_bar_coach_contacts_page')" ></desktop-top-nav>
     <!-- Desktop Nav -->
-    <template>
+    <!-- <template>
       <span
         class="hidden-md-and-down view-profile__wrapper"
         :class="{ 'page-container': !$vuetify.breakpoint.xsOnly }"
@@ -42,13 +44,15 @@
           </v-col>
         </v-row>
       </span>
-    </template>
+    </template> -->
     <CoachContacts />
   </v-container>
+</div>
 </template>
 
 <script>
 import MobileTopNav from "@/components/layout/global/MobileTopNav";
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 import CoachContacts from "@/components/contacts/CoachContacts";
 import { pathData } from "@/data";
 export default {
@@ -60,7 +64,8 @@ export default {
   },
   components: {
     MobileTopNav,
-    CoachContacts
+    CoachContacts,
+    DesktopTopNav
   },
   methods: {
     handleBack() {
@@ -74,9 +79,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page-title {
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 34px;
+.coach-edit-profile-page {
+  background: $body-bg;
+  height: 100%;
+  .page-title {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 34px;
+  }
 }
 </style>

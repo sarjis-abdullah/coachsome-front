@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pt-0 mt-0" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
+  <v-container fluid >
 
     <!-- Mobile Header Start -->
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('wishlist_page_title')">
@@ -12,19 +12,11 @@
         </v-btn>
       </template>
     </mobile-top-nav>
-    
-    <!-- Desktop Header Start -->
-    <v-row class="d-none d-md-block">
-      <v-col cols="12" class="pb-0">
-        <div class="page-title">{{ $t('wishlist_page_title') }}</div>
-      </v-col>
-      <v-col cols="12">
-        <div class="line"></div>
-      </v-col>
-    </v-row>
-    <v-row class="pt-md-0 pt-4" v-if="!progress && coaches && coaches.length">
-      <v-col 
-        cols="12" sm="6" md="3" v-for="(item, i) in coaches" 
+
+    <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('wishlist_page_title')"></desktop-top-nav>
+
+    <v-row class="pt-md-0 pt-4" v-if="!progress && coaches && coaches.length" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
+      <v-col cols="12" sm="6" md="3" v-for="(item, i) in coaches" 
         :key="i">
         <explore-card v-bind="item.coach"></explore-card>
       </v-col>
@@ -37,35 +29,41 @@
         v-if="progress"
       ></v-progress-circular>
       </div>
-      <article v-if="!progress && coaches && !coaches.length" cols="12" sm="12" class="centered">
-        <header>
-          <h3 class="wishlist--title">
-            {{$t('wishlist_title')}}
-          </h3>
-        </header>
-        <div class="wishlist--text">
-          {{$t('wishlist_description')}} 
-        </div>
-        <div class="text-center mt-5">
-          <v-btn @click="gotoFindCoaches" class="white--text" depressed color="#15577C">
-            {{$t("wishlist_explore_coaches_btn")}}
-          </v-btn>
-        </div>
-      </article>
+      <v-row v-if="!progress && coaches && !coaches.length" >
+        <v-col cols="12" >
+        <article>
+          <header>
+            <h3 class="wishlist--title">
+              {{$t('wishlist_title')}}
+            </h3>
+          </header>
+          <div class="wishlist--text">
+            {{$t('wishlist_description')}} 
+          </div>
+          <div class="text-center mt-5">
+            <v-btn @click="gotoFindCoaches" class="white--text" depressed color="#15577C">
+              {{$t("wishlist_explore_coaches_btn")}}
+            </v-btn>
+          </div>
+        </article>
+        </v-col>
+      </v-row>
     </div>
   </v-container>
 </template>
 
 <script>
 import { pathData } from "@/data";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 import ExploreCard from "@/components/card/ExploreCard";
 
 export default {
   layout: "athlete",
   components: {
     MobileTopNav,
-    ExploreCard
+    ExploreCard,
+    DesktopTopNav
   },
   data() {
     return {

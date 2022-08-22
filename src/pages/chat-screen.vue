@@ -109,11 +109,11 @@
             @click="handleCalenderClick"
           >
             <v-icon
-              color="primary-light-1"
+              color="primary-light-3"
               :style="{ marginRight: '5px', padding: 0 }"
               >mdi-calendar-plus</v-icon
             >
-            <div class="action-item__title primary-light-1--text">
+            <div class="action-item__title primary-light-3--text">
               {{ $t("chat_title_booing_req") }}
             </div>
           </div>
@@ -183,7 +183,7 @@
                             >
                               <template v-slot:activator="{ on, attrs }">
                                 <v-btn
-                                  color="primary-light-1"
+                                  color="primary-light-3"
                                   icon
                                   v-bind="attrs"
                                   v-on="on"
@@ -194,14 +194,14 @@
                               <v-list dense>
                                 <v-list-item link @click="handleUnreadBtnClick">
                                   <v-list-item-avatar>
-                                    <v-icon color="primary-light-1"
+                                    <v-icon color="primary-light-3"
                                       >mdi-check</v-icon
                                     >
                                   </v-list-item-avatar>
 
                                   <v-list-item-content>
                                     <v-list-item-title
-                                      class="primary-light-1--text"
+                                      class="primary-light-3--text"
                                       >Mark as unread</v-list-item-title
                                     >
                                   </v-list-item-content>
@@ -211,14 +211,14 @@
                                   @click="handleArchiveBtnClick"
                                 >
                                   <v-list-item-avatar>
-                                    <v-icon color="primary-light-1"
+                                    <v-icon color="primary-light-3"
                                       >mdi-archive</v-icon
                                     >
                                   </v-list-item-avatar>
 
                                   <v-list-item-content>
                                     <v-list-item-title
-                                      class="primary-light-1--text"
+                                      class="primary-light-3--text"
                                       >Archive Chat</v-list-item-title
                                     >
                                   </v-list-item-content>
@@ -233,7 +233,7 @@
                                   v-on="on"
                                   @click="handleUnarchiveBtnClick"
                                 >
-                                  <v-icon color="primary-light-1" small>
+                                  <v-icon color="primary-light-3" small>
                                     mdi-archive
                                   </v-icon>
                                 </v-btn>
@@ -244,7 +244,7 @@
                           <v-btn
                             @click="handleMobileHideActionBtnClick"
                             icon
-                            color="primary-light-1"
+                            color="primary-light-3"
                             class="text-normal d-md-none"
                           >
                              <v-icon>mdi-filter-variant</v-icon>
@@ -254,7 +254,7 @@
                             outlined
                             small
                             rounded
-                            color="primary-light-1"
+                            color="primary-light-3"
                             class="text-normal d-none d-md-block"
                           >
                             {{
@@ -329,7 +329,7 @@
                                     v-bind="attrs"
                                     v-on="on"
                                     small
-                                    color="primary-light-1"
+                                    color="primary-light-3"
                                     icon
                                   >
                                     <v-icon>
@@ -385,7 +385,7 @@
                           >
                             <template v-slot:activator="{ on, attrs }">
                               <v-btn
-                                color="primary-light-1"
+                                color="primary-light-3"
                                 icon
                                 v-bind="attrs"
                                 v-on="on"
@@ -399,14 +399,14 @@
                                 @click="inviteGroupDialog.value = true"
                               >
                                 <v-list-item-avatar>
-                                  <v-icon color="primary-light-1"
+                                  <v-icon color="primary-light-3"
                                     >mdi-account-plus</v-icon
                                   >
                                 </v-list-item-avatar>
 
                                 <v-list-item-content>
                                   <v-list-item-title
-                                    class="primary-light-1--text"
+                                    class="primary-light-3--text"
                                     >Add People</v-list-item-title
                                   >
                                 </v-list-item-content>
@@ -416,7 +416,7 @@
                           <v-btn
                             @click="handleMobileHideActionBtnClick"
                             icon
-                            color="primary-light-1"
+                            color="primary-light-3"
                             class="text-normal d-md-none"
                           >
                              <v-icon>mdi-filter-variant</v-icon>
@@ -426,7 +426,7 @@
                             outlined
                             small
                             rounded
-                            color="primary-light-1"
+                            color="primary-light-3"
                             class="text-normal d-none d-md-block"
                           >
                             {{
@@ -471,7 +471,7 @@
                               v-on="on">
                               <img
                                 :src="
-                                  require(`@/assets/images/icons/attachment.svg`)
+                                  require(`@/assets/img/svg-icons/new/attach.svg`)
                                 "
                                 alt="attachment-icon"
                               />
@@ -486,7 +486,7 @@
                                         fab
                                         text
                                         small
-                                        color="#49556A"
+                                        color="primary-light-3"
                                         @click="handleAttachmentUploadBtn()"
                                       >
                                         <v-icon dark>
@@ -497,7 +497,7 @@
                                         fab
                                         text
                                         small
-                                        color="#49556A"
+                                        color="primary-light-3"
                                         @click="uploadVideo"
                                       >
                                         <v-icon dark>
@@ -508,7 +508,7 @@
                                         fab
                                         text
                                         small
-                                        color="#49556A"
+                                        color="primary-light-3"
                                         @click="uploadFile"
                                       >
                                         <v-icon dark>
@@ -543,7 +543,7 @@
                             <img
                               class="mt-1"
                               :src="
-                                require(`@/assets/images/icons/settings.svg`)
+                                require(`@/assets/img/svg-icons/new/settings.svg`)
                               "
                               alt="setting-icon"
                             />
@@ -565,7 +565,7 @@
                           <v-btn icon v-bind="attrs" v-on="on" x-small>
                             <img
                               class="mt-1"
-                              :src="require(`@/assets/images/icons/emoji.svg`)"
+                              :src="require(`@/assets/img/svg-icons/new/Emoji.svg`)"
                               alt="emoji-icon"
                             />
                           </v-btn>
@@ -579,7 +579,7 @@
                       <div>
                         <v-btn icon @click="handleMessageInput" small>
                           <img
-                            :src="require(`@/assets/images/icons/send.svg`)"
+                            :src="require(`@/assets/img/svg-icons/new/send.svg`)"
                             alt="send-icon"
                           />
                         </v-btn>
@@ -1488,7 +1488,7 @@ export default {
     line-height: 25px;
     text-align: center;
     margin-top: 8px;
-    color: #15577C;
+    color: $grey-700;
 
   }
   .contact__title{
@@ -1536,7 +1536,7 @@ $header-height: 60px;
   }
 
   .v-textarea .v-input__control {
-    border: 2px solid #15577c !important;
+    border: 2px solid $grey-700 !important;
   }
 
   .group-avatar {
@@ -1630,7 +1630,7 @@ $header-height: 60px;
           line-height: 25px;
           text-align: center;
           text-transform: capitalize;
-          color: $primary-light-1;
+          color: $primary-light-3;
           padding-top: 5px;
           padding-bottom: 5px;
         }
@@ -1640,7 +1640,7 @@ $header-height: 60px;
           line-height: 19px;
           text-align: center;
           text-transform: capitalize;
-          color: $primary-light-1;
+          color: $primary-light-3;
         }
       }
     }

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
+  <v-container fluid >
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_user_list')">
       <template v-slot:goBack>
         <v-btn
@@ -20,21 +20,9 @@
         </v-btn>
       </template>
     </mobile-top-nav>
+    <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_user_list')"></desktop-top-nav>
 
-
-    <v-row class="d-none d-md-block">
-      <v-col cols="12" class="pb-0">
-        <div class="page-title">{{$t('pwa_user_list')}}</div>
-      </v-col>
-    </v-row>
-
-    <v-row class="d-none d-md-block">
-      <v-col cols="12">
-        <div class="line"></div>
-      </v-col>
-    </v-row>
-
-    <v-row>
+    <v-row :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
       <v-col cols="12">
         <div>
           <v-card>
@@ -498,9 +486,10 @@ import { imageService } from "@/services";
 import { adminUserApi, adminImpersonateApi } from "@/api";
 import { pathData } from "@/data";
 import VuePhoneNumberInput from "vue-phone-number-input";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
-import AddButton from '@/components/layout/global/AddButton'
-import FormHeader from '@/components/layout/global/FormHeader'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import AddButton from '@/components/layout/global/AddButton';
+import FormHeader from '@/components/layout/global/FormHeader';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "admin",
@@ -508,7 +497,8 @@ export default {
     VuePhoneNumberInput,
     MobileTopNav,
     AddButton,
-    FormHeader
+    FormHeader,
+    DesktopTopNav
   },
   data() {
     return {

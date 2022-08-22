@@ -14,15 +14,16 @@
           <span></span>
         </template>
       </mobile-top-nav>
+      <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('page_title_image_and_video')"></desktop-top-nav>
       <span class="page-container gallery-page">
-      <v-row class="d-none d-md-block">
+      <!-- <v-row class="d-none d-md-block">
         <v-col cols="12" class="pb-0" >
           <div class="page-title">{{ $t("page_title_image_and_video") }}</div>
         </v-col>
         <v-col cols="12">
           <div class="line"></div>
         </v-col>
-      </v-row>
+      </v-row> -->
       <v-row :class="{'pt-5' : $vuetify.breakpoint.mdAndUp}">
         <v-col cols="12" md="4">
           <div class="default--label pb-2">{{ $t("text_video") }}</div>
@@ -201,7 +202,8 @@ import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import DarkboxGallery from "@/components/darkbox/Gallery";
 import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 
 export default {
@@ -210,7 +212,8 @@ export default {
     ClientBackFooter,
     DarkboxGallery,
     Cropper,
-    MobileTopNav
+    MobileTopNav,
+    DesktopTopNav
   },
   data() {
     return {

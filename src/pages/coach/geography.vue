@@ -14,17 +14,18 @@
           <span></span>
         </template>
       </mobile-top-nav>
+      <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('geography_page_title')"></desktop-top-nav>
     <span class="page-container" >
-      <v-row class="d-none d-md-block">
+      <!-- <v-row class="d-none d-md-block">
         <v-col cols="12" class="pb-0">
           <div class="page-title">{{ $t("geography_page_title") }}</div>
         </v-col>
         <v-col cols="12">
           <div class="line"></div>
         </v-col>
-      </v-row>
+      </v-row> -->
 
-      <v-row>
+      <v-row class="mt-5">
         <v-col cols="12" md="4">
           <div class="default--label pb-2">
             {{ $t("geography_section_title_location") }}
@@ -197,14 +198,16 @@ import { coachGeographyApi, countryApi } from "@/api";
 import { pathData } from "@/data";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import GooglePlaceSearch from "@/components/geography/GooglePlaceSearch";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "coach",
   components: {
     ClientBackFooter,
     GooglePlaceSearch,
-    MobileTopNav
+    MobileTopNav,
+    DesktopTopNav
   },
   data() {
     return {

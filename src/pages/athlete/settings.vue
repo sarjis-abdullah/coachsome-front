@@ -1,6 +1,6 @@
 <template>
   <div class="setting-page--athlete">
-    <v-container>
+    <v-container fluid>
       <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('setting_page_title')">
         <template v-slot:goBack>
           <v-btn
@@ -14,13 +14,14 @@
           <span></span>
         </template>
       </mobile-top-nav>
-      <v-row>
-        <v-col offset-md="2">
-          <v-row class="d-none d-md-block">
+      <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('setting_page_title')"></desktop-top-nav>
+      <v-row  class="d-flext justify-center">
+        <v-col cols="11">
+          <!-- <v-row class="d-none d-md-block">
             <v-col cols="12" class="pb-0">
               <div class="page-title">{{ $t("setting_page_title") }}</div>
             </v-col>
-          </v-row>
+          </v-row> -->
           <v-row class="d-md-none">
             <v-col cols="12" class="py-0">
               <v-list class="body-bg pt-0">
@@ -519,13 +520,15 @@
 import { endpoint, coachSettingApi, coachTimezoneApi } from "@/api";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import { pathData } from "@/data";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "athlete",
   components: {
     ClientBackFooter,
-    MobileTopNav
+    MobileTopNav,
+    DesktopTopNav
   },
   data() {
     return {

@@ -8,7 +8,7 @@
         <span></span>
       </template>
     </mobile-top-nav>
-
+    <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('text_dashboard')"></desktop-top-nav>
     <span class="page-container admin-dashboard">
       <v-row :class="{'pt-5' : $vuetify.breakpoint.xsOnly}">
         <v-col cols="12">
@@ -122,14 +122,16 @@ import { currencyService } from "@/services";
 import moment from "moment";
 import DialogLoading from "@/components/loading/DialogLoading";
 import { adminDashboardApi } from "@/api";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout:"admin",
   components: {
     LineChart,
     DialogLoading,
-    MobileTopNav
+    MobileTopNav,
+    DesktopTopNav
   },
     head() {
     return {

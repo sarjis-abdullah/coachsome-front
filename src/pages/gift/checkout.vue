@@ -772,7 +772,7 @@ export default {
     }
   }
   .or-text {
-    font-family: Roboto;
+    font-family: $font-family!important;
     font-style: normal;
     font-weight: normal;
     font-size: 12px;

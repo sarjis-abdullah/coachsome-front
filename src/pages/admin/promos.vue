@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
+  <v-container fluid>
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_promo_codes')">
       <template v-slot:goBack>
         <v-btn
@@ -21,19 +21,9 @@
       </template>
     </mobile-top-nav>
 
+    <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_promo_codes')"></desktop-top-nav>
 
-
-    <v-row class="d-none d-md-block">
-      <v-col cols="12" class="pb-0 d-flex justify-space-between align-center">
-        <div class="page-title">{{$t('pwa_promo_codes')}}</div>
-      </v-col>
-    </v-row>
-    <v-row class="d-none d-md-block">
-      <v-col cols="12">
-        <div class="line"></div>
-      </v-col>
-    </v-row>
-    <v-row>
+    <v-row :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
       <v-col cols="12">
         <v-card>
 
@@ -128,13 +118,13 @@ import { adminPromoCodeApi } from "@/api";
 import { currencyService } from "@/services";
 import { pathData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
-
-import PromoCodeForm from '@/components/artifact/admin/PromoCodeForm'
+import PromoCodeForm from '@/components/artifact/admin/PromoCodeForm';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   name: "AdminPromos",
   layout: "admin",
-  components: {MobileTopNav, PromoCodeForm},
+  components: {MobileTopNav, PromoCodeForm, DesktopTopNav},
   data() {
     return {
       search: "",

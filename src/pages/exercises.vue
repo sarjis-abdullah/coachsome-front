@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pt-0 mt-0" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
+  <v-container fluid>
 
     <!-- Mobile Header Start -->
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="headerText">
@@ -54,485 +54,491 @@
         <span v-else></span>
       </template>
     </mobile-top-nav>
-    
+
     <!-- Desktop Header Start -->
-    <v-row class="d-none d-md-block">
-      <v-col cols="12" class="pb-0">
-        <div class="page-title">{{$t('dropdown_item_exercises')}}</div>
-      </v-col>
-      <v-col cols="12">
-        <div class="line"></div>
-      </v-col>
-    </v-row>
-
-    <!-- No exercise start -->
-    <v-row class="d-flex justify-center py-10" v-if="noExercise">
-        <v-col cols="12" md="4" class="no-exercise">
-            <h4 class="no-exercise__text">{{$t("no_exercise_title")}}</h4>
-            <p class="no-exercise__sub-text">{{$t("no_execise_sub_title")}}</p>
-            <v-btn
-                elevation="2"
-                color="#15577C"
-                class="no-exercise__button px-5"
-                @click.stop="handleExerciseCreateBtn"
-            >
-                {{$t("no_exercise_button")}}
-            </v-btn>
-        </v-col>
-    </v-row>
-
-    <!-- mobile view start -->
-    <v-row class="d-md-none" justify="center" align="center" v-if="exercises.length && !exerciseDialog && !exercisePreviewDialog">
-
-      <v-col cols="12" sm="8" md="6" lg="4" xs="12" class="pt-5 pb-2" >
-        <v-text-field
-          v-model="search"
-          prepend-inner-icon="search"
-          label="Search"
-          single-line
-          solo
-          @input="filteredList"
-          dense
-          hide-details
-        ></v-text-field>
-      </v-col>
-
-      <!-- Exercise Table For Mobile Start -->
-      <v-col cols="12" sm="8" md="6" lg="4" xs="12"  class="pb-10">
-        <v-row>
-          <v-col cols="12" v-for="(item, index) in table.rows" :key="index" class="py-0 my-0">
-            <v-hover v-slot="{ hover }">
-              <v-card :color="hover ? '#eef1f3' : '#FFFFFF'" class="exercise-table mobile-view " @click.native="showExercise(item)" exact >
-                <v-card-text class="pa-2 ma-2">
-                  <div style="display:inline-block; align: center;vertical-align: middle;" >
-                    <list-asset-view :asset_type="item.asset_type" :url="item.assets" ></list-asset-view>
-                  </div>
-                  <div style="display:inline-block;vertical-align: middle; padding-left: 8px" class="exercise-table--text mobile-view--text" >
-                      {{item.exercise}}
-                  </div>
-                </v-card-text>
-              </v-card>
-            </v-hover>
+    <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('dropdown_item_exercises')"></desktop-top-nav>
+    
+    <div :class="{'px-5' : $vuetify.breakpoint.mdAndUp}">
+      <!-- No exercise start -->
+      <v-row class="d-flex justify-center py-10" v-if="noExercise">
+          <v-col cols="12" md="4" class="no-exercise">
+              <h4 class="no-exercise__text">{{$t("no_exercise_title")}}</h4>
+              <p class="no-exercise__sub-text">{{$t("no_execise_sub_title")}}</p>
+              <v-btn
+                  elevation="2"
+                  color="#15577C"
+                  class="no-exercise__button px-5"
+                  @click.stop="handleExerciseCreateBtn"
+              >
+                  {{$t("no_exercise_button")}}
+              </v-btn>
           </v-col>
-        </v-row>
-      </v-col>
-      <!-- Exercise Table For Mobile End -->
+      </v-row>
 
-      <!-- Exercise Form For Mobile Start -->
-    </v-row>
+      <!-- mobile view start -->
+      <v-row class="d-md-none" justify="center" align="center" v-if="exercises.length && !exerciseDialog && !exercisePreviewDialog">
 
-    <!-- desktop view -->
-    <v-row class="d-none d-md-block" >
-      <v-col cols="12">
-        <div>
-          <v-card>
-            <v-card-title v-if="exercises.length">
-              <v-row align="center" justify="space-between">
-                <v-col cols="12" md="4">
-                  <v-text-field
-                    v-model="search"
-                    prepend-inner-icon="search"
-                    label="Search"
-                    single-line
-                    solo
-                    dense
-                    hide-details
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" md="4">
+        <v-col cols="12" sm="8" md="6" lg="4" xs="12" class="pt-5 pb-2" >
+          <v-text-field
+            v-model="search"
+            prepend-inner-icon="search"
+            label="Search"
+            single-line
+            solo
+            @input="filteredList"
+            dense
+            hide-details
+          ></v-text-field>
+        </v-col>
 
-                  <!-- Filter Start -->
-                  <v-menu
-                    :close-on-content-click="false"
-                    :nudge-width="100"
-                    offset-y
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        v-bind="attrs"
-                        v-on="on"
-                        outlined
-                        color="#49556A"
-                        @click="loader = 'loading3'"
-                        class="px-10"
-                        :block="$vuetify.breakpoint.xsOnly"
-                      >
-                        <v-icon
-                            left
-                            dark
-                        >
-                            mdi-filter-outline
-                        </v-icon>
-                        {{$t("btn_filter")}}
-                      </v-btn>
-                    </template>
+        <!-- Exercise Table For Mobile Start -->
+        <v-col cols="12" sm="8" md="6" lg="4" xs="12"  class="pb-10">
+          <v-row>
+            <v-col cols="12" v-for="(item, index) in table.rows" :key="index" class="py-0 my-0">
+              <v-hover v-slot="{ hover }">
+                <v-card :color="hover ? '#eef1f3' : '#FFFFFF'" class="exercise-table mobile-view " @click.native="showExercise(item)" exact >
+                  <v-card-text class="pa-2 ma-2">
+                    <div style="display:inline-block; align: center;vertical-align: middle;" >
+                      <list-asset-view :asset_type="item.asset_type" :url="item.assets" ></list-asset-view>
+                    </div>
+                    <div style="display:inline-block;vertical-align: middle; padding-left: 8px" class="exercise-table--text mobile-view--text" >
+                        {{item.exercise}}
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </v-hover>
+            </v-col>
+          </v-row>
+        </v-col>
+        <!-- Exercise Table For Mobile End -->
 
+        <!-- Exercise Form For Mobile Start -->
+      </v-row>
 
-                    <v-card class="filter-exercise">
-                      <v-card-title class="px-0">
-                        <span class="filter-exercise__title pl-5">{{$t("ex_filter")}}</span>
-                        <v-spacer></v-spacer>
+      <!-- desktop view -->
+      <v-row class="d-none d-md-block" >
+        <v-col cols="12">
+          <div>
+            <v-card>
+              <v-card-title v-if="exercises.length">
+                <v-row align="center" justify="space-between">
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                      v-model="search"
+                      prepend-inner-icon="search"
+                      label="Search"
+                      single-line
+                      solo
+                      dense
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" md="4">
+
+                    <!-- Filter Start -->
+                    <v-menu
+                      :close-on-content-click="false"
+                      :nudge-width="100"
+                      offset-y
+                    >
+                      <template v-slot:activator="{ on, attrs }">
                         <v-btn
-                          v-if="filterRequest"
                           v-bind="attrs"
                           v-on="on"
                           outlined
                           color="#49556A"
-                          style="text-transform: none"
-                          @click="handleRefresh"
-                          class="mr-5"
+                          @click="loader = 'loading3'"
+                          class="px-10"
+                          :block="$vuetify.breakpoint.xsOnly"
                         >
                           <v-icon
                               left
                               dark
                           >
-                              mdi-refresh
+                              mdi-filter-outline
                           </v-icon>
-                          {{$t("btn_refresh")}}
+                          {{$t("btn_filter")}}
                         </v-btn>
-                        <div class="line mt-4"></div>
-                    </v-card-title>
-                      <v-card-text>
-                        <v-container>
-                          <v-form
-                            ref="form"
-                            v-model="formValid"
-                            lazy-validation
-                            class="mb-10"
+                      </template>
+
+
+                      <v-card class="filter-exercise">
+                        <v-card-title class="px-0">
+                          <span class="filter-exercise__title pl-5">{{$t("ex_filter")}}</span>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            v-if="filterRequest"
+                            v-bind="attrs"
+                            v-on="on"
+                            outlined
+                            color="#49556A"
+                            style="text-transform: none"
+                            @click="handleRefresh"
+                            class="mr-5"
                           >
-                            <v-row>
-                              <v-col cols="12">
-                                <span class="filter-exercise__label">{{$t("ex_filter_from")}}</span>
-                                <div class="d-flex justify-content-between">
-                                  <v-checkbox
-                                    class="pl-0 ml-0"
-                                    v-model="filter.typeSytem"
-                                    :label="$t('ex_coachsome')"
-                                    color="#49556A"
-                                    value="1"
-                                    hide-details
-                                  ></v-checkbox>
-                                  <v-checkbox
-                                    v-model="filter.typeCustom"
-                                    class="pl-5"
-                                    :label="$t('ex_custom_ex')"
-                                    color="#49556A"
-                                    value="1"
-                                    hide-details
-                                  ></v-checkbox>
-                                </div>
-                              </v-col>
-                              <v-col cols="12">
-                                <div class="line"></div>
-                              </v-col>
-                               <v-col cols="12" class="my-0 py-0">
-                                  <!-- <r-t-l-switch :withVideo="filter.withVideo" @updated="handleWithVideo"></r-t-l-switch> -->
+                            <v-icon
+                                left
+                                dark
+                            >
+                                mdi-refresh
+                            </v-icon>
+                            {{$t("btn_refresh")}}
+                          </v-btn>
+                          <div class="line mt-4"></div>
+                      </v-card-title>
+                        <v-card-text>
+                          <v-container>
+                            <v-form
+                              ref="form"
+                              v-model="formValid"
+                              lazy-validation
+                              class="mb-10"
+                            >
+                              <v-row>
+                                <v-col cols="12">
+                                  <span class="filter-exercise__label">{{$t("ex_filter_from")}}</span>
+                                  <div class="d-flex justify-content-between">
+                                    <v-checkbox
+                                      class="pl-0 ml-0"
+                                      v-model="filter.typeSytem"
+                                      :label="$t('ex_coachsome')"
+                                      color="#49556A"
+                                      value="1"
+                                      hide-details
+                                    ></v-checkbox>
+                                    <v-checkbox
+                                      v-model="filter.typeCustom"
+                                      class="pl-5"
+                                      :label="$t('ex_custom_ex')"
+                                      color="#49556A"
+                                      value="1"
+                                      hide-details
+                                    ></v-checkbox>
+                                  </div>
+                                </v-col>
+                                <v-col cols="12">
+                                  <div class="line"></div>
+                                </v-col>
+                                <v-col cols="12" class="my-0 py-0">
+                                    <!-- <r-t-l-switch :withVideo="filter.withVideo" @updated="handleWithVideo"></r-t-l-switch> -->
 
-                                  <v-list class="pa-0 ma-0">
-                                    <!-- Profile Status -->
-                                    <v-list-item text class="pa-0 ma-0"> 
-                                    <v-list-item-content>
-                                      <v-list-item-title>
-                                        <v-list-item-title class="filter-exercise--switch">{{$t('ex_with_video')}}</v-list-item-title>
-                                      </v-list-item-title>
-                                    </v-list-item-content>
-                                      <v-list-item-icon>
-                                        <client-only>
-                                          <toggle-button
-                                            :value="filter.withVideo"
-                                            @input="handleWithVideo"
-                                            :color="{ checked: '#5CC866', unchecked: '#EFEFEF' }"
-                                            :sync="true"
-                                            :font-size="12"
-                                            :width="60"
-                                            :height="30"
-                                          />
-                                        </client-only>
-                                      </v-list-item-icon>
-                                  </v-list-item>
-                                  </v-list>
-
-
-                              </v-col>
-                              <v-col cols="12">
-                                <div class="line"></div>
-                              </v-col>
-
-                              <!-- Category Section -->
-                              <v-col cols="12" class="py-0 my-0">
-                                  <p class="filter-exercise__label">{{$t("lbl_ex_cat")}}</p>
-                                  <v-autocomplete
-                                      v-model="filter.categoriesSelected"
-                                      :items="exerciseInitialData.categories"
-                                      :item-text="$t('t_key')"
-                                      return-object
-                                      chips
-                                      clearable
-                                      :label="$t('hint_cat_ex')"
-                                      :menu-props="{closeOnContentClick: true}"
-                                      outlined
-                                      multiple
-                                      dense
-                                      persistent-hint
-                                      autocomplete="off"
-                                      class="filter-exercise__input-field"
-                                  >
-                                      <template
-                                      v-slot:selection="{ attrs, item, select, selected }"
-                                      >
-                                      <v-chip
-                                          v-bind="attrs"
-                                          :input-value="selected"
-                                          small
-                                          label
-                                          @click="select"
-                                          close
-                                          @click:close="removeFilterCategory(item)"
-                                      >
-                                          <strong>{{ item.name }}</strong
-                                          >&nbsp;
-                                      </v-chip>
-                                      </template>
-                                      <template v-slot:item="data">
+                                    <v-list class="pa-0 ma-0">
+                                      <!-- Profile Status -->
+                                      <v-list-item text class="pa-0 ma-0"> 
                                       <v-list-item-content>
-                                          <v-list-item-title>
-                                          {{ data.item.name }}
-                                          </v-list-item-title>
+                                        <v-list-item-title>
+                                          <v-list-item-title class="filter-exercise--switch">{{$t('ex_with_video')}}</v-list-item-title>
+                                        </v-list-item-title>
                                       </v-list-item-content>
-                                      </template>
-                                  </v-autocomplete>
-                              </v-col>
+                                        <v-list-item-icon>
+                                          <client-only>
+                                            <toggle-button
+                                              :value="filter.withVideo"
+                                              @input="handleWithVideo"
+                                              :color="{ checked: '#5CC866', unchecked: '#EFEFEF' }"
+                                              :sync="true"
+                                              :font-size="12"
+                                              :width="60"
+                                              :height="30"
+                                            />
+                                          </client-only>
+                                        </v-list-item-icon>
+                                    </v-list-item>
+                                    </v-list>
 
-                              <!-- Sports Section -->
-                              <v-col cols="12" class="py-0 my-0">
-                                  <p class="filter-exercise__label">{{$t("lbl_ex_sport")}}</p>
-                                  <v-autocomplete
-                                      v-model="filter.sportsSelected"
-                                      :items="exerciseInitialData.sports"
-                                      :item-text="$t('t_key')"
-                                      return-object
-                                      chips
-                                      multiple
-                                      clearable
-                                      :label="$t('hint_sport_ex')"
-                                      :menu-props="{closeOnContentClick: true}"
-                                      outlined
-                                      dense
-                                      persistent-hint
-                                      autocomplete="off"
-                                      class="filter-exercise__input-field"
+
+                                </v-col>
+                                <v-col cols="12">
+                                  <div class="line"></div>
+                                </v-col>
+
+                                <!-- Category Section -->
+                                <v-col cols="12" class="py-0 my-0">
+                                    <p class="filter-exercise__label">{{$t("lbl_ex_cat")}}</p>
+                                    <v-autocomplete
+                                        v-model="filter.categoriesSelected"
+                                        :items="exerciseInitialData.categories"
+                                        :item-text="$t('t_key')"
+                                        return-object
+                                        chips
+                                        clearable
+                                        :label="$t('hint_cat_ex')"
+                                        :menu-props="{closeOnContentClick: true}"
+                                        outlined
+                                        multiple
+                                        dense
+                                        persistent-hint
+                                        autocomplete="off"
+                                        class="filter-exercise__input-field"
+                                    >
+                                        <template
+                                        v-slot:selection="{ attrs, item, select, selected }"
+                                        >
+                                        <v-chip
+                                            v-bind="attrs"
+                                            :input-value="selected"
+                                            small
+                                            label
+                                            @click="select"
+                                            close
+                                            @click:close="removeFilterCategory(item)"
+                                        >
+                                            <strong>{{ item.name }}</strong
+                                            >&nbsp;
+                                        </v-chip>
+                                        </template>
+                                        <template v-slot:item="data">
+                                        <v-list-item-content>
+                                            <v-list-item-title>
+                                            {{ data.item.name }}
+                                            </v-list-item-title>
+                                        </v-list-item-content>
+                                        </template>
+                                    </v-autocomplete>
+                                </v-col>
+
+                                <!-- Sports Section -->
+                                <v-col cols="12" class="py-0 my-0">
+                                    <p class="filter-exercise__label">{{$t("lbl_ex_sport")}}</p>
+                                    <v-autocomplete
+                                        v-model="filter.sportsSelected"
+                                        :items="exerciseInitialData.sports"
+                                        :item-text="$t('t_key')"
+                                        return-object
+                                        chips
+                                        multiple
+                                        clearable
+                                        :label="$t('hint_sport_ex')"
+                                        :menu-props="{closeOnContentClick: true}"
+                                        outlined
+                                        dense
+                                        persistent-hint
+                                        autocomplete="off"
+                                        class="filter-exercise__input-field"
+                                    >
+                                        <template
+                                        v-slot:selection="{ attrs, item, select, selected }"
+                                        >
+                                        <v-chip
+                                            v-bind="attrs"
+                                            :input-value="selected"
+                                            small
+                                            label
+                                            @click="select"
+                                            close
+                                            @click:close="removeFilterSport(item)"
+                                        >
+                                            <strong>{{ item.name }}</strong
+                                            >&nbsp;
+                                        </v-chip>
+                                        </template>
+                                        <template v-slot:item="data">
+                                        <v-list-item-content>
+                                            <v-list-item-title>
+                                            {{ data.item.name }}
+                                            </v-list-item-title>
+                                        </v-list-item-content>
+                                        </template>
+                                    </v-autocomplete>
+                                </v-col>
+
+                                <!-- lavel Section -->
+                                <v-col cols="12" class="py-0 my-0">
+                                    <p class="filter-exercise__label">{{$t("lbl_ex_lvl")}}</p>
+                                    <v-autocomplete
+                                        v-model="filter.lavelsSelected"
+                                        :items="exerciseInitialData.lavels"
+                                        :item-text="$t('t_key')"
+                                        return-object
+                                        chips
+                                        clearable
+                                        :label="$t('hint_sport_ex')"
+                                        :menu-props="{closeOnContentClick: true}"
+                                        outlined
+                                        dense
+                                        multiple
+                                        persistent-hint
+                                        autocomplete="off"
+                                        color="#9FAEC2"
+                                        class="filter-exercise__input-field"
+                                    >
+                                        <template
+                                        v-slot:selection="{ attrs, item, select, selected }"
+                                        >
+                                        <v-chip
+                                            v-bind="attrs"
+                                            :input-value="selected"
+                                            small
+                                            label
+                                            @click="select"
+                                            close
+                                            @click:close="removeFilterLavel(item)"
+                                        >
+                                            <strong>{{ item.name }}</strong
+                                            >&nbsp;
+                                        </v-chip>
+                                        </template>
+                                        <template v-slot:item="data">
+                                        <v-list-item-content>
+                                            <v-list-item-title>
+                                            {{ data.item.name }}
+                                            </v-list-item-title>
+                                        </v-list-item-content>
+                                        </template>
+                                    </v-autocomplete>
+                                </v-col>
+                                <v-col cols="12">
+                                  <v-btn
+                                      elevation="2"
+                                      color="#15577C"
+                                      class="filter-exercise--button px-5"
+                                      @click="handleFilterExercise"
                                   >
-                                      <template
-                                      v-slot:selection="{ attrs, item, select, selected }"
-                                      >
-                                      <v-chip
-                                          v-bind="attrs"
-                                          :input-value="selected"
-                                          small
-                                          label
-                                          @click="select"
-                                          close
-                                          @click:close="removeFilterSport(item)"
-                                      >
-                                          <strong>{{ item.name }}</strong
-                                          >&nbsp;
-                                      </v-chip>
-                                      </template>
-                                      <template v-slot:item="data">
-                                      <v-list-item-content>
-                                          <v-list-item-title>
-                                          {{ data.item.name }}
-                                          </v-list-item-title>
-                                      </v-list-item-content>
-                                      </template>
-                                  </v-autocomplete>
-                              </v-col>
+                                      {{$t("chat_field_label_txt_search")}}
+                                  </v-btn>
+                                </v-col>
+                              </v-row>
+                            </v-form>
+                          </v-container>
+                        </v-card-text>
+                      </v-card>
 
-                              <!-- lavel Section -->
-                              <v-col cols="12" class="py-0 my-0">
-                                  <p class="filter-exercise__label">{{$t("lbl_ex_lvl")}}</p>
-                                  <v-autocomplete
-                                      v-model="filter.lavelsSelected"
-                                      :items="exerciseInitialData.lavels"
-                                      :item-text="$t('t_key')"
-                                      return-object
-                                      chips
-                                      clearable
-                                      :label="$t('hint_sport_ex')"
-                                      :menu-props="{closeOnContentClick: true}"
-                                      outlined
-                                      dense
-                                      multiple
-                                      persistent-hint
-                                      autocomplete="off"
-                                      color="#9FAEC2"
-                                      class="filter-exercise__input-field"
-                                  >
-                                      <template
-                                      v-slot:selection="{ attrs, item, select, selected }"
-                                      >
-                                      <v-chip
-                                          v-bind="attrs"
-                                          :input-value="selected"
-                                          small
-                                          label
-                                          @click="select"
-                                          close
-                                          @click:close="removeFilterLavel(item)"
-                                      >
-                                          <strong>{{ item.name }}</strong
-                                          >&nbsp;
-                                      </v-chip>
-                                      </template>
-                                      <template v-slot:item="data">
-                                      <v-list-item-content>
-                                          <v-list-item-title>
-                                          {{ data.item.name }}
-                                          </v-list-item-title>
-                                      </v-list-item-content>
-                                      </template>
-                                  </v-autocomplete>
-                              </v-col>
-                              <v-col cols="12">
-                                <v-btn
-                                    elevation="2"
-                                    color="#15577C"
-                                    class="filter-exercise--button px-5"
-                                    @click="handleFilterExercise"
-                                >
-                                    {{$t("chat_field_label_txt_search")}}
-                                </v-btn>
-                              </v-col>
-                            </v-row>
-                          </v-form>
-                        </v-container>
-                      </v-card-text>
-                    </v-card>
+                    </v-menu>
 
-                  </v-menu>
+                  </v-col>
+                  <v-col class="d-flex justify-end">
+                    <v-btn
+                      solo
+                      :block="$vuetify.breakpoint.xsOnly"
+                      color="primary-light-1"
+                      style="text-transform: none"
+                      @click.stop="handleExerciseCreateBtn"
+                      class="px-5"
+                    >
+                      {{$t("exercise_create_button")}}
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-title>
 
-                </v-col>
-                <v-col class="d-flex justify-end">
-                  <v-btn
-                    solo
-                    :block="$vuetify.breakpoint.xsOnly"
-                    color="primary-light-1"
-                    style="text-transform: none"
-                    @click.stop="handleExerciseCreateBtn"
-                    class="px-5"
-                  >
-                    {{$t("exercise_create_button")}}
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card-title>
+              <v-data-table
+                v-if="exercises.length"
+                :headers="table.headers"
+                :items="table.rows"
+                :search="search"
+                class="exercise-table row-pointer"
+                :header-props="{ sortIcon: 'mdi-chevron-down' }"
+                :footer-props="{
+                    'items-per-page-text' : $t('ex_table_rows_per_page')
+                }"
+                @click:row="handleColumnClick"
+              >
 
-            <v-data-table
-              v-if="exercises.length"
-              :headers="table.headers"
-              :items="table.rows"
-              :search="search"
-              class="exercise-table row-pointer"
-              :header-props="{ sortIcon: 'mdi-chevron-down' }"
-              :footer-props="{
-                  'items-per-page-text' : $t('ex_table_rows_per_page')
-              }"
-              @click:row="handleColumnClick"
-            >
-
-            <!-- Search No results -->
-            <template v-slot:no-results>
-                <span>{{$t("ex_no_matching_results")}}</span>
-            </template>
-
-            <template v-slot:no-data>
-                <span>{{$t("no_data_ex")}}</span>
-            </template>
-            
-
-              <!-- table head start -->
-
-              <template v-slot:header.assets="{ header }">
-                {{$t("thead_exercises")}}( {{table.rows.length}} )
+              <!-- Search No results -->
+              <template v-slot:no-results>
+                  <span>{{$t("ex_no_matching_results")}}</span>
               </template>
 
-              <template v-slot:header.category="{ header }">
-                {{$t("thead_category")}}
-              </template>
-
-              <template v-slot:header.type="{ header }">
-                {{$t("thead_type")}}
-              </template>
-
-              <template v-slot:header.actions="{ header }">
-                <span></span>
+              <template v-slot:no-data>
+                  <span>{{$t("no_data_ex")}}</span>
               </template>
               
-              <!-- table head end -->
 
-              <!-- table column start -->
+                <!-- table head start -->
 
-              <template v-slot:item.assets="{ item }">
-                <div style="display:inline-block; align: center;vertical-align: middle;" >
-                  <list-asset-view :asset_type="item.asset_type" :url="item.assets" ></list-asset-view>
-                </div>
-                <div style="display:inline-block;vertical-align: middle; padding-left: 8px" class="exercise-table--text" >
-                    {{item.exercise}}
-                </div>
-              </template>
+                <template v-slot:header.assets="{ header }">
+                  {{$t("thead_exercises")}}( {{table.rows.length}} )
+                </template>
 
-              <template v-slot:item.category="{ item }">
-                <div class="exercise-table--text">
-                  {{$t(item.category)}}
-                </div>
+                <template v-slot:header.category="{ header }">
+                  {{$t("thead_category")}}
+                </template>
 
-              </template>
-              <template v-slot:item.type="{ item }">
-                 <div class="exercise-table--text">
-                    {{item.type}}
-                </div>
-              </template>
-              <template v-slot:item.actions="{ item }">
-                <v-menu offset-y >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      color="primary"
-                      block
-                      text
-                      v-bind="attrs"
-                      v-on="on"
-                    >
-                      <v-icon>mdi-dots-horizontal</v-icon>
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-item :disabled="isAuthCoach && item.type == 'System'"  @click.stop="editExercise(item)">
-                      <v-list-item-title>{{$t("btn_edit_ex")}}</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click.stop="duplicateExercise(item)">
-                      <v-list-item-title>{{$t("btn_duplicate")}}</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item :disabled="isAuthCoach && item.type == 'System'"  @click.stop="deleteExercise(item)">
-                      <v-list-item-title :style="[isAuthCoach && item.type == 'System' ? {'color': 'rgba(0, 0, 0, 0.38)'} : {'color': '#FF3A0D'}]">{{$t("btn_remove")}}</v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-              </template>
-              <!-- table column end -->
+                <template v-slot:header.type="{ header }">
+                  {{$t("thead_type")}}
+                </template>
 
-            </v-data-table>
-          </v-card>
-        </div>
-      </v-col>
-    </v-row>
+                <template v-slot:header.actions="{ header }">
+                  <span></span>
+                </template>
+                
+                <!-- table head end -->
 
-    <!-- Dialogs -->
-    <v-row justify="center" align="center" >
-      <v-col cols="12">
-      <!-- Create Dialog -->
-        <template v-if="exerciseDialog">
-          <div v-if="$vuetify.breakpoint.mdAndUp">
-            <v-dialog color="#f7fafc" v-model="exerciseDialog" :max-width="dialogWidth" @click:outside="handleCloseExercise">
+                <!-- table column start -->
+
+                <template v-slot:item.assets="{ item }">
+                  <div style="display:inline-block; align: center;vertical-align: middle;" >
+                    <list-asset-view :asset_type="item.asset_type" :url="item.assets" ></list-asset-view>
+                  </div>
+                  <div style="display:inline-block;vertical-align: middle; padding-left: 8px" class="exercise-table--text" >
+                      {{item.exercise}}
+                  </div>
+                </template>
+
+                <template v-slot:item.category="{ item }">
+                  <div class="exercise-table--text">
+                    {{$t(item.category)}}
+                  </div>
+
+                </template>
+                <template v-slot:item.type="{ item }">
+                  <div class="exercise-table--text">
+                      {{item.type}}
+                  </div>
+                </template>
+                <template v-slot:item.actions="{ item }">
+                  <v-menu offset-y >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        color="primary"
+                        block
+                        text
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon>mdi-dots-horizontal</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-item :disabled="isAuthCoach && item.type == 'System'"  @click.stop="editExercise(item)">
+                        <v-list-item-title>{{$t("btn_edit_ex")}}</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item @click.stop="duplicateExercise(item)">
+                        <v-list-item-title>{{$t("btn_duplicate")}}</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item :disabled="isAuthCoach && item.type == 'System'"  @click.stop="deleteExercise(item)">
+                        <v-list-item-title :style="[isAuthCoach && item.type == 'System' ? {'color': 'rgba(0, 0, 0, 0.38)'} : {'color': '#FF3A0D'}]">{{$t("btn_remove")}}</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </template>
+                <!-- table column end -->
+
+              </v-data-table>
+            </v-card>
+          </div>
+        </v-col>
+      </v-row>
+
+      <!-- Dialogs -->
+      <v-row justify="center" align="center" >
+        <v-col cols="12">
+        <!-- Create Dialog -->
+          <template v-if="exerciseDialog">
+            <div v-if="$vuetify.breakpoint.mdAndUp">
+              <v-dialog color="#f7fafc" v-model="exerciseDialog" :max-width="dialogWidth" @click:outside="handleCloseExercise">
+                <ExerciseForm 
+                  @newExerciseAdded="handleCreateExercise($event)"
+                  @saveExerciseData="handleUpdateExercise($event)" 
+                  @closeCreateDialog="handleCloseExercise"
+                  @exerciseDataUpdated="handleModifyExercise($event)"
+                  :exerciseNewData="exerciseInitialData"
+                  v-if="!previewMode"
+                />
+                <ExercisePreview v-else  :exerciseData="exerciseData"/>
+              </v-dialog>
+            </div>
+            <div v-else>
               <ExerciseForm 
                 @newExerciseAdded="handleCreateExercise($event)"
                 @saveExerciseData="handleUpdateExercise($event)" 
@@ -542,22 +548,11 @@
                 v-if="!previewMode"
               />
               <ExercisePreview v-else  :exerciseData="exerciseData"/>
-            </v-dialog>
-          </div>
-          <div v-else>
-            <ExerciseForm 
-              @newExerciseAdded="handleCreateExercise($event)"
-              @saveExerciseData="handleUpdateExercise($event)" 
-              @closeCreateDialog="handleCloseExercise"
-              @exerciseDataUpdated="handleModifyExercise($event)"
-              :exerciseNewData="exerciseInitialData"
-              v-if="!previewMode"
-            />
-             <ExercisePreview v-else  :exerciseData="exerciseData"/>
-          </div>
-        </template>
-      </v-col>
-    </v-row>
+            </div>
+          </template>
+        </v-col>
+      </v-row>
+    </div>
 
   </v-container>
 </template>
@@ -569,7 +564,7 @@ import MobileTopNav from '@/components/layout/global/MobileTopNav'
 import ListAssetView from '@/components/exercise/ListAssetView.vue';
 import ExerciseForm from '@/components/exercise/forms/ExerciseForm.vue';
 import ExercisePreview from '@/components/exercise/forms/ExercisePreview.vue';
-
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "exercise",
@@ -577,7 +572,8 @@ export default {
     MobileTopNav,
     ListAssetView,
     ExerciseForm,
-    ExercisePreview
+    ExercisePreview,
+    DesktopTopNav
   },
   data() {
     return {

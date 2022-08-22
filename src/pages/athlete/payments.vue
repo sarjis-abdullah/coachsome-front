@@ -14,20 +14,9 @@
           <span></span>
         </template>
       </mobile-top-nav>
-      <span class=" view-profile__wrapper" :class="{'page-container' : !$vuetify.breakpoint.xsOnly}">
-        <v-row class="d-none d-md-block"> 
-          <v-col cols="12" class="pb-0">
-            <div class="page-title">
-              {{ $t("page_title_payments") }}
-            </div>
-          </v-col>
-        </v-row>
+      <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('page_title_payments')"></desktop-top-nav>
 
-        <v-row class="d-none d-md-block">
-          <v-col cols="12">
-            <div class="line"></div>
-          </v-col>
-        </v-row>
+      <span class=" view-profile__wrapper" :class="{'page-container' : !$vuetify.breakpoint.xsOnly}">
 
         <v-row class="mt-10">
           <v-col cols="12" md="4">
@@ -164,14 +153,16 @@ import { currencyService } from "@/services";
 import { endpoint } from "@/api";
 import { pathData } from "@/data";
 import PaymentCard from "@/components/card/PaymentCard.vue";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "athlete",
   components: {
     Reedem,
     PaymentCard,
-    MobileTopNav
+    MobileTopNav,
+    DesktopTopNav
   },
   middleware: ["auth"],
   data() {

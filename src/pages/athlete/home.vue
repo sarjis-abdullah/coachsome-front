@@ -1,6 +1,6 @@
 <template>
   <div class="coach-booking-page">
-    <v-container>
+    <v-container fluid>
       <mobile-top-nav extraClass="body-bg-secondary" actionClass="d-none" :headerText="$t('pwa_home')">
         <template v-slot:goBack>
           <span></span>
@@ -9,6 +9,7 @@
           <span></span>
         </template>
       </mobile-top-nav>
+      <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_home')"></desktop-top-nav>
       <v-row
         align="center"
         justify="center"
@@ -58,13 +59,15 @@
 <script>
 import SessionCard from "@/components/card/SessionCard";
 import { athleteBookingTimeApi } from "@/api";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "athlete",
   components: {
     SessionCard,
-    MobileTopNav
+    MobileTopNav,
+    DesktopTopNav
   },
   data() {
     return {

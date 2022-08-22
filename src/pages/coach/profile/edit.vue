@@ -23,20 +23,23 @@
           <span v-else></span>
         </template>
       </mobile-top-nav>
+
+      <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('profile_info')"></desktop-top-nav>
+
       <span class="page-container view-profile__wrapper" :class="{'px-2' : $vuetify.breakpoint.smAndDown}">
 
 
         <!--------------- Desktop View ---------------->
 
         <div class="d-none d-md-block px-2" v-if="!this.$vuetify.breakpoint.smAndDown">
-          <v-row>
+          <!-- <v-row>
             <v-col cols="12" class="pb-0">
               <div class="page-title">{{ $t("profile") }}</div>
             </v-col>
             <v-col cols="12">
               <div class="line"></div>
             </v-col>
-          </v-row>
+          </v-row> -->
           <v-row>
             <v-col cols="12" md="4">
               <div class="default--label pb-2">
@@ -1268,7 +1271,8 @@ import DrawerToggleBtn from "@/components/artifact/global/DrawerToggleBtn";
 import { languageApi, sportCategoryApi } from "@/api";
 import EditImageDialog from "@/components/profile/EditImageDialog";
 import VuePhoneNumberInput from "vue-phone-number-input";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "coach",
@@ -1279,7 +1283,8 @@ export default {
     EditImageDialog,
     VuePhoneNumberInput,
     draggable,
-    MobileTopNav
+    MobileTopNav,
+    DesktopTopNav
   },
 
   data() {
