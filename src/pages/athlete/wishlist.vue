@@ -29,15 +29,15 @@
         <explore-card v-bind="item.coach"></explore-card>
       </v-col>
     </v-row>
-    <div class="pt-md-0 pt-4 d-flex" style="height: 70vh; align-items: center;">
-      <div class="text-center loader">
+    <div class="pt-md-0 pt-4">
+      <div class="text-center centered">
         <v-progress-circular
         indeterminate
         color="#6EB5CB"
         v-if="progress"
       ></v-progress-circular>
       </div>
-      <article v-if="!progress && coaches && !coaches.length" cols="12" sm="12">
+      <article v-if="!progress && coaches && !coaches.length" cols="12" sm="12" class="centered">
         <header>
           <h3 class="wishlist--title">
             {{$t('wishlist_title')}}
@@ -121,7 +121,7 @@ export default {
   text-align: center;
   color: #9FAEC2;
 }
-.loader {
+.centered {
   margin: 0;
   position: absolute;
   top: 50%;
