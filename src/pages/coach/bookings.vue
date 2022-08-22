@@ -1,6 +1,6 @@
 <template>
   <div class="coach-booking-page">
-    <v-container fluid class="pt-0 mt-0" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
+    <v-container fluid >
       <mobile-top-nav extraClass="body-bg-secondary" actionClass="d-none" :headerText="$t('app_bar_dashboard_booking')">
         <template v-slot:goBack>
           <span></span>
@@ -9,9 +9,10 @@
           <span></span>
         </template>
       </mobile-top-nav>
-      <v-row justify="center">
+      <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('app_bar_dashboard_booking')"></desktop-top-nav>
+      <v-row justify="center" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
         <v-col cols="12" md="8">
-          <DesktopHeader :title="$t('app_bar_dashboard_booking')"/>
+          <!-- <DesktopHeader :title="$t('app_bar_dashboard_booking')"/> -->
 
           <v-row align="center">
             <v-col cols="12" md="3" :class="{'pt-8' : !$vuetify.breakpoint.mdAndUp}">
@@ -150,8 +151,8 @@
 <script>
 import PurchasedCard from "@/components/card/PurchasedCard";
 import { coachBookingTimeApi, coachBookingApi } from "@/api";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
-import DesktopHeader from '@/components/artifact/global/DesktopHeader'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 import PurchasedCardMobile from '@/components/card/PurchasedCardMobile.vue';
 
 export default {
@@ -160,7 +161,7 @@ export default {
     PurchasedCard,
     MobileTopNav,
     PurchasedCardMobile,
-    DesktopHeader
+    DesktopTopNav
   },
   data() {
     return {

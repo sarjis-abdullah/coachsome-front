@@ -55,6 +55,15 @@
   color: $primary-light-2;
 }
 
+.primary-light-3 {
+  color: $grey-700;
+  background: $primary-light-3;
+}
+
+.primary-light-3--text {
+  color: $primary-light-3;
+}
+
 .light {
   color: $grey-500;
   background: $grey-200;
@@ -68,6 +77,12 @@
   width: 100%;
   background: $grey-500;
   height: 1px;
+}
+
+.v-navigation-drawer{
+  &__border{
+    background-color: $grey-500!important;
+  }
 }
 
 .required {

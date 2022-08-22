@@ -1,6 +1,5 @@
 <template>
-
-<v-container fluid>
+  <v-container fluid>
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('payout_info_input_title_account')">
       <template v-slot:goBack>
         <v-btn
@@ -14,6 +13,7 @@
         <router-link class="common-top-save-button" to="" @click.native="handleSaveBtnClick()">{{$t("btn_label_txt_save")}}</router-link>
       </template>
     </mobile-top-nav>
+    <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('payout_info_input_title_account')"></desktop-top-nav>
     
     <v-row
       justify="center"
@@ -402,13 +402,15 @@ import { coachSettingApi, coachTimezoneApi, authApi } from "@/api";
 import { endpoint } from "../../api";
 import { pathData } from "@/data";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "coach",
   components: {
     ClientBackFooter,
-    MobileTopNav
+    MobileTopNav,
+    DesktopTopNav
   },
   data() {
     return {

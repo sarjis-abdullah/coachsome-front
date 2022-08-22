@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid :class="{ 'px-10': $vuetify.breakpoint.mdAndUp }">
+  <v-container fluid >
     <mobile-top-nav
       extraClass="body-bg-secondary"
       :headerText="$t('app_bar_booking_sessions')"
@@ -13,20 +13,9 @@
         <span></span>
       </template>
     </mobile-top-nav>
+    <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('app_bar_booking_sessions')"></desktop-top-nav>
 
-    <v-row class="d-none d-md-block">
-      <v-col cols="12" class="pb-0">
-        <div class="page-title">{{ $t("app_bar_booking_sessions") }}</div>
-      </v-col>
-    </v-row>
-
-    <v-row class="d-none d-md-block">
-      <v-col cols="12">
-        <div class="line"></div>
-      </v-col>
-    </v-row>
-
-    <v-row>
+    <v-row :class="{ 'px-10': $vuetify.breakpoint.mdAndUp }">
       <v-col cols="12">
         <div>
           <v-card>
@@ -65,12 +54,14 @@
 import { pathData } from "@/data";
 import MobileTopNav from "@/components/layout/global/MobileTopNav";
 import moment from "moment";
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   name: "AdminBookingSessions",
   layout: "admin",
   components: {
     MobileTopNav,
+    DesktopTopNav
   },
   data() {
     return {

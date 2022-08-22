@@ -1,6 +1,6 @@
 <template>
   <div class="coach-package-page">
-    <v-container fluid c>
+    <v-container fluid>
 
       <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('coach_booking_package_active_package_titile')">
         <template v-slot:goBack>
@@ -16,16 +16,18 @@
         </template>
       </mobile-top-nav>
 
+      <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_package_menu')"></desktop-top-nav>
+
       <span  class="page-container page-package px-2">
 
-        <v-row justify="space-between" align="center" class="d-none d-md-block">
+        <!-- <v-row justify="space-between" align="center" class="d-none d-md-block">
           <v-col cols="12" md="6" class="pb-0">
             <div class="page-title">{{ $t("text_hourly_rate") }}</div>
           </v-col>
           <v-col cols="12">
             <div class="line"></div>
           </v-col>
-        </v-row>
+        </v-row> -->
 
         <v-row align="center" class="d-none d-md-block">
           <v-col cols="12" class="pb-0">
@@ -407,7 +409,8 @@ import { coachPackageApi } from "@/api";
 import { constantData, pathData } from "@/data";
 import { currencyService } from "@/services";
 import draggable from "vuedraggable";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "coach",
@@ -418,7 +421,8 @@ export default {
     PackageCampEdit,
     ClientBackFooter,
     draggable,
-    MobileTopNav
+    MobileTopNav,
+    DesktopTopNav
   },
 
   data() {
@@ -660,6 +664,7 @@ export default {
   background: $body-bg;
   height: 100%;
   .page-package {
+    padding: 0 16px!important;
     .v-tab--active {
       background: $primary-light-1;
       color: white;

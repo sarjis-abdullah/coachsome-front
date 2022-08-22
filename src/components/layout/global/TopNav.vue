@@ -193,28 +193,6 @@
           v-if="!isLoggedIn"
           >{{ $t(navItems.login.t_key) }}</v-btn
         >
-
-        <!-- Coach-Booking -->
-        <v-btn
-          small
-          class="text-normal"
-          v-if="isAuthCoach"
-          :to="localePath(navItems.coachBooking.path)"
-          text
-          :color="colorOfTheTextBtn"
-          >{{ $t(navItems.coachBooking.t_key) }}</v-btn
-        >
-
-        <!-- Athlete-Booking -->
-        <v-btn
-          small
-          class="text-normal"
-          v-if="isAuthAthlete"
-          :to="localePath(navItems.athleteBooking.path)"
-          text
-          :color="colorOfTheTextBtn"
-          >{{ $t(navItems.athleteBooking.t_key) }}</v-btn
-        >
       </span>
 
       <!-- Filter btn for marketplace page -->

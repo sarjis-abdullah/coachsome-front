@@ -1,6 +1,6 @@
 <template>
   <div class="setting-page">
-    <v-container>
+    <v-container fluid>
       <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('payout_info_page_title')">
         <template v-slot:goBack>
           <v-btn
@@ -14,22 +14,23 @@
           <span></span>
         </template>
       </mobile-top-nav>
+      <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('payout_info_page_title')"></desktop-top-nav>
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-row>
           <v-col cols="12 pl-5">
-            <v-row class="d-none d-md-block">
-              <v-col cols="12" class="pb-0">
+            <!-- <v-row class="d-none d-md-block">
+               <v-col cols="12" class="pb-0">
                 <div class="page-title">
                   {{ $t("payout_info_page_title") }}
                 </div>
               </v-col>
-            </v-row>
+            </v-row> -->
 
-            <v-row class="d-none d-md-block">
+            <!-- <v-row class="d-none d-md-block">
               <v-col cols="12">
                 <div class="line"></div>
               </v-col>
-            </v-row>
+            </v-row> -->
             <v-row class="invoice-identity">
               <v-col cols="12" md="4">
                 <div class="default--label d-none d-md-block">
@@ -407,11 +408,12 @@
 <script>
 import { countryApi, coachPayoutInformationApi } from "@/api";
 import { pathData } from "@/data";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "coach",
-  components: {MobileTopNav},
+  components: {MobileTopNav,DesktopTopNav},
   data() {
     return {
       valid: false,

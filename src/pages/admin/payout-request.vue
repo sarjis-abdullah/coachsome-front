@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
+  <v-container fluid >
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_payout_menu')">
       <template v-slot:goBack>
         <v-btn
@@ -13,18 +13,9 @@
         <span></span>
       </template>
     </mobile-top-nav>
-    <v-row class="d-none d-md-block">
-      <v-col cols="12" class="pb-0">
-        <div class="page-title">{{$t('pwa_payout_menu')}}</div>
-      </v-col>
-    </v-row>
+    <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('pwa_payout_menu')"></desktop-top-nav>
 
-    <v-row class="d-none d-md-block">
-      <v-col cols="12">
-        <div class="line"></div>
-      </v-col>
-    </v-row>
-
+    <v-row :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
       <v-col cols="12" :class="{'pt-5' : $vuetify.breakpoint.xsOnly}">
         <div>
           <v-card>
@@ -88,11 +79,12 @@
 import { imageService } from "@/services";
 import { adminPayoutRequestApi, adminImpersonateApi } from "@/api";
 import { pathData } from "@/data";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "admin",
-  components: {MobileTopNav},
+  components: {MobileTopNav, DesktopTopNav},
   data() {
     return {
       search: "",

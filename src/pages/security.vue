@@ -14,6 +14,8 @@
             </template>
         </mobile-top-nav>
 
+        <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('athlete_settings_tab_security')"></desktop-top-nav>
+
         <v-row
         justify="center"
         >
@@ -158,11 +160,12 @@
 <script>
 import { endpoint } from "../api";
 import { pathData, settingValueData, roleData } from "@/data";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default ({
     layout: "common",
-    components: {MobileTopNav},
+    components: {MobileTopNav,DesktopTopNav},
     data(){
         return {
             settingValueData,

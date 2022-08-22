@@ -14,16 +14,16 @@
           <span></span>
         </template>
       </mobile-top-nav>
-
+      <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('review_page_title')"></desktop-top-nav>
       <span class="page-container">
-          <v-row class="d-none d-md-block">
+          <!-- <v-row class="d-none d-md-block">
             <v-col cols="12" class="pb-0">
               <div class="page-title">{{ $t("review_page_title") }}</div>
             </v-col>
             <v-col cols="12">
               <div class="line"></div>
             </v-col>
-          </v-row>
+          </v-row> -->
 
           <v-row>
             <v-col cols="12" md="4">
@@ -361,7 +361,8 @@ import ReviewCard from "@/components/card/ReviewCard";
 import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import { reviewApi, baseReviewApi } from "@/api";
 import { pathData } from "@/data";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "coach",
@@ -369,7 +370,8 @@ export default {
     VFacebookLogin,
     ReviewCard,
     ClientBackFooter,
-    MobileTopNav
+    MobileTopNav,
+    DesktopTopNav
   },
   data() {
     return {

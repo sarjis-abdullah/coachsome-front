@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pt-0 mt-0" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
+  <v-container fluid >
 
     <!-- Mobile Header Start -->
     <mobile-top-nav extraClass="body-bg-secondary" :headerText="$t('wishlist_page_title')">
@@ -12,17 +12,9 @@
         </v-btn>
       </template>
     </mobile-top-nav>
-    
-    <!-- Desktop Header Start -->
-    <v-row class="d-none d-md-block">
-      <v-col cols="12" class="pb-0">
-        <div class="page-title">{{ $t('wishlist_page_title') }}</div>
-      </v-col>
-      <v-col cols="12">
-        <div class="line"></div>
-      </v-col>
-    </v-row>
-    <v-row class="pt-md-0 pt-4">
+    <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('wishlist_page_title')"></desktop-top-nav>
+
+    <v-row class="pt-md-0 pt-4" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
       <v-col v-if="!progress && coaches && coaches.length" 
         cols="12" sm="6" md="3" v-for="(item, i) in coaches" 
         :key="i">
@@ -34,14 +26,16 @@
 
 <script>
 import { pathData } from "@/data";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 import ExploreCard from "@/components/card/ExploreCard";
 
 export default {
   layout: "athlete",
   components: {
     MobileTopNav,
-    ExploreCard
+    ExploreCard,
+    DesktopTopNav
   },
   data() {
     return {

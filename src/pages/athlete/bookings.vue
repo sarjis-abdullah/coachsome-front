@@ -1,6 +1,6 @@
 <template>
   <div class="athlete-bookings">
-    <v-container fluid class="pt-0 mt-0" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
+    <v-container fluid >
       <mobile-top-nav extraClass="body-bg-secondary" actionClass="d-none" :headerText="$t('app_bar_dashboard_booking')">
         <template v-slot:goBack>
           <span></span>
@@ -9,11 +9,10 @@
           <span></span>
         </template>
       </mobile-top-nav>
-      <v-row justify="center">
+      <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('app_bar_dashboard_booking')"></desktop-top-nav>
+      <v-row justify="center" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
         <v-col cols="12" md="8">
-          <DesktopHeader :title="$t('app_bar_dashboard_booking')"/>
           <v-row>
-            
             <v-col cols="12" md="3" :class="{'pt-8' : !$vuetify.breakpoint.mdAndUp}">
               <v-select
                 v-model="filterValue"
@@ -163,7 +162,7 @@
         </v-col>
       </v-row>
 
-      <v-row v-if="false">
+      <v-row v-if="false" :class="{'px-10' : $vuetify.breakpoint.mdAndUp}">
         <v-col class="text-center">
           <div class="section-title">
             {{ $t("booking_section_title_news") }}
@@ -185,13 +184,9 @@ import NewsCard from "@/components/card/NewsCard";
 import { pathData } from "@/data";
 import MobileTopNav from '@/components/layout/global/MobileTopNav'
 import PurchasedCardMobile from '@/components/card/PurchasedCardMobile.vue';
-import DesktopHeader from '@/components/artifact/global/DesktopHeader'
-
-import {
-  athleteBookingApi,
-  athleteBookingTimeApi,
-  athleteSearchValueApi
-} from "@/api";
+import DesktopHeader from '@/components/artifact/global/DesktopHeader';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
+import {athleteBookingApi,athleteBookingTimeApi,athleteSearchValueApi} from "@/api";
 
 export default {
   layout: "athlete",
@@ -200,7 +195,8 @@ export default {
     NewsCard,
     MobileTopNav,
     PurchasedCardMobile,
-    DesktopHeader
+    DesktopHeader,
+    DesktopTopNav
   },
   data() {
     return {

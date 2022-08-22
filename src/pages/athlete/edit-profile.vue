@@ -23,21 +23,15 @@
           <span v-else></span>
         </template>
       </mobile-top-nav>
+      <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('profile')"></desktop-top-nav>
+
       <span class="page-container view-profile__wrapper">
         <v-row justify="center">
           <v-col cols="12" md="11">
 
             <!--------------- Desktop View ---------------->
 
-            <div class="d-none d-md-block" v-if="!this.$vuetify.breakpoint.smAndDown">
-              <v-row>
-                <v-col cols="12" class="pb-0">
-                  <div class="page-title">{{ $t("profile") }}</div>
-                </v-col>
-                <v-col cols="12">
-                  <div class="line"></div>
-                </v-col>
-              </v-row>
+            <div class="d-none d-md-block">
               <v-row >
                 <v-col cols="12" md="4">
                   <div class="default--label pb-2">
@@ -1242,7 +1236,8 @@ import ClientBackFooter from "@/components/artifact/global/ClientBackFooter";
 import EditImageDialog from "@/components/profile/EditImageDialog";
 import TiptopEditor from "@/components/editor/TiptopEditor";
 import VuePhoneNumberInput from "vue-phone-number-input";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "athlete",
@@ -1251,7 +1246,8 @@ export default {
     EditImageDialog,
     TiptopEditor,
     VuePhoneNumberInput,
-    MobileTopNav
+    MobileTopNav,
+    DesktopTopNav
   },
 
   data() {

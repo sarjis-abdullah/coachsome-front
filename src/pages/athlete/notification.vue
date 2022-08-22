@@ -13,6 +13,8 @@
         <span></span>
       </template>
     </mobile-top-nav>
+    <desktop-top-nav extraClass="body-bg-secondary" :headerText="$t('setting_sec_notification_title')"></desktop-top-nav>
+
     <v-row
       justify="center"
     >
@@ -172,11 +174,12 @@
 <script>
 import { endpoint, athleteSettingApi } from "../../api";
 import { pathData, settingValueData } from "@/data";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "athlete",
-  components: {MobileTopNav},
+  components: {MobileTopNav, DesktopTopNav},
   data() {
     return {
       notificationStatus:null,
