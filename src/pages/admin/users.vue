@@ -607,7 +607,7 @@ const headers = this.table.headers.filter(item=> item.value !== 'image')
         }),
       ];
 
-      const csvString = [
+      const csvContent = "data:text/csv;charset=utf-8," + [
         fields,
         ...mapData.map((item) => [
           ...fields.map(
@@ -619,15 +619,13 @@ const headers = this.table.headers.filter(item=> item.value !== 'image')
       ]
         .map((e) => e.join(","))
         .join("\n");
+      var encodedUri = encodeURI(csvContent);
+      var link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "users-data.csv");
+      document.body.appendChild(link); // Required for FF
 
-      const blob = new Blob([csvString], { type: "text/csv" });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      const fileName = `users-data.csv`;
-      link.setAttribute("download", fileName);
-      document.body.appendChild(link);
-      link.click();
+      link.click(); // This will download the data file named "my_data.csv".
     },
     async resetPassword(email){
       this.loading = true

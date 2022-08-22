@@ -67,7 +67,7 @@
               <!-- Order List -->
               <v-list-item link @click.stop="handleSession">
                 <v-list-item-icon>
-                  <v-img :src="require('@/assets/img/svg-icons/new/basket-plus.svg')" alt="order_list" />
+                  <v-img :src="require('@/assets/img/svg-icons/new/sessions.svg')" alt="order_list" />
                 </v-list-item-icon>
 
                 <v-list-item-content>

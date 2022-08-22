@@ -63,7 +63,7 @@
               <!-- Wishlist -->
                <v-list-item link @click.stop="handleWishlistBtn">
                 <v-list-item-icon>
-                  <v-img  :src="require('@/assets/img/svg-icons/new/credit-card.svg')" alt="payment" />
+                  <v-img  :src="require('@/assets/img/svg-icons/new/gift.svg')" alt="payment" />
                 </v-list-item-icon>
 
                 <v-list-item-content>
