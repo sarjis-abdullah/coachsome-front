@@ -29,7 +29,7 @@
         v-if="progress"
       ></v-progress-circular>
       </div>
-      <v-row v-if="!progress && coaches && !coaches.length" >
+      <v-row v-if="!progress && coaches && !coaches.length" class="centered">
         <v-col cols="12" >
         <article>
           <header>
