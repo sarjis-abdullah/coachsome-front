@@ -22,6 +22,7 @@ const athleteItems = [
         item: true,
         line: false,
         checker:false,
+        model: false,
         subItems: [
             {
                 key: "home",
@@ -87,6 +88,7 @@ const athleteItems = [
         item: true,
         line: false,
         checker:false,
+        model: false,
         subItems: [
             {
                 key: "account",
@@ -143,6 +145,7 @@ const coachItems = [
         item: true,
         line: false,
         checker:false,
+        model: false,
         subItems: [
             {
                 key: "home",
@@ -290,6 +293,7 @@ const coachItems = [
         item: true,
         line: false,
         checker:false,
+        model: false,
         subItems: [
             {
                 key: "account",

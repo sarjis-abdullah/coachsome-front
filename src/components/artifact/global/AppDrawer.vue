@@ -39,7 +39,7 @@
                 </v-list-item-content>
             </v-list-item>
             <v-list-group
-                :value="false"
+                v-model="item.model"
                 :key="i"
                 v-else-if="item.item && item.hasSubItem && !item.line && !item.checker"
             >
@@ -120,9 +120,7 @@ export default {
     drawer: null,
 
   }),
-  computed: {
-
-  },
+  computed: {},
   watch: {},
   created() {},
   mounted() {},
