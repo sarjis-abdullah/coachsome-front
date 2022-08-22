@@ -40,15 +40,15 @@
       <article v-if="!progress && coaches && !coaches.length" cols="12" sm="12">
         <header>
           <h3 class="wishlist--title">
-            Nothing to see here?
+            {{$t('wishlist_title')}}
           </h3>
         </header>
         <div class="wishlist--text">
-          On this page you can save a coach profile if you find a coach interessing and might buy from them later. 
+          {{$t('wishlist_description')}} 
         </div>
         <div class="text-center mt-5">
           <v-btn @click="gotoFindCoaches" class="white--text" depressed color="#15577C">
-            {{$t("explore_coaches")}}
+            {{$t("wishlist_explore_coaches_btn")}}
           </v-btn>
         </div>
       </article>
