@@ -26,7 +26,7 @@
           </v-row> -->
           <v-row>
             <v-col cols="12" md="3">
-              <div class="section-title pb-2">{{ $t("text_times") }}</div>
+              <div class="default--title pb-2">{{ $t("text_times") }}</div>
               <div class="section-description">
                 {{ $t("availability_section_desc") }}
               </div>
@@ -111,7 +111,7 @@
 
           <v-row>
             <v-col cols="12" md="3">
-              <div class="section-title pb-2">
+              <div class="default--title pb-2">
                 {{ $t("availability_section_scheduled_time_title") }}
               </div>
               <div class="section-description">
@@ -251,7 +251,7 @@
         <div class="d-md-none container-page">
           <v-row class=" pt-5">
             <v-col cols="12" class="px-0 mx-0">
-              <div class="section-title pb-2">{{$t("pwa_availability_menu")}}</div>
+              <div class="default--title pb-2">{{$t("pwa_availability_menu")}}</div>
               <div class="line"></div>
             </v-col>
           </v-row>
