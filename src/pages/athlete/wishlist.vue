@@ -29,21 +29,25 @@
         v-if="progress"
       ></v-progress-circular>
       </div>
-      <article v-if="!progress && coaches && !coaches.length" cols="12" sm="12">
-        <header>
-          <h3 class="wishlist--title">
-            {{$t('wishlist_title')}}
-          </h3>
-        </header>
-        <div class="wishlist--text">
-          {{$t('wishlist_description')}} 
-        </div>
-        <div class="text-center mt-5">
-          <v-btn @click="gotoFindCoaches" class="white--text" depressed color="#15577C">
-            {{$t("wishlist_explore_coaches_btn")}}
-          </v-btn>
-        </div>
-      </article>
+      <v-row v-if="!progress && coaches && !coaches.length" >
+        <v-col cols="12" >
+        <article>
+          <header>
+            <h3 class="wishlist--title">
+              {{$t('wishlist_title')}}
+            </h3>
+          </header>
+          <div class="wishlist--text">
+            {{$t('wishlist_description')}} 
+          </div>
+          <div class="text-center mt-5">
+            <v-btn @click="gotoFindCoaches" class="white--text" depressed color="#15577C">
+              {{$t("wishlist_explore_coaches_btn")}}
+            </v-btn>
+          </div>
+        </article>
+        </v-col>
+      </v-row>
     </div>
   </v-container>
 </template>
