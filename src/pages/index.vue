@@ -1002,8 +1002,6 @@ export default {
     this.getCoach();
   },
   mounted() {
-      const CLIENT_ID = process.env.VUE_APP_CLIENT_ID
-
     google.accounts.id.initialize({
         client_id: process.env.GOOGLE_CLIENT_ID,
         ux_mode:"redirect",
@@ -1013,59 +1011,51 @@ export default {
         cancel_on_tap_outside: true, // optional
         auto_prompt:"true"
       })
-      google.accounts.id.prompt()
-      // window.google.accounts.id.initialize({
-      //     client_id: process.env.GOOGLE_CLIENT_ID,
-      //     auto_select: false,
-      //     callback: process.env.API_SERVER_URL + "/auth/login/onetap",
-      //     cancel_on_tap_outside: false,
-      //     context: 'signin'
-      //   });
-      //   window.google.accounts.id.prompt();
-
+      google.accounts.id.prompt();
   },
   methods: {
-    handleCredentialResponse(responseData) {
-      this.$axios.get( process.env.API_SERVER_URL + "/auth/login/onetap/"+responseData.credential)
-      .then(response => {
-        if (response.data.access_token != '') {
-            this.$store.dispatch("putToken", response.data.access_token);
-            this.$auth.setUserToken( response.data.access_token);
-            userApi(this.$axios)
-              .authUserInformation()
-              .then(({ data }) => {
-                this.$store.dispatch("setExistingEmail", data.user.email);
-                this.$store.dispatch("setUser", data.user);
-                this.$auth.setUser(data.user);
-                this.$socket.emit("connected", this.$auth.user.id);
-                if(data.user.roles && data.user.roles[0]){
+    handleCredentialResponse(response) {
+        this.$axios.get( process.env.API_SERVER_URL + "/auth/login/onetap/"+response.credential)
+        .then(response => {
+          if (response.data.access_token != '') {
+              this.$store.dispatch("putToken", response.data.access_token);
+              this.$auth.setUserToken( response.data.access_token);
+              userApi(this.$axios)
+                .authUserInformation()
+                .then(({ data }) => {
+                  this.$store.dispatch("setExistingEmail", data.user.email);
+                  this.$store.dispatch("setUser", data.user);
+                  this.$auth.setUser(data.user);
+                  this.$socket.emit("connected", this.$auth.user.id);
+                  if(data.user.roles && data.user.roles[0]){
 
-                  let authUser = data.user;
+                    let authUser = data.user;
 
-                  this.$store.dispatch("activeBottomNav", 0);
+                    this.$store.dispatch("activeBottomNav", 0);
 
-                  if(authUser.roles[0].name == "superadmin" || authUser.roles[0].name == "admin" || authUser.roles[0].name == "staff"){
-                    this.$router.push(this.localePath(pathData.admin.dashboard));
-                  }else if(authUser.roles[0].name == "coach"){
-                    this.$router.push(this.localePath(pathData.coach.home));
-                  }else if(authUser.roles[0].name == "athlete"){
-                    this.$router.push(this.localePath(pathData.athlete.home));
+                    if(authUser.roles[0].name == "superadmin" || authUser.roles[0].name == "admin" || authUser.roles[0].name == "staff"){
+                      this.$router.push(this.localePath(pathData.admin.dashboard));
+                    }else if(authUser.roles[0].name == "coach"){
+                      this.$router.push(this.localePath(pathData.coach.home));
+                    }else if(authUser.roles[0].name == "athlete"){
+                      this.$router.push(this.localePath(pathData.athlete.home));
+                    }else{
+                      this.$router.push(this.localePath(pathData.pages.home));
+                    }
                   }else{
-                    this.$router.push(this.localePath(pathData.pages.home));
+                    this.$router.push(this.localePath(pathData.pages.getStarted));
                   }
-                }else{
-                  this.$router.push(this.localePath(pathData.pages.getStarted));
-                }
-                
-              })
-              .catch(() => {});
-          }
-          
-        })
-        .catch(error => {
-          console.log(error);
-        });
+                  
+                })
+                .catch(() => {});
+            }
+            
+          })
+          .catch(error => {
+            console.log(error);
+          });
     },
+
     handleReviewTextClick() {
       this.$router.push(this.localePath(pathData.pages.baseReviews));
     },
