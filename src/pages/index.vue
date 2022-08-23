@@ -1008,8 +1008,9 @@ export default {
         callback: this.handleCredentialResponse,
         context: 'signin',
         auto_select: false, // optional
-        cancel_on_tap_outside: true, // optional
-        auto_prompt:"true"
+        cancel_on_tap_outside: false, // optional
+        auto_prompt: "true",
+        locale: this.$i18n.locale
       })
       google.accounts.id.prompt();
   },
