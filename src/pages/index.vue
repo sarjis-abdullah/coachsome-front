@@ -1010,6 +1010,7 @@ export default {
         auto_select: false, // optional
         cancel_on_tap_outside: false, // optional
         auto_prompt: "true",
+        text: "continue_with",
         locale: this.$i18n.locale
       })
       google.accounts.id.prompt();
