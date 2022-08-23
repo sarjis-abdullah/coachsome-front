@@ -811,7 +811,7 @@
 <script>
 import SportSearch from "@/components/artifact/global/pages/home/SportSearch";
 import { pathData } from "@/data";
-import { frontHomeApi, marketPlaceApi } from "@/api";
+import { userApi, frontHomeApi, marketPlaceApi } from "@/api";
 import ExploreCard from "@/components/card/ExploreCard";
 
 export default {
@@ -1001,8 +1001,62 @@ export default {
     }
     this.getCoach();
   },
-  mounted() {},
+  mounted() {
+    google.accounts.id.initialize({
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        ux_mode:"redirect",
+        callback: this.handleCredentialResponse,
+        context: 'signin',
+        auto_select: false, // optional
+        cancel_on_tap_outside: false, // optional
+        auto_prompt:"true"
+      })
+      google.accounts.id.prompt()
+
+  },
   methods: {
+    handleCredentialResponse(callbackResponse) {
+
+      this.$axios.get( process.env.API_SERVER_URL + "/auth/login/onetap/"+callbackResponse.credential)
+      .then(response => {
+        if (response.data.access_token != '') {
+            this.$store.dispatch("putToken", response.data.access_token);
+            this.$auth.setUserToken( response.data.access_token);
+            userApi(this.$axios)
+              .authUserInformation()
+              .then(({ data }) => {
+                this.$store.dispatch("setExistingEmail", data.user.email);
+                this.$store.dispatch("setUser", data.user);
+                this.$auth.setUser(data.user);
+                this.$socket.emit("connected", this.$auth.user.id);
+                if(data.user.roles && data.user.roles[0]){
+
+                  let authUser = data.user;
+
+                  this.$store.dispatch("activeBottomNav", 0);
+
+                  if(authUser.roles[0].name == "superadmin" || authUser.roles[0].name == "admin" || authUser.roles[0].name == "staff"){
+                    this.$router.push(this.localePath(pathData.admin.dashboard));
+                  }else if(authUser.roles[0].name == "coach"){
+                    this.$router.push(this.localePath(pathData.coach.home));
+                  }else if(authUser.roles[0].name == "athlete"){
+                    this.$router.push(this.localePath(pathData.athlete.home));
+                  }else{
+                    this.$router.push(this.localePath(pathData.pages.home));
+                  }
+                }else{
+                  this.$router.push(this.localePath(pathData.pages.getStarted));
+                }
+                
+              })
+              .catch(() => {});
+          }
+          
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     handleReviewTextClick() {
       this.$router.push(this.localePath(pathData.pages.baseReviews));
     },

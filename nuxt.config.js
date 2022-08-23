@@ -90,7 +90,11 @@ export default {
       {
         src: `/clarity.js`,
         body: true
-      }
+      },
+      {
+        src: 'https://accounts.google.com/gsi/client',
+        body: true
+      },
     ]
   },
 

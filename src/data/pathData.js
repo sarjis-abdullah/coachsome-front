@@ -60,6 +60,7 @@ export default {
         dashboard: "/coach/dashboard",
         imageAndVideo: "/coach/gallery",
         availability: "/coach/availability",
+        billing: "/coach/billing",
         geography: "/coach/geography",
         reviews: "/coach/reviews",
         packages: "/coach/packages",

@@ -183,6 +183,18 @@
           >{{ $t(navItems.becomeACoach.t_key) }}</v-btn
         >
 
+        <v-btn
+          small
+          depressed
+          color="#EDB041"
+          class="upgrate-btn"
+          v-if="isAuthCoach"
+        >
+            <img left class="pr-1" :src="require('@/assets/img/svg-icons/lightning.svg')" alt="">
+          
+          {{$t("text_upgrade")}}
+        </v-btn>
+
         <!-- Login -->
         <v-btn
           small
@@ -459,6 +471,15 @@ export default {
   &--div{
     cursor: pointer;
   }
+}
+.upgrate-btn{
+  font-family: $font-family!important;
+  font-style: normal!important;
+  font-weight: 400!important;
+  font-size: 16px!important;
+  line-height: 22px!important;
+  text-transform: capitalize!important;
+  padding: 4px 27px!important;
 }
 // .top-nav {
   // .slogan {
