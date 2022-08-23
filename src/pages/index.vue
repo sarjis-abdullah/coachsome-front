@@ -1002,22 +1002,31 @@ export default {
     this.getCoach();
   },
   mounted() {
+      const CLIENT_ID = process.env.VUE_APP_CLIENT_ID
+
     google.accounts.id.initialize({
         client_id: process.env.GOOGLE_CLIENT_ID,
         ux_mode:"redirect",
         callback: this.handleCredentialResponse,
         context: 'signin',
         auto_select: false, // optional
-        cancel_on_tap_outside: false, // optional
+        cancel_on_tap_outside: true, // optional
         auto_prompt:"true"
       })
       google.accounts.id.prompt()
+      // window.google.accounts.id.initialize({
+      //     client_id: process.env.GOOGLE_CLIENT_ID,
+      //     auto_select: false,
+      //     callback: process.env.API_SERVER_URL + "/auth/login/onetap",
+      //     cancel_on_tap_outside: false,
+      //     context: 'signin'
+      //   });
+      //   window.google.accounts.id.prompt();
 
   },
   methods: {
-    handleCredentialResponse(callbackResponse) {
-
-      this.$axios.get( process.env.API_SERVER_URL + "/auth/login/onetap/"+callbackResponse.credential)
+    handleCredentialResponse(responseData) {
+      this.$axios.get( process.env.API_SERVER_URL + "/auth/login/onetap/"+responseData.credential)
       .then(response => {
         if (response.data.access_token != '') {
             this.$store.dispatch("putToken", response.data.access_token);
