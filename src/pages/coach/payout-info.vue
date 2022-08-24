@@ -52,18 +52,24 @@
               <v-col cols="12" class="d-md-none">
                 <v-text-field
                   v-model="form.accHolderName"
-                  dense
-                  hide-details
                   outlined
+                  dense
+                  class="default-text-field"
+                  color="#9FAEC2"
+                  background-color="white"
+                  hide-details
                   :label="$t('payout_info_input_lable_acc_holder_name')"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" class="d-md-none">
                 <v-text-field
                   v-model="form.bankName"
-                  dense
-                  hide-details
                   outlined
+                  dense
+                  class="default-text-field"
+                  color="#9FAEC2"
+                  background-color="white"
+                  hide-details
                   :label="$t('payout_info_input_label_name_of_bank')"
                 ></v-text-field>
               </v-col>
@@ -71,18 +77,24 @@
               <v-col cols="5" class="d-md-none">
                 <v-text-field
                   v-model="form.registration"
-                  dense
-                  hide-details
                   outlined
+                  dense
+                  class="default-text-field"
+                  color="#9FAEC2"
+                  background-color="white"
+                  hide-details
                   label="Reg. nr"
                 ></v-text-field>
               </v-col>
               <v-col cols="7" class="d-md-none">
                 <v-text-field
                   v-model="form.account"
-                  dense
-                  hide-details
                   outlined
+                  dense
+                  class="default-text-field"
+                  color="#9FAEC2"
+                  background-color="white"
+                  hide-details
                   label="Account Number"
                 ></v-text-field>
               </v-col>
@@ -122,17 +134,21 @@
                       <v-col cols="12" md="6">
                         <v-text-field
                           v-model="form.vatNumber"
-                          solo
+                          outlined
                           dense
+                          class="default-text-field"
+                          color="#9FAEC2"
+                          background-color="white"
                           :label="$t('payout_info_input_label_vat_number')"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" md="6" class="d-flex align-center">
                         <v-switch
                           v-model="form.isVatRegistered"
-                          class="pb-5"
+                          outlined
                           dense
-                          color="primary-light-1"
+                          class="default-text-field pb-5"
+                          color="#9FAEC2"
                           :label="$t('payout_info_input_label_is_vat_reg')"
                         ></v-switch>
                         <img
@@ -146,8 +162,11 @@
                       <v-col cols="12" md="12">
                         <v-text-field
                           v-model="form.companyName"
-                          solo
+                          outlined
                           dense
+                          class="default-text-field"
+                          color="#9FAEC2"
+                          background-color="white"
                           :label="$t('setting_hint_company_name')"
                         ></v-text-field>
                       </v-col>
@@ -163,8 +182,11 @@
                               :items="form.countryList"
                               item-text="displayName"
                               item-value="code"
-                              solo
+                              outlined
                               dense
+                              class="default-text-field"
+                              color="#9FAEC2"
+                              background-color="white"
                               hide-no-data
                               hide-details
                               append-icon="expand_more"
@@ -177,8 +199,11 @@
                             <div v-show="!isTheCountryCodeDk">
                               <v-text-field
                                 v-model="form.address"
-                                solo
+                                outlined
                                 dense
+                                class="default-text-field"
+                                color="#9FAEC2"
+                                background-color="white"
                                 :placeholder="$t('geography_placeholder_address')"
                               ></v-text-field>
                             </div>
@@ -188,8 +213,11 @@
                             >
                               <v-text-field
                                 v-model="form.address"
-                                solo
+                                outlined
                                 dense
+                                class="default-text-field"
+                                color="#9FAEC2"
+                                background-color="white"
                                 ref="input"
                                 type="search"
                                 :placeholder="$t('geography_placeholder_address')"
@@ -203,8 +231,11 @@
                             <v-text-field
                               autocomplete="off"
                               v-model="form.zipCode"
+                              outlined
                               dense
-                              solo
+                              class="default-text-field"
+                              color="#9FAEC2"
+                              background-color="white"
                               :label="$t('setting_input_hint_zip_code')"
                             ></v-text-field>
                           </v-col>
@@ -212,8 +243,11 @@
                             <v-text-field
                               autocomplete="off"
                               v-model="form.city"
+                              outlined
                               dense
-                              solo
+                              class="default-text-field"
+                              color="#9FAEC2"
+                              background-color="white"
                               :label="$t('setting_input_hint_city')"
                             ></v-text-field>
                           </v-col>
@@ -226,8 +260,11 @@
                         <v-col cols="12">
                             <v-text-field
                             v-model="form.companyName"
-                            dense
                             outlined
+                            dense
+                            class="default-text-field"
+                            color="#9FAEC2"
+                            background-color="white"
                             hide-details
                             :label="$t('setting_hint_company_name')"
                             ></v-text-field>
@@ -239,6 +276,9 @@
                                     outlined
                                     hide-details
                                     dense
+                                    class="default-text-field"
+                                    color="#9FAEC2"
+                                    background-color="white"
                                     :placeholder="$t('geography_placeholder_address')"
                                 ></v-text-field>
                             </div>
@@ -251,6 +291,9 @@
                                 outlined
                                 hide-details
                                 dense
+                                class="default-text-field"
+                                color="#9FAEC2"
+                                background-color="white"
                                 ref="input"
                                 type="search"
                                 :label="$t('geography_placeholder_address')"
@@ -262,8 +305,11 @@
                             <v-text-field
                                 autocomplete="off"
                                 v-model="form.zipCode"
-                                dense
                                 outlined
+                                dense
+                                class="default-text-field"
+                                color="#9FAEC2"
+                                background-color="white"
                                 hide-details
                                 :label="$t('setting_input_hint_zip_code')"
                             ></v-text-field>
@@ -272,8 +318,11 @@
                             <v-text-field
                                 autocomplete="off"
                                 v-model="form.city"
-                                dense
                                 outlined
+                                dense
+                                class="default-text-field"
+                                color="#9FAEC2"
+                                background-color="white"
                                 hide-details
                                 :label="$t('setting_input_hint_city')"
                             ></v-text-field>
@@ -288,6 +337,9 @@
                                 item-value="code"
                                 outlined
                                 dense
+                                class="default-text-field"
+                                color="#9FAEC2"
+                                background-color="white"
                                 hide-no-data
                                 hide-details
                                 append-icon="expand_more"
@@ -307,6 +359,9 @@
                                 outlined
                                 hide-details
                                 dense
+                                class="default-text-field"
+                                color="#9FAEC2"
+                                background-color="white"
                                 :label="$t('payout_info_input_label_vat_number')"
                             ></v-text-field>
                         </v-col>
@@ -333,8 +388,11 @@
                     </div>
                     <v-text-field
                       v-model="form.accHolderName"
+                      outlined
                       dense
-                      solo
+                      class="default-text-field"
+                      color="#9FAEC2"
+                      background-color="white"
                       :label="$t('payout_info_input_lable_acc_holder_name')"
                     ></v-text-field>
                   </v-col>
@@ -344,8 +402,11 @@
                     </div>
                     <v-text-field
                       v-model="form.bankName"
+                      outlined
                       dense
-                      solo
+                      class="default-text-field"
+                      color="#9FAEC2"
+                      background-color="white"
                       :label="$t('payout_info_input_label_name_of_bank')"
                     ></v-text-field>
                   </v-col>
@@ -356,8 +417,11 @@
                     </div>
                     <v-text-field
                       v-model="form.registration"
+                      outlined
                       dense
-                      solo
+                      class="default-text-field"
+                      color="#9FAEC2"
+                      background-color="white"
                       label="0000"
                     ></v-text-field>
                   </v-col>
@@ -367,8 +431,11 @@
                     </div>
                     <v-text-field
                       v-model="form.account"
+                      outlined
                       dense
-                      solo
+                      class="default-text-field"
+                      color="#9FAEC2"
+                      background-color="white"
                       label="000 000 0000"
                     ></v-text-field>
                   </v-col>
@@ -550,7 +617,14 @@ export default {
   }
 };
 </script>
-
+<style scoped>
+.v-text-field--outlined >>> fieldset {
+  border-color: #9FAEC2!important;
+}
+.input-tel__label, .country-selector__label{
+  color: #9FAEC2!important;
+}
+</style>
 <style lang="scss">
 .setting-page {
   .input-title {

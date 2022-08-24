@@ -30,19 +30,23 @@
         </v-row> -->
 
         <v-row align="center" class="d-none d-md-block">
-          <v-col cols="12" class="pb-0">
+          <v-col cols="12" md="4" class="pb-0">
             <div class="default--label pb-2">{{ $t("text_rate") }}</div>
           </v-col>
           <v-col cols="12" md="4" class="pt-0">
             <div class="section-description">{{ $t("package_rate_desc") }}</div>
           </v-col>
-          <v-col cols="12" md="2" class="mt-0 pt-0">
+          <v-col cols="12" md="4" class="mt-0 pt-0">
             <!-- Hourly Rate Dialog -->
             <v-dialog v-model="hourlyRate.dialog" persistent max-width="800px">
               <template v-slot:activator="{ on }">
                 <v-text-field
                   label
-                  solo
+                  outlined
+                  dense
+                  class="default-text-field"
+                  color="#9FAEC2"
+                  background-color="white"
                   v-on="on"
                   v-model="hourlyRate.inputValue"
                   readonly
@@ -75,7 +79,11 @@
                       <v-text-field
                         :error-messages="hourlyRateErrors"
                         required
-                        solo
+                        outlined
+                        dense
+                        class="default-text-field"
+                        color="#9FAEC2"
+                        background-color="white"
                         v-model="hourlyRate.dialogInputVal"
                         @input="$v.hourlyRate.dialogInputVal.$touch()"
                       ></v-text-field>
@@ -658,6 +666,15 @@ export default {
   mounted() {}
 };
 </script>
+
+<style scoped>
+.v-text-field--outlined >>> fieldset {
+  border-color: #9FAEC2!important;
+}
+.input-tel__label, .country-selector__label{
+  color: #9FAEC2!important;
+}
+</style>
 
 <style lang="scss">
 .coach-package-page {

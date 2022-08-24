@@ -50,8 +50,11 @@
                   ]"
                   v-model="url.video"
                   :loading="videoForm.isLoading"
+                  outlined
                   dense
-                  solo
+                  class="default-text-field"
+                  color="#9FAEC2"
+                  background-color="white"
                 ></v-text-field>
               </v-form>
             </v-col>

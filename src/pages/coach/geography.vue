@@ -125,7 +125,11 @@
                 <v-col>
                   <v-text-field
                     hide-details
-                    solo
+                    outlined
+                    dense
+                    class="default-text-field"
+                    color="#9FAEC2"
+                    background-color="white"
                     v-model="distance.farAway"
                     :label="$t('text_km_from')"
                   ></v-text-field>
