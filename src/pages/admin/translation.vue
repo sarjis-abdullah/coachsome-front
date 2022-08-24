@@ -68,8 +68,10 @@
                       v-model="search"
                       append-icon="search"
                       label="Search"
-                      single-line
-                      solo
+                      outlined
+                      dense
+                      class="default-text-field"
+                      color="#9FAEC2"
                       hide-details
                     ></v-text-field>
                     <v-spacer></v-spacer>
