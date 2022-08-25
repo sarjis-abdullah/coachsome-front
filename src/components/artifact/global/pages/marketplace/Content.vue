@@ -7,15 +7,15 @@
       @click.stop="clickedOnContainerSpace"
     >
       <v-row>
-        <v-col class="py-0" cols="12" md="9" :class="$vuetify.breakpoint.mdAndUp ? 'mt-1' : 'mt-12'">
+        <v-col class="py-0" cols="12" md="9" :class="{'mt-1' : $vuetify.breakpoint.mdAndUp, 'mt-12' : !$vuetify.breakpoint.mdAndUp}">
           <v-card
             class="overflow-y"
-            :height="$vuetify.breakpoint.mdAndUp ? '91vh' : '90vh'"
+            :height="100"
             color="transparent"
             flat
           >
             <!-- <v-card-text class="px-0 pt-md-15"> -->
-            <v-card-text class="px-0 pt-md-15">
+            <v-card-text class="px-0">
               <!-- Filter Box -->
               <div
                 :class="{ 'fixed-box py-1': isFilterBoxFixed }"

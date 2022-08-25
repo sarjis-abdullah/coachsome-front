@@ -13,7 +13,7 @@
 import { pageBuilderApi } from "@/api";
 
 export default {
-  layout: "admin",
+  layout: "admin-no-drawer",
   head() {
     return {
       title: "Cms"

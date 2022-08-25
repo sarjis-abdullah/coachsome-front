@@ -950,9 +950,6 @@ export default {
   computed: {},
   async asyncData({ $axios, i18n }) {
     const { data } = await frontHomeApi($axios).getInitialData({});
-
-
-
     let categoryList = [];
     if (data.categoryList && data.categoryList.length > 0) {
       for (const item of data.categoryList) {
@@ -1002,7 +999,8 @@ export default {
     this.getCoach();
   },
   mounted() {
-    google.accounts.id.initialize({
+    if(!this.$auth.loggedIn){
+      google.accounts.id.initialize({
         client_id: process.env.GOOGLE_CLIENT_ID,
         ux_mode:"redirect",
         callback: this.handleCredentialResponse,
@@ -1014,6 +1012,7 @@ export default {
         locale: this.$i18n.locale
       })
       google.accounts.id.prompt();
+    }
   },
   methods: {
     handleCredentialResponse(response) {
