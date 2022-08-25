@@ -7,7 +7,7 @@
       @click.stop="clickedOnContainerSpace"
     >
       <v-row>
-        <v-col class="py-0" cols="12" md="9" :class="{'mt-1' : $vuetify.breakpoint.mdAndUp, 'mt-12' : !$vuetify.breakpoint.mdAndUp}">
+        <v-col class="py-0" cols="12" md="9" :class="{'mt-1' : $vuetify.breakpoint.smAndDown, 'mt-12' : !$vuetify.breakpoint.smAndDown}">
           <v-card
             class="overflow-y"
             :height="100"
@@ -19,7 +19,7 @@
               <!-- Filter Box -->
               <div
                 :class="{ 'fixed-box py-1': isFilterBoxFixed }"
-                v-if="$vuetify.breakpoint.mdAndUp"
+                v-if="!$vuetify.breakpoint.smAndDown"
               >
                 <CoachFilter
                   :categories="categoryFilter.categories"
