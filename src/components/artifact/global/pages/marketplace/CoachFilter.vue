@@ -9,15 +9,17 @@
           @input="$emit('update:selectedCategories', categoryFilter.select)"
           :menu-props="{ closeOnContentClick: true }"
           chips
-          dense
           hide-details
           clearable
-          color="white"
           item-text="name"
           item-value="id"
           :search-input.sync="categoryFilter.search"
           multiple
-          solo
+          outlined
+          dense
+          class="default-text-field"
+          color="#9FAEC2"
+          background-color="white"
           :label="$t('marketplace_category_filter_placeholder_text')"
           append-icon
           autocomplete="off"
@@ -56,7 +58,10 @@
           dense
           hide-details
           :label="hourlyPriceFilter.range.join([(separator = ' - ')])"
-          solo
+          outlined
+          class="default-text-field"
+          color="#9FAEC2"
+          background-color="white"
         >
           <template v-slot:no-data>
             <v-list-item>
@@ -98,8 +103,11 @@
           @change="() => $emit('update:selectedCountry', countryFilter.select)"
           item-text="displayName"
           item-value="code"
-          solo
+          outlined
           dense
+          class="default-text-field"
+          color="#9FAEC2"
+          background-color="white"
           hide-no-data
           hide-details
           append-icon="expand_more"

@@ -7,7 +7,7 @@
       @click.stop="clickedOnContainerSpace"
     >
       <v-row>
-        <v-col class="py-0" cols="12" md="9" :class="{'mt-1' : $vuetify.breakpoint.smAndDown, 'mt-12' : !$vuetify.breakpoint.smAndDown}">
+        <v-col class="py-0 mt-12" cols="12" md="9" > <!-- </v-col>:class="{'mt-12' : $vuetify.breakpoint.smAndDown, 'mt-12' : !$vuetify.breakpoint.smAndDown}"> -->
           <v-card
             class="overflow-y"
             :height="100"
