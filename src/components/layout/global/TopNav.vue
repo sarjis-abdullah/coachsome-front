@@ -248,6 +248,7 @@
 
 <script>
 import { pathData } from "@/data";
+import { userApi } from "@/api";
 import { currencyService, bookingService } from "@/services";
 import Avatar from "@/components/artifact/global/Avatar";
 import Burger from "@/components/artifact/global/Burger";
@@ -415,7 +416,64 @@ export default {
       }
     }
   },
+  mounted() {
+    if(!this.$auth.loggedIn){
+      google.accounts.id.initialize({
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        ux_mode:"redirect",
+        callback: this.handleCredentialResponse,
+        context: 'signin',
+        auto_select: false, // optional
+        cancel_on_tap_outside: true, // optional
+        auto_prompt: "true",
+        text: "continue_with",
+        locale: this.$i18n.locale
+      })
+      google.accounts.id.prompt();
+    }
+  },
   methods: {
+    handleCredentialResponse(response) {
+      this.$axios.get( process.env.API_SERVER_URL + "/auth/login/onetap/"+response.credential)
+      .then(response => {
+        if (response.data.access_token != '') {
+          this.$store.dispatch("putToken", response.data.access_token);
+          this.$auth.setUserToken( response.data.access_token);
+          userApi(this.$axios)
+            .authUserInformation()
+            .then(({ data }) => {
+              this.$store.dispatch("setExistingEmail", data.user.email);
+              this.$store.dispatch("setUser", data.user);
+              this.$auth.setUser(data.user);
+              this.$socket.emit("connected", this.$auth.user.id);
+              if(data.user.roles && data.user.roles[0]){
+
+                let authUser = data.user;
+
+                this.$store.dispatch("activeBottomNav", 0);
+
+                if(authUser.roles[0].name == "superadmin" || authUser.roles[0].name == "admin" || authUser.roles[0].name == "staff"){
+                  this.$router.push(this.localePath(pathData.admin.dashboard));
+                }else if(authUser.roles[0].name == "coach"){
+                  this.$router.push(this.localePath(pathData.coach.home));
+                }else if(authUser.roles[0].name == "athlete"){
+                  this.$router.push(this.localePath(pathData.athlete.home));
+                }else{
+                  this.$router.push(this.localePath(pathData.pages.home));
+                }
+              }else{
+                this.$router.push(this.localePath(pathData.pages.getStarted));
+              }
+              
+            })
+            .catch(() => {});
+        }
+          
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    },
     gotoMarketplace(navItems){
       this.$router.push(this.localePath(navItems.marketplace.name))
     },
