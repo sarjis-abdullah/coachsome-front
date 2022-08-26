@@ -204,7 +204,7 @@
                                 class="default-text-field"
                                 color="#9FAEC2"
                                 background-color="white"
-                                :placeholder="$t('geography_placeholder_address')"
+                                :label="$t('geography_placeholder_address')"
                               ></v-text-field>
                             </div>
                             <div
@@ -220,7 +220,7 @@
                                 background-color="white"
                                 ref="input"
                                 type="search"
-                                :placeholder="$t('geography_placeholder_address')"
+                                :label="$t('geography_placeholder_address')"
                                 id="dawa-autocomplete-input"
                               ></v-text-field>
                             </div>

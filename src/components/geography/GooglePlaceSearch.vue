@@ -1,11 +1,15 @@
 <template>
-  <div class="place-search">
+  <div class="place-search float-container">
+    <label for="customInput" class="d-none"  id="customLabel">&nbsp;{{$t('geography_placeholder_address')}}&nbsp;</label>
     <input
+      id="customInput"
+      @focus="inputFocus()"
+      @blur="inputFocusOut()"
       v-model="address"
       @keyup.enter="enterKeyUpHandle"
-      class="search-input"
+      class="search-input search-input--inactive"
       type="text"
-      :placeholder="$t('geography_placeholder_address')"
+      :placeholder="addressLabel"
       ref="search"
       :style="{ height: height }"
     />
@@ -16,6 +20,7 @@ export default {
   props: ["value", "height"],
   data() {
     return {
+      addressLabel:  this.$i18n.t("geography_placeholder_address"),
       address: "",
       google: null,
       location: {
@@ -46,6 +51,24 @@ export default {
     this.init();
   },
   methods: {
+    inputFocus(){
+      this.addressLabel = "";
+      const el = document.getElementById('customLabel');
+      el.classList.remove('d-none');
+      const selfEl = document.getElementById('customInput');
+      selfEl.classList.remove('search-input--inactive');
+      selfEl.classList.add('search-input--active');
+    },
+    inputFocusOut(){
+      this.addressLabel = this.$i18n.t("geography_placeholder_address");
+      if(this.address == ""){
+        const el = document.getElementById('customLabel');
+        el.classList.add('d-none');
+      }
+      const selfEl = document.getElementById('customInput');
+      selfEl.classList.remove('search-input--active');
+      selfEl.classList.add('search-input--inactive');
+    },
     enterKeyUpHandle() {
       this.$emit("location", this.location);
     },
@@ -114,19 +137,92 @@ export default {
   }
 };
 </script>
+<style scoped>
+.float-container {
+  box-sizing: border-box;
+  position: relative;
+  align-items: stretch;
+} 
+input {  
+    border: none;
+    font-size: 16px;
+    outline: 0;
+    padding: 16px 0 10px;    
+    width: 100%;
+  }
 
+  label {
+    font-size: 12px;
+    font-family: "Roboto", sans-serif;
+    position: absolute;
+    left: 2px;
+    background: #F7FAFC !important;
+    color: #9FAEC2 !important;
+    height: 20px;
+    top: 7px;
+    line-height: 20px;
+    font-size: 16px;
+    letter-spacing: normal;
+    max-width: 133%!important;
+    overflow: hidden!important;
+    text-overflow: ellipsis!important;
+    white-space: nowrap!important;
+    pointer-events: auto!important;
+    transform: translateY(-16px) scale(0.75)!important;
+    transition-timing-function: ease-in-out!important;
+    animation: animationname .15s linear;
+    transition: .15s cubic-bezier(0.25, 0.8, 0.5, 1)!important;;
+    -webkit-transition: .15s cubic-bezier(0.25, 0.8, 0.5, 1)!important;;
+  }
+  @keyframes animationname{
+  100%{
+    left: 2px;
+    top: 8px;
+    font-size: 16px;
+  }
+  75%{
+    left: 4px;
+    top: 11px;
+    font-size: 17px;
+  }
+  50%{
+    left: 6px;
+     top: 14px;
+     font-size: 18px;
+  }
+  25%{
+    left: 8px;
+     top: 17px;
+     font-size: 19px;
+  }
+  0%{
+     left: 10px;
+     top: 20px;
+     font-size: 20px;
+  }
+}
+
+
+</style>
 <style lang="scss">
 .place-search {
   .search-input {
     width: 100%;
     padding: 8px 15px 8px 15px;
     background: white;
-    border: 1px solid $grey-500!important;
     border-radius: 4px;
     font-size: 16px;
     letter-spacing: normal;
     max-width: 100%;
     text-align: left;
+    &--active{
+      border: 2px solid $grey-500!important;
+      background: #F7FAFC !important;
+    }
+    &--inactive{
+      border: 1px solid $grey-500!important;
+      background: white !important;
+    }
 
   }
   ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */

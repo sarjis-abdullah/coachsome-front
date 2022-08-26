@@ -852,7 +852,7 @@ export default ({
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            font-size: 18px;
+            font-size: 14px;
             line-height: 25px;
             text-align: center;
             color: #ECF2F7;
