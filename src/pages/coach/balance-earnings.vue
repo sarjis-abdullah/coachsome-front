@@ -394,13 +394,10 @@
                   :options.sync="table.options"
                   :loading="table.loading"
                   :header-props="{ sortIcon: 'mdi-chevron-down' }"
-                  sort-by.sync="'amount'"
-                  sort-desc.sync="true"
                   :footer-props="{
                     itemsPerPageOptions: [10, 20, 30, -1]
                   }"
-
-
+                  :mobile-breakpoint="0"
                 >
                   <template v-slot:header="{ props: {} }">
                     <thead>
@@ -1209,6 +1206,7 @@ export default {
       th {
         white-space: nowrap;
         height: 70px;
+        width: 20px!important;
         .th-col-text {
           // font-family: $font-family;
           // font-weight: normal;
