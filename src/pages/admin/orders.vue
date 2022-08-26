@@ -51,7 +51,7 @@
         <div>
           <v-card>
             <v-card-title>
-              <v-row>
+              <v-row style="justify-content: space-between">
                 <v-col cols="12" md="4">
                   <v-text-field
                     v-model="search"
@@ -174,7 +174,12 @@
                     </template> -->
                   </v-text-field>
                 </v-col>
+                <v-col cols="12" md="4" class="d-flex" style="justify-content:right">
+                  <ExportCSV fileName="orders-data" :rows="table.rows" :headers="table.newHeaders" />
+                </v-col>
               </v-row>
+              <!-- <v-spacer></v-spacer>
+              hello -->
             </v-card-title>
             <v-data-table
               :headers="table.newHeaders"
@@ -275,16 +280,17 @@
 </template>
 
 <script>
-import { adminOrderListApi, adminUserApi, adminImpersonateApi } from "@/api";
+import { adminImpersonateApi, adminOrderListApi, adminUserApi } from "@/api";
+import ExportCSV from '@/components/artifact/global/ExportCSV.vue';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import { pathData } from "@/data";
 import { currencyService, imageService } from "@/services";
 import "vue-phone-number-input/dist/vue-phone-number-input.css";
-import { pathData } from "@/data";
-import MobileTopNav from '@/components/layout/global/MobileTopNav';
-import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
 
 export default {
   layout: "admin",
-  components: {MobileTopNav, DesktopTopNav},
+  components: {MobileTopNav, DesktopTopNav, ExportCSV},
   data() {
     return {
       sessionDialog: false,

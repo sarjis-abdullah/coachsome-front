@@ -117,16 +117,16 @@
 
 <script>
 import { adminPromoCodeApi } from "@/api";
-import { currencyService } from "@/services";
-import { pathData } from "@/data";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
 import PromoCodeForm from '@/components/artifact/admin/PromoCodeForm';
+import ExportCSV from '@/components/artifact/global/ExportCSV.vue';
 import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
-
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import { pathData } from "@/data";
+import { currencyService } from "@/services";
 export default {
   name: "AdminPromos",
   layout: "admin",
-  components: {MobileTopNav, PromoCodeForm, DesktopTopNav},
+  components: {MobileTopNav, PromoCodeForm, DesktopTopNav, ExportCSV},
   data() {
     return {
       search: "",

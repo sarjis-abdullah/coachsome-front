@@ -42,9 +42,7 @@
                 </v-col>
                 <v-col class="d-flex justify-end" v-if="$vuetify.breakpoint.mdAndUp">
                   <!-- <AddButton @add="userCreate.dialog = true" title="Add new user"/> -->
-                  <v-btn @click="csvExport" :block="$vuetify.breakpoint.smAndDown" class="white--text mr-4" depressed color="#9FAEC2">
-                    {{$t("export_to_excel_or_csv")}}
-                  </v-btn>
+                  <ExportCSV fileName="users-data" :rows="table.rows" :headers="table.headers" />
                   <v-btn @click="userCreate.dialog = true" :block="$vuetify.breakpoint.smAndDown" class="white--text" depressed color="#15577C">
                     {{$t("add_new_user")}}
                   </v-btn>
@@ -484,15 +482,15 @@
 </template>
 
 <script>
-import { imageService } from "@/services";
-import { adminUserApi, adminImpersonateApi } from "@/api";
-import { pathData } from "@/data";
-import VuePhoneNumberInput from "vue-phone-number-input";
-import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import { adminImpersonateApi, adminUserApi } from "@/api";
+import ExportCSV from '@/components/artifact/global/ExportCSV.vue';
 import AddButton from '@/components/layout/global/AddButton';
-import FormHeader from '@/components/layout/global/FormHeader';
 import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
-
+import FormHeader from '@/components/layout/global/FormHeader';
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import { pathData } from "@/data";
+import { imageService } from "@/services";
+import VuePhoneNumberInput from "vue-phone-number-input";
 export default {
   layout: "admin",
   components: {
@@ -500,7 +498,8 @@ export default {
     MobileTopNav,
     AddButton,
     FormHeader,
-    DesktopTopNav
+    DesktopTopNav,
+    ExportCSV
   },
   data() {
     return {
@@ -566,15 +565,6 @@ export default {
         rows: []
       }
     };
-  },
-  computed: {
-    csvData() {
-      return this.table.rows.map(item => ({
-        ...item,
-        // address: 'адрес', //item.address.city,
-        // company: 'компания'//item.company.name
-      }));
-    }
   },
   watch: {
     "userCreate.dialog": function() {
