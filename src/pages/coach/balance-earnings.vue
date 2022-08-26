@@ -358,375 +358,410 @@
               {{ $t("balance_earning_sec_overview_balance_earning") }}
             </div>
           </v-col>
+           <v-col cols="12" class="pb-2">
+             <div class="line"></div>
+           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12" md="12">
-            <client-only>
-              <v-data-table
-                :headers="headers"
-                hide-default-header
-                :items="items"
-                item-key="name"
-              >
-                <template v-slot:header="{ props: {} }">
-                  <thead>
-                    <tr>
-                      <!-- Date -->
-                      <th class="text-center">
-                        <span class="th-col-text">
-                          {{ $t("balance_earning_overview_tbl_col_date") }}
-                        </span>
-                        <v-tooltip top max-width="250">
-                          <template v-slot:activator="{ on }">
-                            <v-icon x-small color="#15577C" v-on="on"
-                              >help_outline</v-icon
-                            >
-                          </template>
-                          <span>
-                            {{ $t("balance_earning_table_col_date") }}
-                          </span>
-                        </v-tooltip>
-                      </th>
+          <v-col cols="12" md="12" class="pb-15">
+            <v-card>
+              <v-card-title>
+              <v-row>
+                <v-col cols="12" md="4">
+                  <v-text-field
+                    v-model="search"
+                    prepend-inner-icon="search"
+                    label="Search"
+                    outlined
+                    dense
+                    class="default-text-field"
+                    color="#9FAEC2"
+                    clearable
+                    hide-details
+                  >
+                  </v-text-field>
+                </v-col>
+              </v-row>
+            </v-card-title>
 
-                      <!-- Description -->
-                      <th class="text-center">
-                        <span class="th-col-text">
-                          {{ $t("balance_earning_overview_tbl_description") }}
-                        </span>
-                        <v-tooltip top max-width="250">
-                          <template v-slot:activator="{ on }">
-                            <v-icon x-small color="#15577C" v-on="on"
-                              >help_outline</v-icon
-                            >
-                          </template>
-                          <span>
-                            {{ $t("balance_earning_table_col_description") }}
-                          </span>
-                        </v-tooltip>
-                      </th>
+              <client-only>
+                <v-data-table
+                  :headers="headers"
+                  hide-default-header
+                  :items="items"
+                  item-key="name"
+                  :search="search"
+                  :options.sync="table.options"
+                  :loading="table.loading"
+                  :header-props="{ sortIcon: 'mdi-chevron-down' }"
+                  sort-by.sync="'amount'"
+                  sort-desc.sync="true"
+                  :footer-props="{
+                    itemsPerPageOptions: [10, 20, 30, -1]
+                  }"
 
-                      <!-- Customer -->
-                      <th class="text-center">
-                        <span class="th-col-text">
-                          {{ $t("balance_earing_overview_tbl_col_customer") }}
-                        </span>
-                        <v-tooltip top max-width="250">
-                          <template v-slot:activator="{ on }">
-                            <v-icon x-small color="#15577C" v-on="on"
-                              >help_outline</v-icon
-                            >
-                          </template>
-                          <span>
-                            {{ $t("balance_earning_table_col_customer") }}
-                          </span>
-                        </v-tooltip>
-                      </th>
 
-                      <!-- Amount -->
-                      <th class="text-center">
-                        <span class="th-col-text">
-                          {{ $t("blance_earning_overview_tble_col_amount") }}
-                        </span>
-                        <v-tooltip top max-width="250">
-                          <template v-slot:activator="{ on }">
-                            <v-icon x-small color="#15577C" v-on="on"
-                              >help_outline</v-icon
-                            >
-                          </template>
-                          <span>
-                            {{ $t("balance_earning_table_col_amount") }}
-                          </span>
-                        </v-tooltip>
-                      </th>
-
-                      <!-- Fee -->
-                      <th class="text-center">
-                        <span class="th-col-text">
-                          {{ $t("balance_earning_overview_tbl_col_fee") }}
-                        </span>
-                        <v-tooltip top max-width="250">
-                          <template v-slot:activator="{ on }">
-                            <v-icon x-small color="#15577C" v-on="on"
-                              >help_outline</v-icon
-                            >
-                          </template>
-                          <span>
-                            {{ $t("balance_earning_table_col_fee") }}
-                          </span>
-                        </v-tooltip>
-                      </th>
-
-                      <!-- Income -->
-                      <th class="text-center">
-                        <span class="th-col-text">
-                          {{ $t("balance_earning_overview_tbl_col_income") }}
-                        </span>
-                        <v-tooltip top max-width="250">
-                          <template v-slot:activator="{ on }">
-                            <v-icon x-small color="#15577C" v-on="on"
-                              >help_outline</v-icon
-                            >
-                          </template>
-                          <span>
-                            {{ $t("balance_earning_table_col_income") }}
-                          </span>
-                        </v-tooltip>
-                      </th>
-
-                      <!-- Savings -->
-                      <th class="text-center border-left--dotted">
-                        <div class="d-flex justify-center align-center">
+                >
+                  <template v-slot:header="{ props: {} }">
+                    <thead>
+                      <tr>
+                        <!-- Date -->
+                        <th class="balance-table--header text-center">
                           <span class="th-col-text">
-                            {{ $t("balance_earning_overview_tbl_col_savings") }}
+                            {{ $t("balance_earning_overview_tbl_col_date") }}
+                          </span>
+                          <!-- <v-icon small color="#49556A">mdi-chevron-down</v-icon> -->
+                          <v-tooltip top max-width="250">
+                            <template v-slot:activator="{ on }">
+                              <v-icon x-small color="#49556A" v-on="on"
+                                >help_outline</v-icon
+                              >
+                            </template>
+                            <span>
+                              {{ $t("balance_earning_table_col_date") }}
+                            </span>
+                          </v-tooltip>
+                        </th>
+
+                        <!-- Description -->
+                        <th class="balance-table--header text-center">
+                          <span class="th-col-text">
+                            {{ $t("balance_earning_overview_tbl_description") }}
                           </span>
                           <v-tooltip top max-width="250">
                             <template v-slot:activator="{ on }">
-                              <span class="ml-2 text-center">
-                                <div v-on="on">
-                                  <img
-                                    class="th-col-icon"
-                                    :src="
-                                      require(`@/assets/images/icons/bag-dollar.svg`)
-                                    "
-                                    alt=""
-                                  />
-                                </div>
-                                <div class="currency-code">
-                                  {{ currencyConfig.code }}
-                                </div>
-                              </span>
+                              <v-icon x-small color="#49556A" v-on="on"
+                                >help_outline</v-icon
+                              >
                             </template>
                             <span>
-                              {{
-                                $t(
-                                  "blance_earning_overview_tbl_col_saving_help_text"
-                                )
-                              }}
+                              {{ $t("balance_earning_table_col_description") }}
                             </span>
                           </v-tooltip>
-                        </div>
-                      </th>
+                        </th>
 
-                      <!-- Saving to balance -->
-                      <th class="text-center"></th>
-
-                      <th class="text-center"></th>
-
-                      <th class="text-center"></th>
-
-                      <!-- Balance -->
-                      <th class="text-center">
-                        <div class="d-flex justify-center align-center">
+                        <!-- Customer -->
+                        <th class="balance-table--header text-center">
                           <span class="th-col-text">
-                            {{ $t("balance_earning_overview_table_col_balance") }}
+                            {{ $t("balance_earing_overview_tbl_col_customer") }}
                           </span>
                           <v-tooltip top max-width="250">
                             <template v-slot:activator="{ on }">
-                              <span class="ml-2 text-center">
-                                <div v-on="on">
-                                  <img
-                                    class="th-col-icon"
-                                    :src="
-                                      require(`@/assets/images/icons/contact-calendar.svg`)
-                                    "
-                                    alt=""
-                                  />
-                                </div>
-                                <div class="currency-code">
-                                  {{ currencyConfig.code }}
-                                </div>
-                              </span>
+                              <v-icon x-small color="#49556A" v-on="on"
+                                >help_outline</v-icon
+                              >
                             </template>
                             <span>
-                              {{
-                                $t(
-                                  "balance_earning_overview_tbl_col_balance_help_txt"
-                                )
-                              }}
+                              {{ $t("balance_earning_table_col_customer") }}
                             </span>
                           </v-tooltip>
-                        </div>
-                      </th>
+                        </th>
 
-                      <!-- Balance to paid -->
-                      <th class="text-center"></th>
-
-                      <th class="text-center"></th>
-
-                      <th class="text-center"></th>
-
-                      <!-- Paid -->
-                      <th class="text-center">
-                        <div class="d-flex justify-center align-center">
+                        <!-- Amount -->
+                        <th class="balance-table--header text-center">
                           <span class="th-col-text">
-                            {{ $t("balance_earning_overview_table_col_paid") }}
+                            {{ $t("blance_earning_overview_tble_col_amount") }}
                           </span>
-                          <span class="text-center ml-2">
-                            <div>
-                              <img
-                                class="th-col-icon"
-                                :src="
-                                  require(`@/assets/images/icons/banknote-dollar.svg`)
-                                "
-                                alt=""
-                              />
-                            </div>
-                            <div class="currency-code">
-                              {{ currencyConfig.code }}
-                            </div>
-                          </span>
-                        </div>
-                      </th>
-                    </tr>
-                  </thead>
-                </template>
-
-                <template v-slot:body="{ items }">
-                  <tbody>
-                    <tr v-for="item in items" :key="item.id">
-                      <td class="text-center" style="white-space: nowrap">
-                        {{ item.date }}
-                      </td>
-                      <td>{{ item.description }}</td>
-                      <td>{{ item.customerName }}</td>
-                      <td class="text-right">
-                        <span v-if="item.amount">
-                          {{
-                            currencyService.toCurrency(
-                              item.amount,
-                              currencyConfig
-                            )
-                          }}
-                        </span>
-                      </td>
-                      <td class="text-right">
-                        <span v-if="item.fee">
-                          -
-                          {{
-                            currencyService.toCurrency(item.fee, currencyConfig)
-                          }}
-                        </span>
-                      </td>
-                      <td class="text-right">
-                        <span v-if="item.income">
-                          {{
-                            currencyService.toCurrency(
-                              item.income,
-                              currencyConfig
-                            )
-                          }}
-                        </span>
-                      </td>
-                      <td class="text-right border-left--dotted">
-                        {{
-                          currencyService.toCurrency(item.savings, currencyConfig)
-                        }}
-                      </td>
-                      <td class="text-right" style="color: #6f8098">
-                        <span v-if="item.savingsToBalanceTransferredAmount">
-                          >
-                        </span>
-                      </td>
-                      <td class="text-center" style="color: #6f8098">
-                        <v-tooltip
-                          bottom
-                          max-width="250"
-                          v-if="item.savingsToBalanceTransferredAmount"
-                        >
-                          <template v-slot:activator="{ on }">
-                            <span
-                              v-on="on"
-                              class="border-bottom--dotted"
-                              style="font-size: 11px"
-                            >
-                              {{
-                                currencyService.toCurrency(
-                                  item.savingsToBalanceTransferredAmount,
-                                  currencyConfig
-                                )
-                              }}
+                          <v-tooltip top max-width="250">
+                            <template v-slot:activator="{ on }">
+                              <v-icon x-small color="#49556A" v-on="on"
+                                >help_outline</v-icon
+                              >
+                            </template>
+                            <span>
+                              {{ $t("balance_earning_table_col_amount") }}
                             </span>
-                          </template>
-                          <span>
+                          </v-tooltip>
+                        </th>
+
+                        <!-- Fee -->
+                        <th class="balance-table--header text-center">
+                          <span class="th-col-text">
+                            {{ $t("balance_earning_overview_tbl_col_fee") }}
+                          </span>
+                          <v-tooltip top max-width="250">
+                            <template v-slot:activator="{ on }">
+                              <v-icon x-small color="#49556A" v-on="on"
+                                >help_outline</v-icon
+                              >
+                            </template>
+                            <span>
+                              {{ $t("balance_earning_table_col_fee") }}
+                            </span>
+                          </v-tooltip>
+                        </th>
+
+                        <!-- Income -->
+                        <th class="balance-table--header text-center">
+                          <span class="th-col-text">
+                            {{ $t("balance_earning_overview_tbl_col_income") }}
+                          </span>
+                          <v-tooltip top max-width="250">
+                            <template v-slot:activator="{ on }">
+                              <v-icon x-small color="#49556A" v-on="on"
+                                >help_outline</v-icon
+                              >
+                            </template>
+                            <span>
+                              {{ $t("balance_earning_table_col_income") }}
+                            </span>
+                          </v-tooltip>
+                        </th>
+
+                        <!-- Savings -->
+                        <th class="balance-table--header text-center border-left--dotted">
+                          <div class="d-flex justify-center align-center">
+                            <span class="th-col-text">
+                              {{ $t("balance_earning_overview_tbl_col_savings") }}
+                            </span>
+                            <v-tooltip top max-width="250">
+                              <template v-slot:activator="{ on }">
+                                <span class="ml-2 text-center">
+                                  <div v-on="on">
+                                    <img
+                                      class="th-col-icon"
+                                      :src="
+                                        require(`@/assets/images/icons/bag-dollar.svg`)
+                                      "
+                                      alt=""
+                                    />
+                                  </div>
+                                  <div class="currency-code">
+                                    {{ currencyConfig.code }}
+                                  </div>
+                                </span>
+                              </template>
+                              <span>
+                                {{
+                                  $t(
+                                    "blance_earning_overview_tbl_col_saving_help_text"
+                                  )
+                                }}
+                              </span>
+                            </v-tooltip>
+                          </div>
+                        </th>
+
+                        <!-- Saving to balance -->
+                        <th class="balance-table--header text-center"></th>
+
+                        <th class="balance-table--header text-center"></th>
+
+                        <th class="balance-table--header text-center"></th>
+
+                        <!-- Balance -->
+                        <th class="balance-table--header text-center">
+                          <div class="d-flex justify-center align-center">
+                            <span class="th-col-text">
+                              {{ $t("balance_earning_overview_table_col_balance") }}
+                            </span>
+                            <v-tooltip top max-width="250">
+                              <template v-slot:activator="{ on }">
+                                <span class="ml-2 text-center">
+                                  <div v-on="on">
+                                    <img
+                                      class="th-col-icon"
+                                      :src="
+                                        require(`@/assets/images/icons/contact-calendar.svg`)
+                                      "
+                                      alt=""
+                                    />
+                                  </div>
+                                  <div class="currency-code">
+                                    {{ currencyConfig.code }}
+                                  </div>
+                                </span>
+                              </template>
+                              <span>
+                                {{
+                                  $t(
+                                    "balance_earning_overview_tbl_col_balance_help_txt"
+                                  )
+                                }}
+                              </span>
+                            </v-tooltip>
+                          </div>
+                        </th>
+
+                        <!-- Balance to paid -->
+                        <th class="balance-table--header text-center"></th>
+
+                        <th class="balance-table--header text-center"></th>
+
+                        <th class="balance-table--header text-center"></th>
+
+                        <!-- Paid -->
+                        <th class="balance-table--header text-center">
+                          <div class="d-flex justify-center align-center">
+                            <span class="th-col-text">
+                              {{ $t("balance_earning_overview_table_col_paid") }}
+                            </span>
+                            <span class="text-center ml-2">
+                              <div>
+                                <img
+                                  class="th-col-icon"
+                                  :src="
+                                    require(`@/assets/images/icons/banknote-dollar.svg`)
+                                  "
+                                  alt=""
+                                />
+                              </div>
+                              <div class="currency-code">
+                                {{ currencyConfig.code }}
+                              </div>
+                            </span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                  </template>
+
+                  <template v-slot:body="{ items }">
+                    <tbody>
+                      <tr v-for="item in items" :key="item.id">
+                        <td class="text-center" style="white-space: nowrap">
+                          {{ item.date }}
+                        </td>
+                        <td>{{ item.description }}</td>
+                        <td>{{ item.customerName }}</td>
+                        <td class="text-right">
+                          <span v-if="item.amount">
                             {{
-                              $t(
-                                "balance_earning_tooltip_txt_transferred_to_balance"
+                              currencyService.toCurrency(
+                                item.amount,
+                                currencyConfig
                               )
                             }}
                           </span>
-                        </v-tooltip>
-                      </td>
-                      <td class="text-left" style="color: #6f8098">
-                        <span v-if="item.savingsToBalanceTransferredAmount">
-                          >
-                        </span>
-                      </td>
-
-                      <!-- Balance -->
-                      <td class="text-right">
-                        <span v-if="item.balance">
+                        </td>
+                        <td class="text-right">
+                          <span v-if="item.fee">
+                            -
+                            {{
+                              currencyService.toCurrency(item.fee, currencyConfig)
+                            }}
+                          </span>
+                        </td>
+                        <td class="text-right">
+                          <span v-if="item.income">
+                            {{
+                              currencyService.toCurrency(
+                                item.income,
+                                currencyConfig
+                              )
+                            }}
+                          </span>
+                        </td>
+                        <td class="text-right border-left--dotted">
                           {{
-                            currencyService.toCurrency(
-                              item.balance,
-                              currencyConfig
-                            )
+                            currencyService.toCurrency(item.savings, currencyConfig)
                           }}
-                        </span>
-                      </td>
-
-                      <!-- Balance to paid -->
-                      <td class="text-right" style="color: #6f8098">
-                        <span v-if="item.balanceToPaidTransferredAmount">
-                          >
-                        </span>
-                      </td>
-                      <td class="text-center" style="color: #6f8098">
-                        <v-tooltip
-                          bottom
-                          max-width="250"
-                          v-if="item.balanceToPaidTransferredAmount"
-                        >
-                          <template v-slot:activator="{ on }">
-                            <span
-                              v-on="on"
-                              class="border-bottom--dotted"
-                              style="font-size: 11px"
+                        </td>
+                        <td class="text-right" style="color: #6f8098">
+                          <span v-if="item.savingsToBalanceTransferredAmount">
                             >
+                          </span>
+                        </td>
+                        <td class="text-center" style="color: #6f8098">
+                          <v-tooltip
+                            bottom
+                            max-width="250"
+                            v-if="item.savingsToBalanceTransferredAmount"
+                          >
+                            <template v-slot:activator="{ on }">
+                              <span
+                                v-on="on"
+                                class="border-bottom--dotted"
+                                style="font-size: 11px"
+                              >
+                                {{
+                                  currencyService.toCurrency(
+                                    item.savingsToBalanceTransferredAmount,
+                                    currencyConfig
+                                  )
+                                }}
+                              </span>
+                            </template>
+                            <span>
                               {{
-                                currencyService.toCurrency(
-                                  item.balanceToPaidTransferredAmount,
-                                  currencyConfig
+                                $t(
+                                  "balance_earning_tooltip_txt_transferred_to_balance"
                                 )
                               }}
                             </span>
-                          </template>
-                          <span>
+                          </v-tooltip>
+                        </td>
+                        <td class="text-left" style="color: #6f8098">
+                          <span v-if="item.savingsToBalanceTransferredAmount">
+                            >
+                          </span>
+                        </td>
+
+                        <!-- Balance -->
+                        <td class="text-right">
+                          <span v-if="item.balance">
                             {{
-                              $t("balance_earning_tooltip_transferred_to_paid")
+                              currencyService.toCurrency(
+                                item.balance,
+                                currencyConfig
+                              )
                             }}
                           </span>
-                        </v-tooltip>
-                      </td>
-                      <td class="text-left" style="color: #6f8098">
-                        <span v-if="item.balanceToPaidTransferredAmount">
+                        </td>
+
+                        <!-- Balance to paid -->
+                        <td class="text-right" style="color: #6f8098">
+                          <span v-if="item.balanceToPaidTransferredAmount">
+                            >
+                          </span>
+                        </td>
+                        <td class="text-center" style="color: #6f8098">
+                          <v-tooltip
+                            bottom
+                            max-width="250"
+                            v-if="item.balanceToPaidTransferredAmount"
                           >
-                        </span>
-                      </td>
+                            <template v-slot:activator="{ on }">
+                              <span
+                                v-on="on"
+                                class="border-bottom--dotted"
+                                style="font-size: 11px"
+                              >
+                                {{
+                                  currencyService.toCurrency(
+                                    item.balanceToPaidTransferredAmount,
+                                    currencyConfig
+                                  )
+                                }}
+                              </span>
+                            </template>
+                            <span>
+                              {{
+                                $t("balance_earning_tooltip_transferred_to_paid")
+                              }}
+                            </span>
+                          </v-tooltip>
+                        </td>
+                        <td class="text-left" style="color: #6f8098">
+                          <span v-if="item.balanceToPaidTransferredAmount">
+                            >
+                          </span>
+                        </td>
 
-                      <!-- Paid -->
-                      <td class="text-right">
-                        <span v-if="item.paid">
-                          {{
-                            currencyService.toCurrency(item.paid, currencyConfig)
-                          }}
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-data-table>
-            </client-only>
-
+                        <!-- Paid -->
+                        <td class="text-right">
+                          <span v-if="item.paid">
+                            {{
+                              currencyService.toCurrency(item.paid, currencyConfig)
+                            }}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-data-table>
+              </client-only>
+            </v-card>
             <!-- <div class="mt-5">
                 <v-btn small outlined color="primary-light-2">{{
                   $t("btn_label_show_more")
@@ -796,26 +831,35 @@ export default {
         amount: 0.0,
         currency: "DKK"
       },
+      search: "",
       items: [],
+      table: {
+        page: 1,
+        numberOfPages: 1,
+        options: {
+          itemsPerPage: 10
+        },
+        loading: false,
+      },
       headers: [
         // { text: "#ID", value: "id" },
-        { text: "Date", value: "date" },
-        { text: "Description", value: "description" },
-        { text: "Customer", value: "customerName" },
-        { text: "Amount", value: "amount" },
-        { text: "Fee", value: "fee" },
-        { text: "Income", value: "income" },
-        { text: "Savings", value: "savings" },
-        { text: "Balance", value: "balance" },
+        { text: "Date", class: "balance-table--header", value: "date"},
+        { text: "Description", class: "balance-table--header", value: "description" },
+        { text: "Customer", class: "balance-table--header", value: "customerName" },
+        { text: "Amount", class: "balance-table--header", value: "amount" },
+        { text: "Fee", class: "balance-table--header", value: "fee" },
+        { text: "Income", class: "balance-table--header", value: "income" },
+        { text: "Savings", class: "balance-table--header", value: "savings" },
+        { text: "Balance", class: "balance-table--header", value: "balance" },
         {
           text: "Saving to balance amount",
-          value: "savingsToBalanceTransferredAmount"
+          class: "balance-table--header", value: "savingsToBalanceTransferredAmount"
         },
         {
           text: "Balance to paid amount",
-          value: "balanceToPaidTransferredAmount"
+          class: "balance-table--header", value: "balanceToPaidTransferredAmount"
         },
-        { text: "Paid", value: "balance" }
+        { text: "Paid", class: "balance-table--header", value: "balance" }
       ],
       currencyConfig: currencyService.getCurrentCurrencyWithoutSymbol()
     };
@@ -1042,6 +1086,19 @@ export default {
 </script>
 
 <style lang="scss">
+.balance-table{
+  &--header{
+    font-family: 'Open Sans'!important;
+    font-style: normal!important;
+    font-weight: 600!important;
+    font-size: 12px!important;
+    line-height: 16px!important;
+    letter-spacing: 0.05em!important;
+    text-transform: uppercase!important;
+    color: #49556A!important;
+    background-color: #F7FAFC!important;
+  }
+}
 
 .profile-title{
   font-family: Open Sans;
@@ -1153,19 +1210,28 @@ export default {
         white-space: nowrap;
         height: 70px;
         .th-col-text {
-          font-family: $font-family;
-          font-weight: normal;
-          color: $primary-light-1;
-          font-size: 16px;
+          // font-family: $font-family;
+          // font-weight: normal;
+          // color: $primary-light-1;
+          // font-size: 16px;
+          font-family: 'Open Sans'!important;
+          font-style: normal!important;
+          font-weight: 600!important;
+          font-size: 12px!important;
+          line-height: 16px!important;
+          letter-spacing: 0.05em!important;
+          text-transform: uppercase!important;
+          color: $grey-700!important;
         }
 
         .th-col-icon {
           height: 13px;
+          color: $grey-700!important;
         }
         .currency-code {
           font-family: $font-family;
           font-size: 8px;
-          color: $primary-light-1;
+         color: $grey-700!important;
         }
       }
     }
