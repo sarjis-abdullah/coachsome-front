@@ -1206,7 +1206,6 @@ export default {
       th {
         white-space: nowrap;
         height: 70px;
-        width: 20px!important;
         .th-col-text {
           // font-family: $font-family;
           // font-weight: normal;
