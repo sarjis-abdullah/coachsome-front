@@ -41,8 +41,9 @@
                     hide-details
                   ></v-text-field>
                 </v-col>
-                <v-col class="d-flex justify-end" v-if="$vuetify.breakpoint.mdAndUp">
-                  <v-btn @click="handleNewBtnClick" :block="$vuetify.breakpoint.smAndDown" class="white--text" depressed color="#15577C">
+                <v-col class="d-flex justify-end">
+                  <ExportCSV fileName="promos-data" :rows="promoCodes" :headers="headers" />
+                  <v-btn v-if="$vuetify.breakpoint.mdAndUp" @click="handleNewBtnClick" :block="$vuetify.breakpoint.smAndDown" class="white--text" depressed color="#15577C">
                     {{$t("chat_create_group_label_create")}} {{$t("package_booking_promo_code_title")}}
                   </v-btn>
                 </v-col>
@@ -117,16 +118,16 @@
 
 <script>
 import { adminPromoCodeApi } from "@/api";
-import { currencyService } from "@/services";
-import { pathData } from "@/data";
-import MobileTopNav from '@/components/layout/global/MobileTopNav'
 import PromoCodeForm from '@/components/artifact/admin/PromoCodeForm';
+import ExportCSV from '@/components/artifact/global/ExportCSV.vue';
 import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
-
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import { pathData } from "@/data";
+import { currencyService } from "@/services";
 export default {
   name: "AdminPromos",
   layout: "admin",
-  components: {MobileTopNav, PromoCodeForm, DesktopTopNav},
+  components: {MobileTopNav, PromoCodeForm, DesktopTopNav, ExportCSV},
   data() {
     return {
       search: "",

@@ -75,6 +75,7 @@
                       hide-details
                     ></v-text-field>
                     <v-spacer></v-spacer>
+                    <ExportCSV fileName="translation-data" :rows="excelData" :headers="excelDataHeader" />
 
                     <v-btn
                       @click="dialog = true"
@@ -247,14 +248,14 @@
 </template>
 
 <script>
-import ProfileSeo from "@/components/artifact/admin/translation/seo/ProfileSeo";
+import { adminTranslationApi } from "@/api";
 import HomeSeo from "@/components/artifact/admin/translation/seo/HomeSeo";
 import MarketplaceSeo from "@/components/artifact/admin/translation/seo/MarketplaceSeo";
-import { adminTranslationApi } from "@/api";
-import { pathData } from "@/data";
-import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import ProfileSeo from "@/components/artifact/admin/translation/seo/ProfileSeo";
+import ExportCSV from '@/components/artifact/global/ExportCSV.vue';
 import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
-
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import { pathData } from "@/data";
 export default {
   layout: "admin",
   head() {
@@ -267,7 +268,8 @@ export default {
     HomeSeo,
     MarketplaceSeo,
     MobileTopNav,
-    DesktopTopNav
+    DesktopTopNav,
+    ExportCSV
   },
   data: () => ({
     tributeValue: "",
@@ -315,6 +317,19 @@ export default {
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
+    excelData(){
+      return this.langData.map(item => {
+        return {
+          id: item.id,
+          page_name: item.page_name,
+          gl_key: item.gl_key,
+          group: item.group
+        }
+      })
+    },
+    excelDataHeader(){
+      return this.headers.filter(item => item.value !== 'en_value' && item.value !== 'sv_value' && item.value !== 'dn_value')
     }
   },
 
