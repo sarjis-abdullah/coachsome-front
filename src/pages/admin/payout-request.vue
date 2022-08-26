@@ -20,7 +20,7 @@
         <div>
           <v-card>
             <v-card-title>
-              <v-row>
+              <v-row style="justify-content: space-between;">
                 <v-col cols="12" md="4">
                   <v-text-field
                     v-model="search"
@@ -32,6 +32,9 @@
                     color="#9FAEC2"
                     hide-details
                   ></v-text-field>
+                </v-col>
+                <v-col cols="12" md="4" class="d-flex" style="justify-content:right">
+                  <ExportCSV fileName="payout-request-data" :rows="table.rows" :headers="table.headers" />
                 </v-col>
               </v-row>
             </v-card-title>
@@ -78,15 +81,15 @@
 </template>
 
 <script>
-import { imageService } from "@/services";
-import { adminPayoutRequestApi, adminImpersonateApi } from "@/api";
-import { pathData } from "@/data";
-import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import { adminImpersonateApi, adminPayoutRequestApi } from "@/api";
+import ExportCSV from '@/components/artifact/global/ExportCSV.vue';
 import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
-
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
+import { pathData } from "@/data";
+import { imageService } from "@/services";
 export default {
   layout: "admin",
-  components: {MobileTopNav, DesktopTopNav},
+  components: {MobileTopNav, DesktopTopNav, ExportCSV},
   data() {
     return {
       search: "",

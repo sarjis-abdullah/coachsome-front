@@ -20,7 +20,7 @@
         <div>
           <v-card>
             <v-card-title>
-              <v-row>
+              <v-row style="justify-content: space-between;">
                 <v-col cols="12" md="4">
                   <v-text-field
                     v-model="search"
@@ -32,6 +32,9 @@
                     color="#9FAEC2"
                     hide-details
                   ></v-text-field>
+                </v-col>
+                <v-col cols="12" md="4" class="d-flex" style="justify-content:right">
+                  <ExportCSV fileName="logs-data" :rows="table.rows" :headers="table.headers" />
                 </v-col>
               </v-row>
             </v-card-title>
@@ -67,16 +70,17 @@
 
 <script>
 import { adminUserLogApi } from "@/api";
+import ExportCSV from '@/components/artifact/global/ExportCSV.vue';
+import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
+import MobileTopNav from '@/components/layout/global/MobileTopNav';
 import { pathData } from "@/data";
 import { imageService } from "@/services";
-import MobileTopNav from '@/components/layout/global/MobileTopNav';
-import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
-
 export default {
   layout:"admin",
   components:{
     MobileTopNav,
-    DesktopTopNav
+    DesktopTopNav,
+    ExportCSV
   },
   data() {
     return {

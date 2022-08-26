@@ -378,6 +378,11 @@ export default {
       }
     };
   },
+  computed: {
+    filteredHeaders() {
+      return this.table.newHeaders.filter(item => item.value !== 'customerSwitch' && item.value !== 'coachSwitch') 
+    }
+  },
   watch: {},
   created() {
     this.fetchOrderList();

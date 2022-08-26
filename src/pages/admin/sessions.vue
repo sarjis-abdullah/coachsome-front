@@ -34,7 +34,7 @@
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="4" class="d-flex" style="justify-content:right">
-                  <ExportCSV fileName="sessions-data" :rows="table.rows" :headers="table.newHeaders" />
+                  <ExportCSV fileName="sessions-data" :rows="excelData" :headers="table.headers" />
                 </v-col>
               </v-row>
             </v-card-title>
@@ -88,7 +88,8 @@ export default {
           { text: "Location", value: "location" }
         ],
         rows: []
-      }
+      },
+      excelData: []
     };
   },
   created() {
@@ -132,6 +133,7 @@ export default {
                   "DD-MMM-YYYY, HH.mm"
                 ).format("HH.mm");
                 object.dateAndTime = `<b>${calender_date}</b> ${st} to ${et}`;
+                object.onlyDateAndTime = `${calender_date} ${st} to ${et}`;
               }
               array.push(object);
             }
@@ -142,6 +144,9 @@ export default {
                 return item
             }
         });
+        this.excelData = this.table.rows.map(item=> {
+          return {...item, dateAndTime: item.onlyDateAndTime}
+        })
       } catch (error) {
         console.error(error);
       } finally {

@@ -27,7 +27,7 @@
       csvExport() {
         const mapData = this.rows;
 
-        const headers = this.headers.filter(item=> item.value !== 'image')
+        const headers = this.headers.filter(item=> item.value !== 'image' &&  item.value !== 'actions')
         const fields = [
           ...headers.map((el) => {
             return el.value
@@ -44,12 +44,14 @@
             ),
           ]),
         ]
-          .map((e) => e.join(","))
+          .map((e) => {
+            return '"' + e.join('","') + '"';
+          })
           .join("\n");
         var encodedUri = encodeURI(csvContent);
         var link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "users-data.csv");
+        link.setAttribute("download", this.fileName + ".csv");
         document.body.appendChild(link); // Required for FF
 
         link.click(); // This will download the data file named "my_data.csv".
