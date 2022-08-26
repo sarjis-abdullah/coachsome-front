@@ -20,7 +20,7 @@
         <div>
           <v-card>
             <v-card-title>
-              <v-row align="center" justify="space-between">
+              <v-row justify="space-between">
                 <v-col cols="12" md="4">
                   <v-text-field
                     v-model="search"
@@ -32,6 +32,9 @@
                     color="#9FAEC2"
                     hide-details
                   ></v-text-field>
+                </v-col>
+                <v-col cols="12" md="4" class="d-flex" style="justify-content:right">
+                  <ExportCSV fileName="sessions-data" :rows="excelData" :headers="table.headers" />
                 </v-col>
               </v-row>
             </v-card-title>
@@ -53,17 +56,18 @@
 </template>
 
 <script>
-import { pathData } from "@/data";
-import MobileTopNav from "@/components/layout/global/MobileTopNav";
-import moment from "moment";
+import ExportCSV from '@/components/artifact/global/ExportCSV.vue';
 import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
-
+import MobileTopNav from "@/components/layout/global/MobileTopNav";
+import { pathData } from "@/data";
+import moment from "moment";
 export default {
   name: "AdminBookingSessions",
   layout: "admin",
   components: {
     MobileTopNav,
-    DesktopTopNav
+    DesktopTopNav,
+    ExportCSV
   },
   data() {
     return {
@@ -84,7 +88,8 @@ export default {
           { text: "Location", value: "location" }
         ],
         rows: []
-      }
+      },
+      excelData: []
     };
   },
   created() {
@@ -128,6 +133,7 @@ export default {
                   "DD-MMM-YYYY, HH.mm"
                 ).format("HH.mm");
                 object.dateAndTime = `<b>${calender_date}</b> ${st} to ${et}`;
+                object.onlyDateAndTime = `${calender_date} ${st} to ${et}`;
               }
               array.push(object);
             }
@@ -138,6 +144,9 @@ export default {
                 return item
             }
         });
+        this.excelData = this.table.rows.map(item=> {
+          return {...item, dateAndTime: item.onlyDateAndTime}
+        })
       } catch (error) {
         console.error(error);
       } finally {
