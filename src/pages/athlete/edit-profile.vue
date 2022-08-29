@@ -571,7 +571,7 @@
               </v-row>
               <v-row>
                 <v-col cols="12" md="4">
-                  <div class="default--title pb-2">
+                  <div class="default--label pb-2">
                     {{ $t("profile_social_profile_title") }}
                   </div>
                   <div class="section-description">
@@ -1150,7 +1150,7 @@
               </v-row>
               <v-row>
                 <v-col cols="12" md="4">
-                  <div class="default--title">
+                  <div class="default--label">
                     {{ $t("profile_social_profile_title") }}
                   </div>
                 </v-col>
