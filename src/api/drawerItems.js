@@ -305,16 +305,16 @@ const coachItems = [
                 checker:false,
                 item: true
             },
-            {
-                key: "billing",
-                t_key: "setting_label_billing",
-                text: "billing",
-                url: pathData.coach.billing,
-                hasSubItem: false,
-                line: false,
-                checker:false,
-                item: true
-            },
+            // {
+            //     key: "billing",
+            //     t_key: "setting_label_billing",
+            //     text: "billing",
+            //     url: pathData.coach.billing,
+            //     hasSubItem: false,
+            //     line: false,
+            //     checker:false,
+            //     item: true
+            // },
             {
                 key: "notifications",
                 t_key: "setting_sec_notification_title",

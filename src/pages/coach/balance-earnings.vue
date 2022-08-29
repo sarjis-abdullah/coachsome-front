@@ -381,6 +381,9 @@
                   >
                   </v-text-field>
                 </v-col>
+                <!-- <v-col cols="12" md="8" class="d-flex" style="justify-content:right">
+                  <ExportCSV fileName="balance-earnings-data" :rows="items" :headers="headers" />
+                </v-col> -->
               </v-row>
             </v-card-title>
 
@@ -780,6 +783,7 @@ import LineChart from "@/components/charts/LineChart";
 import RadarChart from "@/components/charts/RadarChart";
 import MobileTopNav from '@/components/layout/global/MobileTopNav';
 import DesktopTopNav from '@/components/layout/global/DesktopTopNav.vue';
+import ExportCSV from '@/components/artifact/global/ExportCSV.vue';
 
 export default {
   layout: "coach",
@@ -787,7 +791,8 @@ export default {
     LineChart,
     RadarChart,
     MobileTopNav,
-    DesktopTopNav
+    DesktopTopNav,
+    ExportCSV
   },
   data() {
     return {
