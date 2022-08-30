@@ -516,27 +516,12 @@
                             </span>
                             <v-tooltip top max-width="250">
                               <template v-slot:activator="{ on }">
-                                <span class="ml-2 text-center">
-                                  <div v-on="on">
-                                    <img
-                                      class="th-col-icon"
-                                      :src="
-                                        require(`@/assets/images/icons/bag-dollar.svg`)
-                                      "
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div class="currency-code">
-                                    {{ currencyConfig.code }}
-                                  </div>
-                                </span>
+                                <v-icon x-small color="#49556A" v-on="on"
+                                  >help_outline</v-icon
+                                >
                               </template>
                               <span>
-                                {{
-                                  $t(
-                                    "blance_earning_overview_tbl_col_saving_help_text"
-                                  )
-                                }}
+                                {{ $t("blance_earning_overview_tbl_col_saving_help_text") }}
                               </span>
                             </v-tooltip>
                           </div>
@@ -557,27 +542,12 @@
                             </span>
                             <v-tooltip top max-width="250">
                               <template v-slot:activator="{ on }">
-                                <span class="ml-2 text-center">
-                                  <div v-on="on">
-                                    <img
-                                      class="th-col-icon"
-                                      :src="
-                                        require(`@/assets/images/icons/contact-calendar.svg`)
-                                      "
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div class="currency-code">
-                                    {{ currencyConfig.code }}
-                                  </div>
-                                </span>
+                                <v-icon x-small color="#49556A" v-on="on"
+                                  >help_outline</v-icon
+                                >
                               </template>
                               <span>
-                                {{
-                                  $t(
-                                    "balance_earning_overview_tbl_col_balance_help_txt"
-                                  )
-                                }}
+                                {{ $t("balance_earning_overview_tbl_col_balance_help_txt") }}
                               </span>
                             </v-tooltip>
                           </div>
@@ -597,15 +567,6 @@
                               {{ $t("balance_earning_overview_table_col_paid") }}
                             </span>
                             <span class="text-center ml-2">
-                              <div>
-                                <img
-                                  class="th-col-icon"
-                                  :src="
-                                    require(`@/assets/images/icons/banknote-dollar.svg`)
-                                  "
-                                  alt=""
-                                />
-                              </div>
                               <div class="currency-code">
                                 {{ currencyConfig.code }}
                               </div>
