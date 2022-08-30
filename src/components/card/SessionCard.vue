@@ -1,36 +1,35 @@
 <template>
   <div >
-  <v-card class="session-card" v-if="status == 'Accepted'">
-    <v-card-actions>
-          <v-list-item three-line>
-            <v-list-item-avatar
-              color="primary-light-1"
-              class="d-flex justify-center"
-              size="60"
-            >
-              <v-img v-if="profileImage.square" :src="profileImage.square"></v-img>
-              <div v-else >
-                {{ profileAvatarName }}
-              </div>
-            </v-list-item-avatar>
+    <div flat class="" v-if="status == 'Accepted'">
+      <v-list-item three-line>
+        <v-list-item-avatar
+          color="primary-light-1"
+          class="d-flex justify-center"
+          size="60"
+        >
+          <v-img v-if="profileImage.square" :src="profileImage.square"></v-img>
+          <div v-else >
+            {{ profileAvatarName }}
+          </div>
+        </v-list-item-avatar>
 
-            <v-list-item-content>
-              <v-list-item-title class="session-card__title" v-html="profileName"></v-list-item-title>
-              <v-list-item-subtitle>
-                <div class="session-card__date_time">
-                  {{ date }} , {{ time }}
-                </div>
-              </v-list-item-subtitle>
-              <v-list-item-subtitle>
-                <div class="session-card__address">
-                  {{ address}}
-                </div>
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-    </v-card-actions>
-  </v-card>
-</div>
+        <v-list-item-content>
+          <v-list-item-title class="session-card__title" v-html="profileName"></v-list-item-title>
+          <v-list-item-subtitle>
+            <div class="session-card__date_time">
+              {{ date }} , {{ time }}
+            </div>
+          </v-list-item-subtitle>
+          <v-list-item-subtitle>
+            <div class="session-card__address">
+              {{ address}}
+            </div>
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider v-if="show" class="mx-6" color="#9FAEC2"></v-divider>
+    </div>
+  </div>
 </template>
 <script>
 import packageHelper from "@/helper/package";
@@ -48,6 +47,7 @@ export default {
     "city",
     "zip",
     "address",
+    "show"
   ],
   data() {
     return {
